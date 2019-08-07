@@ -396,17 +396,16 @@ class ChartState {
     scrollChartToLeft = () => {
         this.stxx.chart.entryTick = null;
         if (this.scrollToEpoch && !this.startEpoch) {
-            const dataSetLength = this.stxx.chart.dataSet.length;
             const startEntry = this.stxx.chart.dataSet
                 .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
 
             if (startEntry) {
                 this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
             } else {
-                this.stxx.chart.entryTick = dataSetLength - 1;
+                this.stxx.chart.entryTick = this.stxx.chart.dataSet.length - 1;
             }
 
-            const scrollToTarget = dataSetLength - this.stxx.chart.entryTick + 1;
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick + 1;
             if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
                 this.stxx.animations.liveScroll.stop();
             }
@@ -418,7 +417,6 @@ class ChartState {
                 this.stxx.setMaxTicks(5);
                 this.stxx.micropixels = 0;
                 this.setIsChartScrollingToEpoch(false);
-                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
                 this.stxx.draw();
 
                 // This assignment should be always after draw()
@@ -427,12 +425,10 @@ class ChartState {
         } else if (this.startEpoch) {
             this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = true;
-            this.stxx.chart.isScrollLocationChanged = true;
             this.setIsChartScrollingToEpoch(false);
         } else {
             this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = false;
-            this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
