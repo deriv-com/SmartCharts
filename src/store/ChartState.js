@@ -430,7 +430,7 @@ class ChartState {
             });
         } else if (scrollToEpoch && this.startEpoch || force) {
             this.stxx.chart.lockAutoScroll = true;
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch)); // the calculation of entry tick should be done after draw
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
 
             if (!this.endEpoch) {
