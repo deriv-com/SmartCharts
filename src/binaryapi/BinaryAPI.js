@@ -46,6 +46,8 @@ export default class BinaryAPI {
 
     forget(params) {
         const key = this._getKey(params);
+        if (!this.streamRequests[key]) return;
+
         const { request, callback } = this.streamRequests[key];
         delete this.streamRequests[key];
         return this.requestForget(request, callback);

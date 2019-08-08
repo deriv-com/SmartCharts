@@ -98,6 +98,7 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
+const activeLanguagesList = ['ID', 'FR', 'IT', 'PT', 'DE'];
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -114,9 +115,10 @@ class App extends Component {
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
         let isChartTypeCandle;
-        let granularity = 60;
+        let granularity = 0;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+        const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
 
         if (settings) {
             settings.language = language;
@@ -124,10 +126,11 @@ class App extends Component {
         } else {
             settings = { language };
         }
+        settings.activeLanguages = activeLanguage ? activeLanguagesList : null;
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
-            chartType = 'mountain';
+            chartType = 'line';
             isChartTypeCandle = false;
             if (layout) {
                 granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
@@ -159,6 +162,7 @@ class App extends Component {
             chartType,
             isChartTypeCandle,
             granularity,
+            activeLanguage,
             isConnectionOpened: true,
             highLow: {},
             barrierType: '',
@@ -216,6 +220,7 @@ class App extends Component {
             const url = new URLSearchParams(search);
             url.delete('l');
             url.set('l', settings.language);
+            url.set('activeLanguage', prevSetting.activeLanguages ? 'true' : 'false');
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     };
@@ -377,12 +382,28 @@ class App extends Component {
         });
     };
 
+    onActiveLanguage = () => {
+        this.setState(prevState => ({
+            activeLanguage: !prevState.activeLanguage,
+            settings: {
+                ...prevState.settings,
+                activeLanguages: !prevState.activeLanguage ? activeLanguagesList : null,
+            },
+        }));
+    }
+
+    onLanguage = (evt) => {
+        const { settings } = this.state;
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages ? 'true' : 'false'}`;
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
-            enabledNavigationWidget } = this.state;
+            enabledNavigationWidget, activeLanguage } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -447,6 +468,22 @@ class App extends Component {
                     <div className="form-row">
                         Navigation Widget <br />
                         <button type="button" onClick={this.onWidget}>Toggle</button>
+                    </div>
+                    <div className="form-row">
+                        Active Language:
+                        <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'ON' : 'OFF'}</button>
+                    </div>
+                    <div className="form-row">
+                        Language <br />
+                        <select onChange={this.onLanguage}>
+                            <option value="">None</option>
+                            <option value="en">English</option>
+                            <option value="pt">Português</option>
+                            <option value="de">Deutsch</option>
+                            <option value="fr">French</option>
+                            <option value="pl">Polish</option>
+                            <option value="ar">Arabic(not supported)</option>
+                        </select>
                     </div>
                     <div className="form-row">
                         Markers <br />

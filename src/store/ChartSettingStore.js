@@ -5,6 +5,62 @@ import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
+const languageList = [
+    {
+        key: 'en',
+        name: 'English',
+        icon: <FlagIcons.USD />,
+    }, {
+        key: 'pt',
+        name: 'Português',
+        icon: <FlagIcons.Portugal />,
+    }, {
+        key: 'de',
+        name: 'Deutsch',
+        icon: <FlagIcons.German />,
+    }, {
+        key: 'ru',
+        name: 'Русский',
+        icon: <FlagIcons.Russia />,
+    }, {
+        key: 'fr',
+        name: 'French',
+        icon: <FlagIcons.French />,
+    }, {
+        key: 'th',
+        name: 'Thai',
+        icon: <FlagIcons.Thailand />,
+    }, {
+        key: 'id',
+        name: 'Indonesia',
+        icon: <FlagIcons.Indonesia />,
+    }, {
+        key: 'vi',
+        name: 'Tiếng Việt',
+        icon: <FlagIcons.Vietnam />,
+    }, {
+        key: 'it',
+        name: 'Italiano',
+        icon: <FlagIcons.Italy />,
+    }, {
+        key: 'zh_cn',
+        name: '简体中文',
+        icon: <FlagIcons.Chinese />,
+    }, {
+        key: 'pl',
+        name: 'Polish',
+        icon: <FlagIcons.Poland />,
+    }, {
+        key: 'zh_tw',
+        name: '繁體中文',
+        icon: <FlagIcons.ChineseTraditional />,
+    }, {
+        key: 'es',
+        name: 'espanyol',
+        icon: <FlagIcons.Spanish />,
+    },
+];
+
 export default class ChartSettingStore {
     constructor(mainStore) {
         this.defaultLanguage = this.languages[0];
@@ -19,62 +75,12 @@ export default class ChartSettingStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
-    languages = [
-        {
-            key: 'en',
-            name: 'English',
-            icon: <FlagIcons.USD />,
-        }, {
-            key: 'pt',
-            name: 'Português',
-            icon: <FlagIcons.Portugal />,
-        }, {
-            key: 'de',
-            name: 'Deutsch',
-            icon: <FlagIcons.German />,
-        }, {
-            key: 'ru',
-            name: 'Русский',
-            icon: <FlagIcons.Russia />,
-        }, {
-            key: 'fr',
-            name: 'French',
-            icon: <FlagIcons.French />,
-        }, {
-            key: 'th',
-            name: 'Thai',
-            icon: <FlagIcons.Thailand />,
-        }, {
-            key: 'id',
-            name: 'Indonesia',
-            icon: <FlagIcons.Indonesia />,
-        }, {
-            key: 'vi',
-            name: 'Tiếng Việt',
-            icon: <FlagIcons.Vietnam />,
-        }, {
-            key: 'it',
-            name: 'Italiano',
-            icon: <FlagIcons.Italy />,
-        }, {
-            key: 'zh_cn',
-            name: '简体中文',
-            icon: <FlagIcons.Chinese />,
-        }, {
-            key: 'pl',
-            name: 'Polish',
-            icon: <FlagIcons.Poland />,
-        }, {
-            key: 'zh_tw',
-            name: '繁體中文',
-            icon: <FlagIcons.ChineseTraditional />,
-        },
-    ];
+    languages = [];
     defaultLanguage = {};
     onSettingsChange;
     @observable assetInformation = true;
     @observable view = '';
-    @observable language = this.languages[0];
+    @observable language = null;
     @observable position = 'bottom';
     @observable theme = 'light';
     @observable countdown = false;
@@ -84,7 +90,17 @@ export default class ChartSettingStore {
 
     setSettings(settings) {
         if (settings === undefined) { return; }
-        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme } = settings;
+        const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme, activeLanguages } = settings;
+
+        if (!(
+            (!activeLanguages && languageList.every(x => this.languages.find(y => y.key === x.key)))
+            || (
+                activeLanguages
+                && this.languages.length === activeLanguages.length
+                && this.languages.every(x => activeLanguages.indexOf(x.key.toUpperCase()) !== -1)
+            )
+        )) { this.updateActiveLanguage(activeLanguages); }
+
         if (theme                        !== undefined) { this.setTheme(theme); }
         if (position                     !== undefined) { this.setPosition(position); }
         if (countdown                    !== undefined) { this.showCountdown(countdown); }
@@ -114,11 +130,32 @@ export default class ChartSettingStore {
         this.view = view || '';
     }
 
+    @action.bound updateActiveLanguage(activeLanguages) {
+        this.setView(''); // return the view back to chart setting list
+
+        if (activeLanguages) {
+            this.languages = activeLanguages
+                .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
+                .filter(x => x);
+        } else this.languages = languageList;
+
+        // set default language as the first item of active languages or Eng
+        this.defaultLanguage = this.languages[0];
+
+        if (
+            (this.language && !this.languages.find(x => x.key === this.language.key))
+            || !this.language
+        ) {
+            this.setLanguage(this.languages[0].key);
+        }
+    }
+
     @action.bound setLanguage(lng) {
-        if (lng === this.language.key) { return; }
-        this.language = this.languages.find(item => item.key === lng);
-        t.setLanguage(lng);
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${lng}`);
+        if (!this.languages.length) { return; }
+        if (this.language && lng === this.language.key) { return; }
+        this.language = this.languages.find(item => item.key === lng) || this.defaultLanguage;
+        t.setLanguage(this.language.key);
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${this.language.key}`);
         this.saveSetting();
     }
 

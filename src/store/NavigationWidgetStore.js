@@ -38,7 +38,10 @@ export default class NavigationWidgetStore {
 
     @action.bound onHome() {
         this.isHomeEnabled = false;
+        this.stxx.chart.lockAutoScroll = false;
+        this.stxx.chart.isScrollLocationChanged = false;
         this.stxx.home();
+        this.stxx.draw();
     }
 
     @action.bound onScale() {
