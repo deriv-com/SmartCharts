@@ -26,6 +26,10 @@ class CrosshairStore {
         return this.context.stx;
     }
 
+    get isChartReady() {
+        return this.mainStore.state.isChartReady;
+    }
+
     @observable state = 2;
 
     node = null;
@@ -90,7 +94,7 @@ class CrosshairStore {
 
         const bar = stx.barFromPixel(stx.cx);
         const data = stx.chart.dataSegment[bar];
-        if (!data) {
+        if (!data || !this.isChartReady) {
             this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
             return;
         }

@@ -27,6 +27,7 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
+    @observable isChartScrollingToEpoch = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -165,6 +166,7 @@ class ChartState {
         if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
+                this.setIsChartScrollingToEpoch(true);
                 this.scrollChartToLeft();
             }
         }
@@ -192,6 +194,10 @@ class ChartState {
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
             this.stxx.draw();
         }
+    }
+
+    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch) {
+        this.isChartScrollingToEpoch = isScrollingToEpoch;
     }
 
     @action.bound hasReachedEndOfData(hasReachedEndOfData) {
@@ -406,7 +412,6 @@ class ChartState {
             }
 
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick + 1;
-
             if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
                 this.stxx.animations.liveScroll.stop();
             }
@@ -417,7 +422,7 @@ class ChartState {
             this.stxx.scrollTo(this.stxx.chart, scrollToTarget, () => {
                 this.stxx.setMaxTicks(5);
                 this.stxx.micropixels = 0;
-                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                this.setIsChartScrollingToEpoch(false);
                 this.stxx.draw();
 
                 // This assignment should be always after draw()
@@ -425,10 +430,7 @@ class ChartState {
             });
         } else if (scrollToEpoch && this.startEpoch || force) {
             this.stxx.chart.lockAutoScroll = true;
-            this.stxx.chart.isScrollLocationChanged = true;
-            const startToEpoch = this.startEpoch || scrollToEpoch;
-
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(startToEpoch)); // the calculation of entry tick should be done after draw
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch)); // the calculation of entry tick should be done after draw
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
 
             if (!this.endEpoch) {
@@ -439,12 +441,13 @@ class ChartState {
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
             }
             this.stxx.draw();
+            this.setIsChartScrollingToEpoch(false);
         } else {
             this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = false;
-            this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
+            this.setIsChartScrollingToEpoch(false);
         }
         this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
