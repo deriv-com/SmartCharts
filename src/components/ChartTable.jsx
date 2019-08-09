@@ -12,9 +12,12 @@ const ChartTable = ({
     isTick,
     symbol,
     setOpen,
+    updateScrollSpy,
+    setScrollPanel,
+    isScrolled,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
-    const width = isTick ? '415px' : '704px';
+    const width = isTick ? '380px' : '704px';
 
     const handleClose = () => {
         setOpen(false);
@@ -22,7 +25,6 @@ const ChartTable = ({
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
-            <div className="cq-dialog--cover" />
             <Dialog className="cq-dialog ciq-chart-dialog">
             <>
                 {isMobile && (
@@ -34,27 +36,27 @@ const ChartTable = ({
                 )
                 }
                 {isMobile ? '' : (
-                    <table className="ciq-chart-table">
+                    <table className={`ciq-chart-table ${isScrolled ? 'ciq-chart-table--scrolled' : ''}`}>
                         <thead>
-                            <tr className="ciq-table-head">
-                                <th className="ciq-table-cell">{t.translate('Date')}</th>
+                            <tr>
+                                <th>{t.translate('Date')}</th>
                                 {isTick
-                                    ? <th className="ciq-table-cell">{t.translate('Tick')}</th>
-                                    :                                                (
+                                    ? <th>{t.translate('Tick')}</th>
+                                    : (
                                         <React.Fragment>
-                                            <th className="ciq-table-cell">{t.translate('Open')}</th>
-                                            <th className="ciq-table-cell">{t.translate('High')}</th>
-                                            <th className="ciq-table-cell">{t.translate('Low')}</th>
-                                            <th className="ciq-table-cell">{t.translate('Close')}</th>
+                                            <th>{t.translate('Open')}</th>
+                                            <th>{t.translate('High')}</th>
+                                            <th>{t.translate('Low')}</th>
+                                            <th>{t.translate('Close')}</th>
                                         </React.Fragment>
                                     )
                                 }
-                                <th className="ciq-table-cell before-last-child">
+                                <th className="before-last-child">
                                     <div className="cq-change-cell">
                                         {t.translate('Change')}
                                     </div>
                                 </th>
-                                <th className="ciq-table-cell">
+                                <th>
                                     <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
                                 </th>
                             </tr>
@@ -65,23 +67,24 @@ const ChartTable = ({
                     autoHeight
                     autoHeightMax="80vh"
                     className="ciq-list"
+                    onScroll={updateScrollSpy}
+                    ref={setScrollPanel}
                 >
                     {isMobile
                         ? (
                             <table className="ciq-chart-table">
                                 <tbody>
-                                    {tableData.map((item, idx) => (
+                                    {tableData.map(item => (
                                         <tr
-                                            className="ciq-table-row"
-                                            key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
+                                            key={`chartTable-${item.date}`} // eslint-disable-line react/no-array-index-key
                                         >
                                             <td>
-                                                <div className="ciq-table-cell">
+                                                <div>
                                                     <div className="ciq-table-date">{item.Date}</div>
                                                     <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
                                                     <div className={`cq-change ${item.Status}`} />
                                                 </div>
-                                                <div className="ciq-table-cell">
+                                                <div>
                                                     {isTick && <div><span>{t.translate('Close')}</span>{item.Close}</div>}
                                                     {!isTick
                                                     && [
@@ -98,36 +101,43 @@ const ChartTable = ({
                             </table>
                         )
                         :                        (
-                            <table className="ciq-chart-table">
+                            <table className={`ciq-chart-table ${isTick ? 'ciq-chart-table--tick' : ''}`}>
                                 <tbody>
-                                    {tableData.map((item, idx) => (
-                                        <tr
-                                            key={`chartTable-${idx}`} // eslint-disable-line react/no-array-index-key
-                                            className="ciq-table-row"
-                                        >
-                                            <td className="ciq-table-cell">{item.Date}</td>
-                                            {isTick && <td className="ciq-table-cell">{item.Close}</td>}
-                                            {!isTick
-                                        && [
-                                            <td key="td-open" className="ciq-table-cell">{item.Open}</td>,
-                                            <td key="td-high" className="ciq-table-cell">{item.High}</td>,
-                                            <td key="td-low" className="ciq-table-cell">{item.Low}</td>,
-                                            <td key="td-close" className="ciq-table-cell">{item.Close}</td>,
-                                        ]}
-                                            <td className="ciq-table-cell before-last-child">
-                                                <div className="cq-change-cell">
-                                                    <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
-                                                </div>
-                                            </td>
-                                            <td className="ciq-table-cell">
-                                                <div className="cq-change-cell">
-                                                    <div className={`cq-change ${item.Status}`} />
-                                                </div>
-                                            </td>
-                                        </tr>
+                                    {tableData.map(item => (
+                                        <React.Fragment key={`chartTable-group-${item.date}`}>
+                                            <tr
+                                                key={`chartTable-${item.date}`} // eslint-disable-line react/no-array-index-key
+                                            >
+                                                <td colSpan={isTick ? 4 : 7} className="ciq-table-cell--wide"> {item.date} </td>
+                                            </tr>
+                                            {item.datas.map((data, idy) => (
+                                                <tr
+                                                    key={`chartTable-${item.date}-${idy}`} // eslint-disable-line react/no-array-index-key
+                                                >
+                                                    <td>{data.Date}</td>
+                                                    {isTick && <td>{data.Close}</td>}
+                                                    {!isTick
+                                                && [
+                                                    <td key="td-open">{data.Open}</td>,
+                                                    <td key="td-high">{data.High}</td>,
+                                                    <td key="td-low">{data.Low}</td>,
+                                                    <td key="td-close">{data.Close}</td>,
+                                                ]}
+                                                    <td className="before-last-child">
+                                                        <div className="cq-change-cell">
+                                                            <div className={`${data.Status ? data.Status : 'up'}`}>{data.Change}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div className="cq-change-cell">
+                                                            <div className={`cq-change ${data.Status}`} />
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </React.Fragment>
                                     ))
                                     }
-
                                 </tbody>
                             </table>
                         )
@@ -147,4 +157,7 @@ export default connect(({  chart, chartTable }) => ({
     isTick: chartTable.isTick,
     symbol: chartTable.symbol,
     setOpen: chartTable.setOpen,
+    updateScrollSpy: chartTable.updateScrollSpy,
+    setScrollPanel: chartTable.setScrollPanel,
+    isScrolled: chartTable.isScrolled,
 }))(ChartTable);
