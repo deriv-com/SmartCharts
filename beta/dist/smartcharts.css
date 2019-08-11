@@ -41,6 +41,8 @@
 
 .cq-last-digits{position:absolute;bottom:45px;left:calc(50% - 150px);visibility:hidden}.cq-last-digits.show{visibility:visible}.cq-last-digits .cq-bars{height:70px}.smartcharts-light .cq-last-digits .cq-bars{color:#7f8397}.smartcharts-dark .cq-last-digits .cq-bars{color:#7f8397}.smartcharts-light .cq-last-digits .cq-bars .min{color:#e31c4b}.smartcharts-dark .cq-last-digits .cq-bars .min{color:#e31c4b}.smartcharts-light .cq-last-digits .cq-bars .max{color:#2d9f93}.smartcharts-dark .cq-last-digits .cq-bars .max{color:#39b19d}.cq-last-digits .cq-bars .cq-bar-value{margin:-16px 0 0 -6px;transition:opacity 0.8s linear;font-size:12px;opacity:0}.cq-last-digits .cq-bars .cq-bar-value.show{opacity:1}.cq-last-digits .cq-bars .cq-bar{width:10px;position:absolute;bottom:40px;transition:height 0.8s ease-in-out;border-radius:16px}.smartcharts-light .cq-last-digits .cq-bars .cq-bar{background-color:#999cac}.smartcharts-dark .cq-last-digits .cq-bars .cq-bar{background-color:#555975}.cq-last-digits .cq-bars .cq-bar .cq-bar-title{position:absolute;bottom:-20px;width:10px;text-align:center;font-size:14px}.smartcharts-light .cq-last-digits .cq-bars .cq-bar.min{background-color:#e31c4b}.smartcharts-dark .cq-last-digits .cq-bars .cq-bar.min{background-color:#e31c4b}.smartcharts-light .cq-last-digits .cq-bars .cq-bar.max{background-color:#2d9f93}.smartcharts-dark .cq-last-digits .cq-bars .cq-bar.max{background-color:#39b19d}.cq-last-digits .cq-bar-footer{text-align:center;width:475px;font-size:12px;top:60px;position:absolute;left:-75px}.smartcharts-light .cq-last-digits .cq-bar-footer{color:#000}.smartcharts-dark .cq-last-digits .cq-bar-footer{color:#fff}.cq-last-digits.minimised{bottom:10px}.cq-last-digits.minimised .cq-bars{height:25px}.cq-last-digits.minimised .cq-bar-footer{top:8px}
 
+.ciq-navigation-widget{width:32px;position:absolute;bottom:2.5em;left:2.5em;z-index:30}.ciq-navigation-widget__item{margin-bottom:8px}.ciq-navigation-widget__item--zoom .ic-icon:first-child{margin-bottom:2px}.ciq-navigation-widget__item--hidden{display:none}.ciq-navigation-widget__item .ic-icon{width:32px;height:32px;border-radius:4px;cursor:pointer;margin:auto;line-height:41px;transition:none}.smartcharts-light .ciq-navigation-widget__item .ic-icon{background-color:#f4f4f6}.smartcharts-dark .ciq-navigation-widget__item .ic-icon{background-color:#191c31}.smartcharts-light .ciq-navigation-widget__item .ic-icon svg{fill:rgba(0,0,0,0.8)}.smartcharts-dark .ciq-navigation-widget__item .ic-icon svg{fill:#fff}
+
 .spot__shape-circule{border-radius:100%;width:6px;height:6px;margin-left:-3px;margin-top:-3px;line-height:1px;position:absolute}.smartcharts-light .spot__fill-red{background-color:#e31c4b}.smartcharts-dark .spot__fill-red{background-color:#e31c4b}.smartcharts-light .spot__fill-blue{background-color:#39b19d}.smartcharts-dark .spot__fill-blue{background-color:#39b19d}.spot__label{text-align:center;padding:4px;white-space:nowrap;position:absolute;z-index:1;margin-left:0px;line-height:1.5}.smartcharts-light .spot__label{background-color:rgba(0,0,0,0.16);color:rgba(0,0,0,0.8)}.smartcharts-dark .spot__label{background-color:#303342;color:#fff}.spot__label:after{content:'';position:absolute;left:0;margin-left:0px;border-width:4px;border-style:solid}.spot__label[data-label-pos='top']{border-radius:3px 3px 3px 0px;margin-top:-40px}.spot__label[data-label-pos='top']:after{top:100%}.smartcharts-light .spot__label[data-label-pos='top']:after{border-color:rgba(0,0,0,0.16) transparent transparent rgba(0,0,0,0.16)}.smartcharts-dark .spot__label[data-label-pos='top']:after{border-color:#303342 transparent transparent #303342}.spot__label[data-label-pos='bottom']{border-radius:0px 3px 3px;margin-top:15px}.spot__label[data-label-pos='bottom']:after{bottom:100%}.smartcharts-light .spot__label[data-label-pos='bottom']:after{border-color:transparent transparent rgba(0,0,0,0.16) rgba(0,0,0,0.16)}.smartcharts-dark .spot__label[data-label-pos='bottom']:after{border-color:transparent transparent #303342 #303342}
 
 html,body{-ms-touch-action:none;margin:0px}
@@ -151,7 +153,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx_baseline_delta_mountain{background-color:rgba(163,102,255,0.5);color:rgba(163,102,255,0.01);padding:3px}
 .stx_colored_mountain_chart{background-color:rgba(163,102,255,0.5);color:rgba(163,102,255,0.01);width:2px;padding:4px}
 .stx_mountain_chart{width:1px}
-.smartcharts-light .stx_mountain_chart{border:#999cac;background-color:rgba(153,156,172,0.36);color:rgba(255,255,255,0)}
+.smartcharts-light .stx_mountain_chart{border:#999cac;background-color:rgba(153,156,172,0.16);color:rgba(255,255,255,0)}
 .smartcharts-dark .stx_mountain_chart{border:#fff;background-color:rgba(255,255,255,0.36);color:rgba(16,19,32,0)}
 .stx_histogram_down{color:#f95454}
 .smartcharts-light .stx_histogram_down{border-left-color:#999cac}
@@ -283,6 +285,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .smartcharts .smartcharts-mobile{-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 .smartcharts .cq-chart-control-left .cq-top-ui-widgets{left:90px}
 .smartcharts .cq-chart-control-left .cq-notifications{right:100px}
+.smartcharts--navigation-widget .home{display:none !important}
 .smartcharts--has-markers .stx-subholder{z-index:108 !important}
 .ciq-menu{position:relative}
 .smartcharts-light .ciq-menu{color:rgba(0,0,0,0.8)}
@@ -331,7 +334,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .no-touch .price-arrow span{position:absolute;top:4px;left:6px;display:block;width:15px;height:15px;background-position:-4px -488px;opacity:0;transition:opacity 0.2s}
 .no-touch .chart-line:hover .price-arrow{width:20px;height:23px}
 .no-touch .chart-line:hover .price-arrow span{opacity:1}
-.price{font-size:12px;font-weight:bold;display:block;padding:3px 6px;line-height:18px;overflow:hidden;text-align:center}
+.price{font-size:12px;font-weight:bold;display:block;padding:3px 1px;line-height:18px;overflow:hidden;text-align:center}
 .draggable .price{padding-left:16px}
 .draggable .price:after{font-weight:normal;content:'\2261';font-size:25px;position:absolute;left:1px;top:1px;-webkit-transform:scaleX(0.8);transform:scaleX(0.8)}
 .shade.hidden{opacity:0}
