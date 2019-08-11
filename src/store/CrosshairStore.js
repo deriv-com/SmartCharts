@@ -26,6 +26,10 @@ class CrosshairStore {
         return this.context.stx;
     }
 
+    get isChartReady() {
+        return this.mainStore.state.isChartReady;
+    }
+
     @observable state = 2;
 
     node = null;
@@ -53,9 +57,9 @@ class CrosshairStore {
             crosshair.classList.add('active');
         } else {
             this.stx.setStyle('stx-float-price', 'color', '#fff');
-            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatlabelsbg`]);
+            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}_float_labels_bg`]);
             this.stx.controls.floatDate.style.color = '#fff';
-            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}floatlabelsbg`];
+            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}_float_labels_bg`];
             this.stx.controls.crossX.style.height = '100%';
             crosshair.classList.remove('active');
         }
@@ -90,7 +94,7 @@ class CrosshairStore {
 
         const bar = stx.barFromPixel(stx.cx);
         const data = stx.chart.dataSegment[bar];
-        if (!data) {
+        if (!data || !this.isChartReady) {
             this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
             return;
         }
@@ -350,6 +354,13 @@ class CrosshairStore {
         }
 
         return rows;
+    }
+
+    updateVisibility = (visible) => {
+        const crosshair = this.stx.container.querySelector('.cq-crosshair');
+
+        if (visible) crosshair.style.opacity = 1;
+        else crosshair.style.opacity = 0;
     }
 
     // YES! we are manually patching DOM, Because we don't want to pay
