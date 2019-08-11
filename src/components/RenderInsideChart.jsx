@@ -26,8 +26,8 @@ class RenderInsideChart extends Component {
     }
 
     render() {
-        if (!this.props.isChartReady) return(null);
-        if (this.props.hideInScrollToEpoch && this.props.isChartScrollingToEpoch) return(null);
+        if (!this.props.isChartReady) return (null);
+        if (this.props.hideInScrollToEpoch && this.props.isChartScrollingToEpoch) return (null);
         if (this.container) {
             return ReactDOM.createPortal(
                 this.props.children,
