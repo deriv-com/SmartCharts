@@ -24,6 +24,58 @@
     z-index: 1;
 }
 
+.ciq-chart-table__panel {
+    position: relative;
+    overflow: hidden;
+    transform: translateZ(0);
+
+    &__group {
+        position: relative;
+        padding-top: 44px;
+        overflow: hidden;
+
+        &--title {
+            display: block;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            transform: translate3d(0, 0, 0);
+            padding: 16px 24px 8px;
+            font-weight: bold;
+            height: 44px;
+            box-sizing: border-box;
+            line-height: 1.43;
+            font-size: 14px;
+            @include themify($themes) {
+                background: themed('ChartTableBodyHeadBg');
+                color: themed('ChartTableBodyHeadText');
+            }
+
+            &.sticky-top,
+            &.sticky-bottom {
+                z-index: 8;
+                @include themify($themes) {
+                    background-color: themed('CatDisplayBg');
+                    border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+                }
+            }
+            &.sticky-bottom {
+                position: absolute;
+                top: auto !important;
+                bottom: 0px !important;
+            }
+            &.sticky-top {
+                position: fixed;
+                top: 0px;
+                z-index: 9;
+                @include themify($themes) {
+                    box-shadow: 0 2px 8px 0 themed('ChartTableHeadShadow');
+                }
+            }
+        }
+    }
+}
+
 .ciq-chart-table {
     width: 100%;
     border-collapse: collapse;
@@ -73,16 +125,6 @@
                 max-width: 50px !important;
                 text-align: left;
                 padding-left: 4px;
-            }
-            &.ciq-table-cell--wide {
-                min-width: 100% !important;
-                max-width: 100% !important;
-                padding: 8px 24px;
-                font-weight: bold;
-                @include themify($themes) {
-                    background: themed('ChartTableBodyHeadBg');
-                    color: themed('ChartTableBodyHeadText');
-                }
             }
             &:nth-child(1), &:nth-child(1) {
                 min-width: 90px;
@@ -160,16 +202,6 @@
     }
     .cq-change-cell {
         display: inline-flex;
-    }
-    &--scrolled {
-        position: relative;
-        z-index: 9;
-
-        thead {
-            @include themify($themes) {
-                box-shadow: 0 2px 8px 0 themed('ChartTableHeadShadow');
-            }
-        }
     }
     &--tick {
         tr {

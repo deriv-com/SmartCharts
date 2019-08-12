@@ -26,6 +26,9 @@ export default class ChartTableStore {
     @observable tableData = [];
     @observable isTick;
     @observable lastTick;
+    @observable activeHeadTop;
+    @observable activeHeadKey;
+    @observable focusedCategoryKey;
 
     @computed get symbol() {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol : {};
@@ -104,7 +107,33 @@ export default class ChartTableStore {
     }
 
     @action.bound updateScrollSpy() {
+        const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
+        let activeHeadTop = 0;
+        let activeMenuId = null;
+        const groupTitleHeight = 44;
+
+        this.tableData.forEach((dateGroup) => {
+            if (!dateGroup.ele) { return; }
+            const r = dateGroup.ele.getBoundingClientRect();
+            const top = r.top - scrollPanelTop;
+            if (top < 0) {
+                activeMenuId = dateGroup.key;
+                const dateSwitchPoint = r.height + top - groupTitleHeight;
+                activeHeadTop = dateSwitchPoint < 0 ? dateSwitchPoint : 0;
+            }
+        });
+
+        this.focusedCategoryKey = activeMenuId || this.tableData[0].key;
+        this.activeHeadTop = activeHeadTop;
         this.scrollTop = this.scrollPanel.getValues().top;
+        this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
+    }
+
+    @action.bound setDateElement(element, date) {
+        const dateGroup = this.tableData.find(x => x.date === date);
+        if (dateGroup) {
+            dateGroup.ele = element;
+        }
     }
 
     @action.bound setScrollPanel(element) {

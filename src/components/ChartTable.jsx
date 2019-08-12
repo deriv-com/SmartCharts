@@ -4,6 +4,46 @@ import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
 
+const GroupTitleClassName = (dateKey, activeHeadKey, activeHeadTop) => {
+    let TitleClassName = '';
+    if (activeHeadKey === dateKey) {
+        TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
+    }
+
+    return `ciq-chart-table__panel__group--title ${TitleClassName}`;
+};
+
+const GroupContent = ({ item, isTick }) => (
+    <table className={`ciq-chart-table ${isTick ? 'ciq-chart-table--tick' : ''}`}>
+        <tbody>
+            {item.datas.map((data, idy) => (
+                <tr
+                    key={`chartTable-${item.key}-${idy}`} // eslint-disable-line react/no-array-index-key
+                >
+                    <td>{data.Date}</td>
+                    {isTick && <td>{data.Close}</td>}
+                    {!isTick && [
+                        <td key="td-open">{data.Open}</td>,
+                        <td key="td-high">{data.High}</td>,
+                        <td key="td-low">{data.Low}</td>,
+                        <td key="td-close">{data.Close}</td>,
+                    ]}
+                    <td className="before-last-child">
+                        <div className="cq-change-cell">
+                            <div className={`${data.Status ? data.Status : 'up'}`}>{data.Change}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div className="cq-change-cell">
+                            <div className={`cq-change ${data.Status}`} />
+                        </div>
+                    </td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
+
 const ChartTable = ({
     isMobile,
     tableData,
@@ -15,6 +55,9 @@ const ChartTable = ({
     updateScrollSpy,
     setScrollPanel,
     isScrolled,
+    setDateElement,
+    activeHeadKey,
+    activeHeadTop,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
     const width = isTick ? '380px' : '704px';
@@ -66,7 +109,7 @@ const ChartTable = ({
                 <Scrollbars
                     autoHeight
                     autoHeightMax="80vh"
-                    className="ciq-list"
+                    className="ciq-chart-table__panel"
                     onScroll={updateScrollSpy}
                     ref={setScrollPanel}
                 >
@@ -100,46 +143,27 @@ const ChartTable = ({
                                 </tbody>
                             </table>
                         )
-                        :                        (
-                            <table className={`ciq-chart-table ${isTick ? 'ciq-chart-table--tick' : ''}`}>
-                                <tbody>
-                                    {tableData.map(item => (
-                                        <React.Fragment key={`chartTable-group-${item.date}`}>
-                                            <tr
-                                                key={`chartTable-${item.date}`} // eslint-disable-line react/no-array-index-key
-                                            >
-                                                <td colSpan={isTick ? 4 : 7} className="ciq-table-cell--wide"> {item.date} </td>
-                                            </tr>
-                                            {item.datas.map((data, idy) => (
-                                                <tr
-                                                    key={`chartTable-${item.date}-${idy}`} // eslint-disable-line react/no-array-index-key
-                                                >
-                                                    <td>{data.Date}</td>
-                                                    {isTick && <td>{data.Close}</td>}
-                                                    {!isTick
-                                                && [
-                                                    <td key="td-open">{data.Open}</td>,
-                                                    <td key="td-high">{data.High}</td>,
-                                                    <td key="td-low">{data.Low}</td>,
-                                                    <td key="td-close">{data.Close}</td>,
-                                                ]}
-                                                    <td className="before-last-child">
-                                                        <div className="cq-change-cell">
-                                                            <div className={`${data.Status ? data.Status : 'up'}`}>{data.Change}</div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <div className="cq-change-cell">
-                                                            <div className={`cq-change ${data.Status}`} />
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </React.Fragment>
-                                    ))
-                                    }
-                                </tbody>
-                            </table>
+                        : (
+                            tableData.map(item => (
+                                <div
+                                    key={`chartTable-group-${item.key}`}
+                                    className="ciq-chart-table__panel__group"
+                                    ref={el => setDateElement(el, item.date)}
+                                >
+                                    <div
+                                        className={GroupTitleClassName(item.key, activeHeadKey, activeHeadTop)}
+                                        style={{ maxWidth: width }}
+                                    >
+                                        {item.date}
+                                    </div>
+                                    <div className="ciq-chart-table__panel__group--content">
+                                        <GroupContent
+                                            item={item}
+                                            isTick={isTick}
+                                        />
+                                    </div>
+                                </div>
+                            ))
                         )
                     }
                 </Scrollbars>
@@ -160,4 +184,7 @@ export default connect(({  chart, chartTable }) => ({
     updateScrollSpy: chartTable.updateScrollSpy,
     setScrollPanel: chartTable.setScrollPanel,
     isScrolled: chartTable.isScrolled,
+    setDateElement: chartTable.setDateElement,
+    activeHeadTop: chartTable.activeHeadTop,
+    activeHeadKey: chartTable.activeHeadKey,
 }))(ChartTable);
