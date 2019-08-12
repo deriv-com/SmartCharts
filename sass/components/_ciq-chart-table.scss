@@ -54,10 +54,6 @@
             &.sticky-top,
             &.sticky-bottom {
                 z-index: 8;
-                @include themify($themes) {
-                    background-color: themed('CatDisplayBg');
-                    border-bottom: 1px solid themed('CatDisplayCatContentBorder');
-                }
             }
             &.sticky-bottom {
                 position: absolute;

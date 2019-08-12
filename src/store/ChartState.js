@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
 import Theme from '../../sass/_themes.scss';
 
 class ChartState {
@@ -210,17 +210,18 @@ class ChartState {
 
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
-        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
+        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
         if (!this.rootNode) {
             this.rootNode = this.mainStore.chart.rootNode;
         }
-        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
+        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
             const closedChartColor = 'rgba(129, 133, 152, 0.35)';
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
-            this.stxx.setStyle('stx_mountain_chart', 'background-color', 'transparent');
-            this.stxx.setStyle('stx_mountain_chart', 'color', 'transparent');
+            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+
             // line chart
             this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
             this.stxx.setStyle('stx_line_up', 'color', closedChartColor);
@@ -231,17 +232,17 @@ class ChartState {
             this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
             // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // candle wick
             this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
             // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // baseline chart
             this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
@@ -254,14 +255,17 @@ class ChartState {
             this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
             // current price text color
-            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}candletextclosed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}candletextclosed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}_candle_text_closed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}_candle_text_closed`]);
             // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}candlebgclosed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}_candle_bg_closed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}_candle_bg_closed`]);
         } else {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
-            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
+            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}_chart_mountain_border`]);
         }
         this.stxx.draw();
     }
@@ -393,11 +397,13 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft = () => {
+    scrollChartToLeft = (leftTick, force) => {
+        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
         this.stxx.chart.entryTick = null;
-        if (this.scrollToEpoch && !this.startEpoch) {
+
+        if (this.scrollToEpoch && !this.startEpoch && !force) {
             const startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
 
             if (startEntry) {
                 this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
@@ -422,9 +428,19 @@ class ChartState {
                 // This assignment should be always after draw()
                 this.stxx.chart.lockAutoScroll = true;
             });
-        } else if (this.startEpoch) {
-            this.stxx.chart.entryTick = null;
+        } else if (scrollToEpoch && this.startEpoch || force) {
             this.stxx.chart.lockAutoScroll = true;
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+
+            if (!this.endEpoch) {
+                this.stxx.setMaxTicks(scrollToTarget + 3);
+                this.stxx.chart.scroll = scrollToTarget + 1;
+            } else {
+                this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
+                this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+            }
+            this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         } else {
             this.stxx.chart.entryTick = null;

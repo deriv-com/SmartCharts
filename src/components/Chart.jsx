@@ -10,6 +10,7 @@ import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import LastDigitStats from './LastDigitStats.jsx';
+import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
 import '../../sass/main.scss';
@@ -76,6 +77,7 @@ class Chart extends Component {
             theme,
             position,
             showLastDigitStats,
+            enabledNavigationWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -86,7 +88,7 @@ class Chart extends Component {
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${contextWidth} ${HasMarkers}`}>
+            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
@@ -122,6 +124,10 @@ class Chart extends Component {
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
                                     </div>
+                                    {
+                                        enabledNavigationWidget
+                                            && <NavigationWidget />
+                                    }
                                     <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                         <DrawingCursor />

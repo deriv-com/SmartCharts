@@ -156,7 +156,6 @@ class App extends Component {
             () => this.setState({ isConnectionOpened: true }),
         );
 
-
         this.state = {
             settings,
             endEpoch,
@@ -361,6 +360,10 @@ class App extends Component {
         this.setState({ markers });
     }
 
+    onWidget = () => {
+        this.setState(prevState => ({ enabledNavigationWidget: !prevState.enabledNavigationWidget }));
+    }
+
     toggleStartEpoch = () => {
         if (this.state.scrollToEpoch) {
             this.setState({
@@ -399,7 +402,8 @@ class App extends Component {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers, activeLanguage } = this.state;
+            leftOffset, color, foregroundColor, markers,
+            enabledNavigationWidget, activeLanguage } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -423,6 +427,7 @@ class App extends Component {
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
+                        enabledNavigationWidget={enabledNavigationWidget}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
                         chartControlsWidgets={this.renderControls}
@@ -460,6 +465,10 @@ class App extends Component {
                     </SmartChart>
                 </div>
                 <div className="action-section">
+                    <div className="form-row">
+                        Navigation Widget <br />
+                        <button type="button" onClick={this.onWidget}>Toggle</button>
+                    </div>
                     <div className="form-row">
                         Active Language:
                         <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'ON' : 'OFF'}</button>
