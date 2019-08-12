@@ -692,7 +692,7 @@ class ChartStore {
     }
 
     @action.bound updateYaxisWidth = () => {
-        if (this.stxx.masterData && this.stxx.masterData.length) {
+        if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
             const currentQuote = this.context.stx.currentQuote();
             if (currentQuote && currentQuote.Close) {
                 this.calculateYaxisWidth(currentQuote.Close);
@@ -721,7 +721,9 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
-            this.mainStore.chart.feed.scaleChart();
+            if (this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.scaleChart();
+            }
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
@@ -754,13 +756,15 @@ class ChartStore {
     }
 
     setMainSeriesDisplay(name) {
-        // Set display name of main series (to be shown in crosshair tooltip)
-        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
-        // TODO, we use to use `field` field to recgnize main seris and show
-        // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
-        // we should find another way of detecting main series price, till then
-        // we found this temporary solution.
-        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
+        if (this.stxx && this.stxx.chart) {
+            // Set display name of main series (to be shown in crosshair tooltip)
+            this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
+            // TODO, we use to use `field` field to recgnize main seris and show
+            // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
+            // we should find another way of detecting main series price, till then
+            // we found this temporary solution.
+            this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
+        }
     }
 
     // Makes requests to tick history API that will replace
