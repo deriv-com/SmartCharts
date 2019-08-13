@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-08-13 22:32\n"
+"PO-Revision-Date: 2019-08-13 22:42\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -568,10 +568,10 @@ msgid "Days Per Year"
 msgstr "Días Al Año"
 
 msgid "Pretty Good Oscillator"
-msgstr "Oscilador Bastante Bueno"
+msgstr "Oscilador Pretty Good"
 
 msgid "Ultimate Oscillator"
-msgstr "Oscilador Último"
+msgstr "Oscilador Ultimate"
 
 msgid "Cycle 1"
 msgstr "Ciclo 1"
@@ -616,7 +616,7 @@ msgid "Commodity Channel Index"
 msgstr "Índice de Canal de Materias Primas"
 
 msgid "Detrended Price Oscillator"
-msgstr "Oscilador del Precio Detectado"
+msgstr "Oscilador del Precio sin Tendencias"
 
 msgid "True Range"
 msgstr "Rango Verdadero"
