@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-07-04 21:22\n"
+"PO-Revision-Date: 2019-08-13 22:32\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -289,10 +289,10 @@ msgid "Retrieving Trading Times..."
 msgstr "Obteniendo Horarios de Trading..."
 
 msgid "Reversal"
-msgstr "Reversal"
+msgstr "Revertir"
 
 msgid "Reversal Percentage"
-msgstr "Porcentaje de Reversal"
+msgstr "Porcentaje de Reversión"
 
 msgid "right-click to delete"
 msgstr "clic derecho para eliminar"
