@@ -62,21 +62,13 @@ class FastMarker extends Component {
         ) {
             let tick_idx = stx.tickFromDate(this.date, chart);
 
-            if (tick_idx > -1) {
-                if (!this.stx.chart.dataSet[tick_idx]) {
-                    stx.updateChartData(
-                        { DT: this.date, Close: null },
-                        null,
-                    );
-                    stx.createDataSet();
-
-                    tick_idx = stx.tickFromDate(this.date, chart);
-                } else if (stx.chart.dataSet[tick_idx]
-                    && stx.chart.dataSet[tick_idx].Close !== this.price) {
-                    delete stx.chart.tickCache[this.date.getTime()];
-                    tick_idx = stx.tickFromDate(this.date, chart);
-                }
+            if (tick_idx > -1
+                && stx.chart.dataSet[tick_idx]
+                && stx.chart.dataSet[tick_idx].Close !== this.price) {
+                delete stx.chart.tickCache[this.date.getTime()];
+                tick_idx = stx.tickFromDate(this.date, chart);
             }
+
             let x = stx.pixelFromTick(tick_idx, chart);
 
             // ChartIQ doesn't support placing markers in the middle of ticks.
@@ -92,17 +84,6 @@ class FastMarker extends Component {
                     const pixelx_from_prev_bar = x - stx.pixelFromTick(tick_idx - 1, chart);
                     x +=  (this.date - bar.DT) / (bar.DT - bar_prev.DT) * pixelx_from_prev_bar;
                 }
-
-                // We don't want to touch master data on marker draw.
-                // However our design requires a tooltip on start time marker,
-                // and crosshair gets the tooltip from master data
-                // TODO if in the future the UI/UX decides that the crosshair doesn't need showing markers' info then we can remove this part of the code.
-                stx.updateChartData(
-                    { DT: this.date, Close: null },
-                    null,
-                    { fillGaps: true },
-                );
-                stx.createDataSet();
             }
 
             const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;

@@ -159,6 +159,10 @@ export default class ChartTypeStore {
 
     @action.bound setType(type) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
+        if (!type) {
+            type = 'mountain';
+        }
+
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type);
         }
