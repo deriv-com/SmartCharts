@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-08-13 22:42\n"
+"PO-Revision-Date: 2019-08-13 22:51\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -1096,19 +1096,19 @@ msgid "Jaw Period"
 msgstr "Período Jaw"
 
 msgid "Jaw Offset"
-msgstr "Mándibula Offset"
+msgstr "Offset de Jaw"
 
 msgid "Teeth Period"
-msgstr "Período de dientes"
+msgstr "Período de Teeth"
 
 msgid "Teeth Offset"
-msgstr "Dientes offset"
+msgstr "Offset de Teeth"
 
 msgid "Lips Period"
-msgstr "Período de Labios"
+msgstr "Período de Lips"
 
 msgid "Lips Offset"
-msgstr "Labios offset"
+msgstr "Offset de Lips"
 
 msgid "Show Fractals"
 msgstr "Mostrar Fractales"
@@ -1117,10 +1117,10 @@ msgid "Jaw"
 msgstr "Jaw"
 
 msgid "Teeth"
-msgstr "Dientes"
+msgstr "Teeth"
 
 msgid "Lips"
-msgstr "Labios"
+msgstr "Lips"
 
 msgid "Gator Oscillator"
 msgstr "Oscilador Gator"
