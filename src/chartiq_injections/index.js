@@ -8,9 +8,9 @@ import { plotterDrawText }        from './plotterDrawText';
 const inject = () => {
     drawCurrentPriceLine();
     maintainHeadsUpHR();
-    plotterDrawText();
     maintainSpanSize();
     // manageMasterDataLength();
+    plotterDrawText();
     setMaxTicks();
 };
 
