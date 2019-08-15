@@ -152,7 +152,6 @@ const ChartTable = ({
                                 >
                                     <div
                                         className={GroupTitleClassName(item.key, activeHeadKey, activeHeadTop)}
-                                        style={{ maxWidth: width }}
                                     >
                                         {item.date}
                                     </div>
