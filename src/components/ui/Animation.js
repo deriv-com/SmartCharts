@@ -233,15 +233,15 @@ export default function animateChart(stx, animationParameters, easeMachine) {
         if (params.secondarySeries) return;
 
         stx.prevQuote = this.currentQuote() || newQuotes[0];
-        stx.isNewTick = !this.prevQuote || newQuotes.slice(-1)[0].DT > this.prevQuote.DT;
+        stx.isNewTick = newQuotes.slice(-1)[0].Close && (!this.prevQuote || newQuotes.slice(-1)[0].DT > this.prevQuote.DT);
         stx.chart.granularity = calculateGranularity(this.layout.interval, this.layout.timeUnit);
         stx.chart.lockScroll = !stx.chart.granularity;
     });
 
     stx.append('updateChartData', function (newQuotes, chart, params) {
-        if (params.secondarySeries) return;
+        if (params && params.secondarySeries) return;
 
-        if (stx.isHome() && !stx.chart.lockAutoScroll && newQuotes && newQuotes.length && stx.isNewTick) {
+        if (!stx.chart.entryTick && stx.isHome() && !stx.chart.lockAutoScroll && newQuotes && newQuotes.length && stx.isNewTick) {
             const timeInterval = newQuotes.slice(-1)[0].DT - this.prevQuote.DT;
 
             if (stx.animations.liveScroll) {
@@ -256,6 +256,11 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
 
             stx.animations.liveScroll.run((bar) => {
+                if (stx.isDestroyed) {
+                    stx.animations.liveScroll.stop();
+                    return;
+                }
+
                 this.micropixels = -bar;
                 this.draw();
             }, 0, stx.layout.candleWidth);
@@ -265,16 +270,18 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
 
             if (stx.chart.lockAutoScroll) {
-                if (stx.isNewTick && this.chart.entryTick !== null && this.chart.entryTick !== undefined) {
-                    const visibleTicks = this.chart.dataSet.length - (this.chart.entryTick || 0) + 1;
-                    this.setMaxTicks(visibleTicks + 3);
-                } else if (stx.isNewTick) {
-                    this.setMaxTicks(this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 5) || 2));
-                    this.chart.scroll = this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 10) || 1);
+                if (stx.isNewTick) {
+                    if (this.chart.entryTick || this.chart.entryTick === 0) {
+                        this.micropixels = 0;
+                        const visibleTicks = this.chart.dataSet.length - this.chart.entryTick + 1;
+                        this.setMaxTicks(visibleTicks + 3);
+                    } else {
+                        this.setMaxTicks(this.chart.dataSet.length + (Math.floor(this.chart.dataSet.length / 5) || 2));
+                        this.chart.scroll = this.chart.dataSet.length;
+                    }
+                    this.micropixels = 0;
+                    this.draw();
                 }
-
-                this.micropixels = 0;
-                this.draw();
             }
         }
     });

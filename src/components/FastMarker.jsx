@@ -34,7 +34,7 @@ class FastMarker extends Component {
     injectionId = null;
 
     setPosition = ({ epoch, price }) => {
-        this.price = +price;
+        this.price = +price || null;
         this.date = CIQ.strToDateTime(getUTCDate(epoch));
         this.updateCSS();
     }
@@ -60,16 +60,23 @@ class FastMarker extends Component {
             && chart.dataSet.length
             && stx.mainSeriesRenderer
         ) {
-            const tick_idx = stx.tickFromDate(this.date, chart);
+            let tick_idx = stx.tickFromDate(this.date, chart);
+
+            if (tick_idx > -1
+                && stx.chart.dataSet[tick_idx]
+                && stx.chart.dataSet[tick_idx].Close !== this.price) {
+                delete stx.chart.tickCache[this.date.getTime()];
+                tick_idx = stx.tickFromDate(this.date, chart);
+            }
+
             let x = stx.pixelFromTick(tick_idx, chart);
 
             // ChartIQ doesn't support placing markers in the middle of ticks.
-            const bar_idx = tick_idx - chart.dataSet.length + chart.scroll;
-            const bar = chart.dataSegment[bar_idx];
+            const bar = chart.dataSet[tick_idx];
             // Here we interpolate the pixel distance between two adjacent ticks.
             if (bar && bar.DT < this.date) {
-                const bar_next = chart.dataSegment[bar_idx + 1];
-                const bar_prev = bar_idx > 0 ? chart.dataSegment[bar_idx - 1] : null;
+                const bar_next = chart.dataSet[tick_idx + 1];
+                const bar_prev = tick_idx > 0 ? chart.dataSet[tick_idx - 1] : null;
                 if (bar_next && bar_next.Close && bar_next.DT > this.date) {
                     const pixelx_to_next_bar = stx.pixelFromTick(tick_idx + 1, chart) - x;
                     x +=  (this.date - bar.DT) / (bar_next.DT - bar.DT) * pixelx_to_next_bar;
@@ -77,18 +84,6 @@ class FastMarker extends Component {
                     const pixelx_from_prev_bar = x - stx.pixelFromTick(tick_idx - 1, chart);
                     x +=  (this.date - bar.DT) / (bar.DT - bar_prev.DT) * pixelx_from_prev_bar;
                 }
-
-                // We don't want to touch master data on marker draw.
-                // However our design requires a tooltip on start time marker,
-                // and crosshair gets the tooltip from master data
-                // TODO: remove the following hack.
-                stx.updateChartData(
-                    { DT: this.date, Close: null },
-                    null,
-                    { fillGaps: true },
-                );
-                stx.createDataSet();
-                // end TODO
             }
 
             const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;

@@ -17,6 +17,9 @@ class CurrentSpotStore {
     updateSpot = () => {
         const stx = this.stx;
         const cq_spot = this.context.topNode.querySelector('.cq-spot');
+        if (!cq_spot) return;
+
+        if (!cq_spot) return;
 
         if (this.state.endEpoch) {
             cq_spot.style.display = 'none';

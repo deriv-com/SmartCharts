@@ -65,8 +65,9 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
             let endOfLine = panel.right;
             const currentQuote = this.currentQuote();
             if (currentQuote) {
+                const tick = currentQuote.Close ? currentQuote.tick : currentQuote.tick - 1;
                 // Change the panel position to current spot position for drawing current price line
-                x = this.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
+                x = this.pixelFromTick(tick, chart) + (chart.lastTickOffset || 0);
                 endOfLine -= this.chart.context.measureText(txt).width * 0.4 // Draw the chart from the current spot to the beginning of the price label
             }
             endOfLine += 24; // we move the "x" psoition forward by 24 on createYAxisLabel in chartStore.js

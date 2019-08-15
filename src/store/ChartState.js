@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate } from '../utils';
+import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
 import Theme from '../../sass/_themes.scss';
 
 class ChartState {
@@ -27,6 +27,7 @@ class ChartState {
     @observable refreshActiveSymbols;
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
+    @observable isChartScrollingToEpoch = false;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -101,7 +102,7 @@ class ChartState {
             this.symbol = symbol;
             isSymbolChanged = true;
 
-            if (this.mainStore.chart && this.mainStore.chart.feed) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
@@ -121,7 +122,7 @@ class ChartState {
             this.setChartGranularity(granularity);
 
             isGranularityChanged = true;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged) {
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
         }
@@ -144,13 +145,6 @@ class ChartState {
             }
         }
 
-        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
-            this.scrollToEpoch = scrollToEpoch;
-            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
-                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
-            }
-        }
-
         // This if statement should be always after setting `this.scrollToEpoch` value
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
@@ -162,9 +156,18 @@ class ChartState {
             } else if (this.mainStore.chart.feed) {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
-                if (!this.importedLayout && !this.scrollToEpoch) {
+                if (!this.importedLayout && !this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
+            }
+        }
+
+        // Please always assign scrollToEpoch after startEpoch and keep this if statement exactly after above if clause
+        if (!isStaticChart && scrollToEpoch !== this.scrollToEpoch) {
+            this.scrollToEpoch = scrollToEpoch;
+            if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
+                this.setIsChartScrollingToEpoch(true);
+                this.scrollChartToLeft();
             }
         }
 
@@ -193,6 +196,10 @@ class ChartState {
         }
     }
 
+    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch) {
+        this.isChartScrollingToEpoch = isScrollingToEpoch;
+    }
+
     @action.bound hasReachedEndOfData(hasReachedEndOfData) {
         this.hasReachedEndOfData = hasReachedEndOfData;
     }
@@ -203,17 +210,18 @@ class ChartState {
 
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
-        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}chartgrid`]);
+        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
         if (!this.rootNode) {
             this.rootNode = this.mainStore.chart.rootNode;
         }
-        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}chartbg`];
+        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
             const closedChartColor = 'rgba(129, 133, 152, 0.35)';
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
-            this.stxx.setStyle('stx_mountain_chart', 'background-color', 'transparent');
-            this.stxx.setStyle('stx_mountain_chart', 'color', 'transparent');
+            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+
             // line chart
             this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
             this.stxx.setStyle('stx_line_up', 'color', closedChartColor);
@@ -224,17 +232,17 @@ class ChartState {
             this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
             // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // candle wick
             this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
             this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
             // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}chartclosedcandle`]);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}chartclosedcandle`]);
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // baseline chart
             this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
@@ -247,14 +255,17 @@ class ChartState {
             this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
             this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
             // current price text color
-            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}candletextclosed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}candletextclosed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}_candle_text_closed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}_candle_text_closed`]);
             // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}candlebgclosed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}candlebgclosed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}_candle_bg_closed`]);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}_candle_bg_closed`]);
         } else {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}chartmountainborder`]);
-            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}chartmountainborder`]);
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
+            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+
+            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}_chart_mountain_border`]);
         }
         this.stxx.draw();
     }
@@ -351,7 +362,7 @@ class ChartState {
                 if (layoutData.tension) {
                     this.stxx.chart.tension = layoutData.tension;
                 }
-                this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+                this.restoreDrawings();
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
                     this.setChartIsReady(true);
@@ -379,62 +390,66 @@ class ChartState {
     }
 
     restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
-        if (drawings) {
-            this.stxx.importDrawings(drawings);
-            this.stxx.draw();
+        if (this.stxx && this.stxx.chart) {
+            const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
+            if (drawings) {
+                this.stxx.importDrawings(drawings);
+                this.stxx.draw();
+            }
         }
     }
 
-    scrollChartToLeft = () => {
+    scrollChartToLeft = (leftTick, force) => {
+        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
         this.stxx.chart.entryTick = null;
-        if (this.scrollToEpoch && !this.startEpoch) {
-            let startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)).valueOf());
 
-            if (!startEntry) {
-                startEntry = {
-                    DT: CIQ.strToDateTime(getUTCDate(this.scrollToEpoch)),
-                    Close: null,
-                };
+        if (this.scrollToEpoch && !this.startEpoch && !force) {
+            const startEntry = this.stxx.chart.dataSet
+                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
 
-                /**
-                 * Adding an invisible bar if the bar
-                 * does not exist on the masterData
-                 */
-                this.stxx.updateChartData(
-                    startEntry,
-                    null,
-                    { fillGaps: true },
-                );
-                this.stxx.createDataSet();
+            if (startEntry) {
+                this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
+            } else {
+                this.stxx.chart.entryTick = this.stxx.chart.dataSet.length - 1;
             }
-            this.stxx.maxMasterDataSize = 0;
-            this.stxx.micropixels = 0;
-            this.stxx.draw();
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT); // the calculation of entry tick should be done after draw
 
-            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
-
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick + 1;
             if (this.stxx.animations.liveScroll && this.stxx.animations.liveScroll.running) {
                 this.stxx.animations.liveScroll.stop();
             }
 
+            this.stxx.minimumLeftBars = 1;
+            this.stxx.micropixels = 0;
+
             this.stxx.scrollTo(this.stxx.chart, scrollToTarget, () => {
                 this.stxx.setMaxTicks(5);
                 this.stxx.micropixels = 0;
-                this.stxx.chart.lockAutoScroll = true;
-                this.stxx.chart.isScrollLocationChanged = true; // set to true to draw markers
+                this.setIsChartScrollingToEpoch(false);
                 this.stxx.draw();
+
+                // This assignment should be always after draw()
+                this.stxx.chart.lockAutoScroll = true;
             });
-        } else if (this.startEpoch) {
+        } else if (scrollToEpoch && this.startEpoch || force) {
             this.stxx.chart.lockAutoScroll = true;
-            this.stxx.chart.isScrollLocationChanged = true;
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
+            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+
+            if (!this.endEpoch) {
+                this.stxx.setMaxTicks(scrollToTarget + 3);
+                this.stxx.chart.scroll = scrollToTarget + 1;
+            } else {
+                this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
+                this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+            }
+            this.stxx.draw();
+            this.setIsChartScrollingToEpoch(false);
         } else {
+            this.stxx.chart.entryTick = null;
             this.stxx.chart.lockAutoScroll = false;
-            this.stxx.chart.isScrollLocationChanged = false;
             this.stxx.home();
             this.stxx.draw();
+            this.setIsChartScrollingToEpoch(false);
         }
         this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
@@ -469,6 +484,8 @@ class ChartState {
         if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
             this.stxx.layout.interval = undefined;
         }
+
+        this.stxx.minimumLeftBars = this.mainStore.chart.defaultMinimumBars;
 
         // Clear start and end epoch before importing that layout
         this.startEpoch = this.endEpoch = null;
@@ -547,7 +564,7 @@ class ChartState {
         if (grab && this.stxx.chart.lockAutoScroll) {
             this.stxx.chart.lockAutoScroll = false;
         }
-        if (this.stxx && this.stxx.chart) {
+        if (this.stxx && this.stxx.chart && !this.stxx.chart.lockAutoScroll) {
             const dataSegment = this.stxx.chart.dataSegment;
             const whiteSpace = this.chartStore.isMobile ? 50 : 150;
             if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
