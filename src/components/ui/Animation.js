@@ -256,6 +256,11 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
 
             stx.animations.liveScroll.run((bar) => {
+                if (stx.isDestroyed) {
+                    stx.animations.liveScroll.stop();
+                    return;
+                }
+
                 this.micropixels = -bar;
                 this.draw();
             }, 0, stx.layout.candleWidth);
