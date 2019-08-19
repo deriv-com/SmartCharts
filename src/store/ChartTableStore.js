@@ -8,6 +8,7 @@ export default class ChartTableStore {
         this.mainStore = mainStore;
         this.dialog = new DialogStore(mainStore);
         this.Dialog = this.dialog.connect(Dialog);
+        this.dateElements = {};
         reaction(() => this.dialog.open, this.loadTableData);
     }
 
@@ -36,10 +37,6 @@ export default class ChartTableStore {
 
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
-    }
-
-    @computed get isScrolled() {
-        return this.scrollTop > 0.002; // this is constant number for scroll
     }
 
     @action.bound loadTableData() {
@@ -123,16 +120,18 @@ export default class ChartTableStore {
         let activeMenuId = null;
         const groupTitleHeight = 44;
 
-        this.tableData.forEach((dateGroup) => {
-            if (!dateGroup.ele) { return; }
-            const r = dateGroup.ele.getBoundingClientRect();
+        for (const dateGroup of this.tableData) {
+            const el = this.dateElements[dateGroup.key];
+
+            if (!el) { return; }
+            const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop;
             if (top < 0) {
                 activeMenuId = dateGroup.key;
                 const dateSwitchPoint = r.height + top - groupTitleHeight;
                 activeHeadTop = dateSwitchPoint < 0 ? dateSwitchPoint : 0;
             }
-        });
+        }
 
         this.focusedCategoryKey = activeMenuId || (this.tableData.lenght && this.tableData[0].key);
         this.activeHeadTop = activeHeadTop;
@@ -141,10 +140,7 @@ export default class ChartTableStore {
     }
 
     @action.bound setDateElement(element, date) {
-        const dateGroup = this.tableData.find(x => x.date === date);
-        if (dateGroup) {
-            dateGroup.ele = element;
-        }
+        this.dateElements[date] = element;
     }
 
     @action.bound setScrollPanel(element) {

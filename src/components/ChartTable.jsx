@@ -54,7 +54,6 @@ const ChartTable = ({
     setOpen,
     updateScrollSpy,
     setScrollPanel,
-    isScrolled,
     setDateElement,
     activeHeadKey,
     activeHeadTop,
@@ -79,7 +78,7 @@ const ChartTable = ({
                 )
                 }
                 {isMobile ? '' : (
-                    <table className={`ciq-chart-table ${isScrolled ? 'ciq-chart-table--scrolled' : ''}`}>
+                    <table className="ciq-chart-table">
                         <thead>
                             <tr>
                                 <th>{t.translate('Date')}</th>
@@ -148,7 +147,7 @@ const ChartTable = ({
                                 <div
                                     key={`chartTable-group-${item.key}`}
                                     className="ciq-chart-table__panel__group"
-                                    ref={el => setDateElement(el, item.date)}
+                                    ref={el => setDateElement(el, item.key)}
                                 >
                                     <div
                                         className={GroupTitleClassName(item.key, activeHeadKey, activeHeadTop)}
@@ -182,7 +181,6 @@ export default connect(({  chart, chartTable }) => ({
     setOpen: chartTable.setOpen,
     updateScrollSpy: chartTable.updateScrollSpy,
     setScrollPanel: chartTable.setScrollPanel,
-    isScrolled: chartTable.isScrolled,
     setDateElement: chartTable.setDateElement,
     activeHeadTop: chartTable.activeHeadTop,
     activeHeadKey: chartTable.activeHeadKey,
