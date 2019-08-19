@@ -76,7 +76,25 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        const excludedStudies = { Beta: true };
+        const excludedStudies = {
+            Beta: true,
+            // volume is not supported in chart
+            Klinger: true,
+            'Trade Vol': true,
+            'Vol ROC': true,
+            'Price Vol': true,
+            'Pos Vol': true,
+            'Neg Vol': true,
+            'On Bal Vol': true,
+            'Vol Osc': true,
+            volume: true,
+            'vol undr': true,
+            'vol profile': true,
+            'W MFI': true,
+            EOM: true,
+            'Chaikin MF': true,
+            Twiggs: true,
+        };
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
             if (!excludedStudies[studyId]) {
                 const study = CIQ.Studies.studyLibrary[studyId];
