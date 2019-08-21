@@ -362,7 +362,7 @@ class ChartState {
                 if (layoutData.tension) {
                     this.stxx.chart.tension = layoutData.tension;
                 }
-                this.restoreDrawings(this.stxx, this.stxx.chart.symbol);
+                this.restoreDrawings();
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
                     this.setChartIsReady(true);
@@ -390,10 +390,12 @@ class ChartState {
     }
 
     restoreDrawings() {
-        const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
-        if (drawings) {
-            this.stxx.importDrawings(drawings);
-            this.stxx.draw();
+        if (this.stxx && this.stxx.chart) {
+            const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
+            if (drawings) {
+                this.stxx.importDrawings(drawings);
+                this.stxx.draw();
+            }
         }
     }
 
