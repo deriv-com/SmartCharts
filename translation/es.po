@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-07-04 21:22\n"
+"PO-Revision-Date: 2019-08-13 22:51\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -289,10 +289,10 @@ msgid "Retrieving Trading Times..."
 msgstr "Obteniendo Horarios de Trading..."
 
 msgid "Reversal"
-msgstr "Reversal"
+msgstr "Revertir"
 
 msgid "Reversal Percentage"
-msgstr "Porcentaje de Reversal"
+msgstr "Porcentaje de Reversión"
 
 msgid "right-click to delete"
 msgstr "clic derecho para eliminar"
@@ -568,10 +568,10 @@ msgid "Days Per Year"
 msgstr "Días Al Año"
 
 msgid "Pretty Good Oscillator"
-msgstr "Oscilador Bastante Bueno"
+msgstr "Oscilador Pretty Good"
 
 msgid "Ultimate Oscillator"
-msgstr "Oscilador Último"
+msgstr "Oscilador Ultimate"
 
 msgid "Cycle 1"
 msgstr "Ciclo 1"
@@ -616,7 +616,7 @@ msgid "Commodity Channel Index"
 msgstr "Índice de Canal de Materias Primas"
 
 msgid "Detrended Price Oscillator"
-msgstr "Oscilador del Precio Detectado"
+msgstr "Oscilador del Precio sin Tendencias"
 
 msgid "True Range"
 msgstr "Rango Verdadero"
@@ -1096,19 +1096,19 @@ msgid "Jaw Period"
 msgstr "Período Jaw"
 
 msgid "Jaw Offset"
-msgstr "Mándibula Offset"
+msgstr "Offset de Jaw"
 
 msgid "Teeth Period"
-msgstr "Período de dientes"
+msgstr "Período de Teeth"
 
 msgid "Teeth Offset"
-msgstr "Dientes offset"
+msgstr "Offset de Teeth"
 
 msgid "Lips Period"
-msgstr "Período de Labios"
+msgstr "Período de Lips"
 
 msgid "Lips Offset"
-msgstr "Labios offset"
+msgstr "Offset de Lips"
 
 msgid "Show Fractals"
 msgstr "Mostrar Fractales"
@@ -1117,10 +1117,10 @@ msgid "Jaw"
 msgstr "Jaw"
 
 msgid "Teeth"
-msgstr "Dientes"
+msgstr "Teeth"
 
 msgid "Lips"
-msgstr "Labios"
+msgstr "Lips"
 
 msgid "Gator Oscillator"
 msgstr "Oscilador Gator"
