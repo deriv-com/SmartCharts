@@ -12,6 +12,25 @@ import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
+        this.excludedStudies = {
+            Beta: true,
+            // volume is not supported in chart
+            Klinger: true,
+            'Trade Vol': true,
+            'Vol ROC': true,
+            'Price Vol': true,
+            'Pos Vol': true,
+            'Neg Vol': true,
+            'On Bal Vol': true,
+            'Vol Osc': true,
+            volume: true,
+            'vol undr': true,
+            'vol profile': true,
+            'W MFI': true,
+            EOM: true,
+            'Chaikin MF': true,
+            Twiggs: true,
+        };
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
@@ -49,6 +68,7 @@ export default class StudyLegendStore {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
         // to remove studies if user has already more than 5
+        // and remove studies which are excluded
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
@@ -76,9 +96,9 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        const excludedStudies = { Beta: true };
+
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            if (!excludedStudies[studyId]) {
+            if (!this.excludedStudies[studyId]) {
                 const study = CIQ.Studies.studyLibrary[studyId];
                 data.push({
                     enabled: true,
@@ -103,17 +123,15 @@ export default class StudyLegendStore {
 
     @action.bound removeExtraStudies() {
         if (this.stx.layout && this.stx.layout.studies) {
-            const studiesKeys = Object.keys(this.stx.layout.studies);
-            if (studiesKeys.length > 5) {
-                Object.keys(this.stx.layout.studies).forEach((study, idx) => {
-                    if (idx >= 5) {
-                        setTimeout(() => {
-                            CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
-                            this.renderLegend();
-                        }, 0);
-                    }
-                });
-            }
+            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                const type = this.stx.layout.studies[study].type;
+                if (idx >= 5 || this.excludedStudies[type]) {
+                    setTimeout(() => {
+                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                        this.renderLegend();
+                    }, 0);
+                }
+            });
         }
     }
 
