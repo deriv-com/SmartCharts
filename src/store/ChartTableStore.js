@@ -29,6 +29,7 @@ export default class ChartTableStore {
     @observable lastTick;
     @observable activeHeadTop;
     @observable activeHeadKey;
+    @observable activeIndex;
     @observable focusedCategoryKey;
 
     @computed get symbol() {
@@ -118,24 +119,32 @@ export default class ChartTableStore {
         const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
         let activeHeadTop = 0;
         let activeMenuId = null;
+        let activeIndex = 0;
         const groupTitleHeight = 44;
+        const scrollTop = this.scrollPanel.getValues().top;
+        const loopStart = (this.activeIndex - 2) < 0 ? 0 : this.activeIndex - 2;
 
-        for (const dateGroup of this.tableData) {
-            const el = this.dateElements[dateGroup.key];
+        for (let i = loopStart; i < (loopStart + 5); i++) {
+            const dateKey = this.tableData[i];
+            if (!dateKey) { return; }
 
+            const el = this.dateElements[dateKey.key];
             if (!el) { return; }
+
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop;
             if (top < 0) {
-                activeMenuId = dateGroup.key;
+                activeIndex = i;
+                activeMenuId = dateKey.key;
                 const dateSwitchPoint = r.height + top - groupTitleHeight;
                 activeHeadTop = dateSwitchPoint < 0 ? dateSwitchPoint : 0;
             }
         }
 
-        this.focusedCategoryKey = activeMenuId || (this.tableData.lenght && this.tableData[0].key);
+        this.scrollTop = scrollTop;
+        this.activeIndex = activeIndex;
+        this.focusedCategoryKey = activeMenuId || (this.tableData[0] && this.tableData[0].key);
         this.activeHeadTop = activeHeadTop;
-        this.scrollTop = this.scrollPanel.getValues().top;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 

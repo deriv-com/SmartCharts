@@ -22,6 +22,7 @@
 .ciq-chart-table__panel {
     position: relative;
     overflow: hidden;
+    height: 80vh !important;
     transform: translateZ(0);
     @include themify($themes) {
         background: themed('ChartTableBg');
@@ -46,6 +47,8 @@
             box-sizing: border-box;
             line-height: 1.43;
             font-size: 14px;
+            transform: translate3d(0, 0, 0);
+            transition: none !important;
             @include themify($themes) {
                 background: themed('ChartTableBodyHeadBg');
                 color: themed('ChartTableBodyHeadText');

@@ -4,15 +4,6 @@ import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
 
-const GroupTitleClassName = (dateKey, activeHeadKey, activeHeadTop) => {
-    let TitleClassName = '';
-    if (activeHeadKey === dateKey) {
-        TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
-    }
-
-    return `ciq-chart-table__panel__group--title ${TitleClassName}`;
-};
-
 const GroupContent = ({ item, isTick }) => (
     <table className={`ciq-chart-table ${isTick ? 'ciq-chart-table--tick' : ''}`}>
         <tbody>
@@ -106,8 +97,6 @@ const ChartTable = ({
                     </table>
                 )}
                 <Scrollbars
-                    autoHeight
-                    autoHeightMax="80vh"
                     className="ciq-chart-table__panel"
                     onScroll={updateScrollSpy}
                     ref={setScrollPanel}
@@ -150,7 +139,7 @@ const ChartTable = ({
                                     ref={el => setDateElement(el, item.key)}
                                 >
                                     <div
-                                        className={GroupTitleClassName(item.key, activeHeadKey, activeHeadTop)}
+                                        className={`ciq-chart-table__panel__group--title ${(activeHeadKey === item.key && activeHeadTop < 0) ?  'sticky-bottom' : ''} ${(activeHeadKey === item.key && activeHeadTop === 0) ? 'sticky-top' : ''}`}
                                     >
                                         {item.date}
                                     </div>
