@@ -31,6 +31,7 @@ export default class ChartTableStore {
     @observable activeHeadKey;
     @observable activeIndex;
     @observable focusedCategoryKey;
+    @observable scrollPanelTop;
 
     @computed get symbol() {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol : {};
@@ -116,43 +117,44 @@ export default class ChartTableStore {
     }
 
     @action.bound updateScrollSpy() {
-        const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
-        let activeHeadTop = 0;
-        let activeMenuId = null;
-        let activeIndex = 0;
-        const groupTitleHeight = 44;
+        // const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
+        // let activeHeadTop = 0;
+        // let activeMenuId = null;
+        // // let activeIndex = 0;
+        // const groupTitleHeight = 44;
         const scrollTop = this.scrollPanel.getValues().top;
-        const loopStart = (this.activeIndex - 2) < 0 ? 0 : this.activeIndex - 2;
+        // const loopStart = (this.activeIndex - 2) < 0 ? 0 : this.activeIndex - 2;
 
-        for (let i = loopStart; i < (loopStart + 5); i++) {
-            const dateKey = this.tableData[i];
-            if (!dateKey) { return; }
+        // for (let i = loopStart; i < (loopStart + 5); i++) {
+        //     const dateKey = this.tableData[i];
+        //     if (!dateKey) { return; }
 
-            const el = this.dateElements[dateKey.key];
-            if (!el) { return; }
+        //     const el = this.dateElements[dateKey.key];
+        //     if (!el) { return; }
 
-            const r = el.getBoundingClientRect();
-            const top = r.top - scrollPanelTop;
-            if (top < 0) {
-                activeIndex = i;
-                activeMenuId = dateKey.key;
-                const dateSwitchPoint = r.height + top - groupTitleHeight;
-                activeHeadTop = dateSwitchPoint < 0 ? dateSwitchPoint : 0;
-            }
-        }
+        //     const r = el.getBoundingClientRect();
+        //     const top = r.top - scrollPanelTop;
+        //     if (top < 0) {
+        //         activeIndex = i;
+        //         activeMenuId = dateKey.key;
+        //         const dateSwitchPoint = r.height + top - groupTitleHeight;
+        //         activeHeadTop = dateSwitchPoint < 0 ? dateSwitchPoint : 0;
+        //     }
+        // }
 
         this.scrollTop = scrollTop;
-        this.activeIndex = activeIndex;
-        this.focusedCategoryKey = activeMenuId || (this.tableData[0] && this.tableData[0].key);
-        this.activeHeadTop = activeHeadTop;
-        this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
+        // this.activeIndex = activeIndex;
+        // this.focusedCategoryKey = activeMenuId || (this.tableData[0] && this.tableData[0].key);
+        // this.activeHeadTop = activeHeadTop;
+        // this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
-    @action.bound setDateElement(element, date) {
+    @action.bound setDateElement(date, element) {
         this.dateElements[date] = element;
     }
 
     @action.bound setScrollPanel(element) {
         this.scrollPanel =  element;
+        // this.scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
     }
 }

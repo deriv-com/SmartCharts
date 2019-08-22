@@ -25,6 +25,7 @@ import LastDigitStatsStore from './LastDigitStatsStore';
 import NavigationWidgetStore from './NavigationWidgetStore';
 import HighestLowestStore from './HighestLowestStore';
 import PaginationLoaderStore from './PaginationLoaderStore';
+import ChartTableGroupStore from './ChartTableGroupStore';
 
 export default class MainStore {
     notifier = new Notifier();
@@ -49,6 +50,7 @@ export default class MainStore {
     currentSpot = new CurrentSpotStore(this);
     drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
+    chartTableGroup = new ChartTableGroupStore(this);
     lastDigitStats= new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
     navigationWidget = new NavigationWidgetStore(this);

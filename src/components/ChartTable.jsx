@@ -3,37 +3,7 @@ import { Scrollbars } from 'tt-react-custom-scrollbars';
 import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
-
-const GroupContent = ({ item, isTick }) => (
-    <table className={`ciq-chart-table ${isTick ? 'ciq-chart-table--tick' : ''}`}>
-        <tbody>
-            {item.datas.map((data, idy) => (
-                <tr
-                    key={`chartTable-${item.key}-${idy}`} // eslint-disable-line react/no-array-index-key
-                >
-                    <td>{data.Date}</td>
-                    {isTick && <td>{data.Close}</td>}
-                    {!isTick && [
-                        <td key="td-open">{data.Open}</td>,
-                        <td key="td-high">{data.High}</td>,
-                        <td key="td-low">{data.Low}</td>,
-                        <td key="td-close">{data.Close}</td>,
-                    ]}
-                    <td className="before-last-child">
-                        <div className="cq-change-cell">
-                            <div className={`${data.Status ? data.Status : 'up'}`}>{data.Change}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div className="cq-change-cell">
-                            <div className={`cq-change ${data.Status}`} />
-                        </div>
-                    </td>
-                </tr>
-            ))}
-        </tbody>
-    </table>
-);
+import ChartTableGroup from './ChartTableGroup.jsx';
 
 const ChartTable = ({
     isMobile,
@@ -43,11 +13,13 @@ const ChartTable = ({
     isTick,
     symbol,
     setOpen,
+    scrollTop,
+    scrollPanelTop,
     updateScrollSpy,
     setScrollPanel,
-    setDateElement,
     activeHeadKey,
     activeHeadTop,
+    dateElements,
 }) => {
     const SymbolIcon = ItemIconMap[symbol.symbol] || SymbolPlaceholderIcon;
     const width = isTick ? '380px' : '704px';
@@ -133,23 +105,16 @@ const ChartTable = ({
                         )
                         : (
                             tableData.map(item => (
-                                <div
-                                    key={`chartTable-group-${item.key}`}
-                                    className="ciq-chart-table__panel__group"
-                                    ref={el => setDateElement(el, item.key)}
-                                >
-                                    <div
-                                        className={`ciq-chart-table__panel__group--title ${(activeHeadKey === item.key && activeHeadTop < 0) ?  'sticky-bottom' : ''} ${(activeHeadKey === item.key && activeHeadTop === 0) ? 'sticky-top' : ''}`}
-                                    >
-                                        {item.date}
-                                    </div>
-                                    <div className="ciq-chart-table__panel__group--content">
-                                        <GroupContent
-                                            item={item}
-                                            isTick={isTick}
-                                        />
-                                    </div>
-                                </div>
+                                <ChartTableGroup
+                                    key={item.key}
+                                    item={item}
+                                    isTick={isTick}
+                                    ele={dateElements[item.key]}
+                                    scrollTop={scrollTop}
+                                    scrollPanelTop={scrollPanelTop}
+                                    activeHeadKey={activeHeadKey}
+                                    activeHeadTop={activeHeadTop}
+                                />
                             ))
                         )
                     }
@@ -168,6 +133,9 @@ export default connect(({  chart, chartTable }) => ({
     isTick: chartTable.isTick,
     symbol: chartTable.symbol,
     setOpen: chartTable.setOpen,
+    scrollTop: chartTable.scrollTop,
+    dateElements: chartTable.dateElements,
+    scrollPanelTop: chartTable.scrollPanelTop,
     updateScrollSpy: chartTable.updateScrollSpy,
     setScrollPanel: chartTable.setScrollPanel,
     setDateElement: chartTable.setDateElement,
