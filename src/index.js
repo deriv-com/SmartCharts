@@ -17,6 +17,7 @@ import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
 import FastMarker from './components/FastMarker.jsx';
+import RawMarker from './components/RawMarker.jsx';
 import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
@@ -65,6 +66,7 @@ export default {
     DrawTools,
     Marker, // this is depricated in favor of FastMarker
     FastMarker,
+    RawMarker,
     PendingPromise,
     setSmartChartsPublicPath,
     Share,
