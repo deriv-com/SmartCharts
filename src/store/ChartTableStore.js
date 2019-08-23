@@ -27,10 +27,6 @@ export default class ChartTableStore {
     @observable tableData = [];
     @observable isTick;
     @observable lastTick;
-    @observable activeHeadTop;
-    @observable activeHeadKey;
-    @observable activeIndex;
-    @observable focusedCategoryKey;
     @observable scrollPanelTop;
 
     @computed get symbol() {
@@ -117,36 +113,8 @@ export default class ChartTableStore {
     }
 
     @action.bound updateScrollSpy() {
-        // const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
-        // let activeHeadTop = 0;
-        // let activeMenuId = null;
-        // // let activeIndex = 0;
-        // const groupTitleHeight = 44;
         const scrollTop = this.scrollPanel.getValues().top;
-        // const loopStart = (this.activeIndex - 2) < 0 ? 0 : this.activeIndex - 2;
-
-        // for (let i = loopStart; i < (loopStart + 5); i++) {
-        //     const dateKey = this.tableData[i];
-        //     if (!dateKey) { return; }
-
-        //     const el = this.dateElements[dateKey.key];
-        //     if (!el) { return; }
-
-        //     const r = el.getBoundingClientRect();
-        //     const top = r.top - scrollPanelTop;
-        //     if (top < 0) {
-        //         activeIndex = i;
-        //         activeMenuId = dateKey.key;
-        //         const dateSwitchPoint = r.height + top - groupTitleHeight;
-        //         activeHeadTop = dateSwitchPoint < 0 ? dateSwitchPoint : 0;
-        //     }
-        // }
-
         this.scrollTop = scrollTop;
-        // this.activeIndex = activeIndex;
-        // this.focusedCategoryKey = activeMenuId || (this.tableData[0] && this.tableData[0].key);
-        // this.activeHeadTop = activeHeadTop;
-        // this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
     @action.bound setDateElement(date, element) {
@@ -155,6 +123,5 @@ export default class ChartTableStore {
 
     @action.bound setScrollPanel(element) {
         this.scrollPanel =  element;
-        // this.scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
     }
 }
