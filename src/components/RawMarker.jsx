@@ -72,14 +72,6 @@ class RawMarker extends React.Component {
             this.date_array.forEach(({ date, epoch }) => {
                 const tick_idx = stx.tickFromDate(date, chart);
 
-                // if (tick_idx > -1
-                //     && stx.chart.dataSet[tick_idx]
-                //     && stx.chart.dataSet[tick_idx].Close !== this.price) {
-                //     delete stx.chart.tickCache[this.date.getTime()];
-                //     tick_idx = stx.tickFromDate(this.date, chart);
-                // }
-
-
                 // ChartIQ doesn't support placing markers in the middle of ticks.
                 const bar = chart.dataSet[tick_idx];
                 const bar_next = chart.dataSet[tick_idx + 1];

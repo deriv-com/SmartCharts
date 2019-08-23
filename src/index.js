@@ -18,7 +18,6 @@ import AssetInformation from './components/AssetInformation.jsx';
 import Marker from './components/Marker.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
-import CurrentSpot from './components/CurrentSpot.jsx';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
 
@@ -45,7 +44,6 @@ export {
     SmartChart,
     StudyLegend,
     Timeperiod,
-    CurrentSpot,
     Views,
     logEvent,
     LogCategories,
@@ -73,7 +71,6 @@ export default {
     SmartChart,
     StudyLegend,
     Timeperiod,
-    CurrentSpot,
     Views,
     logEvent,
     LogCategories,

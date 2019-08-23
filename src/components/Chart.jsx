@@ -6,7 +6,6 @@ import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
-import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import LastDigitStats from './LastDigitStats.jsx';
@@ -119,7 +118,6 @@ class Chart extends Component {
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
                                         <PaginationLoader />
-                                        <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
