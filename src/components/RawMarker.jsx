@@ -26,7 +26,6 @@ class RawMarker extends React.Component {
         contextPromise.then((ctx) => {
             this.ctx = ctx;
             this.stx = this.ctx.stx;
-            window.stx = this.stx;
 
             this.injectionId = this.stx.append('draw', this.draw);
             this.draw();
@@ -57,11 +56,7 @@ class RawMarker extends React.Component {
 
         const stx = this.stx;
         const chart = stx.chart;
-
-        let top = 0, left = 0, show = true;
-
-        show = !threshold || stx.layout.candleWidth >= threshold;
-
+        const show = !threshold || stx.layout.candleWidth >= threshold;
 
         if (show
             && chart.dataSet
@@ -100,15 +95,15 @@ class RawMarker extends React.Component {
 
                 const y = price ? stx.pixelFromPrice(price, chart.panel) : 0;
 
-                let visible = true;
-                if (chart.yAxis.left > x
+                const visible =  (
+                    x >= 0
+                    && chart.yAxis.left > x
                     && chart.yAxis.top <= y
-                    && chart.yAxis.bottom >= y) {
-                    top = +y;
-                    left = Math.round(x);
-                } else {
-                    visible = false;
-                }
+                    && chart.yAxis.bottom >= y
+                );
+                const yAxis = chart.yAxis;
+                const top = Math.min(Math.max(+y, yAxis.top), yAxis.bottom);
+                const left = Math.min(Math.max(x, 0), yAxis.left);
 
                 result.push({
                     epoch,

@@ -25,6 +25,15 @@ class CurrentSpotStore {
         const x = stx.pixelFromTick(len - 1, chart);
         const y = stx.pixelFromPrice(bar.Close, chart.panel);
 
+        if (
+            x < 0
+            || x > chart.yAxis.left
+            || y < chart.yAxis.top
+            || y > chart.yAxis.bottom
+        ) {
+            return;
+        }
+
         // glow is set by Animation.js
         let  glow = bar.current_spot_glow || 0;
         glow = Math.min(glow, 1);
