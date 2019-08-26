@@ -428,7 +428,7 @@ class ChartState {
                 this.stxx.draw();
 
                 // This assignment should be always after draw()
-                this.stxx.chart.lockAutoScroll = true;
+                this.stxx.chart.lockAutoScroll = !this.stxx.chart.series;
             });
         } else if (scrollToEpoch && this.startEpoch || force) {
             this.stxx.chart.lockAutoScroll = true;
