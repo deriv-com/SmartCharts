@@ -87,11 +87,11 @@ export default class ChartTableStore {
                 let previousClose = 0;
 
                 // if the first group has more than 2 data, let compare
-                if (this.tableData.lenght && this.tableData[0].datas.lenght > 1) {
+                if (this.tableData.length && this.tableData[0].datas.length > 1) {
                     previousClose = this.tableData[0].datas[1].Close;
 
                 // if not above, then let pick previous Close from last item in previous group
-                } else if (this.tableData.lenght && this.tableData.lenght > 1 && this.tableData[0].datas.lenght === 1) {
+                } else if (this.tableData.length && this.tableData.length > 1 && this.tableData[0].datas.length === 1) {
                     previousClose = this.tableData[1].datas[0].Close;
                 }
 
