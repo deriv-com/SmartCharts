@@ -77,6 +77,7 @@ class Chart extends Component {
             position,
             showLastDigitStats,
             enabledNavigationWidget,
+            digits,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -139,7 +140,7 @@ class Chart extends Component {
                                     <BottomWidgetsContainer>
                                         {
                                             BottomWidgets
-                                                && <BottomWidgets />
+                                                && <BottomWidgets digits={digits} />
                                         }
                                     </BottomWidgetsContainer>
                                 </div>
@@ -159,7 +160,16 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
+export default connect(({
+    chart,
+    drawTools,
+    studies,
+    chartSetting,
+    chartType,
+    state,
+    drawingCursor,
+    lastDigitStats,
+}) => ({
     init: chart.init,
     destroy: chart.destroy,
     StudySettingsDialog : studies.StudySettingsDialog,
@@ -176,5 +186,6 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     theme: chartSetting.theme,
     position: chartSetting.position,
     showLastDigitStats:state.showLastDigitStats,
+    digits: lastDigitStats.digits,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);
