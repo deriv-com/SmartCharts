@@ -46,12 +46,16 @@ class RawMarker extends React.Component {
 
         const { threshold = 0, epoch_array, draw_callback } = this.props;
 
-        if (!this.date_array || this.date_array.length !== epoch_array.length) {
+        if (
+            !this.last_epoch_array
+            || this.last_epoch_array.toString() !== epoch_array.toString()
+        ) {
             this.date_array = epoch_array
                 .map(epoch => ({
                     date: CIQ.strToDateTime(getUTCDate(epoch)),
                     epoch,
                 }));
+            this.last_epoch_array = epoch_array;
         }
 
         const stx = this.stx;
