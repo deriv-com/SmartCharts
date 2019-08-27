@@ -104,12 +104,14 @@ class RawMarker extends React.Component {
                 const yAxis = chart.yAxis;
                 const top = Math.min(Math.max(+y, yAxis.top), yAxis.bottom);
                 const left = Math.min(Math.max(x, 0), yAxis.left);
+                const zoom = stx.layout.candleWidth;
 
                 result.push({
                     epoch,
                     visible,
                     top,
                     left,
+                    zoom,
                 });
             });
             draw_callback({
