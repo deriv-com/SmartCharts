@@ -28,9 +28,9 @@ function connectCustomStore(mapperFunction, CustomStore) {
                 this.injectedComponent = inject(mapStoresAndProps)(WrappedComponent);
             }
 
-            componentWillReceiveProps(nextProps) {
+            componentDidUpdate() {
                 if (this.store.updateProps) {
-                    this.store.updateProps(nextProps);
+                    this.store.updateProps(this.props);
                 }
             }
 

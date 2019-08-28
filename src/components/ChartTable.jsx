@@ -37,8 +37,8 @@ const ChartTableGroupContent = ({ item, isTick }) => (
 
 
 class ChartTableGroup extends Component {
-    componentWillReceiveProps(nextProps) {
-        const { scrollPanel } = nextProps;
+    componentDidUpdate() {
+        const { scrollPanel } = this.props;
         if (scrollPanel && scrollPanel.container && !this.scrollPanelTop) this.scrollPanelTop = scrollPanel.container.getBoundingClientRect().top;
     }
 
