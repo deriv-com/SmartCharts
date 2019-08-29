@@ -8,7 +8,11 @@ export default class LastDigitStatsStore {
         when(() => this.context, () => {
             this.lastSymbol = this.marketDisplayName;
             this.updateLastDigitStats();
+            // TODO: call onMasterDataUpdate on symobl change.
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+            this.mainStore.chart.feed.onMasterDataReinitialize(() => {
+                this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+            });
         });
     }
 
@@ -65,7 +69,11 @@ export default class LastDigitStatsStore {
         this.updateBars();
     }
 
-    @action.bound onMasterDataUpdate({ Close }) {
+    // api tick
+    @observable last_tick = null;
+
+    @action.bound onMasterDataUpdate({ Close, tick }) {
+        this.last_tick = tick;
         if (this.marketDisplayName !== this.lastSymbol) {
             this.lastSymbol = this.marketDisplayName;
             // Symbol has changed
