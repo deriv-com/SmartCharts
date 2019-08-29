@@ -8,7 +8,8 @@ import { getUTCDate } from  '../utils';
 // Props:
 //
 //  - epoch_array: array of epoch values to get coordinates for.
-//  - draw_callback: called on every frame with ({ctx, points}).
+//  - price_array: array of price values to get y-coordinates for.
+//  - draw_callback: called on every frame with ({ctx, points, prices}).
 //  -- points will be an array of [{left, top, epoch}] in pixels.
 //  -- ctx is the Context2dDrawingContext
 
@@ -44,7 +45,12 @@ class RawMarker extends React.Component {
     draw = () => {
         if (!this.ctx) { return; }
 
-        const { threshold = 0, epoch_array, draw_callback } = this.props;
+        const {
+            threshold = 0,
+            epoch_array,
+            draw_callback,
+            price_array = [],
+        } = this.props;
 
         if (
             !this.last_epoch_array
@@ -67,7 +73,7 @@ class RawMarker extends React.Component {
             && chart.dataSet.length
             && stx.mainSeriesRenderer
         ) {
-            const result = [];
+            const points = [];
             this.date_array.forEach(({ date, epoch }) => {
                 const tick_idx = stx.tickFromDate(date, chart);
 
@@ -110,7 +116,7 @@ class RawMarker extends React.Component {
                 const left = Math.min(Math.max(x, 0), yAxis.left);
                 const zoom = stx.layout.candleWidth;
 
-                result.push({
+                points.push({
                     epoch,
                     visible,
                     top,
@@ -118,9 +124,12 @@ class RawMarker extends React.Component {
                     zoom,
                 });
             });
+            const prices = price_array
+                .map(price => stx.pixelFromPrice(price * 1, chart.panel));
             draw_callback({
                 ctx: stx.chart.context,
-                points: result,
+                points,
+                prices,
             });
         }
     }
