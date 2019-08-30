@@ -122,6 +122,7 @@ class RawMarker extends React.Component {
                     top,
                     left,
                     zoom,
+                    max_left: yAxis.left,
                 });
             });
             const prices = price_array
