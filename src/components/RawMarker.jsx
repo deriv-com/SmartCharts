@@ -18,34 +18,39 @@ import { getUTCDate } from  '../utils';
 // Which causes a jerky effect on the markers in auto-scroll,
 // However we need the pixel value down to the decimal points.
 // This is copy from chartiq.js file WITHOUT rounding down the pixel value.
-const pixelFromTick = (stx, tick) => {
-    const chart = stx.chart;
-    const dataSegment = chart.dataSegment,
-        dataSet = chart.dataSet,
-        segmentImage = chart.segmentImage,
-        mp = stx.micropixels,
-        length = dataSegment ? dataSegment.length : 0;
-    const panel = chart.panel,
-        scroll = chart.scroll;
-    const bar = tick - dataSet.length + scroll;
-    let quote = length ? dataSegment[bar] : null;
 
-    if (segmentImage) quote = segmentImage[bar];
-    if (quote && quote.leftOffset) {
-        // return Math.floor(panel.left + quote.leftOffset + mp)
-        return panel.left + quote.leftOffset + mp;
-    }
-    let rightOffset = 0, dsTicks = 0;
-    quote = length ? dataSegment[length - 1] : null;
-    if (segmentImage) quote = segmentImage[length - 1];
-    if (quote && quote.leftOffset) {
-        if (length < tick - dataSet.length + scroll) {
-            rightOffset = quote.leftOffset - quote.candleWidth / 2;
-            dsTicks = length;
+const patch_pixel_from_chart = (stx) => {
+    stx.pixelFromTick = function (tick, _chart) {
+        const chart = _chart || stx.chart;
+        const dataSegment = chart.dataSegment,
+            dataSet = chart.dataSet,
+            segmentImage = chart.segmentImage,
+            mp = stx.micropixels,
+            length = dataSegment ? dataSegment.length : 0;
+        const panel = chart.panel,
+            scroll = chart.scroll;
+        const bar = tick - dataSet.length + scroll;
+        let quote = length ? dataSegment[bar] : null;
+
+        if (segmentImage) quote = segmentImage[bar];
+        if (quote && quote.leftOffset) {
+            // return Math.floor(panel.left + quote.leftOffset + mp)
+            return panel.left + quote.leftOffset + mp;
         }
-    }
-    // return Math.floor(/* ... */)
-    return rightOffset + panel.left + (tick - dsTicks - dataSet.length + scroll + 0.5) * stx.layout.candleWidth + mp;
+        let rightOffset = 0, dsTicks = 0;
+        quote = length ? dataSegment[length - 1] : null;
+        if (segmentImage) quote = segmentImage[length - 1];
+        if (quote && quote.leftOffset) {
+            if (length < tick - dataSet.length + scroll) {
+                rightOffset = quote.leftOffset - quote.candleWidth / 2;
+                dsTicks = length;
+            }
+        }
+        // return Math.floor(/* ... */)
+        return rightOffset + panel.left
+            + (tick - dsTicks - dataSet.length + scroll + 0.5)
+            * stx.layout.candleWidth + mp;
+    };
 };
 
 class RawMarker extends React.Component {
@@ -64,6 +69,7 @@ class RawMarker extends React.Component {
             this.stx = this.ctx.stx;
 
             this.injectionId = this.stx.append('draw', this.draw);
+            patch_pixel_from_chart(this.stx);
             this.draw();
         });
     }
@@ -117,23 +123,23 @@ class RawMarker extends React.Component {
                 const bar_next = chart.dataSet[tick_idx + 1];
                 const bar_prev = tick_idx > 0 ? chart.dataSet[tick_idx - 1] : null;
 
-                // let x = stx.pixelFromTick(tick_idx, chart);
-                let x = pixelFromTick(stx, tick_idx);
+                let x = stx.pixelFromTick(tick_idx, chart);
+                // let x = pixelFromTick(stx, tick_idx);
                 let price = bar ? bar.Close : null;
 
                 // const price = (bar || bar_prev || bar_next || {}).Close;
                 // Here we interpolate the pixel distance between two adjacent ticks.
                 if (bar && bar.DT < date) {
                     if (bar_next && bar_next.Close && bar_next.DT > date) {
-                        // const delta_x = stx.pixelFromTick(tick_idx + 1, chart) - x;
-                        const delta_x = pixelFromTick(stx, tick_idx + 1) - x;
+                        const delta_x = stx.pixelFromTick(tick_idx + 1, chart) - x;
+                        // const delta_x = pixelFromTick(stx, tick_idx + 1) - x;
                         const delta_y = bar_next.Close - price;
                         const ratio = (date - bar.DT) / (bar_next.DT - bar.DT);
                         price += ratio * delta_y;
                         x += ratio * delta_x;
                     } else if (bar_prev && bar_prev.Close) {
-                        // const delta_x = x - stx.pixelFromTick(tick_idx - 1, chart);
-                        const delta_x = x - pixelFromTick(stx, tick_idx - 1);
+                        const delta_x = x - stx.pixelFromTick(tick_idx - 1, chart);
+                        // const delta_x = x - pixelFromTick(stx, tick_idx - 1);
                         const delta_y = price - bar_prev.Close;
                         const ratio = (date - bar.DT) / (bar.DT - bar_prev.DT);
                         x +=  ratio * delta_x;
