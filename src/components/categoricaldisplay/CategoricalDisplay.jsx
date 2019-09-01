@@ -2,7 +2,7 @@ import React from 'react';
 import '../../../sass/components/_categorical-display.scss';
 import Scrollbars from 'tt-react-custom-scrollbars';
 
-const CategoricalDisplay = ({
+const CategoricalDisplay = React.memo(({
     onSelectItem,
     updateScrollSpy,
     setScrollPanel,
@@ -37,6 +37,6 @@ const CategoricalDisplay = ({
             />
         </Scrollbars>
     </div>
-);
+));
 
 export default CategoricalDisplay;

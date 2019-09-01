@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 
-const Barrier = ({
+const Barrier = React.memo(({
     shadeColor = '#39b19d',
     color = '#39b19d',
     foregroundColor = '#ffffff',
@@ -26,7 +26,7 @@ const Barrier = ({
         <BetweenShade />
         <BelowShade />
     </div>
-));
+)));
 
 
 export default connect(
