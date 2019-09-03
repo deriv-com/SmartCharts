@@ -167,7 +167,7 @@ class ChartState {
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.setIsChartScrollingToEpoch(true);
-                this.scrollChartToLeft();
+                this.mainStore.chart.feed.onMasterDataUpdate(this.scrollChartToLeft);
             }
         }
 

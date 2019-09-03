@@ -176,7 +176,7 @@ class Feed {
             subscription.onChartData((tickResponse) => {
                 // Append comming ticks to chart only if it belongs to selected symbol after symbol changes
                 if (isComparisonChart || symbol === this._stx.chart.symbol) {
-                    if (this._stx.isDestroyed) return;
+                    if (!this._stx || this._stx.isDestroyed) return;
                     this._appendChartData(tickResponse, key, comparisonChartSymbol);
                 }
             });
