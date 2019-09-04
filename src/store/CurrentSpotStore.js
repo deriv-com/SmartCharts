@@ -51,7 +51,7 @@ class CurrentSpotStore {
         ctx.fillStyle = '#FF9933';
         for (let i = 0; i < (glow ? 3 : 1); ++i) {
             ctx.beginPath();
-            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+            ctx.arc(x - 1, y, 4, 0, 2 * Math.PI);
             ctx.fill();
         }
         ctx.restore();
