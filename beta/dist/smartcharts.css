@@ -329,7 +329,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .chart-line.horizontal:hover{z-index:105}
 .chart-line.horizontal.draggable>.draggable-area{height:20px;top:-8px;position:absolute;width:100%}
 .chart-line.horizontal.draggable>.draggable-area:hover{background:rgba(0,0,0,0.05)}
-.chart-line.horizontal .drag-line{height:2px;float:left;width:100%;margin-left:-10px;position:relative;border-color:inherit;border-top-width:2px}
+.chart-line.horizontal .drag-line{height:1px;float:left;width:100%;margin-left:-10px;position:relative;border-color:inherit;border-top-width:1px}
 .draggable.chart-line:hover.horizontal{cursor:ns-resize}
 .draggable.chart-line:hover.vertical{cursor:ew-resize}
 .hide-pricelines>.chart-line.horizontal{display:none}
