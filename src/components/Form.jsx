@@ -199,11 +199,18 @@ export class NumericInput extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            originalValue: this.props.value,
-            value: this.props.value,
+            originalValue: '',
+            value: '',
         };
 
         this.onUpdateValue = this.onUpdateValue.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState(() => ({
+            originalValue: this.props.value,
+            value: this.props.value,
+        }));
     }
 
     static getDerivedStateFromProps(props, state) {
