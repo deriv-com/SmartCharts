@@ -219,6 +219,16 @@ PROPS:
  - `markerRef` (required): pass the `setRef` callback using this property
  - `className` (optional): avoid expoensive css transition or keyframe animations on this class.
 
+### Raw Marker API
+Get a raw callback with underlying canvas2dcontext.
+This component is used to render directly into the chart canvas.
+
+PROPS:
+
+ - `epoch_array`: array of epoch values to get coordinates for.
+ - `draw_callback`: called on every frame with ({ctx, points}).
+   - `points` will be an array of [{left, top, epoch}] in pixels.
+   - `ctx` is the Context2dDrawingContext
 
 ### Customising Components
 

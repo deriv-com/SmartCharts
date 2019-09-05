@@ -163,12 +163,14 @@ describe('TickHistoryFormatter test', () => {
 
     it('Test parse tick style="candles"', () => {
         const tick = TickHistoryFormatter.formatTick(tickCandleResponse);
+        delete tick.ohlc;
         expect(tick)
             .to.deep.equal(tickCandleResponseResult);
     });
 
     it('Test parse tick style="ticks"', () => {
         const tick = TickHistoryFormatter.formatTick(tickTickResponse);
+        delete tick.tick;
         expect(tick)
             .to.deep.equal(tickTickResponseResult);
     });
