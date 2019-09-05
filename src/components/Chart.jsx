@@ -39,10 +39,10 @@ class Chart extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { updateProps, ...props } = this.props;
-        const { updateProps: prevUpdateProps, ...previousProps } = prevProps;
+        const { updateProps, init, ...props } = this.props;
+        const { updateProps: prevUpdateProps, init: prevInit, ...previousProps } = prevProps;
 
-        if (previousProps !== this.props) {
+        if (previousProps !== props) {
             updateProps(props);
         }
     }
