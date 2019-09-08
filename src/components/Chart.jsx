@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toJS } from 'mobx';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -6,7 +7,6 @@ import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
-import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import LastDigitStats from './LastDigitStats.jsx';
@@ -57,7 +57,6 @@ class Chart extends Component {
 
     render() {
         const {
-            bottomWidgets,
             DrawToolsSettingsDialog,
             StudySettingsDialog,
             isCandle,
@@ -76,14 +75,13 @@ class Chart extends Component {
             isDrawing,
             theme,
             position,
-            showLastDigitStats,
+            bottomWidgets,
             enabledNavigationWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
-        const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
         // if there are any markers, then increase the subholder z-index
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
@@ -119,7 +117,6 @@ class Chart extends Component {
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
                                         <PaginationLoader />
-                                        <CurrentSpot />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
@@ -139,10 +136,7 @@ class Chart extends Component {
                                         </div>
                                     )}
                                     <BottomWidgetsContainer>
-                                        {
-                                            BottomWidgets
-                                                && <BottomWidgets />
-                                        }
+                                        <BottomWidgets bottomWidgets={bottomWidgets} />
                                     </BottomWidgetsContainer>
                                 </div>
                                 { chartControlsWidgets !== null
@@ -161,7 +155,15 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
+export default connect(({
+    chart,
+    drawTools,
+    studies,
+    chartSetting,
+    chartType,
+    state,
+    drawingCursor,
+}) => ({
     init: chart.init,
     destroy: chart.destroy,
     StudySettingsDialog : studies.StudySettingsDialog,
@@ -177,6 +179,29 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,
-    showLastDigitStats:state.showLastDigitStats,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);
+
+// Bottom widgets are pssibly rendered on tick
+// connect it outside to eliminate the need for parent re-render.
+const BottomWidgetsConnected = ({
+    bottomWidgets,
+    showLastDigitStats,
+    digits,
+    last_tick,
+}) => {
+    const Widget = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
+    if (Widget) {
+        return <Widget digits={digits} tick={toJS(last_tick)} />;
+    }
+    return null;
+};
+
+const BottomWidgets = connect(({
+    state,
+    lastDigitStats,
+}) => ({
+    showLastDigitStats:state.showLastDigitStats,
+    digits: lastDigitStats.digits,
+    last_tick: lastDigitStats.last_tick,
+}))(BottomWidgetsConnected);
