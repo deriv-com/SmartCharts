@@ -103,10 +103,6 @@ export default class CategoricalDisplayStore {
             searchInput: this.searchInput,
             searchInputClassName: this.searchInputClassName,
         }))(SearchInput);
-
-        // when(() => this.chart.chartContainerHeight, () => {
-        //     this.height = this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
-        // });
     }
 
     @observable isShown = false;
@@ -121,18 +117,13 @@ export default class CategoricalDisplayStore {
     @observable activeHeadOffset = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
-    // height = 0;
 
     get chart() { return this.mainStore.chart; }
 
     get context() { return this.chart.context; }
 
     get height() {
-        // const isMobile = this.chart.isMobile;
-        // const height = ;
-
         return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
-        // return React.useMemo(() => ({ height }), [isMobile]);
     }
 
     @action.bound updateScrollSpy() {
