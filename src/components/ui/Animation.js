@@ -44,7 +44,6 @@
  *
  */
 
-
 import { calculateGranularity } from '../../utils';
 
 Math.linearTween = function (t, b, c, d) {
@@ -178,6 +177,18 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                     if (quote.Close < prevQuote.Low) q.Low = q.Close;
                 }
                 newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
+
+                let progress = (Date.now() - tickAnimator.startTime) / tickAnimator.ms;
+                progress = Math.min(progress, 1);
+
+                // TODO: interpolate the date using progress
+                // const delta = +quote.DT - +prevQuote.DT;
+                // const dt_ms = +prevQuote.DT + ((delta * progress) | 0);
+                // q.DT = new Date(dt_ms);
+                // q.Date = q.DT.toISOString().replace(/-|:|T|\.|Z/g, '');
+
+                // CurrentSpotStore.drawSpot will use this value for the glow effect
+                q.current_spot_glow = progress;
 
                 const updateQuotes = [q];
                 if (chartJustAdvanced) updateQuotes.unshift(prevQuote);
