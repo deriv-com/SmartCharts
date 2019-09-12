@@ -2,7 +2,6 @@ import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
 import { connect } from './Connect';
 
-
 let activeDialog;
 
 export default class DialogStore {
@@ -71,8 +70,6 @@ export default class DialogStore {
         open: this.open,
         setOpen: this.setOpen,
         onContainerClick: this.onContainerClick,
-        chartHeight: this.mainStore.chart.chartHeight,
-        chartContainerHeight: this.mainStore.chart.chartContainerHeight,
         isMobile: this.mainStore.chart.isMobile,
     }));
 }

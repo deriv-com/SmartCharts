@@ -110,14 +110,14 @@ export default class TimeperiodStore {
             console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
             return;
         }
+
         logEvent(LogCategories.ChartControl, LogActions.Interval, granularity.toString());
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
     @action.bound updateProps(onChange) {
         if (this.mainStore.state.granularity !== undefined) {
-            this.onGranularityChange = typeof onChange === 'function' ? onChange : () => {};
-            this.onGranularityChange(this.mainStore.state.granularity);
+            this.onGranularityChange = onChange;
         }
     }
 
