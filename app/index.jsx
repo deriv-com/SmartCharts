@@ -181,6 +181,12 @@ class App extends Component {
         }
     }
 
+    changeGranularity = (timePeriod) => {
+        this.setState({
+            granularity: timePeriod,
+        });
+    };
+
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
@@ -242,11 +248,7 @@ class App extends Component {
                 }}
             />
             <Timeperiod
-                onChange={(timePeriod) => {
-                    this.setState({
-                        granularity: timePeriod,
-                    });
-                }}
+                onChange={this.changeGranularity}
             />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}

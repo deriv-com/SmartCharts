@@ -38,9 +38,13 @@ class Chart extends Component {
         init(this.root.current, this.modalNode.current, props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { updateProps, ...props } = nextProps;
-        updateProps(props);
+    componentDidUpdate(prevProps) {
+        const { updateProps, init, ...props } = this.props;
+        const { updateProps: prevUpdateProps, init: prevInit, ...previousProps } = prevProps;
+
+        if (previousProps !== props) {
+            updateProps(props);
+        }
     }
 
     componentWillUnmount() {
