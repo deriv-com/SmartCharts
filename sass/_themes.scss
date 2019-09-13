@@ -4,9 +4,7 @@
 $COLOR_WHITE        : #ffffff;
 $COLOR_BLACK        : #000000;
 $COLOR_ORANGE       : #ff9933;
-$COLOR_RED          : #e31c4b;
 $COLOR_SKY_BLUE     : #2196f3;
-$COLOR_GREEN_1      : #39b19d;
 $COLOR_GREEN_2      : #2d9f93;
 $COLOR_PURPLE       : #4f60ae;
 $COLOR_DARK_BLUE_1  : #0b0e18;
@@ -38,6 +36,16 @@ $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
 $COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
 
+
+$COLOR_RED: #ff444f;
+$COLOR_LIGHT_2: #f2f3f4;
+$COLOR_BLACK_1: #333333;
+$COLOR_GRAY_1: #999999;
+$COLOR_GRAY_5: #d6dadb;
+$COLOR_GRAY_6: #d6d6d6;
+$COLOR_GREEN: #85acb0;
+$COLOR_GREEN_1: #4bb4b3;
+
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
@@ -49,15 +57,15 @@ $themes: (
         ChartBg: $COLOR_WHITE,
         ChartBorder: $COLOR_LIGHT_GRAY_1,
         ChartText: $COLOR_DARK_GRAY_3,
-        ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBg: $COLOR_RED,
         ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
         ChartCandleText: $COLOR_WHITE,
         ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
-        ChartGrid: $COLOR_LIGHT_BLACK_4,
+        ChartGrid: $COLOR_LIGHT_2,
         ChartIndicateText: $COLOR_LIGHT_GRAY,
         ChartIndicateDivide: $COLOR_LIGHT_GRAY,
-        ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
-        ChartMountainBg: rgba(153, 156, 172, 0.16),
+        ChartMountainBorder: $COLOR_GREEN,
+        ChartMountainBg: rgba($COLOR_GREEN, 0.16),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
         ChartClosedCandleColor: $COLOR_LIGHT_BLACK_3_SOLID_1,
         MenuBg: $COLOR_WHITE,
@@ -71,14 +79,14 @@ $themes: (
         MenuActiveIcon: $COLOR_DARK_BLUE_5,
         MenuActiveBorder: $COLOR_DARK_BLUE_5,
         ChartTitleBg: $COLOR_WHITE,
-        ChartTitleSubBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        ChartTitleSubBg: $COLOR_LIGHT_2,
         ChartTitleText: $COLOR_LIGHT_BLACK_1,
         ChartTitleBorder: $COLOR_WHITE,
-        ChartTitleArrow: $COLOR_LIGHT_BLACK_1,
-        ChartTitlePriceText: $COLOR_LIGHT_BLACK_1,
-        ChartTitleSymbolText: $COLOR_LIGHT_BLACK_1,
-        ChartTitleHoverBorder: $COLOR_LIGHT_GRAY_1,
-        ChartTitleActiveBorder: $COLOR_LIGHT_GRAY_1,
+        ChartTitleArrow: $COLOR_BLACK_1,
+        ChartTitlePriceText: $COLOR_GRAY_1,
+        ChartTitleSymbolText: $COLOR_BLACK_1,
+        ChartTitleHoverBorder: $COLOR_GRAY_1,
+        ChartTitleActiveBorder: $COLOR_GREEN,
         ChartTitleActiveShadow: $COLOR_LIGHT_GRAY_2,
         ChartTitleActiveArrow: $COLOR_LIGHT_BLACK_1,
         ChartControlBoxBorder: $COLOR_LIGHT_BLACK_4,
@@ -155,37 +163,41 @@ $themes: (
         TimeHoverItemBorder: $COLOR_DARK_BLUE_5,
         TimeIconColor: $COLOR_LIGHT_BLACK_1,
         AssetInfoText: $COLOR_LIGHT_GRAY,
-        CatDisplayBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        CatDisplayBg: $COLOR_WHITE,
         CatDisplayShadow: $COLOR_LIGHT_GRAY_1,
-        CatDisplayText: $COLOR_LIGHT_BLACK_1,
-        CatDisplayBorder: $COLOR_LIGHT_BLACK_4_SOLID,
-        CatDisplaySearchIcon: $COLOR_LIGHT_BLACK_3,
+        CatDisplayText: $COLOR_BLACK_1,
+        CatDisplayBorder: $COLOR_WHITE,
+        CatDisplaySearchBg: $COLOR_WHITE,
+        CatDisplaySearchIcon: $COLOR_GRAY_1,
         CatDisplaySearchText: $COLOR_LIGHT_BLACK_3,
-        CatDisplaySearchBorder: $COLOR_LIGHT_BLACK_3,
-        CatDisplayActiveSearchText: $COLOR_DARK_BLUE_5,
-        CatDisplayActiveSearchIcon: $COLOR_DARK_BLUE_5,
-        CatDisplayActiveSearchIconClose: $COLOR_LIGHT_GRAY_1,
-        CatDisplayActiveSearchBorder: $COLOR_LIGHT_GRAY_1,
+        CatDisplaySearchBorder: $COLOR_GRAY_5,
+        CatDisplayActiveSearchText: $COLOR_BLACK_1,
+        CatDisplayActiveSearchIcon: $COLOR_GREEN,
+        CatDisplayActiveSearchIconClose: $COLOR_BLACK_1,
+        CatDisplayActiveSearchBorder: $COLOR_GREEN,
         CatDisplayActiveSearchShadow: $COLOR_LIGHT_GRAY_2,
-        CatDisplayFilterBg: $COLOR_WHITE,
+        CatDisplayHoverSearchIcon: $COLOR_GREEN,
+        CatDisplayHoverSearchBorder: $COLOR_GREEN,
+        CatDisplayFilterBg: $COLOR_LIGHT_2,
         CatDisplayFilterText: $COLOR_LIGHT_BLACK_1,
         CatDisplayFilterIcon: $COLOR_LIGHT_GRAY,
+        CatDisplayFilterBorder: $COLOR_LIGHT_2,
         CatDisplayFilterInputText: $COLOR_WHITE,
-        CatDisplayActiveFilterBg: $COLOR_LIGHT_GRAY_1,
-        CatDisplayActiveFilterText: $COLOR_WHITE,
-        CatDisplayActiveFilterIcon: $COLOR_WHITE,
-        CatDisplayActiveFilterBorder: $COLOR_DARK_BLUE_5,
+        CatDisplayActiveFilterBg: $COLOR_WHITE,
+        CatDisplayActiveFilterText: $COLOR_BLACK_1,
+        CatDisplayActiveFilterIcon: $COLOR_BLACK_1,
+        CatDisplayActiveFilterBorder: $COLOR_RED,
         CatDisplayHoverFilterBg: $COLOR_LIGHT_BLACK_4,
-        CatDisplayCatTitleText: $COLOR_LIGHT_BLACK_1,
+        CatDisplayCatTitleText: $COLOR_BLACK_1,
         CatDisplayCatSubTitleText: $COLOR_LIGHT_GRAY,
         CatDisplayCatContentBg: $COLOR_WHITE,
-        CatDisplayCatContentBorder: $COLOR_LIGHT_BLACK_4_SOLID,
+        CatDisplayCatContentBorder: $COLOR_WHITE,
         CatDisplayCatContentTitleBg: $COLOR_WHITE,
-        CatDisplayCatContentTitleText: $COLOR_LIGHT_BLACK_1,
-        CatDisplayCatContentIcon: $COLOR_LIGHT_BLACK_1,
+        CatDisplayCatContentTitleText: $COLOR_GRAY_1,
+        CatDisplayCatContentIcon: $COLOR_GRAY_1,
         CatDisplayCatContentDisabled: $COLOR_LIGHT_BLACK_3_SOLID_1,
-        CatDisplayCatActiveContentBg: $COLOR_LIGHT_GRAY_1,
-        CatDisplayCatActiveContentText: $COLOR_WHITE,
+        CatDisplayCatActiveContentBg: $COLOR_GRAY_5,
+        CatDisplayCatActiveContentText: $COLOR_BLACK_1,
         CatDisplayCatActiveContentIcon: $COLOR_WHITE,
         CatDisplayActiveText: $COLOR_LIGHT_BLACK_1,
         CatDisplayCatHoverContentBg: $COLOR_LIGHT_BLACK_4,
@@ -254,7 +266,7 @@ $themes: (
         ChartBg: $COLOR_DARK_BLUE_2,
         ChartBorder: $COLOR_WHITE,
         ChartText: $COLOR_DARK_GRAY_3,
-        ChartCandleBg: $COLOR_ORANGE,
+        ChartCandleBg: $COLOR_RED,
         ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
         ChartCandleText: $COLOR_WHITE,
         ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
