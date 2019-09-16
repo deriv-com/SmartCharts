@@ -86,24 +86,20 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
     </div>
 );
 
-export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => {
-    const cachedOnSelectItem = React.useCallback(e => onSelectItem(e), []);
-
-    return (
-        <div className="results-panel">
-            { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
-                <Category
-                    key={category.categoryId}
-                    Item={getItemType(category.categoryId)}
-                    category={category}
-                    setCategoryElement={setCategoryElement}
-                    onSelectItem={cachedOnSelectItem}
-                    activeHeadKey={activeHeadKey}
-                    activeHeadTop={activeHeadTop}
-                    activeHeadOffset={activeHeadOffset}
-                    disableAll={disableAll}
-                />
-            )) }
-        </div>
-    );
-});
+export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
+    <div className="results-panel">
+        { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
+            <Category
+                key={category.categoryId}
+                Item={getItemType(category.categoryId)}
+                category={category}
+                setCategoryElement={setCategoryElement}
+                onSelectItem={onSelectItem}
+                activeHeadKey={activeHeadKey}
+                activeHeadTop={activeHeadTop}
+                activeHeadOffset={activeHeadOffset}
+                disableAll={disableAll}
+            />
+        )) }
+    </div>
+));
