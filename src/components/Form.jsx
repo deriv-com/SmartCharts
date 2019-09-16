@@ -199,7 +199,7 @@ export class NumericInput extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            originalValue: '',
+            originalValue: '', // eslint-disable-line
             value: '',
         };
 
