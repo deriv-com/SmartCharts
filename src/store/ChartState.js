@@ -141,7 +141,7 @@ class ChartState {
             this.importedLayout = importedLayout;
 
             if (this.importedLayout) {
-                this.importLayout();
+                this.restoreLayout(importedLayout);
             }
         }
 
@@ -309,34 +309,56 @@ class ChartState {
     }
 
     // returns false if restoring layout fails
-    restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
+    restoreLayout(passedLayoutData) {
+        const storedLayoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
+        let layoutData = passedLayoutData || storedLayoutData;
 
-        if (!layoutData || !layoutData.symbols.length) return false;
 
-        // prop values will always take precedence
-        if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
-            // symbol prop takes precedence over local storage data
-            const symbolObject = this.chartStore.activeSymbols.getSymbolObj(this.symbol);
-            layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
-        }
+        if (!this.stxx || !layoutData || !Object.keys(layoutData).length) return;
 
-        for (const symbolDat of layoutData.symbols) {
-            // Symbol from cache may be in different language, so replace it with server's
-            const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.chartStore.activeSymbols.getSymbolObj(cachedSymbol);
-            symbolDat.symbolObject = updatedSymbol;
-            if (symbolDat.parameters) {
-                symbolDat.parameters.display = updatedSymbol.name;
+        const isLayoutPassed = passedLayoutData && Object.keys(passedLayoutData).length;
 
-                // These gap settings are default when new comparisons are added,
-                // but for backward support we need to set them here.
-                symbolDat.parameters.fillGaps = true;
-                symbolDat.parameters.gapDisplayStyle = true;
+        if (layoutData.symbols) {
+            // prop values will always take precedence
+            if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
+                // symbol prop takes precedence over local storage data
+                const symbolObject = this.chartStore.activeSymbols.getSymbolObj(this.symbol);
+                layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
+            }
+
+            for (const symbolDat of layoutData.symbols) {
+                // Symbol from cache may be in different language, so replace it with server's
+                const { symbol: cachedSymbol } = symbolDat;
+                const updatedSymbol = this.chartStore.activeSymbols.getSymbolObj(cachedSymbol);
+                symbolDat.symbolObject = updatedSymbol;
+                if (symbolDat.parameters) {
+                    symbolDat.parameters.display = updatedSymbol.name;
+
+                    // These gap settings are default when new comparisons are added,
+                    // but for backward support we need to set them here.
+                    symbolDat.parameters.fillGaps = true;
+                    symbolDat.parameters.gapDisplayStyle = true;
+                }
             }
         }
 
-        if (this.granularity !== undefined) {
+        this.loader.show();
+        this.loader.setState('chart-data');
+
+        /* Clear current chart interval to make sure importedlayout works as expected
+        if it has same interval with previous state of chart but there is no stream for it */
+        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
+            this.stxx.layout.interval = undefined;
+        }
+
+        if (isLayoutPassed) {
+            this.stxx.minimumLeftBars = this.mainStore.chart.defaultMinimumBars;
+
+            // Clear start and end epoch before importing that layout
+            this.startEpoch = this.endEpoch = null;
+        }
+
+        if (!isLayoutPassed && this.granularity !== undefined) {
             const periodicity = calculateTimeUnitInterval(this.granularity);
             layoutData = { ...layoutData, ...periodicity };
         } else {
@@ -346,34 +368,90 @@ class ChartState {
             this.chartStore.granularity = calculateGranularity(period, timeUnit || interval);
         }
 
-        if (this.startEpoch || this.endEpoch) {
+        if (!passedLayoutData && (this.startEpoch || this.endEpoch)) {
             // already set in chart params
             delete layoutData.span;
             delete layoutData.range;
         }
 
-        if (this.chartType !== undefined) {
-            layoutData.chartType = this.chartType;
-        }
+        // if (this.chartType !== undefined) {
+        //     console.log('restore chartType');
+        //     layoutData.chartType = this.chartType;
+        // } else
+        // if (layoutData.chartType !== this.chartType) {
+        //     this.chartType = layoutData.chartType;
+        // }
 
         this.stxx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
-                if (layoutData.tension) {
-                    this.stxx.chart.tension = layoutData.tension;
-                }
-                this.restoreDrawings();
-                if (this.chartStore.loader) {
-                    this.chartStore.loader.hide();
-                    this.setChartIsReady(true);
-                    this.stxx.home();
-                }
+                if (isLayoutPassed) {
+                    if (layoutData && layoutData.series) {
+                        layoutData.series.forEach((symbol) => {
+                            const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
+                            this.mainStore.comparison.onSelectItem(symbolObject);
+                        });
+                    }
 
-                this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
+                    const { timeUnit, interval, periodicity } = layoutData;
+                    const period = timeUnit ? interval : periodicity;
+                    const granularity = calculateGranularity(period, timeUnit || interval);
+                    this.chartStore.granularity = granularity;
+                    if (this.timeperiodStore.onGranularityChange) {
+                        this.timeperiodStore.onGranularityChange(granularity);
+                    }
+
+                    if (this.chartTypeStore.onChartTypeChanged) {
+                        const chartType = this.chartTypeStore.getChartTypeFromLayout(layoutData);
+                        this.chartTypeStore.setChartTypeFromLayout(layoutData);
+                        this.chartTypeStore.onChartTypeChanged(chartType);
+                    }
+
+                    this.stxx.changeOccurred('layout');
+                    this.mainStore.studies.updateActiveStudies();
+
+                    setTimeout(() => {
+                        if (layoutData && layoutData.drawings) {
+                            this.stxx.importDrawings(layoutData.drawings);
+                            this.stxx.draw();
+                        }
+
+                        if (layoutData && layoutData.isDone) {
+                            if (layoutData.previousMaxTicks) {
+                                this.stxx.setMaxTicks(layoutData.previousMaxTicks);
+                                this.stxx.home();
+                                // delete this.importedlayout.previousMaxTicks;
+                            }
+
+                            // Run the callback when layout import is done
+                            layoutData.isDone();
+
+                            this.loader.hide();
+                        }
+                    }, 500);
+                } else {
+                    if (layoutData.tension) {
+                        this.stxx.chart.tension = layoutData.tension;
+                    }
+                    this.restoreDrawings();
+                    if (this.chartStore.loader) {
+                        this.chartStore.loader.hide();
+                        this.setChartIsReady(true);
+                        this.stxx.home();
+                    }
+                    this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
+                }
             },
         });
 
-        this.chartStore.updateCurrentActiveSymbol();
+        if (isLayoutPassed) {
+            this.mainStore.crosshair.setCrosshairState(layoutData.crosshair);
+            this.stxx.chart.lockAutoScroll = false;
+            this.stxx.chart.entryTick = undefined;
+            this.stxx.maxMasterDataSize = 5000;
+        } else {
+            this.chartStore.updateCurrentActiveSymbol();
+        }
 
         return true;
     }
@@ -471,80 +549,6 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.crosshair.setCrosshairState(2);
-    }
-
-    importLayout() {
-        if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
-
-        this.loader.show();
-        this.loader.setState('chart-data');
-
-        /* Clear current chart interval to make sure importedlayout works as expected
-        if it has same interval with previous state of chart but there is no stream for it */
-        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
-            this.stxx.layout.interval = undefined;
-        }
-
-        this.stxx.minimumLeftBars = this.mainStore.chart.defaultMinimumBars;
-
-        // Clear start and end epoch before importing that layout
-        this.startEpoch = this.endEpoch = null;
-
-        this.stxx.importLayout(this.importedLayout, {
-            managePeriodicity: true,
-            preserveTicksAndCandleWidth: true,
-            cb: () => {
-                if (this.importedLayout && this.importedLayout.series) {
-                    this.importedLayout.series.forEach((symbol) => {
-                        const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
-                        this.mainStore.comparison.onSelectItem(symbolObject);
-                    });
-                }
-
-                const { timeUnit, interval, periodicity } = this.importedLayout;
-                const period = timeUnit ? interval : periodicity;
-                const granularity = calculateGranularity(period, timeUnit || interval);
-                this.chartStore.granularity = granularity;
-                if (this.timeperiodStore.onGranularityChange) {
-                    this.timeperiodStore.onGranularityChange(granularity);
-                }
-
-                if (this.chartTypeStore.onChartTypeChanged) {
-                    const chartType = this.chartTypeStore.getChartTypeFromLayout(this.importedLayout);
-                    this.chartTypeStore.setChartTypeFromLayout(this.importedLayout);
-                    this.chartTypeStore.onChartTypeChanged(chartType);
-                }
-
-                this.stxx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
-
-                setTimeout(() => {
-                    if (this.importedLayout && this.importedLayout.drawings) {
-                        this.stxx.importDrawings(this.importedLayout.drawings);
-                        this.stxx.draw();
-                    }
-
-                    if (this.importedLayout && this.importedLayout.isDone) {
-                        if (this.importedLayout.previousMaxTicks) {
-                            this.stxx.setMaxTicks(this.importedLayout.previousMaxTicks);
-                            this.stxx.home();
-                            delete this.importLayout.previousMaxTicks;
-                        }
-
-                        // Run the callback when layout import is done
-                        this.importedLayout.isDone();
-
-                        this.loader.hide();
-                    }
-                }, 500);
-            },
-        });
-
-        this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
-
-        this.stxx.chart.lockAutoScroll = false;
-        this.stxx.chart.entryTick = undefined;
-        this.stxx.maxMasterDataSize = 5000;
     }
 
     exportLayout() {
