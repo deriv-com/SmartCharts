@@ -129,7 +129,10 @@ class ChartState {
 
         if (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)) {
             this.refreshActiveSymbols = refreshActiveSymbols;
-            this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
+
+            if (this.refreshActiveSymbols) {
+                this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
+            }
         }
 
         if (clearChart !== this.clearChart) {
