@@ -86,7 +86,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
     </div>
 );
 
-export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
+export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
     <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
@@ -102,4 +102,4 @@ export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCate
             />
         )) }
     </div>
-);
+));

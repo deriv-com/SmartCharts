@@ -195,29 +195,40 @@ export const Switch = ({
 );
 
 // NumericInput fires onChange on Enter or onBlur
-export class NumericInput extends React.Component {
-    state = {};
+export class NumericInput extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            originalValue: '', // eslint-disable-line
+            value: '',
+        };
 
-    componentWillMount() {
-        const { value } = this.props;
-        this.setState({
-            originalValue: value,
-            value,
-        });
+        this.onUpdateValue = this.onUpdateValue.bind(this);
     }
 
-    componentWillReceiveProps(newProps) {
-        const { value } = newProps;
-        if (value !== this.state.originalValue) {
-            this.setState({
+    componentDidMount() {
+        this.setState(() => ({
+            originalValue: this.props.value,
+            value: this.props.value,
+        }));
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const { value, min, max, onChange } = props;
+        let val = value;
+        if (value !== state.originalValue) {
+            if (max !== undefined && value > max) {
+                val = max;
+            } else if (min !== undefined && value < min) {
+                val = min;
+            }
+            onChange(val);
+            return {
                 originalValue: value,
-                value,
-            }, this.fireOnChange);
+                value: val,
+            };
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.value !== nextState.value;
+        return null;
     }
 
     fireOnChange = () => {
@@ -233,7 +244,9 @@ export class NumericInput extends React.Component {
     };
 
     onUpdateValue = (e) => {
-        this.setState({ value: e.target.value });
+        e.persist();
+
+        this.setState(() => ({ value: e.target.value }));
     };
 
     fireOnEnter = (e) => {

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/components/_timeperiod.scss';
 
@@ -21,7 +21,7 @@ const Timeperiod = ({
         setOpen(false);
     };
 
-    updateProps(onChange);
+    useEffect(() => updateProps(onChange));
 
     return (
         <TimePeriodMenu
