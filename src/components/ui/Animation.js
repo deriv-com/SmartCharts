@@ -323,7 +323,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
 
             tickAnimator.run(cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced), {
                 Close: start,
-                micropixels: this.nextMicroPixels,
+                micropixels: chart.lockScroll ? 0 : this.nextMicroPixels,
                 lineOffset: beginningOffset,
             }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
 
