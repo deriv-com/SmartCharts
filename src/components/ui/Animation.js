@@ -282,9 +282,10 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 if (this.animations.zoom.hasCompleted) {
                     const candleWidth = this.layout.candleWidth;
                     if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
-                        while (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
-                            chart.scroll++;
-                            this.micropixels -= candleWidth;
+                        if (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
+                            const count = Math.ceil(this.micropixels / candleWidth);
+                            this.scroll += count;
+                            this.micropixels -= count * candleWidth;
                         }
                     }
 
@@ -309,7 +310,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                             chart.scroll = visibleTicks + 1;
                         } else {
                             this.setMaxTicks(chart.dataSet.length + (Math.floor(chart.dataSet.length / 5) || 2));
-                            chart.scroll = chart.dataSet.length + (Math.floor(chart.dataSet.length / 10) || 1);
+                            chart.scroll = chart.dataSet.length;
                         }
                     } else {
                         chart.scroll += 1;
