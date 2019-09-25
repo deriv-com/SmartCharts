@@ -199,11 +199,16 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
                 // console.log("animating: Old",symbol,' New : ',chart.symbol);
 
-                let progress = (Date.now() - tickAnimator.startTime) / tickAnimator.ms;
-                progress = Math.min(progress, 1);
+                const progress = tickAnimator.fc(
+                    (Date.now() - tickAnimator.startTime), // delta time
+                    0,                                     // start value
+                    1,                                     // end value
+                    tickAnimator.ms,                       // duration
+                );
 
-                // CurrentSpotStore.drawSpot will use this value for the glow effect
-                q.current_spot_glow = progress;
+                // the progress value will be used in "CurrentSpotStore.drawSpot" method.
+                // it's used to properly applow glow effect and position the current spot.
+                q.tick_animation_progress = Math.min(progress, 1);
 
                 const updateQuotes = [q];
                 if (chartJustAdvanced) updateQuotes.unshift(prevQuote);
