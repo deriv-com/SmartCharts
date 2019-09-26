@@ -75,9 +75,10 @@
             font-size: 1.4em;
             border: none;
             outline: 0;
-            width: calc(100% - 40px);
             background-color: transparent;
             border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
             @include themify($themes) {
                 background: themed('CatDisplaySearchBg');
                 border: 1px solid themed('CatDisplaySearchBorder');
@@ -135,8 +136,11 @@
     }
     .category {
         padding-top: 3em;
-        padding-bottom: 16px;
+        padding-bottom: 12px;
         position: relative;
+        @include themify($themes) {
+            border-bottom: 4px solid themed('CatDisplayFilterBg');
+        }
 
         &:last-child {
             padding-bottom: 2.5em;
@@ -152,6 +156,9 @@
             border: 1px solid themed('CatDisplayCatContentBorder');
         }
 
+        > div:nth-child(2) {
+            border-radius: 4px 4px 0 0;
+        }
         &:last-child {
             margin-bottom: 0px;
         }
@@ -381,6 +388,7 @@
     .empty-category {
         padding: 0.9em 1.2em;
         border-radius: 4px;
+        font-size: 14px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
         }
