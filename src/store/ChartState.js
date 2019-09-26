@@ -129,7 +129,10 @@ class ChartState {
 
         if (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)) {
             this.refreshActiveSymbols = refreshActiveSymbols;
-            this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
+
+            if (this.refreshActiveSymbols) {
+                this.chartStore.activeSymbols.retrieveActiveSymbols(this.refreshActiveSymbols);
+            }
         }
 
         if (clearChart !== this.clearChart) {
@@ -428,10 +431,10 @@ class ChartState {
                 this.stxx.draw();
 
                 // This assignment should be always after draw()
-                this.stxx.chart.lockAutoScroll = true;
+                this.stxx.chart.lockScroll = true;
             });
         } else if (scrollToEpoch && this.startEpoch || force) {
-            this.stxx.chart.lockAutoScroll = true;
+            this.stxx.chart.lockScroll = true;
             this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
 
@@ -446,7 +449,7 @@ class ChartState {
             this.setIsChartScrollingToEpoch(false);
         } else {
             this.stxx.chart.entryTick = null;
-            this.stxx.chart.lockAutoScroll = false;
+            this.stxx.chart.lockScroll = false;
             this.stxx.home();
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
@@ -542,7 +545,7 @@ class ChartState {
 
         this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
 
-        this.stxx.chart.lockAutoScroll = false;
+        this.stxx.chart.lockScroll = false;
         this.stxx.chart.entryTick = undefined;
         this.stxx.maxMasterDataSize = 5000;
     }
@@ -561,10 +564,10 @@ class ChartState {
     }
 
     scrollListener({ grab }) {
-        if (grab && this.stxx.chart.lockAutoScroll) {
-            this.stxx.chart.lockAutoScroll = false;
+        if (grab && this.stxx.chart.lockScroll) {
+            this.stxx.chart.lockScroll = false;
         }
-        if (this.stxx && this.stxx.chart && !this.stxx.chart.lockAutoScroll) {
+        if (this.stxx && this.stxx.chart && !this.stxx.chart.lockScroll) {
             const dataSegment = this.stxx.chart.dataSegment;
             const whiteSpace = this.chartStore.isMobile ? 50 : 150;
             if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {

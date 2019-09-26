@@ -68,10 +68,10 @@ class Feed {
 
             if (!this.endEpoch) {
                 this._stx.maxMasterDataSize = 0;
-                this._stx.chart.lockAutoScroll = true;
+                this._stx.chart.lockScroll = true;
             } else {
                 this._stx.chart.isDisplayFullMode = false;
-                this._stx.chart.lockAutoScroll = false;
+                this._stx.chart.lockScroll = false;
             }
 
             this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
