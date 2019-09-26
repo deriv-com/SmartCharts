@@ -28,12 +28,26 @@
         margin: 16px 8px;
         position: relative;
 
+        &:hover {
+            input {
+                @include themify($themes) {
+                    border-color: themed('CatDisplayHoverSearchBorder');
+                }
+            }
+            > .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayHoverSearchIcon');
+                        stroke: themed('CatDisplayHoverSearchIcon');
+                    }
+                }
+            }
+        }
         &.active {
             input {
                 @include themify($themes) {
                     color: themed('CatDisplayActiveSearchText');
                     border-color: themed('CatDisplayActiveSearchBorder');
-                    box-shadow: 0 0 0 2px themed('CatDisplayActiveSearchShadow');
                 }
             }
             > .ic-icon {
@@ -61,10 +75,12 @@
             font-size: 1.4em;
             border: none;
             outline: 0;
-            width: calc(100% - 40px);
             background-color: transparent;
             border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
             @include themify($themes) {
+                background: themed('CatDisplaySearchBg');
                 border: 1px solid themed('CatDisplaySearchBorder');
                 color: themed('CatDisplaySearchText');
             }
@@ -78,7 +94,6 @@
                 @include themify($themes) {
                     border-color: themed('CatDisplayActiveSearchBorder');
                     color: themed('CatDisplayActiveSearchText');
-                    box-shadow: 0 0 0 2px themed('CatDisplayActiveSearchShadow');
                 }
 
                 & + .ic-icon {
@@ -94,7 +109,7 @@
         }
         > .ic-icon {
             position: absolute;
-            top: 4px;
+            top: 6px;
             left: 4px;
 
             svg {
@@ -121,8 +136,11 @@
     }
     .category {
         padding-top: 3em;
-        padding-bottom: 16px;
+        padding-bottom: 12px;
         position: relative;
+        @include themify($themes) {
+            border-bottom: 4px solid themed('CatDisplayFilterBg');
+        }
 
         &:last-child {
             padding-bottom: 2.5em;
@@ -138,17 +156,20 @@
             border: 1px solid themed('CatDisplayCatContentBorder');
         }
 
+        > div:nth-child(2) {
+            border-radius: 4px 4px 0 0;
+        }
         &:last-child {
             margin-bottom: 0px;
         }
     }
     .subcategory {
-        padding: 0 0 0 16px;
+        padding: 0;
         font-size: 1.4em;
         border-radius: 4px 4px 0 0;
         display: flex;
         height: 40px;
-        font-weight: bold;
+        font-weight: normal;
         align-items: center;
         @include themify($themes) {
             color: themed('CatDisplayCatContentTitleText');
@@ -212,9 +233,13 @@
         cursor: pointer;
         box-sizing: border-box;
         font-size: 1.4em;
+        @include themify($themes) {
+            border-left: 4px solid themed('CatDisplayFilterBorder');
+        }
 
         &:hover {
             @include themify($themes) {
+                border-left-color: themed('CatDisplayHoverFilterBg');
                 background-color: themed('CatDisplayHoverFilterBg');
             }
         }
@@ -223,6 +248,7 @@
             @include themify($themes) {
                 color: themed('CatDisplayActiveFilterText');
                 background-color: themed('CatDisplayActiveFilterBg');
+                border-left-color: themed('CatDisplayActiveFilterBorder');
             }
 
             .ic-icon {
@@ -253,6 +279,7 @@
         justify-content: space-between;
         line-height: initial;
         font-size: 1.4em;
+        border-radius: 4px;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayBg');
             background-color: themed('CatDisplayCatContentBg');
@@ -353,9 +380,6 @@
     .cq-scroll-panel {
         position: relative;
         min-height: 320px;
-        @include themify($themes) {
-            border-left: 1px solid themed('CatDisplayBorder');
-        }
     }
     .ciq-item-display {
         display: inline-block;
@@ -364,6 +388,7 @@
     .empty-category {
         padding: 0.9em 1.2em;
         border-radius: 4px;
+        font-size: 14px;
         @include themify($themes) {
             background-color: themed('CatDisplayCatContentBg');
         }
