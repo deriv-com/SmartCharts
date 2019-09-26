@@ -226,12 +226,12 @@ html, body {
     margin: 5px;
     border-radius: 3px;
     @include themify($themes) {
-        background: themed('ChartBg');
-        border: 1px solid themed('ChartBorder');
+        background: themed('ChartPanelBg');
     }
 
     .stx-btn-panel {
         opacity: 1;
+        background: transparent;
     }
     * {
         user-select: none;
@@ -243,10 +243,10 @@ html, body {
         float: left;
     }
     .stx-panel-title { /* Panel/Chart Titles */
-        box-shadow: none;
         @include themify($themes) {
-            border-right: 1px solid themed('ChartBorder');
+            color: themed('ChartPanelText');
         }
+        box-shadow: none;
         margin: 5px 10px;
         float: left;
         display: inline-block;
@@ -256,9 +256,6 @@ html, body {
         font-size: 12px;
         text-align: left;
         text-transform: uppercase;
-        @include themify($themes) {
-            color: themed('ChartIndicateText');
-        }
     }
 }
 
@@ -403,14 +400,12 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    color: #fff;
+    border-radius: 4px;
+    font-weight: normal;
     @include themify($themes) {
-        background-color: themed('CrosshairLabel');
+        background-color: themed('CrosshairLabelBg');
+        color: themed('CrosshairLabelText') !important;
     }
-}
-
-.stx-float-price {
-    border-radius: 3px;
 }
 
 .stx-float-date { /* Crosshair Floating x-axis date label*/
@@ -423,7 +418,6 @@ html, body {
     width: auto;
     height: 18px;
     line-height: 18px;
-    font-weight: bold;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */

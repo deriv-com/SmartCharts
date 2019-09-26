@@ -12,9 +12,10 @@
                 display: block;
                 margin-right: 0px;
                 margin-left: 10px;
-                width: 24px;
+                width: 12px;
 
                 svg {
+                    width: 12px;
                     @include themify($themes) {
                         fill: themed('ChartTitleArrow');
                     }
@@ -24,7 +25,6 @@
         &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
             @include themify($themes) {
                 border: solid 1px themed('ChartTitleActiveBorder');
-                box-shadow: 0 0 0 2px themed('ChartTitleActiveShadow');
             }
 
             > .ic-icon.cq-symbol-dropdown {
@@ -179,7 +179,6 @@
         }
     }
     .cq-menu-dropdown {
-        box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.24);
         left: 0px;
         bottom: auto;
         transform: translateX(0) translateY(-3em);

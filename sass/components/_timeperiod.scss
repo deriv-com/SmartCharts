@@ -86,14 +86,14 @@
                 height: 40px;
                 padding-left: 16px;
                 line-height: 40px;
-                font-weight: 300;
+                font-weight: normal;
                 @include themify($themes) {
                     color: themed('TimeUnitColor');
                     border-right: 1px solid themed('TimeUnitItemBorder');
                 }
 
                 &.selected {
-                    font-weight: 500;
+                    font-weight: bold;
                     @include themify($themes) {
                         color: themed('TimeActiveUnitColor');
                         background: themed('TimeActiveUnitBg');
@@ -140,10 +140,10 @@
                     }
                     &:hover {
                         line-height: 27px;
-                        font-weight: bold;
                         @include themify($themes) {
                             color: themed('TimeHoverItemColor');
-                            border-color: themed('TimeHoverItemBorder');
+                            background: themed('TimeHoverItemBg');
+                            border-color: themed('TimeHoverItemBg');
                         }
                     }
                 }

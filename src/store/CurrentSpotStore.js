@@ -53,9 +53,9 @@ class CurrentSpotStore {
             let opacity = Math.sqrt(1.0 - glow) * 255;
             opacity |= 0;
             opacity = opacity.toString(16);
-            ctx.shadowColor = `#Ff9933${opacity}`;
+            ctx.shadowColor = `#ff444f${opacity}`;
         }
-        ctx.fillStyle = '#FF9933';
+        ctx.fillStyle = '#ff444f';
         for (let i = 0; i < (glow ? 3 : 1); ++i) {
             ctx.beginPath();
             ctx.arc(x - 1, y, 4, 0, 2 * Math.PI);
