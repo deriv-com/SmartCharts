@@ -53,6 +53,7 @@ class CrosshairStore {
             this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
             this.stx.controls.floatDate.style.color = 'transparent';
             this.stx.controls.floatDate.style.backgroundColor = 'transparent';
+            this.stx.controls.floatDate.style.display = 'none';
             this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
             crosshair.classList.add('active');
         } else {
@@ -60,6 +61,7 @@ class CrosshairStore {
             this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}_float_labels_bg`]);
             this.stx.controls.floatDate.style.color = '#333';
             this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}_float_labels_bg`];
+            this.stx.controls.floatDate.style.display = 'block';
             this.stx.controls.crossX.style.height = '100%';
             crosshair.classList.remove('active');
         }
