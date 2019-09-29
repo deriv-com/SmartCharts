@@ -19,7 +19,6 @@ class ChartState {
     @observable scrollToEpoch;
     @observable onExportLayout;
     @observable clearChart;
-    @observable importedLayout;
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
@@ -61,7 +60,6 @@ class ChartState {
         clearChart,
         endEpoch,
         id,
-        importedLayout,
         isAnimationEnabled = true,
         isConnectionOpened,
         isStaticChart,
@@ -140,14 +138,6 @@ class ChartState {
             this.cleanChart();
         }
 
-        if (JSON.stringify(importedLayout) !== JSON.stringify(this.importedLayout)) {
-            this.importedLayout = importedLayout;
-
-            if (this.importedLayout) {
-                this.importLayout();
-            }
-        }
-
         // This if statement should be always after setting `this.scrollToEpoch` value
         if (this.startEpoch !== startEpoch || this.endEpoch !== endEpoch) {
             this.startEpoch = startEpoch;
@@ -159,7 +149,7 @@ class ChartState {
             } else if (this.mainStore.chart.feed) {
                 /* When layout is importing and range is changing as the same time we dont need to set the range,
                    the imported layout witll take care of it. */
-                if (!this.importedLayout && !this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
+                if (!this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
                     this.mainStore.chart.feed.onRangeChanged(true);
                 }
             }
@@ -474,80 +464,6 @@ class ChartState {
 
         // TODO: use constant
         this.mainStore.crosshair.setCrosshairState(2);
-    }
-
-    importLayout() {
-        if (!this.stxx || !this.importedLayout || !Object.keys(this.importedLayout).length) return;
-
-        this.loader.show();
-        this.loader.setState('chart-data');
-
-        /* Clear current chart interval to make sure importedlayout works as expected
-        if it has same interval with previous state of chart but there is no stream for it */
-        if (Object.keys(this.mainStore.chart.feed._activeStreams).length === 0) {
-            this.stxx.layout.interval = undefined;
-        }
-
-        this.stxx.minimumLeftBars = this.mainStore.chart.defaultMinimumBars;
-
-        // Clear start and end epoch before importing that layout
-        this.startEpoch = this.endEpoch = null;
-
-        this.stxx.importLayout(this.importedLayout, {
-            managePeriodicity: true,
-            preserveTicksAndCandleWidth: true,
-            cb: () => {
-                if (this.importedLayout && this.importedLayout.series) {
-                    this.importedLayout.series.forEach((symbol) => {
-                        const symbolObject = this.chartStore.activeSymbols.getSymbolObj(symbol);
-                        this.mainStore.comparison.onSelectItem(symbolObject);
-                    });
-                }
-
-                const { timeUnit, interval, periodicity } = this.importedLayout;
-                const period = timeUnit ? interval : periodicity;
-                const granularity = calculateGranularity(period, timeUnit || interval);
-                this.chartStore.granularity = granularity;
-                if (this.timeperiodStore.onGranularityChange) {
-                    this.timeperiodStore.onGranularityChange(granularity);
-                }
-
-                if (this.chartTypeStore.onChartTypeChanged) {
-                    const chartType = this.chartTypeStore.getChartTypeFromLayout(this.importedLayout);
-                    this.chartTypeStore.setChartTypeFromLayout(this.importedLayout);
-                    this.chartTypeStore.onChartTypeChanged(chartType);
-                }
-
-                this.stxx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
-
-                setTimeout(() => {
-                    if (this.importedLayout && this.importedLayout.drawings) {
-                        this.stxx.importDrawings(this.importedLayout.drawings);
-                        this.stxx.draw();
-                    }
-
-                    if (this.importedLayout && this.importedLayout.isDone) {
-                        if (this.importedLayout.previousMaxTicks) {
-                            this.stxx.setMaxTicks(this.importedLayout.previousMaxTicks);
-                            this.stxx.home();
-                            delete this.importLayout.previousMaxTicks;
-                        }
-
-                        // Run the callback when layout import is done
-                        this.importedLayout.isDone();
-
-                        this.loader.hide();
-                    }
-                }, 500);
-            },
-        });
-
-        this.mainStore.crosshair.setCrosshairState(this.importedLayout.crosshair);
-
-        this.stxx.chart.lockScroll = false;
-        this.stxx.chart.entryTick = undefined;
-        this.stxx.maxMasterDataSize = 5000;
     }
 
     exportLayout() {
