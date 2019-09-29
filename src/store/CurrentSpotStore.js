@@ -25,10 +25,10 @@ class CurrentSpotStore {
         const prev_bar = chart.dataSet[len - 2];
         if (!bar || !prev_bar || !bar.Close || !prev_bar.Close) { return; }
         let x = stx.pixelFromTick(len - 1, chart);
-        const delta_x = x - stx.pixelFromTick(len - 2, chart);
+        const delta_x = bar.chartJustAdvanced ? x - stx.pixelFromTick(len - 2, chart) : 0;
         const y = stx.pixelFromPrice(bar.Close, chart.panel);
 
-        const  progress = Math.min(bar.tick_animation_progress || 0, 1);
+        const  progress = Math.min(bar.tickAnimationProgress || 0, 1);
         if (progress) {
             x -=  (1 - progress) * delta_x;
         }
