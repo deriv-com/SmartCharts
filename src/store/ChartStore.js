@@ -460,7 +460,7 @@ class ChartStore {
         manageElement.textContent = t.translate('right-click to manage');
 
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true }, tickAnimator);
-        stxx.chart.lockScroll = true;
+        // stxx.chart.lockScroll = true;
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);

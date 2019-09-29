@@ -19,7 +19,7 @@
         }
     }
     .body {
-        padding: 0 1.6em 1.6em;
+        padding: 18px;
         transition: height 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
         min-height: 190px;
 
@@ -31,6 +31,9 @@
                 line-height: normal;
                 cursor: default;
 
+                &:first-child {
+                    margin-top: 0px !important;
+                }
                 &.ciq-list-item-lng {
                     cursor: pointer;
                 }
@@ -82,13 +85,24 @@
                 padding: 0;
                 padding-left: 10px;
 
+                &:first-child {
+                    margin-top: 0px !important;
+                    border-radius: 4px 0 0;
+                }
                 &:nth-child(2n) {
                     border-left: none;
                 }
                 &:nth-child(2) {
+                    border-radius: 0 4px 0 0;
                     @include themify($themes) {
                         border-top: 1px solid themed('ListLiBorder');
                     }
+                }
+                &:nth-child(12) {
+                    border-radius: 0 0 4px;
+                }
+                &:last-child {
+                    border-radius: 0 0 4px 4px;
                 }
                 .ic-icon {
                     cursor: pointer;
@@ -107,7 +121,7 @@
         transition: height 250ms ease-out;
 
         &.container-language {
-            height: 300px;
+            height: 320px;
 
             .title-text {
                 position: relative;

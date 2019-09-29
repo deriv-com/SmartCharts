@@ -1,11 +1,11 @@
 
 .cq-download {
     .cq-menu-dropdown {
-        width: 280px;
+        width: 200px;
     }
     .body {
         height: 100%;
-        padding: 0 1.6em 1.6em;
+        padding: 18px;
 
         .content {
             .ciq-list-download {
@@ -17,6 +17,9 @@
                     height: 40px;
                     justify-content: space-between;
 
+                    &:first-child {
+                        margin-top: 0px !important;
+                    }
                     .cq-loading {
                         margin-left: 5px;
                     }

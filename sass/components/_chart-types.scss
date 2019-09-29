@@ -1,21 +1,16 @@
 .ciq-chart-types {
     .cq-menu-dropdown {
-        width: 260px;
+        width: 200px;
         box-sizing: border-box;
 
         .body {
-            padding: 0 1.6em 1.6em;
+            padding: 0 16px;
         }
     }
     .ciq-list {
         padding-right: 9px;
 
         .ciq-list-item {
-            &.active {
-                @include themify($themes) {
-                    border-right: 2px solid themed('ChartTypeActiveListBorderRight');
-                }
-            }
             padding: 0;
             justify-content: space-between;
 

@@ -22,9 +22,16 @@ class CurrentSpotStore {
         const len = chart.dataSet.length;
         if (!len) { return; }
         const bar = chart.dataSet[len - 1];
-        if (!bar || !bar.Close) { return; }
-        const x = stx.pixelFromTick(len - 1, chart);
+        const prev_bar = chart.dataSet[len - 2];
+        if (!bar || !prev_bar || !bar.Close || !prev_bar.Close) { return; }
+        let x = stx.pixelFromTick(len - 1, chart);
+        const delta_x = x - stx.pixelFromTick(len - 2, chart);
         const y = stx.pixelFromPrice(bar.Close, chart.panel);
+
+        const  progress = Math.min(bar.tick_animation_progress || 0, 1);
+        if (progress) {
+            x -=  (1 - progress) * delta_x;
+        }
 
         if (
             x < 0
@@ -36,8 +43,7 @@ class CurrentSpotStore {
         }
 
         // glow is set by Animation.js
-        let  glow = bar.current_spot_glow || 0;
-        glow = Math.min(glow, 1);
+        const glow = progress;
 
         /** @type {CanvasRenderingContext2D} */
         const ctx = stx.chart.context;
@@ -47,9 +53,9 @@ class CurrentSpotStore {
             let opacity = Math.sqrt(1.0 - glow) * 255;
             opacity |= 0;
             opacity = opacity.toString(16);
-            ctx.shadowColor = `#Ff9933${opacity}`;
+            ctx.shadowColor = `#ff444f${opacity}`;
         }
-        ctx.fillStyle = '#FF9933';
+        ctx.fillStyle = '#ff444f';
         for (let i = 0; i < (glow ? 3 : 1); ++i) {
             ctx.beginPath();
             ctx.arc(x - 1, y, 4, 0, 2 * Math.PI);

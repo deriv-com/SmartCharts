@@ -28,14 +28,24 @@
         @include themify($themes) {
             color: themed('ListLiText');
             background: themed('ListLiBg');
-            border-left: 1px solid themed('ListLiBorder');
-            border-right: 1px solid themed('ListLiBorder');
-            border-bottom: 1px solid themed('ListLiBorder');
+            border: 1px solid themed('ListLiBorder');
+            border-top: none;
         }
 
         &:first-child {
+            margin-top: 18px;
+            border-radius: 4px 4px 0 0;
             @include themify($themes) {
                 border-top: 1px solid themed('ListLiBorder');
+            }
+        }
+        &:last-child {
+            border-radius: 0 0 4px 4px;
+            margin-bottom: 18px;
+        }
+        &:hover {
+            @include themify($themes) {
+                background-color: themed('ListHoverLiBg');
             }
         }
         &.active {

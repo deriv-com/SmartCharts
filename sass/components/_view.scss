@@ -9,6 +9,8 @@
             height: 32px;
             padding: 0 4px 0 16px;
             box-sizing: border-box;
+            font-size: 12px;
+            border-radius: 4px 4px 0 0;
             @include themify($themes) {
                 border: 1px solid themed('ListLiBorder');
                 background: themed('ListLiBg');
@@ -46,7 +48,7 @@
         .content {
             display: block;
             height: 140px;
-            padding: 0 1.6em 1.6em;
+            padding: 16px 16px 0;
             position: relative;
 
             .ciq-list {
@@ -82,7 +84,8 @@
                     }
                     &:first-child {
                         border-top: none;
-                        margin-top: 0;
+                        margin-top: 0px !important;
+                        border-radius: 0px;
                     }
                     &:last-child {
                         margin-bottom: 0px !important;
