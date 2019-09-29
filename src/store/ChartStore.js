@@ -340,8 +340,6 @@ class ChartStore {
             if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
                 x += 14;
                 left  -= 8;
-            }
-            if (this.labelType === 'currentSpot') {
                 radius = 0;
             }
 

@@ -5,13 +5,11 @@ import { maintainHeadsUpHR }      from './headsUpHR';
 import { maintainSpanSize }       from './resizing';
 import { setMaxTicks }            from './setMaxTicks';
 import { plotterDrawText }        from './plotterDrawText';
-import { maintainDrawCurrentHR }  from './drawCurrentHR';
 
 const inject = () => {
     createXAxis();
     drawCurrentPriceLine();
     maintainHeadsUpHR();
-    maintainDrawCurrentHR();
     maintainSpanSize();
     // manageMasterDataLength();
     plotterDrawText();
