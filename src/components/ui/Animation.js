@@ -208,7 +208,8 @@ export default function animateChart(stx, animationParameters, easeMachine) {
 
                 // the progress value will be used in "CurrentSpotStore.drawSpot" method.
                 // it's used to properly applow glow effect and position the current spot.
-                q.tick_animation_progress = Math.min(progress, 1);
+                q.tickAnimationProgress = Math.min(progress, 1);
+                q.chartJustAdvanced = chartJustAdvanced;
 
                 const updateQuotes = [q];
                 if (chartJustAdvanced) updateQuotes.unshift(prevQuote);
