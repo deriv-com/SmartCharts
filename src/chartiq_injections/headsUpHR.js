@@ -1,7 +1,7 @@
 export const maintainHeadsUpHR = () => {
     CIQ.ChartEngine.prototype.prepend('headsUpHR', function () {
         if (this.currentPanel) {
-            this.yaxisLabelStyle = 'rect';
+            this.yaxisLabelStyle = 'roundRect';
             this.labelType = 'crosshair';
         }
     });

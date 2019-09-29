@@ -292,7 +292,7 @@ class ChartStore {
             // SmartChart Team: this prop modified
             const margin = 9;
             const height = 24;
-            let radius = 0;
+            let radius;
             this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
             const textWidth = context.measureText(txt).width;
@@ -340,6 +340,9 @@ class ChartStore {
             if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
                 x += 14;
                 left  -= 8;
+            }
+            if (this.labelType === 'currentSpot') {
+                radius = 0;
             }
 
             const params = {
