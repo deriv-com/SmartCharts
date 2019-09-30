@@ -27,8 +27,14 @@ export const SymbolSelectButton = ({
     ChartPrice,
     isSymbolOpen,
     symbolOpenTime,
+    onMouseEnter,
+    onMouseLeave,
 }) => (
-    <div className="cq-symbol-select-btn">
+    <div
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        className="cq-symbol-select-btn"
+    >
         <SymbolInfo symbol={symbol} ChartPrice={ChartPrice} symbolOpenTime={symbolOpenTime} isSymbolOpen={isSymbolOpen} />
         { !isSymbolOpen
             && <div className="cq-symbol-closed-text">{t.translate('CLOSED')}</div>

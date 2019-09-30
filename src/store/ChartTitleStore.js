@@ -45,6 +45,8 @@ export default class ChartTitleStore {
             ChartPrice: PriceDisplay,
             isSymbolOpen: this.isSymbolOpen,
             symbolOpenTime: this.symbolOpenTime,
+            onMouseEnter: () => this.crosshairStore.updateVisibility(false),
+            onMouseLeave: () => this.crosshairStore.updateVisibility(true),
         }))(SymbolSelectButton);
     }
 
@@ -55,6 +57,7 @@ export default class ChartTitleStore {
 
     get chart() { return this.mainStore.chart; }
     get context() { return this.mainStore.chart.context; }
+    get crosshairStore() { return this.mainStore.crosshair; }
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get isSymbolOpen() { return this.currentSymbol.exchange_is_open; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
