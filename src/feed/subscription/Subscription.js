@@ -44,7 +44,7 @@ class Subscription {
 
     _processHistoryResponse(response) {
         if (response.error) {
-            throw new Error(response.error);
+            throw response.error;
         }
 
         const quotes = TickHistoryFormatter.formatHistory(response);
