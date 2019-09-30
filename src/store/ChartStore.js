@@ -291,7 +291,7 @@ class ChartStore {
             const context = ctx || this.chart.context;
             // SmartChart Team: this prop modified
             const margin = 9;
-            const height = 24;
+            let height = 24;
             let radius;
             this.canvasFont('stx_price_label', context);
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
@@ -341,6 +341,9 @@ class ChartStore {
                 x += 14;
                 left  -= 8;
                 radius = 0;
+            } else if (this.labelType === 'crosshair') {
+                x += 1;
+                height = 30;
             }
 
             const params = {

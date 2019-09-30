@@ -413,10 +413,12 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     z-index: 3;
-    padding: 3px 6px 2px;
+    padding: 0 8px;
     text-align: center;
     width: auto;
-    line-height: 18px;
+    height: 30px;
+    line-height: 31px;
+    box-size: content-box;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */
@@ -816,7 +818,6 @@ html, body {
     }
     font-size: 12px;
     font-family: 'Roboto';
-    font-weight: bold;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
