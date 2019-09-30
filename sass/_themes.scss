@@ -606,4 +606,6 @@ $themes: (
     dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
     light_float_labels_bg: map-get(map-get($themes, 'light'), 'CrosshairLabelBg');
     dark_float_labels_bg: map-get(map-get($themes, 'dark'), 'CrosshairLabelBg');
+    light_float_labels_text: map-get(map-get($themes, 'light'), 'CrosshairLabelText');
+    dark_float_labels_text: map-get(map-get($themes, 'dark'), 'CrosshairLabelText');
 }
