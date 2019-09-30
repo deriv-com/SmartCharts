@@ -45,8 +45,6 @@ export default class ChartTitleStore {
             ChartPrice: PriceDisplay,
             isSymbolOpen: this.isSymbolOpen,
             symbolOpenTime: this.symbolOpenTime,
-            onMouseEnter: () => this.crosshairStore.updateVisibility(false),
-            onMouseLeave: () => this.crosshairStore.updateVisibility(true),
         }))(SymbolSelectButton);
     }
 
@@ -118,5 +116,13 @@ export default class ChartTitleStore {
                 this.todayChangePercent = ((this.todayChange / oldPrice) * 100).toFixed(2);
             }
         }
+    }
+
+    @action.bound onMouseEnter() {
+        this.crosshairStore.updateVisibility(false);
+    }
+
+    @action.bound onMouseLeave() {
+        this.crosshairStore.updateVisibility(true);
     }
 }
