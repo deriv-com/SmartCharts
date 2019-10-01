@@ -29,6 +29,7 @@ export default class CategoricalDisplayStore {
                 const activeSubCategoryClassName = this.id ? `.${this.id}-subcategory-item-${this.activeSubCategory}` : `.subcategory-item-${this.activeSubCategory}`;
                 const el_active_sub_category = this.mainStore.chart.rootNode.querySelector(activeSubCategoryClassName);
                 this.activeHeadKey = this.activeCategoryKey || null;
+                this.activeHeadTop = 0;
 
                 if (el) {
                     this.pauseScrollSpy = true;
@@ -130,7 +131,8 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
-        const categoryTitleHeight = 40;
+        // hits: 40px for title hight + 4px for content bottom border
+        const categoryTitleHeight = 44;
         const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
         let activeHeadTop = 0;
         let activeMenuId = null;
