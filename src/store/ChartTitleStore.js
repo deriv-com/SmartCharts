@@ -122,7 +122,7 @@ export default class ChartTitleStore {
         this.crosshairStore.updateVisibility(false);
     }
 
-    @action.bound onMouseLeave() {
+    onMouseLeave = () => {
         this.crosshairStore.updateVisibility(true);
     }
 }
