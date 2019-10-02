@@ -156,8 +156,10 @@
             border: 1px solid themed('CatDisplayCatContentBorder');
         }
 
-        > div:nth-child(2) {
-            border-radius: 4px 4px 0 0;
+        &.has-subcategory {
+            > div:nth-child(2) {
+                border-radius: 4px 4px 0 0;
+            }
         }
         &:last-child {
             margin-bottom: 0px;
@@ -279,18 +281,22 @@
         justify-content: space-between;
         line-height: initial;
         font-size: 1.4em;
-        border-radius: 4px;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayBg');
             background-color: themed('CatDisplayCatContentBg');
         }
 
         &:first-child {
-            border-radius: 4px 4px 0 0;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
         }
         &:last-child {
-            border-radius: 0 0 4px 4px;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
             border-bottom: none;
+        }
+        &:not(:first-child):not(:last-child) {
+            border-radius: 4px;
         }
         .left, .right {
             display: flex;
@@ -380,6 +386,10 @@
     .cq-scroll-panel {
         position: relative;
         min-height: 320px;
+
+        > div:nth-child(3) {
+            z-index: 9;
+        }
     }
     .ciq-item-display {
         display: inline-block;
