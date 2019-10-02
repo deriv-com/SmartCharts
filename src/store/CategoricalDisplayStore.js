@@ -22,6 +22,7 @@ export default class CategoricalDisplayStore {
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
+                const activeItemCount = getActiveCategory ? getActiveCategory().data.length : 0;
                 this.focusedCategoryKey = null;
                 this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
                 this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
@@ -29,17 +30,23 @@ export default class CategoricalDisplayStore {
                 const activeSubCategoryClassName = this.id ? `.${this.id}-subcategory-item-${this.activeSubCategory}` : `.subcategory-item-${this.activeSubCategory}`;
                 const el_active_sub_category = this.mainStore.chart.rootNode.querySelector(activeSubCategoryClassName);
                 this.activeHeadKey = this.activeCategoryKey || null;
+                this.activeHeadTop = 0;
+                this.pauseScrollSpy = true;
+                this.isUserScrolling = false;
 
-                if (el) {
-                    this.pauseScrollSpy = true;
-                    this.isUserScrolling = false;
+                if (activeItemCount) {
+                    this.activeCategoryKey = 'active';
+                    this.activeHeadKey = null;
+                    this.scrollPanel.scrollTop(0);
+                } else if (el) {
                     this.scrollPanel.scrollTop(el.offsetTop);
 
                     if (el_active_sub_category) {
                         this.scrollPanel.scrollTop(el.offsetTop + el_active_sub_category.offsetTop - 40);
                     }
-                    setTimeout(() => { this.pauseScrollSpy = false; }, 20);
                 }
+                setTimeout(() => { this.pauseScrollSpy = false; }, 20);
+
                 if (!this.isInit) { this.init(); }
                 if (!mainStore.chart.isMobile) {
                     setTimeout(() => {
@@ -130,7 +137,8 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
-        const categoryTitleHeight = 40;
+        // hits: 40px for title hight + 4px for content bottom border
+        const categoryTitleHeight = 44;
         const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
         let activeHeadTop = 0;
         let activeMenuId = null;

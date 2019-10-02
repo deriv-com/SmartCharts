@@ -52,7 +52,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
-                    className="category-content"
+                    className="category-content has-subcategory"
                     key={subcategory.subcategoryName}
                 >
                     <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
