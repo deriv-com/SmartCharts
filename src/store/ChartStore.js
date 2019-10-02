@@ -293,7 +293,12 @@ class ChartStore {
             const margin = 9;
             let height = 24;
             let radius;
-            this.canvasFont('stx_price_label', context);
+
+            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
+                this.canvasFont('stx_current_hr_up', context);
+            } else {
+                this.canvasFont('stx_price_label', context);
+            }
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
             const textWidth = context.measureText(txt).width;
             let width;

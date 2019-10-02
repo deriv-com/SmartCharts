@@ -390,6 +390,9 @@ html, body {
 
 .stx_current_hr_up, /* 'Up' color for current chart value */
 .stx_current_hr_down { /* 'Down' color for current chart value */
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Roboto';
     @include themify($themes) {
         color: themed('ChartCandleText');
         background-color: themed('ChartCandleBg');
@@ -816,6 +819,7 @@ html, body {
     @include themify($themes) {
         color: themed('ChartText');
     }
+    font-weight: normal;
     font-size: 12px;
     font-family: 'Roboto';
 }
