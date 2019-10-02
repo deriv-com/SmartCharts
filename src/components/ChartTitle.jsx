@@ -13,6 +13,8 @@ const ChartTitle = ({
     SymbolSelectButton,
     setMenuOpen,
     searchInputClassName,
+    onMouseEnter,
+    onMouseLeave,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -22,6 +24,8 @@ const ChartTitle = ({
             className="cq-chart-title stx-show cq-symbols-display"
             isFullscreen
             title={isMobile ? t.translate('Underlying Assets') : ''}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
         >
             <ChartTitleMenu.Title>
                 <SymbolSelectButton />
@@ -50,4 +54,6 @@ export default connect(({ chartTitle: c, chart, state }) => ({
     onChange          : c.setSymbol,
     setMenuOpen       : c.menu.setOpen,
     SymbolSelectButton: c.SymbolSelectButton,
+    onMouseEnter      : c.onMouseEnter,
+    onMouseLeave      : c.onMouseLeave,
 }))(ChartTitle);
