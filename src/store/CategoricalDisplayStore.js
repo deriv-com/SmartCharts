@@ -22,6 +22,7 @@ export default class CategoricalDisplayStore {
     }) {
         reaction(getIsShown, () => {
             if (getIsShown()) {
+                const activeItemCount = getActiveCategory ? getActiveCategory().data.length : 0;
                 this.focusedCategoryKey = null;
                 this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
                 this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
@@ -30,17 +31,22 @@ export default class CategoricalDisplayStore {
                 const el_active_sub_category = this.mainStore.chart.rootNode.querySelector(activeSubCategoryClassName);
                 this.activeHeadKey = this.activeCategoryKey || null;
                 this.activeHeadTop = 0;
+                this.pauseScrollSpy = true;
+                this.isUserScrolling = false;
 
-                if (el) {
-                    this.pauseScrollSpy = true;
-                    this.isUserScrolling = false;
+                if (activeItemCount) {
+                    this.activeCategoryKey = 'active';
+                    this.activeHeadKey = null;
+                    this.scrollPanel.scrollTop(0);
+                } else if (el) {
                     this.scrollPanel.scrollTop(el.offsetTop);
 
                     if (el_active_sub_category) {
                         this.scrollPanel.scrollTop(el.offsetTop + el_active_sub_category.offsetTop - 40);
                     }
-                    setTimeout(() => { this.pauseScrollSpy = false; }, 20);
                 }
+                setTimeout(() => { this.pauseScrollSpy = false; }, 20);
+
                 if (!this.isInit) { this.init(); }
                 if (!mainStore.chart.isMobile) {
                     setTimeout(() => {
