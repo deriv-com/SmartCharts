@@ -118,11 +118,6 @@ export default class ChartTitleStore {
         }
     }
 
-    onMouseEnter = () => {
-        this.crosshairStore.updateVisibility(false);
-    }
-
-    onMouseLeave = () => {
-        this.crosshairStore.updateVisibility(true);
-    }
+    onMouseEnter = () => this.crosshairStore.updateVisibility(false);
+    onMouseLeave = () => this.crosshairStore.updateVisibility(true);
 }
