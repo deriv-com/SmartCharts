@@ -41,6 +41,7 @@ export default class BottomWidgetsContainerStore {
 
     updateChartMargin = (margin) => {
         if (this.context && this.stx) {
+            const minAllowChartHeight = 125;
             let marginTop = 125;
             if (margin === 200) {
                 if (this.stx.chart.yAxis.height < 325) {
@@ -51,6 +52,14 @@ export default class BottomWidgetsContainerStore {
                     margin = 100;
                     marginTop = 10;
                 }
+            }
+
+            if (this.mainChartHeight < (minAllowChartHeight + 125)) {
+                console.error('could not show chart');
+            } else if ((this.mainChartHeight - marginTop - margin) < minAllowChartHeight) {
+                const remainSpace = this.mainChartHeight - minAllowChartHeight;
+                marginTop = 125;
+                margin = remainSpace - 125;
             }
 
             this.stx.chart.yAxis.initialMarginTop = marginTop;
