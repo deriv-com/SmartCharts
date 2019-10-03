@@ -294,7 +294,7 @@ class ChartStore {
             let height = 24;
             let radius;
 
-            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
+            if (this.labelType === 'currentSpot') {
                 this.canvasFont('stx_current_hr_up', context);
             } else {
                 this.canvasFont('stx_price_label', context);
@@ -342,12 +342,12 @@ class ChartStore {
 
             // as crosshair and countdown style is `rect`, so due to previous rule we should
             // increase there x position to fit the y-axis
-            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
-                x += 14;
+            x += 1;
+            if (this.labelType === 'currentSpot') {
+                x += 13;
                 left  -= 8;
                 radius = 0;
             } else if (this.labelType === 'crosshair') {
-                x += 1;
                 height = 30;
             }
 
@@ -401,6 +401,7 @@ class ChartStore {
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
+            yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
                 whitespace: isMobile ? 50 : 150,
