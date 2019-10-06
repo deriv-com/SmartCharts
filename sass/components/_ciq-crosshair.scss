@@ -33,7 +33,6 @@
         pointer-events: none;
         padding: 8px;
         box-sizing: border-box;
-        box-shadow: 0 2px 8px 0 rgba(21, 33, 45, 0.32);
         display: flex;
         flex-direction: column;
         @include themify($themes) {
@@ -65,7 +64,7 @@
             }
         }
         .row {
-            font-size: 1.2em;
+            font-size: 12px;
             line-height: 18px;
             margin-bottom: 4px;
 

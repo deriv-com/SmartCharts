@@ -2,6 +2,8 @@
 export const drawCurrentPriceLine = () => {
 CIQ.ChartEngine.prototype.drawCurrentHR = function () {
     if (this.runPrepend('drawCurrentHR', arguments)) return;
+    this.labelType = 'currentSpot';
+    this.yaxisLabelStyle = 'roundRectArrow';
     let backgroundColor, color;
     const mainSeriesRenderer = this.mainSeriesRenderer || {};
     if (mainSeriesRenderer.noCurrentHR) return;
@@ -81,6 +83,8 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
             }
         }
     }
+    this.yaxisLabelStyle = 'roundRect';
+    this.labelType = undefined;
     this.runAppend('drawCurrentHR', arguments);
 };
 };
