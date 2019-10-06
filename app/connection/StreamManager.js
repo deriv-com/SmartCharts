@@ -153,9 +153,14 @@ class StreamManager {
             tickHistoryResponse = mergeTickHistory(tickHistoryResponse, patch);
         }
 
-        // If cache data is available, send a copy otherwise we risk
-        // mutating the cache outside of StreamManager
-        callback(StreamManager.cloneTickHistoryResponse(tickHistoryResponse));
+        if (tickHistoryResponse.error) {
+            callback(tickHistoryResponse);
+        } else {
+            // If cache data is available, send a copy otherwise we risk
+            // mutating the cache outside of StreamManager
+            callback(StreamManager.cloneTickHistoryResponse(tickHistoryResponse));
+        }
+
         stream.onStream(callback);
     }
 

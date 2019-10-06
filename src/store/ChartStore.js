@@ -530,11 +530,6 @@ class ChartStore {
                     }
                 }));
 
-                if (this.state.importedLayout) {
-                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
-                    this.state.importLayout();
-                }
-
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
 
@@ -545,7 +540,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined)) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });

@@ -361,8 +361,8 @@ class CrosshairStore {
     updateVisibility = (visible) => {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
 
-        if (visible) crosshair.style.opacity = 1;
-        else crosshair.style.opacity = 0;
+        if (this.state === 2 && visible) crosshair.classList.add('active');
+        else if (this.state === 2) crosshair.classList.remove('active');
     }
 
     // YES! we are manually patching DOM, Because we don't want to pay
