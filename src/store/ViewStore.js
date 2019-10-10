@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
@@ -24,6 +24,7 @@ export default class ViewStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get loader() { return this.mainStore.loader; }
+    get state() { return this.mainStore.state; }
 
     static updateLocalStorage() {
         CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
@@ -87,19 +88,9 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
-            const finishImportLayout = () => {
-                stx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
-                if (this.loader) { this.loader.hide(); }
-                this.mainStore.state.setChartIsReady(true);
-            };
-            stx.importLayout(ViewStore.views[idx].layout, {
-                managePeriodicity: true,
-                preserveTicksAndCandleWidth: true,
-                cb: finishImportLayout,
-            });
             // This condition is to make spline chart appear as spline chart
             // Both line chart and spline chart are of type mountain but with different tensions
+            const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
             let chartType = ViewStore.views[idx].layout.chartType;
             if (chartType === 'mountain') {
                 const tension = ViewStore.views[idx].layout.tension;
@@ -107,7 +98,26 @@ export default class ViewStore {
                     chartType = 'spline';
                 }
             }
-            this.mainStore.chartType.setType(chartType);
+            const finishImportLayout = () => {
+                stx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+                if (this.loader) { this.loader.hide(); }
+
+                this.state.setGranularity(granularity);
+                this.state.setChartType(chartType);
+                this.state.setChartIsReady(true);
+            };
+            stx.importLayout(ViewStore.views[idx].layout, {
+                managePeriodicity: true,
+                preserveTicksAndCandleWidth: true,
+                cb: finishImportLayout,
+            });
+
+            if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(granularity);
+
+            if (this.mainStore.chartType.onChartTypeChanged) this.mainStore.chartType.onChartTypeChanged(chartType);
+            else this.mainStore.chartType.setType(chartType);
+
             this.menu.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
