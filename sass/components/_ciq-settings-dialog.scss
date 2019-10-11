@@ -130,6 +130,7 @@
             font-size: 14px;
             border-radius: 4px;
             padding: 0px 20px;
+            font-weight: bold;
             @include themify($themes) {
                 color: themed('DialogFootText');
             }

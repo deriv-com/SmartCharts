@@ -392,7 +392,7 @@ html, body {
 .stx_current_hr_down { /* 'Down' color for current chart value */
     font-weight: bold;
     font-size: 12px;
-    font-family: 'Roboto';
+    font-family: $base-font;
     @include themify($themes) {
         color: themed('ChartCandleText');
         background-color: themed('ChartCandleBg');
@@ -812,7 +812,7 @@ html, body {
         color: themed('ChartText');
     }
     font-size: 10px;
-    font-family: 'Roboto';
+    font-family: $base-font;
 }
 
 .stx_price_label {
@@ -821,7 +821,7 @@ html, body {
     }
     font-weight: normal;
     font-size: 12px;
-    font-family: 'Roboto';
+    font-family: $base-font;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */

@@ -204,6 +204,9 @@ class ChartState {
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
+        this.stxx.setStyle('stx_yaxis', 'color', Theme[`${theme}_chart_text`]);
+        this.stxx.setStyle('stx_xaxis', 'color', Theme[`${theme}_chart_text`]);
+        this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
         if (!this.rootNode) {
             this.rootNode = this.mainStore.chart.rootNode;
         }
