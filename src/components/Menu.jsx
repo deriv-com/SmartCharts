@@ -23,6 +23,8 @@ class Menu extends Component {
             modalNode,
             enabled = true,
             shouldRenderDialogs,
+            onMouseEnter,
+            onMouseLeave,
         } = this.props;
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
@@ -61,6 +63,8 @@ class Menu extends Component {
                 <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                     <div
                         className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
                         onClick={onTitleClick}
                     >
                         {first}
@@ -81,7 +85,11 @@ class Menu extends Component {
                 </div>
             ) || (
                 <div className={`ciq-menu ciq-disabled ${className || ''}`}>
-                    <div className="cq-menu-btn">
+                    <div
+                        className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                    >
                         {first}
                     </div>
                 </div>

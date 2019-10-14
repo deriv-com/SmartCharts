@@ -167,6 +167,7 @@ class Feed {
                 const { message: text } = error;
                 this._mainStore.notifier.notify({
                     text,
+                    type: 'error',
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
@@ -256,6 +257,19 @@ class Feed {
                     start: Math.floor(Math.max(start, startLimit)),
                     end,
                 });
+
+                if (response.error) {
+                    const { message: text } = response.error;
+                    this.loader.hide();
+                    this._mainStore.notifier.notify({
+                        text,
+                        type: 'error',
+                        category: 'activesymbol',
+                    });
+                    callback({ error: response.error });
+                    return;
+                }
+
                 firstEpoch = Feed.getFirstEpoch(response);
                 if (firstEpoch === undefined || firstEpoch === end) {
                     const newStart = start - (end - start);
@@ -347,7 +361,6 @@ class Feed {
             });
         } else {
             this._stx.updateChartData(quotes, null, {
-                appending: !this._mainStore.state.granularity,
                 allowReplaceOHL: true,
             });
             this._stx.createDataSet();

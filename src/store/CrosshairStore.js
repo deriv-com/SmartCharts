@@ -57,9 +57,9 @@ class CrosshairStore {
             this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
             crosshair.classList.add('active');
         } else {
-            this.stx.setStyle('stx-float-price', 'color', '#333');
+            this.stx.setStyle('stx-float-price', 'color', Theme[`${theme}_float_labels_text`]);
             this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}_float_labels_bg`]);
-            this.stx.controls.floatDate.style.color = '#333';
+            this.stx.controls.floatDate.style.color = Theme[`${theme}_float_labels_text`];
             this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}_float_labels_bg`];
             this.stx.controls.floatDate.style.display = 'block';
             this.stx.controls.crossX.style.height = '100%';
@@ -361,8 +361,8 @@ class CrosshairStore {
     updateVisibility = (visible) => {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
 
-        if (visible) crosshair.style.opacity = 1;
-        else crosshair.style.opacity = 0;
+        if (this.state === 2 && visible) crosshair.classList.add('active');
+        else if (this.state === 2) crosshair.classList.remove('active');
     }
 
     // YES! we are manually patching DOM, Because we don't want to pay
