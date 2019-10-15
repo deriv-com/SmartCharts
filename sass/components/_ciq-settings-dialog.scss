@@ -169,15 +169,6 @@
             box-shadow: 0 0 0 1px themed('defaultBorder');
         }
     }
-    .cq-color-picker {
-        display: inline-block;
-
-        .dropdown {
-            @include themify($themes) {
-                border: 1px solid themed('ColorPickerBorder');
-            }
-        }
-    }
 }
 
 /* Mobile Style */
