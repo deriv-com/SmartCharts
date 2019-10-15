@@ -92,8 +92,8 @@ export default class TimeperiodStore {
                         stx.yaxisLabelStyle = 'rect';
                         stx.labelType = 'countdown';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
-                        stx.labelType = null;
-                        stx.yaxisLabelStyle = 'roundRectArrow';
+                        stx.labelType = undefined;
+                        stx.yaxisLabelStyle = 'roundRect';
                     }
                 });
             }
