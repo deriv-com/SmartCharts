@@ -390,6 +390,9 @@ html, body {
 
 .stx_current_hr_up, /* 'Up' color for current chart value */
 .stx_current_hr_down { /* 'Down' color for current chart value */
+    font-weight: bold;
+    font-size: 12px;
+    font-family: 'Roboto';
     @include themify($themes) {
         color: themed('ChartCandleText');
         background-color: themed('ChartCandleBg');
@@ -413,10 +416,12 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     z-index: 3;
-    padding: 3px 6px 2px;
+    padding: 0 8px;
     text-align: center;
     width: auto;
-    line-height: 18px;
+    height: 30px;
+    line-height: 31px;
+    box-size: content-box;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */
@@ -814,9 +819,9 @@ html, body {
     @include themify($themes) {
         color: themed('ChartText');
     }
+    font-weight: normal;
     font-size: 12px;
     font-family: 'Roboto';
-    font-weight: bold;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */

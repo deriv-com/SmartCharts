@@ -361,7 +361,6 @@ class Feed {
             });
         } else {
             this._stx.updateChartData(quotes, null, {
-                appending: !this._mainStore.state.granularity,
                 allowReplaceOHL: true,
             });
             this._stx.createDataSet();

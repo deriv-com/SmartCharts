@@ -304,9 +304,9 @@ $themes: (
         CatDisplayCatHoverContentBg: $color-grey-4,
         CatDisplayCatHoverContentText: $color-black-1,
         CatDisplayCatHoverContentIcon: $color-black-1,
-        CrosshairBg: $COLOR_LIGHT_BLACK_1,
-        CrosshairText: $COLOR_WHITE,
-        CrosshairBorder: rgba($COLOR_LIGHT_GRAY, 0.88),
+        CrosshairBg: $color-grey-5,
+        CrosshairText: $color-black-1,
+        CrosshairBorder: $color-grey-5,
         CrosshairAxis: $color-grey-5,
         CrosshairLabelBg: $color-grey-5,
         CrosshairLabelText: $color-black-1,
@@ -513,12 +513,12 @@ $themes: (
         CatDisplayCatHoverContentBg: $color-black-5,
         CatDisplayCatHoverContentText: $color-white,
         CatDisplayCatHoverContentIcon: $color-white,
-        CrosshairBg: $color-black-1,
-        CrosshairText: $COLOR_WHITE,
-        CrosshairBorder: $COLOR_DARK_GRAY_3,
-        CrosshairAxis: $COLOR_DARK_BLUE_8,
-        CrosshairLabelBg: $color-black-1,
-        CrosshairLabelText: $COLOR_WHITE,
+        CrosshairBg: $color-black-8,
+        CrosshairText: $color-white,
+        CrosshairBorder: $color-black-8,
+        CrosshairAxis: $color-black-8,
+        CrosshairLabelBg: $color-black-8,
+        CrosshairLabelText: $color-white,
         StarIconFav: $COLOR_ORANGE,
         LastdigitsBarBg: $COLOR_DARK_GRAY_3,
         LastdigitsMaxBarBg: $COLOR_GREEN_1,
@@ -606,4 +606,6 @@ $themes: (
     dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
     light_float_labels_bg: map-get(map-get($themes, 'light'), 'CrosshairLabelBg');
     dark_float_labels_bg: map-get(map-get($themes, 'dark'), 'CrosshairLabelBg');
+    light_float_labels_text: map-get(map-get($themes, 'light'), 'CrosshairLabelText');
+    dark_float_labels_text: map-get(map-get($themes, 'dark'), 'CrosshairLabelText');
 }
