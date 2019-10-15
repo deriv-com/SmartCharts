@@ -218,6 +218,8 @@ class App extends Component {
     handleDateChange = (value) => {
         this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
     };
+    changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
+    changeChartType = chartType => this.setState({ chartType });
 
     renderTopWidgets = () => (
         <>
@@ -234,12 +236,8 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={chartType => this.setState({ chartType })}
-            />
-            <Timeperiod
-                onChange={timePeriod => this.setState({ granularity: timePeriod })}
-            />
+            <ChartTypes onChange={this.changeChartType} />
+            <Timeperiod onChange={this.changeGranularity} />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />

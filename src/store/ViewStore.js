@@ -88,9 +88,9 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
+            const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
             // This condition is to make spline chart appear as spline chart
             // Both line chart and spline chart are of type mountain but with different tensions
-            const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
             let chartType = ViewStore.views[idx].layout.chartType;
             if (chartType === 'mountain') {
                 const tension = ViewStore.views[idx].layout.tension;
