@@ -6,6 +6,7 @@ export const  createXAxis = () => {
             let xAxisInterval = Math.floor((last - first) / 5000);
             xAxisInterval = xAxisInterval > 5 ? xAxisInterval - (xAxisInterval % 5) : xAxisInterval;
             this.chart.xAxis.timeUnitMultiplier = xAxisInterval < 100 ? xAxisInterval : 1;
+            this.chart.xAxis.timeUnit = n < 100 ? CIQ.SECOND : undefined;
         }
     });
 };
