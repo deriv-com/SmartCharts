@@ -223,10 +223,10 @@
         z-index: +2;
         width: 250px;
         padding: 8px;
-        box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
         transition: opacity 0.1s;
         border-radius: 4px;
         @include themify($themes) {
+            box-shadow: 0 16px 16px 0 themed('ColorPickerShadow'), 0 0 16px 0 themed('ColorPickerShadow');
             background: themed('ColorPickerBg');
         }
 
