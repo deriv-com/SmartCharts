@@ -113,7 +113,7 @@ class ChartState {
 
         if (chartType !== this.chartType && this.context) {
             if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
-            this.setChartChartType(chartType);
+            this.setChartType(chartType);
         }
 
         if (granularity !== undefined && granularity !== this.granularity) {
@@ -272,26 +272,18 @@ class ChartState {
         }
     }
 
-    @action.bound setGranularity(granularity) {
-        this.granularity = granularity;
-    }
-
     @action.bound setChartGranularity(granularity) {
         const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
         const isChartTypeCandle = this.mainStore.chartType.isCandle
             || (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
 
         if (this.context && isTimeUnitSecond && isChartTypeCandle) {
-            this.setChartChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
+            this.setChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
         }
         this.granularity = granularity === null ? undefined : granularity;
     }
 
     @action.bound setChartType(chartType) {
-        this.chartType = chartType;
-    }
-
-    @action.bound setChartChartType(chartType) {
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);

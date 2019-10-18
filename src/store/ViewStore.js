@@ -24,7 +24,6 @@ export default class ViewStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get loader() { return this.mainStore.loader; }
-    get state() { return this.mainStore.state; }
 
     static updateLocalStorage() {
         CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
@@ -88,7 +87,18 @@ export default class ViewStore {
         const stx = this.stx;
 
         const importLayout = () => {
-            const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
+            const finishImportLayout = () => {
+                stx.changeOccurred('layout');
+                this.mainStore.studies.updateActiveStudies();
+                if (this.loader) { this.loader.hide(); }
+                this.mainStore.state.setChartIsReady(true);
+                this.mainStore.state.setChartGranularity(getIntervalInSeconds(ViewStore.views[idx].layout));
+            };
+            stx.importLayout(ViewStore.views[idx].layout, {
+                managePeriodicity: true,
+                preserveTicksAndCandleWidth: true,
+                cb: finishImportLayout,
+            });
             // This condition is to make spline chart appear as spline chart
             // Both line chart and spline chart are of type mountain but with different tensions
             let chartType = ViewStore.views[idx].layout.chartType;
@@ -98,26 +108,8 @@ export default class ViewStore {
                     chartType = 'spline';
                 }
             }
-            const finishImportLayout = () => {
-                stx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
-                if (this.loader) { this.loader.hide(); }
-
-                this.state.setGranularity(granularity);
-                this.state.setChartType(chartType);
-                this.state.setChartIsReady(true);
-            };
-            stx.importLayout(ViewStore.views[idx].layout, {
-                managePeriodicity: true,
-                preserveTicksAndCandleWidth: true,
-                cb: finishImportLayout,
-            });
-
-            if (this.mainStore.timeperiod.onGranularityChange) this.mainStore.timeperiod.onGranularityChange(granularity);
-
-            if (this.mainStore.chartType.onChartTypeChanged) this.mainStore.chartType.onChartTypeChanged(chartType);
-            else this.mainStore.chartType.setType(chartType);
-
+            this.mainStore.chartType.setType(chartType);
+            this.mainStore.state.setChartType(chartType);
             this.menu.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };

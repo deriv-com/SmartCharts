@@ -38,6 +38,8 @@ export default class TimeperiodStore {
         ], this.updateCountdown.bind(this));
 
         this.context.stx.addEventListener('newChart', this.updateDisplay);
+
+        reaction(() => this.mainStore.state.granularity, granularity => this.onGranularityChange(granularity));
     };
 
     countdownInterval = null;
