@@ -99,10 +99,6 @@ export default function animateChart(stx, animationParameters, easeMachine) {
     });
 
     stx.prepend('updateChartData', function (appendQuotes, chart, params) {
-        if (this.scrollwheel_is_on) {
-            this.scrollwheel_is_on = false;
-            return false; // skipt the animation
-        }
         const self = this;
         if (!chart) {
             chart = self.chart;
