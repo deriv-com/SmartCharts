@@ -60,13 +60,6 @@
             }
             > .icon-reset {
                 opacity: 1;
-
-                svg {
-                    stroke: transparent !important;
-                    @include themify($themes) {
-                        fill: themed('CatDisplayActiveSearchIconClose');
-                    }
-                }
             }
         }
         &.active {
@@ -86,13 +79,6 @@
             }
             > .icon-reset {
                 opacity: 1;
-
-                svg {
-                    stroke: transparent !important;
-                    @include themify($themes) {
-                        fill: themed('CatDisplayActiveSearchIconClose');
-                    }
-                }
             }
         }
         > input {
@@ -158,6 +144,13 @@
             border-radius: 50%;
             cursor: pointer;
             transition: right, opacity 0.2s ease-in-out;
+
+            svg {
+                stroke: transparent !important;
+                @include themify($themes) {
+                    fill: themed('CatDisplayActiveSearchIconClose');
+                }
+            }
         }
     }
     .category {

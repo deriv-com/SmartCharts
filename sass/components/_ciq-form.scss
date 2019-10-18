@@ -139,6 +139,9 @@
             opacity: 1;
             pointer-events: all;
             transition: opacity 0.3s, top 0.2s;
+            @include themify($themes) {
+                box-shadow: 0 16px 16px 0 themed('DropdownActiveShadow'), 0 0 16px 0 themed('DropdownActiveShadow');
+            }
         }
         .row {
             cursor: pointer;
@@ -290,6 +293,29 @@
 
 .cq-numbercolorpicker, .cq-fontsetting {
     display: inline-flex;
+}
+
+.cq-numbercolorpicker {
+    input {
+        box-shadow: none !important;
+        @include themify($themes) {
+            background: themed('InputBg');
+            border: 1px solid themed('InputBorder') !important;
+            color: themed('InputText');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('InputHoverSBorder') !important;
+            }
+        }
+        &:focus {
+            @include themify($themes) {
+                color: themed('InputActiveSText');
+                border-color: themed('InputActiveSBorder') !important;
+            }
+        }
+    }
 }
 
 .cq-fontsetting {
