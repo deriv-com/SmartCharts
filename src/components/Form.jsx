@@ -158,11 +158,15 @@ export class ColorPicker extends React.Component {
         return (
             <div className="cq-color-picker">
                 <div
-                    ref={(ref) => { this.titleRef = ref; }}
                     className="title"
-                    style={{ backgroundColor }}
-                    onClick={this.onClick}
-                />
+                >
+                    <div
+                        ref={(ref) => { this.titleRef = ref; }}
+                        onClick={this.onClick}
+                        className="input-color"
+                        style={{ backgroundColor }}
+                    />
+                </div>
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">

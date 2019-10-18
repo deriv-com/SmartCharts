@@ -216,6 +216,15 @@
         @include themify($themes) {
             background-color: themed('ColorPickerBg');
         }
+
+        .input-color {
+            height: 100%;
+            width: 100%;
+            border-radius: 4px;
+            @include themify($themes) {
+                border: 1px solid themed('ColorPickerInputBorder');
+            }
+        }
     }
     .dropdown {
         position: absolute;
