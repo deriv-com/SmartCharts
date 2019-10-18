@@ -65,4 +65,12 @@
             }
         }
     }
+    > div:nth-child(3) {
+        > div {
+            opacity: 0.16;
+            @include themify($themes) {
+                background-color: themed('ListScroll') !important;
+            }
+        }
+    }
 }

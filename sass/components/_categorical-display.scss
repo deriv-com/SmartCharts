@@ -43,7 +43,7 @@
                 }
             }
         }
-        &.active {
+        &:focus {
             input {
                 @include themify($themes) {
                     color: themed('CatDisplayActiveSearchText');
@@ -55,6 +55,32 @@
                     @include themify($themes) {
                         fill: themed('CatDisplayActiveSearchIcon');
                         stroke: themed('CatDisplayActiveSearchIcon');
+                    }
+                }
+            }
+            > .icon-reset {
+                opacity: 1;
+
+                svg {
+                    stroke: transparent !important;
+                    @include themify($themes) {
+                        fill: themed('CatDisplayActiveSearchIconClose');
+                    }
+                }
+            }
+        }
+        &.active {
+            input {
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveSearchText');
+                    border-color: themed('CatDisplayHoverSearchBorder');
+                }
+            }
+            > .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayHoverSearchIcon');
+                        stroke: themed('CatDisplayHoverSearchIcon');
                     }
                 }
             }
@@ -389,6 +415,13 @@
 
         > div:nth-child(3) {
             z-index: 9;
+
+            > div {
+                opacity: 0.16;
+                @include themify($themes) {
+                    background-color: themed('ListScroll') !important;
+                }
+            }
         }
     }
     .ciq-item-display {
