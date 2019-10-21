@@ -24,6 +24,8 @@ function setSmartChartsPublicPath(path) {
     __webpack_public_path__ = path; // eslint-disable-line
 }
 
+const Marker = FastMarker;
+
 export {
     AssetInformation,
     Barrier,
@@ -36,6 +38,7 @@ export {
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
+    Marker,
     PendingPromise,
     setSmartChartsPublicPath,
     Share,
@@ -61,8 +64,9 @@ export default {
     CrosshairToggle,
     DrawTools,
     FastMarker,
-    RawMarker,
+    Marker: FastMarker,
     PendingPromise,
+    RawMarker,
     setSmartChartsPublicPath,
     Share,
     SmartChart,

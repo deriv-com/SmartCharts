@@ -266,6 +266,14 @@ class App extends Component {
 
     getIsChartReady = isChartReady => isChartReady;
 
+    onMarkerRef = (ref) => {
+        if (ref) {
+            ref.setPosition({
+                epoch: this.state.endEpoch,
+            });
+        }
+    };
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
 
@@ -294,9 +302,7 @@ class App extends Component {
                 {endEpoch ? (
                     <Marker
                         className="chart-marker-historical"
-                        x={endEpoch}
-                        xPositioner="epoch"
-                        yPositioner="top"
+                        markerRef={this.onMarkerRef}
                     ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
                     </Marker>
                 ) : ''}
