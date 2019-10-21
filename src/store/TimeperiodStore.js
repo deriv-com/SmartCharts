@@ -19,7 +19,7 @@ export default class TimeperiodStore {
     get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
-    onGranularityChange;
+    onGranularityChange = () => null;
 
     remain = null;
 
