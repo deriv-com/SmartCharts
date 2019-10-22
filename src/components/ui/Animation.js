@@ -53,7 +53,6 @@ export default function animateChart(stx, animationParameters, easeMachine) {
 
     if (params.tension) stx.chart.tension = animationParameters.tension;
     stx.tickAnimator = easeMachine; // || new CIQ.EaseMachine(Math.linear, 100);
-    // console.warn('something', 200);
 
     let filterSession = false;
     let nextBoundary = null;
