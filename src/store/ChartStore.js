@@ -438,7 +438,14 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
-        const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
+        /*
+        * t = current time
+        * b = starting value
+        * c = change in value
+        * d = duration
+        */
+        const linear = (t, b, c, d) => (t / d) * c + b;
+        const tickAnimator = new CIQ.EaseMachine(linear && Math.easeInOutCubic, 320);
 
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
