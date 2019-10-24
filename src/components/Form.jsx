@@ -148,7 +148,8 @@ export class ColorPicker extends React.Component {
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.state.open !== nextState.open;
+        return (this.state.open !== nextState.open)
+        || (this.props.color !== nextProps.color);
     }
 
     render() {
