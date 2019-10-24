@@ -144,17 +144,20 @@ export class ColorPicker extends React.Component {
         }
     };
 
+    defaultColor = () => (this.props.theme === 'light' ? '#000000' : '#ffffff')
+
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     shouldComponentUpdate(nextProps, nextState) {
         return (this.state.open !== nextState.open)
-        || (this.props.color !== nextProps.color);
+        || (this.props.color !== nextProps.color)
+        || (this.props.theme !== nextProps.theme);
     }
 
     render() {
         const { color, setColor } = this.props;
-        const backgroundColor = color === 'auto' ? '#000000' : color;
+        const backgroundColor = color === 'auto' ? this.defaultColor() : color;
 
         return (
             <div className="cq-color-picker">
