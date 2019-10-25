@@ -118,7 +118,7 @@ const config = {
                     loader: path.resolve('./loaders/exclude-block-loader.js'),
                     options: {
                         start:`@START-EXCLUDE: '${BUILD_MODE}'`,
-                        end: '@END-EXCLUDE'
+                        end: '@END-EXCLUDE',
                     },
                 }],
             },
@@ -154,6 +154,11 @@ const config = {
             commonjs: 'react-transition-group',
             commonjs2: 'react-transition-group',
             root: 'ReactTransitionGroup',
+        },
+        moment: {
+            root: 'moment',
+            commonjs: 'moment',
+            commonjs2: 'moment',
         },
     },
 };
