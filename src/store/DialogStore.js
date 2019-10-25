@@ -13,8 +13,6 @@ export default class DialogStore {
     }
 
     get context() { return this.mainStore.chart.context; }
-    get chart() { return this.mainStore.chart; }
-    get stxx() { return this.chart.stxx; }
     get routingStore() {
         return this.mainStore.routing;
     }
@@ -32,9 +30,6 @@ export default class DialogStore {
                 if (activeDialog) { activeDialog.openDialog(false); }
                 activeDialog = this;
             } else {
-                if (this.stxx) {
-                    setTimeout(() => this.stxx.draw(), 10);
-                }
                 activeDialog = undefined;
             }
         }

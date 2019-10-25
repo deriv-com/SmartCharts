@@ -588,6 +588,7 @@ $themes: (
 }
 
 :export {
+    red: $color-red;
     light_chart_grid: map-get(map-get($themes, 'light'), 'ChartGrid');
     dark_chart_grid: map-get(map-get($themes, 'dark'), 'ChartGrid');
     light_chart_mountain_border: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
