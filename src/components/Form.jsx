@@ -144,25 +144,33 @@ export class ColorPicker extends React.Component {
         }
     };
 
+    defaultColor = () => (this.props.theme === 'light' ? '#000000' : '#ffffff')
+
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.state.open !== nextState.open;
+        return (this.state.open !== nextState.open)
+        || (this.props.color !== nextProps.color)
+        || (this.props.theme !== nextProps.theme);
     }
 
     render() {
         const { color, setColor } = this.props;
-        const backgroundColor = color === 'auto' ? '#000000' : color;
+        const backgroundColor = color === 'auto' ? this.defaultColor() : color;
 
         return (
             <div className="cq-color-picker">
                 <div
-                    ref={(ref) => { this.titleRef = ref; }}
                     className="title"
-                    style={{ backgroundColor }}
-                    onClick={this.onClick}
-                />
+                >
+                    <div
+                        ref={(ref) => { this.titleRef = ref; }}
+                        onClick={this.onClick}
+                        className="input-color"
+                        style={{ backgroundColor }}
+                    />
+                </div>
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
