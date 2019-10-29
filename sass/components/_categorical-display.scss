@@ -43,7 +43,7 @@
                 }
             }
         }
-        &.active {
+        &:focus {
             input {
                 @include themify($themes) {
                     color: themed('CatDisplayActiveSearchText');
@@ -60,13 +60,25 @@
             }
             > .icon-reset {
                 opacity: 1;
-
+            }
+        }
+        &.active {
+            input {
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveSearchText');
+                    border-color: themed('CatDisplayHoverSearchBorder');
+                }
+            }
+            > .ic-icon {
                 svg {
-                    stroke: transparent !important;
                     @include themify($themes) {
-                        fill: themed('CatDisplayActiveSearchIconClose');
+                        fill: themed('CatDisplayHoverSearchIcon');
+                        stroke: themed('CatDisplayHoverSearchIcon');
                     }
                 }
+            }
+            > .icon-reset {
+                opacity: 1;
             }
         }
         > input {
@@ -132,6 +144,13 @@
             border-radius: 50%;
             cursor: pointer;
             transition: right, opacity 0.2s ease-in-out;
+
+            svg {
+                stroke: transparent !important;
+                @include themify($themes) {
+                    fill: themed('CatDisplayActiveSearchIconClose');
+                }
+            }
         }
     }
     .category {
@@ -389,6 +408,13 @@
 
         > div:nth-child(3) {
             z-index: 9;
+
+            > div {
+                opacity: 0.16;
+                @include themify($themes) {
+                    background-color: themed('ListScroll') !important;
+                }
+            }
         }
     }
     .ciq-item-display {

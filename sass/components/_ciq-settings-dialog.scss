@@ -130,6 +130,7 @@
             font-size: 14px;
             border-radius: 4px;
             padding: 0px 20px;
+            font-weight: bold;
             @include themify($themes) {
                 color: themed('DialogFootText');
             }
@@ -166,15 +167,6 @@
         @include themify($themes) {
             border: none;
             box-shadow: 0 0 0 1px themed('defaultBorder');
-        }
-    }
-    .cq-color-picker {
-        display: inline-block;
-
-        .dropdown {
-            @include themify($themes) {
-                border: 1px solid themed('ColorPickerBorder');
-            }
         }
     }
 }
