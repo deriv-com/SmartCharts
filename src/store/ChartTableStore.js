@@ -39,7 +39,12 @@ export default class ChartTableStore {
 
     @action.bound loadTableData() {
         if (this.open) {
-            this.stx.masterData.forEach(row => this.updateTableData(row));
+            const totalItemCount = this.stx.masterData.length;
+            const allowableItems = (totalItemCount <= 100)
+                ? this.stx.masterData
+                : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
+
+            allowableItems.forEach(row => this.updateTableData(row));
             this.mainStore.chart.feed.onMasterDataUpdate(this.updateTableData);
         } else {
             if (this.mainStore.chart.feed) this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);
