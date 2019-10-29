@@ -60,29 +60,29 @@ class FastMarker extends Component {
             && chart.dataSet.length
             && stx.mainSeriesRenderer
         ) {
-            let tick_idx = stx.tickFromDate(this.date, chart);
+            let tickIdx = stx.tickFromDate(this.date, chart);
 
-            if (tick_idx > -1
-                && stx.chart.dataSet[tick_idx]
-                && stx.chart.dataSet[tick_idx].Close !== this.price) {
+            if (tickIdx > -1
+                && stx.chart.dataSet[tickIdx]
+                && stx.chart.dataSet[tickIdx].Close !== this.price) {
                 delete stx.chart.tickCache[this.date.getTime()];
-                tick_idx = stx.tickFromDate(this.date, chart);
+                tickIdx = stx.tickFromDate(this.date, chart);
             }
 
-            let x = stx.pixelFromTick(tick_idx, chart);
+            let x = stx.pixelFromTick(tickIdx, chart);
 
             // ChartIQ doesn't support placing markers in the middle of ticks.
-            const bar = chart.dataSet[tick_idx];
+            const bar = chart.dataSet[tickIdx];
             // Here we interpolate the pixel distance between two adjacent ticks.
             if (bar && bar.DT < this.date) {
-                const bar_next = chart.dataSet[tick_idx + 1];
-                const bar_prev = tick_idx > 0 ? chart.dataSet[tick_idx - 1] : null;
-                if (bar_next && bar_next.Close && bar_next.DT > this.date) {
-                    const pixelx_to_next_bar = stx.pixelFromTick(tick_idx + 1, chart) - x;
-                    x +=  (this.date - bar.DT) / (bar_next.DT - bar.DT) * pixelx_to_next_bar;
-                } else if (bar_prev && bar_prev.Close) {
-                    const pixelx_from_prev_bar = x - stx.pixelFromTick(tick_idx - 1, chart);
-                    x +=  (this.date - bar.DT) / (bar.DT - bar_prev.DT) * pixelx_from_prev_bar;
+                const barNext = chart.dataSet[tickIdx + 1];
+                const barPrev = tickIdx > 0 ? chart.dataSet[tickIdx - 1] : null;
+                if (barNext && barNext.Close && barNext.DT > this.date) {
+                    const pixelToNextBar = stx.pixelFromTick(tickIdx + 1, chart) - x;
+                    x +=  (this.date - bar.DT) / (barNext.DT - bar.DT) * pixelToNextBar;
+                } else if (barPrev && barPrev.Close) {
+                    const pixelFromPrevBar = x - stx.pixelFromTick(tickIdx - 1, chart);
+                    x +=  (this.date - bar.DT) / (bar.DT - barPrev.DT) * pixelFromPrevBar;
                 }
             }
 

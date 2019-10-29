@@ -613,6 +613,7 @@ $themes: (
 }
 
 :export {
+    red: $color-red;
     light_chart_text: map-get(map-get($themes, 'light'), 'ChartText');
     dark_chart_text: map-get(map-get($themes, 'dark'), 'ChartText');
     light_chart_grid: map-get(map-get($themes, 'light'), 'ChartGrid');
