@@ -26,6 +26,14 @@
         .ciq-list-setting {
             height: auto;
 
+            > div:nth-child(3) {
+
+                // this is for override style of list scroll
+                > div {
+                    background-color: transparent !important;
+                    opacity: 1;
+                }
+            }
             .ciq-list-item {
                 height: 38px;
                 line-height: normal;
