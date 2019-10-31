@@ -33,6 +33,7 @@ const config = {
     },
     devServer: {
         publicPath: '/dist/',
+        writeToDisk: true,
     },
     module: {
         rules: [
@@ -118,7 +119,7 @@ const config = {
                     loader: path.resolve('./loaders/exclude-block-loader.js'),
                     options: {
                         start:`@START-EXCLUDE: '${BUILD_MODE}'`,
-                        end: '@END-EXCLUDE'
+                        end: '@END-EXCLUDE',
                     },
                 }],
             },
