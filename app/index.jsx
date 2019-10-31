@@ -181,12 +181,6 @@ class App extends Component {
         }
     }
 
-    changeGranularity = (timePeriod) => {
-        this.setState({
-            granularity: timePeriod,
-        });
-    };
-
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
@@ -224,6 +218,8 @@ class App extends Component {
     handleDateChange = (value) => {
         this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
     };
+    changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
+    changeChartType = chartType => this.setState({ chartType });
 
     renderTopWidgets = () => (
         <>
@@ -240,16 +236,8 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={(chartType) => {
-                    this.setState({
-                        chartType,
-                    });
-                }}
-            />
-            <Timeperiod
-                onChange={this.changeGranularity}
-            />
+            <ChartTypes onChange={this.changeChartType} />
+            <Timeperiod onChange={this.changeGranularity} />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
