@@ -43,7 +43,7 @@
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
-export default function animateChart(stx, animationParameters, easeMachine) {
+export default function animateChart(stx, animationParameters) {
     let params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,
@@ -52,7 +52,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
     animationParameters = CIQ.extend(params, animationParameters);
 
     if (params.tension) stx.chart.tension = animationParameters.tension;
-    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 500);
+    stx.tickAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 320);
 
     let filterSession = false;
     let nextBoundary = null;

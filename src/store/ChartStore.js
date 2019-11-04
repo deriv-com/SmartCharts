@@ -438,7 +438,6 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
-        const tickAnimator = new CIQ.EaseMachine(Math.easeOutCubic, 500);
 
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
@@ -469,7 +468,7 @@ class ChartStore {
         deleteElement.textContent = t.translate('right-click to delete');
         manageElement.textContent = t.translate('right-click to manage');
 
-        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true }, tickAnimator);
+        if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
         // stxx.chart.lockScroll = true;
 
         // connect chart to data
