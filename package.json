@@ -118,13 +118,13 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
+    "@welldone-software/why-did-you-render": "^3.3.8",
     "event-emitter-es6": "^1.1.5",
     "lodash.debounce": "^4.0.8",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "tt-react-custom-scrollbars": "4.2.1-tt2",
-    "url-search-params-polyfill": "^7.0.0",
-    "why-did-you-update": "^1.0.6"
+    "url-search-params-polyfill": "^7.0.0"
   },
   "peerDependencies": {
     "@babel/polyfill": "^7.0.0",

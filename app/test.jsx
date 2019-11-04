@@ -27,7 +27,7 @@ import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
 import './test.scss';
-import { whyDidYouUpdate }  from 'why-did-you-update';
+import whyDidYouRender  from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -38,7 +38,11 @@ setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 if (process.env.NODE_ENV !== 'production') {
-    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+    whyDidYouRender(React, {
+        collapseGroups: true,
+        include: [/.*/],
+        exclude: [/^RenderInsideChart$/, /^inject-/],
+    });
 }
 
 const trackJSDomains = ['binary.com', 'binary.me'];
