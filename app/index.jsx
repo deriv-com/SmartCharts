@@ -181,12 +181,6 @@ class App extends Component {
         }
     }
 
-    changeGranularity = (timePeriod) => {
-        this.setState({
-            granularity: timePeriod,
-        });
-    };
-
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
@@ -224,6 +218,8 @@ class App extends Component {
     handleDateChange = (value) => {
         this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
     };
+    changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
+    changeChartType = chartType => this.setState({ chartType });
 
     renderTopWidgets = () => (
         <>
@@ -240,16 +236,8 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={(chartType) => {
-                    this.setState({
-                        chartType,
-                    });
-                }}
-            />
-            <Timeperiod
-                onChange={this.changeGranularity}
-            />
+            <ChartTypes onChange={this.changeChartType} />
+            <Timeperiod onChange={this.changeGranularity} />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
@@ -265,6 +253,14 @@ class App extends Component {
     };
 
     getIsChartReady = isChartReady => isChartReady;
+
+    onMarkerRef = (ref) => {
+        if (ref) {
+            ref.setPosition({
+                epoch: this.state.endEpoch,
+            });
+        }
+    };
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
@@ -294,9 +290,7 @@ class App extends Component {
                 {endEpoch ? (
                     <Marker
                         className="chart-marker-historical"
-                        x={endEpoch}
-                        xPositioner="epoch"
-                        yPositioner="top"
+                        markerRef={this.onMarkerRef}
                     ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
                     </Marker>
                 ) : ''}

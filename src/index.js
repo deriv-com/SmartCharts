@@ -15,7 +15,6 @@ import SmartChart from './components/SmartChart.jsx';
 import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
-import Marker from './components/Marker.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
 import { createObjectFromLocalStorage } from './utils';
@@ -24,6 +23,8 @@ import { logEvent, LogCategories, LogActions } from './utils/ga';
 function setSmartChartsPublicPath(path) {
     __webpack_public_path__ = path; // eslint-disable-line
 }
+
+const Marker = FastMarker;
 
 export {
     AssetInformation,
@@ -62,10 +63,10 @@ export default {
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
-    Marker, // this is depricated in favor of FastMarker
     FastMarker,
-    RawMarker,
+    Marker: FastMarker,
     PendingPromise,
+    RawMarker,
     setSmartChartsPublicPath,
     Share,
     SmartChart,

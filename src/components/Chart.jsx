@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import { toJS } from 'mobx';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import BottomWidget from './BottomWidget.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
-import LastDigitStats from './LastDigitStats.jsx';
 import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
@@ -140,7 +139,7 @@ class Chart extends Component {
                                         </div>
                                     )}
                                     <BottomWidgetsContainer>
-                                        <BottomWidgets bottomWidgets={bottomWidgets} />
+                                        <BottomWidget bottomWidgets={bottomWidgets} />
                                     </BottomWidgetsContainer>
                                 </div>
                                 { chartControlsWidgets !== null
@@ -185,27 +184,3 @@ export default connect(({
     position: chartSetting.position,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);
-
-// Bottom widgets are pssibly rendered on tick
-// connect it outside to eliminate the need for parent re-render.
-const BottomWidgetsConnected = ({
-    bottomWidgets,
-    showLastDigitStats,
-    digits,
-    last_tick,
-}) => {
-    const Widget = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
-    if (Widget) {
-        return <Widget digits={digits} tick={toJS(last_tick)} />;
-    }
-    return null;
-};
-
-const BottomWidgets = connect(({
-    state,
-    lastDigitStats,
-}) => ({
-    showLastDigitStats:state.showLastDigitStats,
-    digits: lastDigitStats.digits,
-    last_tick: lastDigitStats.last_tick,
-}))(BottomWidgetsConnected);

@@ -173,18 +173,21 @@ html, body {
     padding: 0px;
     margin-bottom: 17px;
     border-radius: 3px;
-    background: #fafafa;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
-    transition: background 0.25s;
     cursor: pointer;
     z-index: 30;
+    @include themify($themes) {
+        background: themed('NavigationWidgetBg');
+    }
 }
 
 .stx_jump_today svg {
     display: inline-block;
     padding: 6px 8px;
-    transition: opacity 0.25s, transform 0.2s;
+    transition: transform 0.2s;
     opacity: 0.6;
+    @include themify($themes) {
+        stroke: themed('NavigationWidgetColor');
+    }
 }
 
 .stx_jump_today:hover svg {
@@ -392,7 +395,7 @@ html, body {
 .stx_current_hr_down { /* 'Down' color for current chart value */
     font-weight: bold;
     font-size: 12px;
-    font-family: 'Roboto';
+    font-family: $base-font;
     @include themify($themes) {
         color: themed('ChartCandleText');
         background-color: themed('ChartCandleBg');
@@ -812,7 +815,7 @@ html, body {
         color: themed('ChartText');
     }
     font-size: 10px;
-    font-family: 'Roboto';
+    font-family: $base-font;
 }
 
 .stx_price_label {
@@ -821,7 +824,7 @@ html, body {
     }
     font-weight: normal;
     font-size: 12px;
-    font-family: 'Roboto';
+    font-family: $base-font;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
@@ -841,6 +844,7 @@ html, body {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
+    z-index: 1;
     @include themify($themes) {
         box-shadow: 0 0 0px 2px themed('ChartBg');
         background: themed('ChartBg');
