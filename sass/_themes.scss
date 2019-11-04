@@ -4,9 +4,7 @@
 $COLOR_WHITE        : #ffffff;
 $COLOR_BLACK        : #000000;
 $COLOR_ORANGE       : #ff9933;
-$COLOR_RED          : #e31c4b;
 $COLOR_SKY_BLUE     : #2196f3;
-$COLOR_GREEN_1      : #39b19d;
 $COLOR_GREEN_2      : #2d9f93;
 $COLOR_PURPLE       : #4f60ae;
 $COLOR_DARK_BLUE_1  : #0b0e18;
@@ -38,68 +36,179 @@ $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
 $COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
 
+$COLOR_GREEN: #85acb0;
+$COLOR_GREEN_1: #4bb4b3;
+
+/*****************************\
+ *****************************
+        COLOR PALETTE
+ *****************************
+\*****************************/
+
+$color-black: #0e0e0e;
+$color-black-1: #333333;
+$color-black-3: #151717;
+$color-black-4: #1d1f20;
+$color-black-5: #242828;
+$color-black-6: #3e3e3e;
+$color-black-7: #000000b8;
+$color-black-8: #323738;
+$color-black-9: #0e0e0ef5;
+$color-black-10: #00000014;
+$color-black-11: #00000029;
+$color-black-12: #0000004d;
+$color-white: #ffffff;
+$color-white-1: #fffffff5;
+$color-white-2: #ffffff29;
+$color-red: #ff444f;
+$color-red-1: #ec3f3f;
+$color-red-2: #cc2e3d;
+$color-red-3: #a32430;
+$color-red-4: #d33636;
+$color-red-5: #eb3e48;
+$color-red-6: #ff444f14;
+$color-grey: #c2c2c2;
+$color-grey-1: #999999;
+$color-grey-2: #f2f3f4;
+$color-grey-3: #eaeced;
+$color-grey-4: #e6e9e9;
+$color-grey-5: #d6dadb;
+$color-grey-6: #d6d6d6;
+$color-grey-7: #6e6e6e;
+$color-green: #85acb0;
+$color-green-1: #4bb4b3;
+$color-green-2: #3d9494;
+$color-green-3: #00a79e;
+$color-green-4: #008079;
+$color-orange: #ff6444;
+$color-yellow: #ffad3a;
+$color-blue: #377cfc;
+
+/* Preserve legacy variables */
+/* Primary */
+
+$COLOR_BLACK      : #000000;
+$COLOR_BLACK_2    : #1d1f20;
+$COLOR_BLACK_3    : #0e0e0e;
+$COLOR_GREEN_1    : #39b19d;
+$COLOR_GREEN_2    : #2d9f93;
+$COLOR_GREEN_3    : #21ce99;
+$COLOR_GREEN_4    : #00a79e;
+$COLOR_GREEN_5    : #4bb4b3;
+$COLOR_ORANGE     : #ff9933;
+$COLOR_DARK_ORANGE: #ff8802;
+$COLOR_PURPLE     : #4f60ae;
+$COLOR_RED        : #e31c4b;
+$COLOR_RED_2      : #cc2e3d;
+$COLOR_RED_3      : #ec3f3f;
+$COLOR_CORAL_RED  : #ff444f;
+$COLOR_SKY_BLUE   : #2196f3;
+$COLOR_WHITE      : #ffffff;
+$COLOR_BLUE       : #1c5ae3;
+// Light theme
+$COLOR_LIGHT_BLACK_1        : rgba(0, 0, 0, 0.8);
+$COLOR_LIGHT_BLACK_2        : rgba(0, 0, 0, 0.4);
+$COLOR_LIGHT_BLACK_3        : rgba(0, 0, 0, 0.16);
+$COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
+$COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
+$COLOR_LIGHT_BLACK_4        : rgba(0, 0, 0, 0.04);
+$COLOR_LIGHT_BLACK_4_SOLID  : #f4f4f6;
+$COLOR_LIGHT_GRAY_1         : #999cac;
+$COLOR_LIGHT_GRAY_2         : rgba(153, 156, 172, 0.32);
+$COLOR_LIGHT_GRAY_3         : #eaeced;
+$COLOR_LIGHT_GRAY_4         : #6e6e6e;
+$COLOR_LIGHT_GRAY_5         : #c2c2c2;
+$COLOR_LIGHT_GREEN_GRADIENT : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(0, 148, 117, 0.16));
+$COLOR_LIGHT_RED_GRADIENT   : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(227, 28, 75, 0.16));
+$COLOR_LIGHT_WHITE_GRADIENT : linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+// Dark theme
+$COLOR_DARK_BLACK_GRADIENT : linear-gradient(to right, rgba(16, 19, 32, 1), rgba(16, 19, 32, 0));
+$COLOR_DARK_BLUE_1         : #0b0e18;
+$COLOR_DARK_BLUE_2         : #101320;
+$COLOR_DARK_BLUE_3         : #191c31;
+$COLOR_DARK_BLUE_4         : #202641;
+$COLOR_DARK_BLUE_5         : #2a3052;
+$COLOR_DARK_BLUE_6         : #555975;
+$COLOR_DARK_BLUE_7         : #7f8397;
+$COLOR_DARK_BLUE_8         : rgba(127, 131, 151, 0.3);
+$COLOR_DARK_GREEN_GRADIENT : linear-gradient(to top, rgba(16, 19, 32, 0), rgba(0, 148, 117, 0.16));
+$COLOR_DARK_RED_GRADIENT   : linear-gradient(to top, rgba(16, 19, 32, 0), rgba(227, 28, 75, 0.16));
+$COLOR_DARK_GRAY_1         : #282a37;
+$COLOR_DARK_GRAY_2         : #303342;
+$COLOR_DARK_GRAY_3         : #555975;
+$COLOR_DARK_GRAY_4         : #999999;
+
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
         DefaultBg:  $COLOR_WHITE,
         DefaultText: $COLOR_LIGHT_GRAY,
+        BtnPrimaryText: $color-white,
         DefaultBorder: $COLOR_LIGHT_GRAY,
         Loading: $COLOR_BLACK,
         ChartAreaBorder: $COLOR_LIGHT_GRAY_2,
         ChartBg: $COLOR_WHITE,
         ChartBorder: $COLOR_LIGHT_GRAY_1,
         ChartText: $COLOR_DARK_GRAY_3,
-        ChartCandleBg: $COLOR_ORANGE,
+        ChartPanelBg: $color-grey-2,
+        ChartPanelText: $color-black-1,
+        ChartCandleBg: $color-red,
         ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
-        ChartCandleText: $COLOR_WHITE,
+        ChartCandleText: $color-white,
         ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
-        ChartGrid: $COLOR_LIGHT_BLACK_4,
-        ChartIndicateText: $COLOR_LIGHT_GRAY,
-        ChartIndicateDivide: $COLOR_LIGHT_GRAY,
-        ChartMountainBorder: $COLOR_LIGHT_GRAY_1,
-        ChartMountainBg: rgba(153, 156, 172, 0.36),
+        ChartGrid: $color-grey-2,
+        ChartIndicateText: $color-grey-3,
+        ChartIndicateDivide: $color-grey-5,
+        ChartMountainBorder: $color-green,
+        ChartMountainBg: rgba($color-green, 0.16),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
         ChartClosedCandleColor: $COLOR_LIGHT_BLACK_3_SOLID_1,
         MenuBg: $COLOR_WHITE,
         MenuIcon: $COLOR_LIGHT_BLACK_1,
         MenuText: $COLOR_LIGHT_BLACK_1,
         MenuBorder: $COLOR_LIGHT_GRAY_1,
-        MenuHoverBg: $COLOR_LIGHT_BLACK_3,
+        MenuHoverBg: $color-grey-4,
         MenuHoverIconBg: $COLOR_LIGHT_GRAY_1,
-        MenuActiveBg: $COLOR_LIGHT_BLACK_3,
+        MenuActiveBg: $color-white,
         MenuActiveText: $COLOR_LIGHT_GRAY,
         MenuActiveIcon: $COLOR_DARK_BLUE_5,
-        MenuActiveBorder: $COLOR_DARK_BLUE_5,
+        MenuActiveBorder: $color-red,
         ChartTitleBg: $COLOR_WHITE,
-        ChartTitleSubBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        ChartTitleSubBg: $color-grey-2,
         ChartTitleText: $COLOR_LIGHT_BLACK_1,
         ChartTitleBorder: $COLOR_WHITE,
-        ChartTitleArrow: $COLOR_LIGHT_BLACK_1,
-        ChartTitlePriceText: $COLOR_LIGHT_BLACK_1,
-        ChartTitleSymbolText: $COLOR_LIGHT_BLACK_1,
-        ChartTitleHoverBorder: $COLOR_LIGHT_GRAY_1,
-        ChartTitleActiveBorder: $COLOR_LIGHT_GRAY_1,
+        ChartTitleArrow: $color-black-1,
+        ChartTitlePriceText: $color-grey-1,
+        ChartTitleSymbolText: $color-black-1,
+        ChartTitleHoverBorder: $color-grey-1,
+        ChartTitleActiveBorder: $color-green,
         ChartTitleActiveShadow: $COLOR_LIGHT_GRAY_2,
         ChartTitleActiveArrow: $COLOR_LIGHT_BLACK_1,
-        ChartControlBoxBorder: $COLOR_LIGHT_BLACK_4,
-        ListScroll: $COLOR_LIGHT_GRAY,
-        ListLiBg: $COLOR_WHITE,
-        ListLiText: $COLOR_LIGHT_GRAY,
-        ListLiBorder: $COLOR_LIGHT_GRAY_2,
+        ChartControlBoxBorder: $color-grey-2,
+        ListScroll: $color-black-1,
+        ListLiBg: $color-white,
+        ListLiText: $color-black-1,
+        ListLiBorder: $color-grey-3,
+        ListHoverLiBg: $color-grey-4,
         ListActiveLiBg: $COLOR_LIGHT_BLACK_3,
         ListActiveLiText: $COLOR_DARK_BLUE_5,
         ListActiveLiBorder: $COLOR_LIGHT_GRAY,
-        DialogBorder: $COLOR_LIGHT_GRAY_1,
-        DialogHeadBg: $COLOR_LIGHT_BLACK_4_SOLID,
-        DialogHeadText: $COLOR_LIGHT_GRAY,
+        DialogBorder: $color-grey-2,
+        DialogHeadBg: $color-white,
+        DialogHeadText: $color-black-1,
         DialogHeadBorder: $COLOR_LIGHT_BLACK_4_SOLID,
         DialogHeadIcon: $COLOR_LIGHT_GRAY,
         DialogHeadActiveBorder: $COLOR_LIGHT_GRAY,
-        DialogBodyBg: $COLOR_WHITE,
-        DialogBodyText: $COLOR_LIGHT_GRAY,
-        DialogFootBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        DialogBodyBg: $color-grey-2,
+        DialogBodyText: $color-black-1,
+        DialogFootBg: $color-white,
         DialogFootText: $COLOR_LIGHT_BLACK_1,
         DialogFootBorder: $COLOR_WHITE,
+        DialogFootDoneBg: $color-red,
+        DialogFootDoneText: $color-white,
+        DialogFootResetBg: transparent,
+        DialogFootResetBorder: $color-grey-1,
+        DialogFootResetText: $color-black-1,
         DialogSettingHeadText: $COLOR_BLACK,
         DialogSettingBodyBg: $COLOR_WHITE,
         DialogOverlay: rgba($COLOR_WHITE, 0.7),
@@ -115,84 +224,101 @@ $themes: (
         TemplateInputText:  $COLOR_LIGHT_GRAY,
         TemplateBtn: $COLOR_DARK_BLUE_5,
         TemplateActiveIcon: $COLOR_LIGHT_GRAY,
-        TooltipBg: rgba($COLOR_LIGHT_GRAY, 0.88),
-        TooltipTextBg: rgba($COLOR_LIGHT_GRAY, 1),
-        TooltipText: $COLOR_WHITE,
+        TooltipBg: $color-grey-2,
+        TooltipTextBg: $color-grey-5,
+        TooltipText: $color-black-1,
         TooltipShadow: rgba($COLOR_LIGHT_GRAY, 0.32),
         ColorPickerBg: $COLOR_WHITE,
+        ColorPickerShadow: rgba(0, 0, 0, 0.08),
         ColorPickerBorder: $COLOR_LIGHT_GRAY,
+        ColorPickerInputBorder: $color-grey-5,
         DropdownText: $COLOR_LIGHT_GRAY,
         DropdownBg: $COLOR_WHITE,
-        DropdownBorder: $COLOR_LIGHT_GRAY_1,
-        DropdownActiveBg: $COLOR_LIGHT_GRAY_1,
-        DropdownActiveText: $COLOR_DARK_BLUE_5,
-        DropdownActiveBorder: $COLOR_LIGHT_GRAY_1,
-        SliderText: $COLOR_DARK_BLUE_5,
-        SliderHandleBg: $COLOR_WHITE,
-        SliderHandleBorder: $COLOR_DARK_BLUE_5,
-        SliderBarBg: $COLOR_LIGHT_GRAY,
-        SliderBarActiveBg: $COLOR_DARK_BLUE_5,
-        SwitchText: $COLOR_WHITE,
-        SwitchHandle: $COLOR_WHITE,
-        SwitchOffBg: $COLOR_LIGHT_GRAY,
-        SwitchOnBg: $COLOR_GREEN_1,
+        DropdownBorder: $color-grey-5,
+        DropdownActiveBg: $color-grey-5,
+        DropdownActiveText: $color-black-1,
+        DropdownActiveBorder: $color-green,
+        DropdownActiveShadow: rgba(0, 0, 0, 0.08),
+        SliderText: $color-black-1,
+        SliderHandleBg: $color-red,
+        SliderHandleBorder: $color-red,
+        SliderBarBg: $color-grey-3,
+        SliderBarActiveBg: $color-red,
+        SwitchText: $color-white,
+        SwitchHandle: $color-white,
+        SwitchOffBg: $color-grey-3,
+        SwitchOnBg: $color-green-1,
+        InputBg: $COLOR_WHITE,
+        InputText: $color-black-1,
+        InputBorder: $color-grey-5,
+        InputActiveText: $color-black-1,
+        InputActiveBorder: $color-green,
+        InputHoverBorder: $color-grey-1,
         ComparisonItemText: $COLOR_LIGHT_GRAY,
         ComparisonItemIcon: $COLOR_DARK_BLUE_5,
         ComparisonItemHoverBg: $COLOR_WHITE,
         TimeMenuActiveIconBorder: $COLOR_LIGHT_GRAY_1,
-        TimeBg: $COLOR_WHITE,
-        TimeUnitBg: $COLOR_WHITE,
-        TimeUnitColor: $COLOR_LIGHT_GRAY,
-        TimeUnitItemBorder: $COLOR_LIGHT_GRAY,
-        TimeActiveUnitBg: $COLOR_LIGHT_GRAY_1,
-        TimeActiveUnitColor: $COLOR_DARK_BLUE_5,
-        TimeActiveUnitItemBorder: $COLOR_DARK_BLUE_5,
-        TimeColor: $COLOR_DARK_BLUE_5,
-        TimeActiveItemBg: $COLOR_DARK_BLUE_5,
-        TimeActiveItemColor: $COLOR_WHITE,
-        TimeActiveItemBorder: $COLOR_DARK_BLUE_5,
-        TimeHoverItemColor: $COLOR_DARK_BLUE_5,
-        TimeHoverItemBorder: $COLOR_DARK_BLUE_5,
+        TimeBg: $color-white,
+        TimeUnitBg: $color-white,
+        TimeUnitColor: $color-black-1,
+        TimeUnitItemBorder: $COLOR_LIGHT_BLACK_3,
+        TimeActiveUnitBg: $color-white,
+        TimeActiveUnitColor: $color-black-1,
+        TimeActiveUnitItemBorder: $color-red,
+        TimeColor: $color-black-1,
+        TimeActiveItemBg: $color-grey-5,
+        TimeActiveItemColor: $color-black-1,
+        TimeActiveItemBorder: $color-grey-5,
+        TimeHoverItemColor: $color-black-1,
+        TimeHoverItemBg: $color-grey-4,
         TimeIconColor: $COLOR_LIGHT_BLACK_1,
         AssetInfoText: $COLOR_LIGHT_GRAY,
-        CatDisplayBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        CatDisplayBg: $COLOR_WHITE,
         CatDisplayShadow: $COLOR_LIGHT_GRAY_1,
-        CatDisplayText: $COLOR_LIGHT_BLACK_1,
-        CatDisplayBorder: $COLOR_LIGHT_BLACK_4_SOLID,
-        CatDisplaySearchIcon: $COLOR_LIGHT_BLACK_3,
+        CatDisplayText: $color-black-1,
+        CatDisplayBorder: $COLOR_WHITE,
+        CatDisplaySearchBg: $COLOR_WHITE,
+        CatDisplaySearchIcon: $color-black-1,
         CatDisplaySearchText: $COLOR_LIGHT_BLACK_3,
-        CatDisplaySearchBorder: $COLOR_LIGHT_BLACK_3,
-        CatDisplayActiveSearchText: $COLOR_DARK_BLUE_5,
-        CatDisplayActiveSearchIcon: $COLOR_DARK_BLUE_5,
-        CatDisplayActiveSearchIconClose: $COLOR_LIGHT_GRAY_1,
-        CatDisplayActiveSearchBorder: $COLOR_LIGHT_GRAY_1,
+        CatDisplaySearchBorder: $color-grey-5,
+        CatDisplayActiveSearchText: $color-black-1,
+        CatDisplayActiveSearchIcon: $color-black-1,
+        CatDisplayActiveSearchIconClose: $color-black-1,
+        CatDisplayActiveSearchBorder: $color-green,
         CatDisplayActiveSearchShadow: $COLOR_LIGHT_GRAY_2,
-        CatDisplayFilterBg: $COLOR_WHITE,
+        CatDisplayHoverSearchIcon: $color-black-1,
+        CatDisplayHoverSearchBorder: $color-grey-1,
+        CatDisplayFilterBg: $color-grey-2,
         CatDisplayFilterText: $COLOR_LIGHT_BLACK_1,
         CatDisplayFilterIcon: $COLOR_LIGHT_GRAY,
+        CatDisplayFilterBorder: $color-grey-2,
         CatDisplayFilterInputText: $COLOR_WHITE,
-        CatDisplayActiveFilterBg: $COLOR_LIGHT_GRAY_1,
-        CatDisplayActiveFilterText: $COLOR_WHITE,
-        CatDisplayActiveFilterIcon: $COLOR_WHITE,
-        CatDisplayActiveFilterBorder: $COLOR_DARK_BLUE_5,
-        CatDisplayHoverFilterBg: $COLOR_LIGHT_BLACK_4,
-        CatDisplayCatTitleText: $COLOR_LIGHT_BLACK_1,
+        CatDisplayActiveFilterBg: $COLOR_WHITE,
+        CatDisplayActiveFilterText: $color-black-1,
+        CatDisplayActiveFilterIcon: $color-black-1,
+        CatDisplayActiveFilterBorder: $COLOR_RED,
+        CatDisplayHoverFilterBg: $color-grey-4,
+        CatDisplayCatTitleText: $color-black-1,
+        CatDisplayCatSubTitleText: $COLOR_LIGHT_GRAY,
         CatDisplayCatContentBg: $COLOR_WHITE,
-        CatDisplayCatContentBorder: $COLOR_LIGHT_BLACK_4_SOLID,
+        CatDisplayCatContentBorder: $COLOR_WHITE,
         CatDisplayCatContentTitleBg: $COLOR_WHITE,
-        CatDisplayCatContentTitleText: $COLOR_LIGHT_BLACK_1,
-        CatDisplayCatContentIcon: $COLOR_LIGHT_BLACK_1,
-        CatDisplayCatActiveContentBg: $COLOR_LIGHT_GRAY_1,
-        CatDisplayCatActiveContentText: $COLOR_WHITE,
+        CatDisplayCatContentTitleText: $color-grey-1,
+        CatDisplayCatContentIcon: $color-grey-1,
+        CatDisplayCatContentDisabled: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        CatDisplayCatActiveContentBg: $color-grey-5,
+        CatDisplayCatActiveContentText: $color-black-1,
         CatDisplayCatActiveContentIcon: $COLOR_WHITE,
-        CatDisplayCatHoverContentBg: $COLOR_LIGHT_BLACK_4,
-        CatDisplayCatHoverContentText: $COLOR_LIGHT_BLACK_1,
-        CatDisplayCatHoverContentIcon: $COLOR_LIGHT_BLACK_1,
-        CrosshairBg: $COLOR_LIGHT_BLACK_1,
-        CrosshairText: $COLOR_WHITE,
-        CrosshairBorder: rgba($COLOR_LIGHT_GRAY, 0.88),
-        CrosshairAxis: rgba($COLOR_LIGHT_GRAY, 0.32),
-        CrosshairLabel: rgba($COLOR_LIGHT_GRAY, 0.88),
+        CatDisplayActiveText: $COLOR_LIGHT_BLACK_1,
+        CatDisplayCatHoverContentBg: $color-grey-4,
+        CatDisplayCatHoverContentText: $color-black-1,
+        CatDisplayCatHoverContentIcon: $color-black-1,
+        CrosshairBg: $color-grey-5,
+        CrosshairText: $color-black-1,
+        CrosshairBorder: $color-grey-5,
+        CrosshairAxis: $color-grey-5,
+        CrosshairLabelBg: $color-grey-5,
+        CrosshairLabelText: $color-black-1,
         StarIconFav: $COLOR_ORANGE,
         LastdigitsBarBg: $COLOR_LIGHT_GRAY_1,
         LastdigitsMaxBarBg: $COLOR_GREEN_2,
@@ -222,161 +348,202 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveBorder: $COLOR_DARK_BLUE_5,
-        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID
+        PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID,
+        NavigationWidgetBg: $COLOR_LIGHT_BLACK_4_SOLID,
+        NavigationWidgetColor: $COLOR_LIGHT_BLACK_1,
+        ChartTableBg: $COLOR_WHITE,
+        ChartTableHeadBg: $COLOR_WHITE,
+        ChartTableHeadBorder: $COLOR_LIGHT_BLACK_4_SOLID,
+        ChartTableHeadText: $color-black-1,
+        ChartTableHeadHover: $COLOR_LIGHT_BLACK_4,
+        ChartTableHeadShadow: rgba($COLOR_BLACK, 0.08),
+        ChartTableBodyText: $color-black-1,
+        ChartTableBodyHeadBg: $color-grey-2,
+        ChartTableBodyHeadText: $color-black-1,
+        ChartTableBodyBorder: $COLOR_LIGHT_BLACK_4_SOLID,
+        HighestLowestMarkerLabelBg: $COLOR_LIGHT_BLACK_3,
+        HighestLowestMarkerLabelText: $COLOR_LIGHT_BLACK_1,
+        HighestSpotColor: $COLOR_GREEN_1,
+        LowestSpotColor: $COLOR_RED,
+        ChartBackgroundOpacity: 0.05
     ),
     dark: (
-        DefaultMain:            $COLOR_DARK_BLUE_5,
-        DefaultBg:              $COLOR_DARK_BLUE_2,
+        DefaultMain:            $color-black,
+        DefaultBg:              $color-black,
         DefaultText:            $COLOR_WHITE,
         DefaultBorder:          $COLOR_WHITE,
         Loading: $COLOR_WHITE,
         ChartAreaBorder: $COLOR_LIGHT_GRAY_30,
-        ChartBg: $COLOR_DARK_BLUE_2,
+        ChartBg: $color-black,
         ChartBorder: $COLOR_WHITE,
-        ChartText: $COLOR_DARK_GRAY_3,
-        ChartCandleBg: $COLOR_ORANGE,
+        ChartText: $color-grey-1,
+        ChartPanelBg: $color-black-3,
+        ChartPanelText: $color-grey,
+        ChartCandleBg: $color-red,
         ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
-        ChartCandleText: $COLOR_WHITE,
+        ChartCandleText: $color-white,
         ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
-        ChartGrid: $COLOR_DARK_BLUE_3,
+        ChartGrid: $color-black-4,
         ChartIndicateText: $COLOR_WHITE,
-        ChartIndicateDivide: $COLOR_DARK_GRAY_3,
+        ChartIndicateDivide: $color-black-8,
         ChartMountainBorder: rgba($COLOR_WHITE, 1),
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
         ChartClosedCandleColor: $COLOR_DARK_GRAY_2,
-        MenuBg: $COLOR_DARK_BLUE_2,
+        MenuBg: $color-black,
         MenuBorder: $COLOR_DARK_BLUE_5,
-        MenuIcon: $COLOR_LIGHT_GRAY,
-        MenuText: $COLOR_LIGHT_GRAY,
-        MenuHoverBg: $COLOR_DARK_BLUE_4,
+        MenuIcon: $color-grey-1,
+        MenuText: $color-grey-1,
+        MenuHoverBg: $color-black-5,
         MenuHoverIconBg: $COLOR_DARK_GRAY_3,
-        MenuActiveBg: $COLOR_DARK_BLUE_4,
-        MenuActiveText: $COLOR_WHITE,
-        MenuActiveIcon: $COLOR_WHITE,
-        MenuActiveBorder: $COLOR_WHITE,
-        ChartTitleBg: $COLOR_DARK_BLUE_2,
-        ChartTitleSubBg: $COLOR_DARK_BLUE_3,
+        MenuActiveBg: $color-black,
+        MenuActiveText: $color-white,
+        MenuActiveIcon: $color-white,
+        MenuActiveBorder: $color-red,
+        ChartTitleBg: $color-black,
+        ChartTitleSubBg: $color-black-3,
         ChartTitleText: $COLOR_WHITE,
-        ChartTitleBorder: $COLOR_DARK_BLUE_2,
-        ChartTitleArrow: $COLOR_LIGHT_GRAY,
-        ChartTitlePriceText: $COLOR_LIGHT_GRAY,
+        ChartTitleBorder: $color-black-3,
+        ChartTitleArrow: $color-grey-1,
+        ChartTitlePriceText: $color-grey-1,
         ChartTitleSymbolText: $COLOR_WHITE,
-        ChartTitleHoverBorder: $COLOR_LIGHT_GRAY,
-        ChartTitleActiveBorder: $COLOR_LIGHT_GRAY,
+        ChartTitleHoverBorder: $color-grey-1,
+        ChartTitleActiveBorder: $color-green,
         ChartTitleActiveShadow: $COLOR_DARK_BLUE_8,
-        ChartTitleActiveArrow: $COLOR_LIGHT_GRAY,
-        ChartControlBoxBorder: $COLOR_DARK_BLUE_3,
-        ListScroll: $COLOR_LIGHT_GRAY,
-        ListLiBg: $COLOR_DARK_BLUE_2,
-        ListLiText: $COLOR_LIGHT_GRAY,
-        ListLiBorder: $COLOR_DARK_BLUE_3,
-        ListActiveLiBg: $COLOR_DARK_BLUE_4,
-        ListActiveLiText: $COLOR_WHITE,
-        ListActiveLiBorder: $COLOR_DARK_GRAY_3,
+        ChartTitleActiveArrow: $color-grey-1,
+        ChartControlBoxBorder: $color-black-3,
+        ListScroll: $color-grey,
+        ListLiBg: $color-black,
+        ListLiText: $color-grey,
+        ListLiBorder: $color-black-4,
+        ListHoverLiBg: $color-black-5,
+        ListActiveLiBg: $color-black-8,
+        ListActiveLiText: $color-white,
+        ListActiveLiBorder: $color-black-4,
         DialogBorder: $COLOR_DARK_BLUE_3,
-        DialogHeadBg: $COLOR_DARK_BLUE_3,
-        DialogHeadText: $COLOR_WHITE,
-        DialogHeadBorder: $COLOR_DARK_BLUE_3,
-        DialogHeadIcon: $COLOR_LIGHT_GRAY,
+        DialogHeadBg: $color-black-3,
+        DialogHeadText: $color-white,
+        DialogHeadBorder: $color-black-3,
+        DialogHeadIcon: $color-grey-3,
         DialogHeadActiveBorder: $COLOR_DARK_BLUE_3,
-        DialogBodyBg: $COLOR_DARK_BLUE_3,
-        DialogBodyText: $COLOR_LIGHT_GRAY,
-        DialogFootBg: $COLOR_DARK_BLUE_3,
-        DialogFootText: $COLOR_LIGHT_GRAY,
-        DialogFootBorder: $COLOR_DARK_BLUE_3,
+        DialogBodyBg: $color-black-3,
+        DialogBodyText: $color-grey,
+        DialogFootBg: $color-black-3,
+        DialogFootText: $color-white,
+        DialogFootBorder: $color-grey-7,
+        DialogFootDoneBg: $color-red,
+        DialogFootDoneText: $color-white,
+        DialogFootResetBg: transparent,
+        DialogFootResetBorder: $color-grey-1,
         DialogSettingHeadText: $COLOR_WHITE,
-        DialogSettingBodyBg: $COLOR_DARK_BLUE_2,
-        DialogOverlay: rgba($COLOR_DARK_BLUE_5, 0.7),
-        ChartTypeText: $COLOR_LIGHT_GRAY,
-        ChartTypeListIcon: $COLOR_LIGHT_GRAY,
+        DialogSettingBodyBg: $color-black-3,
+        DialogOverlay: rgba($color-black, 0.72),
+        ChartTypeText: $color-grey-3,
+        ChartTypeListIcon: $color-grey-3,
         ChartTypeActiveListIcon: $COLOR_WHITE,
         ChartTypeActiveListBorderRight: $COLOR_WHITE,
-        ChartSettingText: $COLOR_LIGHT_GRAY,
+        ChartSettingText: $color-grey-3,
         ChartSettingIcon: $COLOR_DARK_GRAY_3,
-        ChartSettingActiveIcon: $COLOR_LIGHT_GRAY,
-        TemplateAddIcon: $COLOR_LIGHT_GRAY,
-        TemplateText: $COLOR_LIGHT_GRAY,
-        TemplateInputText: $COLOR_LIGHT_GRAY,
+        ChartSettingActiveIcon: $color-white,
+        TemplateAddIcon: $color-grey-3,
+        TemplateText: $color-grey-3,
+        TemplateInputText: $color-grey-3,
         TemplateBtn: $COLOR_WHITE,
-        TemplateActiveIcon: $COLOR_LIGHT_GRAY,
-        TooltipBg: rgba($COLOR_WHITE, 0.88),
-        TooltipTextBg: rgba($COLOR_WHITE, 1),
-        TooltipText: $COLOR_DARK_BLUE_5,
+        TemplateActiveIcon: $color-white,
+        TooltipBg: $color-black-3,
+        TooltipTextBg: $color-black-8,
+        TooltipText: $color-white,
         TooltipShadow: rgba($COLOR_WHITE, 0.32),
-        ColorPickerBg: $COLOR_DARK_BLUE_5,
-        ColorPickerBorder: $COLOR_DARK_GRAY_3 ,
-        DropdownText: $COLOR_WHITE,
-        DropdownBg: $COLOR_DARK_BLUE_5,
-        DropdownBorder: $COLOR_DARK_BLUE_4,
-        DropdownActiveBg: $COLOR_DARK_GRAY_3,
-        DropdownActiveText: $COLOR_LIGHT_GRAY,
-        DropdownActiveBorder: $COLOR_WHITE,
-        SliderText: $COLOR_WHITE,
-        SliderHandleBg: $COLOR_DARK_BLUE_5,
-        SliderHandleBorder: $COLOR_WHITE,
-        SliderBarBg: $COLOR_DARK_GRAY_3,
-        SliderBarActiveBg: $COLOR_WHITE,
+        ColorPickerBg: $color-black-3,
+        ColorPickerShadow: rgba(0, 0, 0, 0.64),
+        ColorPickerBorder: $COLOR_DARK_GRAY_3,
+        ColorPickerInputBorder: $COLOR_DARK_BLUE_8,
+        DropdownText: $color-grey,
+        DropdownBg: $color-black-3,
+        DropdownBorder: $color-black-8,
+        DropdownActiveBg: $color-black-8,
+        DropdownActiveText: $color-white,
+        DropdownActiveBorder: $color-green,
+        DropdownActiveShadow: rgba(0, 0, 0, 0.64),
+        SliderText: $color-white,
+        SliderHandleBg: $color-red,
+        SliderHandleBorder: $color-red,
+        SliderBarBg: $color-black-4,
+        SliderBarActiveBg: $color-red,
         SwitchText: $COLOR_WHITE,
         SwitchHandle: $COLOR_WHITE,
         SwitchOffBg: $COLOR_DARK_GRAY_3,
-        SwitchOnBg: $COLOR_GREEN_1,
+        SwitchOnBg: $color-green-3,
+        InputBg: $color-black-3,
+        InputText: $color-white,
+        InputBorder: $COLOR_DARK_BLUE_8,
+        InputActiveText: $color-white,
+        InputActiveBorder: $color-green,
+        InputHoverBorder: $color-grey-7,
         ComparisonItemText: $COLOR_WHITE,
         ComparisonItemIcon: $COLOR_WHITE,
         ComparisonItemHoverBg: $COLOR_DARK_BLUE_5,
-        TimeBg: $COLOR_DARK_BLUE_2,
-        TimeUnitBg: $COLOR_DARK_BLUE_2,
-        TimeUnitColor: $COLOR_LIGHT_GRAY,
-        TimeUnitItemBorder: $COLOR_DARK_GRAY_3,
-        TimeActiveUnitBg: $COLOR_DARK_BLUE_4,
-        TimeActiveUnitColor: $COLOR_WHITE,
-        TimeActiveUnitItemBorder: $COLOR_WHITE,
-        TimeColor: $COLOR_LIGHT_GRAY,
-        TimeActiveItemBg: $COLOR_WHITE,
-        TimeActiveItemColor: $COLOR_DARK_BLUE_5,
-        TimeActiveItemBorder: $COLOR_WHITE,
-        TimeHoverItemColor:  $COLOR_LIGHT_GRAY,
-        TimeHoverItemBorder: $COLOR_WHITE,
-        TimeIconColor: $COLOR_LIGHT_GRAY,
-        AssetInfoText: $COLOR_LIGHT_GRAY,
-        CatDisplayBg: $COLOR_DARK_BLUE_3,
+        TimeBg: $color-black,
+        TimeUnitBg: $color-black-3,
+        TimeUnitColor: $color-grey,
+        TimeUnitItemBorder: $color-black-1,
+        TimeActiveUnitBg: $color-black,
+        TimeActiveUnitColor: $color-white,
+        TimeActiveUnitItemBorder: $color-red,
+        TimeColor: $color-grey,
+        TimeActiveItemBg: $color-black-8,
+        TimeActiveItemColor: $color-white,
+        TimeActiveItemBorder: $color-black-8,
+        TimeHoverItemColor: $color-grey,
+        TimeHoverItemBg: $color-black-5,
+        TimeIconColor: $color-grey-3,
+        AssetInfoText: $color-grey-3,
+        CatDisplayBg: $color-black,
         CatDisplayShadow: $COLOR_DARK_BLUE_3,
-        CatDisplayText: $COLOR_LIGHT_GRAY,
-        CatDisplayBorder: $COLOR_DARK_BLUE_3,
-        CatDisplaySearchIcon: $COLOR_DARK_BLUE_8,
-        CatDisplaySearchText: $COLOR_DARK_BLUE_8,
+        CatDisplayText: $color-grey,
+        CatDisplayBorder: $color-black,
+        CatDisplaySearchBg: $color-black,
+        CatDisplaySearchIcon: $color-grey,
+        CatDisplaySearchText: $color-black-6,
         CatDisplaySearchBorder: $COLOR_DARK_BLUE_8,
-        CatDisplayActiveSearchText: $COLOR_WHITE,
-        CatDisplayActiveSearchIcon: $COLOR_LIGHT_GRAY,
-        CatDisplayActiveSearchIconClose: $COLOR_LIGHT_GRAY,
-        CatDisplayActiveSearchBorder: $COLOR_LIGHT_GRAY,
+        CatDisplayActiveSearchText: $color-white,
+        CatDisplayActiveSearchIcon: $color-white,
+        CatDisplayActiveSearchIconClose: $color-black-1,
+        CatDisplayActiveSearchBorder: $color-green,
         CatDisplayActiveSearchShadow: $COLOR_DARK_BLUE_8,
-        CatDisplayFilterBg: $COLOR_DARK_BLUE_2,
-        CatDisplayFilterText: $COLOR_LIGHT_GRAY,
-        CatDisplayFilterIcon: $COLOR_LIGHT_GRAY,
+        CatDisplayHoverSearchIcon: $color-grey,
+        CatDisplayHoverSearchBorder: $color-grey-7,
+        CatDisplayFilterBg: $color-black-3,
+        CatDisplayFilterText: $color-grey,
+        CatDisplayFilterIcon: $color-grey-3,
+        CatDisplayFilterBorder: $color-black,
         CatDisplayFilterInputText: $COLOR_WHITE,
-        CatDisplayActiveFilterBg: $COLOR_DARK_BLUE_5,
-        CatDisplayActiveFilterText: $COLOR_WHITE,
-        CatDisplayActiveFilterBorder: $COLOR_WHITE,
+        CatDisplayActiveFilterBg: $color-black,
+        CatDisplayActiveFilterText: $color-white,
+        CatDisplayActiveFilterBorder: $color-red,
         CatDisplayActiveFilterIcon: $COLOR_WHITE,
-        CatDisplayHoverFilterBg: $COLOR_DARK_BLUE_4,
+        CatDisplayHoverFilterBg: $color-black-5,
         CatDisplayCatTitleText: $COLOR_WHITE,
-        CatDisplayCatContentBg: $COLOR_DARK_BLUE_2,
-        CatDisplayCatContentBorder: $COLOR_DARK_BLUE_3,
+        CatDisplayCatSubTitleText: $color-grey-3,
+        CatDisplayCatContentBg: $color-black,
+        CatDisplayCatContentBorder: $color-black,
         CatDisplayCatContentTitleBg: $COLOR_DARK_BLUE_5,
-        CatDisplayCatContentTitleText: $COLOR_WHITE,
-        CatDisplayCatContentIcon: $COLOR_LIGHT_GRAY,
-        CatDisplayCatActiveContentBg: $COLOR_DARK_BLUE_5,
-        CatDisplayCatActiveContentText: $COLOR_WHITE,
+        CatDisplayCatContentTitleText: $color-grey-7,
+        CatDisplayCatContentIcon: $color-grey-1,
+        CatDisplayCatContentDisabled: $COLOR_LIGHT_GRAY_30,
+        CatDisplayCatActiveContentBg: $color-black-8,
+        CatDisplayCatActiveContentText: $color-white,
         CatDisplayCatActiveContentIcon: $COLOR_WHITE,
-        CatDisplayCatHoverContentBg: $COLOR_DARK_BLUE_4,
-        CatDisplayCatHoverContentText: $COLOR_LIGHT_GRAY,
-        CatDisplayCatHoverContentIcon: $COLOR_LIGHT_GRAY,
-        CrosshairBg: $COLOR_DARK_BLUE_5,
-        CrosshairText: $COLOR_WHITE,
-        CrosshairBorder: $COLOR_DARK_GRAY_3,
-        CrosshairAxis: $COLOR_DARK_BLUE_8,
-        CrosshairLabel: $COLOR_DARK_BLUE_5,
+        CatDisplayActiveText: $color-white,
+        CatDisplayCatHoverContentBg: $color-black-5,
+        CatDisplayCatHoverContentText: $color-white,
+        CatDisplayCatHoverContentIcon: $color-white,
+        CrosshairBg: $color-black-8,
+        CrosshairText: $color-white,
+        CrosshairBorder: $color-black-8,
+        CrosshairAxis: $color-black-8,
+        CrosshairLabelBg: $color-black-8,
+        CrosshairLabelText: $color-white,
         StarIconFav: $COLOR_ORANGE,
         LastdigitsBarBg: $COLOR_DARK_GRAY_3,
         LastdigitsMaxBarBg: $COLOR_GREEN_1,
@@ -406,7 +573,24 @@ $themes: (
         ChartHistoryPickerBodyActiveBg: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveColor: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerBodyActiveBorder: $COLOR_WHITE,
-        PaginationLoaderStripeColor: $COLOR_DARK_BLUE_4
+        PaginationLoaderStripeColor: $color-black-1,
+        NavigationWidgetBg: $color-black-3,
+        NavigationWidgetColor: $color-white,
+        ChartTableBg: $color-black-3,
+        ChartTableHeadBg: $color-black-3,
+        ChartTableHeadBorder: $color-black-4,
+        ChartTableHeadText: $color-grey,
+        ChartTableHeadHover: $color-black-5,
+        ChartTableHeadShadow: rgba($COLOR_BLACK, 0.24),
+        ChartTableBodyText: $color-grey,
+        ChartTableBodyHeadBg: $color-black,
+        ChartTableBodyHeadText: $color-grey,
+        ChartTableBodyBorder: $color-black-4,
+        HighestLowestMarkerLabelBg: $COLOR_DARK_GRAY_2,
+        HighestLowestMarkerLabelText: $COLOR_WHITE,
+        HighestSpotColor: $COLOR_GREEN_1,
+        LowestSpotColor: $COLOR_RED,
+        ChartBackgroundOpacity: 0.4
     ),
 );
 
@@ -429,18 +613,27 @@ $themes: (
 }
 
 :export {
-    lightchartgrid: map-get(map-get($themes, 'light'), 'ChartGrid');
-    darkchartgrid: map-get(map-get($themes, 'dark'), 'ChartGrid');
-    lightchartmountainborder: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
-    darkchartmountainborder: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
-    lightcandletextclosed: map-get(map-get($themes, 'light'), 'ChartCandleTextClosed');
-    darkcandletextclosed: map-get(map-get($themes, 'dark'), 'ChartCandleTextClosed');
-    lightcandlebgclosed: map-get(map-get($themes, 'light'), 'ChartCandleBgClosed');
-    darkcandlebgclosed: map-get(map-get($themes, 'dark'), 'ChartCandleBgClosed');
-    lightchartclosedcandle: map-get(map-get($themes, 'light'), 'ChartClosedCandleColor');
-    darkchartclosedcandle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
-    lightchartbg: map-get(map-get($themes, 'light'), 'ChartBg');
-    darkchartbg: map-get(map-get($themes, 'dark'), 'ChartBg');
-    lightfloatlabelsbg: map-get(map-get($themes, 'light'), 'CrosshairLabel');
-    darkfloatlabelsbg: map-get(map-get($themes, 'dark'), 'CrosshairLabel');
+    red: $color-red;
+    light_chart_text: map-get(map-get($themes, 'light'), 'ChartText');
+    dark_chart_text: map-get(map-get($themes, 'dark'), 'ChartText');
+    light_chart_grid: map-get(map-get($themes, 'light'), 'ChartGrid');
+    dark_chart_grid: map-get(map-get($themes, 'dark'), 'ChartGrid');
+    light_chart_mountain_border: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
+    dark_chart_mountain_border: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
+    light_chart_mountain_bg: map-get(map-get($themes, 'light'), 'ChartMountainBg');
+    dark_chart_mountain_bg: map-get(map-get($themes, 'dark'), 'ChartMountainBg');
+    light_chart_mountain_bg_shade: map-get(map-get($themes, 'light'), 'ChartMountainBgShade');
+    dark_chart_mountain_bg_shade: map-get(map-get($themes, 'dark'), 'ChartMountainBgShade');
+    light_candle_text_closed: map-get(map-get($themes, 'light'), 'ChartCandleTextClosed');
+    dark_candle_text_closed: map-get(map-get($themes, 'dark'), 'ChartCandleTextClosed');
+    light_candle_bg_closed: map-get(map-get($themes, 'light'), 'ChartCandleBgClosed');
+    dark_candle_bg_closed: map-get(map-get($themes, 'dark'), 'ChartCandleBgClosed');
+    light_chart_closed_candle: map-get(map-get($themes, 'light'), 'ChartClosedCandleColor');
+    dark_chart_closed_candle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
+    light_chart_bg: map-get(map-get($themes, 'light'), 'ChartBg');
+    dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
+    light_float_labels_bg: map-get(map-get($themes, 'light'), 'CrosshairLabelBg');
+    dark_float_labels_bg: map-get(map-get($themes, 'dark'), 'CrosshairLabelBg');
+    light_float_labels_text: map-get(map-get($themes, 'light'), 'CrosshairLabelText');
+    dark_float_labels_text: map-get(map-get($themes, 'dark'), 'CrosshairLabelText');
 }

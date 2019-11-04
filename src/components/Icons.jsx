@@ -24,6 +24,7 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import Close from '../../sass/icons/close/ic-close.svg';
 import CloseCircle from '../../sass/icons/close/ic-close-circle.svg';
+import CloseBold from '../../sass/icons/close/ic-close-bold.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
 import CrosshairOff from '../../sass/icons/chart settings/crosshair/ic-crosshair-off.svg';
 import CrosshairOn from '../../sass/icons/chart settings/crosshair/ic-crosshair-on.svg';
@@ -43,6 +44,7 @@ import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-nor
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
 import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
+import SynthIndex from '../../sass/icons/sidebar/synth_index/ic-synth-normal.svg';
 import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg';
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
@@ -58,6 +60,11 @@ import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
 import Success from '../../sass/icons/alert message/success.svg';
 import Info from '../../sass/icons/alert message/info.svg';
+
+import Home from '../../sass/icons/navigation-widgets/ic-home.svg';
+import Scale from '../../sass/icons/navigation-widgets/ic-scale-full.svg';
+import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
+import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -94,12 +101,14 @@ import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg
 /* Metals */
 import Metal from '../../sass/icons/active-symbols/metals/ic-metal.svg';
 
-/* Volatility Indices */
+/* Synthetic Indices */
 import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10-index.svg';
 import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25-index.svg';
 import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-index.svg';
 import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index.svg';
 import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index.svg';
+import Vol1S10 from '../../sass/icons/active-symbols/volatility/1s10 index/ic-10-1s-index.svg';
+import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 
@@ -152,6 +161,7 @@ export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
 export const CloseIcon = Wrapper(Close);
 export const CloseCircleIcon = Wrapper(CloseCircle);
+export const CloseBoldIcon = Wrapper(CloseBold);
 export const ComparisonIcon = Wrapper(Comparison);
 export const CrosshairOffIcon = Wrapper(CrosshairOff);
 export const CrosshairOnIcon = Wrapper(CrosshairOn);
@@ -181,6 +191,10 @@ export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
 export const BackIcon = Wrapper(Back);
 
+export const HomeIcon = Wrapper(Home);
+export const ScaleIcon = Wrapper(Scale);
+export const ZoominIcon = Wrapper(Zoomin);
+export const ZoomoutIcon = Wrapper(Zoomout);
 
 export const MetalIcon = Wrapper(Metal);
 
@@ -201,6 +215,7 @@ export const CategoryIconMap = {
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
+    synthetic_index: Wrapper(SynthIndex),
     indicators: Wrapper(Indicator),
 };
 
@@ -239,6 +254,7 @@ export const FlagIcons = {
     Chinese: Wrapper(Chinese),
     ChineseTraditional: Wrapper(ChineseTraditional),
     Poland: Wrapper(PLN),
+    Spanish: Wrapper(Spanish),
 };
 
 
@@ -264,6 +280,8 @@ export const ItemIconMap = {
     R_50: Wrapper(Vol50),
     R_75: Wrapper(Vol75),
     R_100: Wrapper(Vol100),
+    '1HZ10V': Wrapper(Vol1S10),
+    '1HZ100V': Wrapper(Vol1S100),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
 };

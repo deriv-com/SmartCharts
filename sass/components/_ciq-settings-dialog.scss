@@ -115,21 +115,39 @@
     }
     .buttons {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         margin-bottom: 5px;
+        padding: 9px 16px;
         @include themify($themes) {
             background: themed('DialogFootBg');
         }
 
         > div {
-            width: 90px;
-            height: 40px;
-            line-height: 40px;
+            height: 30px;
+            line-height: 31px;
             text-align: center;
             cursor: pointer;
-            font-size: 1.4em;
+            font-size: 14px;
+            border-radius: 4px;
+            padding: 0px 20px;
+            font-weight: bold;
             @include themify($themes) {
                 color: themed('DialogFootText');
+            }
+
+            &.done {
+                @include themify($themes) {
+                    background: themed('DialogFootDoneBg');
+                    color: themed('DialogFootDoneText');
+                    border: 1px solid themed('DialogFootDoneBg');
+                }
+            }
+            &.reset {
+                @include themify($themes) {
+                    background: themed('DialogFootResetBg');
+                    color: themed('DialogFootResetText');
+                    border: 1px solid themed('DialogFootResetBorder');
+                }
             }
         }
     }
@@ -149,15 +167,6 @@
         @include themify($themes) {
             border: none;
             box-shadow: 0 0 0 1px themed('defaultBorder');
-        }
-    }
-    .cq-color-picker {
-        display: inline-block;
-
-        .dropdown {
-            @include themify($themes) {
-                border: 1px solid themed('ColorPickerBorder');
-            }
         }
     }
 }

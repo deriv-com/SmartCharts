@@ -1,4 +1,6 @@
-import { action, computed, observable, when } from 'mobx';
+import { when } from 'mobx';
+import { patchPixelFromChart } from '../utils';
+import { red as RED } from '../../sass/_themes.scss';
 
 class CurrentSpotStore {
     constructor(mainStore) {
@@ -6,60 +8,62 @@ class CurrentSpotStore {
         when(() => this.context, this.onContextReady);
     }
 
-    @observable top = 0;
-    @observable left = 0;
-    @observable show = false;
-    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get state() { return this.mainStore.state; }
 
     onContextReady = () => {
-        if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.updateSpot);
+        if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.drawSpot);
+        patchPixelFromChart(this.stx);
     }
 
-    @action.bound updateSpot() {
-        if (this.state.endEpoch) {
-            this.show = false;
+    drawSpot = () => {
+        if (this.state.endEpoch) { return; }
+        const stx = this.stx;
+        const chart = stx.chart;
+        const len = chart.dataSet.length;
+        if (!len) { return; }
+        const bar = chart.dataSet[len - 1];
+        const prevBar = chart.dataSet[len - 2];
+        if (!bar || !prevBar || !bar.Close || !prevBar.Close) { return; }
+        let x = stx.pixelFromTick(len - 1, chart);
+        const deltaX = bar.chartJustAdvanced ? x - stx.pixelFromTick(len - 2, chart) : 0;
+        const y = stx.pixelFromPrice(bar.Close, chart.panel);
+
+        const  progress = Math.min(bar.tickAnimationProgress || 0, 1);
+        if (progress) {
+            x -=  (1 - progress) * deltaX;
+        }
+
+        if (
+            x < 0
+            || x > chart.yAxis.left
+            || y < chart.yAxis.top
+            || y > chart.yAxis.bottom
+        ) {
             return;
         }
-        const chart = this.stx.chart;
-        const layout = this.stx.layout;
-        const mainSeriesRenderer = this.stx.mainSeriesRenderer;
-        let visible = true;
 
+        // glow is set by Animation.js
+        const glow = progress;
 
-        if (chart.dataSet
-            && chart.dataSet.length
-            && mainSeriesRenderer
-        ) {
-            const panel = chart.panel;
-            const currentQuote = this.stx.currentQuote();
-            if (!currentQuote) { return; }
-            const price = currentQuote.Close;
-            const x = this.stx.pixelFromTick(currentQuote.tick, chart) + (chart.lastTickOffset || 0);
-            const y = this.stx.pixelFromPrice(price, panel);
-
-            if (chart.yAxis.left > x
-                && chart.yAxis.top <= y
-                && chart.yAxis.bottom >= y) {
-                // Limit precision to reduce wobbly-ness in the spot:
-                this.top = +y.toFixed(this.pip);
-                if (Math.abs(this.left - x) >= 1) {
-                    this.left = Math.round(x);
-                }
-            } else {
-                visible = false;
-            }
+        /** @type {CanvasRenderingContext2D} */
+        const ctx = stx.chart.context;
+        ctx.save();
+        if (glow) {
+            ctx.shadowBlur = (glow * 35 + 4) | 0;
+            let opacity = Math.sqrt(1.0 - glow) * 255;
+            opacity |= 0;
+            opacity = opacity.toString(16);
+            ctx.shadowColor = RED + opacity;
         }
-        this.show = visible
-            && !this.state.endEpoch
-            && (
-                layout.chartType !== 'candle'
-                && layout.chartType !== 'colored_bar'
-                && layout.chartType !== 'hollow_candle'
-            );
+        ctx.fillStyle = RED;
+        for (let i = 0; i < (glow ? 3 : 1); ++i) {
+            ctx.beginPath();
+            ctx.arc(x - 1, y, 4, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+        ctx.restore();
     }
 }
 

@@ -5,11 +5,12 @@ import ChartTitle from './ChartTitle.jsx';
 import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
+import BottomWidget from './BottomWidget.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
-import CurrentSpot from './CurrentSpot.jsx';
 import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
-import LastDigitStats from './LastDigitStats.jsx';
+import NavigationWidget from './NavigationWidget.jsx';
+import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 
@@ -36,9 +37,13 @@ class Chart extends Component {
         init(this.root.current, this.modalNode.current, props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { updateProps, ...props } = nextProps;
-        updateProps(props);
+    componentDidUpdate(prevProps) {
+        const { updateProps, init, ...props } = this.props;
+        const { updateProps: prevUpdateProps, init: prevInit, ...previousProps } = prevProps;
+
+        if (previousProps !== props) {
+            updateProps(props);
+        }
     }
 
     componentWillUnmount() {
@@ -55,12 +60,13 @@ class Chart extends Component {
 
     render() {
         const {
-            bottomWidgets,
             DrawToolsSettingsDialog,
             StudySettingsDialog,
+            isCandle,
+            isSpline,
             isMobile = false,
-            isOnPagination,
             isChartAvailable,
+            isHighestLowestMarkerEnabled,
             barriers = [],
             children,
             chartControlsWidgets,
@@ -72,18 +78,18 @@ class Chart extends Component {
             isDrawing,
             theme,
             position,
-            showLastDigitStats,
+            bottomWidgets,
+            enabledNavigationWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
         const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
-        const BottomWidgets = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
         // if there are any markers, then increase the subholder z-index
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${contextWidth} ${HasMarkers}`}>
+            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
                 <div
                     className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
                     ref={this.modalNode}
@@ -104,17 +110,24 @@ class Chart extends Component {
                                         ))}
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder">
-                                        {children}
-
                                         {
-                                            isOnPagination
-                                                && <PaginationLoader />
+                                            !isCandle && !isSpline && isHighestLowestMarkerEnabled
+                                                && <HighestLowestMarker />
                                         }
-                                        <CurrentSpot />
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder" hideInScrollToEpoch>
+                                        {children}
+                                    </RenderInsideChart>
+                                    <RenderInsideChart at="subholder">
+                                        <PaginationLoader />
                                     </RenderInsideChart>
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
                                     </div>
+                                    {
+                                        enabledNavigationWidget
+                                            && <NavigationWidget />
+                                    }
                                     <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                         <DrawingCursor />
@@ -126,10 +139,7 @@ class Chart extends Component {
                                         </div>
                                     )}
                                     <BottomWidgetsContainer>
-                                        {
-                                            BottomWidgets
-                                                && <BottomWidgets />
-                                        }
+                                        <BottomWidget bottomWidgets={bottomWidgets} />
                                     </BottomWidgetsContainer>
                                 </div>
                                 { chartControlsWidgets !== null
@@ -148,13 +158,23 @@ class Chart extends Component {
     }
 }
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, drawingCursor }) => ({
+export default connect(({
+    chart,
+    drawTools,
+    studies,
+    chartSetting,
+    chartType,
+    state,
+    drawingCursor,
+}) => ({
     init: chart.init,
     destroy: chart.destroy,
     StudySettingsDialog : studies.StudySettingsDialog,
     DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
     AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
+    isCandle: chartType.isCandle,
     isChartAvailable: chart.isChartAvailable,
+    isSpline: chartType.isSpline,
     updateProps: state.updateProps,
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
@@ -162,6 +182,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,
-    showLastDigitStats:state.showLastDigitStats,
-    isOnPagination: state.isOnPagination,
+    isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
 }))(Chart);

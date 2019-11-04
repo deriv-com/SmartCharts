@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { getUTCDate, updatePropIfChanged } from '../utils';
 
 // width here includes the size of the flag
@@ -28,6 +28,13 @@ export default class MarkerStore {
         this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updateMarkerTick);
+    }
+
+    @computed get shouldDrawMarkers() {
+        // if this.y === null, we know line markers is passed, so check if chart has
+        // been scrolled to the leftmost of the screen
+        // else return true in order to show chart-loader when loading historical data
+        return this.y === null ? this.stx.chart.isScrollLocationChanged : true;
     }
 
     @action.bound destructor() {
@@ -61,6 +68,9 @@ export default class MarkerStore {
     // Considering how often this function is called, it made more sense to have the offset
     // done in CSS.
     @action.bound updatePosition() {
+        // Don't position the markers when the chart hasn't been scrolled to the leftmost of the screen
+        if (!this.shouldDrawMarkers) return;
+
         // When the chart has not been initialized or there isn't any data in masterData it shouldn't position the markers.
         if (!this.stx || !this.stx.masterData || this.stx.masterData.length <= 0) {
             return;

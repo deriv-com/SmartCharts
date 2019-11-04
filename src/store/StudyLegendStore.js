@@ -12,6 +12,105 @@ import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
+        this.excludedStudies = {
+            Beta: true,
+            // volume is not supported in chart
+            Klinger: true,
+            'Trade Vol': true,
+            'Vol ROC': true,
+            'Price Vol': true,
+            'Pos Vol': true,
+            'Neg Vol': true,
+            'On Bal Vol': true,
+            'Vol Osc': true,
+            volume: true,
+            'vol undr': true,
+            'vol profile': true,
+            'W MFI': true,
+            EOM: true,
+            'Chaikin MF': true,
+            Twiggs: true,
+            // end volume
+            'Aroon Osc': true,
+            'Lin R2': true,
+            'Lin Fcst': true,
+            'Lin Incpt': true,
+            'Time Fcst': true,
+            'VT Filter': true,
+            TRIX: true,
+            'STD Dev': true,
+            Swing: true,
+            'Acc Swing': true,
+            'Price ROC': true,
+            Momentum: true,
+            'Hist Vol': true,
+            'Pretty Good': true,
+            Ultimate: true,
+            'Chaikin Vol': true,
+            'Price Osc': true,
+            'True Range': true,
+            ATR: true,
+            'Ehler Fisher': true,
+            Schaff: true,
+            QStick: true,
+            Coppock: true,
+            'Chande Mtm': true,
+            'Chande Fcst': true,
+            'Intraday Mtm': true,
+            RAVI: true,
+            'Random Walk': true,
+            'High Low': true,
+            'High-Low': true,
+            'Med Price': true,
+            'Fractal Chaos': true,
+            GAPO: true,
+            'Prime Number Bands': true,
+            'Prime Number': true,
+            HHV: true,
+            LLV: true,
+            'Mass Idx': true,
+            Keltner: true,
+            'Elder Ray': true,
+            'Elder Force': true,
+            'LR Slope': true,
+            COG: true,
+            'Typical Price': true,
+            'Weighted Close': true,
+            'M Flow': true,
+            'W Acc Dist': true,
+            'val lines': true,
+            correl: true,
+            PMO: true,
+            'Rel Vol': true,
+            'ATR Bands': true,
+            'STARC Bands': true,
+            'ATR Trailing Stop': true,
+            'Boll BW': true,
+            'Boll %b': true,
+            'Rel Vig': true,
+            'Elder Impulse': true,
+            'Pivot Points': true,
+            VWAP: true,
+            AVWAP: true,
+            'P Rel': true,
+            'Perf Idx': true,
+            Ulcer: true,
+            'Bal Pwr': true,
+            'Trend Int': true,
+            Choppiness: true,
+            Disparity: true,
+            'Rainbow MA': true,
+            'Rainbow Osc': true,
+            'Pring KST': true,
+            'Pring Sp-K': true,
+            Darvas: true,
+            Supertrend: true,
+            Vortex: true,
+            PSY: true,
+            'MA Dev': true,
+            Shinohara: true,
+            'VT HZ Filter': true,
+        };
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
@@ -29,6 +128,7 @@ export default class StudyLegendStore {
             favoritesId: 'indicators',
             mainStore,
             searchInputClassName: () => this.searchInputClassName,
+            limitInfo: t.translate('Up to 5 active indicators allowed.'),
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -47,6 +147,9 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
+        // to remove studies if user has already more than 5
+        // and remove studies which are excluded
+        this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
             const panel = Object.keys(this.stx.panels)[1];
@@ -61,8 +164,10 @@ export default class StudyLegendStore {
 
     previousStudies = { };
     searchInputClassName;
+    @observable hasReachedLimits = false;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
+        categoryNamePostfix: '',
         categoryId: 'active',
         hasSubcategory: false,
         emptyDescription: t.translate('There are no active indicators yet.'),
@@ -71,9 +176,9 @@ export default class StudyLegendStore {
 
     get categorizedStudies() {
         const data = [];
-        const excludedStudies = { Beta: true };
+
         Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            if (!excludedStudies[studyId]) {
+            if (!this.excludedStudies[studyId]) {
                 const study = CIQ.Studies.studyLibrary[studyId];
                 data.push({
                     enabled: true,
@@ -83,23 +188,50 @@ export default class StudyLegendStore {
                 });
             }
         });
+        const categoryNamePostfix = `(${this.activeStudies.data.length}/5)`;
         const category = {
             categoryName: t.translate('Indicators'),
+            categoryNamePostfix,
+            categoryNamePostfixShowIfActive: true,
             categoryId: 'indicators',
+            categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
             hasSubcategory: false,
             data,
         };
         return [category];
     }
 
-    @action.bound onSelectItem(item) {
-        const sd = CIQ.Studies.addStudy(this.stx, item);
-        this.changeStudyPanelTitle(sd);
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-        this.menu.setOpen(false);
+    @action.bound removeExtraStudies() {
+        if (this.stx.layout && this.stx.layout.studies) {
+            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                const type = this.stx.layout.studies[study].type;
+                if (idx >= 5 || this.excludedStudies[type]) {
+                    setTimeout(() => {
+                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                        this.renderLegend();
+                    }, 0);
+                }
+            });
+        }
     }
 
-    @action.bound updateProps(searchInputClassName) {
+    @action.bound onSelectItem(item) {
+        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
+            const sd = CIQ.Studies.addStudy(this.stx, item);
+            this.changeStudyPanelTitle(sd);
+            logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.menu.setOpen(false);
+        }
+    }
+
+    // Temporary prevent user from adding more than 5 indicators
+    // TODO All traces can be removed after new design for studies
+    @action.bound updateStyle() {
+        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
+    }
+
+    @action.bound updateProps({ searchInputClassName }) {
         this.searchInputClassName = searchInputClassName;
     }
 
@@ -249,7 +381,15 @@ export default class StudyLegendStore {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
+        // Temporary prevent user from adding more than 5 indicators
+        // All traces can be removed after new design for studies
+        this.updateStyle();
     };
+
+    @action.bound setReachedLimit() {
+        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        this.hasReachedLimits = hasReachedLimit;
+    }
 
     @action.bound updateActiveStudies() {
         const stx = this.stx;
@@ -272,6 +412,8 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
+        this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
+        this.setReachedLimit();
     }
 
     @action.bound clearStudies() {

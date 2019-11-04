@@ -10,11 +10,18 @@ export default class PriceLineStore {
     @observable draggable = true;
     @observable isDragging = false;
     @observable visible = true;
-    @observable top = 0;
+    // @observable top = 0;
     @observable _price = 0;
-    @observable zIndex;
-    @observable offScreen = false;
-    @observable uncentered = false;
+    // @observable zIndex;
+    offScreen = false;
+    // @observable uncentered = false;
+
+
+    set zIndex(value) {
+        if (this._line) {
+            this._line.style.zIndex = value;
+        }
+    }
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
 
@@ -29,7 +36,7 @@ export default class PriceLineStore {
     }
 
     onContextReady = () => {
-        this._injectionId = this.stx.append('draw', this._draw.bind(this));
+        this._injectionId = this.stx.append('draw', this._draw);
     };
 
     init = () => {
@@ -154,35 +161,50 @@ export default class PriceLineStore {
         return price;
     }
 
-    @action.bound _updateTop() {
+    _calculateTop = () => {
         if (this.stx.currentQuote() === null) { return; }
 
         let top = this._locationFromPrice(this.realPrice);
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
-            this.uncentered = true;
+            // this.uncentered = true;
             if (top < -LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
             top = 0;
         } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
-            this.uncentered = true;
+            // this.uncentered = true;
             if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
             }
             top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
-            this.uncentered = false;
+            // this.uncentered = false;
             this.offScreen = false;
         }
 
-        this.top = Math.round(top) | 0;
+
+        if (top + 30 > this.chart.panel.height) {
+            top = this.chart.panel.height - 30;
+        } else if (top < 10) {
+            top = 10;
+        }
+
+        return Math.round(top) | 0;
     }
 
-    _draw() {
+    // Mantually update the dop to improve performance.
+    // We don't pay for react reconciler and mobx observable tracking in animation frames.
+    set top(v) {
+        this.__top = v;
+        this._line.style.transform = `translateY(${this.top}px)`;
+    }
+    get top() { return this.__top; }
+
+    _draw = () =>  {
         if (this.visible && this._line) {
-            this._updateTop();
+            this.top = this._calculateTop();
         }
     }
 
@@ -202,9 +224,6 @@ export default class PriceLineStore {
         draggable: this.draggable,
         isDragging: this.isDragging,
         init: this.init,
-        zIndex: this.zIndex,
-        offScreen: this.offScreen,
-        uncentered: this.uncentered,
-        top: this.top,
+        // zIndex: this.zIndex,
     }));
 }

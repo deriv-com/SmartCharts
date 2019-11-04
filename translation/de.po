@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: German\n"
 "Language: de_DE\n"
-"PO-Revision-Date: 2019-05-08 03:42\n"
+"PO-Revision-Date: 2019-06-26 07:44\n"
 
 msgid " already exists."
 msgstr " existiert bereits."
@@ -1352,4 +1352,7 @@ msgstr "Geschlossen"
 
 msgid "Opens in:"
 msgstr "Öffnet sich:"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "Bis zu 5 aktive Indikatoren sind erlaubt."
 

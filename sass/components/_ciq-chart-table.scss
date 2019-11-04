@@ -1,11 +1,9 @@
+/* stylelint-disable plugin/no-unsupported-browser-features */
+
 .ciq-chart-dialog {
     width: var(--table-width);
     left: auto;
-
-    .ciq-list > :last-child {
-        top: 42px !important;
-    }
-
+    overflow: hidden;
 }
 
 .cq-dialog-overlay {
@@ -21,79 +19,197 @@
     z-index: 1;
 }
 
+.ciq-chart-table__panel {
+    position: relative;
+    overflow: hidden;
+    height: 80vh !important;
+    transform: translateZ(0);
+    @include themify($themes) {
+        background: themed('ChartTableBg');
+    }
+
+    > div:last-child {
+        right: 10px !important;
+    }
+    &__group {
+        position: relative;
+        padding-top: 44px;
+        overflow: hidden;
+
+        &--title {
+            display: block;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 16px 24px 8px;
+            font-weight: bold;
+            height: 44px;
+            box-sizing: border-box;
+            line-height: 1.43;
+            font-size: 14px;
+            transform: translate3d(0, 0, 0);
+            transition: none !important;
+            @include themify($themes) {
+                background: themed('ChartTableBodyHeadBg');
+                color: themed('ChartTableBodyHeadText');
+            }
+
+            &.sticky-top,
+            &.sticky-bottom {
+                z-index: 8;
+            }
+            &.sticky-bottom {
+                position: absolute;
+                top: auto !important;
+                bottom: 0px !important;
+            }
+            &.sticky-top {
+                position: fixed;
+                top: 0px;
+            }
+        }
+    }
+}
+
 .ciq-chart-table {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
+    @include themify($themes) {
+        background: themed('ChartTableBg');
+    }
 
-    td:nth-child(1), th:nth-child(1) {
-        width: 145px;
+    tr {
+        @include themify($themes) {
+            border-bottom: 1px solid themed('ChartTableBodyBorder');
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+        th,td {
+            text-align: right;
+            box-sizing: border-box;
+            padding: 16px 5px;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            @include themify($themes) {
+                color: themed('ChartTableBodyText');
+            }
+
+            .cq-change:after {
+                margin: 3px 0 0 5px;
+            }
+            .up {
+                @include themify($themes) {
+                    color: $COLOR_GREEN_1;
+                }
+            }
+            .down {
+                @include themify($themes) {
+                    color: $COLOR_RED;
+                }
+            }
+            &.before-last-child {
+                min-width: 105px !important;
+                max-width: 105px !important;
+                padding-right: 4px;
+            }
+            &:first-child {
+                min-width: 90px;
+                max-width: 90px;
+                padding-left: 24px;
+                text-align: left;
+            }
+            &:nth-child(2), &:nth-child(2) {
+                min-width: 120px;
+                max-width: 120px;
+            }
+            &:nth-child(3), &:nth-child(3) {
+                min-width: 120px;
+                max-width: 120px;
+            }
+            &:nth-child(4), &:nth-child(4) {
+                min-width: 110px;
+                max-width: 110px;
+            }
+            &:nth-child(5), &:nth-child(5) {
+                min-width: 110px;
+                max-width: 110px;
+            }
+            &:nth-child(6), &:nth-child(6) {
+                width: 40px;
+                padding-right: 4px;
+            }
+            &:last-child {
+                min-width: 42px !important;
+                max-width: 42px !important;
+                text-align: left;
+                padding-left: 4px;
+            }
+        }
+        th:last-child {
+            text-align: center;
+
+            .ic-icon {
+                cursor: pointer;
+                position: absolute;
+                top: 13px;
+                border-radius: 4px;
+                right: 12px;
+                transition: background 0.2s 0.15s;
+
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('ChartTableHeadHover');
+                    }
+                }
+                svg {
+                    width: 16px;
+                    height: 16px;
+                    stroke: none;
+                }
+            }
+        }
     }
-    td:nth-child(2), th:nth-child(2) {
-        width: 75px;
-    }
-    td:nth-child(3), th:nth-child(3) {
-        width: 100px;
-    }
-    td:nth-child(4), th:nth-child(4) {
-        width: 75px;
-    }
-    td:nth-child(5), th:nth-child(5) {
-        width: 75px;
-    }
-    td:nth-child(6), th:nth-child(6) {
-        width: 100px;
+    thead {
+        width: var(--table-width);
+        display: block;
+        height: 52px;
+        @include themify($themes) {
+            background: themed('ChartTableHeadBg');
+        }
+
+        th {
+            font-size: 14px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            padding: 16px 5px;
+            @include themify($themes) {
+                color: themed('ChartTableHeadText');
+            }
+        }
     }
     tbody {
         display: block;
-        margin-top: 40px;
     }
     .cq-change-cell {
         display: inline-flex;
-
-        .ic-icon {
-            padding: 8px 0 0 20px;
-        }
     }
-}
-
-.ciq-table-head {
-    width: var(--table-width);
-    position: fixed;
-    display: block;
-    @include themify($themes) {
-        background: themed('DialogBodyBg');
-        color: themed('DefaultText');
-    }
-
-    .ciq-table-cell {
-        line-height: 40px;
-    }
-}
-
-.ciq-table-row {
-    @include themify($themes) {
-        border-bottom: 1px solid themed('DialogBodyBg');
-    }
-
-    .ciq-table-cell {
-        text-align: center;
-        height: 30px;
-        @include themify($themes) {
-            color: themed('DefaultText');
-        }
-
-        .cq-change:after {
-            margin: 3px 0 0 5px;
-        }
-        .up {
-            @include themify($themes) {
-                color: $COLOR_GREEN_1;
-            }
-        }
-        .down {
-            @include themify($themes) {
-                color: $COLOR_RED;
+    &--tick {
+        tr {
+            td, th {
+                &:nth-child(1), &:nth-child(1) {
+                    min-width: 105px;
+                    max-width: 105px;
+                    padding-left: 24px;
+                    text-align: left;
+                }
             }
         }
     }
@@ -104,7 +220,6 @@
         width: calc(100% - 20px) !important;
         height: calc(100% - 66px) !important;
         top: 10px;
-        overflow: hidden;
 
         .ciq-list > :last-child {
             top: 2px !important;
@@ -115,12 +230,12 @@
             display: table-row-group;
             margin-top: 0;
         }
-        .ciq-table-cell {
+        td, th {
             display: flex;
             padding: 5px 5px 5px 20px !important;
             text-align: left;
             font-size: 1.2em;
-            height: 20px;
+            height: 52px;
 
             .ciq-table-date {
                 flex: 1;

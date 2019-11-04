@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
@@ -85,6 +85,7 @@ export default class ViewStore {
         }
         this.mainStore.state.setChartIsReady(false);
         const stx = this.stx;
+        const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
 
         const importLayout = () => {
             const finishImportLayout = () => {
@@ -92,6 +93,7 @@ export default class ViewStore {
                 this.mainStore.studies.updateActiveStudies();
                 if (this.loader) { this.loader.hide(); }
                 this.mainStore.state.setChartIsReady(true);
+                this.mainStore.state.setChartGranularity(granularity);
             };
             stx.importLayout(ViewStore.views[idx].layout, {
                 managePeriodicity: true,
@@ -108,6 +110,7 @@ export default class ViewStore {
                 }
             }
             this.mainStore.chartType.setType(chartType);
+            this.mainStore.state.setChartType(chartType);
             this.menu.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };

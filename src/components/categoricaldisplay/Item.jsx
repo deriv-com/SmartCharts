@@ -4,20 +4,20 @@ import {
 } from '../Icons.jsx';
 import Favorite from '../Favorite.jsx';
 
-const Icon = ({ id }) => {
+const Icon = React.memo(({ id }) => {
     if (!id || !ItemIconMap[id]) { return ''; }
     const ItemIcon = ItemIconMap[id];
     return <ItemIcon className={`ic-${id}`} />;
-};
+});
 
-const ItemLeft = ({ item: { itemId, display } }) => (
+const ItemLeft = React.memo(({ item: { itemId, display } }) => (
     <div className="left">
         <Icon id={itemId} />
         <span className="ciq-item-display">{display}</span>
     </div>
-);
+));
 
-const ItemRight = ({ favoritesId, item: { dataObject, itemId } }) => (
+const ItemRight = React.memo(({ favoritesId, item: { dataObject, itemId } }) => (
     <div className="right">
         {(dataObject && (dataObject.exchange_is_open === undefined || dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
         <Favorite
@@ -25,7 +25,7 @@ const ItemRight = ({ favoritesId, item: { dataObject, itemId } }) => (
             id={itemId}
         />
     </div>
-);
+));
 
 const ActiveOption = ({ opt, item }) => {
     const ActiveOptionIcon = ActiveOptionsIconMap[opt.id];
@@ -50,19 +50,20 @@ const ActiveOptions = ({ activeOptions, item }) => (
     )
 );
 
-export const NormalItem = ({ onSelectItem, item, favoritesId, id }) => {
+export const NormalItem = React.memo(({ onSelectItem, item, disableAll, favoritesId, id }) => {
     const itemClass = id ? `${id}-subcategory-item-${item.itemId}` : `subcategory-item-${item.itemId}`;
+
     return (
         <div
             className={`cq-item ${item.selected ? 'selected ' : ''} ${itemClass}`}
             onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
-            disabled={!item.enabled}
+            disabled={!item.enabled || disableAll}
         >
             <ItemLeft item={item} />
             <ItemRight item={item} favoritesId={favoritesId} />
         </div>
     );
-};
+});
 
 export const ActiveItem = ({ item, favoritesId, activeOptions }) => (
     <div

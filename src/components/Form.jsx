@@ -144,25 +144,33 @@ export class ColorPicker extends React.Component {
         }
     };
 
+    defaultColor = () => (this.props.theme === 'light' ? '#000000' : '#ffffff')
+
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.state.open !== nextState.open;
+        return (this.state.open !== nextState.open)
+        || (this.props.color !== nextProps.color)
+        || (this.props.theme !== nextProps.theme);
     }
 
     render() {
         const { color, setColor } = this.props;
-        const backgroundColor = color === 'auto' ? '#000000' : color;
+        const backgroundColor = color === 'auto' ? this.defaultColor() : color;
 
         return (
             <div className="cq-color-picker">
                 <div
-                    ref={(ref) => { this.titleRef = ref; }}
                     className="title"
-                    style={{ backgroundColor }}
-                    onClick={this.onClick}
-                />
+                >
+                    <div
+                        ref={(ref) => { this.titleRef = ref; }}
+                        onClick={this.onClick}
+                        className="input-color"
+                        style={{ backgroundColor }}
+                    />
+                </div>
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
@@ -195,29 +203,40 @@ export const Switch = ({
 );
 
 // NumericInput fires onChange on Enter or onBlur
-export class NumericInput extends React.Component {
-    state = {};
+export class NumericInput extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            originalValue: '',
+            value: '',
+        };
 
-    componentWillMount() {
-        const { value } = this.props;
-        this.setState({
-            originalValue: value,
-            value,
-        });
+        this.onUpdateValue = this.onUpdateValue.bind(this);
     }
 
-    componentWillReceiveProps(newProps) {
-        const { value } = newProps;
-        if (value !== this.state.originalValue) {
-            this.setState({
+    componentDidMount() {
+        this.setState(() => ({
+            originalValue: this.props.value,
+            value: this.props.value,
+        }));
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const { value, min, max, onChange } = props;
+        let val = value;
+        if (value !== state.originalValue) {
+            if (max !== undefined && value > max) {
+                val = max;
+            } else if (min !== undefined && value < min) {
+                val = min;
+            }
+            onChange(val);
+            return {
                 originalValue: value,
-                value,
-            }, this.fireOnChange);
+                value: val,
+            };
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.value !== nextState.value;
+        return null;
     }
 
     fireOnChange = () => {
@@ -233,7 +252,9 @@ export class NumericInput extends React.Component {
     };
 
     onUpdateValue = (e) => {
-        this.setState({ value: e.target.value });
+        e.persist();
+
+        this.setState(() => ({ value: e.target.value }));
     };
 
     fireOnEnter = (e) => {

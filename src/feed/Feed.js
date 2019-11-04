@@ -7,6 +7,7 @@ import ServerTime from '../utils/ServerTime';
 
 class Feed {
     static get EVENT_MASTER_DATA_UPDATE() { return 'EVENT_MASTER_DATA_UPDATE'; }
+    static get EVENT_MASTER_DATA_REINITIALIZE() { return 'EVENT_MASTER_DATA_REASSIGN'; }
     static get EVENT_COMPARISON_DATA_UPDATE() { return 'EVENT_COMPARISON_DATA_UPDATE'; }
     static get EVENT_START_PAGINATION() { return 'EVENT_START_PAGINATION'; }
     static get EVENT_ON_PAGINATION() { return 'EVENT_ON_PAGINATION'; }
@@ -40,15 +41,6 @@ class Feed {
 
         if (!this.endEpoch) {
             if (this.startEpoch) {
-                const key = this._getKey({
-                    symbol     : this._mainStore.state.symbol,
-                    granularity: this._mainStore.state.granularity,
-                });
-
-                if (this._activeStreams[key]) {
-                    this._forgetStream(key);
-                }
-
                 dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
             }
         } else {
@@ -70,6 +62,10 @@ class Feed {
 
     scaleChart() {
         if (this.startEpoch) {
+            if (this._stx.animations.liveScroll && this._stx.animations.liveScroll.running) {
+                this._stx.animations.liveScroll.stop();
+            }
+
             if (!this.endEpoch) {
                 this._stx.maxMasterDataSize = 0;
                 this._stx.chart.lockScroll = true;
@@ -79,7 +75,8 @@ class Feed {
             }
 
             this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
-            this._stx.chart.scroll = this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 10) || 1);
+            this._stx.chart.scroll = this._stx.chart.dataSet.length;
+            this._stx.chart.isScrollLocationChanged = true;
             this._stx.draw();
         }
     }
@@ -89,6 +86,9 @@ class Feed {
 
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
     unsubscribe({ symbol, period, interval }) {
+        // the chart forgets the ticks_history of the main chart symbol before sending a new request in fetchInitialData function.
+        if (this._stx.chart.symbol === symbol) return;
+
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         this._forgetStream(key);
@@ -102,6 +102,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
+        this.setHasReachedEndOfData(false);
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
@@ -156,11 +157,17 @@ class Feed {
             }
 
             try {
+                // The chart should forget all ticks_history subscriptions when the symbol/granularity of the main chart is changed before sending the new request.
+                if (!isComparisonChart) {
+                    this.unsubscribeAll();
+                }
+
                 quotes = await subscription.initialFetch();
             } catch (error) {
                 const { message: text } = error;
                 this._mainStore.notifier.notify({
                     text,
+                    type: 'error',
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
@@ -170,6 +177,7 @@ class Feed {
             subscription.onChartData((tickResponse) => {
                 // Append comming ticks to chart only if it belongs to selected symbol after symbol changes
                 if (isComparisonChart || symbol === this._stx.chart.symbol) {
+                    if (this._stx.isDestroyed) return;
                     this._appendChartData(tickResponse, key, comparisonChartSymbol);
                 }
             });
@@ -206,7 +214,7 @@ class Feed {
         this._mainStore.chart.updateYaxisWidth();
         this.scaleChart();
 
-        this._emitDataUpdate(quotes, comparisonChartSymbol);
+        this._emitDataUpdate(quotes, comparisonChartSymbol, true);
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
@@ -231,6 +239,7 @@ class Feed {
             callback({ moreAvailable: false, quotes: [] });
             if (isMainChart) { // ignore comparisons
                 this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+                this.setHasReachedEndOfData(true);
             }
             return;
         }
@@ -239,6 +248,7 @@ class Feed {
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - Math.ceil(2.8 * 365 * 24 * 60 * 60); /* == 3 Years */
         let result = { quotes: [] };
+        let firstEpoch;
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
@@ -247,12 +257,26 @@ class Feed {
                     start: Math.floor(Math.max(start, startLimit)),
                     end,
                 });
-                const firstEpoch = Feed.getFirstEpoch(response);
+
+                if (response.error) {
+                    const { message: text } = response.error;
+                    this.loader.hide();
+                    this._mainStore.notifier.notify({
+                        text,
+                        type: 'error',
+                        category: 'activesymbol',
+                    });
+                    callback({ error: response.error });
+                    return;
+                }
+
+                firstEpoch = Feed.getFirstEpoch(response);
                 if (firstEpoch === undefined || firstEpoch === end) {
                     const newStart = start - (end - start);
                     if (newStart <= startLimit) {
                         // Passed available range. Prevent anymore pagination requests:
                         callback({ moreAvailable: false, quotes: [] });
+                        this.setHasReachedEndOfData(true);
                         return;
                     }
                     // Recursively extend the date range for more data until we exceed available range
@@ -260,6 +284,11 @@ class Feed {
                     return;
                 }
                 result.quotes = TickHistoryFormatter.formatHistory(response);
+
+                if (firstEpoch <= startLimit) {
+                    callback({ moreAvailable: false, quotes: [] });
+                    this.setHasReachedEndOfData(true);
+                }
             } catch (err) {
                 console.error(err);
                 result = { error: err };
@@ -268,7 +297,16 @@ class Feed {
 
         callback(result);
         if (isMainChart) { // ignore comparisons
-            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end });
+            // prevent overlapping by setting pagination end as firstEpoch
+            // if 'end' is greater than firstEpoch from feed
+            const paginationEnd = end > firstEpoch ? firstEpoch : end;
+            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end: paginationEnd });
+        }
+    }
+
+    setHasReachedEndOfData(hasReachedEndOfData) {
+        if (this._mainStore.state.hasReachedEndOfData !== hasReachedEndOfData) {
+            this._mainStore.state.hasReachedEndOfData = hasReachedEndOfData;
         }
     }
 
@@ -322,13 +360,16 @@ class Feed {
                 noCreateDataSet: true,
             });
         } else {
-            this._stx.updateChartData(quotes, null, { allowReplaceOHL: true });
+            this._stx.updateChartData(quotes, null, {
+                allowReplaceOHL: true,
+            });
+            this._stx.createDataSet();
         }
 
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
 
-    _emitDataUpdate(quotes, comparisonChartSymbol) {
+    _emitDataUpdate(quotes, comparisonChartSymbol, isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
         const prevClose = (prev !== undefined) ? prev.Close : undefined;
         const dataUpdate = {
@@ -337,8 +378,12 @@ class Feed {
         };
 
         if (!comparisonChartSymbol) {
-            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
-            this._mainStore.chart.setChartAvailability(true);
+            if (isChartReinitialized) {
+                this._emitter.emit(Feed.EVENT_MASTER_DATA_REINITIALIZE);
+                this._mainStore.chart.setChartAvailability(true);
+            } else {
+                this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
+            }
         } else {
             this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
                 symbol: comparisonChartSymbol,
@@ -364,6 +409,14 @@ class Feed {
 
     offMasterDataUpdate(callback) {
         this._emitter.off(Feed.EVENT_MASTER_DATA_UPDATE, callback);
+    }
+
+    onMasterDataReinitialize(callback) {
+        this._emitter.on(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
+    }
+
+    offMasterDataReinitialize(callback) {
+        this._emitter.off(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
     }
 
     onComparisonDataUpdate(callback) {
@@ -424,6 +477,7 @@ class Feed {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = (this._stx.chart.symbol !== symbol) ? symbol : undefined;
         this._activeStreams[key].resume().then((quotes) => {
+            if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });
     }

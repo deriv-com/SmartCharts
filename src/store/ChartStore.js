@@ -25,6 +25,7 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
+// import '../utils/raf';
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
@@ -59,6 +60,7 @@ class ChartStore {
     holderStyle;
     state;
     onMessage = null;
+    defaultMinimumBars = 5;
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;
@@ -255,9 +257,9 @@ class ChartStore {
                 if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
-                    exactScroll = parseInt(exactScroll * 0.8, 10);
+                    exactScroll = parseInt(exactScroll * 0.8, 10); // eslint-disable-line
                 } else if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(exactScroll * 0.9, 10);
+                    exactScroll = parseInt(exactScroll * 0.9, 10); // eslint-disable-line
                 }
 
                 if (params.animate) {
@@ -289,9 +291,14 @@ class ChartStore {
             const context = ctx || this.chart.context;
             // SmartChart Team: this prop modified
             const margin = 9;
-            const height = 24;
-            let radius = 0;
-            this.canvasFont('stx_price_label', context);
+            let height = 24;
+            let radius;
+
+            if (this.labelType === 'currentSpot') {
+                this.canvasFont('stx_current_hr_up', context);
+            } else {
+                this.canvasFont('stx_price_label', context);
+            }
             const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
             const textWidth = context.measureText(txt).width;
             let width;
@@ -335,9 +342,13 @@ class ChartStore {
 
             // as crosshair and countdown style is `rect`, so due to previous rule we should
             // increase there x position to fit the y-axis
-            if (this.labelType !== 'crosshair' && this.labelType !== 'countdown') {
-                x += 14;
+            x += 1;
+            if (this.labelType === 'currentSpot') {
+                x += 13;
                 left  -= 8;
+                radius = 0;
+            } else if (this.labelType === 'crosshair') {
+                height = 30;
             }
 
             const params = {
@@ -365,16 +376,16 @@ class ChartStore {
             requestAPI,
             requestSubscribe,
             requestForget,
+            requestForgetStream,
             isMobile,
             enableRouting,
             onMessage,
             settings,
             onSettingsChange,
         } = props;
-        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget);
-
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
-        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api));
+        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
 
         const { chartSetting } = this.mainStore;
@@ -386,10 +397,11 @@ class ChartStore {
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = (granularity !== undefined) ? granularity : this.defaults.granularity;
         const engineParams = {
-            maxMasterDataSize: 5000, // cap size so tick_history requests do not become too large
+            maxMasterDataSize: this.getMaxMasterDataSize(this.granularity), // cap size so tick_history requests do not become too large
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
+            yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
                 whitespace: isMobile ? 50 : 150,
@@ -409,7 +421,7 @@ class ChartStore {
                 gaplines: true,
                 dynamicYAxis: true,
             },
-            minimumLeftBars: 2,
+            minimumLeftBars: this.defaultMinimumBars,
             yTolerance: 999999, // disable vertical scrolling
         };
         let chartLayout = {
@@ -427,6 +439,26 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
+        // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
+        // let defaultMinimumBars = this.defaultMinimumBars;
+        // if (stxx.chart.maxTicks - 10 > 50) {
+        //     defaultMinimumBars = 50;
+        // }
+        // stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
+
+        // macos trackpad is so sensitive that it'll break our zoom animation.
+        // unfortunately there is no way to detect a trackpad from javascript,
+        // here we drop 'wheel' events shorter that 40ms
+        // TODO: email chartiq support to fix this.
+        const org_run = stxx.animations.zoom.run.bind(stxx.animations.zoom);
+        let wheelInMotion = false;
+        stxx.animations.zoom.run = (fc, startValues, endValues) => {
+            if (wheelInMotion) return;
+            wheelInMotion = true;
+            setTimeout(() => { wheelInMotion = false; }, 40);
+            return org_run(fc, startValues, endValues);
+        };
+
         stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
         ChartStore.chartCount += 1;
@@ -437,6 +469,7 @@ class ChartStore {
         manageElement.textContent = t.translate('right-click to manage');
 
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
+        // stxx.chart.lockScroll = true;
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
@@ -496,11 +529,6 @@ class ChartStore {
                     }
                 }));
 
-                if (this.state.importedLayout) {
-                    // Check if there is a layout set by importedLayout porp, import it here after chart is loaded
-                    this.state.importLayout();
-                }
-
                 stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                 stxx.container.addEventListener('mouseleave', this.onMouseLeave);
 
@@ -511,7 +539,7 @@ class ChartStore {
                     this.state.symbol,
                     this.state.granularity,
                 ], () => {
-                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined && !this.state.importedLayout)) {
+                    if (this.state.symbol !== undefined || (this.state.granularity !== undefined)) {
                         this.changeSymbol(this.state.symbol, this.state.granularity);
                     }
                 });
@@ -546,12 +574,10 @@ class ChartStore {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, false);
-                    this.mainStore.state.setChartClosed(false);
+                    this.chartClosedOpenThemeChange(false);
                     this.mainStore.notifier.notifyMarketOpen(name);
                 } else {
-                    this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, true);
-                    this.mainStore.state.setChartClosed(true);
+                    this.chartClosedOpenThemeChange(true);
                     this.mainStore.notifier.notifyMarketClose(name);
                 }
             }
@@ -561,6 +587,15 @@ class ChartStore {
             this.refreshChart();
         }
     };
+
+    getMaxMasterDataSize(granularity) {
+        let maxMasterDataSize = 5000;
+        // When granularity is 1 day
+        if (granularity === 86400) maxMasterDataSize = Math.floor(2.8 * 365);
+        // When granularity is 8 hours
+        else if (granularity === 28800) maxMasterDataSize = Math.floor(2.8 * 365 * 3);
+        return maxMasterDataSize;
+    }
 
     chartClosedOpenThemeChange(isChartClosed) {
         this.mainStore.state.setChartClosed(isChartClosed);
@@ -628,6 +663,7 @@ class ChartStore {
         let params;
         if (granularity !== undefined) {
             this.granularity = granularity;
+            this.stxx.maxMasterDataSize = this.getMaxMasterDataSize(this.granularity);
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
 
@@ -660,19 +696,22 @@ class ChartStore {
     }
 
     @action.bound updateYaxisWidth = () => {
-        if (this.stxx.masterData && this.stxx.masterData.length) {
+        if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
             const currentQuote = this.context.stx.currentQuote();
             if (currentQuote && currentQuote.Close) {
                 this.calculateYaxisWidth(currentQuote.Close);
             } else {
-                const lastDataWitClose = this.stxx.masterData.find(x => x.Close);
-                this.calculateYaxisWidth(lastDataWitClose.Close);
+                const lastDataWithClose = this.stxx.masterData.find(x => x.Close);
+                if (lastDataWithClose) {
+                    this.calculateYaxisWidth(lastDataWithClose.Close);
+                }
             }
         }
     }
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
+        if (!symbolObj) return;
         this.stxx.chart.symbolDisplay = symbolObj.name;
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
@@ -686,7 +725,9 @@ class ChartStore {
                 return;
             }
             this.state.restoreDrawings();
-            this.mainStore.chart.feed.scaleChart();
+            if (this.mainStore.chart.feed) {
+                this.mainStore.chart.feed.scaleChart();
+            }
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
@@ -719,13 +760,15 @@ class ChartStore {
     }
 
     setMainSeriesDisplay(name) {
-        // Set display name of main series (to be shown in crosshair tooltip)
-        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
-        // TODO, we use to use `field` field to recgnize main seris and show
-        // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
-        // we should find another way of detecting main series price, till then
-        // we found this temporary solution.
-        this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
+        if (this.stxx && this.stxx.chart) {
+            // Set display name of main series (to be shown in crosshair tooltip)
+            this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
+            // TODO, we use to use `field` field to recgnize main seris and show
+            // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
+            // we should find another way of detecting main series price, till then
+            // we found this temporary solution.
+            this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
+        }
     }
 
     // Makes requests to tick history API that will replace

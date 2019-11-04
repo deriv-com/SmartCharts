@@ -45,16 +45,19 @@ $transition-duration: 300ms;
         pointer-events: initial;
     }
     .title {
-        display: inline-block;
+        display: block;
         height: 20px;
         line-height: 20px;
-        padding: 1em 1.6em 0.5em;
+        padding: 9px 16px;
         box-sizing: content-box;
+        @include themify($themes) {
+            background: themed('DialogHeadBg');
+        }
 
         .title-text {
             display: inline-block;
             font-size: 1.2em;
-            font-weight: 400;
+            font-weight: bold;
         }
 
         @include themify($themes) {

@@ -43,7 +43,7 @@
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
-export default function animateChart(stx, animationParameters, easeMachine) {
+export default function animateChart(stx, animationParameters) {
     let params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,
@@ -52,7 +52,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
     animationParameters = CIQ.extend(params, animationParameters);
 
     if (params.tension) stx.chart.tension = animationParameters.tension;
-    stx.tickAnimator = easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 500);
+    stx.tickAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 320);
 
     let filterSession = false;
     let nextBoundary = null;
@@ -194,26 +194,29 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 }
                 newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
                 // console.log("animating: Old",symbol,' New : ',chart.symbol);
+
+                const progress = tickAnimator.fc(
+                    (Date.now() - tickAnimator.startTime), // delta time
+                    0,                                     // start value
+                    1,                                     // end value
+                    tickAnimator.ms,                       // duration
+                );
+
+                // the progress value will be used in "CurrentSpotStore.drawSpot" method.
+                // it's used to properly applow glow effect and position the current spot.
+                q.tickAnimationProgress = Math.min(progress, 1);
+                q.chartJustAdvanced = chartJustAdvanced;
+
                 const updateQuotes = [q];
                 if (chartJustAdvanced) updateQuotes.unshift(prevQuote);
                 self.updateChartData(updateQuotes, chart, newParams);
                 newParams.firstLoop = false;
                 if (tickAnimator.hasCompleted) {
-                    // console.log( 'animator has completed') ;
-                    // self.pendingScrollAdvance=false;
-                    // var possibleYAxisChange = chart.animatingHorizontalScroll;
                     unanimateScroll();
-                    /* if (possibleYAxisChange) { // <---- Logic no longer necessary
-                     // After completion, one more draw for good measure in case our
-                     // displayed high and low have changed, which would trigger
-                     // the y-axis animation
-                     setTimeout(function(){
-                     self.draw();
-                     }, 0);
-                     } */
                 }
             };
-        }
+        } /* end function */
+
         if (supportedChartType) {
             const quote = appendQuotes[appendQuotes.length - 1];
             this.prevQuote = this.currentQuote();  // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
@@ -281,9 +284,10 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                 if (this.animations.zoom.hasCompleted) {
                     const candleWidth = this.layout.candleWidth;
                     if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
-                        while (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
-                            chart.scroll++;
-                            this.micropixels -= candleWidth;
+                        if (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
+                            const count = Math.ceil(this.micropixels / candleWidth);
+                            this.scroll += count;
+                            this.micropixels -= count * candleWidth;
                         }
                     }
 
@@ -308,7 +312,7 @@ export default function animateChart(stx, animationParameters, easeMachine) {
                             chart.scroll = visibleTicks + 1;
                         } else {
                             this.setMaxTicks(chart.dataSet.length + (Math.floor(chart.dataSet.length / 5) || 2));
-                            chart.scroll = chart.dataSet.length + (Math.floor(chart.dataSet.length / 10) || 1);
+                            chart.scroll = chart.dataSet.length;
                         }
                     } else {
                         chart.scroll += 1;
@@ -319,12 +323,14 @@ export default function animateChart(stx, animationParameters, easeMachine) {
             }
             chart.closePendingAnimation = quote.Close;
             const start = (chartJustAdvanced && !linearChart) ? quote.Open : this.prevQuote.Close;
+
             tickAnimator.run(cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced), {
                 Close: start,
-                micropixels: this.nextMicroPixels,
+                micropixels: chart.lockScroll ? 0 : this.nextMicroPixels,
                 lineOffset: beginningOffset,
             }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
-            return true; // bypass default behavior in favor of animation
+
+            return true; // bypass default behavior if the animation is on
         }
     });
 }

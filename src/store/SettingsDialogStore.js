@@ -15,6 +15,7 @@ export default class SettingsDialogStore {
     constructor({
         mainStore, getContext, onDeleted, favoritesId, onChanged,
     }) {
+        this.mainStore = mainStore;
         this.getContext = getContext;
         this.onDeleted = onDeleted;
         this.favoritesId = favoritesId;
@@ -25,6 +26,7 @@ export default class SettingsDialogStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    get theme() { return this.mainStore.chartSetting.theme; }
 
     @computed get open() { return this.menu.open; }
     @action.bound setOpen(value) {
@@ -70,5 +72,6 @@ export default class SettingsDialogStore {
         Dialog: this.Dialog,
         open: this.open,
         id: this.id,
+        theme: this.theme,
     }));
 }
