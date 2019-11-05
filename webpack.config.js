@@ -211,6 +211,12 @@ if (isApp) {
             to: 'mobx-react.js',
         },
         {
+            from: production
+                ? './node_modules/moment/min/moment-with-locals.min.js'
+                : './node_modules/moment/min/moment-with-locales.js',
+            to: 'moment.js',
+        },
+        {
             from: './node_modules/react-transition-group/dist/react-transition-group.js',
             to: 'react-transition-group.js',
         },
