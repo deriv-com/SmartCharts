@@ -33,7 +33,6 @@ const config = {
     },
     devServer: {
         publicPath: '/dist/',
-        writeToDisk: true,
     },
     module: {
         rules: [
@@ -212,7 +211,7 @@ if (isApp) {
         },
         {
             from: production
-                ? './node_modules/moment/min/moment-with-locals.min.js'
+                ? './node_modules/moment/min/moment-with-locales.min.js'
                 : './node_modules/moment/min/moment-with-locales.js',
             to: 'moment.js',
         },
