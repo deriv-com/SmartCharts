@@ -44,6 +44,7 @@ import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-nor
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
 import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
+import SynthIndex from '../../sass/icons/sidebar/synth_index/ic-synth-normal.svg';
 import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg';
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
@@ -100,12 +101,14 @@ import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg
 /* Metals */
 import Metal from '../../sass/icons/active-symbols/metals/ic-metal.svg';
 
-/* Volatility Indices */
+/* Synthetic Indices */
 import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10-index.svg';
 import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25-index.svg';
 import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-index.svg';
 import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index.svg';
 import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index.svg';
+import Vol1S10 from '../../sass/icons/active-symbols/volatility/1s10 index/ic-10-1s-index.svg';
+import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 
@@ -212,6 +215,7 @@ export const CategoryIconMap = {
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
+    synthetic_index: Wrapper(SynthIndex),
     indicators: Wrapper(Indicator),
 };
 
@@ -276,6 +280,8 @@ export const ItemIconMap = {
     R_50: Wrapper(Vol50),
     R_75: Wrapper(Vol75),
     R_100: Wrapper(Vol100),
+    '1HZ10V': Wrapper(Vol1S10),
+    '1HZ100V': Wrapper(Vol1S100),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
 };

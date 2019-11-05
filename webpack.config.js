@@ -33,6 +33,7 @@ const config = {
     },
     devServer: {
         publicPath: '/dist/',
+        writeToDisk: true,
     },
     module: {
         rules: [

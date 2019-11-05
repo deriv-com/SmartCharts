@@ -78,7 +78,7 @@ export default class ActiveSymbols {
 
         // Categorize symbols in order defined by another array; there's probably a more
         // efficient algo for this, but for just ~100 items it's not worth the effort
-        const order = ['forex', 'indices', 'stocks', 'commodities', 'volidx'];
+        const order = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
         const orderedSymbols = [];
         for (const o of order) {
             for (const p of processedSymbols) {

@@ -26,7 +26,7 @@ import moment from 'moment';
 import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
-import { whyDidYouUpdate }  from 'why-did-you-update';
+import whyDidYouRender  from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -37,7 +37,11 @@ setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 if (process.env.NODE_ENV !== 'production') {
-    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+    whyDidYouRender(React, {
+        collapseGroups: true,
+        include: [/.*/],
+        exclude: [/^RenderInsideChart$/, /^inject-/],
+    });
 }
 
 const trackJSDomains = ['binary.com', 'binary.me'];
@@ -181,12 +185,6 @@ class App extends Component {
         }
     }
 
-    changeGranularity = (timePeriod) => {
-        this.setState({
-            granularity: timePeriod,
-        });
-    };
-
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
@@ -224,6 +222,8 @@ class App extends Component {
     handleDateChange = (value) => {
         this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
     };
+    changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
+    changeChartType = chartType => this.setState({ chartType });
 
     renderTopWidgets = () => (
         <>
@@ -240,16 +240,8 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={(chartType) => {
-                    this.setState({
-                        chartType,
-                    });
-                }}
-            />
-            <Timeperiod
-                onChange={this.changeGranularity}
-            />
+            <ChartTypes onChange={this.changeChartType} />
+            <Timeperiod onChange={this.changeGranularity} />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
