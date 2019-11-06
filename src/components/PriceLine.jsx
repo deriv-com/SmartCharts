@@ -17,7 +17,14 @@ class PriceLine extends Component {
             color,
             foregroundColor,
             width,
+            titleTag,
+            currency,
+            yAxiswidth,
+            offScreen,
+            hideOffscreenLines,
         } = this.props;
+
+        const showDragLine = hideOffscreenLines !== true || offScreen !== true;
 
         return (
             <div
@@ -26,11 +33,20 @@ class PriceLine extends Component {
                 ref={setDragLine}
                 hidden={!visible}
             >
-                <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
+                { showDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle, transform: titleTag && `translateX(-${yAxiswidth}px)` }} /> }
                 <div className="draggable-area" />
-                <div className="drag-price" style={{ backgroundColor: color, width }}>
-                    <div className="price">{priceDisplay}</div>
-                </div>
+                { !titleTag && (
+                    <div className="drag-price" style={{ backgroundColor: color, width }}>
+                        <div className="price">{priceDisplay}</div>
+                    </div>
+                )}
+                { titleTag && (
+                    <div className="label-wrapper" style={{ borderColor: color, right: yAxiswidth }}>
+                        <span className="label">{titleTag.label}</span>
+                        <span>{titleTag.amount < 0 ? '-' : '+'}</span>
+                        <span className={`symbols symbols--${currency.toLowerCase()}`}>{titleTag.amount.replace(/^-/, '')}</span>
+                    </div>
+                )}
             </div>
         );
     }

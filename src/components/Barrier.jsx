@@ -15,13 +15,14 @@ const Barrier = React.memo(({
     lineStyle,
     isInitialized,
     priceLabelWidth,
+    hideOffscreenLines,
 }) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLines={hideOffscreenLines} />
+        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLines={hideOffscreenLines} />
         <AboveShade />
         <BetweenShade />
         <BelowShade />
@@ -44,6 +45,7 @@ export default connect(
         isInitialized: store.isInitialized,
         destructor: store.destructor,
         priceLabelWidth: store.priceLabelWidth,
+        hideOffscreenLines: store.hideOffscreenLines,
     }),
     BarrierStore,
 )(Barrier);

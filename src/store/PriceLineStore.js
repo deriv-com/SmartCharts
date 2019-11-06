@@ -15,6 +15,8 @@ export default class PriceLineStore {
     // @observable zIndex;
     offScreen = false;
     // @observable uncentered = false;
+    @observable titleTag;
+    @observable currency;
 
 
     set zIndex(value) {
@@ -58,6 +60,10 @@ export default class PriceLineStore {
         let display = this._price.toFixed(this.pip);
         if (this.relative && this._price > 0) { display = `+${display}`; }
         return display;
+    }
+
+    @computed get yAxiswidth() {
+        return this.mainStore.chart.yAxiswidth;
     }
 
     get price() {
@@ -224,6 +230,11 @@ export default class PriceLineStore {
         draggable: this.draggable,
         isDragging: this.isDragging,
         init: this.init,
+        titleTag: this.titleTag,
+        currency: this.currency,
+        yAxiswidth: this.yAxiswidth,
+        offScreen: this.offScreen,
+        hideOffscreenLines: this.hideOffscreenLines,
         // zIndex: this.zIndex,
     }));
 }

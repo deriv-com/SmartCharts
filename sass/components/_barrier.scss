@@ -32,6 +32,24 @@
             border-color: inherit;
             border-top-width: 1px;
         }
+        .label-wrapper {
+            $label-height: 24px;
+            position: absolute;
+            color: var(--text-prominent);
+            min-width: 94px;
+            height: $label-height;
+            border: 1px solid;
+            background-color: var(--content-bg-color);
+            top: -$label-height/2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+
+            .label {
+                white-space: pre-wrap;
+            }
+        }
     }
 }
 
