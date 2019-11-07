@@ -76,7 +76,7 @@
     "file-loader": "^4.2.0",
     "fs": "^0.0.1-security",
     "gettext-loader2": "^0.3.0",
-    "gh-pages": "^2.1.0",
+    "gh-pages": "^2.1.1",
     "json-loader": "^0.5.7",
     "md5-file": "^4.0.0",
     "mini-css-extract-plugin": "^0.8.0",
