@@ -35,11 +35,11 @@
         .label-wrapper {
             $label-height: 24px;
             position: absolute;
-            color: var(--text-prominent);
+            color: var(--text-general);
             min-width: 94px;
             height: $label-height;
             border: 1px solid;
-            background-color: var(--content-bg-color);
+            background-color: var(--general-main-1);
             top: -$label-height/2;
             display: flex;
             align-items: center;

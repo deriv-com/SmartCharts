@@ -85,7 +85,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle, titleTag, currency, hideOffscreenLines,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle, titleTag, hideOffscreenLines, hidePriceLabel, barrierTitle,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -98,9 +98,10 @@ export default class BarrierStore {
             if (isValidProp(low)) { this.low_barrier = low; }
             if (onChange) { this.onBarrierChange = onChange; }
             if (titleTag) { this.titleTag = titleTag; }
-            if (currency) { this.currency = currency; }
+            if (barrierTitle) { this.barrierTitle = barrierTitle; }
             this.lineStyle = lineStyle;
             this.hidePriceLines = !!hidePriceLines;
+            this.hidePriceLabel = !!hidePriceLabel;
             this.hideOffscreenLines = !!hideOffscreenLines;
         }));
     }
