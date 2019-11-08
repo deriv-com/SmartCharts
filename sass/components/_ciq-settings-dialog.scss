@@ -89,6 +89,7 @@
     .items {
         padding: 16px 0;
         flex-grow: 1;
+        min-width: 360px;
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
         }

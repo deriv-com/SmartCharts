@@ -22,7 +22,7 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
-import Close from '../../sass/icons/close/ic-close.svg';
+import Close from '../../sass/icons/common/ic-close.svg';
 import CloseCircle from '../../sass/icons/close/ic-close-circle.svg';
 import CloseBold from '../../sass/icons/close/ic-close-bold.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
