@@ -25,6 +25,7 @@ class ChartState {
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
+    @observable modalMode;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -72,6 +73,7 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
+        modalMode,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -89,6 +91,11 @@ class ChartState {
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
             if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (modalMode !== this.modalMode) {
+            this.modalMode = modalMode;
+            this.mainStore.chart.onModalDialog(modalMode);
         }
 
         if (symbol !== this.symbol) {

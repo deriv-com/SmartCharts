@@ -26,6 +26,9 @@ import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
+import Dialog          from '../components/Dialog.jsx';
+import MenuStore       from './MenuStore';
+
 
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
@@ -71,6 +74,8 @@ class ChartStore {
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
+    @observable SimpleDialog;
+    @observable TabularDialog;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -535,6 +540,12 @@ class ChartStore {
                 this.contextPromise.resolve(this.context);
                 this.resizeScreen();
 
+                this.SimpleMenu = new MenuStore(this.mainStore, { route:'simple-modal' });
+                this.SimpleDialog = this.SimpleMenu.dialog.connect(Dialog);
+
+                this.TabularMenu = new MenuStore(this.mainStore, { route:'tabular-modal' });
+                this.TabularDialog = this.TabularMenu.dialog.connect(Dialog);
+
                 reaction(() => [
                     this.state.symbol,
                     this.state.granularity,
@@ -769,6 +780,11 @@ class ChartStore {
             // we found this temporary solution.
             this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
         }
+    }
+
+    @action.bound onModalDialog(dialogMode) {
+        if (this.SimpleMenu) this.SimpleMenu.setOpen(dialogMode === 'simple');
+        if (this.TabularMenu) this.TabularMenu.setOpen(dialogMode === 'tabular');
     }
 
     // Makes requests to tick history API that will replace

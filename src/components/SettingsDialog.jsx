@@ -10,8 +10,6 @@ import {
     NumberColorPicker,
     FontSetting,
 } from './Form.jsx';
-// import { DeleteIcon } from './Icons.jsx';
-// import Favorite from './Favorite.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
 import 'react-tabs/style/react-tabs.css';
 
@@ -128,133 +126,59 @@ const DoneButton = ({
     </div>
 );
 
-// const SettingTabs = ({
-//     onTabClick,
-//     activeTab,
-// }) => (
-//     <div className="tabs">
-//         <div
-//             onClick={() => onTabClick('settings')}
-//             className={activeTab === 'settings' ? 'active' : ''}
-//         > Settings
-//         </div>
-//         <div
-//             onClick={() => onTabClick('description')}
-//             className={activeTab === 'description' ? 'active' : ''}
-//         > Description
-//         </div>
-//         <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
-//     </div>
-// );
-
 const SettingsDialog = ({
-    // id,
     items, // [{ id, title, value, defaultValue, type }]
     title,
     description,
-    // activeTab,
     setOpen,
     showTabs,
-    // onTabClick,
-    // onDeleteClick,
-    // favoritesId,
     onResetClick,
     onItemChange,
     Dialog,
-    open,
     theme,
 }) => (
-    <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
-        <Dialog
-            className="cq-dialog cq-settings-dialog"
-            title={title}
-            enableTabular={showTabs}
-        >
-            {showTabs
-                ? (
-                    <Tabs className="tabs--vertical">
-                        <TabList>
-                            <Tab>Settings</Tab>
-                            <Tab>Description</Tab>
-                        </TabList>
-                        <TabPanel>
-                            <SettingsPanel
-                                items={items}
-                                theme={theme}
-                                onItemChange={onItemChange}
-                            />
-                            <div className="buttons">
-                                <ResetButton onResetClick={onResetClick} />
-                                <DoneButton setOpen={setOpen} />
-                            </div>
-                        </TabPanel>
-                        <TabPanel>
-                            {description}
-                        </TabPanel>
-                    </Tabs>
-                ) : (
-                <>
-                    <SettingsPanel
-                        items={items}
-                        theme={theme}
-                        onItemChange={onItemChange}
-                    />
-                    <div className="buttons">
-                        <ResetButton onResetClick={onResetClick} />
-                        <DoneButton setOpen={setOpen} />
-                    </div>
-                </>
-                )}
-        </Dialog>
-    </div>
+    <Dialog
+        className="cq-dialog cq-settings-dialog"
+        title={title}
+        enableTabular={showTabs}
+        enableOverlay // this temprary, we remove it when all menus convert to modal
+    >
+        {showTabs
+            ? (
+                <Tabs className="tabs--vertical">
+                    <TabList>
+                        <Tab>Settings</Tab>
+                        <Tab>Description</Tab>
+                    </TabList>
+                    <TabPanel>
+                        <SettingsPanel
+                            items={items}
+                            theme={theme}
+                            onItemChange={onItemChange}
+                        />
+                        <div className="buttons">
+                            <ResetButton onResetClick={onResetClick} />
+                            <DoneButton setOpen={setOpen} />
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        {description}
+                    </TabPanel>
+                </Tabs>
+            ) : (
+            <>
+                <SettingsPanel
+                    items={items}
+                    theme={theme}
+                    onItemChange={onItemChange}
+                />
+                <div className="buttons">
+                    <ResetButton onResetClick={onResetClick} />
+                    <DoneButton setOpen={setOpen} />
+                </div>
+            </>
+            )}
+    </Dialog>
+
 );
-
-// <>
-//     <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
-//         <div className="title">{title}</div>
-//         <div className="icons">
-//             { onDeleteClick && (
-//                 <DeleteIcon
-//                     onClick={onDeleteClick}
-//                     className="margin"
-//                 />
-//             )}
-//             { favoritesId
-//         && (
-//             <Favorite
-//                 id={id}
-//                 category={favoritesId}
-//             />
-//         )}
-//         </div>
-//     </div>
-
-//     { showTabs && (
-//         <SettingTabs
-//             activeTab={activeTab}
-//             onTabClick={onTabClick}
-//         />
-//     )}
-
-//     { activeTab === 'settings'
-//         ? (
-//             <>
-//                 <SettingsPanel
-//                     items={items}
-//                     theme={theme}
-//                     onItemChange={onItemChange}
-//                 />
-//                 <div className="buttons">
-//                     <ResetButton onResetClick={onResetClick} />
-//                     <DoneButton setOpen={setOpen} />
-//                 </div>
-//             </>
-//         )
-//         :                    (
-//             <div className="description">
-//                 {description}
-//             </div>
-//         )
-//     }
-// </>
 export default SettingsDialog;
