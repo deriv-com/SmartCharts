@@ -128,7 +128,7 @@ class CrosshairStore {
             }
         }
 
-        if (!(CIQ.ChartEngine.insideChart
+        if (!(stx.insideChart
             && stx.layout.crosshair
             && stx.displayCrosshairs
             && !stx.overXAxis

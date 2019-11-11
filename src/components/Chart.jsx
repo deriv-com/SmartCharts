@@ -7,7 +7,6 @@ import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import BottomWidget from './BottomWidget.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
-import DrawingCursor from './DrawingCursor.jsx';
 import ChartTable from './ChartTable.jsx';
 import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
@@ -75,7 +74,6 @@ class Chart extends Component {
             chartContainerHeight,
             containerWidth,
             isChartClosed,
-            isDrawing,
             theme,
             position,
             bottomWidgets,
@@ -128,9 +126,8 @@ class Chart extends Component {
                                         enabledNavigationWidget
                                             && <NavigationWidget />
                                     }
-                                    <div className={`chartContainer ${isDrawing ? 'ciq-draw-mode' : ''}`} style={{ height: chartContainerHeight }}>
+                                    <div className="chartContainer" style={{ height: chartContainerHeight }}>
                                         <Crosshair />
-                                        <DrawingCursor />
                                     </div>
                                     <Loader />
                                     {!isChartAvailable && (
@@ -165,7 +162,6 @@ export default connect(({
     chartSetting,
     chartType,
     state,
-    drawingCursor,
 }) => ({
     init: chart.init,
     destroy: chart.destroy,
@@ -179,7 +175,6 @@ export default connect(({
     chartContainerHeight: chart.chartContainerHeight,
     containerWidth: chart.containerWidth,
     isChartClosed: state.isChartClosed,
-    isDrawing: drawingCursor.isDrawing,
     theme: chartSetting.theme,
     position: chartSetting.position,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
