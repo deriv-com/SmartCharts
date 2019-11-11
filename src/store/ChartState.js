@@ -7,9 +7,7 @@ class ChartState {
     @observable granularity;
     @observable chartType;
     @observable startEpoch;
-    @observable startEpochMargin;
     @observable endEpoch;
-    @observable endEpochMargin;
     @observable symbol;
     @observable isConnectionOpened;
     @observable isChartReady = false;
@@ -69,13 +67,11 @@ class ChartState {
         refreshActiveSymbols,
         removeAllComparisons,
         scrollToEpoch,
-        scrollToEpochOffset = 0,
         settings,
         shouldFetchTradingTimes = true,
         showLastDigitStats = false,
         startEpoch,
         symbol,
-        zoom,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -86,7 +82,6 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
         this.margin = margin;
-        this.scrollToEpochOffset = scrollToEpochOffset;
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
@@ -168,17 +163,6 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
-        if (zoom !== this.zoom) {
-            this.zoom = +zoom;
-            if (this.context && this.stxx && this.zoom) {
-                if (this.zoom >= 0) {
-                    // this.stxx.zoomIn(null, (Math.abs(100 - this.zoom) || 0.01) / 100);
-                } else {
-                    // this.stxx.zoomOut(null, (100 + Math.abs(this.zoom)) / 100);
-                }
-            }
-        }
-
         this.mainStore.chartSetting.setSettings(this.settings);
 
         if (this.stxx) {
@@ -204,6 +188,9 @@ class ChartState {
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
+        this.stxx.setStyle('stx_yaxis', 'color', Theme[`${theme}_chart_text`]);
+        this.stxx.setStyle('stx_xaxis', 'color', Theme[`${theme}_chart_text`]);
+        this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
         if (!this.rootNode) {
             this.rootNode = this.mainStore.chart.rootNode;
         }

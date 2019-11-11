@@ -103,6 +103,9 @@
         svg {
             pointer-events: none;
             transition: transform 0.6s;
+            @include themify($themes) {
+                fill: themed('DropdownText');
+            }
         }
         &.active {
             @include themify($themes) {
@@ -129,7 +132,6 @@
         border-radius: 4px;
         @include themify($themes) {
             background: themed('DropdownBg');
-            border: 1px solid themed('DropdownBorder');
         }
 
         &.active {
@@ -137,10 +139,13 @@
             opacity: 1;
             pointer-events: all;
             transition: opacity 0.3s, top 0.2s;
+            @include themify($themes) {
+                box-shadow: 0 16px 16px 0 themed('DropdownActiveShadow'), 0 0 16px 0 themed('DropdownActiveShadow');
+            }
         }
         .row {
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 8px 8px 9px;
 
             &:hover {
                 font-weight: bold;
@@ -211,6 +216,15 @@
         @include themify($themes) {
             background-color: themed('ColorPickerBg');
         }
+
+        .input-color {
+            height: 100%;
+            width: 100%;
+            border-radius: 4px;
+            @include themify($themes) {
+                border: 1px solid themed('ColorPickerInputBorder');
+            }
+        }
     }
     .dropdown {
         position: absolute;
@@ -221,10 +235,10 @@
         z-index: +2;
         width: 250px;
         padding: 8px;
-        box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
         transition: opacity 0.1s;
         border-radius: 4px;
         @include themify($themes) {
+            box-shadow: 0 16px 16px 0 themed('ColorPickerShadow'), 0 0 16px 0 themed('ColorPickerShadow');
             background: themed('ColorPickerBg');
         }
 
@@ -288,6 +302,29 @@
 
 .cq-numbercolorpicker, .cq-fontsetting {
     display: inline-flex;
+}
+
+.cq-numbercolorpicker {
+    input {
+        box-shadow: none !important;
+        @include themify($themes) {
+            background: themed('InputBg');
+            border: 1px solid themed('InputBorder') !important;
+            color: themed('InputText');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('InputHoverSBorder') !important;
+            }
+        }
+        &:focus {
+            @include themify($themes) {
+                color: themed('InputActiveSText');
+                border-color: themed('InputActiveSBorder') !important;
+            }
+        }
+    }
 }
 
 .cq-fontsetting {

@@ -24,6 +24,9 @@ export default class LastDigitStatsStore {
     latestData = [];
     lastSymbol = null;
     @observable bars = [];
+    // api tick
+    @observable lastTick = null;
+
 
     get api() {
         return this.mainStore.chart.api;
@@ -69,11 +72,8 @@ export default class LastDigitStatsStore {
         this.updateBars();
     }
 
-    // api tick
-    @observable last_tick = null;
-
     @action.bound onMasterDataUpdate({ Close, tick }) {
-        this.last_tick = tick;
+        this.lastTick = tick;
         if (this.marketDisplayName !== this.lastSymbol) {
             this.lastSymbol = this.marketDisplayName;
             // Symbol has changed

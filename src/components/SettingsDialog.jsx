@@ -15,6 +15,7 @@ import '../../sass/components/_ciq-settings-dialog.scss';
 
 const SettingsPanel = ({
     items,
+    theme,
     onItemChange,
 }) => {
     const renderMap = {
@@ -26,6 +27,7 @@ const SettingsPanel = ({
         ),
         colorpicker: item => (
             <ColorPicker
+                theme={theme}
                 color={item.value}
                 setColor={value => onItemChange(item.id, value)}
             />
@@ -158,6 +160,7 @@ const SettingsDialog = ({
     onItemChange,
     Dialog,
     open,
+    theme,
 }) => (
     <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
         <Dialog className="cq-dialog cq-settings-dialog">
@@ -193,6 +196,7 @@ const SettingsDialog = ({
                         <>
                             <SettingsPanel
                                 items={items}
+                                theme={theme}
                                 onItemChange={onItemChange}
                             />
                             <div className="buttons">
