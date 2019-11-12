@@ -222,10 +222,6 @@ export default class BarrierStore {
         this._high_barrier.titleTag = titleTag;
     }
 
-    set currency(currency) {
-        this._high_barrier.currency = currency;
-    }
-
     _drawShadedArea = () => {
         if (!this.isInitialized) { return; }
 

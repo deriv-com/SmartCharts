@@ -42,7 +42,7 @@ class PriceLine extends Component {
                     </div>
                 )}
                 { titleTag && barrierTitle && (
-                    <div className="label-wrapper" style={{ borderColor: color, right: yAxiswidth }}>
+                    <div className="label-wrapper" style={{ color, right: yAxiswidth }}>
                         {barrierTitle(titleTag)}
                     </div>
                 ) }
