@@ -33,7 +33,6 @@ const config = {
     },
     devServer: {
         publicPath: '/dist/',
-        writeToDisk: true,
     },
     module: {
         rules: [
@@ -156,6 +155,11 @@ const config = {
             commonjs2: 'react-transition-group',
             root: 'ReactTransitionGroup',
         },
+        moment: {
+            root: 'moment',
+            commonjs: 'moment',
+            commonjs2: 'moment',
+        },
     },
 };
 
@@ -204,6 +208,12 @@ if (isApp) {
                 ? './node_modules/mobx-react/index.min.js'
                 : './node_modules/mobx-react/index.js',
             to: 'mobx-react.js',
+        },
+        {
+            from: production
+                ? './node_modules/moment/min/moment-with-locales.min.js'
+                : './node_modules/moment/min/moment-with-locales.js',
+            to: 'moment.js',
         },
         {
             from: './node_modules/react-transition-group/dist/react-transition-group.js',
