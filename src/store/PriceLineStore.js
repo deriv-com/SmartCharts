@@ -15,7 +15,7 @@ export default class PriceLineStore {
     // @observable zIndex;
     offScreen = false;
     // @observable uncentered = false;
-    @observable titleTag;
+    @observable title;
 
 
     set zIndex(value) {
@@ -229,7 +229,7 @@ export default class PriceLineStore {
         draggable: this.draggable,
         isDragging: this.isDragging,
         init: this.init,
-        titleTag: this.titleTag,
+        title: this.title,
         yAxiswidth: this.yAxiswidth,
         offScreen: this.offScreen,
         hideOffscreenLines: this.hideOffscreenLines,

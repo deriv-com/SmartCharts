@@ -11,20 +11,19 @@ const Barrier = React.memo(({
     AboveShade,
     BetweenShade,
     BelowShade,
+    hideOffscreenLines,
     hidePriceLines,
-    hidePriceLabel,
     lineStyle,
     isInitialized,
     priceLabelWidth,
-    hideOffscreenLines,
-    barrierTitle,
+    title,
 }) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLines={hideOffscreenLines} barrierTitle={barrierTitle} hidePriceLabel={hidePriceLabel} />
-        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLines={hideOffscreenLines} barrierTitle={barrierTitle} hidePriceLabel={hidePriceLabel} />
+        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLines={hideOffscreenLines} title={title} />
+        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLines={hideOffscreenLines} title={title} />
         <AboveShade />
         <BetweenShade />
         <BelowShade />
@@ -42,14 +41,13 @@ export default connect(
         shadeColor: store.shadeColor,
         color: store.color,
         foregroundColor: store.foregroundColor,
+        hideOffscreenLines: store.hideOffscreenLines,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
         isInitialized: store.isInitialized,
         destructor: store.destructor,
         priceLabelWidth: store.priceLabelWidth,
-        hideOffscreenLines: store.hideOffscreenLines,
-        barrierTitle: store.barrierTitle,
-        hidePriceLabel: store.hidePriceLabel,
+        title: store.title,
     }),
     BarrierStore,
 )(Barrier);

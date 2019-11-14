@@ -85,7 +85,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle, titleTag, hideOffscreenLines, hidePriceLabel, barrierTitle,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle, title, hideOffscreenLines,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -97,11 +97,9 @@ export default class BarrierStore {
             if (isValidProp(high)) { this.high_barrier = high; }
             if (isValidProp(low)) { this.low_barrier = low; }
             if (onChange) { this.onBarrierChange = onChange; }
-            if (titleTag) { this.titleTag = titleTag; }
-            if (barrierTitle) { this.barrierTitle = barrierTitle; }
+            if (title) { this.title = title; }
             this.lineStyle = lineStyle;
             this.hidePriceLines = !!hidePriceLines;
-            this.hidePriceLabel = !!hidePriceLabel;
             this.hideOffscreenLines = !!hideOffscreenLines;
         }));
     }
@@ -216,10 +214,6 @@ export default class BarrierStore {
     set draggable(value) {
         this._high_barrier.draggable = value;
         this._low_barrier.draggable = value;
-    }
-
-    set titleTag(titleTag) {
-        this._high_barrier.titleTag = titleTag;
     }
 
     _drawShadedArea = () => {

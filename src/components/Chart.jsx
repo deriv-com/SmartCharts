@@ -78,7 +78,6 @@ class Chart extends Component {
             position,
             bottomWidgets,
             enabledNavigationWidget,
-            barrierTitle,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -104,7 +103,6 @@ class Chart extends Component {
                                         {barriers.map((barr, idx) => (
                                             <Barrier
                                                 key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
-                                                barrierTitle={barrierTitle}
                                                 {...barr}
                                             />
                                         ))}

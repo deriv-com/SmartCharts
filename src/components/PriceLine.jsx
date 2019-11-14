@@ -17,12 +17,10 @@ class PriceLine extends Component {
             color,
             foregroundColor,
             width,
-            titleTag,
+            title,
             yAxiswidth,
             offScreen,
             hideOffscreenLines,
-            barrierTitle,
-            hidePriceLabel,
         } = this.props;
 
         const showDragLine = hideOffscreenLines !== true || offScreen !== true;
@@ -34,18 +32,16 @@ class PriceLine extends Component {
                 ref={setDragLine}
                 hidden={!visible}
             >
-                { showDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle, transform: hidePriceLabel && `translateX(-${yAxiswidth}px)` }} /> }
+                { showDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
                 <div className="draggable-area" />
-                { !hidePriceLabel && (
-                    <div className="drag-price" style={{ backgroundColor: color, width }}>
-                        <div className="price">{priceDisplay}</div>
+                <div className={`drag-price ${title ? 'barrier-price' : ''}`} style={{ backgroundColor: color, width }}>
+                    <div className="price">{priceDisplay}</div>
+                </div>
+                { title && (
+                    <div className="label-wrapper" style={{ color, right: yAxiswidth }}>
+                        <span className="label">{title}</span>
                     </div>
                 )}
-                { titleTag && barrierTitle && (
-                    <div className="label-wrapper" style={{ color, right: yAxiswidth }}>
-                        {barrierTitle(titleTag)}
-                    </div>
-                ) }
             </div>
         );
     }
