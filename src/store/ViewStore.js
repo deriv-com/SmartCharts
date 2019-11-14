@@ -87,13 +87,13 @@ export default class ViewStore {
         const stx = this.stx;
         const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
 
+        this.mainStore.timeperiod.onGranularityChange(granularity);
         const importLayout = () => {
             const finishImportLayout = () => {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
                 if (this.loader) { this.loader.hide(); }
                 this.mainStore.state.setChartIsReady(true);
-                this.mainStore.state.setChartGranularity(granularity);
             };
             stx.importLayout(ViewStore.views[idx].layout, {
                 managePeriodicity: true,
