@@ -44,6 +44,7 @@ const config = {
                         options: {
                             extract: true,
                             spriteFilename: 'sprite-[hash:6].smartcharts.svg',
+                            esModule: false,
                         },
                     },
                     {
