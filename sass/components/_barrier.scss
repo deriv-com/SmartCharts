@@ -32,14 +32,11 @@
             border-color: inherit;
             border-top-width: 1px;
         }
-        .barrier-price {
-            border-radius: 0px;
-        }
         .label-wrapper {
             $label-height: 24px;
             position: absolute;
             height: $label-height;
-            background-color: var(--general-main-1);
+            background-image: linear-gradient(transparent 30%, var(--general-main-1) 50%, transparent 75%); /* stylelint-disable-line plugin/no-unsupported-browser-features */
             top: -11px;
             display: flex;
             align-items: center;
@@ -47,6 +44,7 @@
             font-size: 11px;
             padding: 3px 10px;
             font-weight: bold;
+
             .label {
                 white-space: pre-wrap;
             }

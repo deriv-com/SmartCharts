@@ -34,7 +34,7 @@ class PriceLine extends Component {
             >
                 { showDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
                 <div className="draggable-area" />
-                <div className={`drag-price ${title ? 'barrier-price' : ''}`} style={{ backgroundColor: color, width }}>
+                <div className="drag-price" style={{ backgroundColor: color, width }}>
                     <div className="price">{priceDisplay}</div>
                 </div>
                 { title && (
