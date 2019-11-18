@@ -13,7 +13,7 @@ export default class PriceLineStore {
     // @observable top = 0;
     @observable _price = 0;
     // @observable zIndex;
-    offScreen = false;
+    @observable offScreen = false;
     // @observable uncentered = false;
     @observable title;
 
@@ -166,6 +166,7 @@ export default class PriceLineStore {
         return price;
     }
 
+    @action.bound
     _calculateTop = () => {
         if (this.stx.currentQuote() === null) { return; }
 
