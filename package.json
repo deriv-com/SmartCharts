@@ -31,8 +31,8 @@
     "test": "cross-env NODE_ENV=test mocha --require @babel/register './+(src|app)/!(node_modules)/**/__tests__/*.spec.js'",
     "coverage": "cross-env NODE_ENV=test nyc yarn test",
     "start": "rimraf dist && cross-env BUILD_MODE='app' webpack-dev-server --mode=development --open  --hot --inline",
-    "gh-pages": "gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME}'",
-    "gh-pages:folder": "yarn gh-pages --src '{index.html,manifest.json,sw.js,dist/**}' --dest $1",
+    "gh-pages": "gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME,Dockerfile,.dockerignore,default.conf,.circleci/**}'",
+    "gh-pages:folder": "yarn gh-pages --src '{index.html,manifest.json,sw.js,dist/**,Dockerfile,.dockerignore,default.conf,.circleci/**}' --dest $1",
     "translations": "yarn build && node scripts/extract-translations.js ./dist/smartcharts.js",
     "deploy:production": "yarn build-travis && echo 'charts.binary.com' > CNAME  && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
     "deploy:beta": "yarn build-travis && yarn gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'"
