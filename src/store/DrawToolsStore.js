@@ -84,9 +84,9 @@ export default class DrawToolsStore {
         }
     };
 
-    @action.bound onDeleteHighlighted() {
+    @action.bound onDeleteHighlighted(callRightClick) {
         for (const drawing of this.stx.drawingObjects) {
-            if (drawing.highlighted && !drawing.permanent) {
+            if (callRightClick) {
                 this.showDrawToolDialog(drawing);
                 return true; // Override default behaviour; prevent ChartIQ from deleting the drawing
             }
