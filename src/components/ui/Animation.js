@@ -74,6 +74,7 @@ export default function animateChart(stx, animationParameters) {
     });
 
     stx.append('updateChartData', function (appendQuotes, chart, params) {
+        if (params.noCreateDataSet) return false;
         // These chart types are the only types supported by animation
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
 
@@ -99,6 +100,7 @@ export default function animateChart(stx, animationParameters) {
     });
 
     stx.prepend('updateChartData', function (appendQuotes, chart, params) {
+        if (params.noCreateDataSet) return false;
         const self = this;
         if (!chart) {
             chart = self.chart;

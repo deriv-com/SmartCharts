@@ -48,4 +48,21 @@ export class TickHistoryFormatter {
             };
         }
     }
+
+    static formatProposalTick(response) {
+        const { proposal, echo_req: request } = response;
+
+        if (proposal) {
+            return {
+                Date: getUTCDate(+proposal.spot_time),
+                Close: +proposal.spot,
+                tick: {
+                    epoch: proposal.spot_time,
+                    quotes: proposal.spot,
+                    symbol: request.symbol,
+                },
+            };
+        }
+        return null;
+    }
 }

@@ -25,7 +25,9 @@ class ChartState {
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
+    @observable hasAlternativeSource = false;
     chartControlsWidgets;
+    refToAddTick;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -49,6 +51,10 @@ class ChartState {
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
         this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
+
+        if (this.refToAddTick && typeof (this.refToAddTick) === 'function' && this.mainStore.chart.feed) {
+            this.refToAddTick(this.mainStore.chart.feed.appendChartDataByPropsalResposne.bind(this.mainStore.chart.feed));
+        }
     };
 
     @action.bound updateProps({
@@ -57,6 +63,7 @@ class ChartState {
         chartType,
         clearChart,
         endEpoch,
+        hasAlternativeSource = false,
         id,
         isAnimationEnabled = true,
         isConnectionOpened,
@@ -65,6 +72,7 @@ class ChartState {
         margin = 0,
         onExportLayout,
         refreshActiveSymbols,
+        refToAddTick,
         removeAllComparisons,
         scrollToEpoch,
         settings,
@@ -78,10 +86,12 @@ class ChartState {
 
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
+        this.hasAlternativeSource = hasAlternativeSource;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
         this.margin = margin;
+        this.refToAddTick = refToAddTick;
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;

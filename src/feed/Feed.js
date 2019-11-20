@@ -17,6 +17,7 @@ class Feed {
     get context() { return this._mainStore.chart.context; }
     get loader() { return this._mainStore.loader; }
     get margin() { return this._mainStore.state.margin; }
+    get hasAlternativeSource() { return this._mainStore.state.hasAlternativeSource; }
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -102,6 +103,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
+        this.tickQueue = [];
         this.setHasReachedEndOfData(false);
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
@@ -336,7 +338,7 @@ class Feed {
         return result;
     }
 
-    _appendChartData(quotes, key, comparisonChartSymbol) {
+    _appendChartData(quotes, key, comparisonChartSymbol, fromAlternativeSource = false) {
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
@@ -359,7 +361,24 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
+        } else if (this.hasAlternativeSource && !fromAlternativeSource) {
+            this.tickQueue.push(...quotes);
         } else {
+            if (this.tickQueue && this.tickQueue.length) {
+                if (this.tickQueue.slice(-1)[0].Date <= quotes.slice(-1)[0].Date) {
+                    quotes = this.tickQueue.slice(-1);
+
+                    this._stx.updateChartData(this.tickQueue.slice(0, -1), null, {
+                        noCreateDataSet: true,
+                        allowReplaceOHL: true,
+                    });
+
+                    this.tickQueue = [];
+                }
+            } else if (fromAlternativeSource) {
+                return;
+            }
+
             this._stx.updateChartData(quotes, null, {
                 allowReplaceOHL: true,
             });
@@ -369,6 +388,10 @@ class Feed {
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
 
+    appendChartDataByPropsalResposne(quote) {
+        const tick = TickHistoryFormatter.formatProposalTick(quote);
+        this._appendChartData([tick], tick.tick.symbol, null, true);
+    }
     _emitDataUpdate(quotes, comparisonChartSymbol, isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
         const prevClose = (prev !== undefined) ? prev.Close : undefined;
