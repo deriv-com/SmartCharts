@@ -26,7 +26,9 @@ export default class BarrierStore {
     @observable lineStyle = undefined;
     @observable isInitialized = false;
     @observable initializePromise = new PendingPromise();
-    @observable hideOffscreenLines = false;
+    @observable hideBarrierLine = false;
+    @observable hideOffscreenLine = false;
+
     _shadeState;
 
     @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
@@ -85,7 +87,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hidePriceLines, lineStyle, title, hideOffscreenLines,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenLine, hidePriceLines, lineStyle, title,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -99,8 +101,9 @@ export default class BarrierStore {
             if (onChange) { this.onBarrierChange = onChange; }
             if (title) { this.title = title; }
             this.lineStyle = lineStyle;
+            this.hideBarrierLine = !!hideBarrierLine;
             this.hidePriceLines = !!hidePriceLines;
-            this.hideOffscreenLines = !!hideOffscreenLines;
+            this.hideOffscreenLine = !!hideOffscreenLine;
         }));
     }
 

@@ -20,10 +20,11 @@ class PriceLine extends Component {
             title,
             yAxiswidth,
             offScreen,
-            hideOffscreenLines,
+            hideBarrierLine,
+            hideOffscreenLine,
         } = this.props;
 
-        const showDragLine = hideOffscreenLines !== true || offScreen !== true;
+        const showBarrierLine = !hideBarrierLine && (!hideOffscreenLine || !offScreen);
 
         return (
             <div
@@ -32,7 +33,7 @@ class PriceLine extends Component {
                 ref={setDragLine}
                 hidden={!visible}
             >
-                { showDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
+                { showBarrierLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
                 <div className="draggable-area" />
                 <div className="drag-price" style={{ backgroundColor: color, width }}>
                     <div className="price">{priceDisplay}</div>

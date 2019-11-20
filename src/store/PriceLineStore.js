@@ -233,7 +233,8 @@ export default class PriceLineStore {
         title: this.title,
         yAxiswidth: this.yAxiswidth,
         offScreen: this.offScreen,
-        hideOffscreenLines: this.hideOffscreenLines,
+        hideBarrierLine: this.hideBarrierLine,
+        hideOffscreenLine: this.hideOffscreenLine,
         // zIndex: this.zIndex,
     }));
 }
