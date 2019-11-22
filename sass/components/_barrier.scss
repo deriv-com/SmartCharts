@@ -45,10 +45,6 @@
             padding: 3px 10px;
             font-weight: bold;
 
-            .arrow-icon {
-                position: absolute;
-                transition: none;
-            }
             .title {
                 white-space: pre-wrap;
             }
@@ -81,6 +77,14 @@
     right: -1px;
     border: 1px solid inherit;
     border-radius: 4px;
+    .arrow-icon {
+        position: absolute;
+        transition: none;
+        height: 31px;
+        left: 4px;
+        background: var(--general-main-1);
+        width: calc(100% - 4px);
+    }
 }
 
 /*hover*/

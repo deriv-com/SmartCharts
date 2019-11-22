@@ -238,7 +238,7 @@ export function patchPixelFromChart(stx) {
     };
 }
 
-export const ARROW_OFFSET_HEIGHT = 30;
+export const ARROW_HEIGHT = 31;
 
 export const ARROW_DIRECTIONS = Object.freeze({
     UP: 'UP',

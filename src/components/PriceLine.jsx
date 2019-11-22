@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PriceLineArrow       from './PriceLineArrow.jsx';
 import PriceLineTitle       from './PriceLineTitle.jsx';
 
 class PriceLine extends Component {
@@ -38,8 +39,9 @@ class PriceLine extends Component {
                 <div className="draggable-area" />
                 <div className="drag-price" style={{ backgroundColor: color, width }}>
                     <div className="price">{priceDisplay}</div>
+                    { offScreen && arrowDirection && <PriceLineArrow arrowDirection={arrowDirection} color={color} /> }
                 </div>
-                { title && <PriceLineTitle arrowDirection={arrowDirection} color={color} title={title} offScreen={offScreen} yAxiswidth={yAxiswidth} />}
+                { title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} /> }
             </div>
         );
     }
