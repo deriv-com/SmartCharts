@@ -28,6 +28,7 @@ export default class BarrierStore {
     @observable initializePromise = new PendingPromise();
     @observable hideBarrierLine = false;
     @observable hideOffscreenLine = false;
+    @observable isSingleBarrier = false;
 
     _shadeState;
 
@@ -87,7 +88,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenLine, hidePriceLines, lineStyle, title,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenLine, hidePriceLines, lineStyle, title, arrowDirection, isSingleBarrier,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -104,7 +105,9 @@ export default class BarrierStore {
             this.hideBarrierLine = !!hideBarrierLine;
             this.hidePriceLines = !!hidePriceLines;
             this.hideOffscreenLine = !!hideOffscreenLine;
+            this.isSingleBarrier = !!isSingleBarrier;
         }));
+        if (arrowDirection) { this.arrowDirection = arrowDirection; }
     }
 
     @action.bound destructor() {
@@ -217,6 +220,14 @@ export default class BarrierStore {
     set draggable(value) {
         this._high_barrier.draggable = value;
         this._low_barrier.draggable = value;
+    }
+
+    get arrowDirection() {
+        return this._high_barrier.arrowDirection;
+    }
+
+    set arrowDirection(value) {
+        this._high_barrier.arrowDirection = value;
     }
 
     _drawShadedArea = () => {

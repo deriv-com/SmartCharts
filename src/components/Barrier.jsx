@@ -11,23 +11,26 @@ const Barrier = React.memo(({
     AboveShade,
     BetweenShade,
     BelowShade,
-    hideBarrierLine,
-    hideOffscreenLine,
     hidePriceLines,
     lineStyle,
     isInitialized,
     priceLabelWidth,
-    title,
+    isSingleBarrier,
+    ...props
 }) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLine={hideOffscreenLine} hideBarrierLine={hideBarrierLine} title={title} />
-        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} hideOffscreenLine={hideOffscreenLine} hideBarrierLine={hideBarrierLine} title={title} />
-        <AboveShade />
-        <BetweenShade />
-        <BelowShade />
+        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />
+        { !isSingleBarrier && (
+            <>
+                <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />
+                <AboveShade />
+                <BetweenShade />
+                <BelowShade />
+            </>
+        )}
     </div>
 )));
 
@@ -50,6 +53,7 @@ export default connect(
         destructor: store.destructor,
         priceLabelWidth: store.priceLabelWidth,
         title: store.title,
+        isSingleBarrier: store.isSingleBarrier,
     }),
     BarrierStore,
 )(Barrier);

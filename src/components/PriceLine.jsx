@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PriceLineTitle       from './PriceLineTitle.jsx';
 
 class PriceLine extends Component {
     componentDidMount() {
@@ -22,10 +23,10 @@ class PriceLine extends Component {
             offScreen,
             hideBarrierLine,
             hideOffscreenLine,
+            arrowDirection,
         } = this.props;
 
         const showBarrierLine = !hideBarrierLine && (!hideOffscreenLine || !offScreen);
-
         return (
             <div
                 className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
@@ -38,11 +39,7 @@ class PriceLine extends Component {
                 <div className="drag-price" style={{ backgroundColor: color, width }}>
                     <div className="price">{priceDisplay}</div>
                 </div>
-                { title && (
-                    <div className="label-wrapper" style={{ color, right: yAxiswidth }}>
-                        <span className="label">{title}</span>
-                    </div>
-                )}
+                { title && <PriceLineTitle arrowDirection={arrowDirection} color={color} title={title} offScreen={offScreen} yAxiswidth={yAxiswidth} />}
             </div>
         );
     }

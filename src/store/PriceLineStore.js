@@ -1,6 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
+import { ARROW_OFFSET_HEIGHT } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
@@ -16,6 +17,7 @@ export default class PriceLineStore {
     @observable offScreen = false;
     // @observable uncentered = false;
     @observable title;
+    @observable arrowDirection;
 
 
     set zIndex(value) {
@@ -197,6 +199,10 @@ export default class PriceLineStore {
             top = 10;
         }
 
+        if (this.offScreen && this.arrowDirection) {
+            top += this.arrowDirection === 'UP' ? +ARROW_OFFSET_HEIGHT : -ARROW_OFFSET_HEIGHT;
+        }
+
         return Math.round(top) | 0;
     }
 
@@ -235,6 +241,7 @@ export default class PriceLineStore {
         offScreen: this.offScreen,
         hideBarrierLine: this.hideBarrierLine,
         hideOffscreenLine: this.hideOffscreenLine,
+        arrowDirection: this.arrowDirection,
         // zIndex: this.zIndex,
     }));
 }
