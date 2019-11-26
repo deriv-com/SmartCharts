@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -82,8 +81,6 @@ class Chart extends Component {
             position,
             bottomWidgets,
             enabledNavigationWidget,
-            SimpleDialog,
-            TabularDialog,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -156,84 +153,6 @@ class Chart extends Component {
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
                     <ChartTable />
-                    {SimpleDialog ? (
-                        <SimpleDialog
-                            className="cq-dialog cq-settings-dialog"
-                            title="Simple Dialog"
-                            enableTabular={false}
-                            enableOverlay
-                        >
-                            <div className="items">
-                                <div style={{
-                                    padding: 30,
-                                    fontSize: 13,
-                                }}
-                                >
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                    </p>
-                                </div>
-                            </div>
-                        </SimpleDialog>
-                    ) : ''}
-                    { TabularDialog ? (
-                        <TabularDialog
-                            className="cq-dialog cq-settings-dialog"
-                            title="Tabular Dialog"
-                            enableTabular
-                            enableOverlay
-                        >
-                            <Tabs className="tabs--vertical">
-                                <TabList>
-                                    <Tab>Settings</Tab>
-                                    <Tab>Description</Tab>
-                                </TabList>
-                                <TabPanel>
-                                    <div className="items">
-                                        <div style={{
-                                            padding: 30,
-                                            fontSize: 13,
-                                        }}
-                                        >
-                                            <h3> Settings Content </h3>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </TabPanel>
-                                <TabPanel>
-                                    <div className="items">
-                                        <div style={{
-                                            padding: 30,
-                                            fontSize: 13,
-                                        }}
-                                        >
-                                            <h3> Description Content </h3>
-                                            <p>
-                                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                                                proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </TabPanel>
-                            </Tabs>
-                        </TabularDialog>
-                    ) : ''}
                 </div>
             </div>
         );
@@ -265,6 +184,4 @@ export default connect(({
     theme: chartSetting.theme,
     position: chartSetting.position,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
-    SimpleDialog: chart.SimpleDialog,
-    TabularDialog: chart.TabularDialog,
 }))(Chart);

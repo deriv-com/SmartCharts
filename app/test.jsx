@@ -172,7 +172,6 @@ class App extends Component {
             barrierType: '',
             draggable: true,
             markers: [],
-            modalMode: null,
         };
     }
 
@@ -403,15 +402,12 @@ class App extends Component {
         window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages ? 'true' : 'false'}`;
     }
 
-    onSimpleModal = () => this.setState(prevState => ({ modalMode: prevState.modalMode !== 'simple' ? 'simple' : null }));
-    onTabularModal = () => this.setState(prevState => ({ modalMode: prevState.modalMode !== 'tabular' ? 'tabular' : null }));
-
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
-            enabledNavigationWidget, activeLanguage, modalMode } = this.state;
+            enabledNavigationWidget, activeLanguage } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -451,7 +447,6 @@ class App extends Component {
                         barriers={barriers}
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
-                        modalMode={modalMode}
                     >
                         {endEpoch ? (
                             <Marker
@@ -472,7 +467,6 @@ class App extends Component {
                             />
                         ))}
                     </SmartChart>
-
                 </div>
                 <div className="action-section">
                     <div className="form-row">
@@ -567,10 +561,6 @@ class App extends Component {
                     <div className="form-row">
                         Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button> <br />
                         LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
-                    </div>
-                    <div className="form-row">
-                        <button type="button" onClick={this.onSimpleModal}>Simple Modal</button>
-                        <button type="button" onClick={this.onTabularModal}>Tabular Modal</button>
                     </div>
                 </div>
             </div>

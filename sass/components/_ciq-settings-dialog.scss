@@ -114,12 +114,6 @@
             }
         }
     }
-    // this is for test seciton, should be removed after merging
-    p {
-        @include themify($themes) {
-            color: themed('DialogBodyText');
-        }
-    }
     .buttons {
         display: flex;
         justify-content: space-between;
