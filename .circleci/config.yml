@@ -30,6 +30,28 @@ commands:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
+  yarn_install:
+    description: "Install node modules"
+    steps:
+      - restore_cache:
+          name: Restoring node_modules
+          keys:
+            - source-v1-modules-{{ checksum "yarn.lock" }}
+            - source-v1-modules
+      - run:
+          name: yarn install
+          command: yarn install
+      - save_cache:
+          name: Save node_module
+          key: source-v1-modules-{{checksum "yarn.lock" }}
+          paths:
+            - "node_modules"
+  build:
+    description: Build App
+    steps:
+      - run:
+          name: Building App
+          command: yarn build-travis
   docker_build:
     description: "Build Docker image"
     steps:
@@ -37,7 +59,7 @@ commands:
       - run: 
           name: Building docker image
           command: |
-            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1} .
+            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1} .
   docker_push:
     description: "Push image to docker hub"
     steps:
@@ -45,7 +67,7 @@ commands:
           name: Pushing Image to docker hub
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
   k8s_deploy:
     description: "Deploy to k8s cluster"
     steps:
@@ -54,14 +76,16 @@ commands:
           name: Deploying to k8s cluster for service binary-charts
           command: |
             echo $CA_CRT | base64 --decode > ca.crt
-            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/charts-binary-com charts-binary-com=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/charts-binary-com-beta charts-binary-com-beta=${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
 
 jobs:
   release:
     docker:
-      - image: circleci/ruby:2.6.5
+      - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
+      - yarn_install
+      - build
       - docker_build
       - docker_push
       - k8s_deploy
@@ -72,5 +96,5 @@ workflows:
       - release:
           filters:
             branches:
-              only: /^gh-pages$/
+              only: /^dev$/
 
