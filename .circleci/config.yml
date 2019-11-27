@@ -36,14 +36,14 @@ commands:
       - restore_cache:
           name: Restoring node_modules
           keys:
-            - source-v1-{{ checksum "yarn.lock" }}
-            - source-v1-
+            - source-v1-modules-{{ checksum "yarn.lock" }}
+            - source-v1-modules
       - run:
           name: yarn install
           command: yarn install
       - save_cache:
           name: Save node_module
-          key: source-v1-{{checksum "yarn.lock" }}
+          key: source-v1-modules-{{checksum "yarn.lock" }}
           paths:
             - "node_modules"
   build:
