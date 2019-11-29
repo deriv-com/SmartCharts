@@ -9,13 +9,12 @@ const PriceLineArrow = ({
     arrowDirection,
     color,
 }) => {
-    const OFFSET = 3;
-    const top = arrowDirection === ARROW_DIRECTIONS.UP ? -ARROW_HEIGHT - OFFSET : +ARROW_HEIGHT - OFFSET;
+    const top = arrowDirection === ARROW_DIRECTIONS.UP && `${-ARROW_HEIGHT}px`;
     const transform = arrowDirection === ARROW_DIRECTIONS.DOWN && 'rotate(180deg)';
 
     return (color === ARROW_COLORS.GREEN
-        ? <ArrowGreenIcon className="arrow-icon" style={{ top: `${top}px`, transform }} />
-        : <ArrowOrangeIcon className="arrow-icon" style={{ top: `${top}px`, transform }} />
+        ? <ArrowGreenIcon className="arrow-icon" style={{ top, transform }} />
+        : <ArrowOrangeIcon className="arrow-icon" style={{ top, transform }} />
     );
 };
 

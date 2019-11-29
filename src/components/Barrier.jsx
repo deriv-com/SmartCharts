@@ -46,6 +46,7 @@ export default connect(
         color: store.color,
         foregroundColor: store.foregroundColor,
         hideBarrierLine: store.hideBarrierLine,
+        hideOffscreenBarrier: store.hideOffscreenBarrier,
         hideOffscreenLine: store.hideOffscreenLine,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
