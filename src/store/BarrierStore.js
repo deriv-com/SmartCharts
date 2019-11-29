@@ -28,6 +28,7 @@ export default class BarrierStore {
     @observable initializePromise = new PendingPromise();
     @observable hideBarrierLine = false;
     @observable hideOffscreenLine = false;
+    @observable hideOffscreenBarrier = false;
     @observable isSingleBarrier = false;
 
     _shadeState;
