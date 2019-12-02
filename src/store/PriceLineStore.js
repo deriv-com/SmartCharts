@@ -238,12 +238,12 @@ export default class PriceLineStore {
         const { _barriers } = this.mainStore.chart;
 
         const filtered_barriers = _barriers.filter(a => a._high_barrier.price !== 0);
-
         const current_barrier_idx = filtered_barriers.findIndex(b => b._high_barrier === this);
 
-        for (let i = 0; i < filtered_barriers.length && i !== current_barrier_idx; i++) {
-            const barrier = filtered_barriers[i];
+        for (let i = 0; i < filtered_barriers.length; i++) {
+            if (i === current_barrier_idx) { continue; }
 
+            const barrier = filtered_barriers[i];
             const diffTop = Math.abs(barrier._high_barrier.top - top);
 
             if (diffTop < 25) {
