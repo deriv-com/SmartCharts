@@ -55,6 +55,7 @@ export default connect(
         priceLabelWidth: store.priceLabelWidth,
         title: store.title,
         isSingleBarrier: store.isSingleBarrier,
+        opacityOnOverlap: store.opacityOnOverlap,
     }),
     BarrierStore,
 )(Barrier);

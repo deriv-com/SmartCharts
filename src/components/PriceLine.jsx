@@ -26,10 +26,13 @@ class PriceLine extends Component {
             hideOffscreenBarrier,
             hideOffscreenLine,
             arrowDirection,
+            opacityOnOverlap,
+            isOverlapping,
         } = this.props;
 
         const showBarrier = !(hideOffscreenBarrier && offScreen);
-        const showBarrierDragLine = !hideBarrierLine && (!hideOffscreenLine || !offScreen);
+        const showBarrierDragLine = !hideBarrierLine && (!hideOffscreenLine || !offScreen) && !isOverlapping;
+        const opacity = isOverlapping && opacityOnOverlap;
         return (
             showBarrier && (
                 <div
@@ -40,11 +43,11 @@ class PriceLine extends Component {
                 >
                     { showBarrierDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
                     <div className="draggable-area" />
-                    <div className="drag-price" style={{ backgroundColor: color, width }}>
+                    <div className="drag-price" style={{ backgroundColor: color, width, opacity }}>
                         <div className="price">{priceDisplay}</div>
                         { offScreen && arrowDirection && <PriceLineArrow arrowDirection={arrowDirection} color={color} /> }
                     </div>
-                    { title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} /> }
+                    { title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} /> }
                 </div>
             )
         );

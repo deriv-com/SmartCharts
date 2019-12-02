@@ -4,8 +4,9 @@ const PriceLineTitle = ({
     color,
     yAxiswidth,
     title,
+    opacity,
 }) => (
-    <div className="title-wrapper" style={{ color, right: yAxiswidth }}>
+    <div className="title-wrapper" style={{ color, right: yAxiswidth, opacity }}>
         <span className="title">{title}</span>
     </div>
 );

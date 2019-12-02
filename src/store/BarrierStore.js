@@ -67,6 +67,8 @@ export default class BarrierStore {
 
         this.HighPriceLine = this._high_barrier.connect(PriceLine);
         this.LowPriceLine = this._low_barrier.connect(PriceLine);
+
+        this.mainStore.chart._barriers.push(this);
     }
 
     @action.bound init() {
@@ -89,7 +91,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenBarrier, hideOffscreenLine, hidePriceLines, lineStyle, title, arrowDirection, isSingleBarrier,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenBarrier, hideOffscreenLine, hidePriceLines, lineStyle, title, arrowDirection, isSingleBarrier, opacityOnOverlap,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -109,6 +111,7 @@ export default class BarrierStore {
             this.hideOffscreenBarrier = !!hideOffscreenBarrier;
             this.isSingleBarrier = !!isSingleBarrier;
         }));
+        if (opacityOnOverlap) { this.opacityOnOverlap = opacityOnOverlap; }
         if (arrowDirection) { this.arrowDirection = arrowDirection; }
     }
 
@@ -117,6 +120,11 @@ export default class BarrierStore {
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
         this._low_barrier.destructor();
+
+        const i = this.mainStore.chart._barriers.findIndex(b => b === this);
+        if (i !== -1) {
+            this.mainStore.chart._barriers.splice(i, 1);
+        }
     }
 
     get high_barrier() { return this._high_barrier.price; }
@@ -230,6 +238,14 @@ export default class BarrierStore {
 
     set arrowDirection(value) {
         this._high_barrier.arrowDirection = value;
+    }
+
+    get opacityOnOverlap() {
+        return this._high_barrier.opacityOnOverlap;
+    }
+
+    set opacityOnOverlap(value) {
+        this._high_barrier.opacityOnOverlap = value;
     }
 
     _drawShadedArea = () => {

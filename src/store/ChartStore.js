@@ -61,6 +61,7 @@ class ChartStore {
     state;
     onMessage = null;
     defaultMinimumBars = 5;
+    _barriers = [];
     @observable containerWidth = null;
     @observable context = null;
     @observable currentActiveSymbol;

@@ -19,6 +19,7 @@ export default class PriceLineStore {
     // @observable uncentered = false;
     @observable title;
     @observable arrowDirection;
+    @observable isOverlapping;
 
 
     set zIndex(value) {
@@ -204,6 +205,10 @@ export default class PriceLineStore {
             top += this.arrowDirection === ARROW_DIRECTIONS.UP ? +ARROW_HEIGHT : -ARROW_HEIGHT;
         }
 
+        if (this.opacityOnOverlap) {
+            this.isOverlapping = this.overlapCheck(top);
+        }
+
         return Math.round(top) | 0;
     }
 
@@ -229,6 +234,26 @@ export default class PriceLineStore {
         this._emitter.on(PriceLineStore.EVENT_DRAG_RELEASED, callback);
     }
 
+    overlapCheck(top) {
+        const { _barriers } = this.mainStore.chart;
+
+        const filtered_barriers = _barriers.filter(a => a._high_barrier.price !== 0);
+
+        const current_barrier_idx = filtered_barriers.findIndex(b => b._high_barrier === this);
+
+        for (let i = 0; i < filtered_barriers.length && i !== current_barrier_idx; i++) {
+            const barrier = filtered_barriers[i];
+
+            const diffTop = Math.abs(barrier._high_barrier.top - top);
+
+            if (diffTop < 25) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     connect = connect(() => ({
         priceDisplay: this.priceDisplay,
         visible: this.visible,
@@ -243,6 +268,7 @@ export default class PriceLineStore {
         hideBarrierLine: this.hideBarrierLine,
         hideOffscreenLine: this.hideOffscreenLine,
         arrowDirection: this.arrowDirection,
+        isOverlapping: this.isOverlapping,
         // zIndex: this.zIndex,
     }));
 }
