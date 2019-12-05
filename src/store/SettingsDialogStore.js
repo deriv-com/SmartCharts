@@ -45,14 +45,59 @@ export default class SettingsDialogStore {
         }
     }
 
+    @computed get itemGroups() {
+        const restGroup = [];
+        const groups = [];
+        groups.push({
+            key: '%K',
+            fields: [],
+        });
+        groups.push({
+            key: '%D',
+            fields: [],
+        });
+        groups.push({
+            key: 'OverBought',
+            fields: [],
+        });
+        groups.push({
+            key: 'OverSold',
+            fields: [],
+        });
+        groups.push({
+            key: 'Show Zones',
+            fields: [],
+        });
+
+        for (const index in this.items) {
+            const title = this.items[index].title;
+            const group = groups.find(x => title.indexOf(x.key) !== -1);
+            if (group) {
+                group.fields.push(this.items[index]);
+            } else {
+                restGroup.push(this.items[index]);
+            }
+        }
+
+        groups.unshift({
+            key: this.title,
+            fields: restGroup,
+        });
+
+        return groups;
+    }
+
+
     connect = connect(() => ({
         items: this.items,
+        itemGroups: this.itemGroups,
         title: this.title,
         description: this.description,
         showTabs: this.showTabs,
         setOpen: this.setOpen,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
+        onItemActive: this.onItemActive,
         Dialog: this.Dialog,
         open: this.open,
         theme: this.theme,

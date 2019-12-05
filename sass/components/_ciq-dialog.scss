@@ -24,6 +24,8 @@
         display: flex;
         justify-content: space-between;
         border-radius: 4px 4px 0 0;
+        height: 56px;
+        box-sizing: border-box;
         @include themify($themes) {
             color: themed('DialogHeadText');
             background: themed('DialogHeadBg');

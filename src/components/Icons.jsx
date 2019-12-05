@@ -23,6 +23,8 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import Close from '../../sass/icons/common/ic-close.svg';
+import InputNumberMinus from '../../sass/icons/common/ic-input-number-minus.svg';
+import InputNumberPlus from '../../sass/icons/common/ic-input-number-plus.svg';
 import CloseCircle from '../../sass/icons/close/ic-close-circle.svg';
 import CloseBold from '../../sass/icons/close/ic-close-bold.svg';
 import Comparison from '../../sass/icons/chart settings/comparison/ic-comparison-normal.svg';
@@ -156,10 +158,11 @@ export const PointFigureIcon = Wrapper(PointFigure);
 export const RangeBarsIcon = Wrapper(RangeBars);
 export const RenkoIcon = Wrapper(Renko);
 export const TableIcon = Wrapper(Table);
-
 export const AddIcon = Wrapper(Add);
 export const ZoomInIcon = Wrapper(Add);
 export const CloseIcon = Wrapper(Close);
+export const InputNumberMinusIcon = Wrapper(InputNumberMinus);
+export const InputNumberPlusIcon = Wrapper(InputNumberPlus);
 export const CloseCircleIcon = Wrapper(CloseCircle);
 export const CloseBoldIcon = Wrapper(CloseBold);
 export const ComparisonIcon = Wrapper(Comparison);

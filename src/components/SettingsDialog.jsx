@@ -13,8 +13,29 @@ import {
 import '../../sass/components/_ciq-settings-dialog.scss';
 import 'react-tabs/style/react-tabs.css';
 
-const SettingsPanel = ({
-    items,
+const SettingsPanelItem = ({ group, title, type, Field }) => (
+    <div className={`form__group form__group--${type}`}>
+        {(type === 'select'
+         || type === 'colorpicker'
+         || group === 'OverBought'
+         || group === 'OverSold'
+        )
+            ? ''
+            : (
+                <div className="form__label">
+                    <span> {title} </span>
+                </div>
+            )}
+        <div className="form__control">
+            {Field}
+        </div>
+    </div>
+);
+
+
+const SettingsPanelGroup = ({
+    title,
+    items, // [{ id, title, value, defaultValue, type }]
     theme,
     onItemChange,
 }) => {
@@ -29,6 +50,7 @@ const SettingsPanel = ({
             <ColorPicker
                 theme={theme}
                 color={item.value}
+                subtitle={item.title}
                 setColor={value => onItemChange(item.id, value)}
             />
         ),
@@ -48,7 +70,8 @@ const SettingsPanel = ({
         select: item => (
             <DropDown
                 rows={Object.keys(item.options)}
-                title={item.value}
+                value={item.value}
+                subtitle={item.title}
                 onRowClick={value => onItemChange(item.id, value)}
             >
                 {row => row}
@@ -77,6 +100,7 @@ const SettingsPanel = ({
         numbercolorpicker: item => (
             <NumberColorPicker
                 value={item.value}
+                theme={theme}
                 onChange={val => onItemChange(item.id, val)}
             />
         ),
@@ -88,46 +112,85 @@ const SettingsPanel = ({
         ),
     };
 
+    const input_group_name = `form__input-group--${title.toLowerCase().replace(' ', '-')}`;
+
     return (
-        <div className="items">
-            {items
-                .map(item => (renderMap[item.type]
-                        && (
-                            <div key={item.id} className="item">
-                                <div className="title">
-                                    <span>{item.title}</span>
-                                    {renderMap[item.type](item)}
-                                </div>
-                            </div>
-                        )
-                ))
-            }
+        <div className={`form__input-group ${input_group_name}`}>
+            {title === 'Show Zones' ? '' : (<h4>{title}</h4>)}
+            {items.map(item => (renderMap[item.type]
+                && (
+                    <SettingsPanelItem
+                        key={item.id}
+                        group={title}
+                        type={item.type}
+                        active={item.active}
+                        title={item.title}
+                        Field={renderMap[item.type](item)}
+                    />
+                )
+            ))}
         </div>
     );
 };
 
+
+const SettingsPanel = ({
+    itemGroups,
+    theme,
+    onItemChange,
+}) => (
+    <div className="form form--indicator-setting">
+        {itemGroups.map(group => (group.fields.length
+            ? (
+                <SettingsPanelGroup
+                    key={group.key}
+                    title={group.key}
+                    items={group.fields}
+                    theme={theme}
+                    onItemChange={onItemChange}
+                />
+            ) : ''
+        ))
+        }
+    </div>
+);
+
+
 const ResetButton = ({
     onResetClick,
 }) => (
-    <div
+    <button
+        type="button"
         className="reset"
         onClick={onResetClick}
     >{t.translate('RESET')}
-    </div>
+    </button>
 );
 
 const DoneButton = ({
     setOpen,
 }) => (
-    <div
+    <button
+        type="button"
         className="done"
         onClick={() => setOpen(false)}
-    >{t.translate('DONE')}
-    </div>
+    >{t.translate('Save')}
+    </button>
+);
+
+const CancelButton = ({
+    setOpen,
+}) => (
+    <button
+        type="button"
+        className="cancel"
+        onClick={() => setOpen(false)}
+    >{t.translate('Cancel')}
+    </button>
 );
 
 const SettingsDialog = ({
-    items, // [{ id, title, value, defaultValue, type }]
+    itemGroups,
     title,
     description,
     setOpen,
@@ -152,7 +215,7 @@ const SettingsDialog = ({
                     </TabList>
                     <TabPanel>
                         <SettingsPanel
-                            items={items}
+                            itemGroups={itemGroups}
                             theme={theme}
                             onItemChange={onItemChange}
                         />
@@ -168,13 +231,16 @@ const SettingsDialog = ({
             ) : (
             <>
                 <SettingsPanel
-                    items={items}
+                    itemGroups={itemGroups}
                     theme={theme}
                     onItemChange={onItemChange}
                 />
                 <div className="buttons">
                     <ResetButton onResetClick={onResetClick} />
-                    <DoneButton setOpen={setOpen} />
+                    <div>
+                        <CancelButton setOpen={setOpen} />
+                        <DoneButton setOpen={setOpen} />
+                    </div>
                 </div>
             </>
             )}
