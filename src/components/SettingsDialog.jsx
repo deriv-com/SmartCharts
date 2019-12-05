@@ -163,7 +163,7 @@ const ResetButton = ({
         type="button"
         className="reset"
         onClick={onResetClick}
-    >{t.translate('RESET')}
+    >{t.translate('Reset')}
     </button>
 );
 
