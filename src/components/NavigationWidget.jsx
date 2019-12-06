@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-navigation-widget.scss';
 
-import { ZoominIcon, ZoomoutIcon, HomeIcon, ScaleIcon } from './Icons.jsx';
+import { NavigationZoominIcon, NavigationZoomoutIcon, HomeIcon, NavigationScaleIcon } from './Icons.jsx';
 
 const NavigationWidget = ({
     zoomIn,
@@ -24,12 +24,14 @@ const NavigationWidget = ({
         >
             <HomeIcon />
         </div>
-        <div className="ciq-navigation-widget__item" onClick={onScale}>
-            <ScaleIcon />
+        <div className="ciq-navigation-widget__item" onClick={zoomIn}>
+            <NavigationZoominIcon />
         </div>
-        <div className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom">
-            <ZoominIcon onClick={zoomIn} />
-            <ZoomoutIcon onClick={zoomOut} />
+        <div className="ciq-navigation-widget__item" onClick={onScale}>
+            <NavigationScaleIcon />
+        </div>
+        <div className="ciq-navigation-widget__item" onClick={zoomOut}>
+            <NavigationZoomoutIcon />
         </div>
     </div>
 );

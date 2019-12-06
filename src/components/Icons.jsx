@@ -55,16 +55,16 @@ import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 
-
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
 import Success from '../../sass/icons/alert message/success.svg';
 import Info from '../../sass/icons/alert message/info.svg';
 
 import Home from '../../sass/icons/navigation-widgets/ic-home.svg';
-import Scale from '../../sass/icons/navigation-widgets/ic-scale-full.svg';
-import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
-import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
+import NavigationScale from '../../sass/icons/navigation-widgets/ic-navigation-scale.svg';
+import NavigationZoomin from '../../sass/icons/navigation-widgets/ic-navigation-zoomin.svg';
+import NavigationZoomout from '../../sass/icons/navigation-widgets/ic-navigation-zoomout.svg';
+
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -186,15 +186,14 @@ export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const DownloadIcon = Wrapper(Download);
 
+export const HomeIcon = Wrapper(Home);
+export const NavigationScaleIcon = Wrapper(NavigationScale);
+export const NavigationZoominIcon = Wrapper(NavigationZoomin);
+export const NavigationZoomoutIcon = Wrapper(NavigationZoomout);
 
 export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
 export const BackIcon = Wrapper(Back);
-
-export const HomeIcon = Wrapper(Home);
-export const ScaleIcon = Wrapper(Scale);
-export const ZoominIcon = Wrapper(Zoomin);
-export const ZoomoutIcon = Wrapper(Zoomout);
 
 export const MetalIcon = Wrapper(Metal);
 
