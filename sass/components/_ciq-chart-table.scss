@@ -231,7 +231,6 @@
             margin-top: 0;
         }
         td, th {
-            display: flex;
             padding: 5px 5px 5px 20px !important;
             text-align: left;
             font-size: 1.2em;
@@ -246,6 +245,18 @@
                 > span {
                     font-weight: bold;
                     padding-right: 5px;
+                }
+            }
+        }
+        &--tick {
+            tr {
+                td, th {
+                    &:nth-child(1), &:nth-child(1) {
+                        min-width: 125px;
+                        max-width: 125px;
+                        padding-left: 24px;
+                        text-align: left;
+                    }
                 }
             }
         }
