@@ -9,11 +9,14 @@ class RawMarker extends React.Component {
     ctx = null;
     stx = null;
     injectionId = null;
+    hasUnmountedBeforeInjection = false;
 
     componentDidMount() {
         const { contextPromise } = this.props;
 
         contextPromise.then((ctx) => {
+            if (this.hasUnmountedBeforeInjection) { return; }
+
             this.ctx = ctx;
             this.stx = this.ctx.stx;
 
@@ -28,6 +31,8 @@ class RawMarker extends React.Component {
             this.stx.removeInjection(this.injectionId);
             this.ctx = null;
             this.stx = null;
+        } else {
+            this.hasUnmountedBeforeInjection = true;
         }
     }
 
