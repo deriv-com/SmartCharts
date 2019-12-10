@@ -59,10 +59,25 @@
         }
     }
     &--indicator-setting {
-        width: 320px;
+        min-width: 320px;
+        max-width: 320px;
+        min-height: 272px;
         max-height: 272px;
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
+        }
+
+        > div:nth-child(3) {
+            > div {
+                @include themify($themes) {
+                    background-color: themed('ListScroll') !important;
+                }
+            }
+        }
+        &:hover {
+            > div:nth-child(3) {
+                opacity: 1 !important;
+            }
         }
     }
     &__input-group {
@@ -104,7 +119,7 @@
     .cq-slider-range {
         position: relative;
         width: calc(100% - 26px);
-        margin-top: 8px;
+        margin-top: 9px;
         padding-right: 8px;
         height: 12px;
 
@@ -270,7 +285,8 @@
         }
         .row {
             cursor: pointer;
-            padding: 8px 8px 9px;
+            padding: 10px 16px 9px;
+            text-transform: capitalize;
             @include themify($themes) {
                 color: themed('DropdownText');
             }
@@ -544,6 +560,7 @@
         }
     }
     input[type='number'] {
+        -moz-appearance: textfield;
         height: 40px;
         line-height: 40px;
         cursor: pointer;
@@ -558,6 +575,10 @@
             border: 1px solid themed('DropdownBorder') !important;
         }
 
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
         &:focus {
             @include themify($themes) {
                 border-color: themed('ColorPickerActiveBorder') !important;

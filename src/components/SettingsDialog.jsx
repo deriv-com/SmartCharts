@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Scrollbars from 'tt-react-custom-scrollbars';
 import {
     Switch,
     NumericInput,
@@ -139,7 +140,10 @@ const SettingsPanel = ({
     theme,
     onItemChange,
 }) => (
-    <div className="form form--indicator-setting">
+    <Scrollbars
+        className="form form--indicator-setting"
+        autoHide
+    >
         {itemGroups.map(group => (group.fields.length
             ? (
                 <SettingsPanelGroup
@@ -152,7 +156,7 @@ const SettingsPanel = ({
             ) : ''
         ))
         }
-    </div>
+    </Scrollbars>
 );
 
 
