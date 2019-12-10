@@ -25,7 +25,7 @@ class PriceLine extends Component {
             hideBarrierLine,
             hideOffscreenBarrier,
             hideOffscreenLine,
-            arrowDirection,
+            offScreenDirection,
             opacityOnOverlap,
             isOverlapping,
         } = this.props;
@@ -45,7 +45,7 @@ class PriceLine extends Component {
                     <div className="draggable-area" />
                     <div className="drag-price" style={{ backgroundColor: color, width, opacity }}>
                         <div className="price">{priceDisplay}</div>
-                        { offScreen && arrowDirection && <PriceLineArrow arrowDirection={arrowDirection} color={color} /> }
+                        { offScreen && offScreenDirection && <PriceLineArrow offScreenDirection={offScreenDirection} color={color} /> }
                     </div>
                     { title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} /> }
                 </div>

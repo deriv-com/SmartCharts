@@ -91,7 +91,7 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenBarrier, hideOffscreenLine, hidePriceLines, lineStyle, title, arrowDirection, isSingleBarrier, opacityOnOverlap,
+        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenBarrier, hideOffscreenLine, hidePriceLines, lineStyle, title, showOffscreenArrows, isSingleBarrier, opacityOnOverlap,
     }) {
         this.initializePromise.then(action(() => {
             if (color) { this.color = color; }
@@ -112,7 +112,7 @@ export default class BarrierStore {
             this.isSingleBarrier = !!isSingleBarrier;
         }));
         if (opacityOnOverlap) { this.opacityOnOverlap = opacityOnOverlap; }
-        if (arrowDirection) { this.arrowDirection = arrowDirection; }
+        if (showOffscreenArrows) { this.showOffscreenArrows = showOffscreenArrows; }
     }
 
     @action.bound destructor() {
@@ -232,12 +232,12 @@ export default class BarrierStore {
         this._low_barrier.draggable = value;
     }
 
-    get arrowDirection() {
-        return this._high_barrier.arrowDirection;
+    get showOffscreenArrows() {
+        return this._high_barrier.showOffscreenArrows;
     }
 
-    set arrowDirection(value) {
-        this._high_barrier.arrowDirection = value;
+    set showOffscreenArrows(value) {
+        this._high_barrier.showOffscreenArrows = value;
     }
 
     get opacityOnOverlap() {

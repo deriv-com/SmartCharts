@@ -2,7 +2,7 @@ import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
 import { ARROW_HEIGHT,
-    ARROW_DIRECTIONS } from '../utils';
+    DIRECTIONS } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
@@ -18,8 +18,8 @@ export default class PriceLineStore {
     @observable offScreen = false;
     // @observable uncentered = false;
     @observable title;
-    @observable arrowDirection;
     @observable isOverlapping;
+    @observable offScreenDirection;
 
 
     set zIndex(value) {
@@ -181,17 +181,20 @@ export default class PriceLineStore {
             // this.uncentered = true;
             if (top < -LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
+                this.offScreenDirection = DIRECTIONS.UP;
             }
             top = 0;
         } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             // this.uncentered = true;
             if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreen = true;
+                this.offScreenDirection = DIRECTIONS.DOWN;
             }
             top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
             // this.uncentered = false;
             this.offScreen = false;
+            this.offScreenDirection = null;
         }
 
 
@@ -201,8 +204,8 @@ export default class PriceLineStore {
             top = 10;
         }
 
-        if (this.offScreen && this.arrowDirection) {
-            top += this.arrowDirection === ARROW_DIRECTIONS.UP ? +ARROW_HEIGHT : -ARROW_HEIGHT;
+        if (this.offScreenDirection && this.showOffscreenArrows) {
+            top += this.offScreenDirection === DIRECTIONS.UP ? +ARROW_HEIGHT : -ARROW_HEIGHT;
         }
 
         if (this.opacityOnOverlap) {
@@ -267,7 +270,7 @@ export default class PriceLineStore {
         offScreen: this.offScreen,
         hideBarrierLine: this.hideBarrierLine,
         hideOffscreenLine: this.hideOffscreenLine,
-        arrowDirection: this.arrowDirection,
+        offScreenDirection: this.offScreenDirection,
         isOverlapping: this.isOverlapping,
         // zIndex: this.zIndex,
     }));

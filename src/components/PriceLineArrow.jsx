@@ -3,14 +3,14 @@ import { ArrowGreenIcon,
     ArrowOrangeIcon }          from './Icons.jsx';
 import { ARROW_HEIGHT,
     ARROW_COLORS,
-    ARROW_DIRECTIONS }         from '../utils';
+    DIRECTIONS }         from '../utils';
 
 const PriceLineArrow = ({
-    arrowDirection,
+    offScreenDirection,
     color,
 }) => {
-    const top = arrowDirection === ARROW_DIRECTIONS.UP && `${-ARROW_HEIGHT}px`;
-    const transform = arrowDirection === ARROW_DIRECTIONS.DOWN && 'rotate(180deg)';
+    const top = offScreenDirection === DIRECTIONS.UP && `${-ARROW_HEIGHT}px`;
+    const transform = offScreenDirection === DIRECTIONS.DOWN && 'rotate(180deg)';
 
     return (color === ARROW_COLORS.GREEN
         ? <ArrowGreenIcon className="arrow-icon" style={{ top, transform }} />
