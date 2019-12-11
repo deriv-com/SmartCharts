@@ -290,6 +290,7 @@ class App extends Component {
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
                 shouldFetchTradingTimes
+                enabledNavigationWidget
             >
                 {endEpoch ? (
                     <Marker
