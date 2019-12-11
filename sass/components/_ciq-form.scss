@@ -578,6 +578,11 @@
         &::-webkit-outer-spin-button,
         &::-webkit-inner-spin-button {
             -webkit-appearance: none;
+            margin: 0;
+        }
+        &:hover,
+        &:focus {
+            -moz-appearance: textfield;
         }
         &:focus {
             @include themify($themes) {
@@ -590,7 +595,7 @@
         flex-direction: column;
         position: absolute;
         top: 2px;
-        right: 1px;
+        right: 3px;
         border-radius: 0 4px 4px 0;
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
