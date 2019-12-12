@@ -518,7 +518,7 @@
         box-shadow: none !important;
         @include themify($themes) {
             background: themed('InputBg');
-            border: 1px solid themed('InputBorder') !important;
+            border: 1px solid themed('InputBorder');
             color: themed('InputText');
         }
 
@@ -572,7 +572,7 @@
         outline: none;
         @include themify($themes) {
             color: themed('DropdownText') !important;
-            border: 1px solid themed('DropdownBorder') !important;
+            border: 1px solid themed('DropdownBorder');
         }
 
         &::-webkit-outer-spin-button,
@@ -584,9 +584,19 @@
         &:focus {
             -moz-appearance: textfield;
         }
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder') !important;
+            }
+        }
         &:focus {
             @include themify($themes) {
-                border-color: themed('ColorPickerActiveBorder') !important;
+                border-color: themed('DefaultInputActiveBorder') !important;
+            }
+        }
+        &:focus + .subtitle > span {
+            @include themify($themes) {
+                color: themed('DefaultInputActiveBorder') !important;
             }
         }
     }
@@ -617,7 +627,7 @@
     &:hover {
         input[type='number'] {
             @include themify($themes) {
-                border-color: themed('DefaultInputHoverBorder') !important;
+                border-color: themed('DefaultInputHoverBorder');
             }
         }
     }

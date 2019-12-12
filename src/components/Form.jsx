@@ -276,7 +276,6 @@ export class NumericInput extends React.PureComponent {
         const { subtitle, min, max, step } = this.props;
         return (
             <div className="cq-numeric-input">
-                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <input
                     type="number"
                     value={this.state.value}
@@ -287,6 +286,7 @@ export class NumericInput extends React.PureComponent {
                     max={max}
                     step={step}
                 />
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div className="cq-numeric-input-buttons">
                     <InputNumberPlusIcon onClick={this.onIncrease} />
                     <InputNumberMinusIcon onClick={this.onDecrease} />
