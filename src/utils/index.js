@@ -128,7 +128,7 @@ export function calculateTimeUnitInterval(granularity) {
 
     if (granularity === 86400) {
         timeUnit = 'day';
-    } else if (granularity > 0) {
+    } else if (granularity > 59) {
         interval = granularity / 60;
         timeUnit = 'minute';
     }
