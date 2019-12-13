@@ -19,7 +19,7 @@ export class Slider extends React.Component {
             step = 1,
             value,
         } = this.props;
-        const barWidth = 246;// css hardcode
+        const barWidth = 238;// css hardcode
         const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
 
         return (
