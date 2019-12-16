@@ -22,7 +22,7 @@ const CategoricalDisplay = React.memo(({
     >
         <div className="cq-lookup-filters">
             <SearchInput searchInputClassName={searchInputClassName} />
-            <FilterPanel />
+            {isMobile ? '' : <FilterPanel /> }
         </div>
         <Scrollbars
             className="cq-scroll-panel"
@@ -34,6 +34,7 @@ const CategoricalDisplay = React.memo(({
                 onSelectItem={onSelectItem}
                 id={id}
                 disableAll={disableAll}
+                isMobile={isMobile}
             />
         </Scrollbars>
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowIcon, CategoryIconMap } from '../Icons.jsx';
 
 function getItemCount(category) {
     let count = 0;
@@ -13,24 +14,36 @@ function getItemCount(category) {
     return count;
 }
 
-const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle) => {
+const EmptyCategory = ({ category }) => (
+    getItemCount(category) === 0 && category.emptyDescription && (
+        <div className="category-content">
+            <div className="empty-category">{t.translate(category.emptyDescription)}</div>
+        </div>
+    )
+);
+
+const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle, active) => {
     let TitleClassName = '';
     if (activeHeadKey === categoryId) {
         TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
     }
 
-    return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''}`;
+    return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''} ${active ? 'active' : ''}`;
 };
 
-const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
-    <div
-        className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''}`}
-        ref={el => setCategoryElement(el, category.categoryId)}
-    >
+const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffset, isMobile, handleTitleClick }) => {
+    const CategoryIcon = CategoryIconMap[category.categoryId];
+
+    return (
         <div
-            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle)}
+            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle, category.active)}
             style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
-        >{t.translate(category.categoryName)}
+            onClick={() => handleTitleClick(category.categoryId)}
+        >
+            <span className="category-title-left">
+                {isMobile ? (CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />) : ''}
+                {t.translate(category.categoryName)}
+            </span>
             {
                 ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
                     || !category.categoryNamePostfixShowIfActive)
@@ -48,7 +61,24 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                     </div>
                 )
             }
+            { isMobile ? (<ArrowIcon />) : ''}
         </div>
+    );
+};
+
+const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isMobile, handleTitleClick }) => (
+    <div
+        className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''} ${category.active ? 'active' : ''}`}
+        ref={el => setCategoryElement(el, category.categoryId)}
+    >
+        <CategoryTitle
+            category={category}
+            activeHeadKey={activeHeadKey}
+            activeHeadTop={activeHeadTop}
+            activeHeadOffset={activeHeadOffset}
+            isMobile={isMobile}
+            handleTitleClick={handleTitleClick}
+        />
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
@@ -78,15 +108,11 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                     ))}
                 </div>
             )}
-        { getItemCount(category) === 0 && category.emptyDescription && (
-            <div className="category-content">
-                <div className="empty-category">{t.translate(category.emptyDescription)}</div>
-            </div>
-        )}
+        <EmptyCategory category={category} />
     </div>
 );
 
-export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll }) => (
+export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isMobile, handleTitleClick, activeCategories }) => (
     <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
@@ -99,6 +125,9 @@ export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemTy
                 activeHeadTop={activeHeadTop}
                 activeHeadOffset={activeHeadOffset}
                 disableAll={disableAll}
+                isMobile={isMobile}
+                handleTitleClick={handleTitleClick}
+                activeCategories={activeCategories}
             />
         )) }
     </div>

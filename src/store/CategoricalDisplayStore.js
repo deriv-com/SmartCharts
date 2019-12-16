@@ -45,6 +45,7 @@ export default class CategoricalDisplayStore {
                         this.scrollPanel.scrollTop(el.offsetTop + el_active_sub_category.offsetTop - 40);
                     }
                 }
+
                 setTimeout(() => { this.pauseScrollSpy = false; }, 20);
 
                 if (!this.isInit) { this.init(); }
@@ -93,6 +94,8 @@ export default class CategoricalDisplayStore {
             activeHeadTop: this.activeHeadTop,
             activeHeadKey: this.activeHeadKey,
             activeHeadOffset: this.activeHeadOffset,
+            activeCategories: this.activeCategories,
+            handleTitleClick: this.handleTitleClick,
         }))(ResultsPanel);
 
         this.FilterPanel = connect(({ chart }) => ({
@@ -124,6 +127,7 @@ export default class CategoricalDisplayStore {
     @observable activeHeadOffset = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
+    activeCategories = [];
 
     get chart() { return this.mainStore.chart; }
 
@@ -202,6 +206,7 @@ export default class CategoricalDisplayStore {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
             hasSubcategory: false,
+            active: true,
             emptyDescription: t.translate('There are no favorites yet.'),
             data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
@@ -211,6 +216,12 @@ export default class CategoricalDisplayStore {
 
     @computed get filteredItems() {
         let filteredItems = cloneCategories(this.getCategoricalItems());
+
+        for (const item of filteredItems) {
+            if (this.activeCategories.includes(item.categoryId)) {
+                item.active = true;
+            }
+        }
 
         if (this.favoritesId) {
             const favsCategory = { ...this.favoritesCategory };
@@ -251,12 +262,10 @@ export default class CategoricalDisplayStore {
             filteredItems.unshift(activeCategory);
         }
 
-
         if (this.filterText === '') {
             this.lastFilteredItems = filteredItems;
             return filteredItems;
         }
-
 
         let searchHasResult = false;
         const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
@@ -268,6 +277,7 @@ export default class CategoricalDisplayStore {
         };
 
         for (const category of filteredItems) {
+            category.active = true;
             if (category.hasSubcategory) {
                 for (const subcategory of category.data) {
                     filterCategory(subcategory);
@@ -320,11 +330,30 @@ export default class CategoricalDisplayStore {
         this.scrollPanel =  element;
     }
 
+    @action.bound handleTitleClick(categoryId) {
+        this.activeCategories = [];
+        for (const item of this.filteredItems) {
+            if (item.categoryId === categoryId) {
+                item.active = !item.active;
+            }
+
+            if (item.active) {
+                this.activeCategories.push(item.categoryId);
+            }
+        }
+
+        this.activeHeadTop = null;
+        setTimeout(() => {
+            this.updateScrollSpy();
+        }, 0);
+    }
+
     connect = connect(() => ({
         filteredItems: this.filteredItems,
         updateScrollSpy: this.updateScrollSpy,
         setScrollPanel: this.setScrollPanel,
         isScrollingDown: this.isScrollingDown,
+        handleTitleClick: this.handleTitleClick,
         scrollUp: this.scrollUp,
         scrollDown: this.scrollDown,
         onSelectItem: this.onSelectItem,

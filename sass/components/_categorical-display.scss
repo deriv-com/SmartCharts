@@ -234,7 +234,6 @@
             position: fixed;
             top: 0px;
             z-index: 9;
-            padding-right: 25px;
         }
         .category-name-postfix {
             margin-left: 5px;
@@ -486,6 +485,7 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
+        box-shadow: none;
 
         .cq-lookup-filters {
             width: 100%;
@@ -510,23 +510,57 @@
             height: 40px;
         }
         .cq-filter-panel {
-            display: flex;
-            justify-content: space-around;
+            display: none;
+        }
+        .results-panel {
+            .category {
+                padding: 0px;
+                max-height: 40px;
+                overflow-y: hidden;
+                border-bottom: none;
+                transition: max-height 0.5s ease-in-out;
 
-            .cq-filter {
-                border-right: none;
-                background: transparent;
-                padding: 7px 20px;
-                line-height: 3em;
+                .category-title {
+                    display: flex;
+                    justify-content: space-between;
+                    box-sizing: border-box;
+                    align-items: center;
+                    position: relative;
+                    padding-left: 28px;
+                    padding-right: 24px;
+                    cursor: pointer;
 
-                &.cq-active-filter {
-                    border-bottom: 2px solid;
+                    &.sticky-top {
+                        position: relative;
+                        top: 0px !important;
+                    }
+                    .category-title-left {
+                        display: flex;
+                        align-items: center;
+
+                        .ic-icon {
+                            margin-right: 16px;
+                        }
+                    }
+                    > .ic-icon {
+                        transition: transform 0.3s ease-in-out;
+                    }
                 }
-                > .ic-icon {
-                    margin: 0px;
+                .cq-item {
+                    padding-left: 0px;
+                    padding-right: 7px;
                 }
-                .cq-filter-text {
-                    display: none;
+                &:last-child {
+                    padding-bottom: 0px;
+                }
+                &.active {
+                    max-height: 1500px;
+
+                    .category-title {
+                        > .ic-icon {
+                            transform: rotate(180deg);
+                        }
+                    }
                 }
             }
         }
