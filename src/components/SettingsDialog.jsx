@@ -139,9 +139,11 @@ const SettingsPanel = ({
     itemGroups,
     theme,
     onItemChange,
+    setScrollPanel,
 }) => (
     <Scrollbars
         className="form form--indicator-setting"
+        ref={setScrollPanel}
         autoHide
     >
         {itemGroups.map(group => (group.fields.length
@@ -203,6 +205,7 @@ const SettingsDialog = ({
     onItemChange,
     Dialog,
     theme,
+    setScrollPanel,
 }) => (
     <Dialog
         className="cq-dialog cq-settings-dialog"
@@ -222,6 +225,7 @@ const SettingsDialog = ({
                             itemGroups={itemGroups}
                             theme={theme}
                             onItemChange={onItemChange}
+                            setScrollPanel={setScrollPanel}
                         />
                         <div className="buttons">
                             <ResetButton onResetClick={onResetClick} />
@@ -238,6 +242,7 @@ const SettingsDialog = ({
                     itemGroups={itemGroups}
                     theme={theme}
                     onItemChange={onItemChange}
+                    setScrollPanel={setScrollPanel}
                 />
                 <div className="buttons">
                     <ResetButton onResetClick={onResetClick} />

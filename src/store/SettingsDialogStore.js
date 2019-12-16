@@ -10,6 +10,7 @@ export default class SettingsDialogStore {
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
+    @observable scrollPanel;
 
     constructor({
         mainStore, getContext, onChanged,
@@ -27,6 +28,9 @@ export default class SettingsDialogStore {
 
     @computed get open() { return this.menu.open; }
     @action.bound setOpen(value) {
+        if (value) {
+            this.scrollPanel.scrollTop(0);
+        }
         return this.menu.setOpen(value);
     }
 
@@ -86,7 +90,9 @@ export default class SettingsDialogStore {
 
         return groups;
     }
-
+    @action.bound setScrollPanel(element) {
+        this.scrollPanel =  element;
+    }
 
     connect = connect(() => ({
         items: this.items,
@@ -101,5 +107,6 @@ export default class SettingsDialogStore {
         Dialog: this.Dialog,
         open: this.open,
         theme: this.theme,
+        setScrollPanel: this.setScrollPanel,
     }));
 }
