@@ -230,6 +230,7 @@
         font-style: normal;
         line-height: 1.43;
         letter-spacing: normal;
+        text-transform: capitalize;
         @include themify($themes) {
             color: themed('DropdownText') !important;
             border: 1px solid themed('DropdownBorder');

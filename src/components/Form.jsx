@@ -160,9 +160,6 @@ export class ColorPicker extends React.Component {
     render() {
         const { subtitle, color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? this.defaultColor() : color;
-
-        console.log('theme', this.props.theme);
-
         return (
             <div className={`cq-color-picker ${this.state.open ? 'active' : ''}`}>
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
