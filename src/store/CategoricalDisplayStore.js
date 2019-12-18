@@ -45,7 +45,6 @@ export default class CategoricalDisplayStore {
                         this.scrollPanel.scrollTop(el.offsetTop + el_active_sub_category.offsetTop - 40);
                     }
                 }
-
                 setTimeout(() => { this.pauseScrollSpy = false; }, 20);
 
                 if (!this.isInit) { this.init(); }
@@ -94,7 +93,6 @@ export default class CategoricalDisplayStore {
             activeHeadTop: this.activeHeadTop,
             activeHeadKey: this.activeHeadKey,
             activeHeadOffset: this.activeHeadOffset,
-            activeCategories: this.activeCategories,
             handleTitleClick: this.handleTitleClick,
         }))(ResultsPanel);
 

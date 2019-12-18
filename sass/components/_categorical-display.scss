@@ -494,9 +494,8 @@
             z-index: 9;
             transition: max-height 0.2s ease-in;
             margin-bottom: -2px;
-            @include themify($themes) {
-                border-bottom: 1px solid themed('CatDisplaySearchBorder');
-            }
+            background: transparent !important;
+            border: none !important;
         }
         .cq-lookup-input {
             margin: 16px 8px;
@@ -526,8 +525,8 @@
                     box-sizing: border-box;
                     align-items: center;
                     position: relative;
-                    padding-left: 28px;
-                    padding-right: 24px;
+                    padding-left: 17px;
+                    padding-right: 20px;
                     cursor: pointer;
 
                     &.sticky-top {
@@ -537,14 +536,33 @@
                     .category-title-left {
                         display: flex;
                         align-items: center;
+                        @include themify($themes) {
+                            color: themed('CatDisplayText');
+                        }
 
                         .ic-icon {
                             margin-right: 16px;
+                            position: relative;
+                            top: -1px;
+
+                            svg {
+                                width: 24px;
+                                height: 24px;
+                                @include themify($themes) {
+                                    fill: themed('CatDisplayText');
+                                }
+                            }
                         }
                     }
                     > .ic-icon {
                         transition: transform 0.3s ease-in-out;
+                        @include themify($themes) {
+                            fill: themed('CatDisplayText');
+                        }
                     }
+                }
+                .subcategory {
+                    font-weight: bold;
                 }
                 .cq-item {
                     padding-left: 0px;
