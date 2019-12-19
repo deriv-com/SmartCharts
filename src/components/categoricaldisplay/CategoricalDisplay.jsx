@@ -14,15 +14,16 @@ const CategoricalDisplay = React.memo(({
     id,
     searchInputClassName,
     disableAll,
+    isNestedList,
 }) => (
     <div
-        className="cq-categorical-display"
+        className={`cq-categorical-display ${isNestedList ? 'cq-categorical-display--nested' : ''}`}
         style={{ height }}
         id={id}
     >
         <div className="cq-lookup-filters">
             <SearchInput searchInputClassName={searchInputClassName} />
-            {isMobile ? '' : <FilterPanel /> }
+            {isNestedList ? '' : <FilterPanel /> }
         </div>
         <Scrollbars
             className="cq-scroll-panel"
@@ -34,7 +35,7 @@ const CategoricalDisplay = React.memo(({
                 onSelectItem={onSelectItem}
                 id={id}
                 disableAll={disableAll}
-                isMobile={isMobile}
+                isNestedList={isNestedList}
             />
         </Scrollbars>
     </div>
