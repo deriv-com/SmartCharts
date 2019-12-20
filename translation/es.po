@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2019-12-20 14:24\n"
+"PO-Revision-Date: 2019-12-20 14:33\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Reset"
-msgstr "Reset"
+msgstr "Restablecer"
 
 msgid "Retrieving Chart Data..."
 msgstr "Obteniendo Datos del Gráfico..."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "Forma - Estrella"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Mostrar punto más alto / más bajo"
 
 msgid "Size"
-msgstr ""
+msgstr "Tamaño"
 
 msgid "Speed Resistance Arc"
 msgstr "Arc de Resistencia de Velocidad"
