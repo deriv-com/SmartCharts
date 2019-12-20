@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: fr\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-06-24 09:03\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " existe déja."
@@ -30,8 +28,8 @@ msgstr "« Indice de masse » ou « Etoile Doji »"
 msgid "Active"
 msgstr "Actif"
 
-msgid "Add New"
-msgstr "Ajouter Nouveau"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Annotation"
@@ -56,6 +54,9 @@ msgstr "C"
 
 msgid "Callout"
 msgstr "Légende"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "ANNULATION"
@@ -90,6 +91,9 @@ msgstr "CLOTURE"
 msgid "CLOSED"
 msgstr "FERMÉ"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "Point Coloré"
 
@@ -116,9 +120,6 @@ msgstr "Date"
 
 msgid "Day"
 msgstr "Jour"
-
-msgid "DONE"
-msgstr "FAIT"
 
 msgid "Doodle"
 msgstr "Forme libre"
@@ -237,6 +238,9 @@ msgstr "Ouverture"
 msgid "OPEN"
 msgstr "OUVERTURE"
 
+msgid "Opens in:"
+msgstr "Ouverture dans :"
+
 msgid "OVERWRITE"
 msgstr "REMPLACER"
 
@@ -273,8 +277,8 @@ msgstr "Lignes de Régression"
 msgid "Renko"
 msgstr "Renko"
 
-msgid "RESET"
-msgstr "REINITIALISATION"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "Récupération des données du graphique..."
@@ -299,6 +303,9 @@ msgstr "cliquez droit pour supprimer"
 
 msgid "right-click to manage"
 msgstr "cliquez droit pour gérer"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "Rechercher..."
@@ -326,6 +333,12 @@ msgstr "Forme - Cœur"
 
 msgid "Shape - Star"
 msgstr "Forme - Étoile"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Arc de Résistance Vitesse"
@@ -371,6 +384,9 @@ msgstr "Niveaux  Tirone"
 
 msgid "Underlying Assets"
 msgstr "Actifs sous-jacents"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "Il est permis d'activer au maximum 5 indicateurs."
 
 msgid "Vertical"
 msgstr "Vertical"
@@ -1346,13 +1362,4 @@ msgstr "Ratio fort"
 
 msgid "Weak Ratio"
 msgstr "Faible Ratio"
-
-msgid "Closed"
-msgstr "Fermé"
-
-msgid "Opens in:"
-msgstr "Ouverture dans :"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "Il est permis d'activer au maximum 5 indicateurs."
 
