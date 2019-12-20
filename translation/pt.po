@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: pt-PT\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2019-06-24 19:31\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -30,8 +28,8 @@ msgstr "\"Índice de massa\" ou \"Estrela Doji\""
 msgid "Active"
 msgstr "Ativo"
 
-msgid "Add New"
-msgstr "Adicionar novo"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Anotação"
@@ -56,6 +54,9 @@ msgstr "C"
 
 msgid "Callout"
 msgstr "Período de disponibilidade"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "CANCELAR"
@@ -90,6 +91,9 @@ msgstr "FECHAR"
 msgid "CLOSED"
 msgstr "FECHADO"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "Ponto colorido"
 
@@ -116,9 +120,6 @@ msgstr "Data"
 
 msgid "Day"
 msgstr "Dia"
-
-msgid "DONE"
-msgstr "CONCLUÍDO"
 
 msgid "Doodle"
 msgstr "Forma livre"
@@ -237,6 +238,9 @@ msgstr "Abrir"
 msgid "OPEN"
 msgstr "ABRIR"
 
+msgid "Opens in:"
+msgstr "Abre a porta:"
+
 msgid "OVERWRITE"
 msgstr "SUBSTITUIR"
 
@@ -273,8 +277,8 @@ msgstr "Linha de Regressão"
 msgid "Renko"
 msgstr "Renko"
 
-msgid "RESET"
-msgstr "REINICIAR"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "Carregando dados do gráfico..."
@@ -299,6 +303,9 @@ msgstr "Botão direito do mouse para apagar"
 
 msgid "right-click to manage"
 msgstr "Botão direito do mouse para gerenciar"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "Pesquisar..."
@@ -326,6 +333,12 @@ msgstr "Forma - Coração"
 
 msgid "Shape - Star"
 msgstr "Forma - Estrela"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Arco de Resistência Velocidade"
@@ -371,6 +384,9 @@ msgstr "Níveis de Tirone"
 
 msgid "Underlying Assets"
 msgstr "Ativos subjacentes"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "São permitidos até 5 indicadores ativos."
 
 msgid "Vertical"
 msgstr "Vertical"
@@ -1346,13 +1362,4 @@ msgstr "Ratio Forte"
 
 msgid "Weak Ratio"
 msgstr "Ratio Fraca"
-
-msgid "Closed"
-msgstr "Fechado"
-
-msgid "Opens in:"
-msgstr "Abre a porta:"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "São permitidos até 5 indicadores ativos."
 
