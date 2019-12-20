@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2019-12-20 22:32\n"
+"PO-Revision-Date: 2019-12-20 22:43\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -92,7 +92,7 @@ msgid "CLOSED"
 msgstr "ZAMKNIĘTE"
 
 msgid "Color"
-msgstr ""
+msgstr "Kolor"
 
 msgid "Colored Dot"
 msgstr "Kolorowe kropki"
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Reset"
-msgstr ""
+msgstr "Resetuj"
 
 msgid "Retrieving Chart Data..."
 msgstr "Pobieranie danych wykresu..."
@@ -305,7 +305,7 @@ msgid "right-click to manage"
 msgstr "kliknij prawym przyciskiem, aby zarządzać"
 
 msgid "Save"
-msgstr ""
+msgstr "Zapisz"
 
 msgid "Search..."
 msgstr "Wyszukaj..."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "Kształt – gwiazda"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Pokaż najwyższe/najniższy spot"
 
 msgid "Size"
-msgstr ""
+msgstr "Wielkość"
 
 msgid "Speed Resistance Arc"
 msgstr "Łuk odporn. na prędkość"
