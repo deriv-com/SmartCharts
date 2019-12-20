@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-12-20 02:13\n"
+"PO-Revision-Date: 2019-12-20 11:47\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "Hoạt động"
 
 msgid "Add new"
-msgstr ""
+msgstr "Thêm mới"
 
 msgid "Annotation"
 msgstr "Chú thích"
@@ -56,7 +56,7 @@ msgid "Callout"
 msgstr "Chú thích"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Hủy"
 
 msgid "CANCEL"
 msgstr "HỦY BỎ"
@@ -92,7 +92,7 @@ msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
 
 msgid "Color"
-msgstr ""
+msgstr "Màu"
 
 msgid "Colored Dot"
 msgstr "Dấu chấm màu"
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Reset"
-msgstr ""
+msgstr "Thiết lập lại"
 
 msgid "Retrieving Chart Data..."
 msgstr "Lấy dữ liệu biểu đồ..."
@@ -305,7 +305,7 @@ msgid "right-click to manage"
 msgstr "nhấp chuột phải để quản lý"
 
 msgid "Save"
-msgstr ""
+msgstr "Lưu"
 
 msgid "Search..."
 msgstr "Tìm kiếm..."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "Hình dạng - Ngôi sao"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Hiển thị điểm Cao/Thấp nhất"
 
 msgid "Size"
-msgstr ""
+msgstr "Cỡ"
 
 msgid "Speed Resistance Arc"
 msgstr "Đường cung kháng tốc"
