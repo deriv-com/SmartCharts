@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-06-24 07:02\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -30,8 +28,8 @@ msgstr "\"质量指数\" 或 \"十字星\""
 msgid "Active"
 msgstr "活跃"
 
-msgid "Add New"
-msgstr "添新"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "注释"
@@ -56,6 +54,9 @@ msgstr "C"
 
 msgid "Callout"
 msgstr "卖出"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "取消"
@@ -90,6 +91,9 @@ msgstr "收盘"
 msgid "CLOSED"
 msgstr "已关闭"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "彩色点"
 
@@ -116,9 +120,6 @@ msgstr "日期"
 
 msgid "Day"
 msgstr "白天"
-
-msgid "DONE"
-msgstr "已完成"
 
 msgid "Doodle"
 msgstr "自由形式"
@@ -237,6 +238,9 @@ msgstr "开盘"
 msgid "OPEN"
 msgstr "开盘"
 
+msgid "Opens in:"
+msgstr "离开盘时间还有："
+
 msgid "OVERWRITE"
 msgstr "覆盖"
 
@@ -273,8 +277,8 @@ msgstr "回归线"
 msgid "Renko"
 msgstr "砖形图"
 
-msgid "RESET"
-msgstr "重置"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "正在恢复图表数据..."
@@ -299,6 +303,9 @@ msgstr "右键单击鼠标删除"
 
 msgid "right-click to manage"
 msgstr "右键单击管理"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "搜索..."
@@ -326,6 +333,12 @@ msgstr "形状 – 心形"
 
 msgid "Shape - Star"
 msgstr "形状 – 星形"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "速阻弧形线"
@@ -371,6 +384,9 @@ msgstr "泰龙水平线"
 
 msgid "Underlying Assets"
 msgstr "标的资产"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "可同时使用多达5个活动指示器。"
 
 msgid "Vertical"
 msgstr "垂直的"
@@ -1346,13 +1362,4 @@ msgstr "强比例"
 
 msgid "Weak Ratio"
 msgstr "弱比例"
-
-msgid "Closed"
-msgstr "已收盘"
-
-msgid "Opens in:"
-msgstr "离开盘时间还有："
-
-msgid "Up to 5 active indicators allowed."
-msgstr "可同时使用多达5个活动指示器。"
 
