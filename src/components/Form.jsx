@@ -1,6 +1,6 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
-import { ArrowIcon } from './Icons.jsx';
+import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
 
 export class Slider extends React.Component {
@@ -19,7 +19,7 @@ export class Slider extends React.Component {
             step = 1,
             value,
         } = this.props;
-        const barWidth = 120;// css hardcode
+        const barWidth = 238;// css hardcode
         const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
 
         return (
@@ -57,17 +57,18 @@ export class DropDown extends React.Component {
 
     render() {
         const {
-            rows, children, title, onRowClick, className,
+            subtitle, rows, children, value, onRowClick, className,
         } = this.props;
         const { open } = this.state;
         return (
-            <div className={`${className || ''} cq-dropdown`}>
+            <div className={`${className || ''} cq-dropdown ${open ? 'active' : ''}`}>
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    className={`title ${open ? 'active' : ''}`}
+                    className={`value ${open ? 'active' : ''}`}
                     onClick={this.onClick}
                     ref={(ref) => { this.titleRef = ref; }}
                 >
-                    {title}
+                    {value}
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>
@@ -100,15 +101,16 @@ export class Pattern extends React.Component {
         { width: 0, pattern: 'none' },
     ];
     render() {
-        const { pattern, lineWidth, onChange } = this.props;
-        const title = pattern !== 'none'
+        const { pattern, lineWidth, onChange, onActive } = this.props;
+        const value = pattern !== 'none'
             ? <span className={`option ${pattern}-${lineWidth}`} />
             : <span className="none">None</span>;
 
         return (
             <DropDown
                 rows={this.patterns}
-                title={title}
+                value={value}
+                onActive={onActive}
                 onRowClick={onChange}
             >
                 {p => (p.pattern !== 'none'
@@ -139,7 +141,7 @@ export class ColorPicker extends React.Component {
     titleRef = null;
     onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
-        if (e.target !== this.titleRef) {
+        if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
             this.setState({ open: false });
         }
     };
@@ -156,20 +158,21 @@ export class ColorPicker extends React.Component {
     }
 
     render() {
-        const { color, setColor } = this.props;
+        const { subtitle, color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? this.defaultColor() : color;
-
         return (
-            <div className="cq-color-picker">
+            <div className={`cq-color-picker ${this.state.open ? 'active' : ''}`}>
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    className="title"
+                    className="value"
+                    onClick={this.onClick}
+                    ref={(ref) => { this.titleRef = ref; }}
                 >
                     <div
-                        ref={(ref) => { this.titleRef = ref; }}
-                        onClick={this.onClick}
                         className="input-color"
                         style={{ backgroundColor }}
                     />
+                    <ArrowIcon />
                 </div>
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
@@ -263,26 +266,38 @@ export class NumericInput extends React.PureComponent {
         }
     };
 
+    onIncrease = () => this.setState(prevState => ({ value: prevState.value + 1 }));
+    onDecrease = () => this.setState(prevState => ({ value: prevState.value - 1 }));
+
     render() {
-        const { min, max, step } = this.props;
+        const { subtitle, min, max, step } = this.props;
         return (
-            <input
-                type="number"
-                value={this.state.value}
-                onBlur={this.fireOnChange}
-                onChange={this.onUpdateValue}
-                onKeyPress={this.fireOnEnter}
-                min={min}
-                max={max}
-                step={step}
-            />
+            <div className="cq-numeric-input">
+                <input
+                    type="number"
+                    value={this.state.value}
+                    onBlur={this.fireOnChange}
+                    onChange={this.onUpdateValue}
+                    onKeyPress={this.fireOnEnter}
+                    min={min}
+                    max={max}
+                    step={step}
+                />
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
+                <div className="cq-numeric-input-buttons">
+                    <InputNumberPlusIcon onClick={this.onIncrease} />
+                    <InputNumberMinusIcon onClick={this.onDecrease} />
+                </div>
+            </div>
         );
     }
 }
 
 export const NumberColorPicker = ({
     value,
+    theme,
     onChange,
+    onActive,
 }) => {
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
@@ -294,10 +309,14 @@ export const NumberColorPicker = ({
         <span className="cq-numbercolorpicker">
             <NumericInput
                 value={Value}
+                subtitle={t.translate('Size')}
                 onChange={val => onValueChange(val)}
             />
             <ColorPicker
                 color={Color}
+                theme={theme}
+                onActive={onActive}
+                subtitle={t.translate('Color')}
                 setColor={val => onColorChange(val)}
             />
         </span>
