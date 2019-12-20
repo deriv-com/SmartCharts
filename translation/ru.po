@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=4; plural=((n%10==1 && n%100!=11) ? 0 : ((n%10 >= 2 && n%10 <=4 && (n%100 < 12 || n%100 > 14)) ? 1 : ((n%10 == 0 || (n%10 >= 5 && n%10 <=9)) || (n%100 >= 11 && n%100 <= 14)) ? 2 : 3));\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: ru\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-06-26 04:16\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -30,8 +28,8 @@ msgstr "\"Индекс массы\" или \"звезда дожи\""
 msgid "Active"
 msgstr "Активные"
 
-msgid "Add New"
-msgstr "Добавить новый"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Примечание"
@@ -56,6 +54,9 @@ msgstr "З"
 
 msgid "Callout"
 msgstr "Сноска"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
@@ -90,6 +91,9 @@ msgstr "ЗАКРЫТИЕ"
 msgid "CLOSED"
 msgstr "ЗАКРЫТО"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "Цветные точки"
 
@@ -116,9 +120,6 @@ msgstr "Дата"
 
 msgid "Day"
 msgstr "День"
-
-msgid "DONE"
-msgstr "ГОТОВО"
 
 msgid "Doodle"
 msgstr "Произвольной формы"
@@ -237,6 +238,9 @@ msgstr "Открытие"
 msgid "OPEN"
 msgstr "ОТКРЫТИЕ"
 
+msgid "Opens in:"
+msgstr "Открывается в:"
+
 msgid "OVERWRITE"
 msgstr "ПЕРЕЗАПИСАТЬ"
 
@@ -273,8 +277,8 @@ msgstr "Регресионная линия"
 msgid "Renko"
 msgstr "Ренко"
 
-msgid "RESET"
-msgstr "СБРОСИТЬ"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "Получение данных графика..."
@@ -299,6 +303,9 @@ msgstr "Щелкните правой кнопкой мыши чтобы уда�
 
 msgid "right-click to manage"
 msgstr "Щелкните правой кнопкой мыши чтобы управлять"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "Поиск..."
@@ -326,6 +333,12 @@ msgstr "Фигура - Сердце"
 
 msgid "Shape - Star"
 msgstr "Фигура - Звезда"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Дуга сопротивления"
@@ -371,6 +384,9 @@ msgstr "Уровни Тирона"
 
 msgid "Underlying Assets"
 msgstr "Основные активы"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "До пяти индикаторов одновременно."
 
 msgid "Vertical"
 msgstr "Вертикаль"
@@ -1346,13 +1362,4 @@ msgstr "Сильное соотношение"
 
 msgid "Weak Ratio"
 msgstr "Слабое соотношение"
-
-msgid "Closed"
-msgstr "Закрыто"
-
-msgid "Opens in:"
-msgstr "Открывается в:"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "До пяти индикаторов одновременно."
 
