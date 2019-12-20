@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: vi\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-08-18 17:03\n"
+"PO-Revision-Date: 2019-12-20 02:13\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -30,8 +28,8 @@ msgstr "\"Mass Index\" hay \"Doji Star\""
 msgid "Active"
 msgstr "Hoạt động"
 
-msgid "Add New"
-msgstr "Thêm mới"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Chú thích"
@@ -56,6 +54,9 @@ msgstr "C"
 
 msgid "Callout"
 msgstr "Chú thích"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "HỦY BỎ"
@@ -90,6 +91,9 @@ msgstr "ĐÓNG"
 msgid "CLOSED"
 msgstr "ĐÃ ĐÓNG"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "Dấu chấm màu"
 
@@ -116,9 +120,6 @@ msgstr "Ngày"
 
 msgid "Day"
 msgstr "Ngày"
-
-msgid "DONE"
-msgstr "HOÀN THÀNH"
 
 msgid "Doodle"
 msgstr "Nháp"
@@ -237,6 +238,9 @@ msgstr "Mở"
 msgid "OPEN"
 msgstr "MỞ"
 
+msgid "Opens in:"
+msgstr "Mở vào:"
+
 msgid "OVERWRITE"
 msgstr "GHI ĐÈ LÊN"
 
@@ -273,8 +277,8 @@ msgstr "Hồi qui tuyến"
 msgid "Renko"
 msgstr "Renko"
 
-msgid "RESET"
-msgstr "THIẾT LẬP LẠI"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "Lấy dữ liệu biểu đồ..."
@@ -299,6 +303,9 @@ msgstr "nhấp chuột phải để xóa"
 
 msgid "right-click to manage"
 msgstr "nhấp chuột phải để quản lý"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "Tìm kiếm..."
@@ -326,6 +333,12 @@ msgstr "Hình dạng - Trái tim"
 
 msgid "Shape - Star"
 msgstr "Hình dạng - Ngôi sao"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Đường cung kháng tốc"
@@ -371,6 +384,9 @@ msgstr "Cấp độ Tirone"
 
 msgid "Underlying Assets"
 msgstr "Tài sản cơ sở"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "Được phép chọn đến 5 chỉ số hoạt động."
 
 msgid "Vertical"
 msgstr "Theo chiều dọc"
@@ -1346,13 +1362,4 @@ msgstr "Tỷ lệ mạnh"
 
 msgid "Weak Ratio"
 msgstr "Tỷ lệ yếu"
-
-msgid "Closed"
-msgstr "Đã đóng"
-
-msgid "Opens in:"
-msgstr "Mở vào:"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "Được phép chọn đến 5 chỉ số hoạt động."
 
