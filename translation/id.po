@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: id\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-06-25 05:21\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -30,8 +28,8 @@ msgstr "\"Mass Index\" atau \"Doji Star\""
 msgid "Active"
 msgstr "Aktif"
 
-msgid "Add New"
-msgstr "Tambah Baru"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Anotasi"
@@ -56,6 +54,9 @@ msgstr "C"
 
 msgid "Callout"
 msgstr "Callout"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "BATAL"
@@ -90,6 +91,9 @@ msgstr "CLOSE"
 msgid "CLOSED"
 msgstr "TUTUP"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "Titik Berwarna"
 
@@ -116,9 +120,6 @@ msgstr "Tanggal"
 
 msgid "Day"
 msgstr "Hari"
-
-msgid "DONE"
-msgstr "SELESAI"
 
 msgid "Doodle"
 msgstr "Doodle"
@@ -237,6 +238,9 @@ msgstr "Open"
 msgid "OPEN"
 msgstr "OPEN"
 
+msgid "Opens in:"
+msgstr "Dibuka dalam:"
+
 msgid "OVERWRITE"
 msgstr "MENGGANTI"
 
@@ -273,8 +277,8 @@ msgstr "Garis Regresi"
 msgid "Renko"
 msgstr "Renko"
 
-msgid "RESET"
-msgstr "ULANG"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "Menampilkan Data Grafik..."
@@ -299,6 +303,9 @@ msgstr "klik kanan untuk menghapus"
 
 msgid "right-click to manage"
 msgstr "klik kanan untuk mengelola"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "Cari..."
@@ -326,6 +333,12 @@ msgstr "Bentuk - Hati"
 
 msgid "Shape - Star"
 msgstr "Bentuk - Bintang"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Perlawanan Panah Kecepatan"
@@ -371,6 +384,9 @@ msgstr "Tingkat Tirone"
 
 msgid "Underlying Assets"
 msgstr "Aset Dasar"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "Dibenarkan hingga 5 indikator aktif."
 
 msgid "Vertical"
 msgstr "Vertikal"
@@ -1346,13 +1362,4 @@ msgstr "Rasio Kuat"
 
 msgid "Weak Ratio"
 msgstr "Rasio Lemah"
-
-msgid "Closed"
-msgstr "Tutup"
-
-msgid "Opens in:"
-msgstr "Dibuka dalam:"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "Dibenarkan hingga 5 indikator aktif."
 
