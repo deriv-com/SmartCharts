@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: pl\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2019-06-24 19:46\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -30,8 +28,8 @@ msgstr "„Indeks masowy” lub „Gwiazda Doji”"
 msgid "Active"
 msgstr "Aktywne"
 
-msgid "Add New"
-msgstr "Dodaj nowy"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Adnotacja"
@@ -56,6 +54,9 @@ msgstr "Z"
 
 msgid "Callout"
 msgstr "Wezwanie"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "ANULUJ"
@@ -90,6 +91,9 @@ msgstr "ZAMKNIĘCIE"
 msgid "CLOSED"
 msgstr "ZAMKNIĘTE"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "Kolorowe kropki"
 
@@ -116,9 +120,6 @@ msgstr "Data"
 
 msgid "Day"
 msgstr "Dzień"
-
-msgid "DONE"
-msgstr "GOTOWE"
 
 msgid "Doodle"
 msgstr "Doodle"
@@ -237,6 +238,9 @@ msgstr "Otwórz"
 msgid "OPEN"
 msgstr "OTWARCIE"
 
+msgid "Opens in:"
+msgstr "Otwarcie za:"
+
 msgid "OVERWRITE"
 msgstr "NADPISZ"
 
@@ -273,8 +277,8 @@ msgstr "Linia regresji"
 msgid "Renko"
 msgstr "Renko"
 
-msgid "RESET"
-msgstr "RESETUJ"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "Pobieranie danych wykresu..."
@@ -299,6 +303,9 @@ msgstr "kliknij prawym przyciskiem, aby usunąć"
 
 msgid "right-click to manage"
 msgstr "kliknij prawym przyciskiem, aby zarządzać"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "Wyszukaj..."
@@ -326,6 +333,12 @@ msgstr "Kształt - serce"
 
 msgid "Shape - Star"
 msgstr "Kształt – gwiazda"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Łuk odporn. na prędkość"
@@ -371,6 +384,9 @@ msgstr "Poziomy Tirone"
 
 msgid "Underlying Assets"
 msgstr "Aktywa bazowe"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "Dozwolonych jest maksymalnie 5 aktywnych wskaźników."
 
 msgid "Vertical"
 msgstr "Linia pionowa"
@@ -1346,13 +1362,4 @@ msgstr "Wskaźnik silny"
 
 msgid "Weak Ratio"
 msgstr "Wskaźnik słaby"
-
-msgid "Closed"
-msgstr "Zamknięte"
-
-msgid "Opens in:"
-msgstr "Otwarcie za:"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "Dozwolonych jest maksymalnie 5 aktywnych wskaźników."
 
