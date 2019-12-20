@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: smartcharts\n"
 "X-Crowdin-Language: th\n"
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-06-25 08:13\n"
+"PO-Revision-Date: 2019-12-20 02:12\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -30,8 +28,8 @@ msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
 msgid "Active"
 msgstr "ใช้งานอยู่"
 
-msgid "Add New"
-msgstr "เพิ่มใหม่"
+msgid "Add new"
+msgstr ""
 
 msgid "Annotation"
 msgstr "คำอธิบายประกอบ"
@@ -56,6 +54,9 @@ msgstr "C"
 
 msgid "Callout"
 msgstr "คำบรรยายภาพ"
+
+msgid "Cancel"
+msgstr ""
 
 msgid "CANCEL"
 msgstr "CANCEL"
@@ -90,6 +91,9 @@ msgstr "ปิด"
 msgid "CLOSED"
 msgstr "ปิดแล้ว"
 
+msgid "Color"
+msgstr ""
+
 msgid "Colored Dot"
 msgstr "จุดสี"
 
@@ -116,9 +120,6 @@ msgstr "วันที่"
 
 msgid "Day"
 msgstr "วัน"
-
-msgid "DONE"
-msgstr "แล้วเสร็จ"
 
 msgid "Doodle"
 msgstr "Doodle"
@@ -237,6 +238,9 @@ msgstr "เปิด"
 msgid "OPEN"
 msgstr "เปิด"
 
+msgid "Opens in:"
+msgstr "เปิดใน:"
+
 msgid "OVERWRITE"
 msgstr "OVERWRITE"
 
@@ -273,8 +277,8 @@ msgstr "เส้นถดถอย"
 msgid "Renko"
 msgstr "Renko"
 
-msgid "RESET"
-msgstr "RESET"
+msgid "Reset"
+msgstr ""
 
 msgid "Retrieving Chart Data..."
 msgstr "กำลังโหลดข้อมูลของแผนภูมิ..."
@@ -299,6 +303,9 @@ msgstr "คลิกขวาเพื่อลบ"
 
 msgid "right-click to manage"
 msgstr "คลิกขวาเพื่อจัดการ"
+
+msgid "Save"
+msgstr ""
 
 msgid "Search..."
 msgstr "ค้นหา..."
@@ -326,6 +333,12 @@ msgstr "รูปร่าง - หัวใจ"
 
 msgid "Shape - Star"
 msgstr "รูปร่าง - ดาว"
+
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
 
 msgid "Speed Resistance Arc"
 msgstr "Speed Resistance Arc"
@@ -371,6 +384,9 @@ msgstr "ระดับ Tirone"
 
 msgid "Underlying Assets"
 msgstr "ผลิตภัณฑ์อ้างอิง"
+
+msgid "Up to 5 active indicators allowed."
+msgstr "เลือกได้สูงสุด 5 ดัชนี"
 
 msgid "Vertical"
 msgstr "แนวตั้ง"
@@ -1346,13 +1362,4 @@ msgstr "อัตราส่วนความแข็งแรง"
 
 msgid "Weak Ratio"
 msgstr "อัตราส่วนความอ่อนแอ"
-
-msgid "Closed"
-msgstr "ปิดแล้ว"
-
-msgid "Opens in:"
-msgstr "เปิดใน:"
-
-msgid "Up to 5 active indicators allowed."
-msgstr "เลือกได้สูงสุด 5 ดัชนี"
 
