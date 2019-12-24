@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-12-24 19:52\n"
+"PO-Revision-Date: 2019-12-24 20:22\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Ренко"
 
 msgid "Reset"
-msgstr "Изменить"
+msgstr "Сбросить"
 
 msgid "Retrieving Chart Data..."
 msgstr "Получение данных графика..."
