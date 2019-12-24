@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-12-20 02:12\n"
+"PO-Revision-Date: 2019-12-24 19:52\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "Активные"
 
 msgid "Add new"
-msgstr ""
+msgstr "Добавить"
 
 msgid "Annotation"
 msgstr "Примечание"
@@ -56,7 +56,7 @@ msgid "Callout"
 msgstr "Сноска"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 msgid "CANCEL"
 msgstr "ОТМЕНА"
@@ -92,7 +92,7 @@ msgid "CLOSED"
 msgstr "ЗАКРЫТО"
 
 msgid "Color"
-msgstr ""
+msgstr "Цвет"
 
 msgid "Colored Dot"
 msgstr "Цветные точки"
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Ренко"
 
 msgid "Reset"
-msgstr ""
+msgstr "Изменить"
 
 msgid "Retrieving Chart Data..."
 msgstr "Получение данных графика..."
@@ -305,7 +305,7 @@ msgid "right-click to manage"
 msgstr "Щелкните правой кнопкой мыши чтобы управлять"
 
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 msgid "Search..."
 msgstr "Поиск..."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "Фигура - Звезда"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Показать наибольш./наименьш. спот-цену"
 
 msgid "Size"
-msgstr ""
+msgstr "Размер"
 
 msgid "Speed Resistance Arc"
 msgstr "Дуга сопротивления"
