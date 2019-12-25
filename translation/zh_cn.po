@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-12-20 02:12\n"
+"PO-Revision-Date: 2019-12-25 02:01\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "活跃"
 
 msgid "Add new"
-msgstr ""
+msgstr "添新"
 
 msgid "Annotation"
 msgstr "注释"
@@ -56,7 +56,7 @@ msgid "Callout"
 msgstr "卖出"
 
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 msgid "CANCEL"
 msgstr "取消"
@@ -92,7 +92,7 @@ msgid "CLOSED"
 msgstr "已关闭"
 
 msgid "Color"
-msgstr ""
+msgstr "颜色"
 
 msgid "Colored Dot"
 msgstr "彩色点"
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "砖形图"
 
 msgid "Reset"
-msgstr ""
+msgstr "重置"
 
 msgid "Retrieving Chart Data..."
 msgstr "正在恢复图表数据..."
@@ -305,7 +305,7 @@ msgid "right-click to manage"
 msgstr "右键单击管理"
 
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 msgid "Search..."
 msgstr "搜索..."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "形状 – 星形"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "显示最高/最低现价"
 
 msgid "Size"
-msgstr ""
+msgstr "大小"
 
 msgid "Speed Resistance Arc"
 msgstr "速阻弧形线"
