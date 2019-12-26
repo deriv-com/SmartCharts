@@ -172,6 +172,7 @@ class App extends Component {
             barrierType: '',
             draggable: true,
             markers: [],
+            viewToolbar: false,
         };
     }
 
@@ -280,6 +281,18 @@ class App extends Component {
             <DrawTools />
             <Views />
             <Share />
+            <div className="ciq-menu ciq-enabled">
+                <div
+                    className="cq-menu-btn"
+                    onClick={() => {
+                        this.setState(prevState => ({
+                            viewToolbar: !prevState.viewToolbar,
+                        }));
+                    }}
+                >
+                    menu
+                </div>
+            </div>
             {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
@@ -407,7 +420,7 @@ class App extends Component {
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
-            enabledNavigationWidget, activeLanguage } = this.state;
+            enabledNavigationWidget, activeLanguage, viewToolbar } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -447,6 +460,7 @@ class App extends Component {
                         barriers={barriers}
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
+                        onViewToolbar={viewToolbar}
                     >
                         {endEpoch ? (
                             <Marker

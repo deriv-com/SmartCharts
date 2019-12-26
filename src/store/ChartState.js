@@ -72,9 +72,12 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
+        onViewToolbar,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
+
+        this.mainStore.share.open(onViewToolbar);
 
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;

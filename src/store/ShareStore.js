@@ -30,6 +30,11 @@ export default class ShareStore {
         return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
     }
 
+    @action.bound open(value) {
+        this.menu.setOpen(value);
+    }
+
+
     @action.bound downloadPNG() {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
