@@ -36,7 +36,7 @@
         .ic-icon {
             width: 32px;
             height: 32px;
-            margin: auto;
+            margin: 0 auto 4px;
         }
         &:hover {
             @include themify($themes) {
