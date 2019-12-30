@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-12-20 02:12\n"
+"PO-Revision-Date: 2019-12-30 08:23\n"
 
 msgid " already exists."
 msgstr " existe déja."
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "Actif"
 
 msgid "Add new"
-msgstr ""
+msgstr "Ajouter nouveau"
 
 msgid "Annotation"
 msgstr "Annotation"
@@ -56,7 +56,7 @@ msgid "Callout"
 msgstr "Légende"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 msgid "CANCEL"
 msgstr "ANNULATION"
@@ -92,7 +92,7 @@ msgid "CLOSED"
 msgstr "FERMÉ"
 
 msgid "Color"
-msgstr ""
+msgstr "Couleur"
 
 msgid "Colored Dot"
 msgstr "Point Coloré"
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Reset"
-msgstr ""
+msgstr "Réinitialiser"
 
 msgid "Retrieving Chart Data..."
 msgstr "Récupération des données du graphique..."
@@ -305,7 +305,7 @@ msgid "right-click to manage"
 msgstr "cliquez droit pour gérer"
 
 msgid "Save"
-msgstr ""
+msgstr "Sauvegarder"
 
 msgid "Search..."
 msgstr "Rechercher..."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "Forme - Étoile"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Afficher Spot Plus Haut/Plus Bas"
 
 msgid "Size"
-msgstr ""
+msgstr "Volume"
 
 msgid "Speed Resistance Arc"
 msgstr "Arc de Résistance Vitesse"
