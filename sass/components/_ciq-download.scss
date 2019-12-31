@@ -1,37 +1,115 @@
 
-.cq-download {
-    .cq-menu-dropdown {
-        width: 200px;
-    }
-    .body {
+.cq-download-menu {
+    .cq-dialog-overlay {
+        position: fixed;
+        transform: inherit;
+        top: 0px;
+        left: 0px;
+        width: 100%;
         height: 100%;
-        padding: 18px;
 
-        .content {
-            .ciq-list-download {
-                width: 100%;
+        .cq-dialog {
+            width: 320px;
+        }
+    }
+}
 
-                .ciq-list-item {
-                    width: 100%;
-                    padding: 1px 10px;
-                    height: 40px;
-                    justify-content: space-between;
+.cq-download {
+    padding: 24px;
+    display: flex;
+    @include themify($themes) {
+        background: themed('DownloadBg');
+        color: themed('DownloadText');
+    }
 
-                    &:first-child {
-                        margin-top: 0px !important;
-                    }
-                    .cq-loading {
-                        margin-left: 5px;
-                    }
-                    .ic-icon {
-                        position: relative;
-                        top: -4px;
-                    }
-                }
+    &__item {
+        width: 88px;
+        height: 88px;
+        padding: 16px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        margin-right: 8px;
+
+        .ic-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 4px;
+        }
+        &:hover {
+            @include themify($themes) {
+                background: themed('DownloadActiveBg');
             }
         }
-        .caption2 {
-            margin-top: 10px;
+        &__label {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            display: block;
         }
+        &--loading {
+            > .cq-download__item__label,
+            > .ic-icon {
+                opacity: 0.32;
+            }
+        }
+    }
+}
+
+.loading {
+    margin: 0px auto;
+    width: 50px;
+    height: 14px;
+    text-align: center;
+    font-size: 10px;
+
+    &__bullet {
+        height: 100%;
+        width: 4px;
+        margin: 0 2px;
+        display: inline-block;
+        border-radius: 3px;
+        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        @include themify($themes) {
+            background-color: themed('LoadingBg');
+        }
+
+        &:nth-child(2) {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
+        &:nth-child(3) {
+            -webkit-animation-delay: -1s;
+            animation-delay: -1s;
+        }
+        &:nth-child(4) {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
+    }
+}
+
+@-webkit-keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        -webkit-transform: scaleY(1);
+    }
+}
+
+@keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1);
+        -webkit-transform: scaleY(1);
     }
 }
