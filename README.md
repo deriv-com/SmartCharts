@@ -148,11 +148,18 @@ Attributes marked with `*` are **mandatory**:
 shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
+hideBarrierLine | hide/show the barrier line. Can be used to show only the title. Defaults to `false`.
+hideOffscreenLine | hide/show the barrier line when it is offscreen. Defaults to `false`.
+hideOffscreenBarrier | hide/show the barrier line & title when it is offscreen. Defaults to `false`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
+title | Title text of the barrier
+isSingleBarrier | Shows only High barrier, hides low barrier & shades from rendering when the flag is true. Defaults to `false`.
+showOffscreenArrows | hide/show arrows with direction when the barrier is offscreen. Defaults to `false`.
+opacityOnOverlap | Set the opacity of the barrier when it is overlapping with other barrier.
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
 

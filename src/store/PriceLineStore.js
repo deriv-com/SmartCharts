@@ -170,8 +170,7 @@ export default class PriceLineStore {
         return price;
     }
 
-    @action.bound
-    _calculateTop = () => {
+    @action.bound _calculateTop = () => {
         if (this.stx.currentQuote() === null) { return; }
 
         let top = this._locationFromPrice(this.realPrice);
@@ -180,23 +179,20 @@ export default class PriceLineStore {
         if (top < 0) {
             // this.uncentered = true;
             if (top < -LINE_OFFSET_HEIGHT_HALF) {
-                this.offScreen = true;
                 this.offScreenDirection = DIRECTIONS.UP;
             }
             top = 0;
         } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             // this.uncentered = true;
             if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
-                this.offScreen = true;
                 this.offScreenDirection = DIRECTIONS.DOWN;
             }
             top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
             // this.uncentered = false;
-            this.offScreen = false;
             this.offScreenDirection = null;
         }
-
+        this.offScreen = !!this.offScreenDirection;
 
         if (top + 30 > this.chart.panel.height) {
             top = this.chart.panel.height - 30;
