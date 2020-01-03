@@ -25,12 +25,67 @@ class Menu extends Component {
             shouldRenderDialogs,
             onMouseEnter,
             onMouseLeave,
+            newStyle, // this props will remove after we apply new design
+            // to all of components
         } = this.props;
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
 
-        const dropdown = (shouldRenderDialogs
+        if (newStyle) {
+            const newDropdown = (shouldRenderDialogs
+                && (
+                    <DropdownDialog
+                        className="cq-dialog"
+                        isMobile={isMobile}
+                        isFullscreen={isFullscreen}
+                        title={title}
+                        enableOverlay
+                    >
+                        {rest}
+                    </DropdownDialog>
+                ));
+            const newDialog = (isMobile && modalNode)
+                        && ReactDOM.createPortal(
+                            <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                                <div
+                                    className="cq-menu-overlay"
+                                    onClick={this.onOverlayClick}
+                                >
+                                    {newDropdown}
+                                </div>
+                            </div>,
+                            modalNode,
+                        )
+                    || newDropdown;
+            return (
+                enabled && (
+                    <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                        <div
+                            className="cq-menu-btn"
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                            onClick={onTitleClick}
+                        >
+                            {first}
+                        </div>
+                        {open ? newDialog : ''}
+                    </div>
+                ) || (
+                    <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+                        <div
+                            className="cq-menu-btn"
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                        >
+                            {first}
+                        </div>
+                    </div>
+                )
+            );
+        }
+
+        const oldDropdown = (shouldRenderDialogs
             && (
                 <CSSTransition
                     in={open}
@@ -76,12 +131,12 @@ class Menu extends Component {
                                 className="cq-menu-overlay"
                                 onClick={this.onOverlayClick}
                             >
-                                {dropdown}
+                                {oldDropdown}
                             </div>
                         </div>,
                         modalNode,
                     )
-                || (dropdown)}
+                || (oldDropdown)}
                 </div>
             ) || (
                 <div className={`ciq-menu ciq-disabled ${className || ''}`}>
