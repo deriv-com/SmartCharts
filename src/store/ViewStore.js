@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -9,6 +9,17 @@ export default class ViewStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         this.ViewsMenu = this.menu.connect(Menu);
+        reaction(() => this.menu.dialog.open, () => {
+            if (ViewStore.views.length === 0) {
+                this.updateRoute('new');
+            } else {
+                this.updateRoute('main');
+            }
+
+            if (this.menu.dialog.open) {
+                this.templateName = '';
+            }
+        });
     }
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
@@ -78,6 +89,13 @@ export default class ViewStore {
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');
     }
 
+    @action.bound removeAll() {
+        ViewStore.views = [];
+        ViewStore.updateLocalStorage();
+        logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove All Templates');
+        this.updateRoute('new');
+    }
+
     @action.bound applyLayout(idx, e) {
         if (e.nativeEvent.is_item_removed) { return; }
         if (this.loader) {
@@ -115,6 +133,10 @@ export default class ViewStore {
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
         setTimeout(importLayout, 100);
+    }
+
+    @action.bound onToggleNew() {
+        this.updateRoute('main');
     }
 
     inputRef = (ref) => {
