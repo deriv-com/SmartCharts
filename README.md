@@ -157,9 +157,9 @@ onChange | When price of high or low barrier changes (including when switched to
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
 title | Title text of the barrier
-isSingleBarrier | Shows only High barrier, hides low barrier & shades from rendering when the flag is true. Defaults to `false`.
+isSingleBarrier | Shows only High barrier, stops low barrier & shades from rendering when the flag is true. Defaults to `false`.
 showOffscreenArrows | hide/show arrows with direction when the barrier is offscreen. Defaults to `false`.
-opacityOnOverlap | Set the opacity of the barrier when it is overlapping with other barrier.
+opacityOnOverlap | Sets the opacity of the barrier when it is overlapping with other barrier.
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
 
