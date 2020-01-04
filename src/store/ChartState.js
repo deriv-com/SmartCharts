@@ -25,6 +25,7 @@ class ChartState {
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
+    @observable crosshairState = 1;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -72,6 +73,8 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
+        crosshairState,
+        chartSize,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -104,7 +107,6 @@ class ChartState {
             this.onExportLayout = onExportLayout;
             this.exportLayout();
         }
-
 
         if (chartType !== this.chartType && this.context) {
             if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
@@ -161,6 +163,20 @@ class ChartState {
 
         if (removeAllComparisons) {
             this.comparisonStore.removeAll();
+        }
+
+        if (crosshairState !== null && crosshairState !== this.crosshairState) {
+            this.mainStore.crosshair.onChange(crosshairState);
+            this.mainStore.state.saveLayout();
+            this.crosshairState = crosshairState;
+        }
+
+        if (chartSize) {
+            if (chartSize === 1) {
+                this.mainStore.chartSize.zoomIn();
+            } else {
+                this.mainStore.chartSize.zoomOut();
+            }
         }
 
         this.mainStore.chartSetting.setSettings(this.settings);
@@ -450,7 +466,7 @@ class ChartState {
         this.stxx.clearDrawings();
 
         // TODO: use constant
-        this.mainStore.crosshair.setCrosshairState(2);
+        this.mainStore.crosshair.onChange(2);
     }
 
     exportLayout() {

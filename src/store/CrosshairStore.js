@@ -41,7 +41,7 @@ class CrosshairStore {
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
         const state = (typeof storedState !== 'number') ? 2 : storedState;
-        this.setCrosshairState(state);
+        this.onChange(state);
 
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
@@ -69,15 +69,22 @@ class CrosshairStore {
 
     @action.bound toggleState() {
         const state = (this.state + 1) % 3;
-        this.setCrosshairState(state);
+        this.onChange(state);
         this.mainStore.state.saveLayout();
     }
 
-    setCrosshairState(state) {
+    @action.bound updateProps(onChange) {
+        this.onCrosshairChanged = onChange;
+    }
+
+    onChange(state) {
         this.state = state;
         this.setFloatPriceLabelStyle();
         this.stx.layout.crosshair = state;
         this.stx.doDisplayCrosshairs();
+
+        this.mainStore.state.crosshairState = state;
+        this.mainStore.state.saveLayout();
     }
 
     renderCrosshairTooltip = () => {

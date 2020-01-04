@@ -172,6 +172,7 @@ class App extends Component {
             barrierType: '',
             draggable: true,
             markers: [],
+            crosshairState: 1,
         };
     }
 
@@ -247,7 +248,11 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
+            {isMobile ? '' : (
+                <CrosshairToggle
+                    onChange={crosshair => this.setState({ crosshairState: crosshair })}
+                />
+            )}
             <ChartTypes
                 onChange={(chartType, isChartTypeCandle) => {
                     this.setState({
@@ -402,12 +407,32 @@ class App extends Component {
         window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages ? 'true' : 'false'}`;
     }
 
+    onCrosshair = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            crosshairState: value === 'null' ? null : parseInt(value, 10),
+        });
+    }
+
+    onChartSize = (state) => {
+        this.setState({
+            chartSize: state,
+        });
+
+        setTimeout(() => {
+            this.setState({
+                chartSize: 0,
+            });
+        }, 300);
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
-            enabledNavigationWidget, activeLanguage } = this.state;
+            enabledNavigationWidget, activeLanguage,
+            crosshairState, chartSize } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -447,6 +472,8 @@ class App extends Component {
                         barriers={barriers}
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
+                        crosshairState={crosshairState}
+                        chartSize={chartSize}
                     >
                         {endEpoch ? (
                             <Marker
@@ -472,6 +499,20 @@ class App extends Component {
                     <div className="form-row">
                         Navigation Widget <br />
                         <button type="button" onClick={this.onWidget}>Toggle</button>
+                    </div>
+                    <div className="form-row">
+                        Zoom <br />
+                        <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
+                        <button type="button" onClick={() => this.onChartSize(-1)}>Zoom out</button>
+                    </div>
+                    <div className="form-row">
+                        Crosshair State <br />
+                        <select onChange={this.onCrosshair}>
+                            <option value="null">not set</option>
+                            <option value="0">state 0</option>
+                            <option value="1">state 1</option>
+                            <option value="2">state 2</option>
+                        </select>
                     </div>
                     <div className="form-row">
                         Active Language:
