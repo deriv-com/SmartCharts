@@ -65,10 +65,6 @@ export default class PriceLineStore {
         return display;
     }
 
-    @computed get yAxiswidth() {
-        return this.mainStore.chart.yAxiswidth;
-    }
-
     get price() {
         return this._price;
     }
@@ -108,6 +104,10 @@ export default class PriceLineStore {
 
     get realPrice() {
         return this.relative ? this.stx.currentQuote().Close + this._price : this._price;
+    }
+
+    get yAxiswidth() {
+        return this.mainStore.chart.yAxiswidth;
     }
 
     @action.bound setDragLine(el) {
