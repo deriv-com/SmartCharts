@@ -75,6 +75,7 @@ class ChartState {
         symbol,
         crosshairState,
         chartSize,
+        maxTick,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -180,6 +181,14 @@ class ChartState {
         }
 
         this.mainStore.chartSetting.setSettings(this.settings);
+
+        if (maxTick && this.stxx) {
+            const dataSetLength = this.stxx.chart.dataSet.length;
+            const expectTime = this.stxx.chart.dataSet[dataSetLength - maxTick - 1];
+            this.scrollChartToLeft(expectTime, true);
+            this.stxx.chart.lockScroll = false;
+            this.setIsChartScrollingToEpoch(true);
+        }
 
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;

@@ -426,13 +426,20 @@ class App extends Component {
         }, 300);
     }
 
+    onMaxTick = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            maxTick: value === 'null' ? null : parseInt(value, 10),
+        });
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
             enabledNavigationWidget, activeLanguage,
-            crosshairState, chartSize } = this.state;
+            crosshairState, chartSize, maxTick } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -474,6 +481,7 @@ class App extends Component {
                         scrollToEpochOffset={leftOffset}
                         crosshairState={crosshairState}
                         chartSize={chartSize}
+                        maxTick={maxTick}
                     >
                         {endEpoch ? (
                             <Marker
@@ -512,6 +520,15 @@ class App extends Component {
                             <option value="0">state 0</option>
                             <option value="1">state 1</option>
                             <option value="2">state 2</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        Max tick <br />
+                        <select onChange={this.onMaxTick}>
+                            <option value="null">not set</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
                         </select>
                     </div>
                     <div className="form-row">
