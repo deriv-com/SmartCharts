@@ -334,10 +334,13 @@ html,body{-ms-touch-action:none;margin:0px}
 .chart-line.horizontal.draggable>.draggable-area{height:20px;top:-8px;position:absolute;width:100%}
 .chart-line.horizontal.draggable>.draggable-area:hover{background:rgba(0,0,0,0.05)}
 .chart-line.horizontal .drag-line{height:1px;float:left;width:100%;margin-left:-10px;position:relative;border-color:inherit;border-top-width:1px}
+.chart-line.horizontal .title-wrapper{position:absolute;height:24px;background-image:linear-gradient(transparent 30%, var(--general-main-1) 50%, transparent 75%);top:-11px;display:flex;align-items:center;justify-content:center;font-size:11px;padding:3px 10px;font-weight:bold}
+.chart-line.horizontal .title-wrapper .title{white-space:pre-wrap}
 .draggable.chart-line:hover.horizontal{cursor:ns-resize}
 .draggable.chart-line:hover.vertical{cursor:ew-resize}
 .hide-pricelines>.chart-line.horizontal{display:none}
 .drag-price{display:block;height:24px;top:-11px;position:absolute;right:-1px;border:1px solid inherit;border-radius:4px}
+.drag-price .arrow-icon{height:39px;padding:4px 0px;position:absolute;transition:none;left:2px;background:var(--general-main-1);width:calc(100% - 2px)}
 .no-touch .price-arrow span{position:absolute;top:4px;left:6px;display:block;width:15px;height:15px;background-position:-4px -488px;opacity:0;transition:opacity 0.2s}
 .no-touch .chart-line:hover .price-arrow{width:20px;height:23px}
 .no-touch .chart-line:hover .price-arrow span{opacity:1}
