@@ -1,6 +1,7 @@
 .ciq-chart-types {
     .cq-menu-dropdown {
-        width: 200px;
+        width: 424px;
+        height: 174px;
         box-sizing: border-box;
 
         .body {
@@ -26,6 +27,52 @@
                     stroke: none;
                 }
             }
+        }
+    }
+}
+
+.ciq-chart-type {
+    display: flex;
+    padding: 24px;
+    @include themify($themes) {
+        background: themed('ChartTypeBg');
+        color: themed('ChartTypeText');
+    }
+
+    &__item {
+        $self: &;
+        width: 88px;
+        height: 88px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-right: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid transparent;
+
+        &:last-child {
+            margin-right: 0px;
+        }
+        &__text {
+            display: block;
+            @include themify($themes) {
+                color: themed('ChartTypeText');
+            }
+        }
+        &--active {
+            @include themify($themes) {
+                border-color: themed('ChartTypeActiveBorder');
+            }
+
+            #{ $self }__text {
+                font-weight: bold;
+            }
+        }
+        &--disabled {
+            opacity: 0.6;
+            pointer-events: none;
         }
     }
 }

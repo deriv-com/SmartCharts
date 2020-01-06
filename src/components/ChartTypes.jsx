@@ -1,7 +1,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
-import { SettingIcon } from './Icons.jsx';
+import {
+    SettingIcon,
+    // TypeAreaIcon,
+    // TypeCandleIcon,
+    // TypeHollowIcon,
+    // TypeOhlcIcon,
+} from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
@@ -15,10 +21,13 @@ const ChartTypes = ({
     showAggregateDialog,
     Type,
     updateProps,
+    newDesign,
+    types,
 }) => {
     if (Type === undefined) return (null);
 
     const onItemClick = (idx, chartType) => {
+        console.log(chartType);
         if (Type.id !== chartType.id) {
             onChange(chartType.id, chartType.candleOnly, chartId);
         }
@@ -26,6 +35,30 @@ const ChartTypes = ({
     };
 
     updateProps(onChange);
+
+    if (newDesign) {
+        return (
+            <div className="ciq-chart-type">
+                {types.map((chartType) => {
+                    const Icon = chartType.icon;
+                    let className = 'ciq-chart-type__item';
+                    className += chartType.active ? ' ciq-chart-type__item--active' : '';
+                    className += chartType.disabled ? ' ciq-chart-type__item--disabled' : '';
+                    return (
+                        <div
+                            key={chartType.id}
+                            className={className}
+                            onClick={() => onItemClick(0, chartType)}
+                        >
+                            <Icon />
+                            <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
 
     return (
         <ChartTypeMenu
@@ -79,4 +112,5 @@ export default connect(({ chartType, state }) => ({
     showAggregateDialog: chartType.showAggregateDialog,
     Type               : chartType.type,
     updateProps        : chartType.updateProps,
+    types              : chartType.types,
 }))(ChartTypes);

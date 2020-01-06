@@ -57,7 +57,6 @@ import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 
-
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
 import Success from '../../sass/icons/alert message/success.svg';
@@ -67,6 +66,12 @@ import Home from '../../sass/icons/navigation-widgets/ic-home.svg';
 import Scale from '../../sass/icons/navigation-widgets/ic-scale-full.svg';
 import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
 import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
+import CircleInfo from '../../sass/icons/common/ic-circle-info.svg';
+
+import TypeArea from '../../sass/icons/chart-type/ic-area.svg';
+import TypeCandle from '../../sass/icons/chart-type/ic-candle.svg';
+import TypeHollow from '../../sass/icons/chart-type/ic-hollow.svg';
+import TypeOhlc from '../../sass/icons/chart-type/ic-ohlc.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -188,7 +193,7 @@ export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const DownloadIcon = Wrapper(Download);
-
+export const CircleInfoIcon = Wrapper(CircleInfo);
 
 export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
@@ -198,6 +203,11 @@ export const HomeIcon = Wrapper(Home);
 export const ScaleIcon = Wrapper(Scale);
 export const ZoominIcon = Wrapper(Zoomin);
 export const ZoomoutIcon = Wrapper(Zoomout);
+
+export const TypeAreaIcon = Wrapper(TypeArea);
+export const TypeCandleIcon = Wrapper(TypeCandle);
+export const TypeHollowIcon = Wrapper(TypeHollow);
+export const TypeOhlcIcon = Wrapper(TypeOhlc);
 
 export const MetalIcon = Wrapper(Metal);
 
