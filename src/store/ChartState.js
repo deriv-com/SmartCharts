@@ -168,7 +168,6 @@ class ChartState {
 
         if (crosshairState !== null && crosshairState !== this.crosshairState) {
             this.mainStore.crosshair.onChange(crosshairState);
-            this.mainStore.state.saveLayout();
             this.crosshairState = crosshairState;
         }
 
@@ -184,10 +183,15 @@ class ChartState {
 
         if (maxTick && this.stxx) {
             const dataSetLength = this.stxx.chart.dataSet.length;
-            const expectTime = this.stxx.chart.dataSet[dataSetLength - maxTick - 1];
-            this.scrollChartToLeft(expectTime, true);
-            this.stxx.chart.lockScroll = false;
-            this.setIsChartScrollingToEpoch(true);
+            let tickIndex = dataSetLength - maxTick - 1;
+            if (tickIndex < 0) tickIndex = dataSetLength - 1;
+
+            const expectTime = this.stxx.chart.dataSet[tickIndex];
+            if (expectTime) {
+                this.scrollChartToLeft(expectTime, true);
+                this.stxx.chart.lockScroll = false;
+                this.setIsChartScrollingToEpoch(true);
+            }
         }
 
         if (this.stxx) {
