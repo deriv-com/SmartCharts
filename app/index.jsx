@@ -164,7 +164,7 @@ class App extends Component {
             chartType,
             granularity,
             isConnectionOpened: true,
-            crosshair: 0
+            crosshair: 0,
         };
     }
 
@@ -241,7 +241,7 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle onChange={this.changeCrosshair} />}
+            {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes onChange={this.changeChartType} />
             <Timeperiod onChange={this.changeGranularity} />
             <StudyLegend />

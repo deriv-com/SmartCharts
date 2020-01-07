@@ -5,13 +5,14 @@ import { Toggle } from './Form.jsx';
 
 const CrosshairToggle = ({
     state,
+    setCrosshairState,
     onChange,
     updateProps,
 }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
 
     const onCrosshairToggle = () => {
-        onChange((state + 1) % 3);
+        setCrosshairState((state + 1) % 3);
     };
 
     updateProps(onChange);
@@ -35,6 +36,6 @@ const CrosshairToggle = ({
 
 export default connect(({ crosshair }) => ({
     state: (typeof crosshair.state !== 'number') ? 0 : crosshair.state,
-    onChange: crosshair.onChange,
+    setCrosshairState: crosshair.setCrosshairState,
     updateProps: crosshair.updateProps,
 }))(CrosshairToggle);

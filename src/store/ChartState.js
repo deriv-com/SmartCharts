@@ -167,7 +167,7 @@ class ChartState {
         }
 
         if (crosshairState !== null && crosshairState !== this.crosshairState) {
-            this.mainStore.crosshair.onChange(crosshairState);
+            this.mainStore.crosshair.setCrosshairState(crosshairState);
             this.crosshairState = crosshairState;
         }
 
