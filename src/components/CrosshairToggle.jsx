@@ -8,6 +8,7 @@ const CrosshairToggle = ({
     setCrosshairState,
     onChange,
     updateProps,
+    isVisible,
 }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
 
@@ -16,6 +17,8 @@ const CrosshairToggle = ({
     };
 
     updateProps(onChange);
+
+    if (isVisible === false) return null;
 
     return (
         <div className="ciq-menu cq-crosshair-toggle">

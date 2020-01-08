@@ -250,6 +250,7 @@ class App extends Component {
         <>
             {isMobile ? '' : (
                 <CrosshairToggle
+                    isVisible={false}
                     onChange={crosshair => this.setState({ crosshairState: crosshair })}
                 />
             )}
