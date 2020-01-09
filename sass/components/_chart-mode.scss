@@ -15,11 +15,17 @@
     &__menu {
         position: relative;
 
-        svg {
-            stroke: none;
+        .ic-icon {
+            margin: auto;
+
+            svg {
+                stroke: none !important;
+            }
         }
         &__timeperiod {
             position: absolute;
+            top: -4px;
+            left: 5px;
         }
     }
     &__section {

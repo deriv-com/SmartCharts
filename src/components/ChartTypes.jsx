@@ -44,11 +44,13 @@ const ChartTypes = ({
                     let className = 'ciq-chart-type__item';
                     className += chartType.active ? ' ciq-chart-type__item--active' : '';
                     className += chartType.disabled ? ' ciq-chart-type__item--disabled' : '';
+
+                    const onClick = () => (chartType.disabled ? null : onItemClick(0, chartType));
                     return (
                         <div
                             key={chartType.id}
                             className={className}
-                            onClick={() => onItemClick(0, chartType)}
+                            onClick={onClick}
                         >
                             <Icon />
                             <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>

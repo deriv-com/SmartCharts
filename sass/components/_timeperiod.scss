@@ -84,6 +84,9 @@
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
+            @include themify($themes) {
+                color: themed('TimeTitleText');
+            }
         }
     }
     &__content {
@@ -111,7 +114,9 @@
 
             &--active {
                 @include themify($themes) {
+                    color: themed('TimeActiveText');
                     border-color: themed('TimeActiveItemBorder');
+                    font-weight: bold;
                 }
             }
         }

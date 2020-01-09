@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect } from 'react';
 import { connect } from '../store/Connect';
-import { CircleInfoIcon } from './Icons.jsx';
 import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
@@ -29,7 +28,7 @@ const Timeperiod = ({
         return (
             <div className="cq-interval">
                 <div className="cq-interval__head">
-                    <strong>{t.translate('Time interval')}</strong> <CircleInfoIcon />
+                    <strong>{t.translate('Time interval')}</strong>
                 </div>
                 <div className="cq-interval__content">
                     <div
@@ -116,7 +115,7 @@ const Timeperiod = ({
             <TimePeriodMenu.Body>
                 <div className="cq-interval">
                     <div className="cq-interval__head">
-                        <strong>{t.translate('Time interval')}</strong> <CircleInfoIcon />
+                        <strong>{t.translate('Time interval')}</strong>
                     </div>
                     <div className="cq-interval__content">
                         <div
