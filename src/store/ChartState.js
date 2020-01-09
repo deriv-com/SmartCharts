@@ -26,6 +26,7 @@ class ChartState {
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
     @observable crosshairState = 1;
+    @observable maxTick;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -182,16 +183,8 @@ class ChartState {
         this.mainStore.chartSetting.setSettings(this.settings);
 
         if (maxTick && this.stxx) {
-            const dataSetLength = this.stxx.chart.dataSet.length;
-            let tickIndex = dataSetLength - maxTick - 1;
-            if (tickIndex < 0) tickIndex = dataSetLength - 1;
-
-            const expectTime = this.stxx.chart.dataSet[tickIndex];
-            if (expectTime) {
-                this.scrollChartToLeft(expectTime, true);
-                this.stxx.chart.lockScroll = false;
-                this.setIsChartScrollingToEpoch(true);
-            }
+            this.maxTick = maxTick;
+            this.setMaxtTick();
         }
 
         if (this.stxx) {
@@ -199,6 +192,31 @@ class ChartState {
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
             this.stxx.draw();
+        }
+    }
+
+    @action.bound setMaxtTick() {
+        if (this.maxTick && this.stxx && this.stxx.chart.dataSet) {
+            const dataSetLength = this.stxx.chart.dataSet.length;
+            let tickIndex = dataSetLength - this.maxTick;
+            if (tickIndex < 0) tickIndex = dataSetLength;
+
+            const expectTime = this.stxx.chart.dataSet[tickIndex];
+            if (expectTime) {
+                this.stxx.chart.entryTick = this.stxx.tickFromDate(expectTime.DT);
+
+                this.stxx.chart.lockScroll = true;
+                const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+
+                this.stxx.setMaxTicks(scrollToTarget);
+                this.stxx.chart.scroll = scrollToTarget;
+
+                this.stxx.draw();
+                this.setIsChartScrollingToEpoch(false);
+
+                this.stxx.chart.lockScroll = false;
+                this.mainStore.state.setIsChartScrollingToEpoch(true);
+            }
         }
     }
 
