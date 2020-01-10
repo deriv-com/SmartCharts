@@ -76,6 +76,7 @@
             }
         }
         &--active {
+            background: transparent !important;
             @include themify($themes) {
                 border-color: themed('ChartTypeActiveBorder');
             }
@@ -89,6 +90,7 @@
         }
         &--disabled {
             cursor: initial;
+            background: transparent !important;
 
             &:after {
                 position: absolute;

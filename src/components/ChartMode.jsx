@@ -41,7 +41,6 @@ const ChartMode = ({
     timeUnit,
 }) => {
     const TypeIcon = TypeMap[Type.id];
-
     return (
         <ChartTypeMenu
             className="ciq-display ciq-chart-mode"

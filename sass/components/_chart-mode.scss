@@ -17,9 +17,15 @@
 
         .ic-icon {
             margin: auto;
+            width: 16px;
+            height: 16px;
+            top: -4px;
+            position: relative;
 
             svg {
                 stroke: none !important;
+                width: 16px !important;
+                height: 16px !important;
                 @include themify($themes) {
                     fill: themed('ChartModeText') !important;
                 }
@@ -27,8 +33,8 @@
         }
         &__timeperiod {
             position: absolute;
-            top: -4px;
-            left: 5px;
+            top: -9px;
+            left: 4px;
             @include themify($themes) {
                 color: themed('ChartModeText') !important;
             }

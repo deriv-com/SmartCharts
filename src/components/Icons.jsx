@@ -66,7 +66,6 @@ import Home from '../../sass/icons/navigation-widgets/ic-home.svg';
 import Scale from '../../sass/icons/navigation-widgets/ic-scale-full.svg';
 import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
 import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
-import CircleInfo from '../../sass/icons/common/ic-circle-info.svg';
 
 import TypeArea from '../../sass/icons/chart-type/ic-area.svg';
 import TypeCandle from '../../sass/icons/chart-type/ic-candle.svg';
@@ -199,7 +198,6 @@ export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const DownloadIcon = Wrapper(Download);
-export const CircleInfoIcon = Wrapper(CircleInfo);
 
 export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
