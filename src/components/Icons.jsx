@@ -73,6 +73,12 @@ import TypeCandle from '../../sass/icons/chart-type/ic-candle.svg';
 import TypeHollow from '../../sass/icons/chart-type/ic-hollow.svg';
 import TypeOhlc from '../../sass/icons/chart-type/ic-ohlc.svg';
 
+import TypeAreaGrayscale from '../../sass/icons/chart-type/ic-area-grayscale.svg';
+import TypeCandleGrayscale from '../../sass/icons/chart-type/ic-candle-grayscale.svg';
+import TypeHollowGrayscale from '../../sass/icons/chart-type/ic-hollow-grayscale.svg';
+import TypeOhlcGrayscale from '../../sass/icons/chart-type/ic-ohlc-grayscale.svg';
+
+
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
 import CAD from '../../sass/icons/flags/cad.svg';
@@ -208,6 +214,11 @@ export const TypeAreaIcon = Wrapper(TypeArea);
 export const TypeCandleIcon = Wrapper(TypeCandle);
 export const TypeHollowIcon = Wrapper(TypeHollow);
 export const TypeOhlcIcon = Wrapper(TypeOhlc);
+
+export const TypeAreaGrayscaleIcon = Wrapper(TypeAreaGrayscale);
+export const TypeCandleGrayscaleIcon = Wrapper(TypeCandleGrayscale);
+export const TypeHollowGrayscaleIcon = Wrapper(TypeHollowGrayscale);
+export const TypeOhlcGrayscaleIcon = Wrapper(TypeOhlcGrayscale);
 
 export const MetalIcon = Wrapper(Metal);
 

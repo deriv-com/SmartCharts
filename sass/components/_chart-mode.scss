@@ -20,12 +20,18 @@
 
             svg {
                 stroke: none !important;
+                @include themify($themes) {
+                    fill: themed('ChartModeText') !important;
+                }
             }
         }
         &__timeperiod {
             position: absolute;
             top: -4px;
             left: 5px;
+            @include themify($themes) {
+                color: themed('ChartModeText') !important;
+            }
         }
     }
     &__section {

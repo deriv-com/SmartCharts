@@ -3,6 +3,12 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import ChartTypes from './ChartTypes.jsx';
 import Timeperiod from './Timeperiod.jsx';
+import {
+    TypeAreaGrayscaleIcon,
+    TypeCandleGrayscaleIcon,
+    TypeHollowGrayscaleIcon,
+    TypeOhlcGrayscaleIcon,
+} from './Icons.jsx';
 import '../../sass/components/_chart-mode.scss';
 
 const UnitMap = {
@@ -12,24 +18,29 @@ const UnitMap = {
     day: 'D',
 };
 
+const TimeMap = {
+    tick: 1,
+    minute: 1,
+    hour: 60,
+};
+
+const TypeMap = {
+    mountain: TypeAreaGrayscaleIcon,
+    candle: TypeCandleGrayscaleIcon,
+    colored_bar: TypeOhlcGrayscaleIcon,
+    hollow_candle: TypeHollowGrayscaleIcon,
+};
+
 const ChartMode = ({
     ChartTypeMenu,
     menuOpen,
-    setOpen,
     onChartType,
     onGranularity,
     Type,
     interval,
     timeUnit,
 }) => {
-    const handleChartType = (chartType) => {
-        onChartType(chartType);
-        setOpen(false);
-    };
-    const handleGranularity = (granularity) => {
-        onGranularity(granularity);
-        setOpen(false);
-    };
+    const TypeIcon = TypeMap[Type.id];
 
     return (
         <ChartTypeMenu
@@ -40,18 +51,18 @@ const ChartMode = ({
             <ChartTypeMenu.Title>
                 <div className={`ciq-chart-mode__menu ${menuOpen ? 'active' : ''}`}>
                     <span className="ciq-chart-mode__menu__timeperiod">
-                        {interval === 'day' ? 1 : interval} {UnitMap[timeUnit]}
+                        {interval === 'day' ? 1 : (interval / TimeMap[timeUnit])} {UnitMap[timeUnit]}
                     </span>
-                    <Type.icon tooltip-title={t.translate(Type.text)} />
+                    <TypeIcon tooltip-title={t.translate(Type.text)} />
                 </div>
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
                 <div className="ciq-chart-mode__section">
                     <div className="ciq-chart-mode__section__item">
-                        <ChartTypes newDesign onChange={handleChartType} />
+                        <ChartTypes newDesign onChange={onChartType} />
                     </div>
                     <div className="ciq-chart-mode__section__item">
-                        <Timeperiod newDesign onChange={handleGranularity} />
+                        <Timeperiod newDesign onChange={onGranularity} />
                     </div>
                 </div>
             </ChartTypeMenu.Body>
@@ -62,7 +73,6 @@ const ChartMode = ({
 export default connect(({ chartMode, chartType, timeperiod }) => ({
     ChartTypeMenu   : chartMode.ChartTypeMenu,
     menuOpen        : chartMode.menu.open,
-    setOpen         : chartMode.menu.setOpen,
     Type            : chartType.type,
     timeUnit        : timeperiod.timeUnit,
     interval        : timeperiod.interval,

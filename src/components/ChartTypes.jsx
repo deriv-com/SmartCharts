@@ -3,10 +3,6 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import {
     SettingIcon,
-    // TypeAreaIcon,
-    // TypeCandleIcon,
-    // TypeHollowIcon,
-    // TypeOhlcIcon,
 } from './Icons.jsx';
 import '../../sass/components/_chart-types.scss';
 
@@ -27,7 +23,6 @@ const ChartTypes = ({
     if (Type === undefined) return (null);
 
     const onItemClick = (idx, chartType) => {
-        console.log(chartType);
         if (Type.id !== chartType.id) {
             onChange(chartType.id, chartType.candleOnly, chartId);
         }
