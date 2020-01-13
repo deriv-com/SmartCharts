@@ -524,7 +524,7 @@ class App extends Component {
                         </select>
                     </div>
                     <div className="form-row">
-                        Max tick <br />
+                        Max Tick <br />
                         <select onChange={this.onMaxTick}>
                             <option value="null">not set</option>
                             <option value="5">5</option>
