@@ -77,6 +77,8 @@ import TypeCandleGrayscale from '../../sass/icons/chart-type/ic-candle-grayscale
 import TypeHollowGrayscale from '../../sass/icons/chart-type/ic-hollow-grayscale.svg';
 import TypeOhlcGrayscale from '../../sass/icons/chart-type/ic-ohlc-grayscale.svg';
 
+import ArrowGreen from '../../sass/icons/arrows/ic-arrow-green.svg';
+import ArrowOrange from '../../sass/icons/arrows/ic-arrow-orange.svg';
 
 import SymbolPlaceholder from '../../sass/icons/placeholder/ic-placeholder.svg';
 import AUD from '../../sass/icons/flags/aud.svg';
@@ -219,6 +221,9 @@ export const TypeHollowGrayscaleIcon = Wrapper(TypeHollowGrayscale);
 export const TypeOhlcGrayscaleIcon = Wrapper(TypeOhlcGrayscale);
 
 export const MetalIcon = Wrapper(Metal);
+
+export const ArrowGreenIcon = Wrapper(ArrowGreen);
+export const ArrowOrangeIcon = Wrapper(ArrowOrange);
 
 export const alertIconMap = {
     info: Wrapper(Info),
