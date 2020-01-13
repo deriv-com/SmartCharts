@@ -118,6 +118,7 @@
                 }
             }
             &--active {
+                background: transparent !important;
                 @include themify($themes) {
                     color: themed('TimeActiveText');
                     border-color: themed('TimeActiveItemBorder');
