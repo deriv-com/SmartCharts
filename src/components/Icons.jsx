@@ -117,7 +117,8 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
-import EmptyState from '../../sass/icons/empty/ic-empty-state.svg';
+import EmptyState from '../../sass/icons/shape/ic-empty-state.svg';
+import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
 
 export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
@@ -203,6 +204,7 @@ export const ZoomoutIcon = Wrapper(Zoomout);
 
 export const MetalIcon = Wrapper(Metal);
 export const EmptyStateIcon = Wrapper(EmptyState);
+export const OverwriteStateIcon = Wrapper(OverwriteState);
 
 export const alertIconMap = {
     info: Wrapper(Info),

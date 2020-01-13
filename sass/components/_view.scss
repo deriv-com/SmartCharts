@@ -27,7 +27,7 @@
             position: relative;
             outline: none !important;
             padding: 10px 12px;
-            top: -2px;
+            top: -3px;
             font-size: 14px;
             font-weight: normal;
             font-style: normal;
@@ -109,6 +109,7 @@
 
 .ciq-views {
     height: 304px;
+    position: relative;
     @include themify($themes) {
         background: themed('TemplateBg');
     }
@@ -139,22 +140,14 @@
             }
         }
         button {
-            border: 1px solid transparent;
             margin-right: 8px;
             padding: 0px 7px;
             background: transparent;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 14px;
             font-weight: bold;
-            font-style: normal;
-            line-height: 1.43;
-            letter-spacing: normal;
-            cursor: pointer;
-            @include themify($themes) {
-                color: themed('TemplateEmptyBtnText');
-            }
+            outline: none;
 
             > .ic-icon {
                 width: 16px;
@@ -200,9 +193,6 @@
                 }
             }
         }
-        &__content {
-            height: 143px;
-        }
         &__list {
             &__item {
                 height: 40px;
@@ -240,7 +230,7 @@
             }
         }
     }
-    .ovrwrit-alrt {
+    &--overwrite {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -248,42 +238,43 @@
         height: 100%;
         z-index: 40;
         @include themify($themes) {
-            background-color: themed('DialogBodyBg');
+            background: themed('TemplateBg');
         }
 
-        .ovrwrit-alrt-title {
+        &__content {
+            height: 230px;
+            padding: 24px 16px 16px;
+            box-sizing: border-box;
             text-align: center;
 
             .ic-icon {
-                width: 100%;
-                margin-bottom: 10px;
-
-                > svg {
-                    width: 24px;
-                    height: 24px;
-                }
+                margin: auto;
+                width: 128px;
+                height: 128px;
             }
-            > span {
-                display: block;
+            p {
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
                 text-align: center;
-                height: 20px;
+                @include themify($themes) {
+                    color: themed('TemplateText');
+                }
             }
         }
-        .ovrwrit-alrt-buttons {
-            display: flex;
-            justify-content: flex-end;
-            position: absolute;
-            bottom: 16px;
-            right: 30px;
-            font-weight: bold;
+        &__footer {
+            height: 72px;
+            padding: 16px 24px;
+            text-align: right;
+            box-sizing: border-box;
+            @include themify($themes) {
+                border-top: 2px solid themed('TemplateListBorder');
+            }
 
-            > div {
-                width: 90px;
-                text-align: center;
-                cursor: pointer;
-                @include themify($themes) {
-                    color: themed('TemplateBtn');
-                }
+            button {
+                margin-left: 8px;
             }
         }
     }

@@ -3,13 +3,11 @@ import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
 import ViewStore from '../store/ViewStore';
 import {
-    // BackIcon,
     TemplateIcon,
     AddIcon,
-    // TickIcon,
     DeleteIcon,
-    alertIconMap,
     EmptyStateIcon,
+    OverwriteStateIcon,
 } from './Icons.jsx';
 import '../../sass/components/_view.scss';
 
@@ -28,10 +26,30 @@ const EmptyView = ({ onClick }) => (
     <div className="ciq-views--empty">
         <EmptyStateIcon />
         <p>You have no save templates yet.</p>
-        <button type="button" onClick={onClick}>
+        <button type="button" className="btn" onClick={onClick}>
             <AddIcon />
             Add new templates
         </button>
+    </div>
+);
+
+const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
+    <div className="ciq-views--overwrite">
+        <div className="ciq-views--overwrite__content">
+            <OverwriteStateIcon />
+            <p>
+                {templateName + t.translate(' already exists.')}<br />
+                {t.translate('Would you like to overwrite it?')}
+            </p>
+        </div>
+        <div className="ciq-views--overwrite__footer">
+            <button type="button" className="btn" onClick={onCancel}>
+                {t.translate('Cancel')}
+            </button>
+            <button type="button" className="btn btn--primary" onClick={onOverwrite}>
+                {t.translate('Overwrite')}
+            </button>
+        </div>
     </div>
 );
 
@@ -71,71 +89,61 @@ const Views = ({
                         <React.Fragment>
                             {
                                 currentRoute !== 'overwrite' ? '' : (
-                                    <div className="ovrwrit-alrt">
-                                        <div className="ovrwrit-alrt-title">
-                                            <alertIconMap.warning />
-                                            <span>
-                                                {templateName + t.translate(' already exists.')}
-                                            </span>
-                                            <span>
-                                                {t.translate('Would you like to overwrite it?')}
-                                            </span>
-                                        </div>
-                                        <div className="ovrwrit-alrt-buttons">
-                                            <div onClick={main}>
-                                                {t.translate('CANCEL')}
-                                            </div>
-                                            <div onClick={overwrite}>
-                                                {t.translate('OVERWRITE')}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <OverwriteView
+                                        templateName={templateName}
+                                        onCancel={main}
+                                        onOverwrite={overwrite}
+                                    />
                                 )
                             }
-                            <div className="form form--ciq-views">
-                                <div className="form__input-group">
-                                    <div className="form__group">
-                                        <div className="form__control">
-                                            <div className={`form--ciq-views__input ${templateName !== '' ? 'form--ciq-views__input--active' : ''}`}>
-                                                <div className="subtitle">
-                                                    <span>Add new templates</span>
+                            <Scrollbars>
+                                <div className="form form--ciq-views">
+                                    <div className="form__input-group">
+                                        <div className="form__group">
+                                            <div className="form__control">
+                                                <div className={`form--ciq-views__input ${templateName !== '' ? 'form--ciq-views__input--active' : ''}`}>
+                                                    <div className="subtitle">
+                                                        <span>Add new templates</span>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        placeholder={t.translate('Add new templates')}
+                                                        ref={inputRef}
+                                                        value={templateName}
+                                                        onKeyUp={onSubmit}
+                                                        onChange={onChange}
+                                                    />
+                                                    <button type="button" onClick={saveViews}> <AddIcon /> </button>
                                                 </div>
-                                                <input
-                                                    type="text"
-                                                    placeholder={t.translate('Add new templates')}
-                                                    ref={inputRef}
-                                                    value={templateName}
-                                                    onKeyUp={onSubmit}
-                                                    onChange={onChange}
-                                                />
-                                                <button type="button" onClick={saveViews}> <AddIcon /> </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="ciq-views__views">
-                                <div className="ciq-views__views__head">
-                                    <h5>Saved templates</h5>
-                                    <button type="button" onClick={removeAll}>Clear all</button>
-                                </div>
-                                <div className="ciq-views__views__content">
-                                    <Scrollbars
-                                        className="ciq-views__views__list"
-                                    >
-                                        {
-                                            views.map((view, i) => (
-                                                <ViewItem
-                                                    view={view}
-                                                    key={view.name}
-                                                    onClick={e => applyLayout(i, e)}
-                                                    remove={e => remove(i, e)}
-                                                />
-                                            ))
-                                        }
-                                    </Scrollbars>
-                                </div>
-                            </div>
+                                {views.length > 0
+                                    ? (
+                                        <div className="ciq-views__views">
+                                            <div className="ciq-views__views__head">
+                                                <h5>Saved templates</h5>
+                                                <button type="button" onClick={removeAll}>Clear all</button>
+                                            </div>
+                                            <div className="ciq-views__views__content">
+                                                <div className="ciq-views__views__list">
+                                                    {
+                                                        views.map((view, i) => (
+                                                            <ViewItem
+                                                                view={view}
+                                                                key={view.name}
+                                                                onClick={e => applyLayout(i, e)}
+                                                                remove={e => remove(i, e)}
+                                                            />
+                                                        ))
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                    : ''}
+                            </Scrollbars>
                         </React.Fragment>
                     )
                 }

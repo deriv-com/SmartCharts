@@ -165,3 +165,29 @@
     font-size: 1.7em;
     color: #878787;
 }
+
+/* -------------------------- helper styles -------------------------------------*/
+.btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    @include themify($themes) {
+        border: 1px solid themed('BtnDefaultBg');
+        background: themed('BtnDefaultBg');
+        color: themed('BtnDefaultText');
+    }
+
+    &--primary {
+        @include themify($themes) {
+            border-color: themed('BtnPrimaryBg');
+            background: themed('BtnPrimaryBg');
+            color: themed('BtnPrimaryText');
+        }
+    }
+}
