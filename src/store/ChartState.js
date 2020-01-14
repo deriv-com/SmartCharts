@@ -75,7 +75,7 @@ class ChartState {
         startEpoch,
         symbol,
         crosshairState,
-        chartSize,
+        zoom,
         maxTick,
     }) {
         let isSymbolChanged = false;
@@ -172,8 +172,8 @@ class ChartState {
             this.crosshairState = crosshairState;
         }
 
-        if (chartSize) {
-            if (chartSize === 1) {
+        if (zoom) {
+            if (zoom === 1) {
                 this.mainStore.chartSize.zoomIn();
             } else {
                 this.mainStore.chartSize.zoomOut();

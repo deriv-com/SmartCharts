@@ -417,12 +417,12 @@ class App extends Component {
 
     onChartSize = (state) => {
         this.setState({
-            chartSize: state,
+            zoom: state,
         });
 
         setTimeout(() => {
             this.setState({
-                chartSize: 0,
+                zoom: 0,
             });
         }, 300);
     }
@@ -440,7 +440,7 @@ class App extends Component {
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
             enabledNavigationWidget, activeLanguage,
-            crosshairState, chartSize, maxTick } = this.state;
+            crosshairState, zoom, maxTick } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -481,7 +481,7 @@ class App extends Component {
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
                         crosshairState={crosshairState}
-                        chartSize={chartSize}
+                        zoom={zoom}
                         maxTick={maxTick}
                     >
                         {endEpoch ? (
