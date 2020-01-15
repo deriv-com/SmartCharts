@@ -12,6 +12,7 @@ import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
 import '../../sass/main.scss';
+import 'react-tabs/style/react-tabs.css';
 
 import './ui';
 

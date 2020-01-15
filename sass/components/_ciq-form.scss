@@ -1,16 +1,127 @@
+
+.form {
+    $self: &;
+    padding: 8px 0px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    box-sizing: border-box;
+
+    #{ $self }__label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.4;
+        letter-spacing: normal;
+        @include themify($themes) {
+            color: themed('DialogBodyText');
+        }
+    }
+    #{ $self }__control {
+        display: block;
+    }
+    &__group {
+        box-sizing: border-box;
+        padding: 0;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    &__group--select,
+    &__group--colorpicker {
+        #{ $self }__label {
+            margin-bottom: -8px;
+            margin-left: 10px;
+
+            span {
+                padding-left: 2px;
+                padding-right: 2px;
+                z-index: 1;
+                @include themify($themes) {
+                    background: themed('DialogSettingBodyBg');
+                }
+            }
+        }
+    }
+    &__group--switch {
+        flex-direction: row;
+        justify-content: flex-start;
+
+        #{ $self }__label {
+            width: auto;
+        }
+        #{ $self }__control {
+            padding-left: 16px;
+            width: auto;
+        }
+    }
+    &--indicator-setting {
+        min-width: 320px;
+        max-width: 320px;
+        min-height: 272px;
+        max-height: 272px;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
+
+        > div:nth-child(3) {
+            > div {
+                @include themify($themes) {
+                    background-color: themed('ListScroll') !important;
+                }
+            }
+        }
+        &:hover {
+            > div:nth-child(3) {
+                opacity: 1 !important;
+            }
+        }
+    }
+    &__input-group {
+        padding: 16px 24px;
+        @include themify($themes) {
+            border-top: 4px solid themed('DialogSettingSectionDivider');
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            margin: 0 0 16px;
+            @include themify($themes) {
+                color: themed('DialogSettingSectionText');
+            }
+        }
+        &:first-child {
+            border-top: none;
+        }
+    }
+    &__input-group--show-zones {
+        #{ $self }__label {
+            font-size: 14px;
+        }
+    }
+}
+
 /* stylelint-disable plugin/no-unsupported-browser-features */
 .cq-slider {
-    width: 150px;
-    height: 10px;
+    width: 100%;
+    height: 12px;
     display: flex;
     align-items: center;
     position: relative;
 
     .cq-slider-range {
         position: relative;
-        width: 120px;
-        margin-top: 8px;
-        height: 10px;
+        width: calc(100% - 38px);
+        margin-top: 9px;
+        padding-right: 8px;
+        height: 12px;
 
         > input, div {
             position: absolute;
@@ -19,11 +130,11 @@
         }
         input[type='range'] {
             -webkit-appearance: none;
-            width: 120px;
+            width: 100%;
             margin: 0;
             background: transparent;
             height: 12px;
-            top: -6px;
+            top: -5px;
 
             &:focus {
                 outline: none;
@@ -56,7 +167,7 @@
             }
         }
         .cq-slider-bar {
-            width: 120px;
+            width: 100%;
             outline: none;
             height: 2px;
             @include themify($themes) {
@@ -75,6 +186,8 @@
         text-align: right;
         flex-grow: 1;
         font-weight: bold;
+        font-size: 14px;
+        width: 26px;
         @include themify($themes) {
             color: themed('SliderText');
         }
@@ -84,27 +197,67 @@
 
 .cq-dropdown {
     position: relative;
-    height: 32px;
-    width: 142px;
+    height: 40px;
+    width: 100%;
     user-select: none;
 
-    .title {
-        height: 32px;
-        line-height: 32px;
-        padding-left: 8px;
+    .subtitle {
+        position: absolute;
+        margin-left: 10px;
+        top: -6px;
+
+        span {
+            padding-left: 4px;
+            padding-right: 4px;
+            z-index: 1;
+            @include themify($themes) {
+                background: themed('DropdownSubtitleBg');
+                color: themed('DropdownSubtitleText');
+            }
+        }
+    }
+    .value {
+        height: 40px;
+        padding: 10px 12px;
         cursor: pointer;
         border-radius: 4px;
         box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        text-transform: capitalize;
         @include themify($themes) {
             color: themed('DropdownText') !important;
             border: 1px solid themed('DropdownBorder');
         }
 
-        svg {
-            pointer-events: none;
-            transition: transform 0.6s;
+        .ic-icon {
+            line-height: 35px;
+
+            svg {
+                pointer-events: none;
+                transition: transform 0.6s;
+                @include themify($themes) {
+                    fill: themed('DropdownText');
+                }
+            }
+        }
+        &:after {
+            content: ' ';
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+        }
+        &:hover {
             @include themify($themes) {
-                fill: themed('DropdownText');
+                border-color: themed('DefaultInputHoverBorder');
             }
         }
         &.active {
@@ -124,18 +277,19 @@
         opacity: 0;
         pointer-events: none;
         z-index: +2;
-        width: 142px;
+        width: 100%;
         max-height: 200px;
         overflow: scroll;
         box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
         box-sizing: border-box;
         border-radius: 4px;
+        font-size: 14px;
         @include themify($themes) {
             background: themed('DropdownBg');
         }
 
         &.active {
-            top: 36px;
+            top: 50px;
             opacity: 1;
             pointer-events: all;
             transition: opacity 0.3s, top 0.2s;
@@ -145,7 +299,11 @@
         }
         .row {
             cursor: pointer;
-            padding: 8px 8px 9px;
+            padding: 10px 16px 9px;
+            text-transform: capitalize;
+            @include themify($themes) {
+                color: themed('DropdownText');
+            }
 
             &:hover {
                 font-weight: bold;
@@ -200,40 +358,85 @@
         border-top-style: dashed;
         border-top-width: 3px;
     }
+    &.active {
+        .subtitle {
+            span {
+                @include themify($themes) {
+                    color: themed('DropdownActiveBorder');
+                }
+            }
+        }
+    }
 }
 
 .cq-color-picker {
     position: relative;
-    height: 24px;
-    width: 24px;
+    height: 40px;
+    width: 100%;
 
-    .title {
-        height: 100%;
+    .subtitle {
+        position: absolute;
+        margin-left: 10px;
+        top: -6px;
+
+        span {
+            padding-left: 4px;
+            padding-right: 4px;
+            z-index: 1;
+            @include themify($themes) {
+                background: themed('ColorPickerSubtitleBg');
+                color: themed('ColorPickerSubtitleText');
+            }
+        }
+    }
+    .value {
         width: 100%;
+        height: 40px;
+        line-height: 40px;
+        padding: 10px 12px;
         cursor: pointer;
-        border-radius: 2px;
+        border-radius: 4px;
         box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         @include themify($themes) {
             background-color: themed('ColorPickerBg');
+            color: themed('DropdownText') !important;
+            border: 1px solid themed('DropdownBorder');
         }
 
         .input-color {
             height: 100%;
             width: 100%;
             border-radius: 4px;
+            margin-right: 16px;
+        }
+        .ic-icon {
+            line-height: 35px;
+
+            svg {
+                pointer-events: none;
+                transition: transform 0.6s;
+                @include themify($themes) {
+                    fill: themed('DropdownText');
+                }
+            }
+        }
+        &:hover {
             @include themify($themes) {
-                border: 1px solid themed('ColorPickerInputBorder');
+                border-color: themed('DefaultInputHoverBorder');
             }
         }
     }
     .dropdown {
         position: absolute;
-        top: 30px;
-        right: calc(100% - 24px);
+        top: 50px;
+        right: -5px;
         opacity: 0;
         pointer-events: none;
         z-index: +2;
-        width: 250px;
+        width: 266px;
         padding: 8px;
         transition: opacity 0.1s;
         border-radius: 4px;
@@ -259,6 +462,24 @@
                 width: 15px;
                 height: 15px;
                 cursor: pointer;
+            }
+        }
+    }
+    &.active {
+        .subtitle {
+            span {
+                @include themify($themes) {
+                    color: themed('DropdownActiveBorder');
+                }
+            }
+        }
+        .value {
+            @include themify($themes) {
+                border-color: themed('ColorPickerActiveBorder');
+            }
+
+            svg {
+                transform: scaleY(-1);
             }
         }
     }
@@ -305,23 +526,122 @@
 }
 
 .cq-numbercolorpicker {
+    display: flex;
+
     input {
         box-shadow: none !important;
         @include themify($themes) {
             background: themed('InputBg');
-            border: 1px solid themed('InputBorder') !important;
+            border: 1px solid themed('InputBorder');
             color: themed('InputText');
         }
 
         &:hover {
             @include themify($themes) {
-                border-color: themed('InputHoverSBorder') !important;
+                border-color: themed('InputHoverBorder') !important;
             }
         }
         &:focus {
             @include themify($themes) {
-                color: themed('InputActiveSText');
-                border-color: themed('InputActiveSBorder') !important;
+                border-color: themed('ColorPickerActiveBorder') !important;
+            }
+        }
+    }
+    .field {
+        width: 50%;
+    }
+}
+
+.cq-numeric-input {
+    position: relative;
+    height: 40px;
+    width: 100%;
+    margin-right: 25px;
+
+    .subtitle {
+        position: absolute;
+        margin-left: 10px;
+        top: -6px;
+
+        span {
+            padding-left: 4px;
+            padding-right: 4px;
+            z-index: 1;
+            @include themify($themes) {
+                color: themed('ColorPickerSubtitleText');
+                background: themed('DialogSettingBodyBg');
+            }
+        }
+    }
+    input[type='number'] {
+        -moz-appearance: textfield;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        width: 100% !important;
+        box-shadow: none !important;
+        outline: none;
+        @include themify($themes) {
+            color: themed('DropdownText') !important;
+            border: 1px solid themed('DropdownBorder');
+        }
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        &:hover,
+        &:focus {
+            -moz-appearance: textfield;
+        }
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder') !important;
+            }
+        }
+        &:focus {
+            @include themify($themes) {
+                border-color: themed('DefaultInputActiveBorder') !important;
+            }
+        }
+        &:focus + .subtitle > span {
+            @include themify($themes) {
+                color: themed('DefaultInputActiveBorder') !important;
+            }
+        }
+    }
+    .cq-numeric-input-buttons {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 2px;
+        right: 3px;
+        border-radius: 0 4px 4px 0;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
+
+        .ic-icon {
+            width: 24px;
+            height: 18px;
+            line-height: 19px;
+            cursor: pointer;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('DropdownText');
+                }
+            }
+        }
+    }
+    &:hover {
+        input[type='number'] {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder');
             }
         }
     }
