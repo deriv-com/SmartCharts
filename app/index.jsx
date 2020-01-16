@@ -164,6 +164,7 @@ class App extends Component {
             chartType,
             granularity,
             isConnectionOpened: true,
+            crosshair: 0,
         };
     }
 
@@ -224,6 +225,7 @@ class App extends Component {
     };
     changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
     changeChartType = chartType => this.setState({ chartType });
+    changeCrosshair = crosshair => this.setState({ crosshair })
 
     renderTopWidgets = () => (
         <>
@@ -287,6 +289,7 @@ class App extends Component {
                 endEpoch={endEpoch}
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}
+                crosshair={this.state.crosshair}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
                 shouldFetchTradingTimes

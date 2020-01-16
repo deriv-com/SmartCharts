@@ -1,6 +1,8 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
+import { ARROW_HEIGHT,
+    DIRECTIONS } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
@@ -13,8 +15,11 @@ export default class PriceLineStore {
     // @observable top = 0;
     @observable _price = 0;
     // @observable zIndex;
-    offScreen = false;
+    @observable offScreen = false;
     // @observable uncentered = false;
+    @observable title;
+    @observable isOverlapping;
+    @observable offScreenDirection;
 
 
     set zIndex(value) {
@@ -101,6 +106,10 @@ export default class PriceLineStore {
         return this.relative ? this.stx.currentQuote().Close + this._price : this._price;
     }
 
+    get yAxiswidth() {
+        return this.mainStore.chart.yAxiswidth;
+    }
+
     @action.bound setDragLine(el) {
         this._line = el;
         if (this._line) { this._draw(); }
@@ -161,7 +170,7 @@ export default class PriceLineStore {
         return price;
     }
 
-    _calculateTop = () => {
+    @action.bound _calculateTop = () => {
         if (this.stx.currentQuote() === null) { return; }
 
         let top = this._locationFromPrice(this.realPrice);
@@ -170,25 +179,33 @@ export default class PriceLineStore {
         if (top < 0) {
             // this.uncentered = true;
             if (top < -LINE_OFFSET_HEIGHT_HALF) {
-                this.offScreen = true;
+                this.offScreenDirection = DIRECTIONS.UP;
             }
             top = 0;
         } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             // this.uncentered = true;
             if ((top + LINE_OFFSET_HEIGHT) - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
-                this.offScreen = true;
+                this.offScreenDirection = DIRECTIONS.DOWN;
             }
             top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {
             // this.uncentered = false;
-            this.offScreen = false;
+            this.offScreenDirection = null;
         }
-
+        this.offScreen = !!this.offScreenDirection;
 
         if (top + 30 > this.chart.panel.height) {
             top = this.chart.panel.height - 30;
         } else if (top < 10) {
             top = 10;
+        }
+
+        if (this.offScreenDirection && this.showOffscreenArrows) {
+            top += this.offScreenDirection === DIRECTIONS.UP ? +ARROW_HEIGHT : -ARROW_HEIGHT;
+        }
+
+        if (this.opacityOnOverlap) {
+            this.isOverlapping = this.overlapCheck(top);
         }
 
         return Math.round(top) | 0;
@@ -216,6 +233,26 @@ export default class PriceLineStore {
         this._emitter.on(PriceLineStore.EVENT_DRAG_RELEASED, callback);
     }
 
+    overlapCheck(top) {
+        const { _barriers } = this.mainStore.chart;
+
+        const filtered_barriers = _barriers.filter(a => a._high_barrier.price !== 0);
+        const current_barrier_idx = filtered_barriers.findIndex(b => b._high_barrier === this);
+
+        for (let i = 0; i < filtered_barriers.length; i++) {
+            if (i === current_barrier_idx) { continue; }
+
+            const barrier = filtered_barriers[i];
+            const diffTop = Math.abs(barrier._high_barrier.top - top);
+
+            if (diffTop < 25) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     connect = connect(() => ({
         priceDisplay: this.priceDisplay,
         visible: this.visible,
@@ -224,6 +261,13 @@ export default class PriceLineStore {
         draggable: this.draggable,
         isDragging: this.isDragging,
         init: this.init,
+        title: this.title,
+        yAxiswidth: this.yAxiswidth,
+        offScreen: this.offScreen,
+        hideBarrierLine: this.hideBarrierLine,
+        hideOffscreenLine: this.hideOffscreenLine,
+        offScreenDirection: this.offScreenDirection,
+        isOverlapping: this.isOverlapping,
         // zIndex: this.zIndex,
     }));
 }

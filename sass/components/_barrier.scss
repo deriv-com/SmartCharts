@@ -32,6 +32,23 @@
             border-color: inherit;
             border-top-width: 1px;
         }
+        .title-wrapper {
+            $title-height: 24px;
+            position: absolute;
+            height: $title-height;
+            background-image: linear-gradient(transparent 30%, var(--general-main-1) 50%, transparent 75%); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+            top: -11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            padding: 3px 10px;
+            font-weight: bold;
+
+            .title {
+                white-space: pre-wrap;
+            }
+        }
     }
 }
 
@@ -60,6 +77,16 @@
     right: -1px;
     border: 1px solid inherit;
     border-radius: 4px;
+
+    .arrow-icon {
+        height: 39px;
+        padding: 4px 0px;
+        position: absolute;
+        transition: none;
+        left: 2px;
+        background: var(--general-main-1);
+        width: calc(100% - 2px);
+    }
 }
 
 /*hover*/
