@@ -194,5 +194,11 @@
             background: themed('BtnPrimaryBg');
             color: themed('BtnPrimaryText');
         }
+
+        &:hover {
+            @include themify($themes) {
+                background: themed('BtnPrimaryBg');
+            }
+        }
     }
 }
