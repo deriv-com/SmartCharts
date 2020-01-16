@@ -69,6 +69,9 @@ const Views = ({
     saveViews,
     templateName,
     removeAll,
+    isInputActive,
+    onFocus,
+    onBlur,
 }) => (
     <ViewsMenu
         className="ciq-views-menu"
@@ -101,17 +104,20 @@ const Views = ({
                                     <div className="form__input-group">
                                         <div className="form__group">
                                             <div className="form__control">
-                                                <div className={`form--ciq-views__input ${templateName !== '' ? 'form--ciq-views__input--active' : ''}`}>
+                                                <div className={`form--ciq-views__input ${isInputActive ? 'form--ciq-views__input--active' : ''}`}>
                                                     <div className="subtitle">
                                                         <span>Add new templates</span>
                                                     </div>
                                                     <input
                                                         type="text"
-                                                        placeholder={t.translate('Add new templates')}
+                                                        placeholder={isInputActive ? '' : t.translate('Add new templates')}
                                                         ref={inputRef}
                                                         value={templateName}
                                                         onKeyUp={onSubmit}
                                                         onChange={onChange}
+                                                        onFocus={onFocus}
+                                                        onClick={onFocus}
+                                                        onBlur={onBlur}
                                                     />
                                                     <button type="button" onClick={saveViews}> <AddIcon /> </button>
                                                 </div>
@@ -168,4 +174,7 @@ export default connect(({ view: s }) => ({
     onToggleNew: s.onToggleNew,
     saveViews: s.saveViews,
     removeAll: s.removeAll,
+    isInputActive: s.isInputActive,
+    onFocus: s.onFocus,
+    onBlur: s.onBlur,
 }))(Views);

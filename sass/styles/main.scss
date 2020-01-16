@@ -183,6 +183,11 @@
         color: themed('BtnDefaultText');
     }
 
+    &:hover {
+        @include themify($themes) {
+            background: themed('BtnDefaultHoverBg');
+        }
+    }
     &--primary {
         @include themify($themes) {
             border-color: themed('BtnPrimaryBg');

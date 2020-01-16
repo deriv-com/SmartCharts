@@ -25,6 +25,7 @@ export default class ViewStore {
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
     @observable templateName = '';
     @observable currentRoute = 'main';
+    @observable isInputActive;
     @observable routes = {
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
@@ -139,9 +140,18 @@ export default class ViewStore {
         this.updateRoute('main');
     }
 
-    inputRef = (ref) => {
+    @action.bound inputRef(ref) {
         if (ref) {
             ref.focus();
+            this.isInputActive = true;
         }
+    }
+
+    @action.bound onFocus() {
+        this.isInputActive = true;
+    }
+
+    @action.bound onBlur() {
+        this.isInputActive = false;
     }
 }

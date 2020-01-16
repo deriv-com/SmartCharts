@@ -125,7 +125,7 @@
         > .ic-icon {
             width: 130px;
             height: 130px;
-            margin: 0 auto 32px;
+            margin: 0 auto 24px;
         }
         p {
             font-size: 12px;
@@ -134,20 +134,19 @@
             line-height: 1.5;
             letter-spacing: normal;
             text-align: center;
-            margin: 0 0 48px;
+            margin: 0 0 46px;
             @include themify($themes) {
                 color: themed('TemplateEmptyText');
             }
         }
         button {
-            margin-right: 8px;
-            padding: 0px 7px;
             background: transparent;
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: bold;
             outline: none;
+            padding: 10px 16px;
 
             > .ic-icon {
                 width: 16px;
