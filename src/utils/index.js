@@ -237,3 +237,15 @@ export function patchPixelFromChart(stx) {
             * stx.layout.candleWidth + mp;
     };
 }
+
+export const ARROW_HEIGHT = 39;
+
+export const ARROW_COLORS = Object.freeze({
+    GREEN: '#4bb4b3',
+    ORANGE: '#ff6444',
+});
+
+export const DIRECTIONS = Object.freeze({
+    UP: 'UP',
+    DOWN: 'DOWN',
+});

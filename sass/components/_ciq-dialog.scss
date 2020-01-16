@@ -1,9 +1,8 @@
 
 .cq-dialog {
-    width: 344px;
-    left: calc(50% - 344px / 2);
+    width: auto;
     top: auto;
-    border-radius: 5px;
+    border-radius: 4px;
     position: absolute;
     opacity: 0;
     margin-top: 120px;
@@ -12,7 +11,7 @@
     z-index: -3;
     @include dialog-transition();
     @include themify($themes) {
-        background: themed('DialogHeadBg');
+        background: themed('DialogBodyBg');
     }
 
     &.open {
@@ -20,6 +19,114 @@
         margin-top: 0px;
         opacity: 1;
         z-index: 3;
+    }
+    &__head {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 4px 4px 0 0;
+        height: 56px;
+        box-sizing: border-box;
+        @include themify($themes) {
+            color: themed('DialogHeadText');
+            background: themed('DialogHeadBg');
+            border-bottom: 2px solid themed('DialogHeadBorder');
+        }
+
+        &--title {
+            font-size: 16px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            min-width: 168px;
+            padding: 16px;
+            border-radius: 5px 0 0;
+        }
+        &--action {
+            padding: 20px 16px;
+            border-radius: 0 5px 0 0;
+
+            .ic-icon {
+                width: 16px;
+                height: 16px;
+                line-height: 16px;
+                cursor: pointer;
+
+                svg {
+                    @include themify($themes) {
+                        fill: themed('DialogHeadIcon');
+                    }
+                }
+            }
+        }
+    }
+    &__body {
+        border-radius: 0 0 4px 4px;
+    }
+    &.cq-dialog--tabular {
+        .cq-dialog__head {
+            .cq-dialog__head--title {
+                @include themify($themes) {
+                    background: themed('DialogTabularHeadBg');
+                }
+            }
+        }
+    }
+}
+
+.tabs {
+    &--vertical {
+        display: flex;
+        border-radius: 0 0 4px 4px;
+
+        .react-tabs__tab-list {
+            margin: 0px;
+            width: 200px;
+            border-radius: 0 0 0 5px;
+            border-bottom: none;
+            padding: 16px 0 0;
+            @include themify($themes) {
+                background: themed('DialogTabularBg');
+            }
+
+            .react-tabs__tab {
+                width: 100%;
+                display: block;
+                box-sizing: border-box;
+                padding: 10px 16px;
+                border: none;
+                border-radius: 0px;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                @include themify($themes) {
+                    color: themed('DialogTabularColor');
+                    border-left: 4px solid themed('DialogTabularBg');
+                }
+
+                &--selected {
+                    border-radius: 0px;
+                    font-weight: bold;
+                    @include themify($themes) {
+                        background: themed('DialogTabularActiveTabBg');
+                        border-left-color: themed('DialogTabularActiveTabBorder');
+                    }
+                }
+            }
+        }
+        .react-tabs__tab-panel {
+            width: calc(100% - 200px);
+            border-radius: 0 0 4px;
+            @include themify($themes) {
+                background: themed('DialogTabularBodyBg');
+            }
+
+            .items {
+                border-radius: 0 0 4px;
+            }
+        }
     }
 }
 

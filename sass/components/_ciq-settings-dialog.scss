@@ -86,50 +86,26 @@
             }
         }
     }
-    .items {
-        padding: 16px 0;
-        flex-grow: 1;
-        @include themify($themes) {
-            background: themed('DialogSettingBodyBg');
-        }
-
-        .item {
-            box-sizing: border-box;
-            padding: 0 16px;
-            height: 30px;
-            margin-bottom: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-
-            .title {
-                font-size: 1.2em;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                @include themify($themes) {
-                    color: themed('DialogBodyText');
-                }
-            }
-        }
-    }
     .buttons {
         display: flex;
         justify-content: space-between;
-        margin-bottom: 5px;
-        padding: 9px 16px;
+        padding: 16px 24px 24px;
+        border-radius: 0 0 4px 4px;
+        height: 72px;
+        box-sizing: border-box;
         @include themify($themes) {
             background: themed('DialogFootBg');
+            border-top: 1px solid themed('DialogFootBorder');
         }
 
-        > div {
-            height: 30px;
-            line-height: 31px;
+        button {
+            height: 32px;
+            line-height: 32px;
             text-align: center;
             cursor: pointer;
             font-size: 14px;
             border-radius: 4px;
-            padding: 0px 20px;
+            padding: 0px 16.5px;
             font-weight: bold;
             @include themify($themes) {
                 color: themed('DialogFootText');
@@ -143,10 +119,20 @@
                 }
             }
             &.reset {
+                padding: 0px 10.5px;
                 @include themify($themes) {
                     background: themed('DialogFootResetBg');
                     color: themed('DialogFootResetText');
                     border: 1px solid themed('DialogFootResetBorder');
+                }
+            }
+            &.cancel {
+                border: 1px solid transparent;
+                margin-right: 8px;
+                padding: 0px 7px;
+                background: transparent;
+                @include themify($themes) {
+                    color: themed('DialogFootCancelText');
                 }
             }
         }
@@ -164,10 +150,6 @@
         margin-right: 5px;
         padding-left: 6px;
         border-radius: 3px;
-        @include themify($themes) {
-            border: none;
-            box-shadow: 0 0 0 1px themed('defaultBorder');
-        }
     }
 }
 

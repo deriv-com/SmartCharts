@@ -52,8 +52,8 @@ $small-icon-size: 16px;
     }
 }
 @mixin rangetrack() {
-    width: 120px;
-    height: 10px;
+    width: 100%;
+    height: 12px;
     cursor: pointer;
     border-radius: 0px;
     background: transparent;
