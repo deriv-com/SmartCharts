@@ -122,6 +122,7 @@
                 width: 16px;
                 height: 16px;
                 line-height: 16px;
+                margin-right: 6px;
                 @include themify($themes) {
                     fill: themed('TemplateEmptyBtnText');
                 }

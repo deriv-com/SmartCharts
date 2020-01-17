@@ -203,15 +203,16 @@
             }
         }
         &--disabled {
+            opacity: 0.32;
             @include themify($themes) {
-                border-color: themed('BtnPrimaryDisableBg');
-                background: themed('BtnPrimaryDisableBg');
+                border-color: themed('BtnPrimaryBg');
+                background: themed('BtnPrimaryBg');
             }
 
             &:hover {
                 @include themify($themes) {
-                    border-color: themed('BtnPrimaryDisableBg');
-                    background: themed('BtnPrimaryDisableBg');
+                    border-color: themed('BtnPrimaryBg');
+                    background: themed('BtnPrimaryBg');
                 }
             }
         }
