@@ -33,11 +33,12 @@ class PriceLine extends Component {
         const showBarrier = !(hideOffscreenBarrier && offScreen);
         const showBarrierDragLine = !hideBarrierLine && (!hideOffscreenLine || !offScreen) && !isOverlapping;
         const opacity = isOverlapping && opacityOnOverlap;
+
         return (
             showBarrier && (
                 <div
                     className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                    style={{ top: 0, color: foregroundColor, borderColor: color }}
+                    style={{ top: 0, color: foregroundColor, backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00` }}
                     ref={setDragLine}
                     hidden={!visible}
                 >

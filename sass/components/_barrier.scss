@@ -29,8 +29,7 @@
             width: 100%;
             margin-left: -10px;
             position: relative;
-            border-color: inherit;
-            border-top-width: 1px;
+            border-top-width: 0;
         }
         .title-wrapper {
             $title-height: 24px;
@@ -76,7 +75,6 @@
     position: absolute;
     right: -1px;
     border: 1px solid inherit;
-    border-radius: 4px;
 
     .arrow-icon {
         height: 39px;
