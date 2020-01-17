@@ -17,11 +17,11 @@
     &__input {
         height: 40px;
         position: relative;
+        display: flex;
 
         .input {
             width: calc(100% - 40px);
             border-radius: 4px 0 0 4px;
-            top: -4px;
         }
         .subtitle {
             position: absolute;
