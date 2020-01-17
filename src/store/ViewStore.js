@@ -42,6 +42,7 @@ export default class ViewStore {
     }
 
     @action.bound onChange(e) {
+        if (this.currentRoute === 'overwrite') { return; }
         this.templateName = e.target.value;
     }
 

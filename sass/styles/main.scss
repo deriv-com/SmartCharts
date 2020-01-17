@@ -176,6 +176,7 @@
     letter-spacing: normal;
     text-align: center;
     border-radius: 4px;
+    outline: none !important;
     cursor: pointer;
     @include themify($themes) {
         border: 1px solid themed('BtnDefaultBg');
@@ -197,8 +198,59 @@
 
         &:hover {
             @include themify($themes) {
-                background: themed('BtnPrimaryBg');
+                border-color: themed('BtnPrimaryHoverBg');
+                background: themed('BtnPrimaryHoverBg');
             }
+        }
+        &--disabled {
+            @include themify($themes) {
+                border-color: themed('BtnPrimaryDisableBg');
+                background: themed('BtnPrimaryDisableBg');
+            }
+
+            &:hover {
+                @include themify($themes) {
+                    border-color: themed('BtnPrimaryDisableBg');
+                    background: themed('BtnPrimaryDisableBg');
+                }
+            }
+        }
+    }
+}
+
+.input {
+    border-radius: 4px 0 0 4px;
+    height: 40px;
+    box-sizing: border-box;
+    border-right: none !important;
+    position: relative;
+    outline: none !important;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    background: transparent;
+    @include themify($themes) {
+        border: 1px solid themed('InputDefaultBorder');
+    }
+
+    &::placeholder,
+    &::-moz-placeholder {
+        font-size: 14px;
+        @include themify($themes) {
+            color: themed('InputDefaultText');
+        }
+    }
+    &:hover {
+        @include themify($themes) {
+            border-color: themed('InputDefaultHoverBorder');
+        }
+    }
+    &--active {
+        @include themify($themes) {
+            border-color: themed('InputDefaultActiveBorder') !important;
         }
     }
 }

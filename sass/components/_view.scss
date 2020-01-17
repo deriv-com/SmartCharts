@@ -18,34 +18,10 @@
         height: 40px;
         position: relative;
 
-        input {
+        .input {
             width: calc(100% - 40px);
             border-radius: 4px 0 0 4px;
-            height: 40px;
-            box-sizing: border-box;
-            border-right: none !important;
-            position: relative;
-            outline: none !important;
-            padding: 10px 12px;
-            top: -3px;
-            font-size: 14px;
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1.43;
-            letter-spacing: normal;
-            background: transparent;
-            @include themify($themes) {
-                border: 1px solid themed('TemplateFormInputBorder');
-                color: themed('TemplateFormInputText');
-            }
-
-            &::placeholder,
-            &::-moz-placeholder {
-                font-size: 14px;
-                @include themify($themes) {
-                    color: themed('TemplateFormInputText');
-                }
-            }
+            top: -4px;
         }
         .subtitle {
             position: absolute;
@@ -70,14 +46,8 @@
             width: 40px;
             height: 40px;
             border-radius: 0 4px 4px 0;
-            border: none;
             padding: 8px 7px;
-            outline: none !important;
-            cursor: pointer;
-            @include themify($themes) {
-                background: themed('TemplateFormBtnBg');
-                color: themed('TemplateFormBtnText');
-            }
+            border: none !important;
 
             svg {
                 @include themify($themes) {
