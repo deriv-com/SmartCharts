@@ -205,17 +205,12 @@ class ChartState {
             if (expectTime) {
                 this.stxx.chart.entryTick = this.stxx.tickFromDate(expectTime.DT);
 
-                this.stxx.chart.lockScroll = true;
                 const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
 
                 this.stxx.setMaxTicks(scrollToTarget);
                 this.stxx.chart.scroll = scrollToTarget;
 
                 this.stxx.draw();
-                this.setIsChartScrollingToEpoch(false);
-
-                this.stxx.chart.lockScroll = false;
-                this.mainStore.state.setIsChartScrollingToEpoch(true);
             }
         }
     }
