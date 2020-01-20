@@ -29,6 +29,12 @@ msgstr ""
 msgid "Auto Scale"
 msgstr ""
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr ""
 

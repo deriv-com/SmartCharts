@@ -111,7 +111,42 @@
             border-radius: 4px;
             border: 1px solid transparent;
             box-sizing: border-box;
+            position: relative;
 
+            .tooltip {
+                position: absolute;
+                top: calc(50% - 17px);
+                left: 100%;
+                border-radius: 4px;
+                height: 18px;
+                width: auto;
+                white-space: nowrap;
+                padding: 8px;
+                font-size: 12px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.5;
+                letter-spacing: normal;
+                opacity: 0;
+                @include themify($themes) {
+                    background: themed('ChartTypeTooltipBg');
+                    color: themed('ChartTypeTooltipText');
+                }
+
+                &:before {
+                    position: absolute;
+                    width: 0;
+                    height: 0;
+                    border-top: 6px solid transparent;
+                    border-bottom: 6px solid transparent;
+                    content: ' ';
+                    top: calc(50% - 6px);
+                    left: -6px;
+                    @include themify($themes) {
+                        border-right: 6px solid themed('ChartTypeTooltipBg');
+                    }
+                }
+            }
             &:hover {
                 @include themify($themes) {
                     background: themed('TimeHoverBg');
@@ -123,6 +158,21 @@
                     color: themed('TimeActiveText');
                     border-color: themed('TimeActiveItemBorder');
                     font-weight: bold;
+                }
+            }
+            &--disabled {
+                cursor: initial;
+                background: transparent !important;
+
+                > span {
+                    opacity: 0.32;
+                    pointer-events: none;
+                }
+                &:hover {
+                    .tooltip {
+                        opacity: 1;
+                        z-index: 2;
+                    }
                 }
             }
         }
