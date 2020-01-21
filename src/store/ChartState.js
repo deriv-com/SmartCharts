@@ -182,7 +182,7 @@ class ChartState {
 
         this.mainStore.chartSetting.setSettings(this.settings);
 
-        if (maxTick && this.stxx) {
+        if (maxTick && this.maxTick !== maxTick && this.stxx) {
             this.maxTick = maxTick;
             this.setMaxtTick();
         }
@@ -196,22 +196,9 @@ class ChartState {
     }
 
     @action.bound setMaxtTick() {
-        if (this.maxTick && this.stxx && this.stxx.chart.dataSet) {
-            const dataSetLength = this.stxx.chart.dataSet.length;
-            let tickIndex = dataSetLength - this.maxTick;
-            if (tickIndex < 0) tickIndex = dataSetLength;
-
-            const expectTime = this.stxx.chart.dataSet[tickIndex];
-            if (expectTime) {
-                this.stxx.chart.entryTick = this.stxx.tickFromDate(expectTime.DT);
-
-                const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
-
-                this.stxx.setMaxTicks(scrollToTarget);
-                this.stxx.chart.scroll = scrollToTarget;
-
-                this.stxx.draw();
-            }
+        if (this.stxx && this.maxTick) {
+            this.stxx.setMaxTicks(this.maxTick);
+            this.stxx.draw();
         }
     }
 
