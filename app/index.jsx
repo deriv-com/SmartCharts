@@ -229,7 +229,7 @@ class App extends Component {
 
     renderTopWidgets = () => (
         <>
-            <ChartTitle onChange={this.symbolChange} />
+            <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
             <AssetInformation />
             <ComparisonList />

@@ -481,6 +481,109 @@
     }
 }
 
+.cq-categorical-display--nested {
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    box-shadow: none !important;
+
+    .cq-lookup-filters {
+        width: 100%;
+        border-right: none;
+        position: relative;
+        z-index: 9;
+        transition: max-height 0.2s ease-in;
+        margin-bottom: -2px;
+        background: transparent !important;
+        border: none !important;
+    }
+    .cq-lookup-input {
+        margin: 16px 8px;
+    }
+    .cq-scroll-panel {
+        .category:last-child {
+            padding-bottom: 3em;
+        }
+    }
+    .cq-item, .cq-active-item {
+        height: 40px;
+    }
+    .cq-filter-panel {
+        display: none;
+    }
+    .results-panel {
+        .category {
+            padding: 0px;
+            max-height: 40px;
+            overflow-y: hidden;
+            border-bottom: none;
+            transition: max-height 0.5s ease-in-out;
+
+            .category-title {
+                display: flex;
+                justify-content: space-between;
+                box-sizing: border-box;
+                align-items: center;
+                position: relative;
+                padding-left: 17px;
+                padding-right: 20px;
+                cursor: pointer;
+
+                &.sticky-top {
+                    position: relative;
+                    top: 0px !important;
+                }
+                .category-title-left {
+                    display: flex;
+                    align-items: center;
+                    @include themify($themes) {
+                        color: themed('CatDisplayText');
+                    }
+
+                    .ic-icon {
+                        margin-right: 16px;
+                        position: relative;
+                        top: -1px;
+
+                        svg {
+                            width: 24px;
+                            height: 24px;
+                            @include themify($themes) {
+                                fill: themed('CatDisplayText');
+                            }
+                        }
+                    }
+                }
+                > .ic-icon {
+                    transition: transform 0.3s ease-in-out;
+                    @include themify($themes) {
+                        fill: themed('CatDisplayText');
+                    }
+                }
+            }
+            .subcategory {
+                font-weight: bold;
+            }
+            .cq-item {
+                padding-left: 0px;
+                padding-right: 7px;
+            }
+            &:last-child {
+                padding-bottom: 0px !important;
+            }
+            &.active {
+                max-height: 1500px;
+
+                .category-title {
+                    > .ic-icon {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+    }
+}
+
 .smartcharts-mobile {
     .cq-categorical-display {
         flex-direction: column;
