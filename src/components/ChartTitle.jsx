@@ -9,7 +9,7 @@ const ChartTitle = ({
     enabled,
     isMobile,
     MarketSelector,
-    portalNode,
+    portalNodeId,
     onChange,
     SymbolSelectButton,
     setMenuOpen,
@@ -24,7 +24,7 @@ const ChartTitle = ({
             enabled={enabled}
             className="cq-chart-title stx-show cq-symbols-display"
             isFullscreen
-            portalNode={portalNode}
+            portalNodeId={portalNodeId}
             title={isMobile ? t.translate('Underlying Assets') : ''}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}

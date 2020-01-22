@@ -22,7 +22,7 @@ class Menu extends Component {
             isMobile,
             isFullscreen,
             modalNode,
-            portalNode,
+            portalNodeId,
             enabled = true,
             shouldRenderDialogs,
             onMouseEnter,
@@ -126,17 +126,16 @@ class Menu extends Component {
                     >
                         {first}
                     </div>
-                    {(isMobile && (portalNode || modalNode))
+                    {(isMobile && (portalNodeId || modalNode))
                     && (
                         <MenuMobile
                             className={className}
                             open={open}
                             menu_element={oldDropdown}
-                            portalNode={portalNode}
+                            portalNodeId={portalNodeId}
                             onClick={this.onOverlayClick}
                         />
-                    )
-                || (oldDropdown)}
+                    )}
                 </div>
             ) || (
                 <div className={`ciq-menu ciq-disabled ${className || ''}`}>

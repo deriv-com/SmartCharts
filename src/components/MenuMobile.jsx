@@ -6,7 +6,7 @@ import '../../sass/components/_menu-dropdown.scss';
 const MenuMobile = ({
     className,
     menu_element,
-    portalNode,
+    portalNodeId,
     open,
     onClick,
     theme,
@@ -21,7 +21,7 @@ const MenuMobile = ({
     };
 
     disableBodyScroll();
-    if (!portalNode) return null;
+    if (!portalNodeId) return menu_element;
     return ReactDOM.createPortal(
         <div className={`smartcharts-portal ${open ? 'smartcharts-portal--open' : ''}`}>
             <div className={`smartcharts smartcharts-${theme}`}>
@@ -37,7 +37,7 @@ const MenuMobile = ({
                 </div>
             </div>
         </div>,
-        document.getElementById(portalNode),
+        document.getElementById(portalNodeId),
     );
 };
 
