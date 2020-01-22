@@ -39,6 +39,7 @@
                         box-shadow: none;
                     }
                     .category-title.sticky-top {
+                        // stylelint-disable-next-line
                         top: unset;
                     }
                     .cq-scroll-panel .category:last-child {
