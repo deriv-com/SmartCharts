@@ -135,7 +135,8 @@ class Menu extends Component {
                             portalNodeId={portalNodeId}
                             onClick={this.onOverlayClick}
                         />
-                    )}
+                    )
+                || (oldDropdown)}
                 </div>
             ) || (
                 <div className={`ciq-menu ciq-disabled ${className || ''}`}>
