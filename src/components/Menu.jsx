@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
+import MenuMobile from './MenuMobile.jsx';
 import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
@@ -21,6 +22,7 @@ class Menu extends Component {
             isMobile,
             isFullscreen,
             modalNode,
+            portalNode,
             enabled = true,
             shouldRenderDialogs,
             onMouseEnter,
@@ -31,7 +33,6 @@ class Menu extends Component {
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
-
         if (newStyle) {
             const newDropdown = (shouldRenderDialogs
                 && (
@@ -91,6 +92,7 @@ class Menu extends Component {
                     in={open}
                     timeout={150}
                     classNames="cq-menu-dropdown"
+                    unmountOnExit
                 >
                     <DropdownDialog
                         className="cq-menu-dropdown"
@@ -112,8 +114,8 @@ class Menu extends Component {
                     </DropdownDialog>
                 </CSSTransition>
             ));
-
         return (
+
             enabled && (
                 <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                     <div
@@ -124,17 +126,15 @@ class Menu extends Component {
                     >
                         {first}
                     </div>
-                    {(isMobile && modalNode)
-                    && ReactDOM.createPortal(
-                        <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                            <div
-                                className="cq-menu-overlay"
-                                onClick={this.onOverlayClick}
-                            >
-                                {oldDropdown}
-                            </div>
-                        </div>,
-                        modalNode,
+                    {(isMobile && (portalNode || modalNode))
+                    && (
+                        <MenuMobile
+                            className={className}
+                            open={open}
+                            menu_element={oldDropdown}
+                            portalNode={portalNode}
+                            onClick={this.onOverlayClick}
+                        />
                     )
                 || (oldDropdown)}
                 </div>
