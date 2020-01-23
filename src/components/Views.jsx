@@ -25,10 +25,10 @@ const ViewItem = ({
 const EmptyView = ({ onClick }) => (
     <div className="ciq-views--empty">
         <EmptyStateIcon />
-        <p>You have no save templates yet.</p>
+        <p>{t.translate('You have no save templates yet.')}</p>
         <button type="button" className="btn" onClick={onClick}>
             <AddIcon />
-            Add new templates
+            {t.translate('Add new templates')}
         </button>
     </div>
 );
@@ -109,7 +109,7 @@ const Views = ({
                                                 <div className="form__control">
                                                     <div className={`form--ciq-views__input ${isActive ? 'form--ciq-views__input--active' : ''}`}>
                                                         <div className="subtitle">
-                                                            <span>Add new templates</span>
+                                                            <span>{t.translate('Add new templates')}</span>
                                                         </div>
                                                         <input
                                                             type="text"
@@ -139,8 +139,8 @@ const Views = ({
                                         ? (
                                             <div className="ciq-views__views">
                                                 <div className="ciq-views__views__head">
-                                                    <h5>Saved templates</h5>
-                                                    <button type="button" onClick={removeAll}>Clear all</button>
+                                                    <h5>{t.translate('Saved templates')}</h5>
+                                                    <button type="button" onClick={removeAll}>{t.translate('Clear all')}</button>
                                                 </div>
                                                 <div className="ciq-views__views__content">
                                                     <div className="ciq-views__views__list">

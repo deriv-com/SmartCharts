@@ -17,7 +17,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "Add new"
+msgid "Add new templates"
 msgstr ""
 
 msgid "Annotation"
@@ -38,16 +38,10 @@ msgstr ""
 msgid "Box Size"
 msgstr ""
 
-msgid "C"
-msgstr ""
-
 msgid "Callout"
 msgstr ""
 
 msgid "Cancel"
-msgstr ""
-
-msgid "CANCEL"
 msgstr ""
 
 msgid "Candle"
@@ -66,6 +60,9 @@ msgid "Chart Table"
 msgstr ""
 
 msgid "Chart types"
+msgstr ""
+
+msgid "Clear all"
 msgstr ""
 
 msgid "Clear All"
@@ -101,6 +98,9 @@ msgstr ""
 msgid "Crossline"
 msgstr ""
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr ""
 
@@ -117,15 +117,6 @@ msgid "Dot"
 msgstr ""
 
 msgid "Download"
-msgstr ""
-
-msgid "Download as CSV"
-msgstr ""
-
-msgid "Download as PNG"
-msgstr ""
-
-msgid "Download Chart"
 msgstr ""
 
 msgid "Draw tools"
@@ -215,9 +206,6 @@ msgstr ""
 msgid "Minute"
 msgstr ""
 
-msgid "O"
-msgstr ""
-
 msgid "OHLC"
 msgstr ""
 
@@ -230,10 +218,13 @@ msgstr ""
 msgid "Opens in:"
 msgstr ""
 
-msgid "OVERWRITE"
+msgid "Overwrite"
 msgstr ""
 
 msgid "Pitchfork"
+msgstr ""
+
+msgid "PNG"
 msgstr ""
 
 msgid "Point & Figure"
@@ -296,6 +287,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr ""
 
@@ -347,9 +341,6 @@ msgstr ""
 msgid "Table"
 msgstr ""
 
-msgid "Template name"
-msgstr ""
-
 msgid "Templates"
 msgstr ""
 
@@ -381,6 +372,9 @@ msgid "Vertical"
 msgstr ""
 
 msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "You have no save templates yet."
 msgstr ""
 
 msgid "Zoom in"
