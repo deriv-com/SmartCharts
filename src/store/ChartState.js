@@ -25,6 +25,8 @@ class ChartState {
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
+    @observable crosshairState = 1;
+    @observable maxTick;
     chartControlsWidgets;
 
     get comparisonStore() { return this.mainStore.comparison; }
@@ -72,6 +74,9 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
+        crosshairState,
+        zoom,
+        maxTick,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -104,7 +109,6 @@ class ChartState {
             this.onExportLayout = onExportLayout;
             this.exportLayout();
         }
-
 
         if (chartType !== this.chartType && this.context) {
             if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
@@ -163,12 +167,37 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
+        if (crosshairState !== null && crosshairState !== this.crosshairState) {
+            this.mainStore.crosshair.setCrosshairState(crosshairState);
+            this.crosshairState = crosshairState;
+        }
+
+        if (zoom) {
+            if (zoom === 1) {
+                this.mainStore.chartSize.zoomIn();
+            } else {
+                this.mainStore.chartSize.zoomOut();
+            }
+        }
+
         this.mainStore.chartSetting.setSettings(this.settings);
+
+        if (maxTick && this.maxTick !== maxTick && this.stxx) {
+            this.maxTick = maxTick;
+            this.setMaxtTick();
+        }
 
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
+            this.stxx.draw();
+        }
+    }
+
+    @action.bound setMaxtTick() {
+        if (this.stxx && this.maxTick) {
+            this.stxx.setMaxTicks(this.maxTick);
             this.stxx.draw();
         }
     }
@@ -450,7 +479,7 @@ class ChartState {
         this.stxx.clearDrawings();
 
         // TODO: use constant
-        this.mainStore.crosshair.setCrosshairState(2);
+        this.mainStore.crosshair.onChange(2);
     }
 
     exportLayout() {

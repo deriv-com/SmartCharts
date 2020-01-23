@@ -15,6 +15,7 @@ const ChartTitle = ({
     searchInputClassName,
     onMouseEnter,
     onMouseLeave,
+    isNestedList,
 }) => {
     if (!currentSymbol) { return null; }
 
@@ -32,6 +33,7 @@ const ChartTitle = ({
             </ChartTitleMenu.Title>
             <ChartTitleMenu.Body>
                 <MarketSelector
+                    isNestedList={isNestedList}
                     searchInputClassName={searchInputClassName}
                     onSelectItem={(x) => {
                         if (x.symbol !== currentSymbol.symbol) {

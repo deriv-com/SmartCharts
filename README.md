@@ -109,11 +109,14 @@ isAnimationEnabled | Determine whether chart animation is enabled or disabled. I
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
 scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
 scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
-zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
 clearChart | Clear the chart.
 onExportLayout | Export the layout and send it back using this callback.
 importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
 shouldFetchTradingTimes | Determine whether an API call for fetching trading times is necessary for the new chart or not. Defaults to `true`
+maxTick | Set the max number of first points/candles in the visible chart area. The value should be number greater than zero. Defaults to `undefined`
+crosshairState | Set state of Crosshair Component. Allowed values are undefined, 0,1,2. Defaults to `undefined`
+zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
+
 ### Chart Settings
 
 | Attribute | Description |
