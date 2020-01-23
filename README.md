@@ -109,11 +109,14 @@ isAnimationEnabled | Determine whether chart animation is enabled or disabled. I
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
 scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
 scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
-zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
 clearChart | Clear the chart.
 onExportLayout | Export the layout and send it back using this callback.
 importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
 shouldFetchTradingTimes | Determine whether an API call for fetching trading times is necessary for the new chart or not. Defaults to `true`
+maxTick | Set the max number of first points/candles in the visible chart area. The value should be number greater than zero. Defaults to `undefined`
+crosshairState | Set state of Crosshair Component. Allowed values are undefined, 0,1,2. Defaults to `undefined`
+zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
+
 ### Chart Settings
 
 | Attribute | Description |
@@ -148,11 +151,18 @@ Attributes marked with `*` are **mandatory**:
 shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
+hideBarrierLine | hide/show the barrier line. Can be used to show only the title. Defaults to `false`.
+hideOffscreenLine | hide/show the barrier line when it is offscreen. Defaults to `false`.
+hideOffscreenBarrier | hide/show the barrier line & title when it is offscreen. Defaults to `false`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
+title | Title text of the barrier
+isSingleBarrier | Shows only High barrier, stops low barrier & shades from rendering when the flag is true. Defaults to `false`.
+showOffscreenArrows | hide/show arrows with direction when the barrier is offscreen. Defaults to `false`.
+opacityOnOverlap | Sets the opacity of the barrier when it is overlapping with other barrier.
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
 

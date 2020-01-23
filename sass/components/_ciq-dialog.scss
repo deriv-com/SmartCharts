@@ -43,15 +43,13 @@
             border-radius: 5px 0 0;
         }
         &--action {
-            padding: 16px;
+            padding: 20px 16px;
             border-radius: 0 5px 0 0;
 
             .ic-icon {
                 width: 16px;
                 height: 16px;
                 line-height: 16px;
-                margin-right: 8px;
-                margin-top: 4px;
                 cursor: pointer;
 
                 svg {

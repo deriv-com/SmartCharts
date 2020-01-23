@@ -9,7 +9,7 @@ export default class ShareStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route:'download' });
         when(() => this.context, this.onContextReady);
-        this.ShareMenu = this.menu.connect(Menu);
+        this.Dialog = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
