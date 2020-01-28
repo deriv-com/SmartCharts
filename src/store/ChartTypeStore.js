@@ -15,7 +15,7 @@ import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 function getChartTypes() {
     return [
-        { id: 'mountain',      text: t.translate('Line'),   candleOnly: false, icon: TypeAreaIcon   },
+        { id: 'mountain',      text: t.translate('Area'),   candleOnly: false, icon: TypeAreaIcon   },
         { id: 'candle',        text: t.translate('Candle'), candleOnly: true,  icon: TypeCandleIcon },
         { id: 'hollow_candle', text: t.translate('Hollow'), candleOnly: true,  icon: TypeHollowIcon },
         { id: 'colored_bar',   text: t.translate('OHLC'),   candleOnly: true,  icon: TypeOhlcIcon   },
