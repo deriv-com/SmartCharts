@@ -52,6 +52,7 @@ $transition-duration: 300ms;
         box-sizing: content-box;
         @include themify($themes) {
             background: themed('DialogHeadBg');
+            color: themed('DialogHeadText');
         }
 
         .title-text {
@@ -59,11 +60,6 @@ $transition-duration: 300ms;
             font-size: 1.2em;
             font-weight: bold;
         }
-
-        @include themify($themes) {
-            color: themed('DialogHeadText');
-        }
-
         > .ic-icon {
             @include themify($themes) {
                 color: themed('DialogHeadIcon');
@@ -161,6 +157,18 @@ $transition-duration: 300ms;
             .icon-close-menu {
                 pointer-events: initial;
                 opacity: 1;
+            }
+            .title {
+                .title-text {
+                    font-size: 14px;
+                }
+                .icon-close-menu {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('DialogHeadText');
+                        }
+                    }
+                }
             }
         }
     }

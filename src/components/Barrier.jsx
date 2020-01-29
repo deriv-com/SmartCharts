@@ -15,16 +15,22 @@ const Barrier = React.memo(({
     lineStyle,
     isInitialized,
     priceLabelWidth,
+    isSingleBarrier,
+    ...props
 }) => (isInitialized && (
     <div
         className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
         style={{ '--shade-color': shadeColor }}
     >
-        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
-        <AboveShade />
-        <BetweenShade />
-        <BelowShade />
+        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />
+        { !isSingleBarrier && (
+            <>
+                <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />
+                <AboveShade />
+                <BetweenShade />
+                <BelowShade />
+            </>
+        )}
     </div>
 )));
 
@@ -39,11 +45,17 @@ export default connect(
         shadeColor: store.shadeColor,
         color: store.color,
         foregroundColor: store.foregroundColor,
+        hideBarrierLine: store.hideBarrierLine,
+        hideOffscreenBarrier: store.hideOffscreenBarrier,
+        hideOffscreenLine: store.hideOffscreenLine,
         hidePriceLines: store.hidePriceLines,
         lineStyle: store.lineStyle,
         isInitialized: store.isInitialized,
         destructor: store.destructor,
         priceLabelWidth: store.priceLabelWidth,
+        title: store.title,
+        isSingleBarrier: store.isSingleBarrier,
+        opacityOnOverlap: store.opacityOnOverlap,
     }),
     BarrierStore,
 )(Barrier);

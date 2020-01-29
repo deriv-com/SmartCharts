@@ -215,6 +215,7 @@ class Feed {
         this.scaleChart();
 
         this._emitDataUpdate(quotes, comparisonChartSymbol, true);
+        this._mainStore.state.setMaxtTick();
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
