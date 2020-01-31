@@ -63,12 +63,12 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (ViewStore.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+        if (ViewStore.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
-        } else if (this.templateName.length > 0) {
+        } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            ViewStore.views.push({ name: this.templateName, layout });
+            ViewStore.views.push({ name: this.templateName.trim(), layout });
             ViewStore.updateLocalStorage();
             this.templateName = '';
         }
@@ -78,7 +78,7 @@ export default class ViewStore {
         const layout = this.stx.exportLayout();
         const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         ViewStore.views[templateIndex].layout = layout;
-        ViewStore.views[templateIndex].name = this.templateName;
+        ViewStore.views[templateIndex].name = this.templateName.trim();
         ViewStore.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';

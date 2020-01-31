@@ -14,6 +14,8 @@
 }
 
 .form--ciq-views {
+    overflow-y: hidden !important;
+
     &__input {
         height: 40px;
         position: relative;
@@ -80,6 +82,7 @@
 .ciq-views {
     height: 304px;
     position: relative;
+    border-radius: 0 0 4px 4px;
     @include themify($themes) {
         background: themed('TemplateBg');
     }
