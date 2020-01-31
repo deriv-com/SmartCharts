@@ -1,14 +1,37 @@
-import { action, reaction, when } from 'mobx';
+import { action, reaction, when, observable } from 'mobx';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import {
+    DrawToolsChannelIcon,
+    DrawToolsContinuousIcon,
+    DrawToolsFibonaccifanIcon,
+    DrawToolsHorizontalIcon,
+    DrawToolsLineIcon,
+    DrawToolsRayIcon,
+    DrawToolsRectangleIcon,
+    DrawToolsTrendIcon,
+    DrawToolsVerticalIcon,
+} from '../components/Icons.jsx';
 
 // camelCase to spaces separated capitalized string.
 const formatCamelCase = (s) => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+};
+
+const drawTools = {
+    channel:    { id: 'channel',     text: t.translate('Channel'), icon: DrawToolsChannelIcon },
+    continuous: { id: 'continuous',  text: t.translate('Continuous'), icon: DrawToolsContinuousIcon },
+    fibfan:     { id: 'fibfan',      text: t.translate('Fib Fan'), icon: DrawToolsFibonaccifanIcon },
+    horizontal: { id: 'horizontal',  text: t.translate('Horizontal'), icon: DrawToolsHorizontalIcon },
+    line:       { id: 'line',        text: t.translate('Line'), icon: DrawToolsLineIcon },
+    ray:        { id: 'ray',         text: t.translate('Ray'), icon: DrawToolsRayIcon },
+    rectangle:  { id: 'rectangle',   text: t.translate('Rectangle'), icon: DrawToolsRectangleIcon },
+    tirone:     { id: 'tirone',      text: t.translate('Tirone Levels'), icon: DrawToolsTrendIcon },
+    vertical:   { id: 'vertical',    text: t.translate('Vertical'), icon: DrawToolsVerticalIcon },
 };
 
 export default class DrawToolsStore {
@@ -24,7 +47,10 @@ export default class DrawToolsStore {
         this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
 
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, this.noTool);
+        reaction(() => this.menu.open, () => {
+            this.computeActiveDrawTools();
+            this.noTool();
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -33,48 +59,13 @@ export default class DrawToolsStore {
 
     activeDrawing = null;
     isContinuous = false;
-
-    drawToolsItems = [];
+    drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
+    @observable activeTools = [];
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         this.stx.addEventListener('drawing', this.noTool);
         this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
-        this.drawToolsItems = [
-            { id: 'annotation',  text: t.translate('Annotation') },
-            { id: 'average',     text: t.translate('Average Line') },
-            { id: 'callout',     text: t.translate('Callout') },
-            { id: 'channel',     text: t.translate('Channel') },
-            { id: 'continuous',  text: t.translate('Continuous') },
-            { id: 'crossline',   text: t.translate('Crossline') },
-            { id: 'freeform',    text: t.translate('Doodle') },
-            { id: 'ellipse',     text: t.translate('Ellipse') },
-            { id: 'retracement', text: t.translate('Fib Retracement') },
-            { id: 'fibarc',      text: t.translate('Fib Arc') },
-            { id: 'fibfan',      text: t.translate('Fib Fan') },
-            { id: 'fibtimezone', text: t.translate('Fib Time Zone') },
-            { id: 'gannfan',     text: t.translate('Gann Fan') },
-            { id: 'gartley',     text: t.translate('Gartley') },
-            { id: 'horizontal',  text: t.translate('Horizontal') },
-            { id: 'line',        text: t.translate('Line') },
-            { id: 'pitchfork',   text: t.translate('Pitchfork') },
-            { id: 'quadrant',    text: t.translate('Quadrant Lines') },
-            { id: 'ray',         text: t.translate('Ray') },
-            { id: 'rectangle',   text: t.translate('Rectangle') },
-            { id: 'regression',  text: t.translate('Regression Line') },
-            { id: 'segment',     text: t.translate('Segment') },
-            { id: 'arrow',       text: t.translate('Shape - Arrow') },
-            { id: 'check',       text: t.translate('Shape - Check') },
-            { id: 'xcross',      text: t.translate('Shape - Cross') },
-            { id: 'focusarrow',  text: t.translate('Shape - Focus') },
-            { id: 'heart',       text: t.translate('Shape - Heart') },
-            { id: 'star',        text: t.translate('Shape - Star') },
-            { id: 'speedarc',    text: t.translate('Speed Resistance Arc') },
-            { id: 'speedline',   text: t.translate('Speed Resistance Line') },
-            { id: 'timecycle',   text: t.translate('Time Cycle') },
-            { id: 'tirone',      text: t.translate('Tirone Levels') },
-            { id: 'vertical',    text: t.translate('Vertical') },
-        ];
     };
 
     closeOnEscape = (e) => {
@@ -135,6 +126,7 @@ export default class DrawToolsStore {
     @action.bound clearAll() {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
         this.stx.clearDrawings();
+        this.computeActiveDrawTools();
     }
 
     @action.bound selectTool(id) {
@@ -159,9 +151,29 @@ export default class DrawToolsStore {
         this.mainStore.state.saveDrawings();
     }
 
-    @action.bound onDeleted() {
+    @action.bound onDeleted(indx) {
+        if (!indx && !this.activeDrawing) { return; }
+
+        if (indx && this.stx.drawingObjects[indx]) {
+            this.activeDrawing = this.stx.drawingObjects[indx];
+        }
+
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);
         this.stx.removeDrawing(this.activeDrawing);
         this.activeDrawing = null;
+        this.computeActiveDrawTools();
+    }
+
+    @action.bound onSetting(indx) {
+        if (!this.stx.drawingObjects[indx]) { return; }
+
+        this.showDrawToolDialog(this.stx.drawingObjects[indx]);
+    }
+
+    @action.bound computeActiveDrawTools() {
+        this.activeTools = this.stx.drawingObjects.map((item, indx) => {
+            item.index = indx;
+            return ((drawTools[item.name]) ? { ...item, ...drawTools[item.name] } : item);
+        });
     }
 }

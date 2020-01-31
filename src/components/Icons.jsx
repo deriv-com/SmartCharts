@@ -120,6 +120,16 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
+import DrawToolsChannel from '../../sass/icons/draw-tools/ic-channel.svg';
+import DrawToolsContinuous from '../../sass/icons/draw-tools/ic-continuous.svg';
+import DrawToolsFibonaccifan from '../../sass/icons/draw-tools/ic-fibonacci-fan.svg';
+import DrawToolsHorizontal from '../../sass/icons/draw-tools/ic-horizontal.svg';
+import DrawToolsLine from '../../sass/icons/draw-tools/ic-line.svg';
+import DrawToolsRay from '../../sass/icons/draw-tools/ic-ray.svg';
+import DrawToolsRectangle from '../../sass/icons/draw-tools/ic-rectangle.svg';
+import DrawToolsTrend from '../../sass/icons/draw-tools/ic-trend.svg';
+import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
+
 export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
@@ -206,6 +216,17 @@ export const MetalIcon = Wrapper(Metal);
 
 export const ArrowGreenIcon = Wrapper(ArrowGreen);
 export const ArrowOrangeIcon = Wrapper(ArrowOrange);
+
+export const DrawToolsChannelIcon = Wrapper(DrawToolsChannel);
+export const DrawToolsContinuousIcon = Wrapper(DrawToolsContinuous);
+export const DrawToolsFibonaccifanIcon = Wrapper(DrawToolsFibonaccifan);
+
+export const DrawToolsHorizontalIcon = Wrapper(DrawToolsHorizontal);
+export const DrawToolsLineIcon = Wrapper(DrawToolsLine);
+export const DrawToolsRayIcon = Wrapper(DrawToolsRay);
+export const DrawToolsRectangleIcon = Wrapper(DrawToolsRectangle);
+export const DrawToolsTrendIcon = Wrapper(DrawToolsTrend);
+export const DrawToolsVerticalIcon = Wrapper(DrawToolsVertical);
 
 export const alertIconMap = {
     info: Wrapper(Info),

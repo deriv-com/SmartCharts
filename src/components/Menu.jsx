@@ -27,6 +27,8 @@ class Menu extends Component {
             onMouseLeave,
             newStyle, // this props will remove after we apply new design
             // to all of components
+            enableTabular, // this props will remove after we apply new design
+            // to all of components
         } = this.props;
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
@@ -36,7 +38,7 @@ class Menu extends Component {
             const newDropdown = (shouldRenderDialogs
                 && (
                     <DropdownDialog
-                        className="cq-dialog"
+                        className={`cq-dialog ${enableTabular ? 'cq-dialog--tabular' : ''}`}
                         isMobile={isMobile}
                         isFullscreen={isFullscreen}
                         title={title}
