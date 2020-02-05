@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2019-12-20 02:12\n"
+"PO-Revision-Date: 2020-02-05 07:52\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "Ativo"
 
 msgid "Add new"
-msgstr ""
+msgstr "Adicionar novo"
 
 msgid "Annotation"
 msgstr "Anotação"
@@ -56,7 +56,7 @@ msgid "Callout"
 msgstr "Período de disponibilidade"
 
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 msgid "CANCEL"
 msgstr "CANCELAR"
@@ -92,7 +92,7 @@ msgid "CLOSED"
 msgstr "FECHADO"
 
 msgid "Color"
-msgstr ""
+msgstr "Cor"
 
 msgid "Colored Dot"
 msgstr "Ponto colorido"
@@ -278,7 +278,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Reset"
-msgstr ""
+msgstr "Reinicialização"
 
 msgid "Retrieving Chart Data..."
 msgstr "Carregando dados do gráfico..."
@@ -305,7 +305,7 @@ msgid "right-click to manage"
 msgstr "Botão direito do mouse para gerenciar"
 
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 msgid "Search..."
 msgstr "Pesquisar..."
