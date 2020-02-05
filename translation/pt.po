@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2020-02-05 07:52\n"
+"PO-Revision-Date: 2020-02-05 08:02\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -335,10 +335,10 @@ msgid "Shape - Star"
 msgstr "Forma - Estrela"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Mostrar o ponto mais alto/mais baixo"
 
 msgid "Size"
-msgstr ""
+msgstr "Tamanho"
 
 msgid "Speed Resistance Arc"
 msgstr "Arco de Resistência Velocidade"
