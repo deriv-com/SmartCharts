@@ -78,7 +78,7 @@ class Chart extends Component {
             theme,
             position,
             bottomWidgets,
-            enabledNavigationWidget,
+            enabledNavigationWidget = true,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;

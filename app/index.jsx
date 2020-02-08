@@ -4,7 +4,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     StudyLegend,
     Comparison,
     Views,
-    CrosshairToggle,
     Timeperiod,
     ChartSize,
     DrawTools,
@@ -241,7 +240,6 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
             <ChartTypes onChange={this.changeChartType} />
             <Timeperiod onChange={this.changeGranularity} />
             <StudyLegend />
