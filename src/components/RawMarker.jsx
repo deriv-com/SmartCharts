@@ -10,6 +10,7 @@ class RawMarker extends React.Component {
     stx = null;
     injectionId = null;
     hasUnmountedBeforeInjection = false;
+    canvas_height = 0;
 
     componentDidMount() {
         const { contextPromise } = this.props;
