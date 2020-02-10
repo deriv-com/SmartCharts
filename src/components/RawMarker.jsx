@@ -124,8 +124,15 @@ class RawMarker extends React.Component {
             });
             const prices = price_array
                 .map(price => stx.pixelFromPrice(price * 1, chart.panel));
+
+            const canvas = stx.chart.context.canvas;
+            if ((`${canvas.height}`) !== canvas.style.height.replace('px', '')) {
+                this.canvas_height = canvas.height;
+            }
+
             draw_callback({
                 ctx: stx.chart.context,
+                canvas_height: this.canvas_height,
                 points,
                 prices,
             });
