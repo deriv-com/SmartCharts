@@ -1,8 +1,7 @@
-import { action, when, computed } from 'mobx';
+import { action, when, computed, reaction, observable } from 'mobx';
 
 export default class NavigationWidgetStore {
-    moveTimer;
-
+    @observable mouse_in;
     get chart() { return this.mainStore.chart; }
     get stateStore() { return this.mainStore.state; }
     get crosshairStore() { return this.mainStore.crosshair; }
@@ -11,6 +10,7 @@ export default class NavigationWidgetStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.mainStore.chart.context, this.onContextReady);
+        reaction(() => this.crosshairStore.state, this.onCrosshairChange);
     }
 
     onContextReady = () => {
@@ -22,10 +22,12 @@ export default class NavigationWidgetStore {
     @computed get enableScale() { return this.stateStore.startEpoch; }
 
     @action.bound onMouseEnter() {
+        this.mouse_in = true;
         this.crosshairStore.updateVisibility(false);
     }
 
     @action.bound onMouseLeave() {
+        this.mouse_in = false;
         this.crosshairStore.updateVisibility(true);
     }
 
@@ -36,5 +38,11 @@ export default class NavigationWidgetStore {
         if (dataSet && dataSet.length) point = dataSet[0];
 
         this.stateStore.scrollChartToLeft(point, true);
+    }
+
+    @action.bound onCrosshairChange() {
+        if (this.crosshairStore.state === 2 && this.mouse_in) {
+            this.crosshairStore.updateVisibility(false);
+        }
     }
 }
