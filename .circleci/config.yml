@@ -130,5 +130,5 @@ workflows:
           filters:
             branches:
               only: /^dev$/
-          context: binary-frontend-deploy  # using context to retrieve shared secret from circle ci
+          context: binary-frontend-artifact-upload  # using context to retrieve shared secret from circle ci
 
