@@ -1,0 +1,52 @@
+// classNames and styles needed for smartcharts to work outside of smartcharts class wrapper when rendered in portal
+@media (max-width: 767px) and (min-width: 320px) {
+    .smartcharts-portal {
+        opacity: 0;
+        pointer-events: none;
+        display: none;
+
+        &--open {
+            display: block;
+            pointer-events: auto;
+            opacity: 1;
+        }
+        .smartcharts {
+            .smartcharts-mobile {
+                .cq-modal-dropdown {
+                    &.stxMenuActive {
+                        z-index: 999;
+                    }
+                }
+                .cq-menu-dropdown {
+                    width: 100%;
+                    height: auto;
+                    left: 0px;
+                    bottom: auto;
+                    transform: translateX(0) translateY(-3em);
+
+                    &.open {
+                        margin: 0px;
+                    }
+                    &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
+                        opacity: 1;
+                        transform: translateX(0) translateY(0em);
+                    }
+                    &.cq-menu-dropdown-enter-done {
+                        z-index: 6;
+                    }
+                    .cq-categorical-display, .cq-dialog__body {
+                        height: 100% !important;
+                        box-shadow: none;
+                    }
+                    .category-title.sticky-top {
+                        // stylelint-disable-next-line
+                        top: unset;
+                    }
+                    .cq-scroll-panel .category:last-child {
+                        padding-bottom: 8em;
+                    }
+                }
+            }
+        }
+    }
+}
