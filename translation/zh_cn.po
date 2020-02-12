@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-12-25 02:01\n"
+"PO-Revision-Date: 2020-02-12 02:12\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -34,23 +34,26 @@ msgstr "添新"
 msgid "Annotation"
 msgstr "注释"
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr "资产信息"
 
 msgid "Auto Scale"
 msgstr "自动缩放"
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr "平均线"
 
-msgid "Baseline"
-msgstr "基线"
-
 msgid "Box Size"
 msgstr "箱尺寸"
-
-msgid "C"
-msgstr "C"
 
 msgid "Callout"
 msgstr "卖出"
@@ -94,9 +97,6 @@ msgstr "已关闭"
 msgid "Color"
 msgstr "颜色"
 
-msgid "Colored Dot"
-msgstr "彩色点"
-
 msgid "Comparison"
 msgstr "比较"
 
@@ -112,6 +112,9 @@ msgstr "十字光标"
 msgid "Crossline"
 msgstr "十字线"
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr "暗模式"
 
@@ -124,20 +127,8 @@ msgstr "白天"
 msgid "Doodle"
 msgstr "自由形式"
 
-msgid "Dot"
-msgstr "点"
-
 msgid "Download"
 msgstr "下载"
-
-msgid "Download as CSV"
-msgstr "下载为 CSV"
-
-msgid "Download as PNG"
-msgstr "下载为 PNG"
-
-msgid "Download Chart"
-msgstr "下载图表"
 
 msgid "Draw tools"
 msgstr "绘图工具"
@@ -169,9 +160,6 @@ msgstr "Gartley形态"
 msgid "H"
 msgstr "H"
 
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi烛图"
-
 msgid "High"
 msgstr "高"
 
@@ -181,14 +169,17 @@ msgstr "高"
 msgid "Historical Data Mode"
 msgstr "历史数据模式"
 
-msgid "Hollow Candle"
-msgstr "空心蜡烛"
+msgid "Hollow"
+msgstr ""
 
 msgid "Horizontal"
 msgstr "水平"
 
 msgid "Hour"
 msgstr "小时"
+
+msgid "hours"
+msgstr ""
 
 msgid "Indicators"
 msgstr "指标"
@@ -226,8 +217,8 @@ msgstr "测量"
 msgid "Minute"
 msgstr "分钟"
 
-msgid "O"
-msgstr "O"
+msgid "minutes"
+msgstr ""
 
 msgid "OHLC"
 msgstr "OHLC条形图"
@@ -246,6 +237,9 @@ msgstr "覆盖"
 
 msgid "Pitchfork"
 msgstr "叉子"
+
+msgid "PNG"
+msgstr ""
 
 msgid "Point & Figure"
 msgstr "点数图"
@@ -346,17 +340,11 @@ msgstr "速阻弧形线"
 msgid "Speed Resistance Line"
 msgstr "速阻线"
 
-msgid "Spline"
-msgstr "Spline法"
-
 msgid "SPOT"
 msgstr "点"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
-
-msgid "Table"
-msgstr "表"
 
 msgid "Template name"
 msgstr "模板名称"
@@ -373,11 +361,17 @@ msgstr "还没有任何激活指标."
 msgid "There are no favorites yet."
 msgstr "还没有收藏夹。"
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr "跳动点"
 
 msgid "Time Cycle"
 msgstr "时间周期"
+
+msgid "Time interval"
+msgstr ""
 
 msgid "Tirone Levels"
 msgstr "泰龙水平线"
