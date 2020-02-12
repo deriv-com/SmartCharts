@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2020-02-12 02:12\n"
+"PO-Revision-Date: 2020-02-12 11:13\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -35,7 +35,7 @@ msgid "Annotation"
 msgstr "Notas"
 
 msgid "Area"
-msgstr ""
+msgstr "Área"
 
 msgid "Asset Information"
 msgstr "Información del activo"
@@ -44,10 +44,10 @@ msgid "Auto Scale"
 msgstr "Auto Escala"
 
 msgid "Available only for \"Area\" chart type."
-msgstr ""
+msgstr "Disponible solo para el tipo de gráfico \"Área\"."
 
 msgid "Available only for non-tick time intervals."
-msgstr ""
+msgstr "Disponible solo para intervalos de tiempo sin tick."
 
 msgid "Average Line"
 msgstr "Línea Promedio"
@@ -113,7 +113,7 @@ msgid "Crossline"
 msgstr "Retícula"
 
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 msgid "Dark Mode"
 msgstr "Modo Nocturno"
@@ -170,7 +170,7 @@ msgid "Historical Data Mode"
 msgstr "Modo de Datos Históricos"
 
 msgid "Hollow"
-msgstr ""
+msgstr "Hueco"
 
 msgid "Horizontal"
 msgstr "Horizontal"
@@ -179,7 +179,7 @@ msgid "Hour"
 msgstr "Hora"
 
 msgid "hours"
-msgstr ""
+msgstr "horas"
 
 msgid "Indicators"
 msgstr "Indicadores"
@@ -218,7 +218,7 @@ msgid "Minute"
 msgstr "Minuto"
 
 msgid "minutes"
-msgstr ""
+msgstr "minutos"
 
 msgid "OHLC"
 msgstr "Gráfico OHLC"
@@ -239,7 +239,7 @@ msgid "Pitchfork"
 msgstr "Tridentes"
 
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "Punto & Cifra"
@@ -362,7 +362,7 @@ msgid "There are no favorites yet."
 msgstr "No hay favoritos cargados."
 
 msgid "tick"
-msgstr ""
+msgstr "tick"
 
 msgid "Tick"
 msgstr "Tick"
@@ -371,7 +371,7 @@ msgid "Time Cycle"
 msgstr "Ciclo de Tiempo"
 
 msgid "Time interval"
-msgstr ""
+msgstr "Intervalo de tiempo"
 
 msgid "Tirone Levels"
 msgstr "Niveles de Tirone"
