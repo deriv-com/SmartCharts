@@ -45,8 +45,10 @@ export default class BottomWidgetsContainerStore {
             if (margin === 200) {
                 if (this.stx.chart.yAxis.height < 325) {
                     margin = 100;
-                    const marginTopDiff = 325 - margin - this.stx.chart.yAxis.height;
-                    marginTop = marginTopDiff > 0 ? marginTopDiff : 0;
+                    const marginTopDiff = this.stx.chart.yAxis.height - margin; // - this.stx.chart.yAxis.height;
+                    // marginTop = marginTopDiff > 0 ? marginTopDiff : 0;
+                    // marginTop = marginTopDiff > 125 ? 125 : marginTopDiff;
+                    margin = marginTopDiff < margin + marginTop ? 5 : margin - marginTopDiff;
                 } else if (Object.keys(this.stx.panels).length > 3) {
                     margin = 100;
                     marginTop = 10;

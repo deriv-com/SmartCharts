@@ -23,22 +23,25 @@ msgstr ""
 msgid "Annotation"
 msgstr ""
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr ""
 
 msgid "Auto Scale"
 msgstr ""
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr ""
 
-msgid "Baseline"
-msgstr ""
-
 msgid "Box Size"
-msgstr ""
-
-msgid "C"
 msgstr ""
 
 msgid "Callout"
@@ -83,9 +86,6 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-msgid "Colored Dot"
-msgstr ""
-
 msgid "Comparison"
 msgstr ""
 
@@ -101,6 +101,9 @@ msgstr ""
 msgid "Crossline"
 msgstr ""
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr ""
 
@@ -113,19 +116,7 @@ msgstr ""
 msgid "Doodle"
 msgstr ""
 
-msgid "Dot"
-msgstr ""
-
 msgid "Download"
-msgstr ""
-
-msgid "Download as CSV"
-msgstr ""
-
-msgid "Download as PNG"
-msgstr ""
-
-msgid "Download Chart"
 msgstr ""
 
 msgid "Draw tools"
@@ -158,9 +149,6 @@ msgstr ""
 msgid "H"
 msgstr ""
 
-msgid "Heikin Ashi"
-msgstr ""
-
 msgid "High"
 msgstr ""
 
@@ -170,13 +158,16 @@ msgstr ""
 msgid "Historical Data Mode"
 msgstr ""
 
-msgid "Hollow Candle"
+msgid "Hollow"
 msgstr ""
 
 msgid "Horizontal"
 msgstr ""
 
 msgid "Hour"
+msgstr ""
+
+msgid "hours"
 msgstr ""
 
 msgid "Indicators"
@@ -215,7 +206,7 @@ msgstr ""
 msgid "Minute"
 msgstr ""
 
-msgid "O"
+msgid "minutes"
 msgstr ""
 
 msgid "OHLC"
@@ -234,6 +225,9 @@ msgid "OVERWRITE"
 msgstr ""
 
 msgid "Pitchfork"
+msgstr ""
+
+msgid "PNG"
 msgstr ""
 
 msgid "Point & Figure"
@@ -335,16 +329,10 @@ msgstr ""
 msgid "Speed Resistance Line"
 msgstr ""
 
-msgid "Spline"
-msgstr ""
-
 msgid "SPOT"
 msgstr ""
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
-
-msgid "Table"
 msgstr ""
 
 msgid "Template name"
@@ -362,10 +350,16 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr ""
 
 msgid "Time Cycle"
+msgstr ""
+
+msgid "Time interval"
 msgstr ""
 
 msgid "Tirone Levels"
