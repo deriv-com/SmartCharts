@@ -63,7 +63,6 @@ export default class BottomWidgetsContainerStore {
 
             this.stx.chart.yAxis.initialMarginTop = marginTop;
             this.stx.chart.yAxis.initialMarginBottom = margin;
-            this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
             this.stx.draw();
             if (!this.mainStore.state.shouldMinimiseLastDigits) {
                 this.mainStore.state.setShouldMinimiseLastDigit(this.stx.chart.panel.height < 460);
