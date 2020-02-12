@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2019-12-24 20:22\n"
+"PO-Revision-Date: 2020-02-12 02:12\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -34,23 +34,26 @@ msgstr "Добавить"
 msgid "Annotation"
 msgstr "Примечание"
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr "Информация об активе"
 
 msgid "Auto Scale"
 msgstr "Авто масштаб"
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr "Средняя линия"
 
-msgid "Baseline"
-msgstr "Основная линия"
-
 msgid "Box Size"
 msgstr "Размер ячейки"
-
-msgid "C"
-msgstr "З"
 
 msgid "Callout"
 msgstr "Сноска"
@@ -94,9 +97,6 @@ msgstr "ЗАКРЫТО"
 msgid "Color"
 msgstr "Цвет"
 
-msgid "Colored Dot"
-msgstr "Цветные точки"
-
 msgid "Comparison"
 msgstr "Сравнение"
 
@@ -112,6 +112,9 @@ msgstr "Перекрестие"
 msgid "Crossline"
 msgstr "Линия пересечения"
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr "Тёмный режим"
 
@@ -124,20 +127,8 @@ msgstr "День"
 msgid "Doodle"
 msgstr "Произвольной формы"
 
-msgid "Dot"
-msgstr "Точечный"
-
 msgid "Download"
 msgstr "Загрузить"
-
-msgid "Download as CSV"
-msgstr "Загрузить как CSV"
-
-msgid "Download as PNG"
-msgstr "Загрузить как PNG"
-
-msgid "Download Chart"
-msgstr "Загрузить график"
 
 msgid "Draw tools"
 msgstr "Ср-ва отображения"
@@ -169,9 +160,6 @@ msgstr "Гартли"
 msgid "H"
 msgstr "Мак"
 
-msgid "Heikin Ashi"
-msgstr "Хейкен Аши"
-
 msgid "High"
 msgstr "Макс."
 
@@ -181,14 +169,17 @@ msgstr "МАКС."
 msgid "Historical Data Mode"
 msgstr "Исторические данные"
 
-msgid "Hollow Candle"
-msgstr "пустая свеча"
+msgid "Hollow"
+msgstr ""
 
 msgid "Horizontal"
 msgstr "Горизонт."
 
 msgid "Hour"
 msgstr "Час."
+
+msgid "hours"
+msgstr ""
 
 msgid "Indicators"
 msgstr "Индикаторы"
@@ -226,8 +217,8 @@ msgstr "Измерить"
 msgid "Minute"
 msgstr "Мин."
 
-msgid "O"
-msgstr "О"
+msgid "minutes"
+msgstr ""
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -246,6 +237,9 @@ msgstr "ПЕРЕЗАПИСАТЬ"
 
 msgid "Pitchfork"
 msgstr "Вилка"
+
+msgid "PNG"
+msgstr ""
 
 msgid "Point & Figure"
 msgstr "Крестики-нолики"
@@ -346,17 +340,11 @@ msgstr "Дуга сопротивления"
 msgid "Speed Resistance Line"
 msgstr "Линия сопротивления"
 
-msgid "Spline"
-msgstr "Кривая"
-
 msgid "SPOT"
 msgstr "СПОТ"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
-
-msgid "Table"
-msgstr "Таблица"
 
 msgid "Template name"
 msgstr "Название шаблона"
@@ -373,11 +361,17 @@ msgstr "Нет активных индикаторов."
 msgid "There are no favorites yet."
 msgstr "Нет записей в избранном."
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr "Тик"
 
 msgid "Time Cycle"
 msgstr "Временной круг"
+
+msgid "Time interval"
+msgstr ""
 
 msgid "Tirone Levels"
 msgstr "Уровни Тирона"
