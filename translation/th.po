@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2019-12-20 02:12\n"
+"PO-Revision-Date: 2020-02-12 02:12\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -34,23 +34,26 @@ msgstr ""
 msgid "Annotation"
 msgstr "คำอธิบายประกอบ"
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr "ข้อมูลสินทรัพย์"
 
 msgid "Auto Scale"
 msgstr "ปรับสัดส่วนอัตโนมัติ"
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr "เส้นค่าเฉลี่ย"
 
-msgid "Baseline"
-msgstr "เส้นฐาน"
-
 msgid "Box Size"
 msgstr "ขนาดกล่อง"
-
-msgid "C"
-msgstr "C"
 
 msgid "Callout"
 msgstr "คำบรรยายภาพ"
@@ -94,9 +97,6 @@ msgstr "ปิดแล้ว"
 msgid "Color"
 msgstr ""
 
-msgid "Colored Dot"
-msgstr "จุดสี"
-
 msgid "Comparison"
 msgstr "การเปรียบเทียบ"
 
@@ -112,6 +112,9 @@ msgstr "Crosshair"
 msgid "Crossline"
 msgstr "Crossline"
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr "รูปแบบโทนมืด"
 
@@ -124,20 +127,8 @@ msgstr "วัน"
 msgid "Doodle"
 msgstr "Doodle"
 
-msgid "Dot"
-msgstr "จุด"
-
 msgid "Download"
 msgstr "ดาวน์โหลด"
-
-msgid "Download as CSV"
-msgstr "ดาวน์โหลดเป็น CSV"
-
-msgid "Download as PNG"
-msgstr "ดาวน์โหลดเป็น PNG"
-
-msgid "Download Chart"
-msgstr "ดาวน์โหลดแผนภูมิ"
 
 msgid "Draw tools"
 msgstr "เครื่องมือวาดภาพ"
@@ -169,9 +160,6 @@ msgstr "Gartley"
 msgid "H"
 msgstr "H"
 
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
 msgid "High"
 msgstr "สูง"
 
@@ -181,14 +169,17 @@ msgstr "HIGH"
 msgid "Historical Data Mode"
 msgstr "โหมดข้อมูลเก่า"
 
-msgid "Hollow Candle"
-msgstr "เทียนกลวง"
+msgid "Hollow"
+msgstr ""
 
 msgid "Horizontal"
 msgstr "แนวนอน"
 
 msgid "Hour"
 msgstr "ชั่วโมง"
+
+msgid "hours"
+msgstr ""
 
 msgid "Indicators"
 msgstr "ดัชนี"
@@ -226,8 +217,8 @@ msgstr "วัด"
 msgid "Minute"
 msgstr "นาที"
 
-msgid "O"
-msgstr "O"
+msgid "minutes"
+msgstr ""
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -246,6 +237,9 @@ msgstr "OVERWRITE"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
+
+msgid "PNG"
+msgstr ""
 
 msgid "Point & Figure"
 msgstr "จุดและตัวเลข"
@@ -346,17 +340,11 @@ msgstr "Speed Resistance Arc"
 msgid "Speed Resistance Line"
 msgstr "Speed Resistance Line"
 
-msgid "Spline"
-msgstr "เส้นโค้ง"
-
 msgid "SPOT"
 msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
-
-msgid "Table"
-msgstr "ตาราง"
 
 msgid "Template name"
 msgstr "ชื่อแม่แบบ"
@@ -373,11 +361,17 @@ msgstr "ยังไม่มีตัวชี้วัดที่ใช้ง
 msgid "There are no favorites yet."
 msgstr "ยังไม่มีรายการโปรด"
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr "ช่วงห่างของราคา"
 
 msgid "Time Cycle"
 msgstr "รอบเวลา"
+
+msgid "Time interval"
+msgstr ""
 
 msgid "Tirone Levels"
 msgstr "ระดับ Tirone"
