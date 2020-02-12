@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2019-12-20 11:47\n"
+"PO-Revision-Date: 2020-02-12 02:12\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -34,23 +34,26 @@ msgstr "Thêm mới"
 msgid "Annotation"
 msgstr "Chú thích"
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr "Thông tin tài sản"
 
 msgid "Auto Scale"
 msgstr "Tự động chỉnh"
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr "Đường trung bình"
 
-msgid "Baseline"
-msgstr "Đường cơ sở"
-
 msgid "Box Size"
 msgstr "Kích thước hộp"
-
-msgid "C"
-msgstr "C"
 
 msgid "Callout"
 msgstr "Chú thích"
@@ -94,9 +97,6 @@ msgstr "ĐÃ ĐÓNG"
 msgid "Color"
 msgstr "Màu"
 
-msgid "Colored Dot"
-msgstr "Dấu chấm màu"
-
 msgid "Comparison"
 msgstr "So sánh"
 
@@ -112,6 +112,9 @@ msgstr "Chữ thập"
 msgid "Crossline"
 msgstr "Đường giao nhau"
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr "Chế độ tối"
 
@@ -124,20 +127,8 @@ msgstr "Ngày"
 msgid "Doodle"
 msgstr "Nháp"
 
-msgid "Dot"
-msgstr "Dấu chấm"
-
 msgid "Download"
 msgstr "Tải xuống"
-
-msgid "Download as CSV"
-msgstr "Tải xuống CSV"
-
-msgid "Download as PNG"
-msgstr "Tải xuống PNG"
-
-msgid "Download Chart"
-msgstr "Tải Về Biểu Đồ"
 
 msgid "Draw tools"
 msgstr "Công cụ vẽ"
@@ -169,9 +160,6 @@ msgstr "Gartley"
 msgid "H"
 msgstr "H"
 
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
 msgid "High"
 msgstr "Cao"
 
@@ -181,14 +169,17 @@ msgstr "CAO"
 msgid "Historical Data Mode"
 msgstr "Chế độ dữ liệu lịch sử"
 
-msgid "Hollow Candle"
-msgstr "Nến rỗng"
+msgid "Hollow"
+msgstr ""
 
 msgid "Horizontal"
 msgstr "Theo chiều ngang"
 
 msgid "Hour"
 msgstr "Giờ"
+
+msgid "hours"
+msgstr ""
 
 msgid "Indicators"
 msgstr "Chỉ số"
@@ -226,8 +217,8 @@ msgstr "Đo"
 msgid "Minute"
 msgstr "Phút"
 
-msgid "O"
-msgstr "O"
+msgid "minutes"
+msgstr ""
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -246,6 +237,9 @@ msgstr "GHI ĐÈ LÊN"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
+
+msgid "PNG"
+msgstr ""
 
 msgid "Point & Figure"
 msgstr "Điểm & hình"
@@ -346,17 +340,11 @@ msgstr "Đường cung kháng tốc"
 msgid "Speed Resistance Line"
 msgstr "Tuyến kháng tốc"
 
-msgid "Spline"
-msgstr "Chốt"
-
 msgid "SPOT"
 msgstr "VỊ TRÍ"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
-
-msgid "Table"
-msgstr "Bảng biểu"
 
 msgid "Template name"
 msgstr "Tên mẫu"
@@ -373,11 +361,17 @@ msgstr "Chưa có chỉ số hoạt động nào."
 msgid "There are no favorites yet."
 msgstr "Không có mục yêu thích nào."
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr "Giây"
 
 msgid "Time Cycle"
 msgstr "Chu kỳ thời gian"
+
+msgid "Time interval"
+msgstr ""
 
 msgid "Tirone Levels"
 msgstr "Cấp độ Tirone"
