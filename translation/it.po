@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2019-12-23 08:53\n"
+"PO-Revision-Date: 2020-02-12 02:12\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -34,23 +34,26 @@ msgstr "Aggiungi nuovo"
 msgid "Annotation"
 msgstr "Annotazione"
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr "Informazioni sull'asset"
 
 msgid "Auto Scale"
 msgstr "Scala automatica"
 
+msgid "Available only for \"Area\" chart type."
+msgstr ""
+
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
 msgid "Average Line"
 msgstr "Linea della media"
 
-msgid "Baseline"
-msgstr "Linea di riferimento"
-
 msgid "Box Size"
 msgstr "Unità di escursione"
-
-msgid "C"
-msgstr "C"
 
 msgid "Callout"
 msgstr "Fumetto"
@@ -94,9 +97,6 @@ msgstr "CHIUSO"
 msgid "Color"
 msgstr "Colore"
 
-msgid "Colored Dot"
-msgstr "Punto colorato"
-
 msgid "Comparison"
 msgstr "Confronto"
 
@@ -112,6 +112,9 @@ msgstr "Mirino"
 msgid "Crossline"
 msgstr "Crossline"
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr "Modalità scura"
 
@@ -124,20 +127,8 @@ msgstr "Giorno"
 msgid "Doodle"
 msgstr "Mano libera"
 
-msgid "Dot"
-msgstr "Punto"
-
 msgid "Download"
 msgstr "Scarica"
-
-msgid "Download as CSV"
-msgstr "Scarica come CSV"
-
-msgid "Download as PNG"
-msgstr "Scarica come PNG"
-
-msgid "Download Chart"
-msgstr "Scarica grafico"
 
 msgid "Draw tools"
 msgstr "Strumenti disegno"
@@ -169,9 +160,6 @@ msgstr "Gartley"
 msgid "H"
 msgstr "M"
 
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
 msgid "High"
 msgstr "Massimo"
 
@@ -181,14 +169,17 @@ msgstr "MASSIMO"
 msgid "Historical Data Mode"
 msgstr "Modalità dati storici"
 
-msgid "Hollow Candle"
-msgstr "Candela vuota"
+msgid "Hollow"
+msgstr ""
 
 msgid "Horizontal"
 msgstr "Orizzontale"
 
 msgid "Hour"
 msgstr "Ora"
+
+msgid "hours"
+msgstr ""
 
 msgid "Indicators"
 msgstr "Indicatori"
@@ -226,8 +217,8 @@ msgstr "Misura"
 msgid "Minute"
 msgstr "Minuto"
 
-msgid "O"
-msgstr "A"
+msgid "minutes"
+msgstr ""
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -246,6 +237,9 @@ msgstr "SOVRASCRIVI"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
+
+msgid "PNG"
+msgstr ""
 
 msgid "Point & Figure"
 msgstr "Punto e figura"
@@ -346,17 +340,11 @@ msgstr "Arco di resistenza della velocità"
 msgid "Speed Resistance Line"
 msgstr "Linea di resistenza della velocità"
 
-msgid "Spline"
-msgstr "Spline"
-
 msgid "SPOT"
 msgstr "SPOT"
 
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
-
-msgid "Table"
-msgstr "Tabella"
 
 msgid "Template name"
 msgstr "Nome del modello"
@@ -373,11 +361,17 @@ msgstr "Non risulta ancora nessun indicatore attivo."
 msgid "There are no favorites yet."
 msgstr "Non sono ancora stati aggiunti preferiti."
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr "Tick"
 
 msgid "Time Cycle"
 msgstr "Ciclo temporale"
+
+msgid "Time interval"
+msgstr ""
 
 msgid "Tirone Levels"
 msgstr "Livelli di Tirone"
