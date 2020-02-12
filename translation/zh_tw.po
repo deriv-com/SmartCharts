@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Chinese Traditional\n"
 "Language: zh_TW\n"
-"PO-Revision-Date: 2020-02-12 02:12\n"
+"PO-Revision-Date: 2020-02-12 02:32\n"
 
 msgid " already exists."
 msgstr " 已經存在。"
@@ -35,7 +35,7 @@ msgid "Annotation"
 msgstr "注釋"
 
 msgid "Area"
-msgstr ""
+msgstr "面積"
 
 msgid "Asset Information"
 msgstr "資產資訊"
@@ -44,10 +44,10 @@ msgid "Auto Scale"
 msgstr "自動縮放"
 
 msgid "Available only for \"Area\" chart type."
-msgstr ""
+msgstr "僅適用於「面積」圖表類型。"
 
 msgid "Available only for non-tick time intervals."
-msgstr ""
+msgstr "僅適用於非跳動點時間間隔。"
 
 msgid "Average Line"
 msgstr "平均線"
@@ -113,7 +113,7 @@ msgid "Crossline"
 msgstr "十字線"
 
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 msgid "Dark Mode"
 msgstr "暗模式"
@@ -170,7 +170,7 @@ msgid "Historical Data Mode"
 msgstr "歷史資料模式"
 
 msgid "Hollow"
-msgstr ""
+msgstr "空心"
 
 msgid "Horizontal"
 msgstr "水平"
@@ -179,7 +179,7 @@ msgid "Hour"
 msgstr "小時"
 
 msgid "hours"
-msgstr ""
+msgstr "小時"
 
 msgid "Indicators"
 msgstr "指標"
@@ -218,7 +218,7 @@ msgid "Minute"
 msgstr "分鐘"
 
 msgid "minutes"
-msgstr ""
+msgstr "分鐘"
 
 msgid "OHLC"
 msgstr "OHLC條形圖"
@@ -239,7 +239,7 @@ msgid "Pitchfork"
 msgstr "叉子"
 
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "點數圖"
@@ -362,7 +362,7 @@ msgid "There are no favorites yet."
 msgstr "還沒有偏好。"
 
 msgid "tick"
-msgstr ""
+msgstr "跳動點"
 
 msgid "Tick"
 msgstr "跳動點"
@@ -371,7 +371,7 @@ msgid "Time Cycle"
 msgstr "時間週期"
 
 msgid "Time interval"
-msgstr ""
+msgstr "時間間隔"
 
 msgid "Tirone Levels"
 msgstr "泰隆水平線"
