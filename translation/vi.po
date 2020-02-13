@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2020-02-12 02:12\n"
+"PO-Revision-Date: 2020-02-13 10:35\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -35,7 +35,7 @@ msgid "Annotation"
 msgstr "Chú thích"
 
 msgid "Area"
-msgstr ""
+msgstr "Khu vực"
 
 msgid "Asset Information"
 msgstr "Thông tin tài sản"
@@ -44,10 +44,10 @@ msgid "Auto Scale"
 msgstr "Tự động chỉnh"
 
 msgid "Available only for \"Area\" chart type."
-msgstr ""
+msgstr "Chỉ khả dụng cho loại bảng \"khu vực\"."
 
 msgid "Available only for non-tick time intervals."
-msgstr ""
+msgstr "Chỉ khả dụng cho khoảng thời gian không đánh dấu."
 
 msgid "Average Line"
 msgstr "Đường trung bình"
@@ -113,7 +113,7 @@ msgid "Crossline"
 msgstr "Đường giao nhau"
 
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 msgid "Dark Mode"
 msgstr "Chế độ tối"
@@ -170,7 +170,7 @@ msgid "Historical Data Mode"
 msgstr "Chế độ dữ liệu lịch sử"
 
 msgid "Hollow"
-msgstr ""
+msgstr "Rỗng"
 
 msgid "Horizontal"
 msgstr "Theo chiều ngang"
@@ -179,7 +179,7 @@ msgid "Hour"
 msgstr "Giờ"
 
 msgid "hours"
-msgstr ""
+msgstr "giờ"
 
 msgid "Indicators"
 msgstr "Chỉ số"
@@ -218,7 +218,7 @@ msgid "Minute"
 msgstr "Phút"
 
 msgid "minutes"
-msgstr ""
+msgstr "phút"
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -239,7 +239,7 @@ msgid "Pitchfork"
 msgstr "Pitchfork"
 
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "Điểm & hình"
@@ -371,7 +371,7 @@ msgid "Time Cycle"
 msgstr "Chu kỳ thời gian"
 
 msgid "Time interval"
-msgstr ""
+msgstr "Khoảng thời gian"
 
 msgid "Tirone Levels"
 msgstr "Cấp độ Tirone"
