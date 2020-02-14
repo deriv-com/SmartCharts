@@ -4,10 +4,10 @@
     position: absolute;
     bottom: 2.5em;
     left: 2.5em;
-    z-index: 30;
+    z-index: 9;
 
     &__item {
-        margin-bottom: 8px;
+        margin-bottom: 18px;
 
         &--zoom {
             .ic-icon:first-child {

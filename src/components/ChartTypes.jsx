@@ -15,6 +15,8 @@ const ChartTypes = ({
     showAggregateDialog,
     Type,
     updateProps,
+    newDesign,
+    types,
 }) => {
     if (Type === undefined) return (null);
 
@@ -26,6 +28,33 @@ const ChartTypes = ({
     };
 
     updateProps(onChange);
+
+    if (newDesign) {
+        return (
+            <div className="ciq-chart-type">
+                {types.map((chartType) => {
+                    const Icon = chartType.icon;
+                    let className = 'ciq-chart-type__item';
+                    className += chartType.active ? ' ciq-chart-type__item--active' : '';
+                    className += chartType.disabled ? ' ciq-chart-type__item--disabled' : '';
+
+                    const onClick = () => (chartType.disabled ? null : onItemClick(0, chartType));
+                    return (
+                        <div
+                            key={chartType.id}
+                            className={className}
+                            onClick={onClick}
+                        >
+                            <Icon />
+                            <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>
+                            <div className="tooltip">{t.translate('Available only for non-tick time intervals.')}</div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    }
+
 
     return (
         <ChartTypeMenu
@@ -79,4 +108,5 @@ export default connect(({ chartType, state }) => ({
     showAggregateDialog: chartType.showAggregateDialog,
     Type               : chartType.type,
     updateProps        : chartType.updateProps,
+    types              : chartType.types,
 }))(ChartTypes);
