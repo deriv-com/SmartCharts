@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2020-02-12 02:12\n"
+"PO-Revision-Date: 2020-02-14 21:53\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -35,7 +35,7 @@ msgid "Annotation"
 msgstr "Anotação"
 
 msgid "Area"
-msgstr ""
+msgstr "Area"
 
 msgid "Asset Information"
 msgstr "Informações do ativo"
@@ -44,7 +44,7 @@ msgid "Auto Scale"
 msgstr "Dimensionamento automático"
 
 msgid "Available only for \"Area\" chart type."
-msgstr ""
+msgstr "Disponível apenas para o tipo de gráfico \"Área\"."
 
 msgid "Available only for non-tick time intervals."
 msgstr ""
@@ -113,7 +113,7 @@ msgid "Crossline"
 msgstr "Linha Cruzada"
 
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 msgid "Dark Mode"
 msgstr "Modo escuro"
@@ -179,7 +179,7 @@ msgid "Hour"
 msgstr "Hora"
 
 msgid "hours"
-msgstr ""
+msgstr "horas"
 
 msgid "Indicators"
 msgstr "Indicadores"
@@ -218,7 +218,7 @@ msgid "Minute"
 msgstr "Minuto"
 
 msgid "minutes"
-msgstr ""
+msgstr "minutos"
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -239,7 +239,7 @@ msgid "Pitchfork"
 msgstr "Forquilha"
 
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "Point & Figure"
@@ -362,7 +362,7 @@ msgid "There are no favorites yet."
 msgstr "Ainda não há favoritos."
 
 msgid "tick"
-msgstr ""
+msgstr "tique-taque"
 
 msgid "Tick"
 msgstr "Tique-taque"
@@ -371,7 +371,7 @@ msgid "Time Cycle"
 msgstr "Ciclo de Tempo"
 
 msgid "Time interval"
-msgstr ""
+msgstr "Intervalo de tempo"
 
 msgid "Tirone Levels"
 msgstr "Níveis de Tirone"
