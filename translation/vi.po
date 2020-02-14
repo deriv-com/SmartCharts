@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2020-02-13 10:35\n"
+"PO-Revision-Date: 2020-02-14 17:36\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -362,7 +362,7 @@ msgid "There are no favorites yet."
 msgstr "Không có mục yêu thích nào."
 
 msgid "tick"
-msgstr ""
+msgstr "tick"
 
 msgid "Tick"
 msgstr "Giây"
