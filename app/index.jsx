@@ -1,12 +1,11 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    ChartTypes,
     StudyLegend,
     Comparison,
     Views,
     CrosshairToggle,
-    Timeperiod,
     ChartSize,
+    ChartMode,
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
@@ -242,8 +241,10 @@ class App extends Component {
     renderControls = () => (
         <>
             {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes onChange={this.changeChartType} />
-            <Timeperiod onChange={this.changeGranularity} />
+            <ChartMode
+                onChartType={this.changeChartType}
+                onGranularity={this.changeGranularity}
+            />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
