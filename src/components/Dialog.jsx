@@ -11,10 +11,11 @@ const Dialog = ({
     setOpen,
     enableTabular,
     enableOverlay,
+    isPortal,
 }) => (
     <>
         {enableOverlay ? (
-            <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
+            <div className={`${isPortal ? 'cq-dialog-portal' : 'cq-dialog-overlay'} ${open ? 'cq-dialog-active' : ''}`}>
                 <div
                     className={`${className || 'cq-dialog'} ${enableTabular ? 'cq-dialog--tabular' : ''} ${open ? ' open' : ''}`}
                     onClick={onContainerClick}

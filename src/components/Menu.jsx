@@ -44,6 +44,7 @@ class Menu extends Component {
                         isFullscreen={isFullscreen}
                         title={title}
                         enableOverlay
+                        isPortal={portalNode}
                     >
                         {rest}
                     </DropdownDialog>
