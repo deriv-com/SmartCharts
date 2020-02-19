@@ -127,7 +127,7 @@ class RawMarker extends React.Component {
                 .map(price => stx.pixelFromPrice(price * 1, chart.panel));
 
             const canvas = stx.chart.context.canvas;
-            if ((`${canvas.height}`) !== canvas.style.height.replace('px', '')) {
+            if (canvas.style.height.indexOf(canvas.height) < 0) {
                 this.canvas_height = canvas.height;
             }
 
