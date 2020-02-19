@@ -109,6 +109,11 @@
             @include themify($themes) {
                 background: themed('ChartTypeHoverBg');
             }
+
+            .tooltip {
+                opacity: 1;
+                z-index: 1;
+            }
         }
         &--active {
             background: transparent !important;
@@ -131,12 +136,6 @@
                 opacity: 0.32;
                 pointer-events: none;
             }
-            &:hover {
-                .tooltip {
-                    opacity: 1;
-                    z-index: 1;
-                }
-            }
         }
     }
 }
@@ -153,5 +152,9 @@
                 margin-bottom: 2px;
             }
         }
+    }
+    .ciq-chart-type__item:hover .tooltip {
+        opacity: 0 !important;
+        z-index: -1 !important;
     }
 }
