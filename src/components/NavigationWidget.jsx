@@ -19,7 +19,7 @@ const NavigationWidget = ({
         onMouseLeave={onMouseLeave}
     >
         <div
-            className={`ciq-navigation-widget__item ${!enableScale ? 'ciq-navigation-widget__item--hidden' : ''}`}
+            className={`ciq-navigation-widget__item ciq-navigation-widget__item--scale ${!enableScale ? 'ciq-navigation-widget__item--hidden' : ''}`}
             onClick={onScale}
         >
             <ScaleIcon />

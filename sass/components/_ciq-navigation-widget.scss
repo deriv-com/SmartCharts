@@ -7,6 +7,9 @@
     z-index: 9;
 
     &__item {
+        &--scale {
+            margin-bottom: 8px;
+        }
         &--zoom {
             .ic-icon:first-child {
                 margin-bottom: 2px;
