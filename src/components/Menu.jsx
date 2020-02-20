@@ -49,31 +49,27 @@ class Menu extends Component {
                         {rest}
                     </DropdownDialog>
                 ));
+            const modalDropdown = (
+                <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <div
+                        className="cq-menu-overlay"
+                        onClick={this.onOverlayClick}
+                    >
+                        {newDropdown}
+                    </div>
+                </div>
+            );
             let newDialog = newDropdown;
             if (portalNode) {
                 newDialog = ReactDOM.createPortal(
                     <div className={`smartcharts-${theme}`}>
-                        <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                            <div
-                                className="cq-menu-overlay"
-                                onClick={this.onOverlayClick}
-                            >
-                                {newDropdown}
-                            </div>
-                        </div>
+                        {modalDropdown}
                     </div>,
                     portalNode,
                 );
             } else if (isMobile && modalNode) {
                 newDialog = ReactDOM.createPortal(
-                    <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                        <div
-                            className="cq-menu-overlay"
-                            onClick={this.onOverlayClick}
-                        >
-                            {newDropdown}
-                        </div>
-                    </div>,
+                    modalDropdown,
                     modalNode,
                 );
             }
