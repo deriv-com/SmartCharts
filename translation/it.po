@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2020-02-24 18:02\n"
+"PO-Revision-Date: 2020-02-24 18:12\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -113,7 +113,7 @@ msgid "Crossline"
 msgstr "Crossline"
 
 msgid "CSV"
-msgstr ""
+msgstr "Creazione di valore condiviso"
 
 msgid "Dark Mode"
 msgstr "Modalità scura"
@@ -179,7 +179,7 @@ msgid "Hour"
 msgstr "Ora"
 
 msgid "hours"
-msgstr ""
+msgstr "ore"
 
 msgid "Indicators"
 msgstr "Indicatori"
@@ -218,7 +218,7 @@ msgid "Minute"
 msgstr "Minuto"
 
 msgid "minutes"
-msgstr ""
+msgstr "minuti"
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -239,7 +239,7 @@ msgid "Pitchfork"
 msgstr "Pitchfork"
 
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "Punto e figura"
@@ -362,7 +362,7 @@ msgid "There are no favorites yet."
 msgstr "Non sono ancora stati aggiunti preferiti."
 
 msgid "tick"
-msgstr ""
+msgstr "tick"
 
 msgid "Tick"
 msgstr "Tick"
@@ -371,7 +371,7 @@ msgid "Time Cycle"
 msgstr "Ciclo temporale"
 
 msgid "Time interval"
-msgstr ""
+msgstr "Intervallo di tempo"
 
 msgid "Tirone Levels"
 msgstr "Livelli di Tirone"
