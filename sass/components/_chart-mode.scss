@@ -1,0 +1,56 @@
+
+.ciq-chart-mode {
+    .cq-dialog-overlay {
+        position: fixed;
+        transform: inherit;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+
+        .cq-dialog {
+            width: 424px;
+        }
+    }
+    &__menu {
+        position: relative;
+
+        .ic-icon {
+            margin: auto;
+            width: 16px;
+            height: 16px;
+            top: -4px;
+            position: relative;
+
+            svg {
+                stroke: none !important;
+                width: 16px !important;
+                height: 16px !important;
+                @include themify($themes) {
+                    fill: themed('ChartModeText') !important;
+                }
+            }
+        }
+        &__timeperiod {
+            position: absolute;
+            top: -9px;
+            left: 4px;
+            @include themify($themes) {
+                color: themed('ChartModeText') !important;
+            }
+        }
+    }
+    &__section {
+        @include themify($themes) {
+            background: themed('ChartModeBg');
+        }
+
+        &__item {
+            &:first-child {
+                @include themify($themes) {
+                    border-bottom: 4px solid themed('ChartModeBorder');
+                }
+            }
+        }
+    }
+}

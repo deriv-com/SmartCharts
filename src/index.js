@@ -2,6 +2,7 @@
 import Barrier from './components/Barrier.jsx';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
+import ChartMode from './components/ChartMode.jsx';
 import StudyLegend from './components/StudyLegend.jsx';
 import Comparison from './components/Comparison.jsx';
 import Views from './components/Views.jsx';
@@ -33,6 +34,7 @@ export {
     ChartSize,
     ChartTitle,
     ChartTypes,
+    ChartMode,
     Comparison,
     ComparisonList,
     createObjectFromLocalStorage,
@@ -58,6 +60,7 @@ export default {
     ChartSize,
     ChartTitle,
     ChartTypes,
+    ChartMode,
     Comparison,
     ComparisonList,
     createObjectFromLocalStorage,
