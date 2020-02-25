@@ -10,11 +10,27 @@ class RawMarker extends React.Component {
     stx = null;
     injectionId = null;
     hasUnmountedBeforeInjection = false;
+    shouldRedraw = false;
 
     componentDidMount() {
         const { contextPromise } = this.props;
-
         contextPromise.then((ctx) => {
+            if (this.hasUnmountedBeforeInjection) { return; }
+
+            this.ctx = ctx;
+            this.stx = this.ctx.stx;
+
+            this.injectionId = this.stx.append('draw', this.draw);
+            this.draw();
+        });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.shouldRedraw === this.props.shouldRedraw) {
+            return;
+        }
+
+        this.props.contextPromise.then((ctx) => {
             if (this.hasUnmountedBeforeInjection) { return; }
 
             this.ctx = ctx;
