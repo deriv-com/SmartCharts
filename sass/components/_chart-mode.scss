@@ -1,6 +1,7 @@
 
 .ciq-chart-mode {
-    .cq-dialog-overlay {
+    .cq-dialog-overlay,
+    .cq-dialog-portal {
         position: fixed;
         transform: inherit;
         top: 0px;
@@ -11,6 +12,11 @@
         .cq-dialog {
             width: 424px;
         }
+    }
+    .cq-dialog-portal {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     &__menu {
         position: relative;

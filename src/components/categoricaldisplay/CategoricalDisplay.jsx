@@ -23,7 +23,7 @@ const CategoricalDisplay = React.memo(({
     >
         <div className="cq-lookup-filters">
             <SearchInput searchInputClassName={searchInputClassName} />
-            {isNestedList ? '' : <FilterPanel /> }
+            {!isNestedList && <FilterPanel /> }
         </div>
         <Scrollbars
             className="cq-scroll-panel"

@@ -54,7 +54,7 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
 
-    connect = connect(({ chart: c }) => ({
+    connect = connect(({ chart: c, chartSetting }) => ({
         setOpen: this.setOpen,
         open: this.open,
         onTitleClick: this.onTitleClick,
@@ -62,5 +62,6 @@ export default class MenuStore {
         modalNode: this.modalNode,
         isMobile: c.isMobile,
         shouldRenderDialogs: c.shouldRenderDialogs,
+        theme: chartSetting.theme,
     }))
 }
