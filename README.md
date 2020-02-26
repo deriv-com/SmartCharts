@@ -305,7 +305,14 @@ Certain chart parameters can be set either by props or from the chart UI:
 ```
  
  See available components and their props in [Customising Components](#customising-components).
+
  
+#### ChartTitle
+| Attribute | Description |
+--------|--------------
+onChange | When symbol/market changes, this method call. `(symbol) => { }`
+isNestedList | Change the theme of Dropdown, if set to `true` it shows a dropdown nested style. Default is `false`
+
 ## Contribute
 
 To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
