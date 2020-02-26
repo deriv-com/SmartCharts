@@ -22,11 +22,14 @@ const Share = ({
     downloadCSV,
     downloadPNG,
     isLoadingPNG,
+    portalNodeId,
 }) => (
     <Dialog
         className="cq-download-menu"
         title={t.translate('Download')}
         newStyle
+        isFullscreen
+        portalNodeId={portalNodeId}
     >
         <Dialog.Title>
             <DownloadIcon

@@ -4,15 +4,6 @@
             background: themed('MenuHoverBg');
         }
     }
-    .cq-toggle {
-        &.active {
-            svg {
-                @include themify($themes) {
-                    fill: themed('MenuActiveIcon') !important;
-                }
-            }
-        }
-    }
 }
 
 .cq-crosshair {

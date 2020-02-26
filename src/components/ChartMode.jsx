@@ -39,6 +39,7 @@ const ChartMode = ({
     Type,
     interval,
     timeUnit,
+    portalNodeId,
 }) => {
     const TypeIcon = TypeMap[Type.id];
     return (
@@ -46,6 +47,8 @@ const ChartMode = ({
             className="ciq-display ciq-chart-mode"
             title={t.translate('Chart types')}
             newStyle
+            isFullscreen
+            portalNodeId={portalNodeId}
         >
             <ChartTypeMenu.Title>
                 <div className={`ciq-chart-mode__menu ${menuOpen ? 'active' : ''}`}>

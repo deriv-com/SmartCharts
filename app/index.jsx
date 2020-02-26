@@ -3,8 +3,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     StudyLegend,
     Comparison,
     Views,
-    CrosshairToggle,
-    ChartSize,
     ChartMode,
     DrawTools,
     ChartSetting,
@@ -240,7 +238,6 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
             <ChartMode
                 onChartType={this.changeChartType}
                 onGranularity={this.changeGranularity}
@@ -250,7 +247,6 @@ class App extends Component {
             <DrawTools />
             <Views />
             <Share />
-            {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
     );
