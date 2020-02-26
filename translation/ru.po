@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2020-02-26 08:32\n"
+"PO-Revision-Date: 2020-02-26 08:52\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -44,10 +44,10 @@ msgid "Auto Scale"
 msgstr "Авто масштаб"
 
 msgid "Available only for \"Area\" chart type."
-msgstr ""
+msgstr "Доступно только для графика с областями."
 
 msgid "Available only for non-tick time intervals."
-msgstr ""
+msgstr "Недоступно для тиковых временных интервалов."
 
 msgid "Average Line"
 msgstr "Средняя линия"
@@ -170,7 +170,7 @@ msgid "Historical Data Mode"
 msgstr "Исторические данные"
 
 msgid "Hollow"
-msgstr ""
+msgstr "Полый"
 
 msgid "Horizontal"
 msgstr "Горизонт."
