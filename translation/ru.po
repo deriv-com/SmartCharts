@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2020-02-12 02:12\n"
+"PO-Revision-Date: 2020-02-26 08:32\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -113,7 +113,7 @@ msgid "Crossline"
 msgstr "Линия пересечения"
 
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 msgid "Dark Mode"
 msgstr "Тёмный режим"
@@ -179,7 +179,7 @@ msgid "Hour"
 msgstr "Час."
 
 msgid "hours"
-msgstr ""
+msgstr "час."
 
 msgid "Indicators"
 msgstr "Индикаторы"
@@ -218,7 +218,7 @@ msgid "Minute"
 msgstr "Мин."
 
 msgid "minutes"
-msgstr ""
+msgstr "мин."
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -239,7 +239,7 @@ msgid "Pitchfork"
 msgstr "Вилка"
 
 msgid "PNG"
-msgstr ""
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "Крестики-нолики"
@@ -362,7 +362,7 @@ msgid "There are no favorites yet."
 msgstr "Нет записей в избранном."
 
 msgid "tick"
-msgstr ""
+msgstr "тик"
 
 msgid "Tick"
 msgstr "Тик"
@@ -371,7 +371,7 @@ msgid "Time Cycle"
 msgstr "Временной круг"
 
 msgid "Time interval"
-msgstr ""
+msgstr "Врем. интервал"
 
 msgid "Tirone Levels"
 msgstr "Уровни Тирона"
