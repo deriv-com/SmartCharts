@@ -72,6 +72,7 @@ const Views = ({
     isInputActive,
     onFocus,
     onBlur,
+    portalNodeId,
 }) => {
     const isActive = isInputActive || templateName !== '';
 
@@ -80,6 +81,7 @@ const Views = ({
             className="ciq-views-menu"
             title={t.translate('Templates')}
             newStyle
+            portalNodeId={portalNodeId}
         >
             <ViewsMenu.Title className="cq-menu-btn">
                 <TemplateIcon

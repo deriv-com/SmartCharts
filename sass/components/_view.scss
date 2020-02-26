@@ -7,9 +7,9 @@
         width: 100%;
         height: 100%;
 
-        .cq-dialog {
-            width: 320px;
-        }
+    }
+    .cq-dialog {
+        width: 320px;
     }
 }
 
@@ -24,6 +24,8 @@
         .input {
             width: calc(100% - 40px);
             border-radius: 4px 0 0 4px;
+            height: 40px;
+            text-align: left;
         }
         .subtitle {
             position: absolute;

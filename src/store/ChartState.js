@@ -167,7 +167,7 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
-        if (crosshairState !== null && crosshairState !== this.crosshairState) {
+        if (crosshairState !== undefined && crosshairState !== null && crosshairState !== this.crosshairState) {
             this.mainStore.crosshair.setCrosshairState(crosshairState);
             this.crosshairState = crosshairState;
         }

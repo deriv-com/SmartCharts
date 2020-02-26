@@ -140,11 +140,6 @@
             right: 100px;
         }
     }
-    &--navigation-widget {
-        .home {
-            display: none !important;
-        }
-    }
     &--has-markers {
         .stx-subholder {
             z-index: 108 !important;
@@ -178,6 +173,7 @@
     border-radius: 4px;
     outline: none !important;
     cursor: pointer;
+    height: 40px !important;
     @include themify($themes) {
         border: 1px solid themed('BtnDefaultBg');
         background: themed('BtnDefaultBg');

@@ -23,16 +23,22 @@ msgstr ""
 msgid "Annotation"
 msgstr ""
 
+msgid "Area"
+msgstr ""
+
 msgid "Asset Information"
 msgstr ""
 
 msgid "Auto Scale"
 msgstr ""
 
-msgid "Average Line"
+msgid "Available only for \"Area\" chart type."
 msgstr ""
 
-msgid "Baseline"
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
+msgid "Average Line"
 msgstr ""
 
 msgid "Box Size"
@@ -80,9 +86,6 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
-msgid "Colored Dot"
-msgstr ""
-
 msgid "Comparison"
 msgstr ""
 
@@ -111,9 +114,6 @@ msgid "Day"
 msgstr ""
 
 msgid "Doodle"
-msgstr ""
-
-msgid "Dot"
 msgstr ""
 
 msgid "Download"
@@ -149,9 +149,6 @@ msgstr ""
 msgid "H"
 msgstr ""
 
-msgid "Heikin Ashi"
-msgstr ""
-
 msgid "High"
 msgstr ""
 
@@ -161,13 +158,16 @@ msgstr ""
 msgid "Historical Data Mode"
 msgstr ""
 
-msgid "Hollow Candle"
+msgid "Hollow"
 msgstr ""
 
 msgid "Horizontal"
 msgstr ""
 
 msgid "Hour"
+msgstr ""
+
+msgid "hours"
 msgstr ""
 
 msgid "Indicators"
@@ -204,6 +204,9 @@ msgid "Measure"
 msgstr ""
 
 msgid "Minute"
+msgstr ""
+
+msgid "minutes"
 msgstr ""
 
 msgid "OHLC"
@@ -329,9 +332,6 @@ msgstr ""
 msgid "Speed Resistance Line"
 msgstr ""
 
-msgid "Spline"
-msgstr ""
-
 msgid "SPOT"
 msgstr ""
 
@@ -339,6 +339,9 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
 msgid "Table"
+msgstr ""
+
+msgid "Template name"
 msgstr ""
 
 msgid "Templates"
@@ -353,10 +356,16 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr ""
 
 msgid "Time Cycle"
+msgstr ""
+
+msgid "Time interval"
 msgstr ""
 
 msgid "Tirone Levels"
