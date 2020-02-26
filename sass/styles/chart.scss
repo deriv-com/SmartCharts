@@ -168,11 +168,11 @@ html, body {
     bottom: 12px;
     right: 10px;
     line-height: 0px;
-    height: 25px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
     padding: 0px;
     margin-bottom: 17px;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
     z-index: 30;
     @include themify($themes) {
@@ -184,7 +184,6 @@ html, body {
     display: inline-block;
     padding: 6px 8px;
     transition: transform 0.2s;
-    opacity: 0.6;
     @include themify($themes) {
         stroke: themed('NavigationWidgetColor');
     }

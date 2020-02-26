@@ -85,6 +85,7 @@
             line-height: 1.5;
             letter-spacing: normal;
             opacity: 0;
+            box-sizing: content-box;
             @include themify($themes) {
                 background: themed('ChartTypeTooltipBg');
                 color: themed('ChartTypeTooltipText');
@@ -99,6 +100,7 @@
                 content: ' ';
                 top: calc(50% - 6px);
                 left: -6px;
+                background: transparent;
                 @include themify($themes) {
                     border-right: 6px solid themed('ChartTypeTooltipBg');
                 }
