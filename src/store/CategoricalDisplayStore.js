@@ -214,9 +214,12 @@ export default class CategoricalDisplayStore {
 
     @computed get filteredItems() {
         let filteredItems = cloneCategories(this.getCategoricalItems());
+        const activeItmes = this.activeCategories.length
+            ? this.activeCategories
+            : [(this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite')];
 
         for (const item of filteredItems) {
-            if (this.activeCategories.includes(item.categoryId)) {
+            if (activeItmes.includes(item.categoryId)) {
                 item.active = true;
             }
         }
