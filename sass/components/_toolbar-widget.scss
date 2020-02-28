@@ -1,0 +1,26 @@
+
+.ciq-toolbar-widget {
+    position: absolute;
+    border-radius: 4px;
+    width: 40px;
+    z-index: 5;
+    top: 9.6em;
+    left: 1.1em;
+    @include themify($themes) {
+        background: themed('ToolbarWidgetBg');
+        border: 8px solid themed('ToolbarWidgetBorder');
+    }
+
+    &--bottom {
+        top: auto;
+        bottom: 0px;
+    }
+    .ciq-menu {
+        .cq-menu-btn {
+            .ciq-chart-mode__menu {
+                width: 40px;
+                height: 40px;
+            }
+        }
+    }
+}

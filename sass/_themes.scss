@@ -383,6 +383,8 @@ $themes: (
         HighestLowestMarkerLabelBg: $COLOR_LIGHT_BLACK_3,
         HighestLowestMarkerLabelText: $COLOR_LIGHT_BLACK_1,
         HighestSpotColor: $COLOR_GREEN_1,
+        ToolbarWidgetBg: $color-white,
+        ToolbarWidgetBorder: $color-grey-2,
         LowestSpotColor: $COLOR_RED,
         ChartBackgroundOpacity: 0.05
     ),
@@ -629,6 +631,7 @@ $themes: (
         HighestLowestMarkerLabelBg: $COLOR_DARK_GRAY_2,
         HighestLowestMarkerLabelText: $COLOR_WHITE,
         HighestSpotColor: $COLOR_GREEN_1,
+        ToolbarWidgetBg: $color-grey-2,
         LowestSpotColor: $COLOR_RED,
         ChartBackgroundOpacity: 0.4
     ),

@@ -79,6 +79,7 @@ class Chart extends Component {
             position,
             bottomWidgets,
             enabledNavigationWidget = true,
+            toolbarWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -86,6 +87,7 @@ class Chart extends Component {
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         // if there are any markers, then increase the subholder z-index
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
+        const ToolbarWidget = toolbarWidget;
 
         return (
             <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
@@ -117,6 +119,7 @@ class Chart extends Component {
                                             enabledNavigationWidget
                                                 && <NavigationWidget />
                                         }
+                                        <ToolbarWidget />
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder" hideInScrollToEpoch>
                                         {children}

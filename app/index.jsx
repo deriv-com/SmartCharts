@@ -16,6 +16,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     LogCategories,
     LogActions,
     Marker,
+    ToolbarWidget,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -238,10 +239,6 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            <ChartMode
-                onChartType={this.changeChartType}
-                onGranularity={this.changeGranularity}
-            />
             <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
@@ -249,6 +246,15 @@ class App extends Component {
             <Share />
             <ChartSetting />
         </>
+    );
+
+    renderToolbarWidget = () => (
+        <ToolbarWidget>
+            <ChartMode
+                onChartType={this.changeChartType}
+                onGranularity={this.changeGranularity}
+            />
+        </ToolbarWidget>
     );
 
     onMessage = (e) => {
@@ -278,6 +284,7 @@ class App extends Component {
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
+                toolbarWidget={this.renderToolbarWidget}
                 chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
