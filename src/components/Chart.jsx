@@ -119,7 +119,6 @@ class Chart extends Component {
                                             enabledNavigationWidget
                                                 && <NavigationWidget />
                                         }
-                                        <ToolbarWidget />
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder" hideInScrollToEpoch>
                                         {children}
@@ -146,6 +145,7 @@ class Chart extends Component {
                                 { chartControlsWidgets !== null
                                     && <ChartControls widgets={chartControlsWidgets} />
                                 }
+                                <ToolbarWidget />
                             </div>
                         </div>
                     </div>

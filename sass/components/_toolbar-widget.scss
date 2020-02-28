@@ -3,9 +3,9 @@
     position: absolute;
     border-radius: 4px;
     width: 40px;
-    z-index: 5;
-    top: 9.6em;
+    top: 102px;
     left: 1.1em;
+    z-index: 9;
     @include themify($themes) {
         background: themed('ToolbarWidgetBg');
         border: 8px solid themed('ToolbarWidgetBorder');
@@ -13,13 +13,23 @@
 
     &--bottom {
         top: auto;
-        bottom: 0px;
+        bottom: 38px;
     }
     .ciq-menu {
         .cq-menu-btn {
             .ciq-chart-mode__menu {
                 width: 40px;
                 height: 40px;
+
+                .ic-icon {
+                    width: 24px !important;
+                    height: 24px !important;
+
+                    svg {
+                        width: 24px !important;
+                        height: 24px !important;
+                    }
+                }
             }
         }
     }
