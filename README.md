@@ -97,6 +97,7 @@ endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Set to `null` if you want to hide chart controls. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
+toolbarWidget | Render function for floating toolbar widgets. Refer to [Customising Components](#customising-components).
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 chartStatusListener | Callback that will be fired each time the loading state of the chart is changed, It will be called with `true` when the chart is loaded completely.
@@ -247,7 +248,7 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ComparisonList } from '@binary-com/smartcharts';
+import { ComparisonList, ToolbarWidget } from '@binary-com/smartcharts';
 
 const renderTopWidgets = () => (
     <React.Fragment>
@@ -261,10 +262,21 @@ const renderBottomWidgets = () => (
         <div>Hi, I am a bottom widget!</div>
     </React.Fragment>
 );
+
+const renderToolbarWidgets = () => (
+    <ToolbarWidget
+      position="top"
+    >
+        <div>Hi I just replaced the top widgets!</div>
+        <ComparisonList />
+    </ToolbarWidget>
+);
+
 const App = () => (
     <SmartChart
         bottomWidgets={renderBottomWidgets}
         topWidgets={renderTopWidgets}
+        toolbarWidget={renderToolbarWidgets}
         chartControlsWidgets={()=>{}}
     >
     </SmartChart>
@@ -287,6 +299,8 @@ Here are the following components you can import:
     - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
     - `<ChartSize />`
     - `<ChartSetting />`
+  -  Toolbar Widget
+      -  `<ChartMode />`
  
  ### Props vs UI
  
@@ -312,6 +326,12 @@ Certain chart parameters can be set either by props or from the chart UI:
 --------|--------------
 onChange | When symbol/market changes, this method call. `(symbol) => { }`
 isNestedList | Change the theme of Dropdown, if set to `true` it shows a dropdown nested style. Default is `false`
+
+#### ToolbarWidget
+| Attribute | Description |
+--------|--------------
+position | determine the position of toolbar, which can be `top, bottom`. Default is `top`
+
 
 ## Contribute
 
