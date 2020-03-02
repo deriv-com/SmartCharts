@@ -47,12 +47,28 @@ commands:
           key: source-v1-modules-{{checksum "yarn.lock" }}
           paths:
             - "node_modules"
+  test:
+    description: Test App
+    steps:
+      - run:
+          name: Testing App
+          command: yarn test
   build:
     description: Build App
     steps:
       - run:
           name: Building App
           command: yarn build-travis
+  early_return_for_pull_requests:
+    description: Avoid deploying the docker image while it is triggered by a PR
+    steps:
+      - run:
+          name: Earyl Return while it is a PR
+          command: |
+            if [ -n "$CIRCLE_PR_NUMBER" ]; then
+              echo "Avoid deploying while it is a PR."
+              circleci-agent step halt
+            fi
   compress:
     description: "Compress"
     steps:
@@ -115,7 +131,9 @@ jobs:
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
+      - early_return_for_pull_requests
       - compress
       - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
       - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
@@ -127,8 +145,5 @@ workflows:
   release:
     jobs:
       - release:
-          filters:
-            branches:
-              only: /^dev$/
           context: binary-frontend-artifact-upload  # using context to retrieve shared secret from circle ci
 
