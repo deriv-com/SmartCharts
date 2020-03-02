@@ -14,7 +14,9 @@ class BottomWidgetsContainer extends React.Component {
     }
 
     componentDidUpdate() {
-        if (React.Children.count(this.props.children)) {
+        const component = React.Children.only(this.props.children);
+
+        if (component && component.props.bottomWidgets) {
             this.props.updateChartMargin(200);
         } else {
             this.props.updateChartMargin(100);
