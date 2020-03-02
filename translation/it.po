@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2020-02-24 18:23\n"
+"PO-Revision-Date: 2020-03-02 10:23\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -44,7 +44,7 @@ msgid "Auto Scale"
 msgstr "Scala automatica"
 
 msgid "Available only for \"Area\" chart type."
-msgstr "Disponibile solo per i grafici dell'\"Area\"."
+msgstr "Disponibile solo per la tipologia di grafici '\"Area\"."
 
 msgid "Available only for non-tick time intervals."
 msgstr "Disponibile solo per gli intervalli non-tick."
