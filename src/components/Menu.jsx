@@ -35,7 +35,7 @@ class Menu extends Component {
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
         if (newStyle) {
-            const portalNode = portalNodeId ? document.getElementById(portalNodeId) : null;
+            const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const newDropdown = (shouldRenderDialogs
                 && (
                     <DropdownDialog
@@ -59,20 +59,16 @@ class Menu extends Component {
                     </div>
                 </div>
             );
-            let newDialog = newDropdown;
-            if (portalNode) {
-                newDialog = ReactDOM.createPortal(
+            const newDialog = (isMobile && modalNode)
+                ? ReactDOM.createPortal(
+                    modalDropdown,
+                    modalNode,
+                ) : ReactDOM.createPortal(
                     <div className={`smartcharts-${theme}`}>
                         {modalDropdown}
                     </div>,
                     portalNode,
                 );
-            } else if (isMobile && modalNode) {
-                newDialog = ReactDOM.createPortal(
-                    modalDropdown,
-                    modalNode,
-                );
-            }
 
             return (
                 enabled && (

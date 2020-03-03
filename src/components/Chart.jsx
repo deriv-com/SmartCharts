@@ -119,6 +119,9 @@ class Chart extends Component {
                                             enabledNavigationWidget
                                                 && <NavigationWidget />
                                         }
+                                        { toolbarWidget
+                                            && <ToolbarWidget />
+                                        }
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder" hideInScrollToEpoch>
                                         {children}
@@ -145,9 +148,6 @@ class Chart extends Component {
                                 { chartControlsWidgets !== null
                                     && <ChartControls widgets={chartControlsWidgets} />
                                 }
-                                { toolbarWidget
-                                    && <ToolbarWidget />
-                                }
                             </div>
                         </div>
                     </div>
@@ -155,6 +155,7 @@ class Chart extends Component {
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
                     <ChartTable />
+                    <div id="smartcharts_modal" className="ciq-modal" />
                 </div>
             </div>
         );

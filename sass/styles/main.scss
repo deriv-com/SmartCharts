@@ -147,6 +147,23 @@
     }
 }
 
+.ciq-modal .cq-menu-overlay {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    overflow: hidden;
+    @include themify($themes) {
+        background: themed('DialogOverlay');
+    }
+}
+
 @import 'menu';
 
 /* -------------------------- custom styles -------------------------------------*/
