@@ -104,7 +104,9 @@ const Views = ({
                                         />
                                     )
                                 }
-                                <Scrollbars>
+                                <Scrollbars
+                                    className="ciq-scrollbar"
+                                >
                                     <div className="form form--ciq-views">
                                         <div className="form__input-group">
                                             <div className="form__group">

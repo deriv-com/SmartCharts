@@ -162,6 +162,18 @@
 }
 
 /* -------------------------- helper styles -------------------------------------*/
+.ciq-scrollbar {
+    > div:nth-child(3) {
+        > div {
+            opacity: 0.16;
+            @include themify($themes) {
+                background-color: themed('ScrollbarBg') !important;
+            }
+        }
+    }
+}
+
+/* -------------------------- helper styles -------------------------------------*/
 .btn {
     padding: 10px 16px;
     font-size: 14px;
