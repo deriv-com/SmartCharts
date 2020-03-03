@@ -162,6 +162,7 @@
                 cursor: pointer;
                 background: transparent;
                 outline: none !important;
+                font-weight: bold;
                 @include themify($themes) {
                     border: 1px solid themed('TemplateListHeadBtnBorder');
                     color: themed('TemplateListHeadBtnText');
