@@ -34,13 +34,14 @@
 .ciq-chart-type {
     display: flex;
     padding: 24px;
+    justify-content: space-between;
     @include themify($themes) {
         background: themed('ChartTypeBg');
     }
 
     &__item {
         $self: &;
-        width: 88px;
+        width: 25%;
         height: 88px;
         display: flex;
         flex-direction: column;
@@ -110,6 +111,11 @@
             @include themify($themes) {
                 background: themed('ChartTypeHoverBg');
             }
+
+            .tooltip {
+                opacity: 1;
+                z-index: 1;
+            }
         }
         &--active {
             background: transparent !important;
@@ -132,20 +138,25 @@
                 opacity: 0.32;
                 pointer-events: none;
             }
-            &:hover {
-                .tooltip {
-                    opacity: 1;
-                    z-index: 1;
-                }
-            }
         }
     }
 }
 
 .smartcharts-mobile {
-    .ciq-chart-types {
-        .ciq-toggle-asset-information {
-            margin: 15px 15px 0;
+    .ciq-chart-type {
+        padding: 8px 10px 24px;
+
+        &__item {
+            height: 64px;
+            width: 64px;
+
+            .ic-icon {
+                margin-bottom: 2px;
+            }
         }
+    }
+    .ciq-chart-type__item:hover .tooltip {
+        opacity: 0 !important;
+        z-index: -1 !important;
     }
 }

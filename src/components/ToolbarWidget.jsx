@@ -12,7 +12,7 @@ const ToolbarWidget = ({
     if (!context) return '';
 
     return (
-        <div className={`ciq-toolbar-widget ciq-toolbar-widget--${position}`}>
+        <div className={`ciq-toolbar-widget ciq-toolbar-widget--${(position || 'top')}`}>
             {children}
         </div>
     );

@@ -6,6 +6,7 @@
     top: 102px;
     left: 1.1em;
     z-index: 9;
+    box-sizing: content-box;
     @include themify($themes) {
         background: themed('ToolbarWidgetBg');
         border: 8px solid themed('ToolbarWidgetBorder');

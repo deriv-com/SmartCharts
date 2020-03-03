@@ -145,7 +145,9 @@ class Chart extends Component {
                                 { chartControlsWidgets !== null
                                     && <ChartControls widgets={chartControlsWidgets} />
                                 }
-                                <ToolbarWidget />
+                                { toolbarWidget
+                                    && <ToolbarWidget />
+                                }
                             </div>
                         </div>
                     </div>

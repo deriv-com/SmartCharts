@@ -69,3 +69,14 @@
         font-size: 10px;
     }
 }
+
+.smartcharts-mobile {
+    .ciq-chart-mode {
+        .cq-dialog-overlay {
+            .cq-dialog {
+                width: 300px;
+                left: auto;
+            }
+        }
+    }
+}

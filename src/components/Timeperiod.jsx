@@ -42,6 +42,7 @@ const Timeperiod = ({
                 <div className="cq-interval__head">
                     <strong>{t.translate('Time interval')}</strong>
                 </div>
+                <div className="cq-interval__info">{t.translate('Tick interval only available for "Area" Chart type.')}</div>
                 <div className="cq-interval__content">
                     <div
                         onClick={() => ((chartType.id === 'mountain') ? onGranularityClick(0) : null)}
