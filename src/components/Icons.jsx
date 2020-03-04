@@ -22,6 +22,7 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
+import AddBold from '../../sass/icons/common/ic-add.svg';
 import Close from '../../sass/icons/common/ic-close.svg';
 import InputNumberMinus from '../../sass/icons/common/ic-input-number-minus.svg';
 import InputNumberPlus from '../../sass/icons/common/ic-input-number-plus.svg';
@@ -41,7 +42,7 @@ import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Time from '../../sass/icons/time/ic-time.svg';
-import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
+import Active from '../../sass/icons/common/ic-active.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
@@ -56,7 +57,7 @@ import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-le
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
-
+import DrawTool from '../../sass/icons/common/ic-drawing-tool.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -67,6 +68,16 @@ import Home from '../../sass/icons/navigation-widgets/ic-home.svg';
 import Scale from '../../sass/icons/navigation-widgets/ic-scale-full.svg';
 import Zoomin from '../../sass/icons/navigation-widgets/ic-zoomin.svg';
 import Zoomout from '../../sass/icons/navigation-widgets/ic-zoomout.svg';
+
+import TypeArea from '../../sass/icons/chart-type/ic-area.svg';
+import TypeCandle from '../../sass/icons/chart-type/ic-candle.svg';
+import TypeHollow from '../../sass/icons/chart-type/ic-hollow.svg';
+import TypeOhlc from '../../sass/icons/chart-type/ic-ohlc.svg';
+
+import TypeAreaGrayscale from '../../sass/icons/chart-type/ic-area-grayscale.svg';
+import TypeCandleGrayscale from '../../sass/icons/chart-type/ic-candle-grayscale.svg';
+import TypeHollowGrayscale from '../../sass/icons/chart-type/ic-hollow-grayscale.svg';
+import TypeOhlcGrayscale from '../../sass/icons/chart-type/ic-ohlc-grayscale.svg';
 
 import ArrowGreen from '../../sass/icons/arrows/ic-arrow-green.svg';
 import ArrowOrange from '../../sass/icons/arrows/ic-arrow-orange.svg';
@@ -120,6 +131,9 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
+import EmptyState from '../../sass/icons/shape/ic-empty-state.svg';
+import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
+
 import DrawToolsChannel from '../../sass/icons/draw-tools/ic-channel.svg';
 import DrawToolsContinuous from '../../sass/icons/draw-tools/ic-continuous.svg';
 import DrawToolsFibonaccifan from '../../sass/icons/draw-tools/ic-fibonacci-fan.svg';
@@ -155,6 +169,8 @@ export const Wrapper = SvgLogo => (props) => {
 };
 
 export const DrawingCursorIcon = Wrapper(DrawCursor);
+export const DrawToolIcon = Wrapper(DrawTool);
+export const ActiveIcon = Wrapper(Active);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);
@@ -171,7 +187,7 @@ export const PointFigureIcon = Wrapper(PointFigure);
 export const RangeBarsIcon = Wrapper(RangeBars);
 export const RenkoIcon = Wrapper(Renko);
 export const TableIcon = Wrapper(Table);
-export const AddIcon = Wrapper(Add);
+export const AddIcon = Wrapper(AddBold);
 export const ZoomInIcon = Wrapper(Add);
 export const CloseIcon = Wrapper(Close);
 export const InputNumberMinusIcon = Wrapper(InputNumberMinus);
@@ -202,7 +218,6 @@ export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
 export const DownloadIcon = Wrapper(Download);
 
-
 export const PositionLeftIcon = Wrapper(PositionLeft);
 export const PositionBottomIcon = Wrapper(PositionBottom);
 export const BackIcon = Wrapper(Back);
@@ -212,7 +227,19 @@ export const ScaleIcon = Wrapper(Scale);
 export const ZoominIcon = Wrapper(Zoomin);
 export const ZoomoutIcon = Wrapper(Zoomout);
 
+export const TypeAreaIcon = Wrapper(TypeArea);
+export const TypeCandleIcon = Wrapper(TypeCandle);
+export const TypeHollowIcon = Wrapper(TypeHollow);
+export const TypeOhlcIcon = Wrapper(TypeOhlc);
+
+export const TypeAreaGrayscaleIcon = Wrapper(TypeAreaGrayscale);
+export const TypeCandleGrayscaleIcon = Wrapper(TypeCandleGrayscale);
+export const TypeHollowGrayscaleIcon = Wrapper(TypeHollowGrayscale);
+export const TypeOhlcGrayscaleIcon = Wrapper(TypeOhlcGrayscale);
+
 export const MetalIcon = Wrapper(Metal);
+export const EmptyStateIcon = Wrapper(EmptyState);
+export const OverwriteStateIcon = Wrapper(OverwriteState);
 
 export const ArrowGreenIcon = Wrapper(ArrowGreen);
 export const ArrowOrangeIcon = Wrapper(ArrowOrange);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
+import MenuMobile from './MenuMobile.jsx';
 import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
@@ -21,10 +22,12 @@ class Menu extends Component {
             isMobile,
             isFullscreen,
             modalNode,
+            portalNodeId,
             enabled = true,
             shouldRenderDialogs,
             onMouseEnter,
             onMouseLeave,
+            theme,
             newStyle, // this props will remove after we apply new design
             // to all of components
             enableTabular, // this props will remove after we apply new design
@@ -33,8 +36,8 @@ class Menu extends Component {
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
-
         if (newStyle) {
+            const portalNode = portalNodeId ? document.getElementById(portalNodeId) : null;
             const newDropdown = (shouldRenderDialogs
                 && (
                     <DropdownDialog
@@ -43,23 +46,36 @@ class Menu extends Component {
                         isFullscreen={isFullscreen}
                         title={title}
                         enableOverlay
+                        isPortal={portalNode}
                     >
                         {rest}
                     </DropdownDialog>
                 ));
-            const newDialog = (isMobile && modalNode)
-                        && ReactDOM.createPortal(
-                            <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                                <div
-                                    className="cq-menu-overlay"
-                                    onClick={this.onOverlayClick}
-                                >
-                                    {newDropdown}
-                                </div>
-                            </div>,
-                            modalNode,
-                        )
-                    || newDropdown;
+            const modalDropdown = (
+                <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <div
+                        className="cq-menu-overlay"
+                        onClick={this.onOverlayClick}
+                    >
+                        {newDropdown}
+                    </div>
+                </div>
+            );
+            let newDialog = newDropdown;
+            if (portalNode) {
+                newDialog = ReactDOM.createPortal(
+                    <div className={`smartcharts-${theme}`}>
+                        {modalDropdown}
+                    </div>,
+                    portalNode,
+                );
+            } else if (isMobile && modalNode) {
+                newDialog = ReactDOM.createPortal(
+                    modalDropdown,
+                    modalNode,
+                );
+            }
+
             return (
                 enabled && (
                     <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
@@ -93,6 +109,7 @@ class Menu extends Component {
                     in={open}
                     timeout={150}
                     classNames="cq-menu-dropdown"
+                    unmountOnExit
                 >
                     <DropdownDialog
                         className="cq-menu-dropdown"
@@ -116,6 +133,7 @@ class Menu extends Component {
             ));
 
         return (
+
             enabled && (
                 <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                     <div
@@ -126,17 +144,15 @@ class Menu extends Component {
                     >
                         {first}
                     </div>
-                    {(isMobile && modalNode)
-                    && ReactDOM.createPortal(
-                        <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                            <div
-                                className="cq-menu-overlay"
-                                onClick={this.onOverlayClick}
-                            >
-                                {oldDropdown}
-                            </div>
-                        </div>,
-                        modalNode,
+                    {(isMobile && (portalNodeId || modalNode))
+                    && (
+                        <MenuMobile
+                            className={className}
+                            open={open}
+                            menu_element={oldDropdown}
+                            portalNodeId={portalNodeId}
+                            onClick={this.onOverlayClick}
+                        />
                     )
                 || (oldDropdown)}
                 </div>

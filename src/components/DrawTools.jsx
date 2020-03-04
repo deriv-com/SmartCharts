@@ -2,7 +2,7 @@ import React from 'react';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from '../store/Connect';
-import { DrawIcon, DeleteIcon, SettingIcon } from './Icons.jsx';
+import { DrawIcon, DrawToolIcon, ActiveIcon, DeleteIcon, SettingIcon } from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
 
 
@@ -78,8 +78,8 @@ const DrawTools = ({
         <DrawToolsMenu.Body>
             <Tabs className="tabs--vertical">
                 <TabList>
-                    <Tab>Active</Tab>
-                    <Tab>All drawings</Tab>
+                    <Tab><ActiveIcon />{t.translate('Active')}</Tab>
+                    <Tab><DrawToolIcon />{t.translate('All drawings')}</Tab>
                 </TabList>
                 <TabPanel>
                     <div className="ciq-draw-tools__panel">

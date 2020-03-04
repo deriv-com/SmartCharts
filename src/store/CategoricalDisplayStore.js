@@ -20,7 +20,7 @@ export default class CategoricalDisplayStore {
         getCurrentActiveSubCategory,
         searchInputClassName,
     }) {
-        reaction(getIsShown, () => {
+        reaction(() => (this.scrollPanel && getIsShown), () => {
             if (getIsShown()) {
                 const activeItemCount = getActiveCategory ? getActiveCategory().data.length : 0;
                 this.focusedCategoryKey = null;

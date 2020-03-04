@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from '../store/Connect';
+import CrosshairToggle from './CrosshairToggle.jsx';
 import '../../sass/components/_ciq-navigation-widget.scss';
 
-import { ZoominIcon, ZoomoutIcon, HomeIcon, ScaleIcon } from './Icons.jsx';
+import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
 
 const NavigationWidget = ({
     zoomIn,
     zoomOut,
-    home,
     onScale,
-    isHomeEnabled,
+    enableScale,
     onMouseEnter,
     onMouseLeave,
 }) => (
@@ -19,16 +19,16 @@ const NavigationWidget = ({
         onMouseLeave={onMouseLeave}
     >
         <div
-            className={`ciq-navigation-widget__item ${!isHomeEnabled ? 'ciq-navigation-widget__item--hidden' : ''}`}
-            onClick={home}
+            className={`ciq-navigation-widget__item ciq-navigation-widget__item--scale ${!enableScale ? 'ciq-navigation-widget__item--hidden' : ''}`}
+            onClick={onScale}
         >
-            <HomeIcon />
-        </div>
-        <div className="ciq-navigation-widget__item" onClick={onScale}>
             <ScaleIcon />
         </div>
-        <div className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom">
+        <div
+            className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom"
+        >
             <ZoominIcon onClick={zoomIn} />
+            <CrosshairToggle />
             <ZoomoutIcon onClick={zoomOut} />
         </div>
     </div>
@@ -37,9 +37,8 @@ const NavigationWidget = ({
 export default connect(({ chartSize, navigationWidget }) => ({
     zoomIn: chartSize.zoomIn,
     zoomOut: chartSize.zoomOut,
-    home: navigationWidget.onHome,
     onScale: navigationWidget.onScale,
-    isHomeEnabled: navigationWidget.isHomeEnabled,
+    enableScale: navigationWidget.enableScale,
     onMouseEnter: navigationWidget.onMouseEnter,
     onMouseLeave: navigationWidget.onMouseLeave,
 }))(NavigationWidget);

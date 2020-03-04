@@ -2,6 +2,7 @@ import BottomWidgetsContainerStore from './BottomWidgetsContainerStore';
 import TimeperiodStore from './TimeperiodStore';
 import ChartStore from './ChartStore';
 import ChartTypeStore from './ChartTypeStore';
+import ChartModeStore from './ChartModeStore';
 import StudyLegendStore from './StudyLegendStore';
 import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
@@ -32,6 +33,7 @@ export default class MainStore {
     chart = new ChartStore(this);
     state = new ChartState(this);
     chartType = new ChartTypeStore(this);
+    chartMode = new ChartModeStore(this);
     studies = new StudyLegendStore(this);
     comparison = new ComparisonStore(this);
     drawTools = new DrawToolsStore(this);

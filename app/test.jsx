@@ -1,11 +1,10 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    ChartTypes,
+    ChartMode,
     StudyLegend,
     Comparison,
     Views,
     CrosshairToggle,
-    Timeperiod,
     ChartSize,
     DrawTools,
     ChartSetting,
@@ -254,16 +253,15 @@ class App extends Component {
                     onChange={crosshair => this.setState({ crosshairState: crosshair })}
                 />
             )}
-            <ChartTypes
-                onChange={(chartType, isChartTypeCandle) => {
+            <ChartMode
+                portalNodeId="portal-node"
+                onChartType={(chartType, isChartTypeCandle) => {
                     this.setState({
                         chartType,
                         isChartTypeCandle,
                     });
                 }}
-            />
-            <Timeperiod
-                onChange={(timePeriod) => {
+                onGranularity={(timePeriod) => {
                     this.setState({
                         granularity: timePeriod,
                     });
@@ -285,7 +283,7 @@ class App extends Component {
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
             <Views />
-            <Share />
+            <Share portalNodeId="portal-node" />
             {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
@@ -457,6 +455,7 @@ class App extends Component {
 
         return (
             <div className="test-container" style={{ diplay: 'block' }}>
+                <div id="portal-node" className="portal-node" />
                 <div className="chart-section">
                     <SmartChart
                         id={chartId}
