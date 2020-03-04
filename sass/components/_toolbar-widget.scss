@@ -5,7 +5,7 @@
     width: 40px;
     top: 102px;
     left: 1.2em;
-    z-index: 9;
+    z-index: 4;
     box-sizing: content-box;
     @include themify($themes) {
         background: themed('ToolbarWidgetBg');
@@ -50,4 +50,9 @@
             left: calc(100% + 17px);
         }
     }
+}
+
+.smartcharts-mobile .ciq-toolbar-widget .tooltip {
+    opacity: 0 !important;
+    pointer-events: none !important;
 }

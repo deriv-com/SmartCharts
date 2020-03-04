@@ -115,13 +115,6 @@ class Chart extends Component {
                                             !isCandle && !isSpline && isHighestLowestMarkerEnabled
                                                 && <HighestLowestMarker />
                                         }
-                                        {
-                                            enabledNavigationWidget
-                                                && <NavigationWidget />
-                                        }
-                                        { toolbarWidget
-                                            && <ToolbarWidget />
-                                        }
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder" hideInScrollToEpoch>
                                         {children}
@@ -135,6 +128,13 @@ class Chart extends Component {
                                     <div className="chartContainer" style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                     </div>
+                                    {
+                                        enabledNavigationWidget
+                                            && <NavigationWidget />
+                                    }
+                                    { toolbarWidget
+                                        && <ToolbarWidget />
+                                    }
                                     <Loader />
                                     {!isChartAvailable && (
                                         <div className="cq-chart-unavailable">
