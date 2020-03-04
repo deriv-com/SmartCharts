@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2020-03-04 06:27\n"
+"PO-Revision-Date: 2020-03-04 06:44\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "活跃"
 
 msgid "Add new templates"
-msgstr ""
+msgstr "添加新模板"
 
 msgid "Annotation"
 msgstr "注释"
@@ -80,7 +80,7 @@ msgid "Chart types"
 msgstr "图表类型"
 
 msgid "Clear all"
-msgstr ""
+msgstr "全部清除"
 
 msgid "Clear All"
 msgstr "全部清除"
@@ -233,7 +233,7 @@ msgid "Opens in:"
 msgstr "离开盘时间还有："
 
 msgid "Overwrite"
-msgstr ""
+msgstr "覆盖"
 
 msgid "Pitchfork"
 msgstr "叉子"
@@ -302,7 +302,7 @@ msgid "Save"
 msgstr "保存"
 
 msgid "Saved templates"
-msgstr ""
+msgstr "已保存的模板"
 
 msgid "Search..."
 msgstr "搜索..."
@@ -350,7 +350,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "由于许可限制, [symbol] 串流不可用"
 
 msgid "Table"
-msgstr ""
+msgstr "表"
 
 msgid "Template name"
 msgstr "模板名称"
@@ -395,7 +395,7 @@ msgid "Would you like to overwrite it?"
 msgstr "是否要覆盖它？"
 
 msgid "You have no save templates yet."
-msgstr ""
+msgstr "您尚未保存任何模板。"
 
 msgid "Zoom in"
 msgstr "放大"
