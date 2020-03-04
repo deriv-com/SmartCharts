@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2020-02-12 11:13\n"
+"PO-Revision-Date: 2020-03-04 06:27\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -28,8 +28,8 @@ msgstr "\"Índice en Masa\" o \"Patrón Doji Star\""
 msgid "Active"
 msgstr "Activo"
 
-msgid "Add new"
-msgstr "Agregar nuevo"
+msgid "Add new templates"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Notas"
@@ -61,9 +61,6 @@ msgstr "Leyenda"
 msgid "Cancel"
 msgstr "Cancelar"
 
-msgid "CANCEL"
-msgstr "CANCELAR"
-
 msgid "Candle"
 msgstr "Vela"
 
@@ -81,6 +78,9 @@ msgstr "Tabla de Datos"
 
 msgid "Chart types"
 msgstr "Tipos de Gráficos"
+
+msgid "Clear all"
+msgstr ""
 
 msgid "Clear All"
 msgstr "Vaciar Todo"
@@ -232,8 +232,8 @@ msgstr "ABIERTO"
 msgid "Opens in:"
 msgstr "Abre en:"
 
-msgid "OVERWRITE"
-msgstr "SOBREESCRIBIR"
+msgid "Overwrite"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Tridentes"
@@ -301,6 +301,9 @@ msgstr "clic derecho para administrar"
 msgid "Save"
 msgstr "Guardar"
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr "Buscar..."
 
@@ -346,6 +349,9 @@ msgstr "PUNTO"
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "La transmisión para [symbol] no está disponible debido a restricciones de licencias"
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr "Nombre de la plantilla"
 
@@ -387,6 +393,9 @@ msgstr "Vertical"
 
 msgid "Would you like to overwrite it?"
 msgstr "¿Desea sobre-escribirlo?"
+
+msgid "You have no save templates yet."
+msgstr ""
 
 msgid "Zoom in"
 msgstr "Acercar"
