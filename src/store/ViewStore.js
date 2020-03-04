@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -9,11 +9,23 @@ export default class ViewStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         this.ViewsMenu = this.menu.connect(Menu);
+        reaction(() => this.menu.dialog.open, () => {
+            if (ViewStore.views.length === 0) {
+                this.updateRoute('new');
+            } else {
+                this.updateRoute('main');
+            }
+
+            if (this.menu.dialog.open) {
+                this.templateName = '';
+            }
+        });
     }
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
     @observable templateName = '';
     @observable currentRoute = 'main';
+    @observable isInputActive;
     @observable routes = {
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
@@ -30,6 +42,7 @@ export default class ViewStore {
     }
 
     @action.bound onChange(e) {
+        if (this.currentRoute === 'overwrite') { return; }
         this.templateName = e.target.value;
     }
 
@@ -50,12 +63,12 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (ViewStore.views.some(x => x.name.toLowerCase() === this.templateName.toLowerCase())) {
+        if (ViewStore.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
-        } else if (this.templateName.length > 0) {
+        } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            ViewStore.views.push({ name: this.templateName, layout });
+            ViewStore.views.push({ name: this.templateName.trim(), layout });
             ViewStore.updateLocalStorage();
             this.templateName = '';
         }
@@ -65,7 +78,7 @@ export default class ViewStore {
         const layout = this.stx.exportLayout();
         const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         ViewStore.views[templateIndex].layout = layout;
-        ViewStore.views[templateIndex].name = this.templateName;
+        ViewStore.views[templateIndex].name = this.templateName.trim();
         ViewStore.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
@@ -76,6 +89,13 @@ export default class ViewStore {
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');
+    }
+
+    @action.bound removeAll() {
+        ViewStore.views = [];
+        ViewStore.updateLocalStorage();
+        logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove All Templates');
+        this.updateRoute('new');
     }
 
     @action.bound applyLayout(idx, e) {
@@ -117,9 +137,22 @@ export default class ViewStore {
         setTimeout(importLayout, 100);
     }
 
-    inputRef = (ref) => {
+    @action.bound onToggleNew() {
+        this.updateRoute('main');
+    }
+
+    @action.bound inputRef(ref) {
         if (ref) {
             ref.focus();
+            this.isInputActive = true;
         }
+    }
+
+    @action.bound onFocus() {
+        this.isInputActive = true;
+    }
+
+    @action.bound onBlur() {
+        this.isInputActive = false;
     }
 }
