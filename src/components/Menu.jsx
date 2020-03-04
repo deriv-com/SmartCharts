@@ -22,7 +22,6 @@ class Menu extends Component {
             DropdownDialog,
             isMobile,
             isFullscreen,
-            modalNode,
             portalNodeId,
             enabled = true,
             shouldRenderDialogs,
@@ -60,16 +59,12 @@ class Menu extends Component {
                     </div>
                 </div>
             );
-            const newDialog = (isMobile && modalNode)
-                ? ReactDOM.createPortal(
-                    modalDropdown,
-                    modalNode,
-                ) : ReactDOM.createPortal(
-                    <div className={`smartcharts-${theme}`}>
-                        {modalDropdown}
-                    </div>,
-                    portalNode,
-                );
+            const newDialog = ReactDOM.createPortal(
+                <div className={`smartcharts-${theme}`}>
+                    {modalDropdown}
+                </div>,
+                portalNode,
+            );
 
             return (
                 enabled && (
@@ -141,7 +136,7 @@ class Menu extends Component {
                     >
                         {first}
                     </div>
-                    {(isMobile && (portalNodeId || modalNode))
+                    {(isMobile && portalNodeId)
                     && (
                         <MenuMobile
                             className={className}

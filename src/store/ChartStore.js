@@ -104,9 +104,9 @@ class ChartStore {
         if (!this.context) { return; }
 
 
-        if (this.modalNode.clientWidth >= 1280) {
+        if (this.rootNode.clientWidth >= 1280) {
             this.containerWidth = 1280;
-        } else if (this.modalNode.clientWidth >= 900) {
+        } else if (this.rootNode.clientWidth >= 900) {
             this.containerWidth = 900;
         } else {
             this.containerWidth = 480;
@@ -121,13 +121,13 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    init = (rootNode, modalNode, props) => {
+    init = (rootNode, props) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
 
         if (window.CIQ) {
-            this._initChart(rootNode, modalNode, props);
+            this._initChart(rootNode, props);
         } else {
             import(/* webpackChunkName: "chartiq" */ 'chartiq').then(action(({ CIQ, SplinePlotter }) => {
                 CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(ResizeIcon)}</div>`;
@@ -137,12 +137,12 @@ class ChartStore {
 
                 window.CIQ = CIQ;
                 SplinePlotter.plotSpline = plotSpline;
-                this._initChart(rootNode, modalNode, props);
+                this._initChart(rootNode, props);
             }));
         }
     };
 
-    @action.bound _initChart(rootNode, modalNode, props) {
+    @action.bound _initChart(rootNode, props) {
         const _self = this;
 
         // Add custom injections to the CIQ
@@ -278,7 +278,6 @@ class ChartStore {
         };
 
         this.rootNode = rootNode;
-        this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
@@ -557,13 +556,13 @@ class ChartStore {
 
         if ('ResizeObserver' in window) {
             this.resizeObserver = new ResizeObserver(this.resizeScreen);
-            this.resizeObserver.observe(modalNode);
+            this.resizeObserver.observe(rootNode);
         } else {
             import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(({ default: ResizeObserver }) => {
                 window.ResizeObserver = ResizeObserver;
-                if (stxx.isDestroyed || !modalNode) { return; }
+                if (stxx.isDestroyed || !rootNode) { return; }
                 this.resizeObserver = new ResizeObserver(this.resizeScreen);
-                this.resizeObserver.observe(modalNode);
+                this.resizeObserver.observe(rootNode);
             });
         }
     }

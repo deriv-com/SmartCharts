@@ -25,7 +25,6 @@ import PaginationLoader from './PaginationLoader.jsx';
 class Chart extends Component {
     constructor(props) {
         super(props);
-        this.modalNode = React.createRef();
         this.root = React.createRef();
     }
 
@@ -34,7 +33,7 @@ class Chart extends Component {
         initGA();
         logPageView();
         updateProps(props);
-        init(this.root.current, this.modalNode.current, props);
+        init(this.root.current, props);
     }
 
     componentDidUpdate(prevProps) {
@@ -91,10 +90,7 @@ class Chart extends Component {
 
         return (
             <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
-                <div
-                    className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                    ref={this.modalNode}
-                >
+                <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
                     <div
                         className="cq-context"
                         ref={this.root}

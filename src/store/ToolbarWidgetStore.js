@@ -8,7 +8,6 @@ export default class ToolbarWidgetStore {
     }
 
     @action.bound onMouseEnter() {
-        console.log('onMouseEnter');
         this.crosshairStore.updateVisibility(false);
     }
 
