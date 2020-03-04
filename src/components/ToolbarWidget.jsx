@@ -8,17 +8,25 @@ const ToolbarWidget = ({
     position,
     children,
     context,
+    onMouseEnter,
+    onMouseLeave,
 }) => {
     if (!context) return '';
 
     return (
-        <div className={`ciq-toolbar-widget ciq-toolbar-widget--${(position || 'top')}`}>
+        <div
+            className={`ciq-toolbar-widget ciq-toolbar-widget--${(position || 'top')}`}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             {children}
         </div>
     );
 };
 
 
-export default connect(({ chart }) => ({
+export default connect(({ chart, toolbarWidget }) => ({
     context: chart.context,
+    onMouseEnter: toolbarWidget.onMouseEnter,
+    onMouseLeave: toolbarWidget.onMouseLeave,
 }))(ToolbarWidget);

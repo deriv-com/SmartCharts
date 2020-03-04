@@ -41,6 +41,8 @@
             position: absolute;
             top: -9px;
             left: 4px;
+            font-size: 8px;
+            font-weight: bold;
             @include themify($themes) {
                 color: themed('ChartModeText') !important;
             }
@@ -62,11 +64,12 @@
 }
 
 .ciq-toolbar-widget {
+    .ciq-chart-mode__menu {
+        padding: 8px;
+    }
     .ciq-chart-mode__menu__timeperiod {
-        position: relative;
         top: 3px;
-        left: 5px;
-        font-size: 10px;
+        left: 8px;
     }
 }
 

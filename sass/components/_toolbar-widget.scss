@@ -21,17 +21,33 @@
             .ciq-chart-mode__menu {
                 width: 40px;
                 height: 40px;
+                box-sizing: border-box;
 
                 .ic-icon {
                     width: 24px !important;
                     height: 24px !important;
+                    top: 0px;
 
                     svg {
-                        width: 24px !important;
-                        height: 24px !important;
+                        width: 20px !important;
+                        height: 20px !important;
+                        position: relative;
+                        bottom: -2px;
                     }
                 }
             }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('ToolbarWidgetHoverBg');
+                }
+
+                & + .tooltip {
+                    opacity: 1;
+                }
+            }
+        }
+        .tooltip {
+            left: calc(100% + 17px);
         }
     }
 }

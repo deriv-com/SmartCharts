@@ -17,6 +17,7 @@ class Menu extends Component {
             className,
             children,
             title,
+            tooltip,
             onTitleClick,
             DropdownDialog,
             isMobile,
@@ -81,6 +82,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
+                        {tooltip ? (<div className="tooltip tooltip--right">{tooltip}</div>) : ''}
                         {open ? newDialog : ''}
                     </div>
                 ) || (
@@ -92,6 +94,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
+                        {tooltip ? (<div className="tooltip tooltip--right">{tooltip}</div>) : ''}
                     </div>
                 )
             );
