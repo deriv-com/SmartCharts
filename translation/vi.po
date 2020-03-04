@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Vietnamese\n"
 "Language: vi_VN\n"
-"PO-Revision-Date: 2020-02-14 17:36\n"
+"PO-Revision-Date: 2020-03-04 06:27\n"
 
 msgid " already exists."
 msgstr " đã tồn tại."
@@ -28,8 +28,8 @@ msgstr "\"Mass Index\" hay \"Doji Star\""
 msgid "Active"
 msgstr "Hoạt động"
 
-msgid "Add new"
-msgstr "Thêm mới"
+msgid "Add new templates"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Chú thích"
@@ -61,9 +61,6 @@ msgstr "Chú thích"
 msgid "Cancel"
 msgstr "Hủy"
 
-msgid "CANCEL"
-msgstr "HỦY BỎ"
-
 msgid "Candle"
 msgstr "Nến"
 
@@ -81,6 +78,9 @@ msgstr "Bảng Biểu Đồ"
 
 msgid "Chart types"
 msgstr "Loại biểu đồ"
+
+msgid "Clear all"
+msgstr ""
 
 msgid "Clear All"
 msgstr "Xóa tất cả"
@@ -232,8 +232,8 @@ msgstr "MỞ"
 msgid "Opens in:"
 msgstr "Mở vào:"
 
-msgid "OVERWRITE"
-msgstr "GHI ĐÈ LÊN"
+msgid "Overwrite"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -301,6 +301,9 @@ msgstr "nhấp chuột phải để quản lý"
 msgid "Save"
 msgstr "Lưu"
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr "Tìm kiếm..."
 
@@ -346,6 +349,9 @@ msgstr "VỊ TRÍ"
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Truyền cho [symbol] không khả dụng do các hạn chế cấp phép"
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr "Tên mẫu"
 
@@ -387,6 +393,9 @@ msgstr "Theo chiều dọc"
 
 msgid "Would you like to overwrite it?"
 msgstr "Bạn có muốn ghi đè lên nó không?"
+
+msgid "You have no save templates yet."
+msgstr ""
 
 msgid "Zoom in"
 msgstr "Phóng to"
