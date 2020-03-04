@@ -22,6 +22,7 @@ import Csv from '../../sass/icons/download/ic-csv.svg';
 
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
+import AddBold from '../../sass/icons/common/ic-add.svg';
 import Close from '../../sass/icons/common/ic-close.svg';
 import InputNumberMinus from '../../sass/icons/common/ic-input-number-minus.svg';
 import InputNumberPlus from '../../sass/icons/common/ic-input-number-plus.svg';
@@ -129,6 +130,9 @@ import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/i
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
+import EmptyState from '../../sass/icons/shape/ic-empty-state.svg';
+import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
+
 export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
@@ -170,7 +174,7 @@ export const PointFigureIcon = Wrapper(PointFigure);
 export const RangeBarsIcon = Wrapper(RangeBars);
 export const RenkoIcon = Wrapper(Renko);
 export const TableIcon = Wrapper(Table);
-export const AddIcon = Wrapper(Add);
+export const AddIcon = Wrapper(AddBold);
 export const ZoomInIcon = Wrapper(Add);
 export const CloseIcon = Wrapper(Close);
 export const InputNumberMinusIcon = Wrapper(InputNumberMinus);
@@ -221,6 +225,8 @@ export const TypeHollowGrayscaleIcon = Wrapper(TypeHollowGrayscale);
 export const TypeOhlcGrayscaleIcon = Wrapper(TypeOhlcGrayscale);
 
 export const MetalIcon = Wrapper(Metal);
+export const EmptyStateIcon = Wrapper(EmptyState);
+export const OverwriteStateIcon = Wrapper(OverwriteState);
 
 export const ArrowGreenIcon = Wrapper(ArrowGreen);
 export const ArrowOrangeIcon = Wrapper(ArrowOrange);

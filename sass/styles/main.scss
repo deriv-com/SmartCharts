@@ -160,3 +160,106 @@
     font-size: 1.7em;
     color: #878787;
 }
+
+/* -------------------------- helper styles -------------------------------------*/
+.ciq-scrollbar {
+    > div:nth-child(3) {
+        > div {
+            opacity: 0.16;
+            @include themify($themes) {
+                background-color: themed('ScrollbarBg') !important;
+            }
+        }
+    }
+}
+
+/* -------------------------- helper styles -------------------------------------*/
+.btn {
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    text-align: center;
+    border-radius: 4px;
+    outline: none !important;
+    cursor: pointer;
+    height: 40px !important;
+    @include themify($themes) {
+        border: 1px solid themed('BtnDefaultBg');
+        background: themed('BtnDefaultBg');
+        color: themed('BtnDefaultText');
+    }
+
+    &:hover {
+        @include themify($themes) {
+            background: themed('BtnDefaultHoverBg');
+        }
+    }
+    &--primary {
+        @include themify($themes) {
+            border-color: themed('BtnPrimaryBg');
+            background: themed('BtnPrimaryBg');
+            color: themed('BtnPrimaryText');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('BtnPrimaryHoverBg');
+                background: themed('BtnPrimaryHoverBg');
+            }
+        }
+        &--disabled {
+            opacity: 0.32;
+            @include themify($themes) {
+                border-color: themed('BtnPrimaryBg');
+                background: themed('BtnPrimaryBg');
+            }
+
+            &:hover {
+                @include themify($themes) {
+                    border-color: themed('BtnPrimaryBg');
+                    background: themed('BtnPrimaryBg');
+                }
+            }
+        }
+    }
+}
+
+.input {
+    border-radius: 4px 0 0 4px;
+    height: 40px;
+    box-sizing: border-box;
+    border-right: none !important;
+    position: relative;
+    outline: none !important;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.43;
+    letter-spacing: normal;
+    background: transparent;
+    @include themify($themes) {
+        border: 1px solid themed('InputDefaultBorder');
+    }
+
+    &::placeholder,
+    &::-moz-placeholder {
+        font-size: 14px;
+        @include themify($themes) {
+            color: themed('InputDefaultText');
+        }
+    }
+    &:hover {
+        @include themify($themes) {
+            border-color: themed('InputDefaultHoverBorder');
+        }
+    }
+    &--active {
+        @include themify($themes) {
+            border-color: themed('InputDefaultActiveBorder') !important;
+        }
+    }
+}

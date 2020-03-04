@@ -17,7 +17,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "Add new"
+msgid "Add new templates"
 msgstr ""
 
 msgid "Annotation"
@@ -50,9 +50,6 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-msgid "CANCEL"
-msgstr ""
-
 msgid "Candle"
 msgstr ""
 
@@ -69,6 +66,9 @@ msgid "Chart Table"
 msgstr ""
 
 msgid "Chart types"
+msgstr ""
+
+msgid "Clear all"
 msgstr ""
 
 msgid "Clear All"
@@ -221,7 +221,7 @@ msgstr ""
 msgid "Opens in:"
 msgstr ""
 
-msgid "OVERWRITE"
+msgid "Overwrite"
 msgstr ""
 
 msgid "Pitchfork"
@@ -290,6 +290,9 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr ""
 
@@ -335,6 +338,9 @@ msgstr ""
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr ""
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr ""
 
@@ -375,6 +381,9 @@ msgid "Vertical"
 msgstr ""
 
 msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "You have no save templates yet."
 msgstr ""
 
 msgid "Zoom in"
