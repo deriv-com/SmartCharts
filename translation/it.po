@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2020-03-02 10:23\n"
+"PO-Revision-Date: 2020-03-04 06:27\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -28,8 +28,8 @@ msgstr "\"Indice di massa\" o \"Doji Star\""
 msgid "Active"
 msgstr "Attivo"
 
-msgid "Add new"
-msgstr "Aggiungi nuovo"
+msgid "Add new templates"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Annotazione"
@@ -61,9 +61,6 @@ msgstr "Fumetto"
 msgid "Cancel"
 msgstr "Annulla"
 
-msgid "CANCEL"
-msgstr "ANNULLA"
-
 msgid "Candle"
 msgstr "Candela"
 
@@ -81,6 +78,9 @@ msgstr "Tabella del grafico"
 
 msgid "Chart types"
 msgstr "Tipologie di grafico"
+
+msgid "Clear all"
+msgstr ""
 
 msgid "Clear All"
 msgstr "Cancella tutto"
@@ -232,8 +232,8 @@ msgstr "APERTURA"
 msgid "Opens in:"
 msgstr "Apertura tra:"
 
-msgid "OVERWRITE"
-msgstr "SOVRASCRIVI"
+msgid "Overwrite"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -301,6 +301,9 @@ msgstr "destro del mouse per gestire"
 msgid "Save"
 msgstr "Salva"
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr "Cerca..."
 
@@ -346,6 +349,9 @@ msgstr "SPOT"
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr "Nome del modello"
 
@@ -387,6 +393,9 @@ msgstr "Verticale"
 
 msgid "Would you like to overwrite it?"
 msgstr "Desideri sovrascriverlo?"
+
+msgid "You have no save templates yet."
+msgstr ""
 
 msgid "Zoom in"
 msgstr "Zoom avanti"
