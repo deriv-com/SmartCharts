@@ -116,46 +116,17 @@
             box-sizing: border-box;
             position: relative;
 
-            .tooltip {
-                position: absolute;
-                top: calc(50% - 17px);
-                left: 100%;
-                border-radius: 4px;
-                height: 18px;
-                width: auto;
-                white-space: nowrap;
-                padding: 8px;
-                font-size: 12px;
-                font-weight: normal;
-                font-style: normal;
-                line-height: 1.5;
-                letter-spacing: normal;
-                opacity: 0;
-                box-sizing: content-box;
-                @include themify($themes) {
-                    background: themed('ChartTypeTooltipBg');
-                    color: themed('ChartTypeTooltipText');
-                }
-
-                &:before {
-                    position: absolute;
-                    width: 0;
-                    height: 0;
-                    border-top: 6px solid transparent;
-                    border-bottom: 6px solid transparent;
-                    content: ' ';
-                    top: calc(50% - 6px);
-                    left: -6px;
-                    background: transparent;
-                    @include themify($themes) {
-                        border-right: 6px solid themed('ChartTypeTooltipBg');
-                    }
-                }
-            }
             &:hover {
                 @include themify($themes) {
                     background: themed('TimeHoverBg');
                 }
+            }
+            &__text {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             &--active {
                 background: transparent !important;
@@ -169,15 +140,16 @@
                 cursor: initial;
                 background: transparent !important;
 
-                > span {
+                #{ $self }__item__text {
                     opacity: 0.32;
-                    pointer-events: none;
-                }
-                &:hover {
-                    .tooltip {
-                        opacity: 1;
-                        z-index: 2;
+
+                    > span {
+                        pointer-events: none;
                     }
+                }
+                #{ $self }__item__text:hover + .tooltip {
+                    opacity: 1;
+                    z-index: 2;
                 }
             }
         }
