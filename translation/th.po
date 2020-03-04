@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Thai\n"
 "Language: th_TH\n"
-"PO-Revision-Date: 2020-02-12 02:12\n"
+"PO-Revision-Date: 2020-03-04 06:27\n"
 
 msgid " already exists."
 msgstr " มีอยู่แล้ว"
@@ -28,7 +28,7 @@ msgstr "\"ดัชนีมวล\" หรือ \"Doji Star\""
 msgid "Active"
 msgstr "ใช้งานอยู่"
 
-msgid "Add new"
+msgid "Add new templates"
 msgstr ""
 
 msgid "Annotation"
@@ -61,9 +61,6 @@ msgstr "คำบรรยายภาพ"
 msgid "Cancel"
 msgstr ""
 
-msgid "CANCEL"
-msgstr "CANCEL"
-
 msgid "Candle"
 msgstr "แท่งเทียน"
 
@@ -81,6 +78,9 @@ msgstr "ตารางแผนภูมิ"
 
 msgid "Chart types"
 msgstr "ชนิดแผนภูมิ"
+
+msgid "Clear all"
+msgstr ""
 
 msgid "Clear All"
 msgstr "ล้างทั้งหมด"
@@ -232,8 +232,8 @@ msgstr "เปิด"
 msgid "Opens in:"
 msgstr "เปิดใน:"
 
-msgid "OVERWRITE"
-msgstr "OVERWRITE"
+msgid "Overwrite"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -301,6 +301,9 @@ msgstr "คลิกขวาเพื่อจัดการ"
 msgid "Save"
 msgstr ""
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr "ค้นหา..."
 
@@ -346,6 +349,9 @@ msgstr "SPOT"
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "การสตรีมสำหรับ [symbol] ไม่พร้อมใช้งาน เนื่องจากข้อจำกัดสิทธิ์การใช้งาน"
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr "ชื่อแม่แบบ"
 
@@ -387,6 +393,9 @@ msgstr "แนวตั้ง"
 
 msgid "Would you like to overwrite it?"
 msgstr "ท่านต้องการเขียนทับหรือไม่?"
+
+msgid "You have no save templates yet."
+msgstr ""
 
 msgid "Zoom in"
 msgstr "ย่อลง"
