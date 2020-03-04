@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2020-02-16 23:52\n"
+"PO-Revision-Date: 2020-03-04 06:27\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -28,8 +28,8 @@ msgstr "„Indeks masowy” lub „Gwiazda Doji”"
 msgid "Active"
 msgstr "Aktywne"
 
-msgid "Add new"
-msgstr "Dodaj nowy"
+msgid "Add new templates"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Adnotacja"
@@ -61,9 +61,6 @@ msgstr "Wezwanie"
 msgid "Cancel"
 msgstr "Anuluj"
 
-msgid "CANCEL"
-msgstr "ANULUJ"
-
 msgid "Candle"
 msgstr "Świeca"
 
@@ -81,6 +78,9 @@ msgstr "Tabela wykresu"
 
 msgid "Chart types"
 msgstr "Rodzaje wykresów"
+
+msgid "Clear all"
+msgstr ""
 
 msgid "Clear All"
 msgstr "Wyczyść wszystko"
@@ -232,8 +232,8 @@ msgstr "OTWARCIE"
 msgid "Opens in:"
 msgstr "Otwarcie za:"
 
-msgid "OVERWRITE"
-msgstr "NADPISZ"
+msgid "Overwrite"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Widły"
@@ -301,6 +301,9 @@ msgstr "kliknij prawym przyciskiem, aby zarządzać"
 msgid "Save"
 msgstr "Zapisz"
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr "Wyszukaj..."
 
@@ -346,6 +349,9 @@ msgstr "SPOT"
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr "Nazwa szablonu"
 
@@ -387,6 +393,9 @@ msgstr "Linia pionowa"
 
 msgid "Would you like to overwrite it?"
 msgstr "Chcesz go nadpisać?"
+
+msgid "You have no save templates yet."
+msgstr ""
 
 msgid "Zoom in"
 msgstr "Powiększ"
