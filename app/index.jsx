@@ -293,7 +293,7 @@ class App extends Component {
                 endEpoch={endEpoch}
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}
-                crosshair={this.state.crosshair}
+                crosshair={isMobile ? 0 : this.state.crosshair}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
                 shouldFetchTradingTimes
