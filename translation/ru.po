@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
-"PO-Revision-Date: 2020-03-02 11:20\n"
+"PO-Revision-Date: 2020-03-04 06:27\n"
 
 msgid " already exists."
 msgstr " уже существует."
@@ -28,8 +28,8 @@ msgstr "\"Индекс массы\" или \"звезда дожи\""
 msgid "Active"
 msgstr "Активные"
 
-msgid "Add new"
-msgstr "Добавить"
+msgid "Add new templates"
+msgstr ""
 
 msgid "Annotation"
 msgstr "Примечание"
@@ -61,9 +61,6 @@ msgstr "Сноска"
 msgid "Cancel"
 msgstr "Отмена"
 
-msgid "CANCEL"
-msgstr "ОТМЕНА"
-
 msgid "Candle"
 msgstr "Свеча"
 
@@ -81,6 +78,9 @@ msgstr "График"
 
 msgid "Chart types"
 msgstr "Вид графика"
+
+msgid "Clear all"
+msgstr ""
 
 msgid "Clear All"
 msgstr "Очистить все"
@@ -232,8 +232,8 @@ msgstr "ОТКРЫТИЕ"
 msgid "Opens in:"
 msgstr "Открывается в:"
 
-msgid "OVERWRITE"
-msgstr "ПЕРЕЗАПИСАТЬ"
+msgid "Overwrite"
+msgstr ""
 
 msgid "Pitchfork"
 msgstr "Вилка"
@@ -301,6 +301,9 @@ msgstr "Щелкните правой кнопкой мыши чтобы упр�
 msgid "Save"
 msgstr "Сохранить"
 
+msgid "Saved templates"
+msgstr ""
+
 msgid "Search..."
 msgstr "Поиск..."
 
@@ -346,6 +349,9 @@ msgstr "СПОТ"
 msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Потоковые котировки для [symbol] недоступны из-за лицензионных ограничений"
 
+msgid "Table"
+msgstr ""
+
 msgid "Template name"
 msgstr "Название шаблона"
 
@@ -387,6 +393,9 @@ msgstr "Вертикаль"
 
 msgid "Would you like to overwrite it?"
 msgstr "Хотите перезаписать?"
+
+msgid "You have no save templates yet."
+msgstr ""
 
 msgid "Zoom in"
 msgstr "Увеличить"
