@@ -18,7 +18,6 @@ import FavoriteStore from './FavoriteStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
-import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 import ChartTableStore from './ChartTableStore';
@@ -49,7 +48,6 @@ export default class MainStore {
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
     currentSpot = new CurrentSpotStore(this);
-    drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
     lastDigitStats= new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);

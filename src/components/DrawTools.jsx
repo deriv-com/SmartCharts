@@ -2,9 +2,23 @@ import React from 'react';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from '../store/Connect';
-import { DrawIcon, DrawToolIcon, ActiveIcon, DeleteIcon, SettingIcon } from './Icons.jsx';
+import {
+    DrawIcon,
+    DrawToolIcon,
+    ActiveIcon,
+    DeleteIcon,
+    SettingIcon,
+    EmptyStateIcon,
+} from './Icons.jsx';
 import '../../sass/components/_draw-tools.scss';
 
+
+const EmptyView = () => (
+    <div className="ciq-draw-tools--empty">
+        <EmptyStateIcon />
+        <p>{t.translate('You have no active drawings yet.')}</p>
+    </div>
+);
 
 const DrawToolsList = ({ items, onClick }) => (
     <Scrollbars
@@ -83,18 +97,26 @@ const DrawTools = ({
                 </TabList>
                 <TabPanel>
                     <div className="ciq-draw-tools__panel">
-                        <div className="ciq-draw-tools__panel__head">
-                            <button type="button" className="btn" onClick={clearAll}>
-                                <span>{t.translate('Clear All')}</span>
-                            </button>
-                        </div>
-                        <div className="ciq-draw-tools__panel__content">
-                            <ActiveDrawToolsList
-                                items={activeDrawToolsItems}
-                                onSetting={onSetting}
-                                onDelete={onDelete}
-                            />
-                        </div>
+                        {
+                            (activeDrawToolsItems && activeDrawToolsItems.length)
+                                ? (
+                                <>
+                                    <div className="ciq-draw-tools__panel__head">
+                                        <button type="button" className="btn btn--sm btn--outline-secondary" onClick={clearAll}>
+                                            <span>{t.translate('Clear All')}</span>
+                                        </button>
+                                    </div>
+                                    <div className="ciq-draw-tools__panel__content">
+                                        <ActiveDrawToolsList
+                                            items={activeDrawToolsItems}
+                                            onSetting={onSetting}
+                                            onDelete={onDelete}
+                                        />
+                                    </div>
+                                </>
+                                )
+                                : (<EmptyView />)
+                        }
                     </div>
                 </TabPanel>
                 <TabPanel>

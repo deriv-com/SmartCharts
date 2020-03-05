@@ -100,9 +100,9 @@
 
             .react-tabs__tab {
                 width: 100%;
-                display: block;
+                display: flex;
                 box-sizing: border-box;
-                padding: 10px 16px;
+                padding: 10px 12px;
                 border: none;
                 border-radius: 0px;
                 font-size: 14px;
@@ -115,6 +115,17 @@
                     border-left: 4px solid themed('DialogTabularBg');
                 }
 
+                .ic-icon {
+                    width: 16px;
+                    height: 16px;
+                    line-height: 27px;
+                    margin-right: 16px;
+
+                    svg {
+                        width: 16px;
+                        height: 16px;
+                    }
+                }
                 &--selected {
                     border-radius: 0px;
                     font-weight: bold;

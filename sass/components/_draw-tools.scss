@@ -12,6 +12,28 @@
             height: 392px;
         }
     }
+    &--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+
+        > .ic-icon {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 24px;
+        }
+        p {
+            font-size: 12px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: center;
+            margin: 0 0 46px;
+        }
+    }
     &__panel {
         height: 392px;
         padding: 16px 8px;
