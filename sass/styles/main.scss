@@ -79,6 +79,7 @@
     font-family: $base-font;
     font-size: $font-size-base;
     overflow: hidden;
+    top: 0;
     @include themify($themes) {
         background: themed('DefaultMain');
     }
