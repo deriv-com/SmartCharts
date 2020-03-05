@@ -18,6 +18,7 @@ import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
+import ToolbarWidget from './components/ToolbarWidget.jsx';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
 
@@ -48,6 +49,7 @@ export {
     StudyLegend,
     Timeperiod,
     Views,
+    ToolbarWidget,
     logEvent,
     LogCategories,
     LogActions,
@@ -76,6 +78,7 @@ export default {
     StudyLegend,
     Timeperiod,
     Views,
+    ToolbarWidget,
     logEvent,
     LogCategories,
     LogActions,

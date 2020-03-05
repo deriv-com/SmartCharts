@@ -25,6 +25,7 @@ import LastDigitStatsStore from './LastDigitStatsStore';
 import NavigationWidgetStore from './NavigationWidgetStore';
 import HighestLowestStore from './HighestLowestStore';
 import PaginationLoaderStore from './PaginationLoaderStore';
+import ToolbarWidgetStore from './ToolbarWidgetStore';
 
 export default class MainStore {
     notifier = new Notifier();
@@ -54,4 +55,5 @@ export default class MainStore {
     navigationWidget = new NavigationWidgetStore(this);
     highestLowest = new HighestLowestStore(this);
     paginationLoader = new PaginationLoaderStore(this);
+    toolbarWidget = new ToolbarWidgetStore(this);
 }

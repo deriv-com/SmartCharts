@@ -17,11 +17,11 @@ class Menu extends Component {
             className,
             children,
             title,
+            tooltip,
             onTitleClick,
             DropdownDialog,
             isMobile,
             isFullscreen,
-            modalNode,
             portalNodeId,
             enabled = true,
             shouldRenderDialogs,
@@ -37,7 +37,7 @@ class Menu extends Component {
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
         if (newStyle) {
-            const portalNode = portalNodeId ? document.getElementById(portalNodeId) : null;
+            const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const newDropdown = (shouldRenderDialogs
                 && (
                     <DropdownDialog
@@ -61,20 +61,14 @@ class Menu extends Component {
                     </div>
                 </div>
             );
-            let newDialog = newDropdown;
-            if (portalNode) {
-                newDialog = ReactDOM.createPortal(
-                    <div className={`smartcharts-${theme}`}>
+            const newDialog = ReactDOM.createPortal(
+                <div className={`smartcharts-${theme}`}>
+                    <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
                         {modalDropdown}
-                    </div>,
-                    portalNode,
-                );
-            } else if (isMobile && modalNode) {
-                newDialog = ReactDOM.createPortal(
-                    modalDropdown,
-                    modalNode,
-                );
-            }
+                    </div>
+                </div>,
+                portalNode,
+            );
 
             return (
                 enabled && (
@@ -87,6 +81,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
+                        {tooltip ? (<div className="tooltip tooltip--right">{tooltip}</div>) : ''}
                         {open ? newDialog : ''}
                     </div>
                 ) || (
@@ -98,6 +93,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
+                        {tooltip ? (<div className="tooltip tooltip--right">{tooltip}</div>) : ''}
                     </div>
                 )
             );
@@ -144,7 +140,7 @@ class Menu extends Component {
                     >
                         {first}
                     </div>
-                    {(isMobile && (portalNodeId || modalNode))
+                    {(isMobile && portalNodeId)
                     && (
                         <MenuMobile
                             className={className}

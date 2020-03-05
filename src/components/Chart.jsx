@@ -25,7 +25,6 @@ import PaginationLoader from './PaginationLoader.jsx';
 class Chart extends Component {
     constructor(props) {
         super(props);
-        this.modalNode = React.createRef();
         this.root = React.createRef();
     }
 
@@ -34,7 +33,7 @@ class Chart extends Component {
         initGA();
         logPageView();
         updateProps(props);
-        init(this.root.current, this.modalNode.current, props);
+        init(this.root.current, props);
     }
 
     componentDidUpdate(prevProps) {
@@ -79,6 +78,7 @@ class Chart extends Component {
             position,
             bottomWidgets,
             enabledNavigationWidget = true,
+            toolbarWidget,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -86,13 +86,11 @@ class Chart extends Component {
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         // if there are any markers, then increase the subholder z-index
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
+        const ToolbarWidget = toolbarWidget;
 
         return (
             <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
-                <div
-                    className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                    ref={this.modalNode}
-                >
+                <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
                     <div
                         className="cq-context"
                         ref={this.root}
@@ -113,10 +111,6 @@ class Chart extends Component {
                                             !isCandle && !isSpline && isHighestLowestMarkerEnabled
                                                 && <HighestLowestMarker />
                                         }
-                                        {
-                                            enabledNavigationWidget
-                                                && <NavigationWidget />
-                                        }
                                     </RenderInsideChart>
                                     <RenderInsideChart at="subholder" hideInScrollToEpoch>
                                         {children}
@@ -130,6 +124,13 @@ class Chart extends Component {
                                     <div className="chartContainer" style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                     </div>
+                                    {
+                                        enabledNavigationWidget
+                                            && <NavigationWidget />
+                                    }
+                                    { toolbarWidget
+                                        && <ToolbarWidget />
+                                    }
                                     <Loader />
                                     {!isChartAvailable && (
                                         <div className="cq-chart-unavailable">
@@ -150,6 +151,7 @@ class Chart extends Component {
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
                     <ChartTable />
+                    <div id="smartcharts_modal" className="ciq-modal" />
                 </div>
             </div>
         );
