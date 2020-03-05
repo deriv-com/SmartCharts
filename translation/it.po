@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
-"PO-Revision-Date: 2020-03-04 06:27\n"
+"PO-Revision-Date: 2020-03-05 09:44\n"
 
 msgid " already exists."
 msgstr "Già esistente."
@@ -80,7 +80,7 @@ msgid "Chart types"
 msgstr "Tipologie di grafico"
 
 msgid "Clear all"
-msgstr ""
+msgstr "Cancella tutto"
 
 msgid "Clear All"
 msgstr "Cancella tutto"
@@ -233,7 +233,7 @@ msgid "Opens in:"
 msgstr "Apertura tra:"
 
 msgid "Overwrite"
-msgstr ""
+msgstr "Sovrascrivi"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
@@ -350,7 +350,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "[symbol] in streaming non è disponibile a causa delle limitazioni della licenza"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabella"
 
 msgid "Template name"
 msgstr "Nome del modello"
@@ -395,7 +395,7 @@ msgid "Would you like to overwrite it?"
 msgstr "Desideri sovrascriverlo?"
 
 msgid "You have no save templates yet."
-msgstr ""
+msgstr "Non hai ancora salvato alcun modello."
 
 msgid "Zoom in"
 msgstr "Zoom avanti"
