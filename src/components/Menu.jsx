@@ -61,7 +61,9 @@ class Menu extends Component {
             );
             const newDialog = ReactDOM.createPortal(
                 <div className={`smartcharts-${theme}`}>
-                    {modalDropdown}
+                    <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
+                        {modalDropdown}
+                    </div>
                 </div>,
                 portalNode,
             );
