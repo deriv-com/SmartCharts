@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
-"PO-Revision-Date: 2020-03-04 06:27\n"
+"PO-Revision-Date: 2020-03-07 23:32\n"
 
 msgid " already exists."
 msgstr " już istnieje."
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "Aktywne"
 
 msgid "Add new templates"
-msgstr ""
+msgstr "Dodaj nowe szablony"
 
 msgid "Annotation"
 msgstr "Adnotacja"
@@ -80,7 +80,7 @@ msgid "Chart types"
 msgstr "Rodzaje wykresów"
 
 msgid "Clear all"
-msgstr ""
+msgstr "Wyczyść wszystko"
 
 msgid "Clear All"
 msgstr "Wyczyść wszystko"
@@ -233,7 +233,7 @@ msgid "Opens in:"
 msgstr "Otwarcie za:"
 
 msgid "Overwrite"
-msgstr ""
+msgstr "Nadpisz"
 
 msgid "Pitchfork"
 msgstr "Widły"
@@ -302,7 +302,7 @@ msgid "Save"
 msgstr "Zapisz"
 
 msgid "Saved templates"
-msgstr ""
+msgstr "Zapisane szablony"
 
 msgid "Search..."
 msgstr "Wyszukaj..."
@@ -350,7 +350,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Z powodu ograniczeń licencyjnych przesyłanie strumieniowe dla [symbol] jest niedostępne"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabela"
 
 msgid "Template name"
 msgstr "Nazwa szablonu"
@@ -395,7 +395,7 @@ msgid "Would you like to overwrite it?"
 msgstr "Chcesz go nadpisać?"
 
 msgid "You have no save templates yet."
-msgstr ""
+msgstr "Nie masz jeszcze żadnych zapisanych szablonów."
 
 msgid "Zoom in"
 msgstr "Powiększ"
