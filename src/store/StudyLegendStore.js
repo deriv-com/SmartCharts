@@ -1,14 +1,109 @@
-import { observable, action, when } from 'mobx';
+import React from 'react';
+import { observable, action, when, reaction } from 'mobx';
+import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
+import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import {
+    IndicatorCatMomentumIcon,
+    IndicatorCatTrendIcon,
+    IndicatorCatVolatilityIcon,
+    IndicatorCatAveragesIcon,
+    IndicatorCatOtherIcon,
+    IndicatorAwesomeOscillatorIcon,
+    IndicatorDTrendedIcon,
+    IndicatorGatorIcon,
+    IndicatorMacdIcon,
+    IndicatorRateChangeIcon,
+    IndicatorRSIIcon,
+    IndicatorStochasticOscillatorIcon,
+    IndicatorStochasticMomentumIcon,
+    IndicatorWilliamPercentIcon,
+    IndicatorAroonIcon,
+    IndicatorAdxIcon,
+    IndicatorCommodityChannelIndexIcon,
+    IndicatorIchimokuIcon,
+    IndicatorParabolicIcon,
+    IndicatorZigZagIcon,
+    IndicatorBollingerIcon,
+    IndicatorDonchianIcon,
+    IndicatorAveragesIcon,
+    IndicatorEnvelopeIcon,
+    IndicatorAlligatorIcon,
+    IndicatorFractalChaosIcon,
+} from '../components/Icons.jsx';
 
 // TODO:
 // import StudyInfo from '../study-info';
+
+const getStudyBars = (name, type) => {
+    const str = (name.replace(type, '').trim());
+    return str.slice(str.indexOf('('));
+};
+
+const IndicatorsTree = [
+    {
+        id: 'momentum',
+        name: t.translate('Momentum'),
+        icon: IndicatorCatMomentumIcon,
+        items: [
+            { id: 'Awesome', name: t.translate('Awesome Oscillator'), icon: IndicatorAwesomeOscillatorIcon },
+            { id: 'Detrended', name: t.translate('Detrended Price Oscillator'), icon: IndicatorDTrendedIcon },
+            { id: 'Gator', name: t.translate('Gator Oscillator'), icon: IndicatorGatorIcon },
+            { id: 'macd', name: t.translate('MACD'), icon: IndicatorMacdIcon },
+            { id: 'Price ROC', name: t.translate('Rate of Change'), icon: IndicatorRateChangeIcon },
+            { id: 'rsi', name: t.translate('Relative Strength Index (RSI)'), icon: IndicatorRSIIcon },
+            { id: 'stochastics', name: t.translate('Stochastic Oscillator'), icon: IndicatorStochasticOscillatorIcon },
+            { id: 'Stch Mtm', name: t.translate('Stochastic Momentum index'), icon: IndicatorStochasticMomentumIcon },
+            { id: 'Williams %R', name: t.translate('William\'s Percent Range'), icon: IndicatorWilliamPercentIcon },
+        ],
+    },
+    {
+        id: 'trend',
+        name: t.translate('Trend'),
+        icon: IndicatorCatTrendIcon,
+        items: [
+            { id: 'Aroon', name: t.translate('Aroon'), icon: IndicatorAroonIcon },
+            { id: 'ADX', name: t.translate('ADX/DMS'), icon: IndicatorAdxIcon },
+            { id: 'CCI', name: t.translate('Commodity Channel Index'), icon: IndicatorCommodityChannelIndexIcon },
+            { id: 'Ichimoku', name: t.translate('Ichimoku Clouds'), icon: IndicatorIchimokuIcon },
+            { id: 'Parabolic', name: t.translate('Parabolic SAR'), icon:  IndicatorParabolicIcon },
+            { id: 'ZigZag', name: t.translate('Zig Zag'), icon: IndicatorZigZagIcon },
+        ],
+    },
+    {
+        id: 'volatility',
+        name: t.translate('Volatility'),
+        icon: IndicatorCatVolatilityIcon,
+        items: [
+            { id: 'Bollinger Bands', name: t.translate('Bollinger Bands'), icon: IndicatorBollingerIcon },
+            { id: 'Donchian Channel', name: t.translate('Donchian Channel'), icon: IndicatorDonchianIcon },
+        ],
+    },
+    {
+        id: 'moving-averages',
+        name: t.translate('Moving averages'),
+        icon: IndicatorCatAveragesIcon,
+        items: [
+            { id: 'ma', name: t.translate('Moving averages'), icon: IndicatorAveragesIcon },
+            { id: 'MA Env', name: t.translate('Moving Average Envelope'), icon: IndicatorEnvelopeIcon },
+        ],
+    },
+    {
+        id: 'others',
+        name: t.translate('Others'),
+        icon: IndicatorCatOtherIcon,
+        items: [
+            { id: 'Alligator', name: t.translate('Alligator'), icon: IndicatorAlligatorIcon },
+            { id: 'Fractal Chaos Bands', name: t.translate('Fractal Chaos Band'), icon: IndicatorFractalChaosIcon },
+        ],
+    },
+];
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -139,6 +234,21 @@ export default class StudyLegendStore {
         this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
         this.StudyMenu = this.menu.connect(Menu);
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
+
+        this.searchInput = React.createRef();
+        this.SearchInput = connect(() => ({
+            placeholder: 'Search',
+            value: this.filterText,
+            onChange: this.setFilterText,
+            searchInput: this.searchInput,
+            searchInputClassName: 'searchInputClassName',
+        }))(SearchInput);
+
+        reaction(() => this.menu.open, () => {
+            setTimeout(() => {
+                if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
+            }, 200);
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -152,12 +262,25 @@ export default class StudyLegendStore {
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
-            const panel = Object.keys(this.stx.panels)[1];
-            if (panel) {
-                // Hide the up arrow from first indicator to prevent user
-                // from moving the indicator panel above the main chart
-                this.stx.panels[panel].up.style.display = 'none';
-            }
+            const panelsLen = Object.keys(this.stx.panels).length;
+            Object.keys(this.stx.panels).forEach((id, index) => {
+                if (index !== 0) {
+                    const panelObj = this.stx.panels[id];
+                    const sd = this.stx.layout.studies[id];
+                    if (sd) {
+                        panelObj.title.innerHTML = `${sd.type} <span class="bars">${getStudyBars(sd.name, sd.type)}</span>`;
+                    }
+
+                    if (index === 1) {
+                        // Hide the up arrow from first indicator to prevent user
+                        // from moving the indicator panel above the main chart
+                        panelObj.up.style.display = 'none';
+                    }
+                    if (index === (panelsLen - 1)) {
+                        panelObj.down.style.display = 'none';
+                    }
+                }
+            });
         });
         this.renderLegend();
     };
@@ -174,31 +297,37 @@ export default class StudyLegendStore {
         data: [],
     };
 
-    get categorizedStudies() {
-        const data = [];
+    @observable selectedTab = 1;
+    @observable filterText = '';
+    @observable activeItems = [];
+    @observable infoItem = null;
 
-        Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            if (!this.excludedStudies[studyId]) {
-                const study = CIQ.Studies.studyLibrary[studyId];
-                data.push({
-                    enabled: true,
-                    display: t.translate(study.name),
-                    dataObject: studyId,
-                    itemId: studyId,
-                });
-            }
-        });
-        const categoryNamePostfix = `(${this.activeStudies.data.length}/5)`;
-        const category = {
-            categoryName: t.translate('Indicators'),
-            categoryNamePostfix,
-            categoryNamePostfixShowIfActive: true,
-            categoryId: 'indicators',
+    get categorizedStudies() {
+        return IndicatorsTree.map(indicatorGroup => ({
+            categoryName: indicatorGroup.name,
+            categoryId: indicatorGroup.id,
             categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
             hasSubcategory: false,
-            data,
-        };
-        return [category];
+            data: indicatorGroup.items.map(item => ({
+                enabled: true,
+                display: item.name,
+                icon: item.icon,
+                dataObject: item.id,
+                itemId: item.id,
+            })),
+        }));
+    }
+
+
+    get items() { return [...IndicatorsTree]; }
+
+    get searchedItems() {
+        return [...IndicatorsTree]
+            .map((category) => {
+                category.foundItems = category.items.filter(item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1);
+                return category;
+            })
+            .filter(category => category.foundItems.length);
     }
 
     @action.bound removeExtraStudies() {
@@ -216,6 +345,7 @@ export default class StudyLegendStore {
     }
 
     @action.bound onSelectItem(item) {
+        this.onInfoItem(null);
         if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             this.changeStudyPanelTitle(sd);
@@ -304,13 +434,12 @@ export default class StudyLegendStore {
     }
 
     @action.bound deleteStudy(study) {
-        const sd = study.sd;
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${sd.name}`);
-        if (!sd.permanent) {
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
+        if (!study.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
             setTimeout(() => {
-                CIQ.Studies.removeStudy(this.stx, sd);
+                CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
             }, 0);
         }
@@ -394,9 +523,25 @@ export default class StudyLegendStore {
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
+        const activeItems = [];
         Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
+            const studyObjCategory = IndicatorsTree.find(category => category.items.find(item => item.id === sd.type));
+            const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
+            if (studyObj) {
+                activeItems.push({
+                    ...studyObj,
+                    bars: getStudyBars(sd.name, sd.type),
+                    dataObject: {
+                        stx,
+                        sd,
+                        inputs: sd.inputs,
+                        outputs: sd.outputs,
+                        parameters: sd.parameters,
+                    },
+                });
+            }
 
             studies.push({
                 enabled: true,
@@ -411,14 +556,38 @@ export default class StudyLegendStore {
             });
         });
 
+        this.activeItems = activeItems;
+
         this.activeStudies.data = studies;
         this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
         this.setReachedLimit();
+    }
+
+    @action.bound deleteAllStudies() {
+        const stx = this.stx;
+        if (stx) {
+            Object.keys(stx.layout.studies || []).forEach((id) => {
+                this.deleteStudy(stx.layout.studies[id]);
+            });
+        }
     }
 
     @action.bound clearStudies() {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
+    }
+
+    @action.bound onSelectTab(tabIndex) {
+        this.selectedTab = tabIndex;
+    }
+
+    @action.bound setFilterText(filterText) {
+        this.selectedTab = (filterText !== '') ? 0 : 1;
+        this.filterText = filterText;
+    }
+
+    @action.bound onInfoItem(study) {
+        this.infoItem = study;
     }
 }

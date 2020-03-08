@@ -17,6 +17,8 @@ class Menu extends Component {
             className,
             children,
             title,
+            subTitle,
+            onBack,
             tooltip,
             onTitleClick,
             DropdownDialog,
@@ -28,6 +30,7 @@ class Menu extends Component {
             onMouseEnter,
             onMouseLeave,
             theme,
+            enableTabular,
             newStyle, // this props will remove after we apply new design
             // to all of components
         } = this.props;
@@ -43,7 +46,10 @@ class Menu extends Component {
                         isMobile={isMobile}
                         isFullscreen={isFullscreen}
                         title={title}
+                        subTitle={subTitle}
+                        onBack={onBack}
                         enableOverlay
+                        enableTabular={enableTabular}
                         isPortal={portalNode}
                     >
                         {rest}

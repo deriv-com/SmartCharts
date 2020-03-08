@@ -256,9 +256,9 @@
     border-radius: 4px;
     outline: none !important;
     cursor: pointer;
-    height: 40px !important;
+    border: 1px solid;
     @include themify($themes) {
-        border: 1px solid themed('BtnDefaultBg');
+        border-color: themed('BtnDefaultBg');
         background: themed('BtnDefaultBg');
         color: themed('BtnDefaultText');
     }
@@ -267,6 +267,10 @@
         @include themify($themes) {
             background: themed('BtnDefaultHoverBg');
         }
+    }
+    &--sm {
+        font-size: 12px;
+        padding: 3px 12px;
     }
     &--primary {
         @include themify($themes) {
@@ -294,6 +298,17 @@
                     background: themed('BtnPrimaryBg');
                 }
             }
+        }
+    }
+    &--outline-secondary {
+        background: transparent;
+        @include themify($themes) {
+            border-color: themed('BtnSecondaryBorder');
+            color: themed('BtnSecondaryText');
+        }
+
+        &:hover {
+            background: transparent !important;
         }
     }
 }

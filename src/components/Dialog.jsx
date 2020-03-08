@@ -1,5 +1,5 @@
 import React  from 'react';
-import { CloseIcon } from './Icons.jsx';
+import { CloseIcon, BackIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-dialog.scss';
 
 const Dialog = ({
@@ -8,6 +8,8 @@ const Dialog = ({
     onContainerClick,
     className,
     title,
+    subTitle,
+    onBack,
     setOpen,
     enableTabular,
     enableOverlay,
@@ -23,6 +25,15 @@ const Dialog = ({
                     {title ? (
                         <div className="cq-dialog__head">
                             <div className="cq-dialog__head--title">{title}</div>
+                            {
+                                subTitle
+                                    ? (
+                                        <div className="cq-dialog__head--subtitle">
+                                            <BackIcon onClick={() => onBack()} />
+                                            {subTitle}
+                                        </div>
+                                    ) : ''
+                            }
                             <div className="cq-dialog__head--action">
                                 <CloseIcon
                                     onClick={() => setOpen(false)}
@@ -57,5 +68,6 @@ const Dialog = ({
         )}
     </>
 );
+
 
 export default Dialog;
