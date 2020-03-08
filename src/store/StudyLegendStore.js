@@ -580,6 +580,7 @@ export default class StudyLegendStore {
 
     @action.bound onSelectTab(tabIndex) {
         this.selectedTab = tabIndex;
+        this.onInfoItem(null);
     }
 
     @action.bound setFilterText(filterText) {
