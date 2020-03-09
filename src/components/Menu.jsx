@@ -79,7 +79,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {tooltip ? (<div className="sc-tooltip tooltip--right">{tooltip}</div>) : ''}
+                        {tooltip ? (<div className="sc-tooltip sc-tooltip--right">{tooltip}</div>) : ''}
                         {open ? newDialog : ''}
                     </div>
                 ) || (
@@ -91,7 +91,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {tooltip ? (<div className="sc-tooltip tooltip--right">{tooltip}</div>) : ''}
+                        {tooltip ? (<div className="sc-tooltip sc-tooltip--right">{tooltip}</div>) : ''}
                     </div>
                 )
             );
