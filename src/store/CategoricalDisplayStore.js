@@ -338,7 +338,7 @@ export default class CategoricalDisplayStore {
                 item.active = !item.active;
             }
 
-            if (item.active) {
+            if (item.active && item.categoryId !== 'favorite') {
                 this.activeCategories.push(item.categoryId);
             }
         }
