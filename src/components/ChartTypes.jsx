@@ -51,7 +51,7 @@ const ChartTypes = ({
                                 <Icon />
                                 <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>
                             </div>
-                            <div className="tooltip">{t.translate('Available only for non-tick time intervals.')}</div>
+                            <div className="sc-tooltip">{t.translate('Available only for non-tick time intervals.')}</div>
                         </div>
                     );
                 })}
