@@ -42,79 +42,104 @@ const Timeperiod = ({
                 <div className="cq-interval__head">
                     <strong>{t.translate('Time interval')}</strong>
                 </div>
+                <div className="cq-interval__info">{t.translate('Tick interval only available for "Area" Chart type.')}</div>
                 <div className="cq-interval__content">
                     <div
                         onClick={() => ((chartType.id === 'mountain') ? onGranularityClick(0) : null)}
                         className={ItemClassName('tick', 1)}
                     >
-                        <span>1 {t.translate('tick')}</span>
+                        <div className="cq-interval__item__text">
+                            <span> 1 {t.translate('tick')}</span>
+                        </div>
                         <div className="tooltip">{t.translate('Available only for "Area" chart type.')}</div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(120)}
                         className={ItemClassName('minute', 2)}
                     >
-                        <span>2 {t.translate('minutes')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>2 {t.translate('minutes')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(180)}
                         className={ItemClassName('minute', 3)}
                     >
-                        <span>3 {t.translate('minutes')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>3 {t.translate('minutes')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(300)}
                         className={ItemClassName('minute', 5)}
                     >
-                        <span>5 {t.translate('minutes')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>5 {t.translate('minutes')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(600)}
                         className={ItemClassName('minute', 10)}
                     >
-                        <span>10 {t.translate('minutes')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>10 {t.translate('minutes')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(900)}
                         className={ItemClassName('minute', 15)}
                     >
-                        <span>15 {t.translate('minutes')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>15 {t.translate('minutes')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(1800)}
                         className={ItemClassName('minute', 30)}
                     >
-                        <span>30 {t.translate('minutes')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>30 {t.translate('minutes')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(3600)}
                         className={ItemClassName('hour', 60)}
                     >
-                        <span>1 {t.translate('hours')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>1 {t.translate('hours')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(7200)}
                         className={ItemClassName('hour', 120)}
                     >
-                        <span>2 {t.translate('hours')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>2 {t.translate('hours')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(14400)}
                         className={ItemClassName('hour', 240)}
                     >
-                        <span>4 {t.translate('hours')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>4 {t.translate('hours')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(28800)}
                         className={ItemClassName('hour', 480)}
                     >
-                        <span>8 {t.translate('hours')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>8 {t.translate('hours')}</span>
+                        </div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(86400)}
                         className={ItemClassName('day', 'day')}
                     >
-                        <span>1 {t.translate('Day')}</span>
+                        <div className="cq-interval__item__text">
+                            <span>1 {t.translate('Day')}</span>
+                        </div>
                     </div>
                 </div>
             </div>

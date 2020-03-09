@@ -34,29 +34,44 @@
 .ciq-chart-type {
     display: flex;
     padding: 24px;
+    justify-content: space-between;
     @include themify($themes) {
         background: themed('ChartTypeBg');
     }
 
     &__item {
         $self: &;
-        width: 88px;
+        width: 25%;
         height: 88px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
         margin-right: 8px;
-        border-radius: 4px;
         cursor: pointer;
         border: 1px solid transparent;
+        border-radius: 4px;
         position: relative;
 
         &:last-child {
             margin-right: 0px;
         }
-        .ic-icon {
-            margin-bottom: 12px;
+        &__content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+
+            .ic-icon {
+                margin-bottom: 12px;
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('ChartTypeHoverBg');
+                }
+            }
+        }
+        .tooltip {
+            pointer-events: none;
         }
         &__text {
             display: block;
@@ -70,53 +85,15 @@
                 color: themed('ChartTypeText');
             }
         }
-        .tooltip {
-            position: absolute;
-            top: calc(50% - 17px);
-            left: 100%;
-            border-radius: 4px;
-            height: 18px;
-            width: auto;
-            white-space: nowrap;
-            padding: 8px;
-            font-size: 12px;
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1.5;
-            letter-spacing: normal;
-            opacity: 0;
-            box-sizing: content-box;
-            @include themify($themes) {
-                background: themed('ChartTypeTooltipBg');
-                color: themed('ChartTypeTooltipText');
-            }
-
-            &:before {
-                position: absolute;
-                width: 0;
-                height: 0;
-                border-top: 6px solid transparent;
-                border-bottom: 6px solid transparent;
-                content: ' ';
-                top: calc(50% - 6px);
-                left: -6px;
-                background: transparent;
-                @include themify($themes) {
-                    border-right: 6px solid themed('ChartTypeTooltipBg');
-                }
-            }
-        }
-        &:hover {
-            @include themify($themes) {
-                background: themed('ChartTypeHoverBg');
-            }
-        }
         &--active {
             background: transparent !important;
             @include themify($themes) {
                 border-color: themed('ChartTypeActiveBorder');
             }
 
+            #{ $self }__content {
+                background: transparent !important;
+            }
             #{ $self }__text {
                 font-weight: bold;
                 @include themify($themes) {
@@ -128,24 +105,37 @@
             cursor: initial;
             background: transparent !important;
 
-            > span {
+            #{ $self }__content {
                 opacity: 0.32;
-                pointer-events: none;
-            }
-            &:hover {
-                .tooltip {
-                    opacity: 1;
-                    z-index: 1;
+                background: transparent !important;
+
+                > span {
+                    pointer-events: none;
                 }
+            }
+            #{ $self }__content:hover + .tooltip {
+                opacity: 1;
+                z-index: 1;
             }
         }
     }
 }
 
 .smartcharts-mobile {
-    .ciq-chart-types {
-        .ciq-toggle-asset-information {
-            margin: 15px 15px 0;
+    .ciq-chart-type {
+        padding: 8px 10px 24px;
+
+        &__item {
+            height: 64px;
+            width: 64px;
+
+            .ic-icon {
+                margin-bottom: 2px;
+            }
         }
+    }
+    .ciq-chart-type__item:hover .tooltip {
+        opacity: 0 !important;
+        z-index: -1 !important;
     }
 }

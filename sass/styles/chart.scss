@@ -281,11 +281,11 @@ html, body {
         width: 100%;
         border-radius: 3px 3px 0px 0px;
         font-weight: 500;
+        border: none;
+        box-sizing: border-box;
         @include themify($themes) {
             background: themed('TooltipTextBg');
         }
-        border: none;
-        box-sizing: border-box;
     }
     .mStickyRightClick {
         position: relative;

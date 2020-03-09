@@ -41,6 +41,8 @@
             position: absolute;
             top: -9px;
             left: 4px;
+            font-size: 8px;
+            font-weight: bold;
             @include themify($themes) {
                 color: themed('ChartModeText') !important;
             }
@@ -58,5 +60,22 @@
                 }
             }
         }
+    }
+}
+
+.ciq-toolbar-widget {
+    .ciq-chart-mode__menu {
+        padding: 8px;
+    }
+    .ciq-chart-mode__menu__timeperiod {
+        top: 3px;
+        left: 8px;
+    }
+}
+
+.smartcharts-mobile {
+    .ciq-chart-mode .cq-dialog {
+        width: 300px;
+        left: auto;
     }
 }

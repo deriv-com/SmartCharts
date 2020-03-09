@@ -43,10 +43,14 @@ const ChartTypes = ({
                         <div
                             key={chartType.id}
                             className={className}
-                            onClick={onClick}
                         >
-                            <Icon />
-                            <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>
+                            <div
+                                onClick={onClick}
+                                className="ciq-chart-type__item__content"
+                            >
+                                <Icon />
+                                <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>
+                            </div>
                             <div className="tooltip">{t.translate('Available only for non-tick time intervals.')}</div>
                         </div>
                     );
