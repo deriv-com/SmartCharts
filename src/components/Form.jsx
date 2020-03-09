@@ -169,7 +169,7 @@ export class ColorPicker extends React.Component {
                     ref={(ref) => { this.titleRef = ref; }}
                 >
                     <div
-                        className="input-color"
+                        className="sc-input-color"
                         style={{ backgroundColor }}
                     />
                     <ArrowIcon />
