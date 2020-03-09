@@ -26,7 +26,7 @@ const EmptyView = ({ onClick }) => (
     <div className="ciq-views--empty">
         <EmptyStateIcon />
         <p>{t.translate('You have no save templates yet.')}</p>
-        <button type="button" className="btn" onClick={onClick}>
+        <button type="button" className="sc-btn" onClick={onClick}>
             <AddIcon />
             {t.translate('Add new templates')}
         </button>
@@ -43,10 +43,10 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
             </p>
         </div>
         <div className="ciq-views--overwrite__footer">
-            <button type="button" className="btn" onClick={onCancel}>
+            <button type="button" className="sc-btn" onClick={onCancel}>
                 {t.translate('Cancel')}
             </button>
-            <button type="button" className="btn btn--primary" onClick={onOverwrite}>
+            <button type="button" className="sc-btn sc-btn--primary" onClick={onOverwrite}>
                 {t.translate('Overwrite')}
             </button>
         </div>
@@ -117,7 +117,7 @@ const Views = ({
                                                         </div>
                                                         <input
                                                             type="text"
-                                                            className={`input ${isActive ? 'input--active' : ''}`}
+                                                            className={`sc-input ${isActive ? 'sc-input--active' : ''}`}
                                                             placeholder={isActive ? '' : t.translate('Add new templates')}
                                                             ref={inputRef}
                                                             value={templateName}
@@ -130,7 +130,7 @@ const Views = ({
                                                         <button
                                                             type="button"
                                                             onClick={saveViews}
-                                                            className={`btn btn--primary ${isActive ? '' : 'btn--primary--disabled'}`}
+                                                            className={`sc-btn sc-btn--primary ${isActive ? '' : 'sc-btn--primary--disabled'}`}
                                                         >
                                                             <AddIcon />
                                                         </button>
