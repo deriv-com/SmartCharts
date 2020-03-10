@@ -77,18 +77,24 @@ function extractOutPot(source, translationDir) {
     const parsed_code = parseCode(source);
     const extracted_text = extractTextFromFunctions(...options.method_names)(parsed_code);
     const indicator_text = getIndicatorStrings();
-    let formatted_text = `\n${formatText(extracted_text)}`;
-    formatted_text += `\n\n# Indicator strings:\n\n${formatText(indicator_text)}`;
+    const formatted_json = {};
+
+    // this way, the duplicate items also removed
+    extracted_text.map(x => {
+        formatted_json[x.text.trim()] = '';
+    });
+    
+    const formatted_json_content = JSON.stringify(formatted_json, null, 2);
     try {
-        if (file_removed) { fs.appendFileSync(`${output}/messages.pot`, formatted_text); } else {
-            fs.unlinkSync(`${output}/messages.pot`);
-            fs.writeFileSync(`${output}/messages.pot`, formatted_text);
+        if (file_removed) { fs.appendFileSync(`${output}/messages.json`, formatted_json_content); } else {
+            fs.unlinkSync(`${output}/messages.json`);
+            fs.writeFileSync(`${output}/messages.json`, 'utf8', formatted_json_content);
             file_removed = true;
         }
     } catch (err) {
         file_removed = true;
         mkdirp.sync(path.resolve(output));
-        fs.writeFileSync(`${output}/messages.pot`, formatted_text);
+        fs.writeFileSync(`${output}/messages.json`, formatted_json_content);
     }
 }
 
