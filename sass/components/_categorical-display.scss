@@ -91,6 +91,8 @@
             border-radius: 4px;
             width: 100%;
             box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
             @include themify($themes) {
                 background: themed('CatDisplaySearchBg');
                 border: 1px solid themed('CatDisplaySearchBorder');
