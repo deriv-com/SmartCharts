@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
-"PO-Revision-Date: 2020-03-04 06:27\n"
+"PO-Revision-Date: 2020-03-10 12:26\n"
 
 msgid " already exists."
 msgstr " já existe."
@@ -29,7 +29,7 @@ msgid "Active"
 msgstr "Ativo"
 
 msgid "Add new templates"
-msgstr ""
+msgstr "Adicionar novo modelo"
 
 msgid "Annotation"
 msgstr "Anotação"
@@ -47,7 +47,7 @@ msgid "Available only for \"Area\" chart type."
 msgstr "Disponível apenas para o tipo de gráfico \"Área\"."
 
 msgid "Available only for non-tick time intervals."
-msgstr ""
+msgstr "Disponível apenas para intervalos de tempo sem tique taque."
 
 msgid "Average Line"
 msgstr "Linha Média"
@@ -80,7 +80,7 @@ msgid "Chart types"
 msgstr "Tipos de gráficos"
 
 msgid "Clear all"
-msgstr ""
+msgstr "Limpar Todos"
 
 msgid "Clear All"
 msgstr "Limpar Todos"
@@ -170,7 +170,7 @@ msgid "Historical Data Mode"
 msgstr "Modo de data histórica"
 
 msgid "Hollow"
-msgstr ""
+msgstr "Vazio"
 
 msgid "Horizontal"
 msgstr "Horizontal"
@@ -233,7 +233,7 @@ msgid "Opens in:"
 msgstr "Abre a porta:"
 
 msgid "Overwrite"
-msgstr ""
+msgstr "Substituir"
 
 msgid "Pitchfork"
 msgstr "Forquilha"
@@ -302,7 +302,7 @@ msgid "Save"
 msgstr "Salvar"
 
 msgid "Saved templates"
-msgstr ""
+msgstr "Modelos salvos"
 
 msgid "Search..."
 msgstr "Pesquisar..."
@@ -350,7 +350,7 @@ msgid "Streaming for [symbol] is not available due to license restrictions"
 msgstr "Transmissão ao vivo do [symbol] não está disponível devido a restrições de licença"
 
 msgid "Table"
-msgstr ""
+msgstr "Tabela"
 
 msgid "Template name"
 msgstr "Nome do modelo"
@@ -395,7 +395,7 @@ msgid "Would you like to overwrite it?"
 msgstr "Deseja substituí-lo?"
 
 msgid "You have no save templates yet."
-msgstr ""
+msgstr "Você ainda não salvou nenhum modelo."
 
 msgid "Zoom in"
 msgstr "Aumentar o zoom"
