@@ -51,7 +51,7 @@ const Timeperiod = ({
                         <div className="cq-interval__item__text">
                             <span> 1 {t.translate('tick')}</span>
                         </div>
-                        <div className="tooltip">{t.translate('Available only for "Area" chart type.')}</div>
+                        <div className="sc-tooltip">{t.translate('Available only for "Area" chart type.')}</div>
                     </div>
                     <div
                         onClick={() => onGranularityClick(120)}
