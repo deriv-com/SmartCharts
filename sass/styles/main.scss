@@ -183,7 +183,7 @@
     color: #878787;
 }
 
-.tooltip {
+.sc-tooltip {
     position: absolute;
     top: -44px;
     left: 50%;
@@ -249,7 +249,7 @@
 }
 
 /* -------------------------- buttons -------------------------------------*/
-.btn {
+.sc-btn {
     padding: 10px 16px;
     font-size: 14px;
     font-weight: bold;
@@ -302,7 +302,7 @@
     }
 }
 
-.input {
+.sc-input {
     border-radius: 4px 0 0 4px;
     height: 40px;
     box-sizing: border-box;
