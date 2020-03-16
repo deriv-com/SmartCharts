@@ -5,6 +5,21 @@ import { cloneCategories, cloneCategory } from '../utils';
 import SearchInput from '../components/SearchInput.jsx';
 import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
 
+const scrollTo = (element, offset) => {
+    if (element.container) {
+        element.scrollTop(offset);
+    } else { // native scroll
+        element.scrollTop = offset;
+    }
+};
+const elementTop = element => (element.container
+    ? element.container.getBoundingClientRect().top
+    : element.getBoundingClientRect().top);
+
+const elementOffsetTop = element => (element.container
+    ? element.offsetTop
+    : (element.getBoundingClientRect().top - window.scrollY));
+
 export default class CategoricalDisplayStore {
     constructor({
         getCategoricalItems,
@@ -37,12 +52,12 @@ export default class CategoricalDisplayStore {
                 if (activeItemCount) {
                     this.activeCategoryKey = 'active';
                     this.activeHeadKey = null;
-                    this.scrollPanel.scrollTop(0);
+                    scrollTo(this.scrollPanel, 0);
                 } else if (el) {
-                    this.scrollPanel.scrollTop(el.offsetTop);
+                    scrollTo(this.scrollPanel, el.offsetTop);
 
                     if (el_active_sub_category) {
-                        this.scrollPanel.scrollTop(el.offsetTop + el_active_sub_category.offsetTop - 40);
+                        scrollTo(this.scrollPanel, (el.offsetTop + el_active_sub_category.offsetTop - 40));
                     }
                 }
                 setTimeout(() => { this.pauseScrollSpy = false; }, 20);
@@ -141,7 +156,7 @@ export default class CategoricalDisplayStore {
 
         // hits: 40px for title hight + 4px for content bottom border
         const categoryTitleHeight = 44;
-        const scrollPanelTop = this.scrollPanel.container.getBoundingClientRect().top;
+        const scrollPanelTop = elementTop(this.scrollPanel);
         let activeHeadTop = 0;
         let activeMenuId = null;
 
@@ -159,7 +174,7 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        const scrollTop = this.scrollPanel.getValues().top;
+        const scrollTop = elementTop(this.scrollPanel);
 
         if (this.scrollTop > scrollTop) {
             this.scrollUp();
@@ -167,7 +182,9 @@ export default class CategoricalDisplayStore {
             this.scrollDown();
         }
 
-        this.activeHeadOffset = (this.chart.isMobile ? this.scrollPanel.container.offsetTop  : 0);
+        const offsetTop = elementOffsetTop(this.scrollPanel);
+
+        this.activeHeadOffset = (this.chart.isMobile ? offsetTop : 0);
         this.scrollTop = scrollTop;
         this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;

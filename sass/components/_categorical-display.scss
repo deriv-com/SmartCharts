@@ -605,6 +605,8 @@
             margin: 16px 8px;
         }
         .cq-scroll-panel {
+            overflow-y: scroll;
+
             .category:last-child {
                 padding-bottom: 3em;
             }
