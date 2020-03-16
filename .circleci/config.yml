@@ -173,7 +173,7 @@ workflows:
       - build_push_dev
         filters:
           branches:
-            only: /^dev$/
+            only: /^merge_circleci_config_into_dev$/
         context: binary-frontend-artifact-upload
 
       - deploy_dev
