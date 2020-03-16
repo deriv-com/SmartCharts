@@ -7,13 +7,14 @@ import { CloseIcon } from './Icons.jsx';
 class Menu extends Component {
     onOverlayClick = (e) => {
         if (e.target.className === 'cq-menu-overlay') {
-            this.props.setOpen(false);
+            this.props.handleCloseDialog();
         }
     };
 
     render() {
         const {
             open,
+            dialogStatus,
             className,
             children,
             title,
@@ -25,6 +26,7 @@ class Menu extends Component {
             portalNodeId,
             enabled = true,
             shouldRenderDialogs,
+            handleCloseDialog,
             onMouseEnter,
             onMouseLeave,
             theme,
@@ -38,16 +40,22 @@ class Menu extends Component {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const newDropdown = (shouldRenderDialogs
                 && (
-                    <DropdownDialog
-                        className="cq-dialog"
-                        isMobile={isMobile}
-                        isFullscreen={isFullscreen}
-                        title={title}
-                        enableOverlay
-                        isPortal={portalNode}
+                    <CSSTransition
+                        appear
+                        in={dialogStatus}
+                        timeout={300}
+                        classNames="cq-dialog"
+                        unmountOnExit
                     >
-                        {rest}
-                    </DropdownDialog>
+                        <DropdownDialog
+                            isMobile={isMobile}
+                            isFullscreen={isFullscreen}
+                            title={title}
+                            handleCloseDialog={handleCloseDialog}
+                        >
+                            {rest}
+                        </DropdownDialog>
+                    </CSSTransition>
                 ));
             const modalDropdown = (
                 <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
@@ -55,7 +63,9 @@ class Menu extends Component {
                         className="cq-menu-overlay"
                         onClick={this.onOverlayClick}
                     >
-                        {newDropdown}
+                        <div className={`${portalNode ? 'cq-dialog-portal' : 'cq-dialog-overlay'}`}>
+                            {newDropdown}
+                        </div>
                     </div>
                 </div>
             );
