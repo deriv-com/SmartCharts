@@ -34,8 +34,14 @@
                     &.cq-menu-dropdown-enter-done {
                         z-index: 6;
                     }
-                    .cq-categorical-display, .cq-dialog__body {
+                    .cq-dialog__body {
                         height: 100% !important;
+                        box-shadow: none;
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .cq-categorical-display {
+                        flex: 1;
                         box-shadow: none;
                     }
                     .category-title.sticky-top {
