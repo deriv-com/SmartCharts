@@ -82,7 +82,7 @@
 			for(var i=0;i<n-4;i+=2){
 				cp=cp.concat(getControlPoints(i));
 			}
-			if(cp===null) return;
+
 			if(!colorPatternChanges) colorPatternChanges=[];
 			var colorPatternIndex=0;
 
@@ -99,6 +99,14 @@
 					context.moveTo(points[i],points[i+1]);  //reset back to last point
 					colorPatternIndex++;
 				}
+			}
+
+			if(!cp.length) {
+				// just two points, so connect them
+				context.moveTo(points[0],points[1]);
+				seeIfStrokeNeeded(0);
+				context.lineTo(points[2],points[3]);
+				return;
 			}
 
 			//plot the first segment
