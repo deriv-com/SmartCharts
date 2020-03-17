@@ -138,12 +138,12 @@ jobs:
       - yarn_install
       - test
       - build
-      - early_return_for_pull_requests
-      - compress
+      # - early_return_for_pull_requests
+      # - compress
       # - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
       # - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
-      - docker_build
-      - docker_push
+      # - docker_build
+      # - docker_push
 
   build_push_production:
     docker:
