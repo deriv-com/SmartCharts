@@ -170,7 +170,7 @@ jobs:
 workflows:
   release_dev:
     jobs:
-      - build_push_dev:
+      - build_push_dev
       #   filters:
       #     branches:
       #       only: /^shivanand/merge_circleci_config_into_dev$/
