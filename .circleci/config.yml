@@ -6,15 +6,15 @@ commands:
   git_checkout_from_cache:
     description: "Git checkout and save cache"
     steps:
-      # - restore_cache:
-      #     name: Git restore cache
-      #     keys:
-      #       - source-v1-{{ .Branch }}-{{ .Revision }}
-      #       - source-v2-{{ .Branch }}-{{ .Revision }}
-      #       - source-v1-{{ .Branch }}-
-      #       - source-v2-{{ .Branch }}-
-      #       - source-v1-
-      #       - source-v2-
+      - restore_cache:
+          name: Git restore cache
+          keys:
+            - source-v1-{{ .Branch }}-{{ .Revision }}
+            - source-v2-{{ .Branch }}-{{ .Revision }}
+            - source-v1-{{ .Branch }}-
+            - source-v2-{{ .Branch }}-
+            - source-v1-
+            - source-v2-
       - run: 
           name: Fetch git tags 
           command: |
@@ -29,19 +29,19 @@ commands:
       - run:
           name: Compress git objects 
           command: git gc
-      # - save_cache:
-      #     name: Git save cache
-      #     key: source-v1-{{ .Branch }}-{{ .Revision }}
-      #     paths:
-      #       - ".git"
+      - save_cache:
+          name: Git save cache
+          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ".git"
   yarn_install:
     description: "Install node modules"
     steps:
-      - restore_cache:
-          name: Restoring node_modules
-          keys:
-            - source-v1-modules-{{ checksum "yarn.lock" }}
-            - source-v1-modules
+      # - restore_cache:
+      #     name: Restoring node_modules
+      #     keys:
+      #       - source-v1-modules-{{ checksum "yarn.lock" }}
+      #       - source-v1-modules
       - run:
           name: yarn install
           command: yarn install
