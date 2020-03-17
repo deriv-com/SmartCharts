@@ -44,7 +44,7 @@ commands:
           command: yarn install
       - save_cache:
           name: Save node_module
-          key: source-v1-modules-{{checksum "yarn.lock" }}
+          key: source-v1-modules-{{ checksum "yarn.lock" }}
           paths:
             - "node_modules"
   test:
@@ -125,7 +125,7 @@ commands:
             kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/charts-binary-com-beta charts-binary-com-beta=${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
 
 jobs:
-  release:
+  build_push_dev:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
@@ -135,15 +135,57 @@ jobs:
       - build
       - early_return_for_pull_requests
       - compress
-      # - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
-      # - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
-      # - docker_build
-      # - docker_push
-      # - k8s_deploy
+      - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
+      - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
+      - docker_build
+      - docker_push
+
+  build_push_production:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - git_checkout_from_cache
+      - yarn_install
+      - build
+      - docker_build
+      - docker_push
+
+  deploy_dev:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - k8s_deploy
+
+  deploy_production:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - k8s_deploy
       
 workflows:
-  release:
+  release_dev:
     jobs:
-      - release:
-          context: binary-frontend-artifact-upload  # using context to retrieve shared secret from circle ci
+      - build_push_dev
+        filters:
+          branches:
+            only: /^merge_circleci_config_into_master$/
+        context: binary-frontend-artifact-upload
 
+      - deploy_dev
+        filters:
+            branches:
+              only: /^dev$/
+
+  release_production:
+    jobs:
+      - build_push_production
+          filters:
+            branches:
+              only: /^master$/
+              
+      - deploy_production
+          requires:
+            - build_push_production
+          filters:
+            branches:
+              only: /^master$/
