@@ -10,11 +10,8 @@ commands:
           name: Git restore cache
           keys:
             - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v2-{{ .Branch }}-{{ .Revision }}
             - source-v1-{{ .Branch }}-
-            - source-v2-{{ .Branch }}-
             - source-v1-
-            - source-v2-
       - run: 
           name: Fetch git tags 
           command: |
@@ -37,19 +34,17 @@ commands:
   yarn_install:
     description: "Install node modules"
     steps:
-      # - restore_cache:
-      #     name: Restoring node_modules
-      #     keys:
-      #       - source-v1-modules-{{ checksum "yarn.lock" }}
-      #       - source-v1-modules
+      - restore_cache:
+          name: Restoring node_modules
+          keys:
+            - source-v1-modules-{{ checksum "yarn.lock" }}
+            - source-v1-modules
       - run:
           name: yarn install
           command: yarn install
       - save_cache:
           name: Save node_module
-          keys: 
-            - source-v1-{{checksum "yarn.lock" }}
-            - source-v1-modules-{{checksum "yarn.lock" }}
+          key: source-v1-modules-{{checksum "yarn.lock" }}
           paths:
             - "node_modules"
   test:
@@ -110,7 +105,7 @@ commands:
       - run: 
           name: Building docker image
           command: |
-            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1} .
+            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1} .
   docker_push:
     description: "Push image to docker hub"
     steps:
@@ -118,7 +113,7 @@ commands:
           name: Pushing Image to docker hub
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
   k8s_deploy:
     description: "Deploy to k8s cluster"
     steps:
@@ -127,10 +122,10 @@ commands:
           name: Deploying to k8s cluster for service binary-charts
           command: |
             echo $CA_CRT | base64 --decode > ca.crt
-            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/charts-binary-com charts-binary-com=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/charts-binary-com-beta charts-binary-com-beta=${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
 
 jobs:
-  build_push_dev:
+  release:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
@@ -138,59 +133,17 @@ jobs:
       - yarn_install
       - test
       - build
-      # - early_return_for_pull_requests
-      # - compress
+      - early_return_for_pull_requests
+      - compress
       # - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
       # - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
       # - docker_build
       # - docker_push
-
-  build_push_production:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-    steps:
-      - git_checkout_from_cache
-      - yarn_install
-      - build
-      - docker_build
-      - docker_push
-
-  deploy_dev:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-    steps:
-      - k8s_deploy
-
-  deploy_production:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-    steps:
-      - k8s_deploy
-
+      # - k8s_deploy
+      
 workflows:
-  release_dev:
+  release:
     jobs:
-      - build_push_dev:
-        filters:
-          branches:
-            only: /^shivanand/merge_circleci_config_into_dev$/
-          context: binary-frontend-artifact-upload
+      - release:
+          context: binary-frontend-artifact-upload  # using context to retrieve shared secret from circle ci
 
-      # - deploy_dev:
-      #     filters:
-      #       branches:
-      #         only: /^dev$/
-
-  # release_production:
-  #   jobs:
-  #     - build_push_production:
-  #         filters:
-  #           branches:
-  #             only: /^master$/
-              
-  #     - deploy_production:
-  #         requires:
-  #           - build_push_production
-  #         filters:
-  #           branches:
-  #             only: /^master$/
