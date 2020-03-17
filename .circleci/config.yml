@@ -165,25 +165,25 @@ jobs:
 workflows:
   release_dev:
     jobs:
-      - build_push_dev
+      - build_push_dev:
         filters:
           branches:
             only: /^merge_circleci_config_into_master$/
         context: binary-frontend-artifact-upload
 
-      - deploy_dev
+      - deploy_dev:
         filters:
             branches:
               only: /^dev$/
 
   release_production:
     jobs:
-      - build_push_production
+      - build_push_production:
           filters:
             branches:
               only: /^master$/
               
-      - deploy_production
+      - deploy_production:
           requires:
             - build_push_production
           filters:
