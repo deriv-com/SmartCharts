@@ -171,15 +171,15 @@ workflows:
   release_dev:
     jobs:
       - build_push_dev:
-        filters:
-          branches:
-            only: /^shivanand/merge_circleci_config_into_dev$/
-          context: binary-frontend-artifact-upload
+      #   filters:
+      #     branches:
+      #       only: /^shivanand/merge_circleci_config_into_dev$/
+      #     context: binary-frontend-artifact-upload
 
-      - deploy_dev:
-          filters:
-            branches:
-              only: /^dev$/
+      # - deploy_dev:
+      #     filters:
+      #       branches:
+      #         only: /^dev$/
 
   # release_production:
   #   jobs:
