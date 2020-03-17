@@ -37,13 +37,14 @@ export default class CategoricalDisplayStore {
     }) {
         reaction(() => (this.scrollPanel && getIsShown), () => {
             if (getIsShown()) {
+                const rootEl = this.scrollPanel.container || this.scrollPanel;
                 const activeItemCount = getActiveCategory ? getActiveCategory().data.length : 0;
                 this.focusedCategoryKey = null;
                 this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
                 this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
                 const el = this.categoryElements[this.activeCategoryKey];
-                const activeSubCategoryClassName = this.id ? `.${this.id}-subcategory-item-${this.activeSubCategory}` : `.subcategory-item-${this.activeSubCategory}`;
-                const el_active_sub_category = this.mainStore.chart.rootNode.querySelector(activeSubCategoryClassName);
+                const activeSubCategoryClassName = this.id ? `.category-${this.activeCategoryKey} .${this.id}-subcategory-item-${this.activeSubCategory}` : `.category-${this.activeCategoryKey}  .subcategory-item-${this.activeSubCategory}`;
+                const el_active_sub_category = rootEl.querySelector(activeSubCategoryClassName);
                 this.activeHeadKey = this.activeCategoryKey || null;
                 this.activeHeadTop = 0;
                 this.pauseScrollSpy = true;
