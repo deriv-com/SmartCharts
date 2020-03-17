@@ -171,9 +171,9 @@ workflows:
   release_dev:
     jobs:
       - build_push_dev:
-        # filters:
-        #   branches:
-        #     only: /^shivanand/merge_circleci_config_into_dev$/
+        filters:
+          branches:
+            only: /^shivanand/merge_circleci_config_into_dev$/
           context: binary-frontend-artifact-upload
 
       - deploy_dev:
