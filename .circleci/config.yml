@@ -166,13 +166,13 @@ workflows:
   release_dev:
     jobs:
       - build_push_dev:
-        filters:
-          branches:
-            only: /^merge_circleci_config_into_master$/
-        context: binary-frontend-artifact-upload
+          filters:
+            branches:
+              only: /^merge_circleci_config_into_master$/
+          context: binary-frontend-artifact-upload
 
       - deploy_dev:
-        filters:
+          filters:
             branches:
               only: /^dev$/
 
