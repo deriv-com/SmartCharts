@@ -177,7 +177,7 @@ workflows:
           context: binary-frontend-artifact-upload
 
       - deploy_dev:
-        filters:
+          filters:
             branches:
               only: /^dev$/
 
