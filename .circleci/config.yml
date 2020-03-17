@@ -168,7 +168,7 @@ workflows:
       - build_push_dev:
           filters:
             branches:
-              only: /^merge_circleci_config_into_master$/
+              only: /^shivanand/merge_circleci_config_into_master$/
           context: binary-frontend-artifact-upload
 
       - deploy_dev:
