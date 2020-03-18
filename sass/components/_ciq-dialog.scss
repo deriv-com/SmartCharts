@@ -5,20 +5,22 @@
     border-radius: 4px;
     position: absolute;
     opacity: 0;
-    margin-top: 120px;
     box-shadow: 0 0 0.63em 0.03em rgba(0, 0, 0, 0.14);
-    visibility: hidden;
     z-index: -3;
+    pointer-events: none;
+    transform: translateY(3em);
     @include dialog-transition();
     @include themify($themes) {
         background: themed('DialogBodyBg');
     }
 
-    &.open {
-        visibility: visible;
-        margin-top: 0px;
+    &.cq-dialog-enter-done, &.cq-dialog-enter-active {
         opacity: 1;
+        transform: translateY(0em);
         z-index: 3;
+    }
+    &.cq-dialog-enter-done {
+        pointer-events: initial;
     }
     &__head {
         display: flex;
