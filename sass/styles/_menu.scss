@@ -148,10 +148,6 @@ $transition-duration: 300ms;
             &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
                 transform: translateY(0em);
             }
-            .icon-close-menu {
-                pointer-events: initial;
-                opacity: 1;
-            }
             .title {
                 .title-text {
                     font-size: 14px;
@@ -163,6 +159,14 @@ $transition-duration: 300ms;
                         }
                     }
                 }
+            }
+        }
+    }
+    .cq-menu-dropdown {
+        &.open {
+            .icon-close-menu {
+                pointer-events: initial;
+                opacity: 1;
             }
         }
     }
