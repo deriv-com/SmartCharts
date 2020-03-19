@@ -30,9 +30,13 @@ class Menu extends Component {
             onMouseEnter,
             onMouseLeave,
             theme,
+            ready,
+            emptyMenu,
             newStyle, // this props will remove after we apply new design
             // to all of components
         } = this.props;
+
+        if (!ready) return '';
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
@@ -77,6 +81,10 @@ class Menu extends Component {
                 </div>,
                 portalNode,
             );
+
+            if (emptyMenu) {
+                return (open ? newDialog : '');
+            }
 
             return (
                 enabled && (
