@@ -147,7 +147,7 @@
                         pointer-events: none;
                     }
                 }
-                #{ $self }__item__text:hover + .tooltip {
+                #{ $self }__item__text:hover + .sc-tooltip {
                     opacity: 1;
                     z-index: 2;
                 }
@@ -207,7 +207,7 @@
         width: 31.9% !important;
         margin: 0 4px 8px 0px;
     }
-    .cq-interval__content .cq-interval__item:hover .tooltip {
+    .cq-interval__content .cq-interval__item:hover .sc-tooltip {
         opacity: 0 !important;
         z-index: -1 !important;
     }

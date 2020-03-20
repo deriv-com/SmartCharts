@@ -41,18 +41,18 @@
                     background: themed('ToolbarWidgetHoverBg');
                 }
 
-                & + .tooltip {
+                & + .sc-tooltip {
                     opacity: 1;
                 }
             }
         }
-        .tooltip {
+        .sc-tooltip {
             left: calc(100% + 17px);
         }
     }
 }
 
-.smartcharts-mobile .ciq-toolbar-widget .tooltip {
+.smartcharts-mobile .ciq-toolbar-widget .sc-tooltip {
     opacity: 0 !important;
     pointer-events: none !important;
 }
