@@ -44,7 +44,7 @@ commands:
           command: yarn install
       - save_cache:
           name: Save node_module
-          key: source-v1-modules-{{checksum "yarn.lock" }}
+          key: source-v1-modules-{{ checksum "yarn.lock" }}
           paths:
             - "node_modules"
   test:
@@ -98,34 +98,56 @@ commands:
           aws-access-key-id: env_CONTEXT_ARTIFACT_S3_AWS_ACCESS_KEY_ID
           aws-secret-access-key: env_CONTEXT_ARTIFACT_S3_AWS_SECRET_ACCESS_KEY
           aws-region: env_CONTEXT_ARTIFACT_S3_AWS_REGION
-  docker_build:
+  docker_build_dev:
     description: "Build Docker image"
     steps:
       - setup_remote_docker
       - run: 
           name: Building docker image
           command: |
-            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1} .
-  docker_push:
+            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1} -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-latest .
+  docker_build_production:
+    description: "Build Docker image"
+    steps:
+      - setup_remote_docker
+      - run: 
+          name: Building docker image
+          command: |
+            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1} -t ${DOCKHUB_ORGANISATION}/binary-static-charts:latest .
+  docker_push_dev:
     description: "Push image to docker hub"
     steps:
       - run: 
           name: Pushing Image to docker hub
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-latest
+  docker_push_production:
+    description: "Push image to docker hub"
+    steps:
+      - run: 
+          name: Pushing Image to docker hub
+          command: |
+            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:latest
   k8s_deploy:
     description: "Deploy to k8s cluster"
+    parameters:
+      k8s_svc_name:
+        type: string
+        default: "charts-binary-com-beta"
     steps:
       - k8s/install-kubectl
       - run: 
           name: Deploying to k8s cluster for service binary-charts
           command: |
             echo $CA_CRT | base64 --decode > ca.crt
-            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/charts-binary-com-beta charts-binary-com-beta=${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1}
+            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/<< parameters.k8s_svc_name >> << parameters.k8s_svc_name >>=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
 
 jobs:
-  release:
+  build_push_dev:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
@@ -137,13 +159,59 @@ jobs:
       - compress
       - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
       - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
-      - docker_build
-      - docker_push
+      - docker_build_dev
+      - docker_push_dev
+
+  build_push_production:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - git_checkout_from_cache
+      - yarn_install
+      - build
+      - docker_build_production
+      - docker_push_production
+
+  deploy_dev:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
       - k8s_deploy
+
+  deploy_production:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - k8s_deploy:
+          k8s_svc_name: "charts-binary-com"
       
 workflows:
-  release:
+  release_dev:
     jobs:
-      - release:
-          context: binary-frontend-artifact-upload  # using context to retrieve shared secret from circle ci
+      - build_push_dev:
+          filters:
+            branches:
+              only: /^dev$/
+          context: binary-frontend-artifact-upload
 
+      - deploy_dev:
+          requires:
+            - build_push_dev
+          filters:
+            branches:
+              only: /^dev$/
+
+  release_production:
+    jobs:
+      - build_push_production:
+          filters:
+            branches:
+              only: /^master$/
+          context: binary-frontend-artifact-upload
+              
+      - deploy_production:
+          requires:
+            - build_push_production
+          filters:
+            branches:
+              only: /^master$/
