@@ -15,7 +15,7 @@
     left: 0px;
 }
 
-.cq-settings-dialog {
+.cq-chart-settings {
     display: flex;
     flex-direction: column;
     height: auto !important;
@@ -113,17 +113,7 @@
             border-radius: 4px;
             padding: 0px 16.5px;
             font-weight: bold;
-            @include themify($themes) {
-                color: themed('DialogFootText');
-            }
 
-            &.done {
-                @include themify($themes) {
-                    background: themed('DialogFootDoneBg');
-                    color: themed('DialogFootDoneText');
-                    border: 1px solid themed('DialogFootDoneBg');
-                }
-            }
             &.reset {
                 padding: 0px 10.5px;
                 @include themify($themes) {
