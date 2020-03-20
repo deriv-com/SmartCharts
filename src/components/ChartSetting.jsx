@@ -1,25 +1,24 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from '../store/Connect';
 import { Switch } from './Form.jsx';
 import {
     PositionLeftIcon,
     PositionBottomIcon,
     SettingIcon,
-    BackIcon,
-    CloseIcon,
+    ThemeLightIcon,
+    ThemeDarkIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-chart-setting.scss';
+import '../../sass/components/_sc-chart-setting.scss';
 
 const AssetInformationToggle = ({
     value,
     onChange,
 }) => (
-    <div className="ciq-list-item">
-        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
-        <div className="ciq-action">
+    <div className="sc-chart-setting__list__item">
+        <span className="text">{t.translate('Asset Information')}</span>
+        <div className="action">
             <Switch
                 value={value}
                 onChange={onChange}
@@ -32,9 +31,9 @@ const ThemeToggle = ({
     position,
     setPosition,
 }) => (
-    <div className="ciq-list-item ciq-list-item-position">
-        <span className="ciq-icon-text">{t.translate('Position')}</span>
-        <div className="ciq-action">
+    <div className="sc-chart-setting__list__item">
+        <span className="text">{t.translate('Position')}</span>
+        <div className="action action--position">
             <PositionBottomIcon
                 onClick={() => setPosition('bottom')}
                 className={`${position === 'bottom' ? 'active' : ''}`}
@@ -50,7 +49,6 @@ const ThemeToggle = ({
 const ChartSetting = ({
     assetInformation,
     ChartSettingMenu,
-    closeMenu,
     countdown,
     historical,
     isAutoScale,
@@ -66,137 +64,113 @@ const ChartSetting = ({
     setLanguage,
     setPosition,
     setTheme,
-    setView,
     showCountdown,
-    view,
     theme,
     toggleHighestLowestMarker,
-}) => {
-    const renderMain = () => (
-        <div>
-            <div className="title">
-                <div className="title-text"> {t.translate('Settings')} </div>
-                <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-            </div>
-            <div className="body">
-                <div className="ciq-list ciq-list-setting">
-                    {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={isAutoScale}
-                                onChange={setAutoScale}
-                            />
+}) => (
+    <ChartSettingMenu
+        className="sc-chart-setting"
+        title={t.translate('Settings')}
+        enableTabular
+        newStyle
+    >
+        <ChartSettingMenu.Title>
+            <SettingIcon
+                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                tooltip-title={t.translate('Settings')}
+            />
+        </ChartSettingMenu.Title>
+        <ChartSettingMenu.Body>
+            <Tabs className="tabs--vertical">
+                <TabList>
+                    <Tab key="theme">{t.translate('Theme')}</Tab>
+                    <Tab key="platform">{t.translate('Chart')}</Tab>
+                    <Tab key="language">{t.translate('Language')}</Tab>
+                </TabList>
+                <TabPanel>
+                    <div className="sc-chart-setting__panel">
+                        <div className="sc-chart-setting__theme">
+                            <div
+                                className={`sc-chart-setting__theme__item ${theme === 'light' ? 'sc-chart-setting__theme__item--active' : ''}`}
+                                onClick={() => setTheme('light')}
+                            >
+                                <ThemeLightIcon />
+                                <span className="text">{t.translate('Light')}</span>
+                            </div>
+                            <div
+                                className={`sc-chart-setting__theme__item ${theme === 'dark' ? 'sc-chart-setting__theme__item--active' : ''}`}
+                                onClick={() => setTheme('dark')}
+                            >
+                                <ThemeDarkIcon />
+                                <span className="text">{t.translate('Dark')}</span>
+                            </div>
                         </div>
                     </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={(theme === 'dark')}
-                                onChange={checked => setTheme(checked ? 'dark' : 'light')}
-                            />
+                </TabPanel>
+                <TabPanel>
+                    <div className="sc-chart-setting__panel">
+                        <div className="sc-chart-setting__list">
+                            {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
+                            <div className="sc-chart-setting__list__item">
+                                <span className="text">{t.translate('Auto Scale')}</span>
+                                <div className="action">
+                                    <Switch
+                                        value={isAutoScale}
+                                        onChange={setAutoScale}
+                                    />
+                                </div>
+                            </div>
+                            <div className="sc-chart-setting__list__item">
+                                <span className="text">{t.translate('Countdown')}</span>
+                                <div className="action">
+                                    <Switch
+                                        value={countdown}
+                                        onChange={showCountdown}
+                                    />
+                                </div>
+                            </div>
+                            {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
+                            <div className="sc-chart-setting__list__item">
+                                <span className="text">{t.translate('Historical Data Mode')}</span>
+                                <div className="action">
+                                    <Switch
+                                        value={historical}
+                                        onChange={setHistorical}
+                                    />
+                                </div>
+                            </div>
+                            <div className={`sc-chart-setting__list__item ${historical && 'disabled'}`}>
+                                <span className="text">{t.translate('Show Highest/Lowest Spot')}</span>
+                                <div className="action">
+                                    <Switch
+                                        value={isHighestLowestMarkerEnabled}
+                                        onChange={toggleHighestLowestMarker}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Countdown')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={countdown}
-                                onChange={showCountdown}
-                            />
+                </TabPanel>
+                <TabPanel>
+                    <div className="sc-chart-setting__panel">
+                        <div className="sc-chart-setting__languages">
+                            {languages.map(language => (
+                                <div
+                                    className={`sc-chart-setting__languages__item ${(selectedLanguage.key === language.key) ? 'sc-chart-setting__languages__item--active' : ''}`}
+                                    key={language.key}
+                                    onClick={() => setLanguage(language.key)}
+                                >
+                                    {language.icon}
+                                    <span className="text">{language.name}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
-                    {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Historical Data Mode')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={historical}
-                                onChange={setHistorical}
-                            />
-                        </div>
-                    </div>
-                    <div
-                        className="ciq-list-item ciq-list-item-lng"
-                        onClick={() => setView('language')}
-                    >
-                        <span className="ciq-icon-text">{t.translate('Language')}</span>
-                        <div className="ciq-action">
-                            {selectedLanguage.icon}
-                        </div>
-                    </div>
-                    <div className={`ciq-list-item ${historical && 'disabled'}`}>
-                        <span className="ciq-icon-text">{t.translate('Show Highest/Lowest Spot')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={isHighestLowestMarkerEnabled}
-                                onChange={toggleHighestLowestMarker}
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-    const renderLanguage = () => (
-        <div>
-            <div className="title">
-                <BackIcon
-                    className="icon-back-menu"
-                    onClick={() => setView()}
-                />
-                <div className="title-text">{t.translate('Language')}</div>
-            </div>
-            <div className="body">
-                <div className="ciq-list ciq-list-language">
-                    {languages.map(language => (
-                        <div
-                            className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
-                            key={language.key}
-                            onClick={() => setLanguage(language.key)}
-                        >
-                            {language.icon}
-                            <span className="ciq-icon-text">{language.name}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-    return (
-        <ChartSettingMenu className="cq-chart-setting">
-            <ChartSettingMenu.Title>
-                <SettingIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Settings')}
-                />
-            </ChartSettingMenu.Title>
-            <ChartSettingMenu.Body>
-                <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
-                    <CSSTransition
-                        in={view === ''}
-                        timeout={250}
-                        classNames="cq-setting-main animate"
-                        unmountOnExit
-                    >
-                        {renderMain()}
-                    </CSSTransition>
-
-                    <CSSTransition
-                        in={view === 'language'}
-                        timeout={250}
-                        classNames="cq-setting-language animate"
-                        unmountOnExit
-                    >
-                        {renderLanguage()}
-                    </CSSTransition>
-                </div>
-            </ChartSettingMenu.Body>
-        </ChartSettingMenu>
-    );
-};
+                </TabPanel>
+            </Tabs>
+        </ChartSettingMenu.Body>
+    </ChartSettingMenu>
+);
 
 export default connect(({ chartSetting: s, chart: c }) => ({
     assetInformation            : s.assetInformation,

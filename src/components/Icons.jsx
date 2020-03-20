@@ -58,6 +58,9 @@ import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 
+import ThemeLight from '../../sass/icons/common/ic-theme-light.svg';
+import ThemeDark from '../../sass/icons/common/ic-theme-dark.svg';
+
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
 import Success from '../../sass/icons/alert message/success.svg';
@@ -190,6 +193,8 @@ export const Wrapper = SvgLogo => (props) => {
 };
 
 export const DrawingCursorIcon = Wrapper(DrawCursor);
+export const ThemeLightIcon = Wrapper(ThemeLight);
+export const ThemeDarkIcon = Wrapper(ThemeDark);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);
