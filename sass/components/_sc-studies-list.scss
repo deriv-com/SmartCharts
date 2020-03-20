@@ -1,0 +1,15 @@
+
+.sc-studies-list {
+    position: absolute;
+    top: 102px;
+    left: 84px;
+    display: flex;
+    flex-direction: column;
+
+    .stx-panel-control {
+        position: relative;
+        left: 0px;
+        top: 0px;
+        margin-bottom: 10px;
+    }
+}

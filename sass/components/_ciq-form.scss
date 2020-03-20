@@ -79,6 +79,9 @@
                 opacity: 1 !important;
             }
         }
+        .form__input-group:last-child {
+            margin-bottom: 50px;
+        }
     }
     &__input-group {
         padding: 16px 24px;
@@ -99,9 +102,6 @@
         }
         &:first-child {
             border-top: none;
-        }
-        &:last-child {
-            margin-bottom: 50px;
         }
     }
     &__input-group--show-zones {
