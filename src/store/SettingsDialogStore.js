@@ -1,7 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { connect } from './Connect';
-import Dialog from '../components/Dialog.jsx';
 import MenuStore from './MenuStore';
+import Menu from '../components/Menu.jsx';
 
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
@@ -19,7 +19,7 @@ export default class SettingsDialogStore {
         this.getContext = getContext;
         this.onChanged = onChanged;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
-        this.Dialog = this.menu.dialog.connect(Dialog);
+        this.SettingDialogMenu = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -28,7 +28,7 @@ export default class SettingsDialogStore {
 
     @computed get open() { return this.menu.open; }
     @action.bound setOpen(value) {
-        if (value) {
+        if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop(0);
         }
         return this.menu.setOpen(value);
@@ -100,13 +100,13 @@ export default class SettingsDialogStore {
         title: this.title,
         description: this.description,
         showTabs: this.showTabs,
-        setOpen: this.setOpen,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
         onItemActive: this.onItemActive,
-        Dialog: this.Dialog,
+        SettingDialogMenu: this.SettingDialogMenu,
         open: this.open,
         theme: this.theme,
         setScrollPanel: this.setScrollPanel,
+        close: this.menu.handleCloseDialog,
     }));
 }

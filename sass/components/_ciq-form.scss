@@ -100,6 +100,9 @@
         &:first-child {
             border-top: none;
         }
+        &:last-child {
+            margin-bottom: 50px;
+        }
     }
     &__input-group--show-zones {
         #{ $self }__label {
@@ -406,7 +409,7 @@
             border: 1px solid themed('DropdownBorder');
         }
 
-        .input-color {
+        .sc-input-color {
             height: 100%;
             width: 100%;
             border-radius: 4px;

@@ -60,6 +60,7 @@ export default class MenuStore {
     }
 
     connect = connect(({ chart: c, chartSetting }) => ({
+        ready: c.context,
         setOpen: this.setOpen,
         open: this.open,
         dialogStatus: this.dialogStatus,
