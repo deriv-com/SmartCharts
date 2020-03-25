@@ -457,8 +457,8 @@ class ChartState {
                 this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
             }
-            this.stxx.draw();
             this.stxx.allowScroll = false;
+            this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         } else {
             this.stxx.chart.entryTick = null;
