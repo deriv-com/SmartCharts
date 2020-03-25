@@ -194,17 +194,17 @@ const StudyLegend = ({
         setOpen={setOpen}
         isMobile={isMobile}
         title={t.translate('Indicators')}
+        tooltip={t.translate('Indicators')}
         subTitle={infoItem ? infoItem.name : null}
         onBack={() => onInfoItem(null)}
         newStyle
         enableTabular
     >
         <StudyMenu.Title>
-            <IndicatorIcon
-                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Indicators')}
-            />
-            <NotificationBadge notificationCount={activeStudiesNo} />
+            <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
+                <IndicatorIcon />
+                <NotificationBadge notificationCount={activeStudiesNo} />
+            </div>
         </StudyMenu.Title>
         <StudyMenu.Body>
             <SearchInput />

@@ -68,7 +68,6 @@ const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffse
 
 const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
     <div
-        style={{ height: '392px' }}
         className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''} ${category.active ? 'active' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
@@ -114,7 +113,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
 );
 
 export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
-    <div className="results-panel" style={{ height: '392px' }}>
+    <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
                 key={category.categoryId}

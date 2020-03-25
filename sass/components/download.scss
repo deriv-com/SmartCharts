@@ -1,5 +1,5 @@
 
-.cq-download-menu {
+.sc-download-menu {
     .cq-dialog-overlay {
         position: fixed;
         transform: inherit;
@@ -14,7 +14,7 @@
     }
 }
 
-.cq-download {
+.sc-download {
     padding: 24px;
     display: flex;
     @include themify($themes) {
@@ -52,10 +52,26 @@
             display: block;
         }
         &--loading {
-            > .cq-download__item__label,
+            > .sc-download__item__label,
             > .ic-icon {
                 opacity: 0.32;
             }
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .sc-download {
+        justify-content: space-around;
+
+        &__item {
+            margin: 0px;
+        }
+    }
+    .sc-download-menu {
+        .cq-dialog {
+            left: auto;
+            width: 300px;
         }
     }
 }

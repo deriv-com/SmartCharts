@@ -35,11 +35,9 @@ import CrosshairTooltip from '../../sass/icons/chart settings/crosshair/ic-cross
 import Delete from '../../sass/icons/delete/ic-delete.svg';
 import Clear from '../../sass/icons/clear/ic-clear.svg';
 import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-normal.svg';
-import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
-import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Time from '../../sass/icons/time/ic-time.svg';
 import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
@@ -52,11 +50,14 @@ import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
-import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
+
+import Download from '../../sass/icons/common/ic-download.svg';
+import Indicator from '../../sass/icons/common/ic-indicators.svg';
+import Template from '../../sass/icons/common/ic-templates.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
