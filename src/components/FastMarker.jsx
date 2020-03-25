@@ -140,7 +140,7 @@ class FastMarker extends Component {
         const { className, children } = this.props;
         return (
             <div
-                className={`aaa ${className}`}
+                className={className}
                 ref={this.setRef}
                 style={{ position: 'absolute' }}
             >
