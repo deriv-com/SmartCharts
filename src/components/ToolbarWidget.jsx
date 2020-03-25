@@ -1,11 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { connect } from '../store/Connect';
-import '../../sass/components/_toolbar-widget.scss';
-
+import '../../sass/components/toolbar-widget.scss';
 
 const ToolbarWidget = ({
-    position,
+    position = 'top',
     children,
     context,
     onMouseEnter,
@@ -15,7 +14,7 @@ const ToolbarWidget = ({
 
     return (
         <div
-            className={`ciq-toolbar-widget ciq-toolbar-widget--${(position || 'top')}`}
+            className={`sc-toolbar-widget sc-toolbar-widget--${position}`}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
@@ -23,7 +22,6 @@ const ToolbarWidget = ({
         </div>
     );
 };
-
 
 export default connect(({ chart, toolbarWidget }) => ({
     context: chart.context,
