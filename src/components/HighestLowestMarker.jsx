@@ -11,7 +11,9 @@ const HighestLowestMarker = ({
     <>
         <FastMarker
             markerRef={setHighestRef}
-            className="ciq-highest-price"
+            className="ciq-highlow ciq-highest-price"
+            offsetTop={-80}
+            offsetLeft={-80}
         >
             <span className="spot__shape-circule spot__fill-blue" />
             <span className="spot__label" data-label-pos="top">
@@ -22,7 +24,9 @@ const HighestLowestMarker = ({
 
         <FastMarker
             markerRef={setLowestRef}
-            className="ciq-lowest-price"
+            className="ciq-highlow ciq-lowest-price"
+            offsetTop={-80}
+            offsetLeft={-80}
         >
             <span className="spot__shape-circule spot__fill-red" />
             <span className="spot__label" data-label-pos="bottom">

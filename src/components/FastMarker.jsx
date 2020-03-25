@@ -46,6 +46,9 @@ class FastMarker extends Component {
             return;
         }
 
+        const offsetTop = this.props.offsetTop || 0;
+        const offsetLeft = this.props.offsetLeft || 0;
+
         const elem = this.elem;
         const stx = this.stx;
         const chart = stx.chart;
@@ -99,7 +102,7 @@ class FastMarker extends Component {
         }
 
         // patch DOM without triggering recalculate layout.
-        elem.style.transform = `translate(${left}px, ${top}px)`;
+        elem.style.transform = `translate(${(left + offsetLeft)}px, ${(top + offsetTop)}px)`;
         elem.style.visibility = show ? 'visible' : 'hidden';
     }
 
@@ -137,7 +140,7 @@ class FastMarker extends Component {
         const { className, children } = this.props;
         return (
             <div
-                className={className}
+                className={`aaa ${className}`}
                 ref={this.setRef}
                 style={{ position: 'absolute' }}
             >

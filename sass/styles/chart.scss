@@ -37,6 +37,20 @@ html, body {
     @include themify($themes) {
         background: themed('ChartBg');
     }
+
+    &.ciq-screenshot {
+        .cq-menu-dropdown,
+        .ciq-toolbar-widget,
+        .ciq-navigation-widget,
+        .stx_jump_today.home {
+            /*
+            There is a strange bug where dropdowns get displayed (partially)
+            when html is being rendered to canvas. So we set this to manually
+            hide it when PNG is exported.
+            */
+            display: none !important;
+        }
+    }
 }
 
 /* The Chart */
@@ -912,15 +926,6 @@ html, body {
 
 .stx-chart-panel.stx-show { /* Hide default Chart Title and Icons */
     display: none;
-}
-
-.ciq-chart.ciq-screenshot .cq-menu-dropdown {
-    /*
-    There is a strange bug where dropdowns get displayed (partially)
-    when html is being rendered to canvas. So we set this to manually
-    hide it when PNG is exported.
-    */
-    display: none !important;
 }
 
 .ps--active-x > .ps__rail-x,
