@@ -102,7 +102,7 @@ class FastMarker extends Component {
         }
 
         // patch DOM without triggering recalculate layout.
-        elem.style.transform = `translate(${(left + offsetLeft)}px, ${(top + offsetTop)}px)`;
+        elem.style.transform = `translate(${left + offsetLeft}px, ${top + offsetTop}px)`;
         elem.style.visibility = show ? 'visible' : 'hidden';
     }
 
