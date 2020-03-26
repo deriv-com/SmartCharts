@@ -53,8 +53,6 @@
             .notification-badge {
                 width: 16px;
                 height: 16px;
-                background: #ec3f3f;
-                color: #fff;
                 border-radius: 8px;
                 position: absolute;
                 top: 3px;
@@ -65,6 +63,10 @@
                 line-height: 1.5;
                 letter-spacing: normal;
                 text-align: center;
+                @include themify($themes) {
+                    background: themed('ToolbarWidgetBadgeBg');
+                    color: themed('ToolbarWidgetBadgeText');
+                }
             }
             &:hover {
                 @include themify($themes) {
