@@ -72,8 +72,8 @@ const IndicatorsTree = [
             { id: 'Aroon', name: t.translate('Aroon'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAroonIcon },
             { id: 'ADX', name: t.translate('ADX/DMS'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAdxIcon },
             { id: 'CCI', name: t.translate('Commodity Channel Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorCommodityChannelIndexIcon },
-            { id: 'Ichimoku', name: t.translate('Ichimoku Clouds'), description: t.translate('There isn\'t any description here.'), icon: IndicatorIchimokuIcon },
-            { id: 'Parabolic', name: t.translate('Parabolic SAR'), description: t.translate('There isn\'t any description here.'), icon:  IndicatorParabolicIcon },
+            { id: 'Ichimoku Clouds', name: t.translate('Ichimoku Clouds'), description: t.translate('There isn\'t any description here.'), icon: IndicatorIchimokuIcon },
+            { id: 'PSAR', name: t.translate('Parabolic SAR'), description: t.translate('There isn\'t any description here.'), icon:  IndicatorParabolicIcon },
             { id: 'ZigZag', name: t.translate('Zig Zag'), description: t.translate('There isn\'t any description here.'), icon: IndicatorZigZagIcon },
         ],
     },
@@ -536,10 +536,6 @@ export default class StudyLegendStore {
         });
 
         this.activeItems = activeItems;
-
-        // this.activeStudies.data = studies;
-        // this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
-        // this.setReachedLimit();
     }
 
     @action.bound deleteAllStudies() {

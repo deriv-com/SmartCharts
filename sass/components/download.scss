@@ -1,16 +1,7 @@
 
 .sc-download-menu {
-    .cq-dialog-overlay {
-        position: fixed;
-        transform: inherit;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-
-        .cq-dialog {
-            width: 320px;
-        }
+    .cq-dialog {
+        width: 320px;
     }
 }
 

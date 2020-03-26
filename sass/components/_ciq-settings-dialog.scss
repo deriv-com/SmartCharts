@@ -1,6 +1,5 @@
 
-.cq-dialog-overlay,
-.cq-dialog-portal {
+.cq-dialog-overlay {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,11 +7,6 @@
     width: 100%;
     position: absolute;
     bottom: 2em;
-}
-
-.cq-dialog-portal {
-    top: 0px;
-    left: 0px;
 }
 
 .cq-chart-settings {

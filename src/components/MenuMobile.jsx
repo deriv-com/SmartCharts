@@ -28,7 +28,7 @@ const MenuMobile = ({
                 <div className="smartcharts-mobile">
                     <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                         <div
-                            className="cq-menu-overlay"
+                            className="cq-modal__overlay"
                             onClick={onClick}
                         >
                             {menu_element}

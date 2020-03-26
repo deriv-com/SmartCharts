@@ -152,7 +152,8 @@
     }
 }
 
-.ciq-modal .cq-menu-overlay {
+.cq-modal__overlay {
+    display: flex;
     width: 100%;
     height: 100%;
     align-items: center;
@@ -162,10 +163,15 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 9999;
     overflow: hidden;
-    @include themify($themes) {
-        background: themed('DialogOverlay');
+}
+
+.ciq-modal {
+    .cq-modal__overlay {
+        z-index: 9999;
+        @include themify($themes) {
+            background: themed('DialogOverlay');
+        }
     }
 }
 
