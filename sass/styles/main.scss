@@ -263,7 +263,7 @@
 
 /* -------------------------- buttons -------------------------------------*/
 .sc-btn {
-    padding: 10px 16px;
+    padding: 5px 16px;
     font-size: 14px;
     font-weight: bold;
     font-style: normal;
@@ -272,7 +272,6 @@
     text-align: center;
     border-radius: 4px;
     outline: none !important;
-    cursor: pointer;
     border: 1px solid;
     @include themify($themes) {
         border-color: themed('BtnDefaultBg');
@@ -280,14 +279,17 @@
         color: themed('BtnDefaultText');
     }
 
+    &[type='button'] {
+        cursor: pointer;
+    }
     &:hover {
         @include themify($themes) {
             background: themed('BtnDefaultHoverBg');
         }
     }
     &--sm {
-        font-size: 12px;
         padding: 3px 12px;
+        font-size: 12px;
     }
     &--w100 {
         width: 100%;
@@ -321,6 +323,7 @@
         }
     }
     &--outline-secondary {
+        padding: 3px 12px;
         background: transparent;
         @include themify($themes) {
             border-color: themed('BtnSecondaryBorder');

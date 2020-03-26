@@ -1,5 +1,106 @@
-
 .ciq-draw-tools {
+    .cq-dialog-overlay {
+        position: fixed;
+        transform: inherit;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+
+        .cq-dialog {
+            width: 560px;
+            height: 392px;
+        }
+    }
+    &--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+
+        > .ic-icon {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 24px;
+        }
+        p {
+            font-size: 12px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: center;
+            margin: 0 0 46px;
+            @include themify($themes) {
+                color: themed('DrawToolsEmptyText');
+            }
+        }
+    }
+    &__panel {
+        width: 360px;
+        height: 392px;
+        padding: 16px 8px;
+        box-sizing: border-box;
+
+        &__head {
+            text-align: right;
+            padding: 0 8px 16px;
+        }
+    }
+    &__list {
+        &__item {
+            height: 40px;
+            padding: 10px 16px;
+            display: flex;
+            border-radius: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            justify-content: space-between;
+            @include themify($themes) {
+                color: themed('DrawToolsItemText');
+            }
+
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DrawToolsHoverBg');
+                }
+            }
+            &__text {
+                display: flex;
+                justify-content: space-between;
+
+                span {
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-style: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    margin-right: 16px;
+                }
+            }
+            &__actions {
+                display: flex;
+                justify-content: space-between;
+
+                small {
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-style: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    text-align: right;
+                }
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('DrawToolsItemIcon');
+                        }
+                    }
+                }
+            }
+        }
+    }
     .cq-menu-dropdown {
         width: 200px;
         box-sizing: border-box;
