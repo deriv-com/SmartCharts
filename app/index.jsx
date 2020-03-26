@@ -239,11 +239,8 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
-            <Views />
-            <Share />
             <ChartSetting />
         </>
     );
@@ -254,6 +251,9 @@ class App extends Component {
                 onChartType={this.changeChartType}
                 onGranularity={this.changeGranularity}
             />
+            <StudyLegend />
+            <Views />
+            <Share />
         </ToolbarWidget>
     );
 

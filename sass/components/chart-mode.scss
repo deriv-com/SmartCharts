@@ -1,5 +1,5 @@
 
-.ciq-chart-mode {
+.sc-chart-mode {
     .cq-dialog-overlay,
     .cq-dialog-portal {
         position: fixed;
@@ -63,18 +63,18 @@
     }
 }
 
-.ciq-toolbar-widget {
-    .ciq-chart-mode__menu {
+.sc-toolbar-widget {
+    .sc-chart-mode__menu {
         padding: 8px;
     }
-    .ciq-chart-mode__menu__timeperiod {
+    .sc-chart-mode__menu__timeperiod {
         top: 3px;
         left: 8px;
     }
 }
 
 .smartcharts-mobile {
-    .ciq-chart-mode .cq-dialog {
+    .sc-chart-mode .cq-dialog {
         width: 300px;
         left: auto;
     }

@@ -3,7 +3,7 @@ import Scrollbars from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
-import { IndicatorIcon, ActiveStateIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon } from './Icons.jsx';
+import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon } from './Icons.jsx';
 import '../../sass/components/_sc-studies.scss';
 
 const EmptyView = () => (
@@ -100,7 +100,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
         <TabList>
             <Tab key="hidden" className="hidden" />
             <Tab key="active">
-                <ActiveStateIcon />
+                <ActiveIcon />
                 {t.translate('Active')}
                 {
                     activeItems.length
@@ -194,17 +194,17 @@ const StudyLegend = ({
         setOpen={setOpen}
         isMobile={isMobile}
         title={t.translate('Indicators')}
+        tooltip={t.translate('Indicators')}
         subTitle={infoItem ? infoItem.name : null}
         onBack={() => onInfoItem(null)}
         newStyle
         enableTabular
     >
         <StudyMenu.Title>
-            <IndicatorIcon
-                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Indicators')}
-            />
-            <NotificationBadge notificationCount={activeStudiesNo} />
+            <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
+                <IndicatorIcon />
+                <NotificationBadge notificationCount={activeStudiesNo} />
+            </div>
         </StudyMenu.Title>
         <StudyMenu.Body>
             <SearchInput />

@@ -15,6 +15,7 @@
 
     .cq-lookup-filters {
         width: 200px;
+        min-width: 200px;
         @include themify($themes) {
             background: themed('CatDisplayFilterBg');
         }
