@@ -56,7 +56,7 @@ const ActiveDrawToolsList = ({ items, onSetting, onDelete }) => (
                     <span>{Item.text}</span>
                 </div>
                 <div className="ciq-draw-tools__list__item__actions">
-                    <small>({Item.bars} bars)</small>
+                    {Item.bars ? (<small>({Item.bars} bars)</small>) : ''}
                     <SettingIcon onClick={() => onSetting(Item.index)} />
                     <DeleteIcon onClick={() => onDelete(Item.index)} />
                 </div>

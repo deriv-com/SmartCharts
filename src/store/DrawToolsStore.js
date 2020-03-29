@@ -172,11 +172,14 @@ export default class DrawToolsStore {
 
     @action.bound computeActiveDrawTools() {
         const items = {};
+        const ignoreBarType = ['vertical', 'horizontal'];
 
         this.activeTools = this.stx.drawingObjects.map((item, indx) => {
             item = ((drawTools[item.name]) ? { ...item, ...drawTools[item.name] } : item);
             item.index = indx;
-            item.bars = Math.abs(parseInt(item.p1[0] - item.p0[0], 10)) + 1;
+            item.bars = (ignoreBarType.indexOf(item.name) === -1)
+                ? (Math.abs(parseInt(item.p1[0] - item.p0[0], 10)) + 1)
+                : null;
 
             if (items[item.name]) {
                 items[item.name]++;
