@@ -24,7 +24,7 @@ const formatCamelCase = (s) => {
 
 const drawTools = {
     channel:    { id: 'channel',     text: t.translate('Channel'), icon: DrawToolsChannelIcon },
-    continuous: { id: 'continuous',  text: t.translate('Continuous'), icon: DrawToolsContinuousIcon },
+    segment:    { id: 'continuous',  text: t.translate('Continuous'), icon: DrawToolsContinuousIcon },
     fibfan:     { id: 'fibfan',      text: t.translate('Fib Fan'), icon: DrawToolsFibonaccifanIcon },
     horizontal: { id: 'horizontal',  text: t.translate('Horizontal'), icon: DrawToolsHorizontalIcon },
     line:       { id: 'line',        text: t.translate('Line'), icon: DrawToolsLineIcon },
@@ -172,9 +172,11 @@ export default class DrawToolsStore {
 
     @action.bound computeActiveDrawTools() {
         const items = {};
+
         this.activeTools = this.stx.drawingObjects.map((item, indx) => {
             item = ((drawTools[item.name]) ? { ...item, ...drawTools[item.name] } : item);
             item.index = indx;
+            item.bars = Math.abs(parseInt(item.p1[0] - item.p0[0], 10)) + 1;
 
             if (items[item.name]) {
                 items[item.name]++;
@@ -182,7 +184,6 @@ export default class DrawToolsStore {
             } else {
                 items[item.name] = 1;
             }
-
             return item;
         });
     }
