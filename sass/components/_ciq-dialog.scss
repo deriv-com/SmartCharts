@@ -170,9 +170,9 @@
                     border-radius: 0px;
                     font-weight: bold;
                     @include themify($themes) {
-                        color: themed('DialogTabularActiveTabText');
-                        background: themed('DialogTabularActiveTabBg');
-                        border-left-color: themed('DialogTabularActiveTabBorder');
+                        color: themed('DialogTabularActiveTabText') !important;
+                        background: themed('DialogTabularActiveTabBg') !important;
+                        border-left-color: themed('DialogTabularActiveTabBorder') !important;
                     }
 
                     .ic-icon {
