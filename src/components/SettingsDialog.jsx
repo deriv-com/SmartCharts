@@ -58,6 +58,7 @@ const SettingsPanelGroup = ({
                 <Pattern
                     pattern={item.value}
                     lineWidth={lineWidth}
+                    subtitle={item.title}
                     onChange={(v) => {
                         onItemChange('pattern', v.pattern);
                         onItemChange('lineWidth', v.width);
@@ -164,7 +165,7 @@ const ResetButton = ({
 }) => (
     <button
         type="button"
-        className="reset"
+        className="sc-btn sc-btn--outline-secondary"
         onClick={onClick}
     >{t.translate('Reset')}
     </button>
@@ -175,7 +176,7 @@ const DoneButton = ({
 }) => (
     <button
         type="button"
-        className="sc-btn sc-btn--primary"
+        className="sc-btn sc-btn--primary sc-btn--save"
         onClick={() => onClick()}
     >{t.translate('Save')}
     </button>
@@ -186,7 +187,7 @@ const CancelButton = ({
 }) => (
     <button
         type="button"
-        className="cancel"
+        className="sc-btn sc-btn--cancel"
         onClick={() => onClick()}
     >{t.translate('Cancel')}
     </button>

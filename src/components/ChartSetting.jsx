@@ -40,8 +40,6 @@ const ChartSettingItem = ({
     </FormGroup>
 );
 
-console.log(SettingCountdownMap);
-
 const ChartSetting = ({
     ChartSettingMenu,
     countdown,

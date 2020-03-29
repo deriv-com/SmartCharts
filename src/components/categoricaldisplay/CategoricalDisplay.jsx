@@ -41,7 +41,6 @@ const CategoricalDisplay = React.memo(({
                             className="cq-scroll-panel"
                             onScroll={updateScrollSpy}
                             ref={setScrollPanel}
-                            style={{ width: isMobile ? '100%' : '312px' }}
                         >
                             {innerPanel}
                         </div>
@@ -51,7 +50,6 @@ const CategoricalDisplay = React.memo(({
                             className="cq-scroll-panel"
                             onScroll={updateScrollSpy}
                             ref={setScrollPanel}
-                            style={{ width: isMobile ? '100%' : '312px' }}
                         >
                             {innerPanel}
                         </Scrollbars>

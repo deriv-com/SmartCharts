@@ -34,14 +34,12 @@ import CrosshairTooltip from '../../sass/icons/chart settings/crosshair/ic-cross
 import Delete from '../../sass/icons/delete/ic-delete.svg';
 import Clear from '../../sass/icons/clear/ic-clear.svg';
 import Draw from '../../sass/icons/chart settings/drawing tools/ic-drawingtools-normal.svg';
-import Indicator from '../../sass/icons/chart settings/indicators/ic-indicator-normal.svg';
 import Measure from '../../sass/icons/measure/ic-measure.svg';
 import Minus from '../../sass/icons/chart settings/zoom-out/ic-zoomout-light.svg';
 import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
-import Template from '../../sass/icons/chart settings/chart template/ic-charttemplate-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Time from '../../sass/icons/time/ic-time.svg';
-import Active from '../../sass/icons/sidebar/active/ic-active-normal.svg';
+import Active from '../../sass/icons/common/ic-active.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
@@ -51,11 +49,15 @@ import Volidx from '../../sass/icons/sidebar/volatility/ic-volatility-normal.svg
 import Search from '../../sass/icons/search/ic-search-normal.svg';
 import Edit from '../../sass/icons/edit/ic-edit.svg';
 import Arrow from '../../sass/icons/dropdown/ic-dropdown.svg';
-import Download from '../../sass/icons/download/ic-download.svg';
 import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-left.svg';
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
+import DrawTool from '../../sass/icons/common/ic-drawing-tool.svg';
+
+import Download from '../../sass/icons/common/ic-download.svg';
+import Indicator from '../../sass/icons/common/ic-indicators.svg';
+import Template from '../../sass/icons/common/ic-templates.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -131,7 +133,6 @@ import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg'
 
 import EmptyState from '../../sass/icons/shape/ic-empty-state.svg';
 import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
-import ActiveState from '../../sass/icons/common/ic-active.svg';
 import InfoCircle from '../../sass/icons/common/ic-info.svg';
 
 import Language from '../../sass/icons/common/ic-language.svg';
@@ -187,6 +188,16 @@ import IndicatorEnvelope from '../../sass/icons/indicators/ic-envelope.svg';
 import IndicatorAlligator from '../../sass/icons/indicators/ic-alligator.svg';
 import IndicatorFractalChaos from '../../sass/icons/indicators/ic-fractal-chaos.svg';
 
+import DrawToolsChannel from '../../sass/icons/draw-tools/ic-channel.svg';
+import DrawToolsContinuous from '../../sass/icons/draw-tools/ic-continuous.svg';
+import DrawToolsFibonaccifan from '../../sass/icons/draw-tools/ic-fibonacci-fan.svg';
+import DrawToolsHorizontal from '../../sass/icons/draw-tools/ic-horizontal.svg';
+import DrawToolsLine from '../../sass/icons/draw-tools/ic-line.svg';
+import DrawToolsRay from '../../sass/icons/draw-tools/ic-ray.svg';
+import DrawToolsRectangle from '../../sass/icons/draw-tools/ic-rectangle.svg';
+import DrawToolsTrend from '../../sass/icons/draw-tools/ic-trend.svg';
+import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
+
 export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
@@ -214,6 +225,8 @@ export const Wrapper = SvgLogo => (props) => {
 export const DrawingCursorIcon = Wrapper(DrawCursor);
 export const ThemeLightIcon = Wrapper(ThemeLight);
 export const ThemeDarkIcon = Wrapper(ThemeDark);
+export const DrawToolIcon = Wrapper(DrawTool);
+export const ActiveIcon = Wrapper(Active);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);
@@ -271,7 +284,6 @@ export const HomeIcon = Wrapper(Home);
 export const ScaleIcon = Wrapper(Scale);
 export const ZoominIcon = Wrapper(Zoomin);
 export const ZoomoutIcon = Wrapper(Zoomout);
-export const ActiveStateIcon = Wrapper(ActiveState);
 
 export const LanguageIcon = Wrapper(Language);
 export const ThemeIcon = Wrapper(Theme);
@@ -324,6 +336,17 @@ export const OverwriteStateIcon = Wrapper(OverwriteState);
 
 export const ArrowGreenIcon = Wrapper(ArrowGreen);
 export const ArrowOrangeIcon = Wrapper(ArrowOrange);
+
+export const DrawToolsChannelIcon = Wrapper(DrawToolsChannel);
+export const DrawToolsContinuousIcon = Wrapper(DrawToolsContinuous);
+export const DrawToolsFibonaccifanIcon = Wrapper(DrawToolsFibonaccifan);
+
+export const DrawToolsHorizontalIcon = Wrapper(DrawToolsHorizontal);
+export const DrawToolsLineIcon = Wrapper(DrawToolsLine);
+export const DrawToolsRayIcon = Wrapper(DrawToolsRay);
+export const DrawToolsRectangleIcon = Wrapper(DrawToolsRectangle);
+export const DrawToolsTrendIcon = Wrapper(DrawToolsTrend);
+export const DrawToolsVerticalIcon = Wrapper(DrawToolsVertical);
 
 export const alertIconMap = {
     info: Wrapper(Info),
