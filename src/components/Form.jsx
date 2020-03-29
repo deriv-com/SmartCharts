@@ -1,7 +1,49 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
-import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon } from './Icons.jsx';
+import {
+    ArrowIcon,
+    InputNumberPlusIcon,
+    InputNumberMinusIcon,
+    CheckboxIcon,
+    CheckboxActiveIcon,
+} from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
+
+export const FormGroup = ({ title, type, children }) => (
+    <div className={`form__group ${type ? (`form__group--${type}`) : ''}`}>
+        {
+            title && (
+                <div className="form__label">
+                    <span> {title} </span>
+                </div>
+            )
+        }
+        <div className="form__control">
+            {children}
+        </div>
+    </div>
+);
+
+export const Checkbox = ({
+    id,
+    label,
+    checked,
+    disabled,
+    onChange,
+}) => (
+    <label
+        htmlFor={id}
+        className={`sc-checkbox ${checked ? 'sc-checkbox--checked' : ''} ${disabled ? 'sc-checkbox--disabled' : ''}`}
+        onClick={() => onChange(!checked)}
+    >
+        {
+            checked
+                ? (<CheckboxActiveIcon className="sc-checkbox__box" />)
+                : (<CheckboxIcon className="sc-checkbox__box" />)
+        }
+        <span className="sc-checkbox__label">{label}</span>
+    </label>
+);
 
 export class Slider extends React.Component {
     onChange = (val) => {
@@ -204,6 +246,31 @@ export const Switch = ({
         <div className="handle" />
     </div>
 );
+
+
+export const SwitchIcon = ({
+    id,
+    label,
+    value,
+    onChange,
+    noramIcon,
+    activeIcon,
+}) => {
+    const Icon = value ? activeIcon : noramIcon;
+    return (
+        <div className="sc-switch-icon">
+            <Icon className="sc-switch-icon__icon" />
+            <div className="sc-switch-icon__description">
+                <Checkbox
+                    id={id}
+                    label={label}
+                    checked={value}
+                    onChange={onChange}
+                />
+            </div>
+        </div>
+    );
+};
 
 // NumericInput fires onChange on Enter or onBlur
 export class NumericInput extends React.PureComponent {

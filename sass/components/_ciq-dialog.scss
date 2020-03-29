@@ -148,14 +148,22 @@
                 line-height: 1.43;
                 letter-spacing: normal;
                 align-items: center;
+                cursor: pointer;
                 @include themify($themes) {
                     color: themed('DialogTabularText');
                     border-left: 4px solid themed('DialogTabularBg');
                 }
 
                 .ic-icon {
+                    margin-right: 16px;
                     @include themify($themes) {
                         fill: themed('DialogTabularText');
+                    }
+                }
+                &:hover {
+                    @include themify($themes) {
+                        border-left-color: themed('DialogTabularHoverTabBg');
+                        background: themed('DialogTabularHoverTabBg');
                     }
                 }
                 &--selected {

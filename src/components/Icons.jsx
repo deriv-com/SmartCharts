@@ -20,7 +20,6 @@ import Table from '../../sass/icons/chart settings/chart types/table/table.svg';
 import Png from '../../sass/icons/download/ic-png.svg';
 import Csv from '../../sass/icons/download/ic-csv.svg';
 
-
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import AddBold from '../../sass/icons/common/ic-add.svg';
 import Close from '../../sass/icons/common/ic-close.svg';
@@ -57,9 +56,6 @@ import PositionLeft from '../../sass/icons/chart settings/setting/ic-position-le
 import PositionBottom from '../../sass/icons/chart settings/setting/ic-position-bottom.svg';
 import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
-
-import ThemeLight from '../../sass/icons/common/ic-theme-light.svg';
-import ThemeDark from '../../sass/icons/common/ic-theme-dark.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -138,10 +134,33 @@ import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
 import ActiveState from '../../sass/icons/common/ic-active.svg';
 import InfoCircle from '../../sass/icons/common/ic-info.svg';
 
+import Language from '../../sass/icons/common/ic-language.svg';
+import Theme from '../../sass/icons/common/ic-theme.svg';
+import Chart from '../../sass/icons/common/ic-charts.svg';
+import Checkbox from '../../sass/icons/common/ic-checkbox.svg';
+import CheckboxActive from '../../sass/icons/common/ic-checkbox-active.svg';
+
+import ThemeLight from '../../sass/icons/setting/ic-theme-light.svg';
+import ThemeDark from '../../sass/icons/setting/ic-theme-dark.svg';
+
+import SettingCountdownLightNormal from '../../sass/icons/setting/countdown/ic-countdown-light-normal.svg';
+import SettingCountdownLightActive from '../../sass/icons/setting/countdown/ic-countdown-light-active.svg';
+import SettingCountdownDarkNormal from '../../sass/icons/setting/countdown/ic-countdown-dark-normal.svg';
+import SettingCountdownDarkActive from '../../sass/icons/setting/countdown/ic-countdown-dark-active.svg';
+
+import SettingHistoricalLightNormal from '../../sass/icons/setting/historical/ic-historical-light-normal.svg';
+import SettingHistoricalLightActive from '../../sass/icons/setting/historical/ic-historical-light-active.svg';
+import SettingHistoricalDarkNormal from '../../sass/icons/setting/historical/ic-historical-dark-normal.svg';
+import SettingHistoricalDarkActive from '../../sass/icons/setting/historical/ic-historical-dark-active.svg';
+
+import SettingHighestLowestLightNormal from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-light-normal.svg';
+import SettingHighestLowestLightActive from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-light-active.svg';
+import SettingHighestLowestDarkNormal from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-dark-normal.svg';
+import SettingHighestLowestDarkActive from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-dark-active.svg';
+
 import IndicatorCatMomentum from '../../sass/icons/indicators/ic-momentum.svg';
 import IndicatorCatTrendLight from '../../sass/icons/indicators/ic-trend-light.svg';
 import IndicatorCatTrendDark from '../../sass/icons/indicators/ic-trend-dark.svg';
-
 import IndicatorCatVolatility from '../../sass/icons/indicators/ic-volatility.svg';
 import IndicatorCatAverages from '../../sass/icons/indicators/ic-cat-averages.svg';
 import IndicatorCatOther from '../../sass/icons/indicators/ic-other.svg';
@@ -254,6 +273,12 @@ export const ZoominIcon = Wrapper(Zoomin);
 export const ZoomoutIcon = Wrapper(Zoomout);
 export const ActiveStateIcon = Wrapper(ActiveState);
 
+export const LanguageIcon = Wrapper(Language);
+export const ThemeIcon = Wrapper(Theme);
+export const ChartIcon = Wrapper(Chart);
+export const CheckboxIcon = Wrapper(Checkbox);
+export const CheckboxActiveIcon = Wrapper(CheckboxActive);
+
 export const TypeAreaIcon = Wrapper(TypeArea);
 export const TypeCandleIcon = Wrapper(TypeCandle);
 export const TypeHollowIcon = Wrapper(TypeHollow);
@@ -321,6 +346,39 @@ export const CategoryIconMap = {
     indicators: Wrapper(Indicator),
 };
 
+export const SettingCountdownMap = {
+    light: {
+        normal: Wrapper(SettingCountdownLightNormal),
+        active: Wrapper(SettingCountdownLightActive),
+    },
+    dark: {
+        normal: Wrapper(SettingCountdownDarkNormal),
+        active: Wrapper(SettingCountdownDarkActive),
+    },
+};
+
+export const SettingHistoricalMap = {
+    light: {
+        normal: Wrapper(SettingHistoricalLightNormal),
+        active: Wrapper(SettingHistoricalLightActive),
+    },
+    dark: {
+        normal: Wrapper(SettingHistoricalDarkNormal),
+        active: Wrapper(SettingHistoricalDarkActive),
+    },
+};
+
+export const SettingHighestLowestMap = {
+    light: {
+        normal: Wrapper(SettingHighestLowestLightNormal),
+        active: Wrapper(SettingHighestLowestLightActive),
+    },
+    dark: {
+        normal: Wrapper(SettingHighestLowestDarkNormal),
+        active: Wrapper(SettingHighestLowestDarkActive),
+    },
+};
+
 const FlagIconMap = {
     AUD: Wrapper(AUD),
     CAD: Wrapper(CAD),
@@ -345,6 +403,7 @@ const FlagIconMap = {
 
 export const FlagIcons = {
     USD: Wrapper(USD),
+    GBP: Wrapper(GBP),
     German: Wrapper(German),
     French: Wrapper(French),
     Portugal: Wrapper(Portugal),
