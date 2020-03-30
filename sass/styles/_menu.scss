@@ -163,7 +163,8 @@ $transition-duration: 300ms;
         }
     }
     .cq-menu-dropdown {
-        &.open {
+        &.open,
+        &.cq-menu-dropdown-enter-done {
             .icon-close-menu {
                 pointer-events: initial;
                 opacity: 1;

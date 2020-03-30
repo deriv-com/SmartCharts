@@ -1,14 +1,110 @@
-import { observable, action, when } from 'mobx';
+import React from 'react';
+import { observable, action, when, reaction } from 'mobx';
+import { connect } from './Connect';
 import MenuStore from './MenuStore';
-import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
-import { CategoricalDisplay } from '../components/categoricaldisplay';
+import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import {
+    IndicatorCatMomentumIcon,
+    IndicatorCatTrendLightIcon,
+    IndicatorCatTrendDarkIcon,
+    IndicatorCatVolatilityIcon,
+    IndicatorCatAveragesIcon,
+    IndicatorCatOtherIcon,
+    IndicatorAwesomeOscillatorIcon,
+    IndicatorDTrendedIcon,
+    IndicatorGatorIcon,
+    IndicatorMacdIcon,
+    IndicatorRateChangeIcon,
+    IndicatorRSIIcon,
+    IndicatorStochasticOscillatorIcon,
+    IndicatorStochasticMomentumIcon,
+    IndicatorWilliamPercentIcon,
+    IndicatorAroonIcon,
+    IndicatorAdxIcon,
+    IndicatorCommodityChannelIndexIcon,
+    IndicatorIchimokuIcon,
+    IndicatorParabolicIcon,
+    IndicatorZigZagIcon,
+    IndicatorBollingerIcon,
+    IndicatorDonchianIcon,
+    IndicatorAveragesIcon,
+    IndicatorEnvelopeIcon,
+    IndicatorAlligatorIcon,
+    IndicatorFractalChaosIcon,
+} from '../components/Icons.jsx';
 
 // TODO:
 // import StudyInfo from '../study-info';
+
+const StudyNameRegex = /[^a-z0-9 \-\%\,\)\(]/gi; /* eslint-disable-line */
+const getStudyBars = (name, type) => name.replace(StudyNameRegex, '').trim().replace(type.trim(), '').trim();
+const capitalizeFirstLetter = (string) => {
+    const str = string.replace(StudyNameRegex, '');
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+const IndicatorsTree = [
+    {
+        id: 'momentum',
+        name: t.translate('Momentum'),
+        icon: IndicatorCatMomentumIcon,
+        items: [
+            { id: 'Awesome', name: t.translate('Awesome Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAwesomeOscillatorIcon },
+            { id: 'Detrended', name: t.translate('Detrended Price Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorDTrendedIcon },
+            { id: 'Gator', name: t.translate('Gator Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorGatorIcon },
+            { id: 'macd', name: t.translate('MACD'), description: t.translate('There isn\'t any description here.'), icon: IndicatorMacdIcon },
+            { id: 'Price ROC', name: t.translate('Rate of Change'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRateChangeIcon },
+            { id: 'rsi', name: t.translate('Relative Strength Index (RSI)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRSIIcon },
+            { id: 'stochastics', name: t.translate('Stochastic Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticOscillatorIcon },
+            { id: 'Stch Mtm', name: t.translate('Stochastic Momentum Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticMomentumIcon },
+            { id: 'Williams %R', name: t.translate('William\'s Percent Range'), description: t.translate('There isn\'t any description here.'), icon: IndicatorWilliamPercentIcon },
+        ],
+    },
+    {
+        id: 'trend',
+        name: t.translate('Trend'),
+        icon: IndicatorCatTrendLightIcon,
+        items: [
+            { id: 'Aroon', name: t.translate('Aroon'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAroonIcon },
+            { id: 'ADX', name: t.translate('ADX/DMS'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAdxIcon },
+            { id: 'CCI', name: t.translate('Commodity Channel Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorCommodityChannelIndexIcon },
+            { id: 'Ichimoku', name: t.translate('Ichimoku Clouds'), description: t.translate('There isn\'t any description here.'), icon: IndicatorIchimokuIcon },
+            { id: 'Parabolic', name: t.translate('Parabolic SAR'), description: t.translate('There isn\'t any description here.'), icon:  IndicatorParabolicIcon },
+            { id: 'ZigZag', name: t.translate('Zig Zag'), description: t.translate('There isn\'t any description here.'), icon: IndicatorZigZagIcon },
+        ],
+    },
+    {
+        id: 'volatility',
+        name: t.translate('Volatility'),
+        icon: IndicatorCatVolatilityIcon,
+        items: [
+            { id: 'Bollinger Bands', name: t.translate('Bollinger Bands'), description: t.translate('There isn\'t any description here.'), icon: IndicatorBollingerIcon },
+            { id: 'Donchian Channel', name: t.translate('Donchian Channel'), description: t.translate('There isn\'t any description here.'), icon: IndicatorDonchianIcon },
+        ],
+    },
+    {
+        id: 'moving-averages',
+        name: t.translate('Moving averages'),
+        icon: IndicatorCatAveragesIcon,
+        items: [
+            { id: 'ma', name: t.translate('Moving Average (MA)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAveragesIcon },
+            { id: 'MA Env', name: t.translate('Moving Average Envelope'), description: t.translate('There isn\'t any description here.'), icon: IndicatorEnvelopeIcon },
+        ],
+    },
+    {
+        id: 'others',
+        name: t.translate('Others'),
+        icon: IndicatorCatOtherIcon,
+        items: [
+            { id: 'Alligator', name: t.translate('Alligator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAlligatorIcon },
+            { id: 'Fractal Chaos Bands', name: t.translate('Fractal Chaos Band'), description: t.translate('There isn\'t any description here.'), icon: IndicatorFractalChaosIcon },
+        ],
+    },
+];
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -115,30 +211,32 @@ export default class StudyLegendStore {
         when(() => this.context, this.onContextReady);
 
         this.menu = new MenuStore(mainStore, { route:'indicators' });
-        this.categoricalDisplay = new CategoricalDisplayStore({
-            activeOptions: [
-                { id: 'edit', onClick: item => this.editStudy(item) },
-                { id: 'delete', onClick: item => this.deleteStudy(item) },
-            ],
-            getIsShown: () => this.menu.open,
-            getCategoricalItems: () => this.categorizedStudies,
-            getActiveCategory: () => this.activeStudies,
-            onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: t.translate('"Mass Index" or "Doji Star"'),
-            favoritesId: 'indicators',
-            mainStore,
-            searchInputClassName: () => this.searchInputClassName,
-            limitInfo: t.translate('Up to 5 active indicators allowed.'),
-        });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper),
             favoritesId: 'indicators',
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
-        this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
         this.StudyMenu = this.menu.connect(Menu);
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
+
+        this.searchInput = React.createRef();
+        this.SearchInput = connect(() => ({
+            placeholder: 'Search',
+            value: this.filterText,
+            onChange: this.setFilterText,
+            searchInput: this.searchInput,
+            searchInputClassName: 'searchInputClassName',
+        }))(SearchInput);
+
+        reaction(() => this.menu.open, () => {
+            if (!this.menu.open) {
+                this.setFilterText('');
+            }
+            setTimeout(() => {
+                if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
+            }, 200);
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -147,58 +245,68 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
+
         // to remove studies if user has already more than 5
         // and remove studies which are excluded
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
-            const panel = Object.keys(this.stx.panels)[1];
-            if (panel) {
-                // Hide the up arrow from first indicator to prevent user
-                // from moving the indicator panel above the main chart
-                this.stx.panels[panel].up.style.display = 'none';
-            }
+            const panelsLen = Object.keys(this.stx.panels).length;
+            Object.keys(this.stx.panels).forEach((id, index) => {
+                if (index !== 0) {
+                    const panelObj = this.stx.panels[id];
+                    const sd = this.stx.layout.studies[id];
+                    if (sd) {
+                        panelObj.title.innerHTML = `${sd.type} <span class="bars">${getStudyBars(sd.name, sd.type)}</span>`;
+
+                        // Regarding the ChartIQ.js, codes under Line 34217, edit function
+                        // not mapped, this is a force to map edit function for indicators
+                        if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
+                    }
+
+                    if (index === 1) {
+                        // Hide the up arrow from first indicator to prevent user
+                        // from moving the indicator panel above the main chart
+                        panelObj.up.style.display = 'none';
+                    }
+                    if (index === (panelsLen - 1)) {
+                        panelObj.down.style.display = 'none';
+                    }
+                }
+            });
         });
         this.renderLegend();
     };
 
     previousStudies = { };
     searchInputClassName;
-    @observable hasReachedLimits = false;
-    @observable activeStudies = {
-        categoryName: t.translate('Active'),
-        categoryNamePostfix: '',
-        categoryId: 'active',
-        hasSubcategory: false,
-        emptyDescription: t.translate('There are no active indicators yet.'),
-        data: [],
-    };
+    @observable selectedTab = 1;
+    @observable filterText = '';
+    @observable activeItems = [];
+    @observable infoItem = null;
 
-    get categorizedStudies() {
-        const data = [];
-
-        Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            if (!this.excludedStudies[studyId]) {
-                const study = CIQ.Studies.studyLibrary[studyId];
-                data.push({
-                    enabled: true,
-                    display: t.translate(study.name),
-                    dataObject: studyId,
-                    itemId: studyId,
-                });
+    get items() {
+        return [...IndicatorsTree].map((indicator) => {
+            // the only icon which is different on light/dark is trend
+            if (indicator.id === 'trend') {
+                indicator.icon = this.mainStore.chartSetting.theme === 'light' ? IndicatorCatTrendLightIcon : IndicatorCatTrendDarkIcon;
             }
+
+            return indicator;
         });
-        const categoryNamePostfix = `(${this.activeStudies.data.length}/5)`;
-        const category = {
-            categoryName: t.translate('Indicators'),
-            categoryNamePostfix,
-            categoryNamePostfixShowIfActive: true,
-            categoryId: 'indicators',
-            categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
-            hasSubcategory: false,
-            data,
-        };
-        return [category];
+    }
+
+    get searchedItems() {
+        return [...IndicatorsTree]
+            .map((category) => {
+                category.foundItems = category.items.filter(item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1);
+                return category;
+            })
+            .filter(category => category.foundItems.length);
+    }
+
+    get chartActiveStudies() {
+        return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
     }
 
     @action.bound removeExtraStudies() {
@@ -216,6 +324,7 @@ export default class StudyLegendStore {
     }
 
     @action.bound onSelectItem(item) {
+        this.onInfoItem(null);
         if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             this.changeStudyPanelTitle(sd);
@@ -304,13 +413,12 @@ export default class StudyLegendStore {
     }
 
     @action.bound deleteStudy(study) {
-        const sd = study.sd;
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${sd.name}`);
-        if (!sd.permanent) {
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
+        if (!study.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
             setTimeout(() => {
-                CIQ.Studies.removeStudy(this.stx, sd);
+                CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
             }, 0);
         }
@@ -338,6 +446,7 @@ export default class StudyLegendStore {
             }
         }
         if (Object.keys(updates).length === 0) return;
+
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();
@@ -386,17 +495,32 @@ export default class StudyLegendStore {
         this.updateStyle();
     };
 
-    @action.bound setReachedLimit() {
-        const hasReachedLimit = this.activeStudies.data.length >= 5;
-        this.hasReachedLimits = hasReachedLimit;
-    }
-
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
+        const activeItems = [];
         Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
+            const studyObjCategory = IndicatorsTree.find(category => category.items.find(item => item.id === sd.type));
+            const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
+            if (studyObj) {
+                const bars = getStudyBars(sd.name, sd.type);
+                const name = this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display;
+
+                activeItems.push({
+                    ...studyObj,
+                    bars,
+                    name: capitalizeFirstLetter(name.replace(bars, '')),
+                    dataObject: {
+                        stx,
+                        sd,
+                        inputs: sd.inputs,
+                        outputs: sd.outputs,
+                        parameters: sd.parameters,
+                    },
+                });
+            }
 
             studies.push({
                 enabled: true,
@@ -411,14 +535,39 @@ export default class StudyLegendStore {
             });
         });
 
-        this.activeStudies.data = studies;
-        this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
-        this.setReachedLimit();
+        this.activeItems = activeItems;
+
+        // this.activeStudies.data = studies;
+        // this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
+        // this.setReachedLimit();
+    }
+
+    @action.bound deleteAllStudies() {
+        const stx = this.stx;
+        if (stx) {
+            Object.keys(stx.layout.studies || []).forEach((id) => {
+                this.deleteStudy(stx.layout.studies[id]);
+            });
+        }
     }
 
     @action.bound clearStudies() {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
+    }
+
+    @action.bound onSelectTab(tabIndex) {
+        this.selectedTab = tabIndex;
+        this.onInfoItem(null);
+    }
+
+    @action.bound setFilterText(filterText) {
+        this.selectedTab = (filterText !== '') ? 0 : 1;
+        this.filterText = filterText;
+    }
+
+    @action.bound onInfoItem(study) {
+        this.infoItem = study;
     }
 }

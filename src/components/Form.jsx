@@ -101,7 +101,7 @@ export class Pattern extends React.Component {
         { width: 0, pattern: 'none' },
     ];
     render() {
-        const { pattern, lineWidth, onChange, onActive } = this.props;
+        const { pattern, subtitle, lineWidth, onChange, onActive } = this.props;
         const value = pattern !== 'none'
             ? <span className={`option ${pattern}-${lineWidth}`} />
             : <span className="none">None</span>;
@@ -112,6 +112,7 @@ export class Pattern extends React.Component {
                 value={value}
                 onActive={onActive}
                 onRowClick={onChange}
+                subtitle={subtitle}
             >
                 {p => (p.pattern !== 'none'
                     ? <span className={`option ${p.pattern}-${p.width}`} />
