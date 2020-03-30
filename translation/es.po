@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2020-03-10 12:26\n"
+"PO-Revision-Date: 2020-03-30 05:32\n"
 
 msgid " already exists."
 msgstr " ya existe."
@@ -170,7 +170,7 @@ msgid "Historical Data Mode"
 msgstr "Modo de Datos Históricos"
 
 msgid "Hollow"
-msgstr "Hueco"
+msgstr "Hueca"
 
 msgid "Horizontal"
 msgstr "Horizontal"
@@ -395,7 +395,7 @@ msgid "Would you like to overwrite it?"
 msgstr "¿Desea sobre-escribirlo?"
 
 msgid "You have no save templates yet."
-msgstr "Aún no ha guardado ninguna plantilla."
+msgstr "Aún no ha guardado plantillas."
 
 msgid "Zoom in"
 msgstr "Acercar"
