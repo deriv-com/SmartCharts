@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Language-Team: Indonesian\n"
 "Language: id_ID\n"
-"PO-Revision-Date: 2019-12-20 02:12\n"
+"PO-Revision-Date: 2020-03-30 05:32\n"
 
 msgid " already exists."
 msgstr " sudah tersedia."
@@ -28,11 +28,14 @@ msgstr "\"Mass Index\" atau \"Doji Star\""
 msgid "Active"
 msgstr "Aktif"
 
-msgid "Add new"
-msgstr ""
+msgid "Add new templates"
+msgstr "Tambahkan template baru"
 
 msgid "Annotation"
 msgstr "Anotasi"
+
+msgid "Area"
+msgstr "Area"
 
 msgid "Asset Information"
 msgstr "Informasi Aset"
@@ -40,26 +43,23 @@ msgstr "Informasi Aset"
 msgid "Auto Scale"
 msgstr "Skala Otomatis"
 
+msgid "Available only for \"Area\" chart type."
+msgstr "Hanya tersedia untuk jenis chart \"Area\"."
+
+msgid "Available only for non-tick time intervals."
+msgstr "Hanya tersedia untuk interval waktu non-tik."
+
 msgid "Average Line"
 msgstr "Garis Rata-Rata"
 
-msgid "Baseline"
-msgstr "Baseline"
-
 msgid "Box Size"
 msgstr "Box Size"
-
-msgid "C"
-msgstr "C"
 
 msgid "Callout"
 msgstr "Callout"
 
 msgid "Cancel"
-msgstr ""
-
-msgid "CANCEL"
-msgstr "BATAL"
+msgstr "Batal"
 
 msgid "Candle"
 msgstr "Candle"
@@ -79,6 +79,9 @@ msgstr "Tabel Grafik"
 msgid "Chart types"
 msgstr "Jenis grafik"
 
+msgid "Clear all"
+msgstr "Hapus semua"
+
 msgid "Clear All"
 msgstr "Hapus Semua"
 
@@ -92,10 +95,7 @@ msgid "CLOSED"
 msgstr "TUTUP"
 
 msgid "Color"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr "Titik Berwarna"
+msgstr "Warna"
 
 msgid "Comparison"
 msgstr "Perbandingan"
@@ -112,6 +112,9 @@ msgstr "Crosshair"
 msgid "Crossline"
 msgstr "Crossline"
 
+msgid "CSV"
+msgstr "CSV"
+
 msgid "Dark Mode"
 msgstr "Dark Mode"
 
@@ -124,20 +127,8 @@ msgstr "Hari"
 msgid "Doodle"
 msgstr "Doodle"
 
-msgid "Dot"
-msgstr "Titik"
-
 msgid "Download"
 msgstr "Download"
-
-msgid "Download as CSV"
-msgstr "Download CSV"
-
-msgid "Download as PNG"
-msgstr "Download PNG"
-
-msgid "Download Chart"
-msgstr "Download Grafik"
 
 msgid "Draw tools"
 msgstr "Alat gambar"
@@ -169,9 +160,6 @@ msgstr "Gartley"
 msgid "H"
 msgstr "H"
 
-msgid "Heikin Ashi"
-msgstr "Heikin Ashi"
-
 msgid "High"
 msgstr "High"
 
@@ -181,14 +169,17 @@ msgstr "HIGH"
 msgid "Historical Data Mode"
 msgstr "Mode Data Historis"
 
-msgid "Hollow Candle"
-msgstr "Hollow Candle"
+msgid "Hollow"
+msgstr "Hollow"
 
 msgid "Horizontal"
 msgstr "Horizontal"
 
 msgid "Hour"
 msgstr "Jam"
+
+msgid "hours"
+msgstr "jam"
 
 msgid "Indicators"
 msgstr "Indikator"
@@ -226,8 +217,8 @@ msgstr "Mengukur"
 msgid "Minute"
 msgstr "Menit"
 
-msgid "O"
-msgstr "O"
+msgid "minutes"
+msgstr "menit"
 
 msgid "OHLC"
 msgstr "OHLC"
@@ -241,11 +232,14 @@ msgstr "OPEN"
 msgid "Opens in:"
 msgstr "Dibuka dalam:"
 
-msgid "OVERWRITE"
-msgstr "MENGGANTI"
+msgid "Overwrite"
+msgstr "Menimpa"
 
 msgid "Pitchfork"
 msgstr "Pitchfork"
+
+msgid "PNG"
+msgstr "PNG"
 
 msgid "Point & Figure"
 msgstr "Point & Figure"
@@ -278,7 +272,7 @@ msgid "Renko"
 msgstr "Renko"
 
 msgid "Reset"
-msgstr ""
+msgstr "Reset"
 
 msgid "Retrieving Chart Data..."
 msgstr "Menampilkan Data Grafik..."
@@ -305,7 +299,10 @@ msgid "right-click to manage"
 msgstr "klik kanan untuk mengelola"
 
 msgid "Save"
-msgstr ""
+msgstr "Simpan"
+
+msgid "Saved templates"
+msgstr "Template yang disimpan"
 
 msgid "Search..."
 msgstr "Cari..."
@@ -335,19 +332,16 @@ msgid "Shape - Star"
 msgstr "Bentuk - Bintang"
 
 msgid "Show Highest/Lowest Spot"
-msgstr ""
+msgstr "Tampilkan spot tertinggi/terendah"
 
 msgid "Size"
-msgstr ""
+msgstr "Ukuran"
 
 msgid "Speed Resistance Arc"
 msgstr "Perlawanan Panah Kecepatan"
 
 msgid "Speed Resistance Line"
 msgstr "Perlawanan Garis Kecepatan"
-
-msgid "Spline"
-msgstr "Spline"
 
 msgid "SPOT"
 msgstr "SPOT"
@@ -373,11 +367,17 @@ msgstr "Belum tersedia indikator aktif."
 msgid "There are no favorites yet."
 msgstr "Favorit belum tersedia."
 
+msgid "tick"
+msgstr "tik"
+
 msgid "Tick"
 msgstr "Tik"
 
 msgid "Time Cycle"
 msgstr "Siklus Waktu"
+
+msgid "Time interval"
+msgstr "Interval waktu"
 
 msgid "Tirone Levels"
 msgstr "Tingkat Tirone"
@@ -393,6 +393,9 @@ msgstr "Vertikal"
 
 msgid "Would you like to overwrite it?"
 msgstr "Apakah Anda ingin menggantikannya?"
+
+msgid "You have no save templates yet."
+msgstr "Anda belum menyimpan template."
 
 msgid "Zoom in"
 msgstr "Perbesar"
