@@ -81,18 +81,18 @@ const ChartSetting = ({
                             type="theme"
                         >
                             <div
-                                className={`form__group__item ${theme === 'light' ? 'form__group__item--active' : ''}`}
-                                onClick={() => setTheme('light')}
-                            >
-                                <ThemeLightIcon />
-                                <div className="text">{t.translate('Light')}</div>
-                            </div>
-                            <div
                                 className={`form__group__item ${theme === 'dark' ? 'form__group__item--active' : ''}`}
                                 onClick={() => setTheme('dark')}
                             >
                                 <ThemeDarkIcon />
                                 <div className="text">{t.translate('Dark')}</div>
+                            </div>
+                            <div
+                                className={`form__group__item ${theme === 'light' ? 'form__group__item--active' : ''}`}
+                                onClick={() => setTheme('light')}
+                            >
+                                <ThemeLightIcon />
+                                <div className="text">{t.translate('Light')}</div>
                             </div>
                         </FormGroup>
                     </div>
