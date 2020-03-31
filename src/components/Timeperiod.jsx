@@ -54,6 +54,12 @@ const Timeperiod = ({
                         <span>1 {t.translate('tick')}</span>
                     </Tooltip>
                     <div
+                        onClick={() => onGranularityClick(60)}
+                        className={ItemClassName('minute', 1)}
+                    >
+                        <span>1 {t.translate('minute')}</span>
+                    </div>
+                    <div
                         onClick={() => onGranularityClick(120)}
                         className={ItemClassName('minute', 2)}
                     >
