@@ -7,6 +7,7 @@ class TradingTimes {
     static get FEED_UNAVAILABLE() { return 'chartonly'; }
     isInitialized = false;
     tradingTimesPromise = new PendingPromise();
+    timeUpdateCallback;
 
     constructor(api, shouldFetchTradingTimes = true) {
         this._shouldFetchTradingTimes = shouldFetchTradingTimes;
@@ -22,7 +23,9 @@ class TradingTimes {
     }
 
     async initialize() {
-        await this._serverTime.init(this._api);
+        await this._serverTime.init(this._api, () => {
+            if (typeof this.timeUpdateCallback === 'function') this.timeUpdateCallback();
+        });
 
         if (this.isInitialized) { return this.tradingTimesPromise; }
         this.isInitialized = true;
@@ -200,6 +203,10 @@ class TradingTimes {
 
     onMarketOpenCloseChanged(callback) {
         this._emitter.on(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, callback);
+    }
+
+    onTimeChanged(callback) {
+        this.timeUpdateCallback =  callback;
     }
 }
 

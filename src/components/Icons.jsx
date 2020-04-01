@@ -59,6 +59,7 @@ import DrawTool from '../../sass/icons/common/ic-drawing-tool.svg';
 import Download from '../../sass/icons/common/ic-download.svg';
 import Indicator from '../../sass/icons/common/ic-indicators.svg';
 import Template from '../../sass/icons/common/ic-templates.svg';
+import FullScreen from '../../sass/icons/common/full-screen.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -203,6 +204,7 @@ export const Wrapper = SvgLogo => (props) => {
 export const DrawingCursorIcon = Wrapper(DrawCursor);
 export const DrawToolIcon = Wrapper(DrawTool);
 export const ActiveIcon = Wrapper(Active);
+export const FullScreenIcon = Wrapper(FullScreen);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);

@@ -17,6 +17,10 @@ export default class BinaryAPI {
         return this.requestAPI({ time: 1 });
     }
 
+    pingServer() {
+        return this.requestAPI({ ping: 1 });
+    }
+
     async getTradingTimes(trading_times = 'today') {
         if (this.tradingTimesCache && this.tradingTimesCache.trading_times === trading_times) {
             return { ...this.tradingTimesCache };
