@@ -7,8 +7,9 @@ class ServerTime {
     clockStarted = false;
     clockStartedPromise = new PendingPromise();
 
-    async init(api) {
+    async init(api, updatedCallback) {
         this._api = api;
+        this.onTimeUpdated = updatedCallback;
         if (!this.clockStarted) {
             this.clockStarted = true;
             clearInterval(this.getTimeInterval);
@@ -41,6 +42,10 @@ class ServerTime {
 
         const updateTime = () => {
             this.serverTimeAtResponse += 1;
+
+            if (typeof this.onTimeUpdated === 'function') {
+                this.onTimeUpdated();
+            }
         };
 
         clearInterval(this.updateTimeInterval);

@@ -3,6 +3,7 @@ import {
     observable,
     reaction,
     computed }                 from 'mobx';
+import moment                  from 'moment';
 import {
     ActiveSymbols,
     BinaryAPI,
@@ -18,6 +19,7 @@ import {
     getUTCDate,
     cloneCategories }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
+import NetworkMonitor          from '../utils/NetworkMonitor';
 
 import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
 import EditIcon        from '../../sass/icons/edit/ic-edit.svg';
@@ -72,6 +74,8 @@ class ChartStore {
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
+    @observable serverTime;
+    @observable networkStatus;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -387,6 +391,8 @@ class ChartStore {
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
+        this.networkMonitor = NetworkMonitor.getInstance();
+        this.networkMonitor.init(this.api, this.onNetworkStatus);
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -545,6 +551,7 @@ class ChartStore {
                 });
 
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+                this.tradingTimes.onTimeChanged(this.onServerTimeChange);
 
                 setTimeout(action(() => {
                     // Defer the render of the dialogs and dropdowns; this enables
@@ -613,6 +620,14 @@ class ChartStore {
                 selected,
             };
         });
+    }
+
+    @action.bound onServerTimeChange() {
+        this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD-MM-YYYY HH:mm:ss [GMT]');
+    }
+
+    @action.bound onNetworkStatus(status) {
+        this.networkStatus = status;
     }
 
     @action.bound onMouseEnter() {
@@ -802,6 +817,18 @@ class ChartStore {
             this.stxx.isDestroyed = true;
             this.stxx.destroy();
             this.stxx = null;
+        }
+    }
+
+    @action.bound openFullscreen() {
+        if (this.rootNode.requestFullscreen) {
+            this.rootNode.requestFullscreen();
+        } else if (this.rootNode.mozRequestFullScreen) { /* Firefox */
+            this.rootNode.mozRequestFullScreen();
+        } else if (this.rootNode.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+            this.rootNode.webkitRequestFullscreen();
+        } else if (this.rootNode.msRequestFullscreen) { /* IE/Edge */
+            this.rootNode.msRequestFullscreen();
         }
     }
 }
