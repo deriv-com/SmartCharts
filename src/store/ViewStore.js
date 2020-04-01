@@ -89,7 +89,7 @@ export default class ViewStore {
     }
 
     @action.bound remove(idx, e) {
-        ViewStore.views = ViewStore.views.filter((x, index) => idx !== index);
+        ViewStore.views = this.sortedItems.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');
