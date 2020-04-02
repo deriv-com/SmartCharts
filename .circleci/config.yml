@@ -210,14 +210,16 @@ workflows:
             - build_push_dev
           filters:
             branches:
-              only: /^dev$/
+              only:
+                - dev
 
   release_production:
     jobs:
       - build_push_production:
           filters:
             branches:
-              only: /^master$/
+              only:
+                - master
           context: binary-frontend-artifact-upload
               
       - deploy_production:
@@ -225,4 +227,5 @@ workflows:
             - build_push_production
           filters:
             branches:
-              only: /^master$/
+              only:
+                - master
