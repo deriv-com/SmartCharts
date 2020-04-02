@@ -1,73 +1,68 @@
 import React from 'react';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
-    ShareIcon,
-    CopyIcon,
+    DownloadIcon,
+    PngIcon,
+    CsvIcon,
 } from './Icons.jsx';
-import '../../sass/_ciq-share.scss';
+import '../../sass/components/download.scss';
 
+const Loading = () => (
+    <div className="loading">
+        <span className="loading__bullet" />
+        <span className="loading__bullet" />
+        <span className="loading__bullet" />
+        <span className="loading__bullet" />
+    </div>
+);
 
 const Share = ({
-    Menu,
+    Dialog,
     menuOpen,
-    shareLink,
     downloadCSV,
     downloadPNG,
-    copyToClipboard,
-    resetCopyTooltip,
-    copyTooltip,
-    onInputRef,
-}) => {
-    return (
-        <Menu className="cq-share">
-            <Menu.Title>
-                <ShareIcon
-                    className = {menuOpen ? 'active' : ''}
-                    tooltip-title={t.translate("Share")}
-                />
-            </Menu.Title>
-            <Menu.Body>
-                <div className='title'> {t.translate('Share / Download Chart')} </div>
-                <div className='body'>
-                    <div className='caption1'>{t.translate('Share link')}</div>
-                    <div className='content'>
-                        <input
-                            ref={onInputRef}
-                            value={shareLink}
-                        />
-                        <CopyIcon
-                            onClick={copyToClipboard}
-                            onMouseOut={resetCopyTooltip}
-                            tooltip-title={copyTooltip}
-                        />
-                    </div>
-
-                    <div className='caption2'>{t.translate('Download chart')}</div>
-                    <div className='content'>
-                        <div
-                            className='download-btn'
-                            onClick={downloadPNG}
-                        > PNG </div>
-                        <div
-                            className='download-btn'
-                            onClick={downloadCSV}
-                        > CSV </div>
-                    </div>
+    isLoadingPNG,
+    portalNodeId,
+}) => (
+    <Dialog
+        className="sc-download-menu"
+        title={t.translate('Download')}
+        tooltip={t.translate('Download')}
+        newStyle
+        isFullscreen
+        portalNodeId={portalNodeId}
+    >
+        <Dialog.Title>
+            <div className={`sc-download__menu ${menuOpen ? 'sc-download__menu--active' : ''}`}>
+                <DownloadIcon />
+            </div>
+        </Dialog.Title>
+        <Dialog.Body>
+            <div className="sc-download">
+                <div
+                    className={`sc-download__item ${isLoadingPNG ? 'sc-download__item--loading' : ''}`}
+                    onClick={downloadPNG}
+                >
+                    <PngIcon />
+                    <span className="sc-download__item__label"> {t.translate('PNG')} </span>
+                    {isLoadingPNG && <Loading />}
                 </div>
-            </Menu.Body>
-        </Menu>
-    );
-};
+                <div
+                    className="sc-download__item"
+                    onClick={downloadCSV}
+                >
+                    <CsvIcon />
+                    <span className="sc-download__item__label"> {t.translate('CSV')}</span>
+                </div>
+            </div>
+        </Dialog.Body>
+    </Dialog>
+);
 
-export default connect(({share: s}) => ({
-    Menu: s.menu.connect(Menu),
-    menuOpen: s.menu.dialog.open,
-    shareLink: s.shareLink,
-    downloadPNG: s.downloadPNG,
-    downloadCSV: s.downloadCSV,
-    copyToClipboard: s.copyToClipboard,
-    onInputRef: s.onInputRef,
-    resetCopyTooltip:  s.resetCopyTooltip,
-    copyTooltip: s.copyTooltip,
+export default connect(({ share: d }) => ({
+    Dialog: d.Dialog,
+    menuOpen: d.menu.dialog.open,
+    downloadPNG: d.downloadPNG,
+    downloadCSV: d.downloadCSV,
+    isLoadingPNG: d.isLoadingPNG,
 }))(Share);

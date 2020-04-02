@@ -1,36 +1,50 @@
 .ciq-period {
-    padding: 0 5px!important;
+    padding: 0;
+    line-height: 1.5em !important;
 
     > .cq-menu-btn {
-        padding: 0 10px;
-        position: relative;
-        margin: 7px 0;
-        height: 18px;
-        border-left: 1px solid #E9E9ED;
-        border-right: 1px solid #E9E9ED;
-        > span {
-            user-select: none;
-            position: relative;
-            top: -3px;
-            width: 48px;
-            height: 24px;
-            line-height: 24px;
-            cursor: pointer;
+        padding: 0 5px;
+
+        > .bt-priod {
+            display: block;
+            height: auto;
+            line-height: 2em;
             border-radius: 2px;
-            display: inline-block;
-            padding: 0 11px;
+            box-sizing: border-box;
             text-align: center;
-            transition: background .15s ease-in, box-shadow .15s ease-in;
+            font-size: 1em;
+            @include themify($themes) {
+                color: themed('menuText');
+            }
+
+            .ic-priod {
+                font-size: 1.2em;
+                border-radius: 4px;
+                padding: 3px 5px;
+            }
+        }
+    }
+    &:hover {
+        .ic-priod {
+            @include themify($themes) {
+                background: themed('menuActiveBg');
+            }
         }
     }
     &.stxMenuActive {
-        > div > span {
-            height: 22px;
-            line-height: 22px;
-            border: 1px solid #4C5794;
-            background: #f2f3f8;
-            color: #4c5794;
-            padding: 0 10px;
+        .bt-priod {
+            font-weight: 500;
+        }
+        .ic-priod {
+            @include themify($themes) {
+                background: themed('menuActiveBg');
+            }
+        }
+        .ic-subtitle,
+        .ic-priod span {
+            @include themify($themes) {
+                color: themed('MenuActiveText');
+            }
         }
     }
     &:after {
@@ -43,67 +57,101 @@
         margin: 0 5px 0 0;
     }
     .cq-menu-dropdown {
-        display: flex;
-        flex-direction: row;
-        width: 296px;;
-        height: 160px;
-        transform: translate(-50%,0);
-        font-size: 12px;
+        width: 424px;
+        height: 216px;
+        font-size: 1.2em;
         font-weight: normal;
+    }
+}
 
-        .timeUnit {
-            display: flex;
-            flex-direction: column;
-            width: 88px;
-            height: 100%;
-            border-right: 1px solid #e9e9e9;
+.sc-interval {
+    $self: &;
+    display: flex;
+    padding: 24px;
+    flex-direction: column;
+    box-sizing: border-box;
+    @include themify($themes) {
+        background: themed('TimeBg');
+        color: themed('TimeText');
+    }
 
-            span {
-                display: block;
-                height: 40px;
-                padding-left: 16px;
-                line-height: 40px;
-                font-weight: 300;
-                color: #000;
+    &__head {
+        display: flex;
 
-                &.selected {
-                    background-color: #f2f3f8;
-                    box-shadow: inset -2px 0 0 0 #4c5794;
-                    color: #4C5794;
-                    font-weight: 500;
-                }
+        strong {
+            font-size: 16px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            @include themify($themes) {
+                color: themed('TimeTitleText');
             }
         }
+    }
+    &__info {
+        display: none;
+    }
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: 16px;
 
-        .interval {
+        #{ $self }__item {
+            width: 23.9%;
+            height: 32px;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            text-align: center;
             display: flex;
-            flex-direction: column;
-            width: 208px;
+            justify-content: center;
+            align-items: center;
+            margin: 0 4px 8px 0px;
+            cursor: pointer;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            box-sizing: border-box;
+            position: relative;
 
-            .row {
-                height: 40px;
-                display: flex;
-                flex-direction: row;
-                margin: 0 4px;
-                align-items: center;
-                font-weight: 300;
+            &:hover {
+                @include themify($themes) {
+                    background: themed('TimeHoverBg');
+                }
+            }
+            &--active {
+                background: transparent !important;
+                @include themify($themes) {
+                    color: themed('TimeActiveText');
+                    border-color: themed('TimeActiveItemBorder');
+                    font-weight: bold;
+                }
+            }
+            &--disabled {
+                cursor: initial;
+                background: transparent !important;
 
                 span {
-                    cursor: pointer;
-                    margin: 0 4px 0 0;
-                    width: 24px;
-                    height: 24px;
-                    text-align: center;
-                    color: #2a3052;
-
-                    &.selected {
-                        background: #4C5794;
-                        border-radius: 4px;
-                        color: #fff;
-                        line-height: 24px;
-                    }
+                    opacity: 0.32;
+                    pointer-events: none;
                 }
             }
         }
+    }
+}
+
+/* Mobile Style */
+.smartcharts-mobile {
+    .sc-interval {
+        padding: 8px 10px 24px;
+    }
+    .sc-interval__info {
+        display: block;
+    }
+    .sc-interval__content .sc-interval__item {
+        width: 31.9% !important;
+        margin: 0 4px 8px 0px;
     }
 }

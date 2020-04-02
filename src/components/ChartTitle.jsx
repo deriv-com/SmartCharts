@@ -1,61 +1,79 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
-import CategoricalDisplay from './CategoricalDisplay.jsx';
-import AnimatedPrice from './AnimatedPrice.jsx';
-import {ItemIconMap, SymbolPlaceholderIcon} from './Icons.jsx';
+import '../../sass/components/_chart-title.scss';
 
 const ChartTitle = ({
-    todayChange,
-    todayChangePercentage,
-    isVisible,
-    isShowChartPrice,
-    isPriceUp,
+    chartId,
+    ChartTitleMenu,
+    containerId,
     currentSymbol,
-    Menu,
-    CategoricalDisplay,
-    AnimatedPrice,
-    onCloseMenu
+    enabled,
+    isMobile,
+    MarketSelector,
+    portalNodeId,
+    onChange,
+    SymbolSelectButton,
+    setMenuOpen,
+    searchInputClassName,
+    theme,
+    onMouseEnter,
+    onMouseLeave,
+    isNestedList,
 }) => {
-    const SymbolIcon = ItemIconMap[currentSymbol.symbol] || SymbolPlaceholderIcon;
-    return (
-        <Menu className="cq-chart-title stx-show cq-symbols-display">
-            <Menu.Title>
-                {isVisible &&
-                <div className="cq-symbol-select-btn">
-                    {SymbolIcon && <SymbolIcon className={`ic-${currentSymbol.symbol}`} />}
-                    <div className="cq-symbol-info">
-                        <div className="cq-market">{currentSymbol.market_display_name}</div>
-                        <div className="cq-symbol">{currentSymbol.name}</div>
-                    </div>
-                    {isShowChartPrice &&
-                     <div className="cq-chart-price">
-                         <AnimatedPrice className="cq-current-price" />
-                         <div className={`cq-change ${isPriceUp ? 'stx-up' : 'stx-down'}`}>
-                             <span className="cq-todays-change">{todayChange}</span>&nbsp;
-                             {/*<span className="cq-todays-change-pct">({todayChangePercentage})</span>*/}
-                         </div>
-                     </div>}
-                </div>}
-            </Menu.Title>
-            <Menu.Body>
-                <CategoricalDisplay  closeMenu={ () => onCloseMenu() } />
-            </Menu.Body>
-        </Menu>
+    if (!currentSymbol) { return null; }
+
+    const ChartTitleContainer = (
+        <ChartTitleMenu
+            enabled={enabled}
+            className="cq-chart-title stx-show cq-symbols-display"
+            isFullscreen
+            portalNodeId={portalNodeId}
+            title={isMobile ? t.translate('Underlying Assets') : ''}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
+            <ChartTitleMenu.Title>
+                <SymbolSelectButton />
+            </ChartTitleMenu.Title>
+            <ChartTitleMenu.Body>
+                <MarketSelector
+                    portalNodeId={portalNodeId}
+                    isNestedList={isNestedList}
+                    searchInputClassName={searchInputClassName}
+                    onSelectItem={(x) => {
+                        if (x.symbol !== currentSymbol.symbol) {
+                            onChange(x.symbol, chartId);
+                        }
+                        setMenuOpen(false);
+                    }}
+                />
+            </ChartTitleMenu.Body>
+        </ChartTitleMenu>
     );
+
+    if (containerId) {
+        return ReactDOM.createPortal(
+            <div className={`smartcharts-${theme}`}>
+                {ChartTitleContainer}
+            </div>,
+            document.getElementById(containerId),
+        );
+    }
+
+    return ChartTitleContainer;
 };
 
-export default connect(
-    ({ chartTitle: c }) => ({
-        todayChange: c.todayChange,
-        todayChangePercentage: c.todayChangePercentage,
-        isPriceUp: c.isPriceUp,
-        isVisible: c.isVisible,
-        isShowChartPrice: c.isShowChartPrice,
-        currentSymbol: c.currentSymbol,
-        Menu: c.menu.connect(Menu),
-        CategoricalDisplay: c.categoricalDisplay.connect(CategoricalDisplay),
-        AnimatedPrice: c.animatedPrice.connect(AnimatedPrice),
-        onCloseMenu: c.menu.onTitleClick,
-    })
-)(ChartTitle);
+export default connect(({ chartTitle: c, chart, state, chartSetting }) => ({
+    chartId           : state.chartId,
+    ChartTitleMenu    : c.ChartTitleMenu,
+    currentSymbol     : c.currentSymbol,
+    isMobile          : chart.isMobile,
+    MarketSelector    : c.MarketSelector,
+    onChange          : c.setSymbol,
+    setMenuOpen       : c.menu.setOpen,
+    SymbolSelectButton: c.SymbolSelectButton,
+    onMouseEnter      : c.onMouseEnter,
+    onMouseLeave      : c.onMouseLeave,
+    theme             : chartSetting.theme,
+}))(ChartTitle);

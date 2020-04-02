@@ -2,23 +2,25 @@
 .cq-comparison {
     $icon-size: 1.3em;
     position: relative;
-    z-index: 3;
-    width: fit-content;
     margin-top: 25px;
     margin-left: 12px;
-    display: block;
+    display: inline-block;
+
     .cq-comparison-label {
         margin-left: 0.8em;
+        @include themify($themes) {
+            color: themed('ComparisonItemText');
+        }
     }
     .cq-comparison-item {
         position: relative;
         justify-content: space-between;
-        margin-top: 5px;
         padding: 5px 10px;
-        font-size: 12px;
+        font-size: 1.2em;
         height: 18px;
         opacity: 1;
-        transition: background .20s 0s, padding .20s 0s, opacity .20s .20s, height .20s .40s, font-size .0s .40s, margin .2s .40s;
+        transition: background 0.2s 0s, padding 0.2s 0s, opacity 0.2s 0.2s, height 0.2s 0.4s, font-size 0s 0.4s, margin 0.2s 0.4s;
+
         &, .left, .right {
             display: flex;
             align-items: center;
@@ -26,11 +28,24 @@
         .right {
             justify-content: flex-end;
             margin-left: 1.5em;
+            margin-right: 5px;
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('DefaultText');
+            }
         }
         &:hover {
-            background: white;
-            @include border-radius($soft-corners);
             box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
+            border-radius: 3px;
+            @include themify($themes) {
+                background: themed('ComparisonItemHoverBg');
+            }
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('ComparisonItemIcon');
+                }
+            }
         }
     }
     .cq-comparison-swatch {
@@ -39,26 +54,36 @@
         height: $icon-size;
     }
     .cq-comparison-item .ciq-close {
-        transition: opacity .20s .0s;
+        transition: opacity 0.2s 0s;
         cursor: pointer;
         opacity: 0;
-        left: 10px;
+        left: 7px;
         position: relative;
+        width: 16px;
+        height: 16px;
+        line-height: 20px;
     }
     .cq-comparison-item:hover .ciq-close {
-        opacity: .6;
+        opacity: 0.6;
     }
     .cq-comparison-item .ciq-close:hover,
     .cq-comparison-item .ciq-close:active {
         opacity: 1;
     }
     .cq-comparison-loader {
+        $loader-icon-size: 16px;
         display: none;
-        height: $icon-size;
-        width: $icon-size;
+        height: $loader-icon-size;
+        width: $loader-icon-size;
         margin-left: 10px;
     }
     .cq-comparison-loader.stx-show {
         display: inline-flex;
+    }
+}
+
+.smartcharts-mobile {
+    .cq-comparison {
+        margin-top: 5px;
     }
 }

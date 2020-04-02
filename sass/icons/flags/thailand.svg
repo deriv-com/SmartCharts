@@ -1,0 +1,30 @@
+<svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="16" viewBox="0 0 24 16">
+  <defs>
+    <clipPath id="clip-path" transform="translate(0 0)">
+      <polyline points="0 3 24 3 24 13 0 13 0 3" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2" transform="translate(0 0)">
+      <polyline points="0 5 24 5 24 11 0 11 0 5" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-3" transform="translate(0 0)">
+      <polyline points="0 0 24 0 24 16 0 16 0 0" fill="none"/>
+    </clipPath>
+  </defs>
+  <title>thailand</title>
+  <g>
+    <path d="M2,0H22a2,2,0,0,1,2,2V14a2,2,0,0,1-2,2H2a2,2,0,0,1-2-2V2A2,2,0,0,1,2,0" transform="translate(0 0)" fill="#f12532"/>
+    <g>
+      <path d="M23,11H1v2H23V11m1,0h0v2h0V11M23,3H1V5H23V3m1,0h0V5h0V3" transform="translate(0 0)" fill="#fff"/>
+    </g>
+    <g>
+      <path d="M23,5H1v6H23V5m1,0h0v6h0V5" transform="translate(0 0)" fill="#322b6c"/>
+    </g>
+    <g>
+      <path d="M21.5,0H2.5A2.5,2.5,0,0,0,0,2.5V3H1V2.5A1.5,1.5,0,0,1,2.5,1h19A1.5,1.5,0,0,1,23,2.5V3h1V2.5A2.5,2.5,0,0,0,21.5,0" transform="translate(0 0)" fill="#e82430"/>
+      <path d="M1,3H0V5H1V3M24,3H23V5h1V3" transform="translate(0 0)" fill="#f5f5f5"/>
+      <path d="M24,13H23v.5A1.5,1.5,0,0,1,21.5,15H2.5A1.5,1.5,0,0,1,1,13.5V13H0v.5A2.5,2.5,0,0,0,2.5,16h19A2.5,2.5,0,0,0,24,13.5V13" transform="translate(0 0)" fill="#e82430"/>
+      <path d="M1,11H0v2H1V11m23,0H23v2h1V11" transform="translate(0 0)" fill="#f5f5f5"/>
+      <path d="M1,5H0v6H1V5M24,5H23v6h1V5" transform="translate(0 0)" fill="#302968"/>
+    </g>
+  </g>
+</svg>

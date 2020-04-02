@@ -25,3 +25,8 @@ Thumbs.db
 tags
 
 jsconfig.json
+
+
+CNAME
+.nyc_output
+**/*.swp

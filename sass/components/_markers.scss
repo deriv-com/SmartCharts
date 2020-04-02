@@ -1,0 +1,11 @@
+.stx-marker {
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    z-index: 2;
+}
+
+// markers should all be positioned absolute as absolute;
+.cq-inchart-subholder > div {
+    position: absolute;
+}

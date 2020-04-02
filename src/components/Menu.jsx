@@ -1,36 +1,205 @@
 import React, { Component } from 'react';
-import {stxtap} from '../store/utils';
+import ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
+import MenuMobile from './MenuMobile.jsx';
+import Tooltip from './Tooltip.jsx';
+import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
+    onOverlayClick = (e) => {
+        if (e.target.className === 'cq-menu-overlay') {
+            this.props.handleCloseDialog();
+        }
+    };
+
     render() {
         const {
             open,
+            dialogStatus,
             className,
             children,
+            title,
+            subTitle,
+            onBack,
+            tooltip,
             onTitleClick,
             DropdownDialog,
+            isMobile,
+            isFullscreen,
+            portalNodeId,
+            enabled = true,
+            shouldRenderDialogs,
+            handleCloseDialog,
+            onMouseEnter,
+            onMouseLeave,
+            theme,
+            enableTabular,
+            ready,
+            emptyMenu,
+            newStyle, // this props will remove after we apply new design
+            // to all of components
         } = this.props;
-        const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
-        const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
+
+        if (!ready) return '';
+
+        const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
+        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
+        if (newStyle) {
+            const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
+            const modalDropdown = (
+                <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <div
+                        className="cq-menu-overlay"
+                        onClick={this.onOverlayClick}
+                    >
+                        <div className={`${portalNode ? 'cq-dialog-portal' : 'cq-dialog-overlay'}`}>
+                            {
+                                (shouldRenderDialogs
+                                && (
+                                    <CSSTransition
+                                        appear
+                                        in={dialogStatus}
+                                        timeout={300}
+                                        classNames="cq-dialog"
+                                        unmountOnExit
+                                    >
+                                        <DropdownDialog
+                                            isMobile={isMobile}
+                                            isFullscreen={isFullscreen}
+                                            title={title}
+                                            handleCloseDialog={handleCloseDialog}
+                                            subTitle={subTitle}
+                                            onBack={onBack}
+                                            enableTabular={enableTabular}
+                                        >
+                                            {rest}
+                                        </DropdownDialog>
+                                    </CSSTransition>
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+            );
+            const newDialog = ReactDOM.createPortal(
+                <div className={`smartcharts-${theme}`}>
+                    <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
+                        {modalDropdown}
+                    </div>
+                </div>,
+                portalNode,
+            );
+
+            if (emptyMenu) {
+                return (open ? newDialog : '');
+            }
+
+            return (
+                enabled && (
+                    <Tooltip
+                        className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}
+                        content={tooltip}
+                        enabled={tooltip}
+                        position="right"
+                    >
+                        <div
+                            className="cq-menu-btn"
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                            onClick={onTitleClick}
+                        >
+                            {first}
+                        </div>
+                        {open ? newDialog : ''}
+                    </Tooltip>
+                ) || (
+                    <Tooltip
+                        className={`ciq-menu ciq-disabled ${className || ''}`}
+                        content={tooltip}
+                        enabled={tooltip}
+                        position="right"
+                    >
+                        <div
+                            className="cq-menu-btn"
+                            onMouseEnter={onMouseEnter}
+                            onMouseLeave={onMouseLeave}
+                        >
+                            {first}
+                        </div>
+                    </Tooltip>
+                )
+            );
+        }
+
+        const oldDropdown = (shouldRenderDialogs
+            && (
+                <CSSTransition
+                    in={open}
+                    timeout={150}
+                    classNames="cq-menu-dropdown"
+                    unmountOnExit
+                >
+                    <DropdownDialog
+                        className="cq-menu-dropdown"
+                        isMobile={isMobile}
+                        isFullscreen={isFullscreen}
+                    >
+                        {title
+                    && (
+                        <div className="title">
+                            <div className="title-text">{title}</div>
+                            <CloseIcon
+                                className="icon-close-menu"
+                                onClick={onTitleClick}
+                            />
+                        </div>
+                    )
+                        }
+                        {rest}
+                    </DropdownDialog>
+                </CSSTransition>
+            ));
 
         return (
-            <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                <div
-                    className="cq-menu-btn"
-                    // onClick={onTitleClick}
-                    ref={el => stxtap(el, onTitleClick)}
-                >
-                    {first}
+
+            enabled && (
+                <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <div
+                        className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                        onClick={onTitleClick}
+                    >
+                        {first}
+                    </div>
+                    {(isMobile && portalNodeId)
+                    && (
+                        <MenuMobile
+                            className={className}
+                            open={open}
+                            menu_element={oldDropdown}
+                            portalNodeId={portalNodeId}
+                            onClick={this.onOverlayClick}
+                        />
+                    )
+                || (oldDropdown)}
                 </div>
-                <DropdownDialog className='cq-menu-dropdown'>
-                    {rest}
-                </DropdownDialog>
-            </div>
+            ) || (
+                <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+                    <div
+                        className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                    >
+                        {first}
+                    </div>
+                </div>
+            )
         );
     }
 }
 
-Menu.Title = ({children}) => children;
-Menu.Body  = ({children}) => children;
+Menu.Title = ({ children }) => children;
+Menu.Body  = ({ children }) => children;
 
 export default Menu;

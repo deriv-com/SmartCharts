@@ -1,0 +1,67 @@
+/* Used for app only. Do not deploy with library! */
+
+.test-container {
+    position: relative;
+    height: calc(100vh - 30px);
+    padding: 15px 5px;
+    display: flex;
+    background: #f4f4f6;
+
+    .chart-section {
+        position: relative;
+        height: 100%;
+        width: calc(100vw - 160px);
+        border-radius: 5px;
+    }
+    .action-section {
+        height: 100%;
+        width: 150px;
+
+        .form-row {
+            padding: 5px 10px;
+            display: block;
+        }
+    }
+}
+
+.chart-marker-line {
+    background: #ff9900;
+    width: 3px;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+}
+
+.chart-marker-circle {
+    border-radius: 50%;
+    border: 6px solid #baccff;
+    padding: 5px;
+    background: transparent;
+    margin: 0 0px -8px -8px;
+}
+
+.chart-marker-historical {
+    width: 2px;
+    height: 100%;
+    border-left: 1.5px dashed #2a3052;
+    top: 0px;
+    position: absolute;
+
+    span {
+        background: #2a3052;
+        border-radius: 3px;
+        white-space: nowrap;
+        left: -54px;
+        position: absolute;
+        bottom: 0px;
+        padding: 1px 9px;
+        color: #fff;
+        font-size: 10px;
+        line-height: 14px;
+    }
+}
+
+.portal-node {
+    position: relative;
+    z-index: 9;
+}

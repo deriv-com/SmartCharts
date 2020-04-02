@@ -17,9 +17,3 @@ src/
 translation/
 webpack.config.js
 yarn.lock
-
-dist/sass/
-dist/mobx.js
-dist/mobx-react.js
-dist/react.js
-dist/react-dom.js

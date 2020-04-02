@@ -1,34 +1,13 @@
-import React, { Component } from 'react';
-import {connect} from '../store/Connect';
-import '../../sass/_ciq-crosshair.scss';
+import React from 'react';
+import '../../sass/components/_ciq-crosshair.scss';
 
-const Crosshair = ({
-    left,
-    right,
-    top,
-    rows,
-    setRootRef,
-}) => (
-    <div
-        ref={setRootRef}
-        className={`cq-crosshair ${left === 'auto' ? 'arrow-right' : 'arrow-left'}`}
-        style={{left, top, right}}
-    >
-        {rows.map(row => (
-            <div className='row' key={row.name}>
-                <span>{row.name !== 'DT' ? `${row.name}:` : row.value}</span>
-                <span>{row.name !== 'DT' ? row.value : ''}</span>
-            </div>
-        ))}
+const Crosshair = () => (
+    <div className="cq-crosshair">
+        <div className="cq-crosshair-content">
+            {/* this is handled manually in CrosshairStore.js
+                to improve performance, as mbox/react is 5ms slower */}
+        </div>
     </div>
 );
 
-export default connect(
-    ({crosshair: c}) => ({
-        right: c.right,
-        left: c.left,
-        top: c.top,
-        rows: c.rows,
-        setRootRef: c.setRootRef,
-    })
-)(Crosshair);
+export default Crosshair;

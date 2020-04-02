@@ -1,26 +1,39 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { action, computed, reaction, observable } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
 
-const allMenues = [];
-
 export default class MenuStore {
-    constructor({getContext}) {
-        this.getContext = getContext;
-        this.dialog = new DialogStore();
+    constructor(mainStore, options) {
+        this.mainStore = mainStore;
+        this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
-        allMenues.push(this);
+        if (options && options.route) { this.route = options.route; }
+        this.DropDownDialog = this.dialog.connect(Dialog);
     }
 
-    get context() { return this.getContext(); }
+    get context() { return this.mainStore.chart.context; }
 
+    get routingStore() {
+        return this.mainStore.routing;
+    }
+
+    @observable dialogStatus = false;
+    @observable route = '';
     @computed get open() { return this.dialog.open; }
-    @action.bound setOpen(val) { this.dialog.setOpen(val); }
+    @action.bound setOpen(val) {
+        this.dialog.setOpen(val);
+        /**
+         *  Update the url hash by considering the dialog `route` and `open`
+         */
+        this.routingStore.updateRoute(this.route, val);
+    }
 
     blurInput() {
         const stx = this.context.stx;
-        if(this.open === false) {
+        setTimeout(this.handleDialogStatus, 300);
+
+        if (this.open === false) {
             document.activeElement.blur();
             stx.modalEnd();
         } else {
@@ -37,9 +50,25 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
 
-    connect = connect(() => ({
+    @action.bound handleDialogStatus() {
+        this.dialogStatus = this.open;
+    }
+
+    @action.bound handleCloseDialog() {
+        this.dialogStatus = false;
+        setTimeout(() => this.setOpen(false), 300);
+    }
+
+    connect = connect(({ chart: c, chartSetting }) => ({
+        ready: c.context,
+        setOpen: this.setOpen,
         open: this.open,
+        dialogStatus: this.dialogStatus,
         onTitleClick: this.onTitleClick,
-        DropdownDialog: this.dialog.connect(Dialog),
+        handleCloseDialog: this.handleCloseDialog,
+        DropdownDialog: this.DropDownDialog,
+        isMobile: c.isMobile,
+        shouldRenderDialogs: c.shouldRenderDialogs,
+        theme: chartSetting.theme,
     }))
 }

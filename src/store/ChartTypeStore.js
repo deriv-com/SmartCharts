@@ -1,68 +1,249 @@
-import { observable, action, computed, when } from 'mobx';
+import { action, computed, observable, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import {
-    LineIcon,
-    DotIcon,
-    BaseLineIcon,
-    CandleIcon,
-    OHLCIcon,
-    HollowCandleIcon,
-    SplineIcon
+    TypeAreaIcon,
+    TypeCandleIcon,
+    TypeHollowIcon,
+    TypeOhlcIcon,
 } from '../components/Icons.jsx';
+import SettingsDialogStore from './SettingsDialogStore';
+import List from '../components/List.jsx';
+import Menu from '../components/Menu.jsx';
+import SettingsDialog from '../components/SettingsDialog.jsx';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+
+function getChartTypes() {
+    return [
+        { id: 'mountain',      text: t.translate('Area'),   candleOnly: false, icon: TypeAreaIcon   },
+        { id: 'candle',        text: t.translate('Candle'), candleOnly: true,  icon: TypeCandleIcon },
+        { id: 'hollow_candle', text: t.translate('Hollow'), candleOnly: true,  icon: TypeHollowIcon },
+        { id: 'colored_bar',   text: t.translate('OHLC'),   candleOnly: true,  icon: TypeOhlcIcon   },
+    ];
+}
+
+const notCandles = getChartTypes()
+    .filter(t => !t.candleOnly)
+    .map(t => t.id);
+
+const aggregateCharts = getChartTypes()
+    .filter(t => t.settingsOnClick);
+
+function getAggregates() {
+    return {
+        heikinashi: true,
+        kagi: {
+            title: t.translate('Kagi'),
+            inputs: [{
+                id: 'kagi',
+                title: t.translate('Reversal Percentage'),
+                type: 'numericinput',
+            }],
+        },
+        renko: {
+            title: t.translate('Renko'),
+            inputs: [{
+                id: 'renko',
+                title: t.translate('Range'),
+                type: 'numericinput',
+            }],
+        },
+        linebreak: {
+            title: t.translate('Line Break'),
+            inputs: [{
+                id: 'priceLines',
+                title: t.translate('Price Lines'),
+                type: 'numericinput',
+                max: 10,
+                step: 1,
+                min: 1,
+            }],
+        },
+        rangebars: {
+            title: t.translate('Range Bars'),
+            inputs: [{
+                id: 'range',
+                title: t.translate('Range'),
+                type: 'numericinput',
+            }],
+        },
+        pandf: {
+            title: t.translate('Point & Figure'),
+            inputs: [{
+                id: 'box',
+                title: t.translate('Box Size'),
+                type: 'numericinput',
+            }, {
+                id: 'reversal',
+                title: t.translate('Reversal'),
+                type: 'numericinput',
+            }],
+        },
+    };
+}
 
 export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore(mainStore, { route:'chart-type' });
 
         this.list = new ListStore({
-            getIsOpen: () => this.menu.open,
             getContext: () => this.context,
-            onItemSelected: item => this.setType(item),
             getItems: () => this.types,
         });
+
+        this.settingsDialog = new SettingsDialogStore({
+            mainStore,
+            onChanged: items => this.updateAggregate(items),
+        });
+
+        this.ChartTypeMenu = this.menu.connect(Menu);
+        this.ChartTypeList = this.list.connect(List);
+        this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
+
+    @observable type = 'mountain';
+    onChartTypeChanged;
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
+    get chartTypeProp() { return this.mainStore.state.chartType; }
+    get isCandle() { return notCandles.indexOf(this.type.id) === -1; }
+    get isSpline() { return this.type.id === 'spline'; }
+    get isAggregateChart() { return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType); }
 
     onContextReady = () => {
-        const type = this.types.find(t => t.id === this.stx.layout.chartType);
-        this.type = type;
+        this.aggregates = getAggregates();
+        this.chartTypes = getChartTypes();
+
+        this.setChartTypeFromLayout(this.stx.layout);
+
+        reaction(() => this.mainStore.state.chartType, () => {
+            if (this.mainStore.state.chartType !== undefined) {
+                this.setType(this.mainStore.state.chartType);
+            }
+        });
+    };
+
+    @action.bound setTypeFromUI(type) {
+        if (this.chartTypeProp !== undefined) {
+            console.error('Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />');
+            return;
+        }
+
+        this.setType(type);
     }
 
     @action.bound setType(type) {
-        if(typeof type === 'string') {
-            type = this.types.filter(t => t.id === type)[0];
+        logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
+        if (!type) {
+            type = 'mountain';
+        }
+
+        if (typeof type === 'string') {
+            type = this.types.find(t => t.id === type);
+        }
+        if (type.id === this.type.id) {
+            return;
+        }
+        if (type.id === 'table') {
+            this.mainStore.chartTable.setOpen(true);
+            return;
         }
         if (type.id === 'spline') {
             // Spline is just a line with tension
+            this.stx.chart.tension = this.stx.layout.tension = 0.5;
             this.stx.setChartType('mountain');
-            this.stx.chart.tension = 0.5;
         } else {
-            this.stx.setChartType(type.id);
             this.stx.chart.tension = 0;
+            delete this.stx.layout.tension;
+            if (this.aggregates[type.id]) {
+                // Set baseline.userLevel to false so chart won't move up after AggregationType set.
+                this.stx.chart.baseline.userLevel = false;
+                this.stx.setAggregationType(type.id);
+                // Reset baseline.userLevel to its default value
+                this.stx.chart.baseline.userLevel = null;
+            } else {
+                this.stx.setChartType(type.id);
+            }
         }
+
         this.type = type;
-        this.menu.setOpen(false);
     }
+
+    @action.bound updateProps(onChange) {
+        this.onChartTypeChanged = onChange;
+    }
+
+    @action.bound showAggregateDialog(aggregateId) {
+        if (aggregateId !== this.type.id) {
+            this.setType(aggregateId);
+        }
+        const aggregate = this.aggregates[aggregateId];
+        this.settingsDialog.title = aggregate.title;
+        const inputs = aggregate.inputs.map(({ id, ...agg }) => {
+            const name = (id === 'box' || id === 'reversal') ? `pandf.${id}` : id;
+            const tuple = CIQ.deriveFromObjectChain(this.stx.layout, name);
+            const value = tuple.obj[tuple.member];
+            const defaultValue = this.stx.chart.defaultChartStyleConfig[id];
+            return {
+                id: name,
+                value: (value != undefined) ? value : defaultValue, // eslint-disable-line eqeqeq
+                defaultValue,
+                ...agg,
+            };
+        });
+        this.settingsDialog.items = inputs;
+        this.settingsDialog.setOpen(true);
+    }
+
+    updateAggregate = (items) => {
+        for (const { id, value } of items) {
+            const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);
+            tuple.obj[tuple.member] = value;
+        }
+        this.stx.changeOccurred('layout');
+        this.stx.createDataSet();
+        this.stx.draw();
+    };
 
     @computed get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
-        return [
-            { id: 'mountain', text: t.translate('Line'), disabled: false, icon: LineIcon },
-            { id: 'line', text: t.translate('Dot'), disabled: false, icon: DotIcon },
-            { id: 'colored_line', text: t.translate('Colored Dot'), disabled: false, icon: DotIcon },
-            { id: 'spline', text: t.translate('Spline'), disabled: false, icon: SplineIcon },
-            { id: 'baseline', text: t.translate('Baseline'), disabled: false, icon: BaseLineIcon },
-            { id: 'candle', text: t.translate('Candle'), disabled: isTickSelected, icon: CandleIcon },
-            { id: 'colored_bar', text: t.translate('OHLC'), disabled: isTickSelected, icon: OHLCIcon },
-            { id: 'hollow_candle', text: t.translate('Hollow Candle'), disabled: isTickSelected, icon: HollowCandleIcon },
-        ].map(t => ({ ...t, active: t.id === this.type.id }));
+        if (this.chartTypes === undefined) {
+            this.chartTypes = getChartTypes();
+        }
+
+        return this.chartTypes.map(t => ({
+            ...t,
+            active: t.id === this.type.id,
+            disabled: t.candleOnly ? isTickSelected : false,
+        }));
     }
 
-    @observable type = { id: 'mountain', text: 'Line', icon: LineIcon };
+    @action.bound setChartTypeFromLayout(layout) {
+        const chartType = this.getChartTypeFromLayout(layout);
+        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
+        this.type = this.chartTypes[typeIdx];
+    }
+
+    getChartTypeFromLayout(layout) {
+        let chartType;
+        if (layout.tension) { // We assume that if tension is set, spline is enabled
+            chartType = 'spline';
+        } else if (this.aggregates[layout.aggregationType]) {
+            chartType = layout.aggregationType;
+        } else {
+            chartType = layout.chartType;
+        }
+        return chartType;
+    }
+
+    isTypeCandle(type) {
+        if (typeof type === 'string') {
+            type = this.types.find(t => t.id === type);
+        }
+        return notCandles.indexOf(type.id) === -1;
+    }
 }

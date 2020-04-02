@@ -9,7 +9,6 @@ Period
 Field
 Type
 Offset
-Underlay
 MA
 MACD
 Fast MA Period
@@ -72,8 +71,8 @@ Accumulative Swing Index
 Limit Move Value
 Result
 Price Rate of Change
-Field
 Period
+Field
 Result
 Volume Rate of Change
 Period
@@ -85,15 +84,15 @@ Price Volume Trend
 Field
 Result
 Positive Volume Index
+Period
 Field
 Moving Average Type
-Period
 Index
 MA
 Negative Volume Index
+Period
 Field
 Moving Average Type
-Period
 Index
 MA
 On Balance Volume
@@ -110,14 +109,17 @@ Show Zones
 OverBought
 OverSold
 Historical Volatility
-Field
 Period
+Field
 Days Per Year
 Standard Deviations
 Result
 Pretty Good Oscillator
 Period
 Result
+Show Zones
+OverBought
+OverSold
 Ultimate Oscillator
 Cycle 1
 Cycle 2
@@ -144,8 +146,8 @@ Moving Average Type
 Result
 Price Oscillator
 Field
-Long Cycle
 Short Cycle
+Long Cycle
 Moving Average Type
 Points Or Percent
 Result
@@ -160,8 +162,8 @@ Show Zones
 OverBought
 OverSold
 Detrended Price Oscillator
-Field
 Period
+Field
 Moving Average Type
 Result
 True Range
@@ -174,8 +176,8 @@ Period
 EF
 EF Trigger
 Schaff Trend Cycle
-Field
 Period
+Field
 Short Cycle
 Long Cycle
 Moving Average Type
@@ -188,10 +190,10 @@ Period
 Moving Average Type
 Result
 Coppock Curve
+Period
 Field
 Short RoC
 Long RoC
-Period
 Result
 Chande Momentum Oscillator
 Period
@@ -200,8 +202,8 @@ Show Zones
 OverBought
 OverSold
 Chande Forecast Oscillator
-Field
 Period
+Field
 Result
 Intraday Momentum Index
 Period
@@ -235,8 +237,8 @@ ADX
 Positive Bar
 Negative Bar
 High Low Bands
-Field
 Period
+Field
 Shift Percentage
 Channel Fill
 High Low Top
@@ -246,11 +248,10 @@ High Minus Low
 Result
 Median Price
 Period
-Overlay
 Result
 Moving Average Envelope
-Field
 Period
+Field
 Shift Type
 Shift
 Moving Average Type
@@ -277,8 +278,8 @@ Prime Number Oscillator
 Tolerance Percentage
 Result
 Bollinger Bands
-Field
 Period
+Field
 Standard Deviations
 Moving Average Type
 Channel Fill
@@ -339,11 +340,9 @@ Field
 Result
 Typical Price
 Period
-Overlay
 Result
 Weighted Close
 Period
-Overlay
 Result
 Money Flow Index
 Period
@@ -408,8 +407,8 @@ Fake
 Squat
 ATR Bands
 Period
-Shift
 Field
+Shift
 Channel Fill
 ATR Bands Top
 ATR Bands Bottom
@@ -423,15 +422,15 @@ STARC Bands Top
 STARC Bands Median
 STARC Bands Bottom
 ATR Trailing Stops
-Multiplier
 Period
+Multiplier
 Plot Type
 HighLow
 Buy Stops
 Sell Stops
 Bollinger %b
-Field
 Period
+Field
 Standard Deviations
 Moving Average Type
 %b
@@ -439,8 +438,8 @@ Show Zones
 OverBought
 OverSold
 Bollinger Bandwidth
-Field
 Period
+Field
 Standard Deviations
 Moving Average Type
 Bandwidth
@@ -515,16 +514,16 @@ Period
 Comparison Symbol
 Result
 Ulcer Index
-Field
 Period
+Field
 Result
 Balance of Power
 Period
 Moving Average Type
 Result
 Trend Intensity Index
-Field
 Period
+Field
 Signal Period
 TII
 Signal
@@ -538,14 +537,13 @@ Show Zones
 OverBought
 OverSold
 Disparity Index
-Field
 Period
+Field
 Moving Average Type
 Result
 Rainbow Moving Average
-Field
 Period
-Underlay
+Field
 SMA1
 SMA2
 SMA3
@@ -557,8 +555,8 @@ SMA8
 SMA9
 SMA10
 Rainbow Oscillator
-Field
 Period
+Field
 HHV/LLV Lookback
 Positive Bar
 Negative Bar
@@ -612,8 +610,8 @@ Psychological Line
 Period
 Result
 Moving Average Deviation
-Field
 Period
+Field
 Moving Average Type
 Points Or Percent
 Increasing Bar

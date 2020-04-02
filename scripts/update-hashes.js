@@ -1,13 +1,14 @@
-const md5File = require('md5-file')
+const md5File = require('md5-file');
 const fs = require('fs');
 
-const files = ['./dist/smartcharts.js', './dist/smartcharts.css', './css/demo.css'];
+const HASH_LENGTH = 8;
 
 let html = fs.readFileSync('index.html', 'utf-8');
-files.forEach(file => {
-    const hash = md5File.sync(file);
+const files = html.match(/(\.\/dist\/[a-zA-Z.-]+)/g);
+files.forEach((file) => {
+    const hash = md5File.sync(file).substring(0, HASH_LENGTH);
     html = html.replace(file, 'PLACEHOLDER');
     html = html.replace(/PLACEHOLDER[^"]*/, `${file}?${hash}`);
 });
 
-fs.writeFileSync('index.html', html, 'utf-8'); 
+fs.writeFileSync('index.html', html, 'utf-8');

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="576" height="144" viewBox="0 0 576 144">
+    <g fill="none" fill-rule="evenodd" opacity=".04">
+        <path fill="#2A3052" fill-rule="nonzero" d="M44 30v12h8V30h-8zm19-2v-8h2v8h5v16H58V28h5zM49 44v8h-2v-8h-5V28h12v16h-5zm11-14v12h8V30h-8zM121 32a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm14 9.586l3.293-3.293a1 1 0 0 1 1.414 1.414L136.414 43l3.293 3.293a1 1 0 0 1-1.414 1.414L135 44.414l-3.293 3.293a1 1 0 0 1-1.414-1.414L133.586 43l-3.293-3.293a1 1 0 0 1 1.414-1.414L135 41.586zm0-14l3.293-3.293a1 1 0 0 1 1.414 1.414L136.414 29l3.293 3.293a1 1 0 0 1-1.414 1.414L135 30.414l-3.293 3.293a1 1 0 0 1-1.414-1.414L133.586 29l-3.293-3.293a1 1 0 1 1 1.414-1.414L135 27.586zM121 34a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0 14a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM196 28v16h8V28h-8zm3 18h-5V26h5v-6h2v6h5v20h-5v6h-2v-6zM262 36v6h-2v-8h6v10h2V26h6v12h2v-8h6v8h2v2h-4v-8h-2v8h-6V28h-2v18h-6V36z"/>
+        <g transform="translate(328 20)">
+            <circle cx="5" cy="16" r="3" fill="#2A3052"/>
+            <circle cx="16" cy="16" r="3" fill="#2A3052"/>
+            <circle cx="27" cy="16" r="3" fill="#2A3052"/>
+            <path stroke="#2A3052" stroke-width="2" d="M4.01 16H28"/>
+        </g>
+        <path stroke="#2A3052" stroke-width="2" d="M418 47v4h-4V29h-7v-4h7v-4h4v22h7v4h-7z"/>
+        <path fill="#2A3052" d="M489 46v6h-2V28h-7v-2h7v-6h2v24h7v2h-7z"/>
+        <path fill="#2A3052" fill-rule="nonzero" d="M556 28v16h8V28h-8zm3 18h-5V26h5v-6h2v6h5v20h-5v6h-2v-6zM4 102v12h8v-12H4zm19-2v-8h2v8h5v16H18v-16h5zM9 116v8H7v-8H2v-16h12v16H9zm11-14v12h8v-12h-8zM81 104a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm14 9.586l3.293-3.293a1 1 0 0 1 1.414 1.414L96.414 115l3.293 3.293a1 1 0 0 1-1.414 1.414L95 116.414l-3.293 3.293a1 1 0 0 1-1.414-1.414L93.586 115l-3.293-3.293a1 1 0 0 1 1.414-1.414L95 113.586zm0-14l3.293-3.293a1 1 0 0 1 1.414 1.414L96.414 101l3.293 3.293a1 1 0 0 1-1.414 1.414L95 102.414l-3.293 3.293a1 1 0 0 1-1.414-1.414L93.586 101l-3.293-3.293a1 1 0 1 1 1.414-1.414L95 99.586zM81 106a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0 14a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM156 100v16h8v-16h-8zm3 18h-5V98h5v-6h2v6h5v20h-5v6h-2v-6zM222 108v6h-2v-8h6v10h2V98h6v12h2v-8h6v8h2v2h-4v-8h-2v8h-6v-12h-2v18h-6v-10z"/>
+        <g transform="translate(288 92)">
+            <circle cx="5" cy="16" r="3" fill="#2A3052"/>
+            <circle cx="16" cy="16" r="3" fill="#2A3052"/>
+            <circle cx="27" cy="16" r="3" fill="#2A3052"/>
+            <path stroke="#2A3052" stroke-width="2" d="M4.01 16H28"/>
+        </g>
+        <path stroke="#2A3052" stroke-width="2" d="M378 119v4h-4v-22h-7v-4h7v-4h4v22h7v4h-7z"/>
+        <path fill="#2A3052" d="M449 118v6h-2v-24h-7v-2h7v-6h2v24h7v2h-7z"/>
+        <path fill="#2A3052" fill-rule="nonzero" d="M516 100v16h8v-16h-8zm3 18h-5V98h5v-6h2v6h5v20h-5v6h-2v-6z"/>
+    </g>
+</svg>

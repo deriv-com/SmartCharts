@@ -1,38 +1,54 @@
+/* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
-import ReactSlider from './Slider.jsx';
-import '../../sass/_ciq-form.scss';
-import {ArrowIcon} from './Icons.jsx';
+import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon } from './Icons.jsx';
+import '../../sass/components/_ciq-form.scss';
 
-export const Slider = ({
-    min = 1,
-    max = 10,
-    step = 1,
-    value,
-    className = '',
-    onChange,
-}) => {
-    return (
-        <div className='cq-slider'>
-            <ReactSlider
-                min={min}
-                max={max}
-                step={step}
-                onChange={onChange}
-                value={value}
-                withBars
-            />
-            <div className='value'>{value}</div>
-        </div>
-    );
-};
+export class Slider extends React.Component {
+    onChange = (val) => {
+        this.props.onChange(val.currentTarget.value);
+    };
+
+    shouldComponentUpdate(nextProps) {
+        return this.props.value !== nextProps.value;
+    }
+
+    render() {
+        const {
+            min = 1,
+            max = 10,
+            step = 1,
+            value,
+        } = this.props;
+        const barWidth = 238;// css hardcode
+        const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+
+        return (
+            <div className="cq-slider">
+                <div className="cq-slider-range">
+                    <div className="cq-slider-bar" />
+                    <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
+                    <input
+                        type="range"
+                        min={min}
+                        max={max}
+                        step={step}
+                        onChange={this.onChange}
+                        value={value}
+                    />
+                </div>
+                <div className="value">{value}</div>
+            </div>
+        );
+    }
+}
 
 export class DropDown extends React.Component {
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({open: !this.state.open});
+    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
-        if(e.target !== this.titleRef) {
-            this.setState({open: false});
+        if (e.target !== this.titleRef) {
+            this.setState({ open: false });
         }
     }
 
@@ -40,23 +56,26 @@ export class DropDown extends React.Component {
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     render() {
-        const { rows, children, title, onRowClick, className } = this.props;
+        const {
+            subtitle, rows, children, value, onRowClick, className,
+        } = this.props;
         const { open } = this.state;
         return (
-            <div className={`${className || ''} cq-dropdown`}>
+            <div className={`${className || ''} cq-dropdown ${open ? 'active' : ''}`}>
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    className={`title ${open ? 'active' : ''}`}
+                    className={`value ${open ? 'active' : ''}`}
                     onClick={this.onClick}
-                    ref={ref => this.titleRef = ref}
+                    ref={(ref) => { this.titleRef = ref; }}
                 >
-                    {title}
+                    {value}
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>
-                    {rows.map((row, rowIdx) => (
+                    {rows.map((row, idx) => (
                         <div
-                            key={rowIdx}
-                            className='row'
+                            key={idx} // eslint-disable-line react/no-array-index-key
+                            className="row"
                             onClick={() => onRowClick && onRowClick(row)}
                         >
                             {children(row)}
@@ -70,32 +89,34 @@ export class DropDown extends React.Component {
 
 export class Pattern extends React.Component {
     patterns = [
-        {width: 1, pattern: 'solid'},
-        {width: 3, pattern: 'solid'},
-        {width: 5, pattern: 'solid'},
-        {width: 1, pattern: 'dotted'},
-        {width: 3, pattern: 'dotted'},
-        {width: 5, pattern: 'dotted'},
-        {width: 1, pattern: 'dashed'},
-        {width: 3, pattern: 'dashed'},
-        {width: 5, pattern: 'dashed'},
-        {width: 0, pattern: 'none'},
+        { width: 1, pattern: 'solid' },
+        { width: 3, pattern: 'solid' },
+        { width: 5, pattern: 'solid' },
+        { width: 1, pattern: 'dotted' },
+        { width: 3, pattern: 'dotted' },
+        { width: 5, pattern: 'dotted' },
+        { width: 1, pattern: 'dashed' },
+        { width: 3, pattern: 'dashed' },
+        { width: 5, pattern: 'dashed' },
+        { width: 0, pattern: 'none' },
     ];
     render() {
-        const { pattern, lineWidth, onChange } = this.props;
-        const title = pattern !== 'none' ?
-            <span className={`option ${pattern}-${lineWidth}`}></span> :
-            <span className='none'>None</span>;
+        const { pattern, subtitle, lineWidth, onChange, onActive } = this.props;
+        const value = pattern !== 'none'
+            ? <span className={`option ${pattern}-${lineWidth}`} />
+            : <span className="none">None</span>;
 
-        return(
+        return (
             <DropDown
                 rows={this.patterns}
-                title={title}
+                value={value}
+                onActive={onActive}
                 onRowClick={onChange}
+                subtitle={subtitle}
             >
-                {p => p.pattern !== 'none' ?
-                    <span className={`option ${p.pattern}-${p.width}`}></span> :
-                    <span className='none'>None</span>
+                {p => (p.pattern !== 'none'
+                    ? <span className={`option ${p.pattern}-${p.width}`} />
+                    : <span className="none">None</span>)
                 }
             </DropDown>
         );
@@ -119,35 +140,49 @@ export class ColorPicker extends React.Component {
     ];
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState({open: !this.state.open});
+    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
-        if(e.target !== this.titleRef) {
-            this.setState({open: false});
+        if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
+            this.setState({ open: false });
         }
     };
+
+    defaultColor = () => (this.props.theme === 'light' ? '#000000' : '#ffffff')
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
-    render() {
-        const { color, setColor } = this.props;
-        const backgroundColor = color === 'auto' ? '#000000' : color;
+    shouldComponentUpdate(nextProps, nextState) {
+        return (this.state.open !== nextState.open)
+        || (this.props.color !== nextProps.color)
+        || (this.props.theme !== nextProps.theme);
+    }
 
+    render() {
+        const { subtitle, color, setColor } = this.props;
+        const backgroundColor = color === 'auto' ? this.defaultColor() : color;
         return (
-            <div className='cq-color-picker'>
+            <div className={`cq-color-picker ${this.state.open ? 'active' : ''}`}>
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    ref={ref => this.titleRef = ref}
-                    className='title'
-                    style={{backgroundColor}}
+                    className="value"
                     onClick={this.onClick}
-                />
+                    ref={(ref) => { this.titleRef = ref; }}
+                >
+                    <div
+                        className="sc-input-color"
+                        style={{ backgroundColor }}
+                    />
+                    <ArrowIcon />
+                </div>
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
-                        <div key={rowIdx} className='row'>
-                            {row.map((tileColor, idx) => (
+                        <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
+                            {row.map(tileColor => (
                                 <div
-                                    key={idx}
-                                    className='tile-color' style={{ backgroundColor: tileColor }}
+                                    key={tileColor}
+                                    className="tile-color"
+                                    style={{ backgroundColor: tileColor }}
                                     onClick={() => setColor(tileColor)}
                                 />
                             ))}
@@ -157,7 +192,6 @@ export class ColorPicker extends React.Component {
             </div>
         );
     }
-
 }
 
 export const Switch = ({
@@ -168,75 +202,122 @@ export const Switch = ({
         className={`cq-switch ${value ? 'on' : 'off'}`}
         onClick={() => onChange(!value)}
     >
-        <div className='handle' />
+        <div className="handle" />
     </div>
 );
 
 // NumericInput fires onChange on Enter or onBlur
-export class NumericInput extends React.Component {
-    state = {};
+export class NumericInput extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            originalValue: '',
+            value: '',
+        };
 
-    componentWillMount() {
-        const { value } = this.props;
-        this.setState({
-            originalValue: value,
-            value,
-        });
+        this.onUpdateValue = this.onUpdateValue.bind(this);
     }
 
-    componentWillReceiveProps(newProps) {
-        const { value } = newProps;
-        if (value !== this.state.originalValue) {
-            this.setState({
+    componentDidMount() {
+        this.setState(() => ({
+            originalValue: this.props.value,
+            value: this.props.value,
+        }));
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const { value, min, max, onChange } = props;
+        let val = value;
+        if (value !== state.originalValue) {
+            if (max !== undefined && value > max) {
+                val = max;
+            } else if (min !== undefined && value < min) {
+                val = min;
+            }
+            onChange(val);
+            return {
                 originalValue: value,
-                value,
-            }, this.fireOnChange);
+                value: val,
+            };
         }
+        return null;
     }
 
-    fireOnChange = () => this.props.onChange(this.state.value);
-
-    onUpdateValue = e => {
-        this.setState({ value: e.target.value });
+    fireOnChange = () => {
+        const { min, max, onChange } = this.props;
+        const setAndChange = val => this.setState({ value: val }, () => onChange(this.state.value));
+        if (max !== undefined && this.state.value > max) {
+            setAndChange(max);
+        } else if (min !== undefined && this.state.value < min) {
+            setAndChange(min);
+        } else {
+            onChange(this.state.value);
+        }
     };
 
-    fireOnEnter = e => {
+    onUpdateValue = (e) => {
+        e.persist();
+
+        this.setState(() => ({ value: e.target.value }));
+    };
+
+    fireOnEnter = (e) => {
         if (e.key === 'Enter') {
             this.fireOnChange();
         }
     };
 
+    onIncrease = () => this.setState(prevState => ({ value: prevState.value + 1 }));
+    onDecrease = () => this.setState(prevState => ({ value: prevState.value - 1 }));
+
     render() {
+        const { subtitle, min, max, step } = this.props;
         return (
-            <input
-                type="number"
-                value={this.state.value}
-                onBlur={this.fireOnChange}
-                onChange={this.onUpdateValue}
-                onKeyPress={this.fireOnEnter}
-            />
+            <div className="cq-numeric-input">
+                <input
+                    type="number"
+                    value={this.state.value}
+                    onBlur={this.fireOnChange}
+                    onChange={this.onUpdateValue}
+                    onKeyPress={this.fireOnEnter}
+                    min={min}
+                    max={max}
+                    step={step}
+                />
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
+                <div className="cq-numeric-input-buttons">
+                    <InputNumberPlusIcon onClick={this.onIncrease} />
+                    <InputNumberMinusIcon onClick={this.onDecrease} />
+                </div>
+            </div>
         );
     }
 }
 
 export const NumberColorPicker = ({
     value,
+    theme,
     onChange,
+    onActive,
 }) => {
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
     const { Value, Color } = value;
-    const onValueChange = Value => onChange({ Color, Value });
-    const onColorChange = Color => onChange({ Color, Value });
+    const onValueChange = v => onChange({ Color,    Value: v });
+    const onColorChange = c => onChange({ Color: c, Value    });
 
     return (
         <span className="cq-numbercolorpicker">
             <NumericInput
                 value={Value}
+                subtitle={t.translate('Size')}
                 onChange={val => onValueChange(val)}
             />
             <ColorPicker
                 color={Color}
+                theme={theme}
+                onActive={onActive}
+                subtitle={t.translate('Color')}
                 setColor={val => onColorChange(val)}
             />
         </span>
@@ -247,18 +328,15 @@ export const Toggle = ({
     className,
     children,
     active,
-    onChange
-}) =>
-{
-    return (
-        <div
-            onClick={() => onChange(!active)}
-            className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
-        >
-            {children}
-        </div>
-    );
-};
+    onChange,
+}) => (
+    <div
+        onClick={() => onChange(!active)}
+        className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+    >
+        {children}
+    </div>
+);
 
 export const FontSetting = ({
     onChange,
@@ -279,7 +357,9 @@ export const FontSetting = ({
     const onFontSizeChange = size => fireChange({ size: `${size}px` });
     const onBoldChange = isBold => fireChange({ weight: isBold ? 'bold' : undefined });
     const onItalicChange = isItalic => fireChange({ style: isItalic ? 'italic' : undefined });
-    const {family, style, weight, size } = value;
+    const {
+        family, style, weight, size,
+    } = value;
 
     return (
         <span className="cq-fontsetting">
@@ -296,20 +376,20 @@ export const FontSetting = ({
                 <div className="cq-text-icon"><i>i</i></div>
             </Toggle>
             <DropDown
-                className='cq-changefontsize'
+                className="cq-changefontsize"
                 rows={fontSizes}
                 title={size || '13px'}
                 onRowClick={onFontSizeChange}
             >
-                {p => <span className={`option`}>{p}</span>}
+                {p => <span className="option">{p}</span>}
             </DropDown>
             <DropDown
-                className='cq-changefontfamily'
+                className="cq-changefontfamily"
                 rows={families}
                 title={family || families[0]}
                 onRowClick={onFontFamilyChange}
             >
-                {p => <span className={`option`}>{p}</span>}
+                {p => <span className="option">{p}</span>}
             </DropDown>
         </span>
     );

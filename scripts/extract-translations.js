@@ -1,56 +1,55 @@
-var _ = require('lodash');
-var path = require('path');
-var fs = require('fs');
-var esprima = require('esprima');
-var estree = require('estree-utils');
-var mkdirp = require('mkdirp');
+const path = require('path');
+const fs = require('fs');
+const espree = require('espree');
+const walk = require('estree-walk');
+const mkdirp = require('mkdirp');
 
-var file_removed = false;
-var string_map = {};
-var default_options = {
-    method_names: ['translate']
+let file_removed = false;
+const string_map = {};
+const default_options = {
+    method_names: ['translate'],
 };
 
-var parseCode = (source) => {
-    return esprima.parse(source, {
-        ecmaVersion: 9,
-        sourceType: 'script',
-        tolerant: true,
-        loc: true
-    })['body'];
-};
+const parseCode = source => espree.parse(source, {
+    ecmaVersion: 10,
+    sourceType: 'script',
+    tolerant: true,
+    loc: true,
+}).body;
 
 function esc(s) {
     if (!s) return s;
     return s.replace(/"/g, '\\"');
 }
 
-var extractTextFromFunctions = (...args) => (code_obj) => {
-    const textFunctions = estree.filterTreeForMethodsAndFunctionsNamed(...args)(code_obj);
-    return _.map(textFunctions, (node) => {
-        var strings = node.arguments.slice(0, 2).map((arg) => arg.value);
-        if (!strings[0]) return; // ignore invalid strings
-        return {
-            text: esc(strings[0]),
-            pluralForm: esc(strings[1]),
-            loc: {
-                line: node.loc.start.line,
-                column: node.loc.start.column
+const extractTextFromFunctions = (...method_names) => (parsed_code) => {
+    const textFunctions = [];
+    walk(parsed_code, {
+        CallExpression(node) {
+            const property = node.callee.property;
+            if (property && method_names.includes(property.name)) {
+                const [text, pluralForm] = node.arguments.slice(0, 2).map(a => esc(a.value));
+                if (text) {
+                    textFunctions.push({ text, pluralForm });
+                }
             }
-        };
+        },
     });
+    // have translations in alphabetical order to avoid confusing diffs when code changes
+    textFunctions.sort(({ text: a }, { text: b }) => a.localeCompare(b));
+    return textFunctions;
 };
 
-var formatText = (extracted_obj) => {
-    var body = '';
-    _.forEach(extracted_obj, (info) => {
+const formatText = (extracted_obj) => {
+    let body = '';
+    extracted_obj.forEach((info) => {
         if (!info || string_map[info.text]) {
             return;
         }
         body = body ? `${body}\n` : '';
-        body += `${'msgid' + ' "'}${info.text}"\n`;
+        body += `${'msgid "'}${info.text}"\n`;
         if (info.pluralForm) {
-            body += `${'msgid_plural' + ' "'}${info.pluralForm}"\n`;
+            body += `${'msgid_plural "'}${info.pluralForm}"\n`;
             body += 'msgstr[0] ""\n';
             body += 'msgstr[1] ""\n';
             string_map[info.text] = true;
@@ -64,7 +63,7 @@ var formatText = (extracted_obj) => {
 
 function getIndicatorStrings() {
     const s = fs.readFileSync(path.resolve('scripts/static-messages.txt')).toString().split('\n');
-    let result = [];
+    const result = [];
     for (const text of s) {
         if (!text || text === '') continue;
         result.push({ text });
@@ -73,19 +72,15 @@ function getIndicatorStrings() {
 }
 
 function extractOutPot(source, translationDir) {
-    default_options.output = translationDir;
-    var options = _.find(this.loaders, loader => loader.path.indexOf("textExtractor") !== -1);
-    options = options ? options.options : default_options;
-    var output = options.output;
-    var parsed_code = parseCode(source);
-    var extracted_text = extractTextFromFunctions(...options.method_names)(parsed_code);
-    var indicator_text = getIndicatorStrings();
-    var formatted_text = `\n${formatText(extracted_text)}`;
-    formatted_text += `\n\n# Indicator strings:\n\n${formatText(indicator_text)}`
+    const options = { ...default_options, output: translationDir };
+    const output = options.output;
+    const parsed_code = parseCode(source);
+    const extracted_text = extractTextFromFunctions(...options.method_names)(parsed_code);
+    const indicator_text = getIndicatorStrings();
+    let formatted_text = `\n${formatText(extracted_text)}`;
+    formatted_text += `\n\n# Indicator strings:\n\n${formatText(indicator_text)}`;
     try {
-        if (file_removed)
-        {fs.appendFileSync(`${output}/messages.pot`, formatted_text);}
-        else {
+        if (file_removed) { fs.appendFileSync(`${output}/messages.pot`, formatted_text); } else {
             fs.unlinkSync(`${output}/messages.pot`);
             fs.writeFileSync(`${output}/messages.pot`, formatted_text);
             file_removed = true;
@@ -106,5 +101,3 @@ if (jsFile) {
 } else {
     console.error('Please provide the transpiled js file!');
 }
-
-

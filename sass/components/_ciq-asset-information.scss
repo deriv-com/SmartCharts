@@ -1,0 +1,52 @@
+.ciq-asset-information {
+    position: relative;
+    z-index: +1;
+    background: transparent;
+    display: flex;
+    margin: 15px 0px;
+    left: 10px;
+    top: 10px;
+    justify-content: flex-start;
+    opacity: 1;
+    height: 14px;
+    transition: all 0.1s;
+
+    &.hide {
+        height: 0;
+        opacity: 0;
+        margin: 0;
+        pointer-events: none;
+    }
+    > div {
+        padding-right: 5px;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 1.2em;
+
+        div:first-child {
+            padding: 0 8px;
+        }
+        div:last-child {
+            font-weight: bold;
+        }
+        @include themify($themes) {
+            color: themed('AssetInfoText');
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .ciq-asset-information {
+        left: 2px;
+        flex-wrap: wrap;
+
+        > div {
+            font-size: 1.2em;
+
+            div:first-child {
+                padding: 0px 5px;
+            }
+        }
+    }
+}

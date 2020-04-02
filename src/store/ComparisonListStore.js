@@ -1,41 +1,46 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, reaction } from 'mobx';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import AnimatedPrice from '../components/AnimatedPrice.jsx';
 
 export default class ComparisonListStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+
+        // The order of setting the reaction is important. The animatedPrices array must match
+        // comparisonSymbols array _before_ updating the prices
+        reaction(() => this.comparisonSymbols.length, this.syncAnimatedPricesWithComparisons);
         reaction(() => this.comparisonSymbols.map(s => s.price), this.updatePrices);
     }
 
     @observable animatedPrices = [];
     animatedPriceStore = [];
-    get comparisonSymbols() { return this.mainStore.chart.comparisonSymbols; }
+    get comparisonSymbols() { return this.mainStore.comparison.comparisonSymbols; }
     get context() { return this.mainStore.chart.context; }
 
-    syncAnimatedPricesWithComparisons = () => {
+    @action.bound syncAnimatedPricesWithComparisons() {
         let diff = this.comparisonSymbols.length - this.animatedPrices.length;
         if (diff > 0) {
-            while (diff--) {
+            while (diff-- !== 0) {
                 const store = new AnimatedPriceStore();
-                this.animatedPrices.push(store.connect(AnimatedPrice));
                 this.animatedPriceStore.push(store);
+                this.animatedPrices = this.animatedPrices.concat([store.connect(AnimatedPrice)]);
             }
         } else if (diff < 0) {
-            this.animatedPrices.splice(diff, diff);
-            this.animatedPriceStore.splice(diff, diff);
+            while (diff++ !== 0) {
+                this.animatedPrices.pop();
+                this.animatedPriceStore.pop();
+            }
         }
-    };
+    }
 
-    updatePrices = () => {
-        this.syncAnimatedPricesWithComparisons();
-        this.comparisonSymbols.map((item, i) => {
+    @action.bound updatePrices() {
+        this.comparisonSymbols.map(({ price, prevPrice }, i) => {
             const animatedPrice = this.animatedPriceStore[i];
-            animatedPrice.setPrice(item.price);
+            animatedPrice.setPrice(price, prevPrice);
         });
     }
 
     @action.bound onDeleteItem(symbolObject) {
-        this.context.stx.removeSeries(symbolObject.symbol);
+        this.mainStore.comparison.removeComparison(symbolObject);
     }
 }

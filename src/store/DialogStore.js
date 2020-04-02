@@ -1,39 +1,52 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, when } from 'mobx';
+import debounce from 'lodash.debounce';
 import { connect } from './Connect';
 
-const allDialogs = [];
+let activeDialog;
 
 export default class DialogStore {
-    constructor() {
-        allDialogs.push(this);
+    constructor(mainStore) {
+        this.mainStore = mainStore;
+        when(() => this.context, () => {
+            this.routingStore.registerDialog(this);
+        });
     }
 
-    @observable open = false;
+    get context() { return this.mainStore.chart.context; }
+    get routingStore() { return this.mainStore.routing; }
 
-    @action.bound setOpen(val) {
-        if(this.open !== val) {
+    @observable open = false;
+    onClose = () => this.setOpen(false);
+    setOpen = debounce((val) => {
+        this.openDialog(val);
+    }, 300, { leading: true, trailing: false });
+
+    @action.bound openDialog(val) {
+        if (this.open !== val) {
             this.open = val;
-            if(this.open) { setTimeout(() => this.register(), 100); }
-            else { this.unregister(); }
-        }
-        if(this.open === true) { // close others.
-            allDialogs.filter(m => m !== this).forEach(m => m.setOpen(false));
+            if (this.open) { this.register(); } else { this.unregister(); }
+
+            if (val === true) { // close active dialog.
+                if (activeDialog) { activeDialog.openDialog(false); }
+                activeDialog = this;
+            } else {
+                activeDialog = undefined;
+            }
         }
     }
 
     handleClickOutside = (e) => {
         let isRightClick = false;
-        if ("which" in e) { isRightClick = e.which == 3; }
-        else if ("button" in e) { isRightClick = e.button == 2; }
+        if ('which' in e) { isRightClick = e.which === 3; } else if ('button' in e) { isRightClick = e.button === 2; }
 
-        if(!e.isHandledByDialog && !isRightClick) {
-            this.setOpen(false);
+        if (!e.isHandledByDialog && !isRightClick) {
+            this.onClose();
         }
     };
     closeOnEscape = (e) => {
         const ESCAPE = 27;
-        if(e.keyCode === ESCAPE) {
-            this.setOpen(false);
+        if (e.keyCode === ESCAPE) {
+            this.onClose();
         }
     };
 
@@ -53,10 +66,18 @@ export default class DialogStore {
         e.nativeEvent.isHandledByDialog = true;
     }
 
+    @action.bound updateCloseCallback(onClose) {
+        if (onClose !== undefined) {
+            this.onClose = onClose;
+        }
+    }
+
     connect = connect(() => ({
         open: this.open,
         setOpen: this.setOpen,
-        onTitleClick: this.onTitleClick,
+        onClose: this.onClose,
+        updateCloseCallback: this.updateCloseCallback,
         onContainerClick: this.onContainerClick,
-    }))
+        isMobile: this.mainStore.chart.isMobile,
+    }));
 }

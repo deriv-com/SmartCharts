@@ -1,0 +1,87 @@
+.cq-last-digits {
+    position: absolute;
+    bottom: 45px;
+    left: calc(50% - 150px);
+    visibility: hidden;
+
+    &.show {
+        visibility: visible;
+    }
+    .cq-bars {
+        height: 70px;
+        @include themify($themes) {
+            color: themed('LastdigitsBarText');
+        }
+
+        .min {
+            @include themify($themes) {
+                color: themed('LastdigitsMinBarBg');
+            }
+        }
+        .max {
+            @include themify($themes) {
+                color: themed('LastdigitsMaxBarBg');
+            }
+        }
+        .cq-bar-value {
+            margin: -16px 0 0 -6px;
+            transition: opacity 0.8s linear;
+            font-size: 12px;
+            opacity: 0;
+
+            &.show {
+                opacity: 1;
+            }
+        }
+        .cq-bar {
+            width: 10px;
+            @include themify($themes) {
+                background-color: themed('LastdigitsBarBg');
+            }
+            position: absolute;
+            bottom: 40px;
+            transition: height 0.8s ease-in-out;
+            border-radius: 16px;
+
+            .cq-bar-title {
+                position: absolute;
+                bottom: -20px;
+                width: 10px;
+                text-align: center;
+                font-size: 14px;
+            }
+            &.min {
+                @include themify($themes) {
+                    background-color: themed('LastdigitsMinBarBg');
+                }
+            }
+            &.max {
+                @include themify($themes) {
+                    background-color: themed('LastdigitsMaxBarBg');
+                }
+            }
+        }
+    }
+    .cq-bar-footer {
+        text-align: center;
+        width: 475px;
+        font-size: 12px;
+        top: 60px;
+        position: absolute;
+        left: -75px;
+
+        @include themify($themes) {
+            color: themed('LastdigitsBarFooter');
+        }
+    }
+    &.minimised {
+        bottom: 10px;
+
+        .cq-bars {
+            height: 25px;
+        }
+        .cq-bar-footer {
+            top: 8px;
+        }
+    }
+}

@@ -1,102 +1,202 @@
 import React from 'react';
-import Menu from './Menu.jsx';
+import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
+import ViewStore from '../store/ViewStore';
 import {
-    CloseIcon,
     TemplateIcon,
     AddIcon,
-    TickIcon,
-    DeleteIcon
+    DeleteIcon,
+    EmptyStateIcon,
+    OverwriteStateIcon,
 } from './Icons.jsx';
+import '../../sass/components/_view.scss';
 
 const ViewItem = ({
     view,
     remove,
     onClick,
 }) => (
-    <div className="view" onClick={onClick}>
-        <span className="name">{view.name}</span>
-        <DeleteIcon onClick={remove}/>
+    <div className="ciq-views__views__list__item" onClick={onClick}>
+        <span>{view.name}</span>
+        <DeleteIcon onClick={remove} />
     </div>
-)
+);
+
+const EmptyView = ({ onClick }) => (
+    <div className="ciq-views--empty">
+        <EmptyStateIcon />
+        <p>{t.translate('You have no save templates yet.')}</p>
+        <button type="button" className="sc-btn" onClick={onClick}>
+            <AddIcon />
+            {t.translate('Add new templates')}
+        </button>
+    </div>
+);
+
+const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
+    <div className="ciq-views--overwrite">
+        <div className="ciq-views--overwrite__content">
+            <OverwriteStateIcon />
+            <p>
+                {templateName + t.translate(' already exists.')}<br />
+                {t.translate('Would you like to overwrite it?')}
+            </p>
+        </div>
+        <div className="ciq-views--overwrite__footer">
+            <button type="button" className="sc-btn" onClick={onCancel}>
+                {t.translate('Cancel')}
+            </button>
+            <button type="button" className="sc-btn sc-btn--primary" onClick={onOverwrite}>
+                {t.translate('Overwrite')}
+            </button>
+        </div>
+    </div>
+);
+
 
 const Views = ({
-    Menu,
+    ViewsMenu,
     menuOpen,
     views,
-    routes: {current: currentRoute, add, main, cancel},
+    currentRoute,
+    onToggleNew,
+    routes: { main, overwrite },
     onChange,
     onSubmit,
     applyLayout,
     remove,
     inputRef,
+    saveViews,
+    templateName,
+    removeAll,
+    isInputActive,
+    onFocus,
+    onBlur,
+    portalNodeId,
 }) => {
-    return (
-        <Menu className="views">
-            <Menu.Title className="cq-menu-btn">
-                <div>
-                    <TemplateIcon
-                        className = {menuOpen ? 'active' : ''}
-                        tooltip-title={t.translate("Templates")} />
-                </div>
-            </Menu.Title>
-            <Menu.Body>
-                <div className="dropdown-title">
+    const isActive = isInputActive || templateName !== '';
 
-                        {
-                            currentRoute === 'add'
-                            ? <span className="add">
-                                <input
-                                    ref={inputRef}
-                                    className="view-input"
-                                    placeholder={t.translate("Template name")}
-                                    maxLength={20}
-                                    onChange={onChange}
-                                    onKeyUp={onSubmit}
-                                />
-                                <CloseIcon onClick={cancel} />
-                            </span>
-                            : <span className="title">Templates</span>
-                        }
-                    <span className="icon">
-                        {
-                            currentRoute === 'add'
-                            //TODO: change this to tick icon.
-                            ? <TickIcon className="ic-clear stroke" onClick={add}/>
-                            : <AddIcon className="ic-clear fill" onClick={main}/>
-                        }
-                    </span>
+    return (
+        <ViewsMenu
+            className="ciq-views-menu"
+            title={t.translate('Templates')}
+            tooltip={t.translate('Templates')}
+            newStyle
+            portalNodeId={portalNodeId}
+        >
+            <ViewsMenu.Title>
+                <div className={`ciq-views__menu ${menuOpen ? 'ciq-views__menu--active' : ''}`}>
+                    <TemplateIcon />
                 </div>
-                <div className='content'>
-                    {
-                        views.length
-                        ? views.map((view, i) => (
-                            <ViewItem
-                                view={view}
-                                key={i}
-                                onClick={applyLayout.bind(null, i)}
-                                remove={remove.bind(null, i)}
-                            />
-                        ))
-                        : <span className="placeholder">
-                            <p>{t.translate('There is no template added by you.')}</p>
-                            <p>{t.translate('Click + icon to add one.')}</p>
-                        </span>
+            </ViewsMenu.Title>
+            <ViewsMenu.Body>
+                <div className="ciq-views">
+                    {(currentRoute === 'new')
+                        ? (<EmptyView onClick={onToggleNew} />)
+                        : (
+                            <React.Fragment>
+                                {
+                                    currentRoute !== 'overwrite' ? '' : (
+                                        <OverwriteView
+                                            templateName={templateName}
+                                            onCancel={main}
+                                            onOverwrite={overwrite}
+                                        />
+                                    )
+                                }
+                                <Scrollbars
+                                    className="ciq-scrollbar"
+                                >
+                                    <div className="form form--ciq-views">
+                                        <div className="form__input-group">
+                                            <div className="form__group">
+                                                <div className="form__control">
+                                                    <div className={`form--ciq-views__input ${isActive ? 'form--ciq-views__input--active' : ''}`}>
+                                                        <div className="subtitle">
+                                                            <span>{t.translate('Add new templates')}</span>
+                                                        </div>
+                                                        <input
+                                                            type="text"
+                                                            className={`sc-input ${isActive ? 'sc-input--active' : ''}`}
+                                                            placeholder={isActive ? '' : t.translate('Add new templates')}
+                                                            ref={inputRef}
+                                                            value={templateName}
+                                                            onKeyUp={onSubmit}
+                                                            onChange={onChange}
+                                                            onFocus={onFocus}
+                                                            onClick={onFocus}
+                                                            onBlur={onBlur}
+                                                        />
+                                                        <button
+                                                            type="button"
+                                                            onClick={saveViews}
+                                                            className={`sc-btn sc-btn--primary ${isActive ? '' : 'sc-btn--primary--disabled'}`}
+                                                        >
+                                                            <AddIcon />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {views.length > 0
+                                        ? (
+                                            <div className="ciq-views__views">
+                                                <div className="ciq-views__views__head">
+                                                    <h5>{t.translate('Saved templates')}</h5>
+                                                    <button
+                                                        type="button"
+                                                        onClick={removeAll}
+                                                        className="sc-btn sc-btn--sm sc-btn--outline-secondary"
+                                                    >
+                                                        {t.translate('Clear all')}
+                                                    </button>
+                                                </div>
+                                                <div className="ciq-views__views__content">
+                                                    <div className="ciq-views__views__list">
+                                                        {
+                                                            views.map((view, i) => (
+                                                                <ViewItem
+                                                                    view={view}
+                                                                    key={view.name}
+                                                                    onClick={e => applyLayout(i, e)}
+                                                                    remove={e => remove(i, e)}
+                                                                />
+                                                            ))
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                        : ''}
+                                </Scrollbars>
+                            </React.Fragment>
+                        )
                     }
                 </div>
-            </Menu.Body>
-        </Menu>
+            </ViewsMenu.Body>
+        </ViewsMenu>
     );
 };
 
-export default connect(({view: s}) => ({
-    Menu: s.menu.connect(Menu),
-    views: s.views,
+
+export default connect(({ view: s }) => ({
+    ViewsMenu: s.ViewsMenu,
+    views: ViewStore.views,
     routes: s.routes,
+    onOverwrite: s.onOverwrite,
     onChange: s.onChange,
     remove: s.remove,
     onSubmit: s.onSubmit,
     applyLayout: s.applyLayout,
     menuOpen: s.menu.dialog.open,
     inputRef: s.inputRef,
+    currentRoute: s.currentRoute,
+    templateName: s.templateName,
+    onToggleNew: s.onToggleNew,
+    saveViews: s.saveViews,
+    removeAll: s.removeAll,
+    isInputActive: s.isInputActive,
+    onFocus: s.onFocus,
+    onBlur: s.onBlur,
 }))(Views);
