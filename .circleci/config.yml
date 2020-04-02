@@ -196,8 +196,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^staging.*/
-          #context: binary-frontend-artifact-upload
-          context: binary-frontend-deploy
+          context: binary-frontend-artifact-upload
       - deploy_staging:
           filters:
             branches:
