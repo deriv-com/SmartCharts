@@ -89,6 +89,26 @@
         background: themed('TemplateBg');
     }
 
+    &__menu {
+        position: relative;
+
+        .ic-icon {
+            margin: auto;
+            width: 16px;
+            height: 16px;
+            top: -4px;
+            position: relative;
+
+            svg {
+                stroke: none !important;
+                width: 16px !important;
+                height: 16px !important;
+                @include themify($themes) {
+                    fill: themed('ChartModeText') !important;
+                }
+            }
+        }
+    }
     &--empty {
         display: flex;
         flex-direction: column;
@@ -257,19 +277,10 @@
 }
 
 .smartcharts-mobile {
-    .cq-menu-dropdown {
-        .dropdown-title {
-            .icon {
-                flex: none;
-            }
-        }
-        .content .ciq-list {
-            .ciq-list-inner {
-                width: 100%;
-            }
-            .ciq-list-item .ic-icon {
-                opacity: 1;
-            }
+    .ciq-views-menu {
+        .cq-dialog {
+            left: auto;
+            width: 300px;
         }
     }
 }

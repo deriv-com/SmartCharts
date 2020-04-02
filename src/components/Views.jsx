@@ -80,14 +80,14 @@ const Views = ({
         <ViewsMenu
             className="ciq-views-menu"
             title={t.translate('Templates')}
+            tooltip={t.translate('Templates')}
             newStyle
             portalNodeId={portalNodeId}
         >
-            <ViewsMenu.Title className="cq-menu-btn">
-                <TemplateIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Templates')}
-                />
+            <ViewsMenu.Title>
+                <div className={`ciq-views__menu ${menuOpen ? 'ciq-views__menu--active' : ''}`}>
+                    <TemplateIcon />
+                </div>
             </ViewsMenu.Title>
             <ViewsMenu.Body>
                 <div className="ciq-views">
@@ -144,7 +144,13 @@ const Views = ({
                                             <div className="ciq-views__views">
                                                 <div className="ciq-views__views__head">
                                                     <h5>{t.translate('Saved templates')}</h5>
-                                                    <button type="button" onClick={removeAll}>{t.translate('Clear all')}</button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={removeAll}
+                                                        className="sc-btn sc-btn--sm sc-btn--outline-secondary"
+                                                    >
+                                                        {t.translate('Clear all')}
+                                                    </button>
                                                 </div>
                                                 <div className="ciq-views__views__content">
                                                     <div className="ciq-views__views__list">

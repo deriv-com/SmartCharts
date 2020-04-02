@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/back/ic-back</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/back/ic-back" stroke-width="1" fill-rule="evenodd" stroke="none">
+        <path d="M3.61340311,8.5 L6.87368585,12.1678181 C7.05714486,12.3742095 7.03855449,12.6902457 6.83216311,12.8737047 C6.62577172,13.0571637 6.30973554,13.0385733 6.12627653,12.8321819 L2.12627653,8.33218192 C1.95788274,8.14273891 1.95788274,7.85726109 2.12627653,7.66781808 L6.12627653,3.16781808 C6.30973554,2.9614267 6.62577172,2.94283633 6.83216311,3.12629534 C7.03855449,3.30975435 7.05714486,3.62579054 6.87368585,3.83218192 L3.61340311,7.5 L13.5,7.5 C13.7761424,7.5 14,7.72385763 14,8 C14,8.27614237 13.7761424,8.5 13.5,8.5 L3.61340311,8.5 Z" id="Combined-Shape" fill-rule="nonzero"></path>
+    </g>
+</svg>
