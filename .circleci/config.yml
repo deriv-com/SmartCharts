@@ -93,7 +93,7 @@ commands:
     parameters:
       docker_image_tag:
         type: string
-        default: "latest-staging"
+        default: "beta-latest"
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
