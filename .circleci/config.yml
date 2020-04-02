@@ -205,8 +205,6 @@ workflows:
               only: 
                 - /^dev$/
                 - /^pull\//
-            tags:
-              only: /^staging.*/
           context: binary-frontend-artifact-upload
 
       - deploy_dev:
