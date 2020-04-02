@@ -52,7 +52,7 @@ commands:
     steps:
       - run:
           name: Testing App
-          command: yarn test
+          command: yarn test 
   build:
     description: Build App
     steps:
