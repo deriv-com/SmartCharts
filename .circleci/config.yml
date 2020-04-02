@@ -202,7 +202,9 @@ workflows:
       - build_push_dev:
           filters:
             branches:
-              ignore: /.*/
+              only: 
+                - /^dev$/
+                - /^pull\//
             tags:
               only: /^staging.*/
           context: binary-frontend-artifact-upload
@@ -212,18 +214,16 @@ workflows:
             - build_push_dev
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^staging.*/
+              only: 
+                - /^dev$/
+                - /^pull\//
 
   release_production:
     jobs:
       - build_push_production:
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^production.*/
+              only: /^master$/
           context: binary-frontend-artifact-upload
               
       - deploy_production:
@@ -231,6 +231,5 @@ workflows:
             - build_push_production
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /^production.*/
+              only: /^master$/
+
