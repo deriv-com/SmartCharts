@@ -104,33 +104,8 @@
             border-top: 1px solid themed('DialogFootBorder');
         }
 
-        button {
-            height: 32px;
-            line-height: 32px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 4px;
-            padding: 0px 16.5px;
-            font-weight: bold;
-
-            &.reset {
-                padding: 0px 10.5px;
-                @include themify($themes) {
-                    background: themed('DialogFootResetBg');
-                    color: themed('DialogFootResetText');
-                    border: 1px solid themed('DialogFootResetBorder');
-                }
-            }
-            &.cancel {
-                border: 1px solid transparent;
-                margin-right: 8px;
-                padding: 0px 7px;
-                background: transparent;
-                @include themify($themes) {
-                    color: themed('DialogFootCancelText');
-                }
-            }
+        .sc-btn--cancel {
+            margin-right: 8px;
         }
     }
     .description {

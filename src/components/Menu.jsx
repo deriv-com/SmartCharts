@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import MenuMobile from './MenuMobile.jsx';
+import Tooltip from './Tooltip.jsx';
 import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
@@ -45,28 +46,6 @@ class Menu extends Component {
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
         if (newStyle) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
-            const newDropdown = (shouldRenderDialogs
-                && (
-                    <CSSTransition
-                        appear
-                        in={dialogStatus}
-                        timeout={300}
-                        classNames="cq-dialog"
-                        unmountOnExit
-                    >
-                        <DropdownDialog
-                            isMobile={isMobile}
-                            isFullscreen={isFullscreen}
-                            title={title}
-                            handleCloseDialog={handleCloseDialog}
-                            subTitle={subTitle}
-                            onBack={onBack}
-                            enableTabular={enableTabular}
-                        >
-                            {rest}
-                        </DropdownDialog>
-                    </CSSTransition>
-                ));
             const modalDropdown = (
                 <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                     <div
@@ -74,7 +53,30 @@ class Menu extends Component {
                         onClick={this.onOverlayClick}
                     >
                         <div className={`${portalNode ? 'cq-dialog-portal' : 'cq-dialog-overlay'}`}>
-                            {newDropdown}
+                            {
+                                (shouldRenderDialogs
+                                && (
+                                    <CSSTransition
+                                        appear
+                                        in={dialogStatus}
+                                        timeout={300}
+                                        classNames="cq-dialog"
+                                        unmountOnExit
+                                    >
+                                        <DropdownDialog
+                                            isMobile={isMobile}
+                                            isFullscreen={isFullscreen}
+                                            title={title}
+                                            handleCloseDialog={handleCloseDialog}
+                                            subTitle={subTitle}
+                                            onBack={onBack}
+                                            enableTabular={enableTabular}
+                                        >
+                                            {rest}
+                                        </DropdownDialog>
+                                    </CSSTransition>
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -94,7 +96,12 @@ class Menu extends Component {
 
             return (
                 enabled && (
-                    <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <Tooltip
+                        className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}
+                        content={tooltip}
+                        enabled={tooltip}
+                        position="right"
+                    >
                         <div
                             className="cq-menu-btn"
                             onMouseEnter={onMouseEnter}
@@ -103,11 +110,15 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {tooltip ? (<div className="sc-tooltip sc-tooltip--right">{tooltip}</div>) : ''}
                         {open ? newDialog : ''}
-                    </div>
+                    </Tooltip>
                 ) || (
-                    <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+                    <Tooltip
+                        className={`ciq-menu ciq-disabled ${className || ''}`}
+                        content={tooltip}
+                        enabled={tooltip}
+                        position="right"
+                    >
                         <div
                             className="cq-menu-btn"
                             onMouseEnter={onMouseEnter}
@@ -115,8 +126,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {tooltip ? (<div className="sc-tooltip sc-tooltip--right">{tooltip}</div>) : ''}
-                    </div>
+                    </Tooltip>
                 )
             );
         }
