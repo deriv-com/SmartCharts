@@ -1,4 +1,4 @@
-# SmartCharts
+# SmartCharts. 
 
 Binary.com charting library using chartiq.
 
