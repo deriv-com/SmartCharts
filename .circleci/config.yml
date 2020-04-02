@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   k8s: circleci/kubernetes@0.7.0
-  s3: circleci/aws-s3@1.0.13
+  s3 : circleci/aws-s3@1.0.13
 commands:
   git_checkout_from_cache:
     description: "Git checkout and save cache"
@@ -200,17 +200,11 @@ workflows:
   release_dev:
     jobs:
       - build_push_dev:
-          filters:
-            branches:
-              only: /^dev$/
           context: binary-frontend-artifact-upload
 
       - deploy_dev:
           requires:
             - build_push_dev
-          filters:
-            branches:
-              only: /^dev$/
 
   release_production:
     jobs:
@@ -226,3 +220,4 @@ workflows:
           filters:
             branches:
               only: /^master$/
+
