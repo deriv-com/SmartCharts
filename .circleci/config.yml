@@ -200,15 +200,17 @@ workflows:
   release_dev:
     jobs:
       - build_push_dev:
-          branches:
-            only: /^dev$/
+          filters:
+            branches:
+              only: /^dev$/
           context: binary-frontend-artifact-upload
 
       - deploy_dev:
           requires:
             - build_push_dev
-          branches:
-            only: /^dev$/
+          filters:
+            branches:
+              only: /^dev$/
 
   release_production:
     jobs:
