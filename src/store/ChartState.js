@@ -28,6 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable maxTick;
     chartControlsWidgets;
+    enabledChartFooter;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -55,6 +56,7 @@ class ChartState {
 
     @action.bound updateProps({
         chartControlsWidgets,
+        enabledChartFooter,
         chartStatusListener,
         chartType,
         clearChart,
@@ -93,6 +95,11 @@ class ChartState {
 
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (enabledChartFooter !== this.enabledChartFooter) {
+            this.enabledChartFooter = enabledChartFooter;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
 

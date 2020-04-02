@@ -297,6 +297,7 @@ class App extends Component {
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
                 shouldFetchTradingTimes
+                enabledChartFooter
             >
                 {endEpoch ? (
                     <Marker

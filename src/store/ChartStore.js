@@ -91,7 +91,13 @@ class ChartStore {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
         // TODO use constant here for chartcontrol height
-        const offsetHeight = (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) ? 40 : 0;
+        let offsetHeight = 0;
+        if (this.stateStore.enabledChartFooter) {
+            offsetHeight = 32;
+        } else if (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) {
+            offsetHeight = 40;
+        }
+
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
