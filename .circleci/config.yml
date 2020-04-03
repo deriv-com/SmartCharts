@@ -189,7 +189,7 @@ workflows:
             branches:
               only: 
                 - /^dev/
-                - pull\/.*
+                - /pull\/.*/
 
   build_deploy_staging:
     jobs:
