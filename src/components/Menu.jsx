@@ -7,7 +7,7 @@ import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
-        if (e.target.className === 'cq-menu-overlay') {
+        if (e.target.className === 'cq-modal__overlay') {
             this.props.handleCloseDialog();
         }
     };
@@ -49,35 +49,33 @@ class Menu extends Component {
             const modalDropdown = (
                 <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                     <div
-                        className="cq-menu-overlay"
+                        className="cq-modal__overlay"
                         onClick={this.onOverlayClick}
                     >
-                        <div className={`${portalNode ? 'cq-dialog-portal' : 'cq-dialog-overlay'}`}>
-                            {
-                                (shouldRenderDialogs
-                                && (
-                                    <CSSTransition
-                                        appear
-                                        in={dialogStatus}
-                                        timeout={300}
-                                        classNames="cq-dialog"
-                                        unmountOnExit
+                        {
+                            (shouldRenderDialogs
+                            && (
+                                <CSSTransition
+                                    appear
+                                    in={dialogStatus}
+                                    timeout={300}
+                                    classNames="cq-dialog"
+                                    unmountOnExit
+                                >
+                                    <DropdownDialog
+                                        isMobile={isMobile}
+                                        isFullscreen={isFullscreen}
+                                        title={title}
+                                        handleCloseDialog={handleCloseDialog}
+                                        subTitle={subTitle}
+                                        onBack={onBack}
+                                        enableTabular={enableTabular}
                                     >
-                                        <DropdownDialog
-                                            isMobile={isMobile}
-                                            isFullscreen={isFullscreen}
-                                            title={title}
-                                            handleCloseDialog={handleCloseDialog}
-                                            subTitle={subTitle}
-                                            onBack={onBack}
-                                            enableTabular={enableTabular}
-                                        >
-                                            {rest}
-                                        </DropdownDialog>
-                                    </CSSTransition>
-                                ))
-                            }
-                        </div>
+                                        {rest}
+                                    </DropdownDialog>
+                                </CSSTransition>
+                            ))
+                        }
                     </div>
                 </div>
             );
