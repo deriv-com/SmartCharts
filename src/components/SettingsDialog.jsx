@@ -115,7 +115,7 @@ const SettingsPanelGroup = ({
         ),
     };
 
-    const input_group_name = `form__input-group--${title.toLowerCase().replace(' ', '-')}`;
+    const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
 
     return (
         <div className={`form__input-group ${input_group_name}`}>
