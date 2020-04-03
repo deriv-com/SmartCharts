@@ -241,7 +241,6 @@ class App extends Component {
     renderControls = () => (
         <>
             {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
             <ChartSetting />
         </>
     );
@@ -254,6 +253,7 @@ class App extends Component {
             />
             <StudyLegend />
             <Views />
+            <DrawTools />
             <Share />
         </ToolbarWidget>
     );
