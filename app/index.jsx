@@ -99,9 +99,10 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguages = ['EN', 'ID', 'RU', 'ES', 'FR', 'IT',
-    'PT', 'PL', 'DE', 'ZH_CN', 'VI', 'ZH_TW',
-    'TH'];
+const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
+    'IT', 'PL', 'PT', 'RU', 'TH',
+    'VI', 'ZH_CN', 'ZH_TW',
+];
 
 
 const streamManager = new StreamManager(connectionManager);

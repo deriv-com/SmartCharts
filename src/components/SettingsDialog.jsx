@@ -2,6 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import {
+    FormGroup,
     Switch,
     NumericInput,
     ColorPicker,
@@ -15,23 +16,18 @@ import '../../sass/components/_ciq-settings-dialog.scss';
 import 'react-tabs/style/react-tabs.css';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
-    <div className={`form__group form__group--${type}`}>
-        {(type === 'select'
-         || type === 'colorpicker'
-         || group === 'OverBought'
-         || group === 'OverSold'
-         || type === 'pattern'
-        )
-            ? ''
-            : (
-                <div className="form__label">
-                    <span> {title} </span>
-                </div>
-            )}
-        <div className="form__control">
-            {Field}
-        </div>
-    </div>
+    <FormGroup
+        title={
+            (type === 'select'
+             || type === 'colorpicker'
+             || group === 'OverBought'
+             || group === 'OverSold'
+            ) ? null : title
+        }
+        type={type}
+    >
+        {Field}
+    </FormGroup>
 );
 
 

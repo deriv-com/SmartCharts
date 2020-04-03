@@ -1,0 +1,173 @@
+
+.sc-chart-setting {
+    &__panel {
+        width: 536px;
+        height: 564px;
+        padding: 24px;
+        box-sizing: border-box;
+    }
+    &__list {
+        &__item {
+            height: 40px;
+            display: flex;
+            border-radius: 4px;
+            box-sizing: border-box;
+            cursor: pointer;
+            justify-content: space-between;
+            align-items: center;
+            @include themify($themes) {
+                color: themed('ChartSettingText');
+            }
+
+            .text {
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                margin-right: 16px;
+                width: 100%;
+                padding: 8px 0 8px 16px;
+            }
+            .action {
+                margin-right: 20px;
+
+                &--position {
+                    display: flex;
+
+                    .ic-icon {
+                        opacity: 0.6;
+                        @include themify($themes) {
+                            fill: themed('ChartSettingText');
+                            stroke: themed('ChartSettingText');
+                        }
+
+                        svg {
+                            height: 20px;
+                            width: 20px;
+                        }
+                        &.active {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .form__group {
+        margin-bottom: 24px;
+
+        .form__label {
+            font-size: 14px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            margin-bottom: 16px;
+            @include themify($themes) {
+                color: themed('ChartSettingItemTitleText');
+            }
+        }
+        .sc-checkbox {
+            .sc-checkbox__label {
+                @include themify($themes) {
+                    color: themed('ChartSettingText');
+                }
+            }
+        }
+        &--theme {
+            .form__control {
+                display: flex;
+                justify-content: space-between;
+            }
+            .form__group__item {
+                cursor: pointer;
+                border-radius: 4px;
+                text-align: center;
+
+                .ic-icon {
+                    border-radius: 4px;
+                    border: 1px solid transparent;
+                    width: 238px;
+                    height: 182px;
+                    cursor: pointer;
+                }
+                .text {
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-style: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    text-align: center;
+                    padding-top: 8px;
+                    @include themify($themes) {
+                        color: themed('ChartSettingText');
+                    }
+                }
+                &--active {
+                    .ic-icon {
+                        @include themify($themes) {
+                            border-color: themed('ChartSettingItemActiveBorder');
+                        }
+                    }
+                    .text {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+        &--language {
+            .form__control {
+                display: flex;
+                flex-wrap: wrap;
+            }
+            .form__group__item {
+                width: 80px;
+                height: 84px;
+                text-align: center;
+                border-radius: 4px;
+                border: 1px solid transparent;
+                cursor: pointer;
+                box-sizing: border-box;
+                margin: 0 16px 16px 0;
+
+                .ic-icon {
+                    margin: 16px auto 8px;
+                    width: 36px;
+                    height: 24px;
+
+                    svg {
+                        width: 36px;
+                        height: 24px;
+                    }
+                }
+                .text {
+                    display: block;
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-style: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    text-align: center;
+                    @include themify($themes) {
+                        color: themed('ChartSettingText');
+                    }
+                }
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('ChartSettingItemHoverBg');
+                    }
+                }
+                &--active {
+                    background: transparent !important;
+                    @include themify($themes) {
+                        border-color: themed('ChartSettingItemActiveBorder');
+                    }
+                }
+            }
+        }
+    }
+}
