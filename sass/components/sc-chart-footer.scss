@@ -37,6 +37,9 @@
                 line-height: 8px;
             }
         }
+        .sc-tooltip__inner {
+            display: none;
+        }
         &:hover {
             @include themify($themes) {
                 background: themed('FooterItemHoverBg');
