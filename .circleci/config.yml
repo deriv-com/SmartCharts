@@ -58,7 +58,7 @@ commands:
     steps:
       - run:
           name: Building App
-          :qno_output_timeout: 30m
+          no_output_timeout: 30m
           command: yarn build-travis
   compress:
     description: "Compress"
