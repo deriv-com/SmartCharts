@@ -67,6 +67,7 @@ commands:
           name: "Compress"
           command: |
             tar -cvf artifact.tar index.html nojs-smartcharts.css dist/*
+            no_output_timeout: 30m
       - run:
           name: "Tag commit id as artifact identifer"
           command: echo "${CIRCLE_TAG}" > artifact-info.txt
