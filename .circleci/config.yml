@@ -186,10 +186,10 @@ workflows:
     jobs:
       - test:
           filters:
-            branches:
-              only: 
-                - /^dev/
-                - /pull\/.*/
+            tags:
+              ignore: 
+                - /^staging.*/
+                - /^production.*/
 
   build_deploy_staging:
     jobs:
