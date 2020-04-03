@@ -144,7 +144,6 @@ jobs:
       - git_checkout_from_cache
       - yarn_install
       - test
-      - build
   build_staging:
     docker:
       - image: circleci/node:12.13.0-stretch
@@ -186,10 +185,10 @@ workflows:
     jobs:
       - test:
           filters:
-            branches:
-              only: 
-                - /^dev/
-                - /pull\/.*/
+            tags:
+              ignore: 
+                - /^staging.*/
+                - /^production.*/
 
   build_deploy_staging:
     jobs:
