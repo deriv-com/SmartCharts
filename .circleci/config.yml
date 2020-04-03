@@ -59,16 +59,6 @@ commands:
       - run:
           name: Building App
           command: yarn build-travis
-  early_return_for_pull_requests:
-    description: Avoid deploying the docker image while it is triggered by a PR
-    steps:
-      - run:
-          name: Earyl Return while it is a PR
-          command: |
-            if [ -n "$CIRCLE_PR_NUMBER" ]; then
-              echo "Avoid deploying while it is a PR."
-              circleci-agent step halt
-            fi
   compress:
     description: "Compress"
     steps:
@@ -78,7 +68,7 @@ commands:
             tar -cvf artifact.tar index.html nojs-smartcharts.css dist/*
       - run:
           name: "Tag commit id as artifact identifer"
-          command: echo "${CIRCLE_SHA1}" > artifact-info.txt
+          command: echo "${CIRCLE_TAG}" > artifact-info.txt
   upload_artifact:
     description: "upload build artifact to s3 bucket"
     steps:
@@ -88,7 +78,7 @@ commands:
           aws-access-key-id: env_CONTEXT_ARTIFACT_S3_AWS_ACCESS_KEY_ID
           aws-secret-access-key: env_CONTEXT_ARTIFACT_S3_AWS_SECRET_ACCESS_KEY
           aws-region: env_CONTEXT_ARTIFACT_S3_AWS_REGION
-          arguments: '--metadata "{\"x-amz-artifact-id\": \"${CIRCLE_SHA1}\" }"'
+          arguments: '--metadata "{\"x-amz-artifact-id\": \"${CIRCLE_TAG}\" }"'
   upload_checksum:
     description: "upload artifact checksum to s3"
     steps:
@@ -98,40 +88,27 @@ commands:
           aws-access-key-id: env_CONTEXT_ARTIFACT_S3_AWS_ACCESS_KEY_ID
           aws-secret-access-key: env_CONTEXT_ARTIFACT_S3_AWS_SECRET_ACCESS_KEY
           aws-region: env_CONTEXT_ARTIFACT_S3_AWS_REGION
-  docker_build_dev:
+  docker_build:
     description: "Build Docker image"
+    parameters:
+      docker_image_tag:
+        type: string
+        default: "beta-latest"
     steps:
-      - setup_remote_docker
-      - run: 
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
           name: Building docker image
           command: |
-            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-${CIRCLE_SHA1} -t ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-latest .
-  docker_build_production:
-    description: "Build Docker image"
-    steps:
-      - setup_remote_docker
-      - run: 
-          name: Building docker image
-          command: |
-            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1} -t ${DOCKHUB_ORGANISATION}/binary-static-charts:latest .
-  docker_push_dev:
+            docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_TAG} -t ${DOCKHUB_ORGANISATION}/binary-static-charts:<< parameters.docker_image_tag >> .
+  docker_push:
     description: "Push image to docker hub"
     steps:
       - run: 
           name: Pushing Image to docker hub
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:beta-latest
-  docker_push_production:
-    description: "Push image to docker hub"
-    steps:
-      - run: 
-          name: Pushing Image to docker hub
-          command: |
-            echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:latest
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts
   k8s_deploy:
     description: "Deploy to k8s cluster"
     parameters:
@@ -143,11 +120,31 @@ commands:
       - run: 
           name: Deploying to k8s cluster for service binary-charts
           command: |
-            echo $CA_CRT | base64 --decode > ca.crt
-            kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/<< parameters.k8s_svc_name >> << parameters.k8s_svc_name >>=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_SHA1}
+            for SERVER_ID in {1..5}
+            do
+              KUBE_SERVER_REF="KUBE_SERVER_$SERVER_ID"
+              SERVICEACCOUNT_TOKEN_REF="SERVICEACCOUNT_TOKEN_$SERVER_ID"
+              CA_CRT_REF="CA_CRT_$SERVER_ID"
+              if [ ! -z "${!KUBE_SERVER_REF}" ]
+              then
+                echo "Deploying to cluster $SERVER_ID"
+                CA_CRT="${!CA_CRT_REF}"
+                KUBE_SERVER="${!KUBE_SERVER_REF}"
+                SERVICEACCOUNT_TOKEN="${!SERVICEACCOUNT_TOKEN_REF}"
+                echo $CA_CRT | base64 --decode > ca.crt
+                kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/<< parameters.k8s_svc_name >> << parameters.k8s_svc_name >>=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_TAG}
+              fi
+            done
 
 jobs:
-  build_push_dev:
+  test:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - git_checkout_from_cache
+      - yarn_install
+      - test
+  build_staging:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
@@ -155,29 +152,27 @@ jobs:
       - yarn_install
       - test
       - build
-      - early_return_for_pull_requests
-      - compress
-      - upload_artifact  # uploading the built code to s3 to create a backup of key services separate from Kubernetes deployment
-      - upload_checksum  # uploading compressed artifact checksum to cross match artifact fingerprint
-      - docker_build_dev
-      - docker_push_dev
-
-  build_push_production:
+      - docker_build
+      - docker_push
+  build_production:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
-      - docker_build_production
-      - docker_push_production
-
-  deploy_dev:
+      - compress
+      - upload_artifact
+      - upload_checksum
+      - docker_build:
+          docker_image_tag: latest
+      - docker_push
+  deploy_staging:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
       - k8s_deploy
-
   deploy_production:
     docker:
       - image: circleci/node:12.13.0-stretch
@@ -186,32 +181,48 @@ jobs:
           k8s_svc_name: "charts-binary-com"
       
 workflows:
-  release_dev:
+  build_and_push_dev:
     jobs:
-      - build_push_dev:
+      - test:
+          filters:
+            tags:
+              ignore: 
+                - /^staging.*/
+                - /^production.*/
+
+  build_deploy_staging:
+    jobs:
+      - build_staging:
+          context: binary-frontend-artifact-upload
           filters:
             branches:
-              only: /^dev$/
+              ignore: /.*/
+            tags:
+              only: /^staging.*/
+      - deploy_staging:
           context: binary-frontend-artifact-upload
-
-      - deploy_dev:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^staging.*/
           requires:
-            - build_push_dev
-          filters:
-            branches:
-              only: /^dev$/
-
-  release_production:
+            - build_staging
+  build_deploy_production:
     jobs:
-      - build_push_production:
+      - build_production:
+          context: binary-frontend-artifact-upload
           filters:
             branches:
-              only: /^master$/
-          context: binary-frontend-artifact-upload
-              
+              ignore: /.*/
+            tags:
+              only: /^production.*/
       - deploy_production:
-          requires:
-            - build_push_production
+          context: binary-frontend-artifact-upload
           filters:
             branches:
-              only: /^master$/
+              ignore: /.*/
+            tags:
+              only: /^production.*/
+          requires:
+            - build_production

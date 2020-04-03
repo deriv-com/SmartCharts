@@ -107,7 +107,7 @@ $transition-duration: 300ms;
             position: absolute;
         }
         &.ciq-studies, &.cq-comparison-new, &.cq-chart-title {
-            .cq-menu-overlay .cq-menu-dropdown {
+            .cq-modal__overlay .cq-menu-dropdown {
                 /* for studies and comparison dropdown, fill screen in mobile */
                 height: 100%;
 
@@ -116,7 +116,7 @@ $transition-duration: 300ms;
                 }
             }
         }
-        .cq-menu-overlay {
+        .cq-modal__overlay {
             position: relative;
             transition: opacity $transition-duration;
             height: inherit;
@@ -124,7 +124,7 @@ $transition-duration: 300ms;
             padding: 0;
             opacity: 0;
         }
-        &.stxMenuActive .cq-menu-overlay {
+        &.stxMenuActive .cq-modal__overlay {
             opacity: 1;
             pointer-events: initial;
             visibility: visible;

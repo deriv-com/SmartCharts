@@ -37,6 +37,20 @@ html, body {
     @include themify($themes) {
         background: themed('ChartBg');
     }
+
+    &.ciq-screenshot {
+        .cq-menu-dropdown,
+        .sc-toolbar-widget,
+        .ciq-navigation-widget,
+        .stx_jump_today.home {
+            /*
+            There is a strange bug where dropdowns get displayed (partially)
+            when html is being rendered to canvas. So we set this to manually
+            hide it when PNG is exported.
+            */
+            display: none !important;
+        }
+    }
 }
 
 /* The Chart */
@@ -219,7 +233,7 @@ html, body {
 .stx-panel-control { /* Panel Control buttons template */
     position: absolute;
     top: 4px;
-    left: 56px;
+    left: 80px;
     overflow: hidden;
     z-index: 30;
     display: none;

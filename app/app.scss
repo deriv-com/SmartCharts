@@ -21,7 +21,7 @@ html {
       in mobile:
      */
     .ciq-period, .cq-download, .ciq-views, .ciq-drawtools, .ciq-studies, .cq-chart-setting, .ciq-draw-tools, .cq-comparison-new, .ciq-chart-types {
-        .cq-menu-overlay {
+        .cq-modal__overlay {
             height: calc(100% - 40px);
         }
     }

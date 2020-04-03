@@ -150,6 +150,7 @@
                 align-items: center;
                 outline: none !important;
                 box-shadow: none !important;
+                cursor: pointer;
                 @include themify($themes) {
                     color: themed('DialogTabularText');
                     border-left: 4px solid themed('DialogTabularBg');
@@ -160,6 +161,15 @@
                     height: 16px;
                     line-height: 27px;
                     margin-right: 16px;
+                    @include themify($themes) {
+                        fill: themed('DialogTabularText');
+                    }
+                }
+                &:hover {
+                    @include themify($themes) {
+                        border-left-color: themed('DialogTabularHoverTabBg');
+                        background: themed('DialogTabularHoverTabBg');
+                    }
 
                     svg {
                         width: 16px;
@@ -177,9 +187,9 @@
                     border-radius: 0px;
                     font-weight: bold;
                     @include themify($themes) {
-                        color: themed('DialogTabularActiveTabText');
-                        background: themed('DialogTabularActiveTabBg');
-                        border-left-color: themed('DialogTabularActiveTabBorder');
+                        color: themed('DialogTabularActiveTabText') !important;
+                        background: themed('DialogTabularActiveTabBg') !important;
+                        border-left-color: themed('DialogTabularActiveTabBorder') !important;
                     }
 
                     .ic-icon {
