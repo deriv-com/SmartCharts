@@ -58,7 +58,7 @@ commands:
     steps:
       - run:
           name: Building App
-          no_output_timeout: 30m
+          :qno_output_timeout: 30m
           command: yarn build-travis
   compress:
     description: "Compress"
@@ -67,7 +67,6 @@ commands:
           name: "Compress"
           command: |
             tar -cvf artifact.tar index.html nojs-smartcharts.css dist/*
-            no_output_timeout: 30m
       - run:
           name: "Tag commit id as artifact identifer"
           command: echo "${CIRCLE_TAG}" > artifact-info.txt
@@ -195,13 +194,14 @@ workflows:
   build_deploy_staging:
     jobs:
       - build_staging:
+          context: binary-frontend-artifact-upload
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^staging.*/
-          context: binary-frontend-artifact-upload
       - deploy_staging:
+          context: binary-frontend-artifact-upload
           filters:
             branches:
               ignore: /.*/
@@ -212,13 +212,14 @@ workflows:
   build_deploy_production:
     jobs:
       - build_production:
+          context: binary-frontend-artifact-upload
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^production.*/
-          context: binary-frontend-artifact-upload
       - deploy_production:
+          context: binary-frontend-artifact-upload
           filters:
             branches:
               ignore: /.*/
