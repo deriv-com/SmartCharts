@@ -78,14 +78,14 @@ const DrawTools = ({
     <DrawToolsMenu
         className="ciq-draw-tools"
         title={t.translate('Drawing tools')}
+        tooltip={t.translate('Drawing tools')}
         newStyle
         enableTabular
     >
         <DrawToolsMenu.Title>
-            <DrawToolIcon
-                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Draw tools')}
-            />
+            <div className={`ciq-draw-tools__menu ${menuOpen ? 'ciq-draw-tools__menu--active' : ''}`}>
+                <DrawToolIcon />
+            </div>
         </DrawToolsMenu.Title>
 
         <DrawToolsMenu.Body>

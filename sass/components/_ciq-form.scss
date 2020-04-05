@@ -524,6 +524,53 @@
     }
 }
 
+.sc-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &__input {
+        display: none;
+    }
+    &__label {
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+    }
+    &__box {
+        border-radius: 2px;
+
+        svg {
+            border-radius: 2px;
+            @include themify($themes) {
+                fill: themed('CheckboxBg');
+            }
+        }
+    }
+    &--checked {
+        .sc-checkbox__box svg {
+            @include themify($themes) {
+                background: themed('CheckboxActiveBg');
+                fill: themed('CheckboxActiveBg');
+            }
+        }
+    }
+}
+
+.sc-switch-icon {
+    display: flex;
+
+    &__icon {
+        width: 160px;
+        height: 120px;
+    }
+    &__description {
+        padding-left: 16px;
+    }
+}
+
 .cq-numbercolorpicker, .cq-fontsetting {
     display: inline-flex;
 }

@@ -118,6 +118,9 @@
                 width: 24px;
             }
         }
+        .sc-tooltip__inner {
+            display: none !important;
+        }
     }
     .ciq-icon {
         width: 24px;
