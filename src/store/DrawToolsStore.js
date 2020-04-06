@@ -1,4 +1,4 @@
-import { action, reaction, when, observable } from 'mobx';
+import { action, reaction, when, observable, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
@@ -33,29 +33,30 @@ export default class DrawToolsStore {
     activeDrawing = null;
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
-    @observable activeTools = [];
+    @observable activeToolsGroup = [];
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
+        document.addEventListener('dblclick', this.doubleClick);
         this.stx.addEventListener('drawing', this.noTool);
-        this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
+        this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
     };
 
     closeOnEscape = (e) => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.stx.changeVectorType('');
+            this.computeActiveDrawTools();
         }
     };
 
-    @action.bound onDeleteHighlighted(callRightClick) {
-        for (const drawing of this.stx.drawingObjects) {
-            if (callRightClick) {
-                this.showDrawToolDialog(drawing);
-                return true; // Override default behaviour; prevent ChartIQ from deleting the drawing
-            }
-        }
-        return false;
+    doubleClick = () => this.computeActiveDrawTools();
+
+    @computed get activeToolsNo() { return this.activeToolsGroup.reduce((a, b) => (a + b.items.length), 0); }
+
+    @action.bound onRightClickDrawing(drawing) {
+        this.showDrawToolDialog(drawing);
+        return true;
     }
 
     showDrawToolDialog(drawing) {
@@ -92,6 +93,7 @@ export default class DrawToolsStore {
         const count = this.stx.drawingObjects.length;
         if ((this.menu.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
             this.stx.changeVectorType('');
+            this.computeActiveDrawTools();
         }
         this._pervDrawingObjectCount = count;
     };
@@ -146,8 +148,8 @@ export default class DrawToolsStore {
     @action.bound computeActiveDrawTools() {
         const items = {};
         const ignoreBarType = ['vertical', 'horizontal'];
-
-        this.activeTools = this.stx.drawingObjects.map((item, indx) => {
+        const groups = {};
+        this.stx.drawingObjects.forEach((item, indx) => {
             item = ((drawTools[item.name]) ? { ...item, ...drawTools[item.name] } : item);
             item.index = indx;
             item.bars = (ignoreBarType.indexOf(item.name) === -1)
@@ -158,9 +160,23 @@ export default class DrawToolsStore {
                 items[item.name]++;
                 item.text = `${item.name} - ${items[item.name]}`;
             } else {
+                item.text = `${item.name} - 1`;
                 items[item.name] = 1;
             }
-            return item;
+
+            if (groups[item.name]) {
+                groups[item.name].items.push(item);
+            } else {
+                groups[item.name] = {
+                    key: item.name,
+                    name: drawTools[item.name] ? drawTools[item.name].text : item.name,
+                    items: [item],
+                };
+            }
         });
+
+        // get the values of group and sort group by the number of their children
+        // this way the single item stay at top
+        this.activeToolsGroup = Object.values(groups).sort((a, b) => (a.items.length - b.items.length));
     }
 }

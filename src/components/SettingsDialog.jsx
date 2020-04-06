@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import {
     FormGroup,
@@ -12,8 +13,8 @@ import {
     NumberColorPicker,
     FontSetting,
 } from './Form.jsx';
+import { DeleteIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
-import 'react-tabs/style/react-tabs.css';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup
@@ -160,36 +161,21 @@ const SettingsPanel = ({
 );
 
 
-const ResetButton = ({
-    onClick,
-}) => (
+const ResetButton = ({ onClick }) => (
     <button
         type="button"
-        className="sc-btn sc-btn--outline-secondary"
+        className="sc-btn sc-btn--outline-secondary sc-btn--reset"
         onClick={onClick}
     >{t.translate('Reset')}
     </button>
 );
 
-const DoneButton = ({
-    onClick,
-}) => (
+const DoneButton = ({ onClick }) => (
     <button
         type="button"
         className="sc-btn sc-btn--primary sc-btn--save"
         onClick={() => onClick()}
-    >{t.translate('Save')}
-    </button>
-);
-
-const CancelButton = ({
-    onClick,
-}) => (
-    <button
-        type="button"
-        className="sc-btn sc-btn--cancel"
-        onClick={() => onClick()}
-    >{t.translate('Cancel')}
+    >{t.translate('Done')}
     </button>
 );
 
@@ -200,6 +186,7 @@ const SettingsDialog = ({
     showTabs,
     onResetClick,
     onItemChange,
+    onItemDelete,
     SettingDialogMenu,
     theme,
     close,
@@ -248,9 +235,11 @@ const SettingsDialog = ({
                                 setScrollPanel={setScrollPanel}
                             />
                             <div className="buttons">
-                                <ResetButton onClick={onResetClick} />
+                                <DeleteIcon
+                                    onClick={onItemDelete}
+                                />
                                 <div>
-                                    <CancelButton onClick={close} />
+                                    <ResetButton onClick={onResetClick} />
                                     <DoneButton onClick={close} />
                                 </div>
                             </div>

@@ -164,12 +164,6 @@
                     @include themify($themes) {
                         fill: themed('DialogTabularText');
                     }
-                }
-                &:hover {
-                    @include themify($themes) {
-                        border-left-color: themed('DialogTabularHoverTabBg');
-                        background: themed('DialogTabularHoverTabBg');
-                    }
 
                     svg {
                         width: 16px;
@@ -178,6 +172,18 @@
                         @include themify($themes) {
                             fill: themed('DialogTabularText');
                         }
+                    }
+                }
+                .sc-notification-badge {
+                    position: relative;
+                    margin-left: 5px;
+                    top: 0px;
+                    left: 0px;
+                }
+                &:hover {
+                    @include themify($themes) {
+                        border-left-color: themed('DialogTabularHoverTabBg');
+                        background: themed('DialogTabularHoverTabBg');
                     }
                 }
                 &:after {

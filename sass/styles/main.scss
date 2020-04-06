@@ -267,6 +267,24 @@
     }
 }
 
+.sc-notification-badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 10px;
+    font-weight: bold;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    @include themify($themes) {
+        background: themed('NotificationBadgeBg');
+        color: themed('NotificationBadgeText');
+    }
+}
 /* -------------------------- buttons -------------------------------------*/
 .sc-btn {
     padding: 5px 16px;

@@ -12,12 +12,11 @@ export default class SettingsDialogStore {
     @computed get showTabs() { return !!this.description; }
     @observable scrollPanel;
 
-    constructor({
-        mainStore, getContext, onChanged,
-    }) {
+    constructor({ mainStore, getContext, onChanged, onDeleted }) {
         this.mainStore = mainStore;
         this.getContext = getContext;
         this.onChanged = onChanged;
+        this.onDeleted = onDeleted;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
         this.SettingDialogMenu = this.menu.connect(Menu);
     }
@@ -38,6 +37,11 @@ export default class SettingsDialogStore {
         const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
         this.items = items;
         this.onChanged(items);
+    }
+
+    @action.bound onItemDelete() {
+        this.menu.setOpen(false);
+        if (this.onDeleted) this.onDeleted();
     }
 
     @action.bound onItemChange(id, newValue) {
@@ -103,6 +107,7 @@ export default class SettingsDialogStore {
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
         onItemActive: this.onItemActive,
+        onItemDelete: this.onItemDelete,
         SettingDialogMenu: this.SettingDialogMenu,
         open: this.open,
         theme: this.theme,

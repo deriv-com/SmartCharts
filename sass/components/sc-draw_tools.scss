@@ -1,4 +1,6 @@
-.ciq-draw-tools {
+.sc-dtools {
+    $self: &;
+
     .cq-dialog-overlay {
         position: fixed;
         transform: inherit;
@@ -42,10 +44,22 @@
         height: 392px;
         padding: 16px 8px;
         box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
 
         &__head {
             text-align: right;
             padding: 0 8px 16px;
+        }
+        &__content {
+            box-sizing: border-box;
+
+            &--active {
+                #{ $self }__list__item {
+                    height: 48px;
+                    padding: 4px 16px;
+                }
+            }
         }
     }
     &__list {
@@ -57,6 +71,7 @@
             box-sizing: border-box;
             cursor: pointer;
             justify-content: space-between;
+            align-items: center;
             @include themify($themes) {
                 color: themed('DrawToolsItemText');
             }
@@ -66,20 +81,38 @@
                     background: themed('DrawToolsHoverBg');
                 }
             }
-            &__text {
+            .info {
                 display: flex;
-                justify-content: space-between;
+                align-items: center;
 
-                span {
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-style: normal;
-                    line-height: 1.43;
-                    letter-spacing: normal;
-                    margin-right: 16px;
+                .text {
+                    display: flex;
+                    flex-direction: column;
+                    padding-left: 16px;
+
+                    span {
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.43;
+                        letter-spacing: normal;
+                        margin-right: 16px;
+                    }
+                    small {
+                        display: block;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.5;
+                        letter-spacing: normal;
+                        margin-top: 2px;
+                        @include themify($themes) {
+                            color: themed('DrawToolsItemSubText');
+                        }
+                    }
                 }
             }
-            &__actions {
+            .actions {
                 display: flex;
                 justify-content: space-between;
 
@@ -98,6 +131,21 @@
                         }
                     }
                 }
+            }
+        }
+    }
+    &__category {
+        margin-top: 16px;
+
+        &__head {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            margin-bottom: 8px;
+            @include themify($themes) {
+                color: themed('DrawToolsItemSubText');
             }
         }
     }
