@@ -114,7 +114,6 @@ export default class DrawToolsStore {
             this.isContinuous = true;
         }
         this.menu.setOpen(false);
-        // let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
     }
 
     @action.bound onChanged(items) {
@@ -158,9 +157,9 @@ export default class DrawToolsStore {
 
             if (items[item.name]) {
                 items[item.name]++;
-                item.text = `${item.name} - ${items[item.name]}`;
+                item.text = `${formatCamelCase(item.name)} - ${items[item.name]}`;
             } else {
-                item.text = `${item.name} - 1`;
+                item.text = `${formatCamelCase(item.name)} - 1`;
                 items[item.name] = 1;
             }
 
