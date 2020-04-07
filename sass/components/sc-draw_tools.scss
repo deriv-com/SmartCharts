@@ -14,6 +14,9 @@
             height: 392px;
         }
     }
+    .tabs--vertical .react-tabs__tab-list {
+        padding-top: 0px !important;
+    }
     &--empty {
         display: flex;
         align-items: center;
@@ -50,6 +53,10 @@
         &__head {
             text-align: right;
             padding: 0 8px 16px;
+
+            .sc-btn {
+                cursor: pointer;
+            }
         }
         &__content {
             box-sizing: border-box;
@@ -70,9 +77,9 @@
             display: flex;
             border-radius: 4px;
             box-sizing: border-box;
-            cursor: pointer;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
             @include themify($themes) {
                 color: themed('DrawToolsItemText');
             }
@@ -126,6 +133,8 @@
                     text-align: right;
                 }
                 .ic-icon {
+                    cursor: pointer;
+
                     svg {
                         @include themify($themes) {
                             fill: themed('DrawToolsItemIcon');
