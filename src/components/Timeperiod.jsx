@@ -99,7 +99,7 @@ const Timeperiod = ({
                         onClick={() => onGranularityClick(3600)}
                         className={ItemClassName('hour', 60)}
                     >
-                        <span>1 {t.translate('hours')}</span>
+                        <span>1 {t.translate('hour')}</span>
                     </div>
                     <div
                         onClick={() => onGranularityClick(7200)}
@@ -123,7 +123,7 @@ const Timeperiod = ({
                         onClick={() => onGranularityClick(86400)}
                         className={ItemClassName('day', 'day')}
                     >
-                        <span>1 {t.translate('Day')}</span>
+                        <span>1 {t.translate('day')}</span>
                     </div>
                 </div>
             </div>
