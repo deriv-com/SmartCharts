@@ -126,9 +126,9 @@ export default class DrawToolsStore {
     }
 
     @action.bound onDeleted(indx) {
-        if (!indx && !this.activeDrawing) { return; }
+        if (indx === undefined && !this.activeDrawing) { return; }
 
-        if (indx && this.stx.drawingObjects[indx]) {
+        if (indx !== undefined && indx >= 0 && this.stx.drawingObjects[indx]) {
             this.activeDrawing = this.stx.drawingObjects[indx];
         }
 
