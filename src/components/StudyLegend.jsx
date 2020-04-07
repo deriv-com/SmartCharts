@@ -187,6 +187,7 @@ const StudyLegend = ({
     deleteStudy,
     editStudy,
     infoItem,
+    portalNodeId,
 }) => (
     <StudyMenu
         className="sc-studies"
@@ -199,6 +200,7 @@ const StudyLegend = ({
         onBack={() => onInfoItem(null)}
         newStyle
         enableTabular
+        portalNodeId={portalNodeId}
     >
         <StudyMenu.Title>
             <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>

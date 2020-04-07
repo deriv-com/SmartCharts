@@ -121,6 +121,7 @@ const DrawTools = ({
     activeDrawToolsGroup,
     onSetting,
     onDelete,
+    portalNodeId,
 }) => (
     <DrawToolsMenu
         className="sc-dtools"
@@ -128,6 +129,7 @@ const DrawTools = ({
         tooltip={t.translate('Drawing tools')}
         newStyle
         enableTabular
+        portalNodeId={portalNodeId}
     >
         <DrawToolsMenu.Title>
             <div className={`sc-dtools__menu ${menuOpen ? 'sc-dtools__menu--active' : ''}`}>

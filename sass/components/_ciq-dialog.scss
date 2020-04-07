@@ -41,10 +41,12 @@
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
-            min-width: 168px;
+            min-width: 200px;
+            width: 200px;
             padding: 16px;
             border-radius: 5px 0 0;
             position: relative;
+            box-sizing: border-box;
         }
         &--subtitle {
             display: flex;
