@@ -55,6 +55,7 @@ class ChartState {
     };
 
     @action.bound updateProps({
+        networkStatus,
         chartControlsWidgets,
         enabledChartFooter,
         chartStatusListener,
@@ -92,6 +93,13 @@ class ChartState {
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
+
+        if (networkStatus && (
+            !this.mainStore.chart.networkStatus
+                || networkStatus.class !== this.mainStore.chart.networkStatus.class
+        )) {
+            this.mainStore.chart.networkStatus = networkStatus;
+        }
 
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;

@@ -1,12 +1,12 @@
-import PendingPromise from './PendingPromise';
+import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
 
 class NetworkMonitor {
     static _instance;
 
     status_config = {
-        online: { class: 'online', tooltip: t.translate('Online') },
-        offline: { class: 'offline', tooltip: t.translate('Offline') },
-        blinking: { class: 'blinker', tooltip: t.translate('Connecting to server') },
+        online: { class: 'online', tooltip: 'Online' },
+        offline: { class: 'offline', tooltip: 'Offline' },
+        blinking: { class: 'blinker', tooltip: 'Connecting to server' },
     };
     last_status;
     last_is_online;
@@ -19,13 +19,14 @@ class NetworkMonitor {
             this.last_status = status;
             this.last_is_online = is_online;
 
+            console.log('status', status);
             if (typeof this.onStatusUpdated === 'function') this.onStatusUpdated(this.status_config[status], is_online);
         }
     };
     isOnline = () => navigator.onLine;
 
-    async init(api, updatedCallback) {
-        this._api = api;
+    async init(requestAPI, updatedCallback) {
+        this._requestAPI = requestAPI;
         this.onStatusUpdated = updatedCallback;
 
         if ('onLine' in navigator) {
@@ -49,15 +50,15 @@ class NetworkMonitor {
         if (!this.statusStarted && this.isOnline()) {
             this.statusStarted = true;
             clearInterval(this.getTimeInterval);
-            await this.requestTime();
-            this.getTimeInterval = setInterval(this.requestTime.bind(this), 30000);
+            await this.requestPing();
+            this.getTimeInterval = setInterval(this.requestPing.bind(this), 30000);
         } else {
             return this.statusStartedPromise;
         }
     }
 
-    async requestTime() {
-        await this._api.pingServer().then(this._statusResponse);
+    async requestPing() {
+        await this._requestAPI({ ping: 1 }).then(this._statusResponse);
         this.statusStartedPromise.resolve();
     }
 

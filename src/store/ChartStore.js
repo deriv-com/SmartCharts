@@ -19,7 +19,6 @@ import {
     getUTCDate,
     cloneCategories }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
-import NetworkMonitor          from '../utils/NetworkMonitor';
 
 import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
 import EditIcon        from '../../sass/icons/edit/ic-edit.svg';
@@ -397,8 +396,6 @@ class ChartStore {
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
         this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
-        this.networkMonitor = NetworkMonitor.getInstance();
-        this.networkMonitor.init(this.api, this.onNetworkStatus);
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -630,10 +627,6 @@ class ChartStore {
 
     @action.bound onServerTimeChange() {
         this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD-MM-YYYY HH:mm:ss [GMT]');
-    }
-
-    @action.bound onNetworkStatus(status) {
-        this.networkStatus = status;
     }
 
     @action.bound onMouseEnter() {
