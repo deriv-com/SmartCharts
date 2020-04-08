@@ -20,6 +20,7 @@ const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup
         title={
             (type === 'select'
+             || type === 'pattern'
              || type === 'colorpicker'
              || group === 'OverBought'
              || group === 'OverSold'
