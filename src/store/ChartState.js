@@ -35,6 +35,7 @@ class ChartState {
     get chartTypeStore() { return this.mainStore.chartType; }
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
+    get drawTools() { return this.mainStore.drawTools; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -410,6 +411,11 @@ class ChartState {
             if (drawings) {
                 this.stxx.importDrawings(drawings);
                 this.stxx.draw();
+
+
+                if (this.drawTools) {
+                    this.drawTools.computeActiveDrawTools();
+                }
             }
         }
     }

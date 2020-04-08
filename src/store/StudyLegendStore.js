@@ -8,34 +8,10 @@ import Menu from '../components/Menu.jsx';
 import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 import {
-    IndicatorCatMomentumIcon,
     IndicatorCatTrendLightIcon,
     IndicatorCatTrendDarkIcon,
-    IndicatorCatVolatilityIcon,
-    IndicatorCatAveragesIcon,
-    IndicatorCatOtherIcon,
-    IndicatorAwesomeOscillatorIcon,
-    IndicatorDTrendedIcon,
-    IndicatorGatorIcon,
-    IndicatorMacdIcon,
-    IndicatorRateChangeIcon,
-    IndicatorRSIIcon,
-    IndicatorStochasticOscillatorIcon,
-    IndicatorStochasticMomentumIcon,
-    IndicatorWilliamPercentIcon,
-    IndicatorAroonIcon,
-    IndicatorAdxIcon,
-    IndicatorCommodityChannelIndexIcon,
-    IndicatorIchimokuIcon,
-    IndicatorParabolicIcon,
-    IndicatorZigZagIcon,
-    IndicatorBollingerIcon,
-    IndicatorDonchianIcon,
-    IndicatorAveragesIcon,
-    IndicatorEnvelopeIcon,
-    IndicatorAlligatorIcon,
-    IndicatorFractalChaosIcon,
 } from '../components/Icons.jsx';
+import { IndicatorsTree, ExcludedStudies } from '../Constant';
 
 // TODO:
 // import StudyInfo from '../study-info';
@@ -47,166 +23,9 @@ const capitalizeFirstLetter = (string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
 
-const IndicatorsTree = [
-    {
-        id: 'momentum',
-        name: t.translate('Momentum'),
-        icon: IndicatorCatMomentumIcon,
-        items: [
-            { id: 'Awesome', name: t.translate('Awesome Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAwesomeOscillatorIcon },
-            { id: 'Detrended', name: t.translate('Detrended Price Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorDTrendedIcon },
-            { id: 'Gator', name: t.translate('Gator Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorGatorIcon },
-            { id: 'macd', name: t.translate('MACD'), description: t.translate('There isn\'t any description here.'), icon: IndicatorMacdIcon },
-            { id: 'Price ROC', name: t.translate('Rate of Change'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRateChangeIcon },
-            { id: 'rsi', name: t.translate('Relative Strength Index (RSI)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRSIIcon },
-            { id: 'stochastics', name: t.translate('Stochastic Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticOscillatorIcon },
-            { id: 'Stch Mtm', name: t.translate('Stochastic Momentum Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticMomentumIcon },
-            { id: 'Williams %R', name: t.translate('William\'s Percent Range'), description: t.translate('There isn\'t any description here.'), icon: IndicatorWilliamPercentIcon },
-        ],
-    },
-    {
-        id: 'trend',
-        name: t.translate('Trend'),
-        icon: IndicatorCatTrendLightIcon,
-        items: [
-            { id: 'Aroon', name: t.translate('Aroon'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAroonIcon },
-            { id: 'ADX', name: t.translate('ADX/DMS'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAdxIcon },
-            { id: 'CCI', name: t.translate('Commodity Channel Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorCommodityChannelIndexIcon },
-            { id: 'Ichimoku', name: t.translate('Ichimoku Clouds'), description: t.translate('There isn\'t any description here.'), icon: IndicatorIchimokuIcon },
-            { id: 'Parabolic', name: t.translate('Parabolic SAR'), description: t.translate('There isn\'t any description here.'), icon:  IndicatorParabolicIcon },
-            { id: 'ZigZag', name: t.translate('Zig Zag'), description: t.translate('There isn\'t any description here.'), icon: IndicatorZigZagIcon },
-        ],
-    },
-    {
-        id: 'volatility',
-        name: t.translate('Volatility'),
-        icon: IndicatorCatVolatilityIcon,
-        items: [
-            { id: 'Bollinger Bands', name: t.translate('Bollinger Bands'), description: t.translate('There isn\'t any description here.'), icon: IndicatorBollingerIcon },
-            { id: 'Donchian Channel', name: t.translate('Donchian Channel'), description: t.translate('There isn\'t any description here.'), icon: IndicatorDonchianIcon },
-        ],
-    },
-    {
-        id: 'moving-averages',
-        name: t.translate('Moving averages'),
-        icon: IndicatorCatAveragesIcon,
-        items: [
-            { id: 'ma', name: t.translate('Moving Average (MA)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAveragesIcon },
-            { id: 'MA Env', name: t.translate('Moving Average Envelope'), description: t.translate('There isn\'t any description here.'), icon: IndicatorEnvelopeIcon },
-        ],
-    },
-    {
-        id: 'others',
-        name: t.translate('Others'),
-        icon: IndicatorCatOtherIcon,
-        items: [
-            { id: 'Alligator', name: t.translate('Alligator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAlligatorIcon },
-            { id: 'Fractal Chaos Bands', name: t.translate('Fractal Chaos Band'), description: t.translate('There isn\'t any description here.'), icon: IndicatorFractalChaosIcon },
-        ],
-    },
-];
-
 export default class StudyLegendStore {
     constructor(mainStore) {
-        this.excludedStudies = {
-            Beta: true,
-            // volume is not supported in chart
-            Klinger: true,
-            'Trade Vol': true,
-            'Vol ROC': true,
-            'Price Vol': true,
-            'Pos Vol': true,
-            'Neg Vol': true,
-            'On Bal Vol': true,
-            'Vol Osc': true,
-            volume: true,
-            'vol undr': true,
-            'vol profile': true,
-            'W MFI': true,
-            EOM: true,
-            'Chaikin MF': true,
-            Twiggs: true,
-            // end volume
-            'Aroon Osc': true,
-            'Lin R2': true,
-            'Lin Fcst': true,
-            'Lin Incpt': true,
-            'Time Fcst': true,
-            'VT Filter': true,
-            TRIX: true,
-            'STD Dev': true,
-            Swing: true,
-            'Acc Swing': true,
-            'Price ROC': true,
-            Momentum: true,
-            'Hist Vol': true,
-            'Pretty Good': true,
-            Ultimate: true,
-            'Chaikin Vol': true,
-            'Price Osc': true,
-            'True Range': true,
-            ATR: true,
-            'Ehler Fisher': true,
-            Schaff: true,
-            QStick: true,
-            Coppock: true,
-            'Chande Mtm': true,
-            'Chande Fcst': true,
-            'Intraday Mtm': true,
-            RAVI: true,
-            'Random Walk': true,
-            'High Low': true,
-            'High-Low': true,
-            'Med Price': true,
-            'Fractal Chaos': true,
-            GAPO: true,
-            'Prime Number Bands': true,
-            'Prime Number': true,
-            HHV: true,
-            LLV: true,
-            'Mass Idx': true,
-            Keltner: true,
-            'Elder Ray': true,
-            'Elder Force': true,
-            'LR Slope': true,
-            COG: true,
-            'Typical Price': true,
-            'Weighted Close': true,
-            'M Flow': true,
-            'W Acc Dist': true,
-            'val lines': true,
-            correl: true,
-            PMO: true,
-            'Rel Vol': true,
-            'ATR Bands': true,
-            'STARC Bands': true,
-            'ATR Trailing Stop': true,
-            'Boll BW': true,
-            'Boll %b': true,
-            'Rel Vig': true,
-            'Elder Impulse': true,
-            'Pivot Points': true,
-            VWAP: true,
-            AVWAP: true,
-            'P Rel': true,
-            'Perf Idx': true,
-            Ulcer: true,
-            'Bal Pwr': true,
-            'Trend Int': true,
-            Choppiness: true,
-            Disparity: true,
-            'Rainbow MA': true,
-            'Rainbow Osc': true,
-            'Pring KST': true,
-            'Pring Sp-K': true,
-            Darvas: true,
-            Supertrend: true,
-            Vortex: true,
-            PSY: true,
-            'MA Dev': true,
-            Shinohara: true,
-            'VT HZ Filter': true,
-        };
+        this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
@@ -536,10 +355,6 @@ export default class StudyLegendStore {
         });
 
         this.activeItems = activeItems;
-
-        // this.activeStudies.data = studies;
-        // this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
-        // this.setReachedLimit();
     }
 
     @action.bound deleteAllStudies() {

@@ -24,7 +24,12 @@ export default class DialogStore {
     @action.bound openDialog(val) {
         if (this.open !== val) {
             this.open = val;
-            if (this.open) { this.register(); } else { this.unregister(); }
+            if (this.open) {
+                // As we combine dialogs with the menu, so for opening
+                // the items which has no menu, this trigger right after
+                // firing open action, this delay prevent that issue.
+                setTimeout(this.register, 100);
+            } else { this.unregister(); }
 
             if (val === true) { // close active dialog.
                 if (activeDialog) { activeDialog.openDialog(false); }
