@@ -236,6 +236,7 @@ const SettingsDialog = ({
                             />
                             <div className="buttons">
                                 <DeleteIcon
+                                    className="sc-btn--delete"
                                     onClick={onItemDelete}
                                 />
                                 <div>

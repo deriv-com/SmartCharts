@@ -98,21 +98,27 @@
             border-top: 1px solid themed('DialogFootBorder');
         }
 
-        .ic-icon {
+        .sc-btn--delete {
             cursor: pointer;
             padding: 5px;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('DialogFootDeleteIcon');
+                }
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DialogFootDeleteHoverBg');
+                }
+            }
         }
         .sc-btn--reset {
             margin-right: 8px;
             padding: 5px 12px;
-
-            svg {
-                @include themify($themes) {
-                    fill: themed('DialogFootIcon');
-                }
-            }
         }
     }
     .description {
