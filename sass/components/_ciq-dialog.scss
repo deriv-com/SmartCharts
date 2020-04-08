@@ -41,10 +41,12 @@
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
-            min-width: 168px;
+            min-width: 200px;
+            width: 200px;
             padding: 16px;
             border-radius: 5px 0 0;
             position: relative;
+            box-sizing: border-box;
         }
         &--subtitle {
             display: flex;
@@ -164,12 +166,6 @@
                     @include themify($themes) {
                         fill: themed('DialogTabularText');
                     }
-                }
-                &:hover {
-                    @include themify($themes) {
-                        border-left-color: themed('DialogTabularHoverTabBg');
-                        background: themed('DialogTabularHoverTabBg');
-                    }
 
                     svg {
                         width: 16px;
@@ -178,6 +174,18 @@
                         @include themify($themes) {
                             fill: themed('DialogTabularText');
                         }
+                    }
+                }
+                .sc-notification-badge {
+                    position: relative;
+                    margin-left: 5px;
+                    top: 0px;
+                    left: 0px;
+                }
+                &:hover {
+                    @include themify($themes) {
+                        border-left-color: themed('DialogTabularHoverTabBg');
+                        background: themed('DialogTabularHoverTabBg');
                     }
                 }
                 &:after {

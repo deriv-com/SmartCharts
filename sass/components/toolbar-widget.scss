@@ -18,7 +18,7 @@
             .ciq-views__menu,
             .sc-download__menu,
             .sc-studies__menu,
-            .ciq-draw-tools__menu {
+            .sc-dtools__menu {
                 width: 40px;
                 height: 40px;
                 box-sizing: border-box;
@@ -48,24 +48,6 @@
                         height: 20px !important;
                         bottom: -2px;
                     }
-                }
-            }
-            .notification-badge {
-                width: 16px;
-                height: 16px;
-                border-radius: 8px;
-                position: absolute;
-                top: 3px;
-                right: 3px;
-                font-size: 10px;
-                font-weight: bold;
-                font-style: normal;
-                line-height: 1.5;
-                letter-spacing: normal;
-                text-align: center;
-                @include themify($themes) {
-                    background: themed('ToolbarWidgetBadgeBg');
-                    color: themed('ToolbarWidgetBadgeText');
                 }
             }
             &:hover {
