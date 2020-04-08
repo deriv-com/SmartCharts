@@ -10,8 +10,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     setSmartChartsPublicPath,
     Share,
     ChartTitle,
-    AssetInformation,
-    ComparisonList,
     logEvent,
     LogCategories,
     LogActions,
@@ -230,8 +228,6 @@ class App extends Component {
         <>
             <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <AssetInformation />
-            <ComparisonList />
             <Notification
                 notifier={this.notifier}
             />
