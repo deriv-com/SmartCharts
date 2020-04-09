@@ -19,7 +19,6 @@ class NetworkMonitor {
             this.last_status = status;
             this.last_is_online = is_online;
 
-            console.log('status', status);
             if (typeof this.onStatusUpdated === 'function') this.onStatusUpdated(this.status_config[status], is_online);
         }
     };
@@ -31,7 +30,6 @@ class NetworkMonitor {
 
         if ('onLine' in navigator) {
             window.addEventListener('online', () => {
-                console.log('get back online');
                 this.setNetworkStatus('blinking');
                 this.establishConnection();
             });
