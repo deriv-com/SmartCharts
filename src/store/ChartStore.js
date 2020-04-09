@@ -146,7 +146,9 @@ class ChartStore {
         const _self = this;
 
         // Add custom injections to the CIQ
-        inject();
+        inject({
+            drawToolsStore: this.mainStore.drawTools,
+        });
 
         /**
          * only home button click part modified to avoid calling
