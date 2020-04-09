@@ -820,14 +820,30 @@ class ChartStore {
     }
 
     @action.bound openFullscreen() {
-        if (this.rootNode.requestFullscreen) {
-            this.rootNode.requestFullscreen();
-        } else if (this.rootNode.mozRequestFullScreen) { /* Firefox */
-            this.rootNode.mozRequestFullScreen();
-        } else if (this.rootNode.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-            this.rootNode.webkitRequestFullscreen();
-        } else if (this.rootNode.msRequestFullscreen) { /* IE/Edge */
-            this.rootNode.msRequestFullscreen();
+        const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null)
+            || (document.webkitFullscreenElement && document.webkitFullscreenElement !== null)
+            || (document.mozFullScreenElement && document.mozFullScreenElement !== null)
+            || (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+        const docElm = this.rootNode;
+        if (!isInFullScreen) {
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            } else if (docElm.msRequestFullscreen) {
+                docElm.msRequestFullscreen();
+            }
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
         }
     }
 }

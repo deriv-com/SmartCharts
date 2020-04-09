@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import { FullScreenIcon } from './Icons.jsx';
+import { HelpCenterIcon, FullScreenIcon } from './Icons.jsx';
 import Tooltip from './Tooltip.jsx';
 import ChartSetting from './ChartSetting.jsx';
 import '../../sass/components/sc-chart-footer.scss';
@@ -19,6 +19,13 @@ const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => 
             </Tooltip>
             <div className="sc-chart-footer__item sc-chart-footer__item--time">
                 <span>{serverTime}</span>
+            </div>
+            <div className="ciq-menu ciq-enabled">
+                <a href="https://deriv.com/help-centre/" target="_blank" rel="noopener noreferrer">
+                    <div className="cq-menu-btn">
+                        <HelpCenterIcon />
+                    </div>
+                </a>
             </div>
             <ChartSetting />
             <div

@@ -55,6 +55,7 @@ import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 import DrawTool from '../../sass/icons/common/ic-drawing-tool.svg';
 
+import HelpCenter from '../../sass/icons/common/ic-help-center.svg';
 import Download from '../../sass/icons/common/ic-download.svg';
 import Indicator from '../../sass/icons/common/ic-indicators.svg';
 import Template from '../../sass/icons/common/ic-templates.svg';
@@ -274,6 +275,7 @@ export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
+export const HelpCenterIcon = Wrapper(HelpCenter);
 export const DownloadIcon = Wrapper(Download);
 export const InfoIcon = Wrapper(Info);
 export const InfoCircleIcon = Wrapper(InfoCircle);
