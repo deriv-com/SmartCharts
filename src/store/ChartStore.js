@@ -626,7 +626,7 @@ class ChartStore {
     }
 
     @action.bound onServerTimeChange() {
-        this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD-MM-YYYY HH:mm:ss [GMT]');
+        this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD MMM YYYY HH:mm:ss [GMT]');
     }
 
     @action.bound onMouseEnter() {
