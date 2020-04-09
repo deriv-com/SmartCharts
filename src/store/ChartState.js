@@ -35,6 +35,7 @@ class ChartState {
     get chartTypeStore() { return this.mainStore.chartType; }
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
+    get drawTools() { return this.mainStore.drawTools; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -47,6 +48,8 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        this.stxx.append('zoomOut', this.enableScroll.bind(this));
+        this.stxx.append('zoomIn', this.enableScroll.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -310,6 +313,10 @@ class ChartState {
         this.shouldMinimiseLastDigits = status;
     }
 
+    enableScroll() {
+        this.stxx.allowScroll = true;
+    }
+
     saveLayout() {
         if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
@@ -404,6 +411,11 @@ class ChartState {
             if (drawings) {
                 this.stxx.importDrawings(drawings);
                 this.stxx.draw();
+
+
+                if (this.drawTools) {
+                    this.drawTools.computeActiveDrawTools();
+                }
             }
         }
     }
@@ -450,6 +462,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+                this.stxx.allowScroll = false;
             }
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);

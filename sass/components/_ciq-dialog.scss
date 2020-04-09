@@ -41,10 +41,12 @@
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
-            min-width: 168px;
+            min-width: 200px;
+            width: 200px;
             padding: 16px;
             border-radius: 5px 0 0;
             position: relative;
+            box-sizing: border-box;
         }
         &--subtitle {
             display: flex;
@@ -150,6 +152,7 @@
                 align-items: center;
                 outline: none !important;
                 box-shadow: none !important;
+                cursor: pointer;
                 @include themify($themes) {
                     color: themed('DialogTabularText');
                     border-left: 4px solid themed('DialogTabularBg');
@@ -160,6 +163,9 @@
                     height: 16px;
                     line-height: 27px;
                     margin-right: 16px;
+                    @include themify($themes) {
+                        fill: themed('DialogTabularText');
+                    }
 
                     svg {
                         width: 16px;
@@ -170,6 +176,18 @@
                         }
                     }
                 }
+                .sc-notification-badge {
+                    position: relative;
+                    margin-left: 5px;
+                    top: 0px;
+                    left: 0px;
+                }
+                &:hover {
+                    @include themify($themes) {
+                        border-left-color: themed('DialogTabularHoverTabBg');
+                        background: themed('DialogTabularHoverTabBg');
+                    }
+                }
                 &:after {
                     display: none !important;
                 }
@@ -177,9 +195,9 @@
                     border-radius: 0px;
                     font-weight: bold;
                     @include themify($themes) {
-                        color: themed('DialogTabularActiveTabText');
-                        background: themed('DialogTabularActiveTabBg');
-                        border-left-color: themed('DialogTabularActiveTabBorder');
+                        color: themed('DialogTabularActiveTabText') !important;
+                        background: themed('DialogTabularActiveTabBg') !important;
+                        border-left-color: themed('DialogTabularActiveTabBorder') !important;
                     }
 
                     .ic-icon {

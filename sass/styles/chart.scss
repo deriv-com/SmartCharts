@@ -37,6 +37,20 @@ html, body {
     @include themify($themes) {
         background: themed('ChartBg');
     }
+
+    &.ciq-screenshot {
+        .cq-menu-dropdown,
+        .sc-toolbar-widget,
+        .ciq-navigation-widget,
+        .stx_jump_today.home {
+            /*
+            There is a strange bug where dropdowns get displayed (partially)
+            when html is being rendered to canvas. So we set this to manually
+            hide it when PNG is exported.
+            */
+            display: none !important;
+        }
+    }
 }
 
 /* The Chart */
@@ -219,7 +233,7 @@ html, body {
 .stx-panel-control { /* Panel Control buttons template */
     position: absolute;
     top: 4px;
-    left: 56px;
+    left: 80px;
     overflow: hidden;
     z-index: 30;
     display: none;
@@ -278,7 +292,7 @@ html, body {
     display: none;
     z-index: 44;
     white-space: nowrap;
-    border-radius: 3px;
+    border-radius: 4px;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -294,7 +308,7 @@ html, body {
         padding: 8px;
         position: relative;
         width: 100%;
-        border-radius: 3px 3px 0px 0px;
+        border-radius: 4px 4px 0px 0px;
         border: none;
         box-sizing: border-box;
         font-size: 12px;
@@ -458,6 +472,7 @@ html, body {
 .stx_crosshair_drawing { /* Crosshairs lines when drawing */
     position: absolute;
     z-index: 10;
+    pointer-events: none;
     @include themify($themes) {
         background-color: themed('CrosshairAxis');
     }

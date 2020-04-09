@@ -152,7 +152,8 @@
     }
 }
 
-.ciq-modal .cq-menu-overlay {
+.cq-modal__overlay {
+    display: flex;
     width: 100%;
     height: 100%;
     align-items: center;
@@ -162,10 +163,15 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 9999;
     overflow: hidden;
-    @include themify($themes) {
-        background: themed('DialogOverlay');
+}
+
+.ciq-modal {
+    .cq-modal__overlay {
+        z-index: 9999;
+        @include themify($themes) {
+            background: themed('DialogOverlay');
+        }
     }
 }
 
@@ -261,6 +267,24 @@
     }
 }
 
+.sc-notification-badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 10px;
+    font-weight: bold;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    @include themify($themes) {
+        background: themed('NotificationBadgeBg');
+        color: themed('NotificationBadgeText');
+    }
+}
 /* -------------------------- buttons -------------------------------------*/
 .sc-btn {
     padding: 5px 16px;
