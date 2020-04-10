@@ -109,14 +109,17 @@
             left: 55px;
             width: 16px;
             height: 16px;
-            font-family: 'Roboto';
+            font-family: $base-font;
             font-weight: bold;
             text-align: center;
-            z-index: 999;
+            z-index: 1;
 
             &.x2 {
                 width: 24px;
             }
+        }
+        .sc-tooltip__inner {
+            display: none !important;
         }
     }
     .ciq-icon {

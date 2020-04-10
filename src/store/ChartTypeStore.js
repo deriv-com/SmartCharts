@@ -1,54 +1,18 @@
 import { action, computed, observable, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
-import {
-    BaseLineIcon,
-    CandleIcon,
-    DotIcon,
-    LineDotIcon,
-    HeikinAshiIcon,
-    HollowCandleIcon,
-    KagiIcon,
-    LineBreakIcon,
-    LineIcon,
-    OHLCIcon,
-    PointFigureIcon,
-    RangeBarsIcon,
-    RenkoIcon,
-    TableIcon,
-    SplineIcon,
-} from '../components/Icons.jsx';
 import SettingsDialogStore from './SettingsDialogStore';
 import List from '../components/List.jsx';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { ChartTypes } from '../Constant';
 
-function getChartTypes() {
-    return [
-        { id: 'mountain',      text: t.translate('Line'),           candleOnly: false, icon: LineIcon         },
-        { id: 'line',          text: t.translate('Dot'),            candleOnly: false, icon: DotIcon          },
-        { id: 'colored_line',  text: t.translate('Colored Dot'),    candleOnly: false, icon: LineDotIcon      },
-        { id: 'spline',        text: t.translate('Spline'),         candleOnly: false, icon: SplineIcon       },
-        { id: 'baseline',      text: t.translate('Baseline'),       candleOnly: false, icon: BaseLineIcon     },
-        { id: 'candle',        text: t.translate('Candle'),         candleOnly: true,  icon: CandleIcon       },
-        { id: 'colored_bar',   text: t.translate('OHLC'),           candleOnly: true,  icon: OHLCIcon         },
-        { id: 'hollow_candle', text: t.translate('Hollow Candle'),  candleOnly: true,  icon: HollowCandleIcon },
-        { id: 'heikinashi',    text: t.translate('Heikin Ashi'),    candleOnly: true,  icon: HeikinAshiIcon   },
-        { id: 'kagi',          text: t.translate('Kagi'),           candleOnly: true,  icon: KagiIcon,        settingsOnClick: true },
-        { id: 'linebreak',     text: t.translate('Line Break'),     candleOnly: true,  icon: LineBreakIcon,   settingsOnClick: true },
-        { id: 'renko',         text: t.translate('Renko'),          candleOnly: true,  icon: RenkoIcon,       settingsOnClick: true },
-        { id: 'rangebars',     text: t.translate('Range Bars'),     candleOnly: true,  icon: RangeBarsIcon,   settingsOnClick: true },
-        { id: 'pandf',         text: t.translate('Point & Figure'), candleOnly: true,  icon: PointFigureIcon, settingsOnClick: true },
-        { id: 'table',         text: t.translate('Table'),          candleOnly: false, icon: TableIcon         },
-    ];
-}
-
-const notCandles = getChartTypes()
+const notCandles = [...ChartTypes]
     .filter(t => !t.candleOnly)
     .map(t => t.id);
 
-const aggregateCharts = getChartTypes()
+const aggregateCharts = [...ChartTypes]
     .filter(t => t.settingsOnClick);
 
 function getAggregates() {
@@ -132,11 +96,12 @@ export default class ChartTypeStore {
     get stx() { return this.context.stx; }
     get chartTypeProp() { return this.mainStore.state.chartType; }
     get isCandle() { return notCandles.indexOf(this.type.id) === -1; }
+    get isSpline() { return this.type.id === 'spline'; }
     get isAggregateChart() { return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType); }
 
     onContextReady = () => {
         this.aggregates = getAggregates();
-        this.chartTypes = getChartTypes();
+        this.chartTypes = [...ChartTypes];
 
         this.setChartTypeFromLayout(this.stx.layout);
 
@@ -158,6 +123,10 @@ export default class ChartTypeStore {
 
     @action.bound setType(type) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
+        if (!type) {
+            type = 'mountain';
+        }
+
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type);
         }
@@ -229,7 +198,7 @@ export default class ChartTypeStore {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
         if (this.chartTypes === undefined) {
-            this.chartTypes = getChartTypes();
+            this.chartTypes = [...ChartTypes];
         }
 
         return this.chartTypes.map(t => ({

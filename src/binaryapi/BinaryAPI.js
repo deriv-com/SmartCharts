@@ -2,17 +2,15 @@ export default class BinaryAPI {
     static get DEFAULT_COUNT() { return 1000; }
     streamRequests = {};
     tradingTimesCache = null;
-    constructor(requestAPI, requestSubscribe, requestForget) {
+    constructor(requestAPI, requestSubscribe, requestForget, requestForgetStream) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;
         this.requestForget = requestForget;
+        this.requestForgetStream = requestForgetStream;
     }
 
     getActiveSymbols() {
-        return this.requestAPI({
-            active_symbols: 'brief',
-            product_type: 'basic',
-        });
+        return this.requestAPI({ active_symbols: 'brief' });
     }
 
     getServerTime() {
@@ -48,9 +46,17 @@ export default class BinaryAPI {
 
     forget(params) {
         const key = this._getKey(params);
+        if (!this.streamRequests[key]) return;
+
         const { request, callback } = this.streamRequests[key];
         delete this.streamRequests[key];
         return this.requestForget(request, callback);
+    }
+
+    forgetStream(subscription_id) {
+        if (this.requestForgetStream && typeof this.requestForgetStream === 'function') {
+            return this.requestForgetStream(subscription_id);
+        }
     }
 
     static createTickHistoryRequest({ symbol, granularity, start, end, subscribe, adjust_start_time = 1, count }) {

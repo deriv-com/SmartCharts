@@ -26,71 +26,77 @@ class CrosshairStore {
         return this.context.stx;
     }
 
+    get isChartReady() {
+        return this.mainStore.state.isChartReady;
+    }
 
-    @observable top = 0;
-    @observable left = -50000;
-    @observable rows = [];
     @observable state = 2;
-    @observable isArrowLeft = true;
+
     node = null;
     lastBar = {};
     showChange = false;
     showSeries = true;
     showStudies = true;
-
-    hide = () => {
-        this.top = 0;
-        this.left = -50000;
-    };
+    onCrosshairChanged = () => null;
 
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
-        this.state = (typeof storedState !== 'number') ? 2 : storedState;
-        this.setCrosshairState(this.state);
+        const state = (typeof storedState !== 'number') ? 2 : storedState;
+        this.setCrosshairState(state);
+
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
 
-    @action.bound setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
+    setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
+        const crosshair = this.stx.container.querySelector('.cq-crosshair');
         if (this.state === 2) {
             this.stx.setStyle('stx-float-price', 'color', 'transparent');
             this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
             this.stx.controls.floatDate.style.color = 'transparent';
             this.stx.controls.floatDate.style.backgroundColor = 'transparent';
+            this.stx.controls.floatDate.style.display = 'none';
             this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
+            crosshair.classList.add('active');
         } else {
-            this.stx.setStyle('stx-float-price', 'color', '#fff');
-            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}floatlabelsbg`]);
-            this.stx.controls.floatDate.style.color = '#fff';
-            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}floatlabelsbg`];
+            this.stx.setStyle('stx-float-price', 'color', Theme[`${theme}_float_labels_text`]);
+            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}_float_labels_bg`]);
+            this.stx.controls.floatDate.style.color = Theme[`${theme}_float_labels_text`];
+            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}_float_labels_bg`];
+            this.stx.controls.floatDate.style.display = 'block';
             this.stx.controls.crossX.style.height = '100%';
+            crosshair.classList.remove('active');
         }
     }
 
     @action.bound toggleState() {
         const state = (this.state + 1) % 3;
         this.setCrosshairState(state);
-        this.mainStore.state.saveLayout();
     }
 
-    setCrosshairState(state) {
+    @action.bound updateProps(onChange) {
+        this.onCrosshairChanged = onChange || (() => null);
+    }
+
+    @action.bound setCrosshairState(state) {
+        if (!this.context) { return; }
+
         this.state = state;
+        this.setFloatPriceLabelStyle();
         this.stx.layout.crosshair = state;
         this.stx.doDisplayCrosshairs();
+
+        this.mainStore.state.crosshairState = state;
+        this.mainStore.state.saveLayout();
+
+        this.onCrosshairChanged(this.state);
     }
 
-    @action.bound renderCrosshairTooltip() {
-        const dateStr = this.stx.controls.floatDate.innerHTML;
-        if (dateStr) {
-            const month = dateStr.substring(0, 2);
-            this.stx.controls.floatDate.innerHTML = dateStr.replace(dateStr.substring(0, 2), dateStr.substring(3, 5)).replace(dateStr.substring(2, 5), `-${month}`);
-        }
-
-        this.setFloatPriceLabelStyle();
-
+    renderCrosshairTooltip = () => {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
-        const { stx } = this;
+        const stx = this.stx;
+
         const { crossX, crossY } = stx.controls;
         // crosshairs are not on
         if ((crossX && crossX.style.display === 'none')
@@ -101,8 +107,8 @@ class CrosshairStore {
 
         const bar = stx.barFromPixel(stx.cx);
         const data = stx.chart.dataSegment[bar];
-        if (!data) {
-            this.hide();
+        if (!data || !this.isChartReady) {
+            this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
             return;
         }
 
@@ -133,7 +139,7 @@ class CrosshairStore {
             }
         }
 
-        if (!(CIQ.ChartEngine.insideChart
+        if (!(stx.insideChart
             && stx.layout.crosshair
             && stx.displayCrosshairs
             && !stx.overXAxis
@@ -144,20 +150,25 @@ class CrosshairStore {
             && goodBar
             && overBar)
         ) {
-            this.hide();
+            this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
             this.lastBar = {};
             return;
         }
 
+        let rows = null;
         if (!(sameBar(data, this.lastBar) && bar !== stx.chart.dataSegment.length - 1)) {
-            this.updateRows(data);
+            rows = this.calculateRows(data);
             this.lastBar = data;
         }
 
-        this.updateTooltipPosition();
+        this.updateTooltipPosition({
+            left: CIQ.ChartEngine.crosshairX - this.stx.left,
+            top: CIQ.ChartEngine.crosshairY - this.stx.top,
+            rows,
+        });
     }
 
-    updateRows(data) {
+    calculateRows(data) {
         const { stx } = this;
         const dupMap = {};
         const fields = [];
@@ -355,13 +366,40 @@ class CrosshairStore {
             }
         }
 
-        this.rows = rows;
+        return rows;
     }
 
-    updateTooltipPosition() {
-        this.left = CIQ.ChartEngine.crosshairX - this.stx.left;
-        this.top = CIQ.ChartEngine.crosshairY - this.stx.top;
-        this.isArrowLeft = this.left <= MAX_TOOLTIP_WIDTH;
+    updateVisibility = (visible) => {
+        const crosshair = this.stx.container.querySelector('.cq-crosshair');
+
+        if (this.state === 2 && visible) crosshair.classList.add('active');
+        else if (this.state === 2) crosshair.classList.remove('active');
+    }
+
+    // YES! we are manually patching DOM, Because we don't want to pay
+    // for react reconciler & mox tracking observables.
+    updateTooltipPosition({ top, left, rows }) {
+        const crosshair = this.stx.container.querySelector('.cq-crosshair');
+
+        crosshair.style.transform = `translate(${left}px, ${top}px)`;
+
+        const arrow = left <= MAX_TOOLTIP_WIDTH ? 'arrow-left' : 'arrow-right';
+        if (arrow !== this.prev_arrow) {
+            crosshair.classList.remove(this.prev_arrow);
+            crosshair.classList.add(arrow);
+            this.prev_arrow = arrow;
+        }
+
+        // if there is a need to update the rows.
+        if (rows !== null) {
+            const content = crosshair.querySelector('.cq-crosshair-content');
+            content.innerHTML = rows.map(r => `
+                <div class="row">
+                    <span>${r.name !== 'DT' ? r.name : r.value}</span>
+                    <span>${r.name !== 'DT' ? r.value : ''}</span>
+                </div>
+            `).join('');
+        }
     }
 }
 

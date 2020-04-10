@@ -9,7 +9,7 @@ export default class ShareStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route:'download' });
         when(() => this.context, this.onContextReady);
-        this.ShareMenu = this.menu.connect(Menu);
+        this.Dialog = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -61,7 +61,12 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        this.stx.masterData.forEach(({ DT, Open, High, Low, Close }) => {
+        const totalItemCount = this.stx.masterData.length;
+        const allowableItems = (totalItemCount <= 100)
+            ? this.stx.masterData
+            : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
+
+        allowableItems.forEach(({ DT, Open, High, Low, Close }) => {
             const year = DT.getFullYear();
             const month = DT.getMonth() + 1; // months from 1-12
             const day = DT.getDate();

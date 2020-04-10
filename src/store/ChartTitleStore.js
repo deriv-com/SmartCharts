@@ -55,13 +55,14 @@ export default class ChartTitleStore {
 
     get chart() { return this.mainStore.chart; }
     get context() { return this.mainStore.chart.context; }
+    get crosshairStore() { return this.mainStore.crosshair; }
     @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
     @computed get isSymbolOpen() { return this.currentSymbol.exchange_is_open; }
     @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
     @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
     @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
     @computed get symbolOpenTime() {
-        const times = this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times;
+        const times = this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times : [];
         const now = this.serverTime.getLocalDate().getTime();
         let openTime = times ? times.find(time => time.open.getTime() > now) : null;
 
@@ -116,4 +117,7 @@ export default class ChartTitleStore {
             }
         }
     }
+
+    onMouseEnter = () => this.crosshairStore.updateVisibility(false);
+    onMouseLeave = () => this.crosshairStore.updateVisibility(true);
 }

@@ -1,11 +1,10 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    ChartTypes,
+    ChartMode,
     StudyLegend,
     Comparison,
     Views,
     CrosshairToggle,
-    Timeperiod,
     ChartSize,
     DrawTools,
     ChartSetting,
@@ -27,7 +26,7 @@ import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
 import './test.scss';
-import { whyDidYouUpdate }  from 'why-did-you-update';
+import whyDidYouRender  from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -38,7 +37,11 @@ setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 if (process.env.NODE_ENV !== 'production') {
-    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+    whyDidYouRender(React, {
+        collapseGroups: true,
+        include: [/.*/],
+        exclude: [/^RenderInsideChart$/, /^inject-/],
+    });
 }
 
 const trackJSDomains = ['binary.com', 'binary.me'];
@@ -98,6 +101,7 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
+const activeLanguagesList = ['ID', 'FR', 'IT', 'PT', 'DE'];
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -114,9 +118,10 @@ class App extends Component {
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
         let isChartTypeCandle;
-        let granularity = 60;
+        let granularity = 0;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
+        const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
 
         if (settings) {
             settings.language = language;
@@ -124,10 +129,11 @@ class App extends Component {
         } else {
             settings = { language };
         }
+        settings.activeLanguages = activeLanguage ? activeLanguagesList : null;
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
-            chartType = 'mountain';
+            chartType = 'line';
             isChartTypeCandle = false;
             if (layout) {
                 granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
@@ -153,18 +159,19 @@ class App extends Component {
             () => this.setState({ isConnectionOpened: true }),
         );
 
-
         this.state = {
             settings,
             endEpoch,
             chartType,
             isChartTypeCandle,
             granularity,
+            activeLanguage,
             isConnectionOpened: true,
             highLow: {},
             barrierType: '',
             draggable: true,
             markers: [],
+            crosshairState: 1,
         };
     }
 
@@ -217,6 +224,7 @@ class App extends Component {
             const url = new URLSearchParams(search);
             url.delete('l');
             url.set('l', settings.language);
+            url.set('activeLanguage', prevSetting.activeLanguages ? 'true' : 'false');
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     };
@@ -239,17 +247,21 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={(chartType, isChartTypeCandle) => {
+            {isMobile ? '' : (
+                <CrosshairToggle
+                    isVisible={false}
+                    onChange={crosshair => this.setState({ crosshairState: crosshair })}
+                />
+            )}
+            <ChartMode
+                portalNodeId="portal-node"
+                onChartType={(chartType, isChartTypeCandle) => {
                     this.setState({
                         chartType,
                         isChartTypeCandle,
                     });
                 }}
-            />
-            <Timeperiod
-                onChange={(timePeriod) => {
+                onGranularity={(timePeriod) => {
                     this.setState({
                         granularity: timePeriod,
                     });
@@ -271,7 +283,7 @@ class App extends Component {
             {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools />
             <Views />
-            <Share />
+            <Share portalNodeId="portal-node" />
             {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
@@ -356,6 +368,10 @@ class App extends Component {
         this.setState({ markers });
     }
 
+    onWidget = () => {
+        this.setState(prevState => ({ enabledNavigationWidget: !prevState.enabledNavigationWidget }));
+    }
+
     toggleStartEpoch = () => {
         if (this.state.scrollToEpoch) {
             this.setState({
@@ -374,11 +390,55 @@ class App extends Component {
         });
     };
 
+    onActiveLanguage = () => {
+        this.setState(prevState => ({
+            activeLanguage: !prevState.activeLanguage,
+            settings: {
+                ...prevState.settings,
+                activeLanguages: !prevState.activeLanguage ? activeLanguagesList : null,
+            },
+        }));
+    }
+
+    onLanguage = (evt) => {
+        const { settings } = this.state;
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages ? 'true' : 'false'}`;
+    }
+
+    onCrosshair = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            crosshairState: value === 'null' ? null : parseInt(value, 10),
+        });
+    }
+
+    onChartSize = (state) => {
+        this.setState({
+            zoom: state,
+        });
+
+        setTimeout(() => {
+            this.setState({
+                zoom: 0,
+            });
+        }, 300);
+    }
+
+    onMaxTick = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            maxTick: value === 'null' ? null : parseInt(value, 10),
+        });
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers } = this.state;
+            leftOffset, color, foregroundColor, markers,
+            enabledNavigationWidget, activeLanguage,
+            crosshairState, zoom, maxTick } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -395,6 +455,7 @@ class App extends Component {
 
         return (
             <div className="test-container" style={{ diplay: 'block' }}>
+                <div id="portal-node" className="portal-node" />
                 <div className="chart-section">
                     <SmartChart
                         id={chartId}
@@ -402,6 +463,7 @@ class App extends Component {
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
+                        enabledNavigationWidget={enabledNavigationWidget}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
                         chartControlsWidgets={this.renderControls}
@@ -417,6 +479,9 @@ class App extends Component {
                         barriers={barriers}
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
+                        crosshairState={crosshairState}
+                        zoom={zoom}
+                        maxTick={maxTick}
                     >
                         {endEpoch ? (
                             <Marker
@@ -439,6 +504,49 @@ class App extends Component {
                     </SmartChart>
                 </div>
                 <div className="action-section">
+                    <div className="form-row">
+                        Navigation Widget <br />
+                        <button type="button" onClick={this.onWidget}>Toggle</button>
+                    </div>
+                    <div className="form-row">
+                        Zoom <br />
+                        <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
+                        <button type="button" onClick={() => this.onChartSize(-1)}>Zoom out</button>
+                    </div>
+                    <div className="form-row">
+                        Crosshair State <br />
+                        <select onChange={this.onCrosshair}>
+                            <option value="null">not set</option>
+                            <option value="0">state 0</option>
+                            <option value="1">state 1</option>
+                            <option value="2">state 2</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        Max Tick <br />
+                        <select onChange={this.onMaxTick}>
+                            <option value="null">not set</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        Active Language:
+                        <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'ON' : 'OFF'}</button>
+                    </div>
+                    <div className="form-row">
+                        Language <br />
+                        <select onChange={this.onLanguage}>
+                            <option value="">None</option>
+                            <option value="en">English</option>
+                            <option value="pt">Português</option>
+                            <option value="de">Deutsch</option>
+                            <option value="fr">French</option>
+                            <option value="pl">Polish</option>
+                            <option value="ar">Arabic(not supported)</option>
+                        </select>
+                    </div>
                     <div className="form-row">
                         Markers <br />
                         <select onChange={this.onAddMArker}>

@@ -97,6 +97,7 @@ endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Set to `null` if you want to hide chart controls. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
+toolbarWidget | Render function for floating toolbar widgets. Refer to [Customising Components](#customising-components).
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 chartStatusListener | Callback that will be fired each time the loading state of the chart is changed, It will be called with `true` when the chart is loaded completely.
@@ -109,10 +110,14 @@ isAnimationEnabled | Determine whether chart animation is enabled or disabled. I
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
 scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
 scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
-zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
 clearChart | Clear the chart.
 onExportLayout | Export the layout and send it back using this callback.
 importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
+shouldFetchTradingTimes | Determine whether an API call for fetching trading times is necessary for the new chart or not. Defaults to `true`
+maxTick | Set the max number of first points/candles in the visible chart area. The value should be number greater than zero. Defaults to `undefined`
+crosshairState | Set state of Crosshair Component. Allowed values are undefined, 0,1,2. Defaults to `undefined`
+zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
+
 ### Chart Settings
 
 | Attribute | Description |
@@ -122,6 +127,8 @@ theme | Sets the chart theme. themes are (`dark\|light`), and default is `light`
 lang | Sets the language. Defaults to `en`.
 position | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`.
 assetInformation | Show or hide the asset information. In mobile this will be always be `false`. Defaults to `true`.
+enabledNavigationWidget | Show or hide navigation widget. Defaults to `false`
+isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.
 
 #### Barriers API
 
@@ -145,15 +152,22 @@ Attributes marked with `*` are **mandatory**:
 shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
+hideBarrierLine | hide/show the barrier line. Can be used to show only the title. Defaults to `false`.
+hideOffscreenLine | hide/show the barrier line when it is offscreen. Defaults to `false`.
+hideOffscreenBarrier | hide/show the barrier line & title when it is offscreen. Defaults to `false`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
+title | Title text of the barrier
+isSingleBarrier | Shows only High barrier, stops low barrier & shades from rendering when the flag is true. Defaults to `false`.
+showOffscreenArrows | hide/show arrows with direction when the barrier is offscreen. Defaults to `false`.
+opacityOnOverlap | Sets the opacity of the barrier when it is overlapping with other barrier.
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
 
-#### Marker API
+#### ~~Marker API~~ (Depricated)
 
 Markers provide a way for developers to place DOM elements inside the chart that are positioned based on date, values or tick location. Unlike [CharIQ's Markers](http://documentation.chartiq.com/tutorial-Markers.html#main), we only allow markers to be placed on the main chart. Also note that this Marker implementation does not factor the width and height of the marker; this is expensive to calculate, so we expect you to offset this in CSS.
 
@@ -181,6 +195,51 @@ yPositioner | Determines y position. Choose between `value` or `none`. Defaults 
 
 There are more options for `xPositioner` and `yPositioner` in [ChartIQ docs](http://documentation.chartiq.com/CIQ.Marker.html#main). What we document here is the most common use case.
 
+#### Marker API
+
+Use `FastMarker` to render given Components under stx-subholder.
+It will keep the marker position on the chart.
+
+```jsx
+ <FastMarker
+     markerRef={setRef}
+     threshold={optional visibility threshold}
+     className="your-css-class"
+ >
+    <your content here/>
+ </FastMarker>
+
+```
+
+USAGE:
+
+ - `setRef({setPosition, div})` will be called onMount.
+ - `setRef(null)` will be called when the marker unmounts.
+ - `div` is the dom element containing the marker with `your-css-class`
+    - any content update should be done using `div` and vanilla js
+    - use `div.querySelector('...')` to get a dom reference in order to update your content.
+    - avoid doning expensive DOM operations on `div` such as style changes.
+ - `setPosition({epoch, price})` is a function that you will use to update the `div` position.
+     - epoch is the tick unix epoch from api
+     - price is the tick price, it could be `null` if you want to draw a vertical line.
+ - call `setPosition({epoch: null, price: null})` to hide the marker.
+
+
+PROPS:
+ - `threshold` (optional): the chart has a zoom level, the marker will be only shown within that threshold.
+ - `markerRef` (required): pass the `setRef` callback using this property
+ - `className` (optional): avoid expoensive css transition or keyframe animations on this class.
+
+### Raw Marker API
+Get a raw callback with underlying canvas2dcontext.
+This component is used to render directly into the chart canvas.
+
+PROPS:
+
+ - `epoch_array`: array of epoch values to get coordinates for.
+ - `draw_callback`: called on every frame with ({ctx, points}).
+   - `points` will be an array of [{left, top, epoch}] in pixels.
+   - `ctx` is the Context2dDrawingContext
 
 ### Customising Components
 
@@ -189,7 +248,7 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ComparisonList } from '@binary-com/smartcharts';
+import { ComparisonList, ToolbarWidget } from '@binary-com/smartcharts';
 
 const renderTopWidgets = () => (
     <React.Fragment>
@@ -203,10 +262,21 @@ const renderBottomWidgets = () => (
         <div>Hi, I am a bottom widget!</div>
     </React.Fragment>
 );
+
+const renderToolbarWidgets = () => (
+    <ToolbarWidget
+      position="top"
+    >
+        <div>Hi I just replaced the top widgets!</div>
+        <ComparisonList />
+    </ToolbarWidget>
+);
+
 const App = () => (
     <SmartChart
         bottomWidgets={renderBottomWidgets}
         topWidgets={renderTopWidgets}
+        toolbarWidget={renderToolbarWidgets}
         chartControlsWidgets={()=>{}}
     >
     </SmartChart>
@@ -229,6 +299,8 @@ Here are the following components you can import:
     - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
     - `<ChartSize />`
     - `<ChartSetting />`
+  -  Toolbar Widget
+      -  `<ChartMode />`
  
  ### Props vs UI
  
@@ -247,7 +319,20 @@ Certain chart parameters can be set either by props or from the chart UI:
 ```
  
  See available components and their props in [Customising Components](#customising-components).
+
  
+#### ChartTitle
+| Attribute | Description |
+--------|--------------
+onChange | When symbol/market changes, this method call. `(symbol) => { }`
+isNestedList | Change the theme of Dropdown, if set to `true` it shows a dropdown nested style. Default is `false`
+
+#### ToolbarWidget
+| Attribute | Description |
+--------|--------------
+position | determine the position of toolbar, which can be `top, bottom`. Default is `top`
+
+
 ## Contribute
 
 To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:

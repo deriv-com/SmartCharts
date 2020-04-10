@@ -1,44 +1,61 @@
-import { observable, action, when } from 'mobx';
+import React from 'react';
+import { observable, action, when, reaction } from 'mobx';
+import { connect } from './Connect';
 import MenuStore from './MenuStore';
-import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
-import { CategoricalDisplay } from '../components/categoricaldisplay';
+import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import {
+    IndicatorCatTrendLightIcon,
+    IndicatorCatTrendDarkIcon,
+} from '../components/Icons.jsx';
+import { IndicatorsTree, ExcludedStudies } from '../Constant';
 
 // TODO:
 // import StudyInfo from '../study-info';
 
+const StudyNameRegex = /[^a-z0-9 \-\%\,\)\(]/gi; /* eslint-disable-line */
+const getStudyBars = (name, type) => name.replace(StudyNameRegex, '').trim().replace(type.trim(), '').trim();
+const capitalizeFirstLetter = (string) => {
+    const str = string.replace(StudyNameRegex, '');
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export default class StudyLegendStore {
     constructor(mainStore) {
+        this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
         this.menu = new MenuStore(mainStore, { route:'indicators' });
-        this.categoricalDisplay = new CategoricalDisplayStore({
-            activeOptions: [
-                { id: 'edit', onClick: item => this.editStudy(item) },
-                { id: 'delete', onClick: item => this.deleteStudy(item) },
-            ],
-            getIsShown: () => this.menu.open,
-            getCategoricalItems: () => this.categorizedStudies,
-            getActiveCategory: () => this.activeStudies,
-            onSelectItem: this.onSelectItem.bind(this),
-            placeholderText: t.translate('"Mass Index" or "Doji Star"'),
-            favoritesId: 'indicators',
-            mainStore,
-            searchInputClassName: () => this.searchInputClassName,
-        });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper),
             favoritesId: 'indicators',
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
-        this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
         this.StudyMenu = this.menu.connect(Menu);
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
+
+        this.searchInput = React.createRef();
+        this.SearchInput = connect(() => ({
+            placeholder: 'Search',
+            value: this.filterText,
+            onChange: this.setFilterText,
+            searchInput: this.searchInput,
+            searchInputClassName: 'searchInputClassName',
+        }))(SearchInput);
+
+        reaction(() => this.menu.open, () => {
+            if (!this.menu.open) {
+                this.setFilterText('');
+            }
+            setTimeout(() => {
+                if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
+            }, 200);
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -47,59 +64,102 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
+
+        // to remove studies if user has already more than 5
+        // and remove studies which are excluded
+        this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', () => {
-            const panel = Object.keys(this.stx.panels)[1];
-            if (panel) {
-                // Hide the up arrow from first indicator to prevent user
-                // from moving the indicator panel above the main chart
-                this.stx.panels[panel].up.style.display = 'none';
-            }
+            const panelsLen = Object.keys(this.stx.panels).length;
+            Object.keys(this.stx.panels).forEach((id, index) => {
+                if (index !== 0) {
+                    const panelObj = this.stx.panels[id];
+                    const sd = this.stx.layout.studies[id];
+                    if (sd) {
+                        panelObj.title.innerHTML = `${sd.type} <span class="bars">${getStudyBars(sd.name, sd.type)}</span>`;
+
+                        // Regarding the ChartIQ.js, codes under Line 34217, edit function
+                        // not mapped, this is a force to map edit function for indicators
+                        if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
+                    }
+
+                    if (index === 1) {
+                        // Hide the up arrow from first indicator to prevent user
+                        // from moving the indicator panel above the main chart
+                        panelObj.up.style.display = 'none';
+                    }
+                    if (index === (panelsLen - 1)) {
+                        panelObj.down.style.display = 'none';
+                    }
+                }
+            });
         });
         this.renderLegend();
     };
 
     previousStudies = { };
     searchInputClassName;
-    @observable activeStudies = {
-        categoryName: t.translate('Active'),
-        categoryId: 'active',
-        hasSubcategory: false,
-        emptyDescription: t.translate('There are no active indicators yet.'),
-        data: [],
-    };
+    @observable selectedTab = 1;
+    @observable filterText = '';
+    @observable activeItems = [];
+    @observable infoItem = null;
 
-    get categorizedStudies() {
-        const data = [];
-        const excludedStudies = { Beta: true };
-        Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
-            if (!excludedStudies[studyId]) {
-                const study = CIQ.Studies.studyLibrary[studyId];
-                data.push({
-                    enabled: true,
-                    display: t.translate(study.name),
-                    dataObject: studyId,
-                    itemId: studyId,
-                });
+    get items() {
+        return [...IndicatorsTree].map((indicator) => {
+            // the only icon which is different on light/dark is trend
+            if (indicator.id === 'trend') {
+                indicator.icon = this.mainStore.chartSetting.theme === 'light' ? IndicatorCatTrendLightIcon : IndicatorCatTrendDarkIcon;
             }
+
+            return indicator;
         });
-        const category = {
-            categoryName: t.translate('Indicators'),
-            categoryId: 'indicators',
-            hasSubcategory: false,
-            data,
-        };
-        return [category];
+    }
+
+    get searchedItems() {
+        return [...IndicatorsTree]
+            .map((category) => {
+                category.foundItems = category.items.filter(item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1);
+                return category;
+            })
+            .filter(category => category.foundItems.length);
+    }
+
+    get chartActiveStudies() {
+        return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
+    }
+
+    @action.bound removeExtraStudies() {
+        if (this.stx.layout && this.stx.layout.studies) {
+            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                const type = this.stx.layout.studies[study].type;
+                if (idx >= 5 || this.excludedStudies[type]) {
+                    setTimeout(() => {
+                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                        this.renderLegend();
+                    }, 0);
+                }
+            });
+        }
     }
 
     @action.bound onSelectItem(item) {
-        const sd = CIQ.Studies.addStudy(this.stx, item);
-        this.changeStudyPanelTitle(sd);
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-        this.menu.setOpen(false);
+        this.onInfoItem(null);
+        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
+            const sd = CIQ.Studies.addStudy(this.stx, item);
+            this.changeStudyPanelTitle(sd);
+            logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.menu.setOpen(false);
+        }
     }
 
-    @action.bound updateProps(searchInputClassName) {
+    // Temporary prevent user from adding more than 5 indicators
+    // TODO All traces can be removed after new design for studies
+    @action.bound updateStyle() {
+        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
+    }
+
+    @action.bound updateProps({ searchInputClassName }) {
         this.searchInputClassName = searchInputClassName;
     }
 
@@ -172,13 +232,12 @@ export default class StudyLegendStore {
     }
 
     @action.bound deleteStudy(study) {
-        const sd = study.sd;
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${sd.name}`);
-        if (!sd.permanent) {
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
+        if (!study.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
             setTimeout(() => {
-                CIQ.Studies.removeStudy(this.stx, sd);
+                CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
             }, 0);
         }
@@ -206,6 +265,7 @@ export default class StudyLegendStore {
             }
         }
         if (Object.keys(updates).length === 0) return;
+
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();
@@ -249,14 +309,37 @@ export default class StudyLegendStore {
         if (!this.shouldRenderLegend()) { return; }
 
         this.updateActiveStudies();
+        // Temporary prevent user from adding more than 5 indicators
+        // All traces can be removed after new design for studies
+        this.updateStyle();
     };
 
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
+        const activeItems = [];
         Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
+            const studyObjCategory = IndicatorsTree.find(category => category.items.find(item => item.id === sd.type));
+            const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
+            if (studyObj) {
+                const bars = getStudyBars(sd.name, sd.type);
+                const name = this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display;
+
+                activeItems.push({
+                    ...studyObj,
+                    bars,
+                    name: capitalizeFirstLetter(name.replace(bars, '')),
+                    dataObject: {
+                        stx,
+                        sd,
+                        inputs: sd.inputs,
+                        outputs: sd.outputs,
+                        parameters: sd.parameters,
+                    },
+                });
+            }
 
             studies.push({
                 enabled: true,
@@ -271,12 +354,35 @@ export default class StudyLegendStore {
             });
         });
 
-        this.activeStudies.data = studies;
+        this.activeItems = activeItems;
+    }
+
+    @action.bound deleteAllStudies() {
+        const stx = this.stx;
+        if (stx) {
+            Object.keys(stx.layout.studies || []).forEach((id) => {
+                this.deleteStudy(stx.layout.studies[id]);
+            });
+        }
     }
 
     @action.bound clearStudies() {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
+    }
+
+    @action.bound onSelectTab(tabIndex) {
+        this.selectedTab = tabIndex;
+        this.onInfoItem(null);
+    }
+
+    @action.bound setFilterText(filterText) {
+        this.selectedTab = (filterText !== '') ? 0 : 1;
+        this.filterText = filterText;
+    }
+
+    @action.bound onInfoItem(study) {
+        this.infoItem = study;
     }
 }

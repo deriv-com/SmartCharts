@@ -17,10 +17,13 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "Add New"
+msgid "Add new templates"
 msgstr ""
 
 msgid "Annotation"
+msgstr ""
+
+msgid "Area"
 msgstr ""
 
 msgid "Asset Information"
@@ -29,22 +32,22 @@ msgstr ""
 msgid "Auto Scale"
 msgstr ""
 
-msgid "Average Line"
+msgid "Available only for \"Area\" chart type."
 msgstr ""
 
-msgid "Baseline"
+msgid "Available only for non-tick time intervals."
+msgstr ""
+
+msgid "Average Line"
 msgstr ""
 
 msgid "Box Size"
 msgstr ""
 
-msgid "C"
-msgstr ""
-
 msgid "Callout"
 msgstr ""
 
-msgid "CANCEL"
+msgid "Cancel"
 msgstr ""
 
 msgid "Candle"
@@ -65,6 +68,9 @@ msgstr ""
 msgid "Chart types"
 msgstr ""
 
+msgid "Clear all"
+msgstr ""
+
 msgid "Clear All"
 msgstr ""
 
@@ -77,7 +83,7 @@ msgstr ""
 msgid "CLOSED"
 msgstr ""
 
-msgid "Colored Dot"
+msgid "Color"
 msgstr ""
 
 msgid "Comparison"
@@ -95,6 +101,9 @@ msgstr ""
 msgid "Crossline"
 msgstr ""
 
+msgid "CSV"
+msgstr ""
+
 msgid "Dark Mode"
 msgstr ""
 
@@ -104,25 +113,10 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-msgid "DONE"
-msgstr ""
-
 msgid "Doodle"
 msgstr ""
 
-msgid "Dot"
-msgstr ""
-
 msgid "Download"
-msgstr ""
-
-msgid "Download as CSV"
-msgstr ""
-
-msgid "Download as PNG"
-msgstr ""
-
-msgid "Download Chart"
 msgstr ""
 
 msgid "Draw tools"
@@ -155,9 +149,6 @@ msgstr ""
 msgid "H"
 msgstr ""
 
-msgid "Heikin Ashi"
-msgstr ""
-
 msgid "High"
 msgstr ""
 
@@ -167,13 +158,16 @@ msgstr ""
 msgid "Historical Data Mode"
 msgstr ""
 
-msgid "Hollow Candle"
+msgid "Hollow"
 msgstr ""
 
 msgid "Horizontal"
 msgstr ""
 
 msgid "Hour"
+msgstr ""
+
+msgid "hours"
 msgstr ""
 
 msgid "Indicators"
@@ -212,7 +206,7 @@ msgstr ""
 msgid "Minute"
 msgstr ""
 
-msgid "O"
+msgid "minutes"
 msgstr ""
 
 msgid "OHLC"
@@ -224,10 +218,16 @@ msgstr ""
 msgid "OPEN"
 msgstr ""
 
-msgid "OVERWRITE"
+msgid "Opens in:"
+msgstr ""
+
+msgid "Overwrite"
 msgstr ""
 
 msgid "Pitchfork"
+msgstr ""
+
+msgid "PNG"
 msgstr ""
 
 msgid "Point & Figure"
@@ -260,7 +260,7 @@ msgstr ""
 msgid "Renko"
 msgstr ""
 
-msgid "RESET"
+msgid "Reset"
 msgstr ""
 
 msgid "Retrieving Chart Data..."
@@ -285,6 +285,12 @@ msgid "right-click to delete"
 msgstr ""
 
 msgid "right-click to manage"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Saved templates"
 msgstr ""
 
 msgid "Search..."
@@ -314,13 +320,16 @@ msgstr ""
 msgid "Shape - Star"
 msgstr ""
 
+msgid "Show Highest/Lowest Spot"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
 msgid "Speed Resistance Arc"
 msgstr ""
 
 msgid "Speed Resistance Line"
-msgstr ""
-
-msgid "Spline"
 msgstr ""
 
 msgid "SPOT"
@@ -347,10 +356,16 @@ msgstr ""
 msgid "There are no favorites yet."
 msgstr ""
 
+msgid "tick"
+msgstr ""
+
 msgid "Tick"
 msgstr ""
 
 msgid "Time Cycle"
+msgstr ""
+
+msgid "Time interval"
 msgstr ""
 
 msgid "Tirone Levels"
@@ -359,10 +374,16 @@ msgstr ""
 msgid "Underlying Assets"
 msgstr ""
 
+msgid "Up to 5 active indicators allowed."
+msgstr ""
+
 msgid "Vertical"
 msgstr ""
 
 msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "You have no save templates yet."
 msgstr ""
 
 msgid "Zoom in"
@@ -1335,10 +1356,4 @@ msgid "Strong Ratio"
 msgstr ""
 
 msgid "Weak Ratio"
-msgstr ""
-
-msgid "Closed"
-msgstr ""
-
-msgid "Opens in:"
 msgstr ""

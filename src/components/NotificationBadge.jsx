@@ -6,7 +6,7 @@ const NotificationBadge = ({
     if (!notificationCount) return null;
 
     return (
-        <span className={`notification-badge ${notificationCount > 9 ? 'x2' : ''}`}>
+        <span className={`sc-notification-badge ${notificationCount > 9 ? 'x2' : ''}`}>
             {notificationCount}
         </span>
     );

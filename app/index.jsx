@@ -1,12 +1,9 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    ChartTypes,
     StudyLegend,
     Comparison,
     Views,
-    CrosshairToggle,
-    Timeperiod,
-    ChartSize,
+    ChartMode,
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
@@ -19,6 +16,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     LogCategories,
     LogActions,
     Marker,
+    ToolbarWidget,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -26,7 +24,7 @@ import moment from 'moment';
 import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
-import { whyDidYouUpdate }  from 'why-did-you-update';
+import whyDidYouRender  from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -37,7 +35,11 @@ setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
 if (process.env.NODE_ENV !== 'production') {
-    whyDidYouUpdate(React, { exclude: [/^RenderInsideChart$/, /^inject-/] });
+    whyDidYouRender(React, {
+        collapseGroups: true,
+        include: [/.*/],
+        exclude: [/^RenderInsideChart$/, /^inject-/],
+    });
 }
 
 const trackJSDomains = ['binary.com', 'binary.me'];
@@ -97,6 +99,11 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
+const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
+    'IT', 'PL', 'PT', 'RU', 'TH',
+    'VI', 'ZH_CN', 'ZH_TW',
+];
+
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -123,13 +130,15 @@ class App extends Component {
         } else {
             settings = { language };
         }
+
+        settings.activeLanguages = activeLanguages;
         if (settings.historical) {
             this.removeAllComparisons();
             endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
             chartType = 'mountain';
             granularity = 0;
             if (layout) {
-                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10);
+                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10); // eslint-disable-line
 
                 if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
@@ -138,6 +147,7 @@ class App extends Component {
                 }
             }
         }
+        settings.isHighestLowestMarkerEnabled = false;
 
         connectionManager.on(
             ConnectionManager.EVENT_CONNECTION_CLOSE,
@@ -153,6 +163,7 @@ class App extends Component {
             chartType,
             granularity,
             isConnectionOpened: true,
+            crosshair: 0,
         };
     }
 
@@ -211,10 +222,13 @@ class App extends Component {
     handleDateChange = (value) => {
         this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
     };
+    changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
+    changeChartType = chartType => this.setState({ chartType });
+    changeCrosshair = crosshair => this.setState({ crosshair })
 
     renderTopWidgets = () => (
         <>
-            <ChartTitle onChange={this.symbolChange} />
+            <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
             <AssetInformation />
             <ComparisonList />
@@ -226,29 +240,22 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={(chartType) => {
-                    this.setState({
-                        chartType,
-                    });
-                }}
-            />
-            <Timeperiod
-                onChange={(timePeriod) => {
-                    this.setState({
-                        granularity: timePeriod,
-                    });
-                }}
-            />
-            <StudyLegend />
             {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
-            <Views />
-            <Share />
-            {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
+    );
+
+    renderToolbarWidget = () => (
+        <ToolbarWidget>
+            <ChartMode
+                onChartType={this.changeChartType}
+                onGranularity={this.changeGranularity}
+            />
+            <StudyLegend />
+            <Views />
+            <DrawTools />
+            <Share />
+        </ToolbarWidget>
     );
 
     onMessage = (e) => {
@@ -256,6 +263,14 @@ class App extends Component {
     };
 
     getIsChartReady = isChartReady => isChartReady;
+
+    onMarkerRef = (ref) => {
+        if (ref) {
+            ref.setPosition({
+                epoch: this.state.endEpoch,
+            });
+        }
+    };
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
@@ -270,6 +285,7 @@ class App extends Component {
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
+                toolbarWidget={this.renderToolbarWidget}
                 chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
@@ -278,15 +294,15 @@ class App extends Component {
                 endEpoch={endEpoch}
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}
+                crosshair={isMobile ? 0 : this.state.crosshair}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
+                shouldFetchTradingTimes
             >
                 {endEpoch ? (
                     <Marker
                         className="chart-marker-historical"
-                        x={endEpoch}
-                        xPositioner="epoch"
-                        yPositioner="top"
+                        markerRef={this.onMarkerRef}
                     ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
                     </Marker>
                 ) : ''}

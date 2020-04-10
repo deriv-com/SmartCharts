@@ -1,0 +1,66 @@
+
+.sc-chart-mode {
+    .cq-dialog {
+        width: 424px;
+    }
+    &__menu {
+        position: relative;
+
+        .ic-icon {
+            margin: auto;
+            width: 16px;
+            height: 16px;
+            top: -4px;
+            position: relative;
+
+            svg {
+                stroke: none !important;
+                width: 16px !important;
+                height: 16px !important;
+                @include themify($themes) {
+                    fill: themed('ChartModeText') !important;
+                }
+            }
+        }
+        &__timeperiod {
+            position: absolute;
+            top: -9px;
+            left: 4px;
+            font-size: 8px;
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('ChartModeText') !important;
+            }
+        }
+    }
+    &__section {
+        @include themify($themes) {
+            background: themed('ChartModeBg');
+        }
+
+        &__item {
+            &:first-child {
+                @include themify($themes) {
+                    border-bottom: 4px solid themed('ChartModeBorder');
+                }
+            }
+        }
+    }
+}
+
+.sc-toolbar-widget {
+    .sc-chart-mode__menu {
+        padding: 8px;
+    }
+    .sc-chart-mode__menu__timeperiod {
+        top: 3px;
+        left: 8px;
+    }
+}
+
+.smartcharts-mobile {
+    .sc-chart-mode .cq-dialog {
+        width: 300px;
+        left: auto;
+    }
+}

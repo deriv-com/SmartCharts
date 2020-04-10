@@ -5,58 +5,62 @@ import {
     PngIcon,
     CsvIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-download.scss';
+import '../../sass/components/download.scss';
 
+const Loading = () => (
+    <div className="loading">
+        <span className="loading__bullet" />
+        <span className="loading__bullet" />
+        <span className="loading__bullet" />
+        <span className="loading__bullet" />
+    </div>
+);
 
 const Share = ({
-    ShareMenu,
+    Dialog,
     menuOpen,
     downloadCSV,
     downloadPNG,
     isLoadingPNG,
+    portalNodeId,
 }) => (
-    <ShareMenu
-        className="cq-download"
-        title={t.translate('Download Chart')}
+    <Dialog
+        className="sc-download-menu"
+        title={t.translate('Download')}
+        tooltip={t.translate('Download')}
+        newStyle
+        isFullscreen
+        portalNodeId={portalNodeId}
     >
-        <ShareMenu.Title>
-            <DownloadIcon
-                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Download')}
-            />
-        </ShareMenu.Title>
-        <ShareMenu.Body>
-            <div className="body">
-                <div className="content">
-                    <div className="ciq-list ciq-list-download">
-                        <div
-                            className="ciq-list-item"
-                            onClick={downloadPNG}
-                        >
-                            <span className="ciq-icon-text">
-                                {t.translate('Download as PNG')}
-                                {isLoadingPNG && <span className="cq-loading" />}
-                            </span>
-                            <PngIcon />
-                        </div>
-                        <div
-                            className="ciq-list-item"
-                            onClick={downloadCSV}
-                        >
-                            <span className="ciq-icon-text">
-                                {t.translate('Download as CSV')}
-                            </span>
-                            <CsvIcon />
-                        </div>
-                    </div>
+        <Dialog.Title>
+            <div className={`sc-download__menu ${menuOpen ? 'sc-download__menu--active' : ''}`}>
+                <DownloadIcon />
+            </div>
+        </Dialog.Title>
+        <Dialog.Body>
+            <div className="sc-download">
+                <div
+                    className={`sc-download__item ${isLoadingPNG ? 'sc-download__item--loading' : ''}`}
+                    onClick={downloadPNG}
+                >
+                    <PngIcon />
+                    <span className="sc-download__item__label"> {t.translate('PNG')} </span>
+                    {isLoadingPNG && <Loading />}
+                </div>
+                <div
+                    className="sc-download__item"
+                    onClick={downloadCSV}
+                >
+                    <CsvIcon />
+                    <span className="sc-download__item__label"> {t.translate('CSV')}</span>
                 </div>
             </div>
-        </ShareMenu.Body>
-    </ShareMenu>
+        </Dialog.Body>
+    </Dialog>
 );
 
 export default connect(({ share: d }) => ({
-    ShareMenu: d.ShareMenu,
+    Dialog: d.Dialog,
     menuOpen: d.menu.dialog.open,
     downloadPNG: d.downloadPNG,
     downloadCSV: d.downloadCSV,

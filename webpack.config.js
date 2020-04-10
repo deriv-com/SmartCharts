@@ -44,6 +44,7 @@ const config = {
                         options: {
                             extract: true,
                             spriteFilename: 'sprite-[hash:6].smartcharts.svg',
+                            esModule: false,
                         },
                     },
                     {
@@ -118,7 +119,7 @@ const config = {
                     loader: path.resolve('./loaders/exclude-block-loader.js'),
                     options: {
                         start:`@START-EXCLUDE: '${BUILD_MODE}'`,
-                        end: '@END-EXCLUDE'
+                        end: '@END-EXCLUDE',
                     },
                 }],
             },
@@ -154,6 +155,11 @@ const config = {
             commonjs: 'react-transition-group',
             commonjs2: 'react-transition-group',
             root: 'ReactTransitionGroup',
+        },
+        moment: {
+            root: 'moment',
+            commonjs: 'moment',
+            commonjs2: 'moment',
         },
     },
 };
@@ -203,6 +209,12 @@ if (isApp) {
                 ? './node_modules/mobx-react/index.min.js'
                 : './node_modules/mobx-react/index.js',
             to: 'mobx-react.js',
+        },
+        {
+            from: production
+                ? './node_modules/moment/min/moment-with-locales.min.js'
+                : './node_modules/moment/min/moment-with-locales.js',
+            to: 'moment.js',
         },
         {
             from: './node_modules/react-transition-group/dist/react-transition-group.js',

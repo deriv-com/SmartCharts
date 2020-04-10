@@ -1,22 +1,27 @@
 import React       from 'react';
-import Marker      from './Marker.jsx';
+import FastMarker from './FastMarker.jsx';
 import { connect } from '../store/Connect';
 
 import '../../sass/components/_pagination-loader.scss';
 
-
-const PaginationLoader = ({ epoch }) => (
-    <Marker
-        x={epoch}
-        xPositioner="epoch"
-        className="pagination"
-    >
-        <div className="pagination__loader">
-            <div className="pagination__loader-background" />
-        </div>
-    </Marker>
+const PaginationLoader = ({ isOnPagination, setRef }) => (
+    isOnPagination
+        ? (
+            <FastMarker
+                markerRef={setRef}
+                className="pagination"
+            >
+                <div className="pagination__loader">
+                    <div className="pagination__loader-background" />
+                </div>
+            </FastMarker>
+        )
+        :   <></>
 );
 
-export default connect(({ state }) => ({
-    epoch: state.paginationEndEpoch,
+export default connect((
+    { paginationLoader: s },
+) => ({
+    isOnPagination: s.isOnPagination,
+    setRef: s.setRef,
 }))(PaginationLoader);

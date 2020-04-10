@@ -19,7 +19,7 @@ export default class TimeperiodStore {
     get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
-    onGranularityChange;
+    onGranularityChange = () => null;
 
     remain = null;
 
@@ -38,6 +38,8 @@ export default class TimeperiodStore {
         ], this.updateCountdown.bind(this));
 
         this.context.stx.addEventListener('newChart', this.updateDisplay);
+
+        reaction(() => this.mainStore.state.granularity, granularity => this.onGranularityChange(granularity));
     };
 
     countdownInterval = null;
@@ -92,8 +94,8 @@ export default class TimeperiodStore {
                         stx.yaxisLabelStyle = 'rect';
                         stx.labelType = 'countdown';
                         stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
-                        stx.labelType = null;
-                        stx.yaxisLabelStyle = 'roundRectArrow';
+                        stx.labelType = undefined;
+                        stx.yaxisLabelStyle = 'roundRect';
                     }
                 });
             }
@@ -110,14 +112,14 @@ export default class TimeperiodStore {
             console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
             return;
         }
+
         logEvent(LogCategories.ChartControl, LogActions.Interval, granularity.toString());
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
     @action.bound updateProps(onChange) {
         if (this.mainStore.state.granularity !== undefined) {
-            this.onGranularityChange = typeof onChange === 'function' ? onChange : () => {};
-            this.onGranularityChange(this.mainStore.state.granularity);
+            this.onGranularityChange = onChange;
         }
     }
 

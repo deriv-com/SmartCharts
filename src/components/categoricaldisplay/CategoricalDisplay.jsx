@@ -2,7 +2,7 @@ import React from 'react';
 import '../../../sass/components/_categorical-display.scss';
 import Scrollbars from 'tt-react-custom-scrollbars';
 
-const CategoricalDisplay = ({
+const CategoricalDisplay = React.memo(({
     onSelectItem,
     updateScrollSpy,
     setScrollPanel,
@@ -13,28 +13,50 @@ const CategoricalDisplay = ({
     height,
     id,
     searchInputClassName,
-}) => (
-    <div
-        className="cq-categorical-display"
-        style={{ height }}
-        id={id}
-    >
-        <div className="cq-lookup-filters">
-            <SearchInput searchInputClassName={searchInputClassName} />
-            <FilterPanel />
-        </div>
-        <Scrollbars
-            className="cq-scroll-panel"
-            onScroll={updateScrollSpy}
-            ref={setScrollPanel}
-            style={{ width: isMobile ? '100%' : '312px' }}
+    disableAll,
+    isNestedList,
+}) => {
+    const innerPanel = (
+        <ResultsPanel
+            onSelectItem={onSelectItem}
+            id={id}
+            disableAll={disableAll}
+            isNestedList={isNestedList}
+        />
+    );
+    return (
+        <div
+            className={`cq-categorical-display ${isNestedList ? 'cq-categorical-display--nested' : ''}`}
+            style={{ height }}
+            id={id}
         >
-            <ResultsPanel
-                onSelectItem={onSelectItem}
-                id={id}
-            />
-        </Scrollbars>
-    </div>
-);
+            <div className="cq-lookup-filters">
+                <SearchInput searchInputClassName={searchInputClassName} />
+                {!isNestedList && <FilterPanel /> }
+            </div>
+            {
+                isMobile
+                    ? (
+                        <div
+                            className="cq-scroll-panel"
+                            onScroll={updateScrollSpy}
+                            ref={setScrollPanel}
+                        >
+                            {innerPanel}
+                        </div>
+                    )
+                    : (
+                        <Scrollbars
+                            className="cq-scroll-panel"
+                            onScroll={updateScrollSpy}
+                            ref={setScrollPanel}
+                        >
+                            {innerPanel}
+                        </Scrollbars>
+                    )
+            }
+        </div>
+    );
+});
 
 export default CategoricalDisplay;

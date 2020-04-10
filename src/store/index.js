@@ -2,6 +2,7 @@ import BottomWidgetsContainerStore from './BottomWidgetsContainerStore';
 import TimeperiodStore from './TimeperiodStore';
 import ChartStore from './ChartStore';
 import ChartTypeStore from './ChartTypeStore';
+import ChartModeStore from './ChartModeStore';
 import StudyLegendStore from './StudyLegendStore';
 import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
@@ -17,11 +18,14 @@ import FavoriteStore from './FavoriteStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
-import DrawingCursorStore from './DrawingCursorStore';
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 import ChartTableStore from './ChartTableStore';
 import LastDigitStatsStore from './LastDigitStatsStore';
+import NavigationWidgetStore from './NavigationWidgetStore';
+import HighestLowestStore from './HighestLowestStore';
+import PaginationLoaderStore from './PaginationLoaderStore';
+import ToolbarWidgetStore from './ToolbarWidgetStore';
 
 export default class MainStore {
     notifier = new Notifier();
@@ -29,6 +33,7 @@ export default class MainStore {
     chart = new ChartStore(this);
     state = new ChartState(this);
     chartType = new ChartTypeStore(this);
+    chartMode = new ChartModeStore(this);
     studies = new StudyLegendStore(this);
     comparison = new ComparisonStore(this);
     drawTools = new DrawToolsStore(this);
@@ -44,8 +49,11 @@ export default class MainStore {
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
     currentSpot = new CurrentSpotStore(this);
-    drawingCursor = new DrawingCursorStore(this);
     chartTable = new ChartTableStore(this);
     lastDigitStats= new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
+    navigationWidget = new NavigationWidgetStore(this);
+    highestLowest = new HighestLowestStore(this);
+    paginationLoader = new PaginationLoaderStore(this);
+    toolbarWidget = new ToolbarWidgetStore(this);
 }

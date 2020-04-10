@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: binarycom\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
-"PO-Revision-Date: 2019-05-07 00:57\n"
+"PO-Revision-Date: 2019-06-24 07:02\n"
 
 msgid " already exists."
 msgstr " 已经存在。"
@@ -1352,4 +1352,7 @@ msgstr "已收盘"
 
 msgid "Opens in:"
 msgstr "离开盘时间还有："
+
+msgid "Up to 5 active indicators allowed."
+msgstr "可同时使用多达5个活动指示器。"
 

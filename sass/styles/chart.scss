@@ -37,6 +37,20 @@ html, body {
     @include themify($themes) {
         background: themed('ChartBg');
     }
+
+    &.ciq-screenshot {
+        .cq-menu-dropdown,
+        .sc-toolbar-widget,
+        .ciq-navigation-widget,
+        .stx_jump_today.home {
+            /*
+            There is a strange bug where dropdowns get displayed (partially)
+            when html is being rendered to canvas. So we set this to manually
+            hide it when PNG is exported.
+            */
+            display: none !important;
+        }
+    }
 }
 
 /* The Chart */
@@ -90,17 +104,16 @@ html, body {
 .stx-btn-panel,
 .stx-btn-panel span { /* Button Defaults */
     display: inline-block;
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
     transition: transform 0.2s;
 }
 
 .stx-btn-panel { /* Button Spacing */
-    margin: 3px 2px;
+    margin: 2px;
     opacity: 0;
     transition: opacity 0.5s;
-    display: none;
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
@@ -112,7 +125,13 @@ html, body {
         transform: scale(1.2, 1.2);
     }
     &.stx-show {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .stx-ico-close {
+        width: 16px;
+        height: 16px;
     }
 }
 
@@ -168,27 +187,22 @@ html, body {
     bottom: 12px;
     right: 10px;
     line-height: 0px;
-    height: 25px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
     padding: 0px;
     margin-bottom: 17px;
-    border-radius: 3px;
-    background: #fafafa;
-    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
-    transition: background 0.25s;
+    border-radius: 4px;
     cursor: pointer;
     z-index: 30;
-}
+    @include themify($themes) {
+        background: themed('NavigationWidgetBg');
+    }
 
-.stx_jump_today svg {
-    display: inline-block;
-    padding: 6px 8px;
-    transition: opacity 0.25s, transform 0.2s;
-    opacity: 0.6;
-}
-
-.stx_jump_today:hover svg {
-    opacity: 1;
+    svg {
+        position: relative;
+        left: 8px;
+        top: 8px;
+    }
 }
 
 /* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
@@ -219,19 +233,26 @@ html, body {
 .stx-panel-control { /* Panel Control buttons template */
     position: absolute;
     top: 4px;
-    left: 0px;
+    left: 80px;
     overflow: hidden;
     z-index: 30;
     display: none;
-    margin: 5px;
-    border-radius: 3px;
+    border-radius: 4px;
+    height: 24px;
     @include themify($themes) {
-        background: themed('ChartBg');
-        border: 1px solid themed('ChartBorder');
+        background: themed('ChartPanelBg');
     }
 
     .stx-btn-panel {
         opacity: 1;
+        background: transparent;
+
+        svg {
+            @include themify($themes) {
+                fill: themed('ChartPanelText');
+                stroke: themed('ChartPanelText');
+            }
+        }
     }
     * {
         user-select: none;
@@ -244,20 +265,23 @@ html, body {
     }
     .stx-panel-title { /* Panel/Chart Titles */
         box-shadow: none;
-        @include themify($themes) {
-            border-right: 1px solid themed('ChartBorder');
-        }
-        margin: 5px 10px;
+        margin: 0px 4px;
         float: left;
         display: inline-block;
-        color: #333;
-        padding: 0 10px;
-        line-height: 22px;
-        font-size: 12px;
+        padding: 0;
         text-align: left;
         text-transform: uppercase;
+        font-size: 10px;
+        font-weight: bold;
+        font-style: normal;
+        line-height: 2.6;
+        letter-spacing: normal;
         @include themify($themes) {
-            color: themed('ChartIndicateText');
+            color: themed('ChartPanelText');
+        }
+
+        .bars {
+            font-weight: normal;
         }
     }
 }
@@ -267,26 +291,36 @@ html, body {
     position: absolute;
     display: none;
     z-index: 44;
-    font-size: 12px;
-    text-align: center;
     white-space: nowrap;
-    border-radius: 3px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
     @include themify($themes) {
-        color: themed('TooltipText');
-        background: themed('TooltipBg');
+        color: themed('ChartStickyText');
+        background: themed('ChartStickyBg');
     }
 
     .mStickyInterior {
-        padding: 8px 8px 4px;
+        padding: 8px;
         position: relative;
         width: 100%;
-        border-radius: 3px 3px 0px 0px;
-        font-weight: 500;
-        @include themify($themes) {
-            background: themed('TooltipTextBg');
-        }
+        border-radius: 4px 4px 0px 0px;
         border: none;
         box-sizing: border-box;
+        font-size: 12px;
+        font-weight: bold;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: normal;
+        text-align: center;
+        @include themify($themes) {
+            background: themed('ChartStickyInnerBg');
+            color: themed('ChartStickyInnerText');
+        }
     }
     .mStickyRightClick {
         position: relative;
@@ -393,6 +427,9 @@ html, body {
 
 .stx_current_hr_up, /* 'Up' color for current chart value */
 .stx_current_hr_down { /* 'Down' color for current chart value */
+    font-weight: bold;
+    font-size: 12px;
+    font-family: $base-font;
     @include themify($themes) {
         color: themed('ChartCandleText');
         background-color: themed('ChartCandleBg');
@@ -403,14 +440,12 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    color: #fff;
+    border-radius: 4px;
+    font-weight: normal;
     @include themify($themes) {
-        background-color: themed('CrosshairLabel');
+        background-color: themed('CrosshairLabelBg');
+        color: themed('CrosshairLabelText') !important;
     }
-}
-
-.stx-float-price {
-    border-radius: 3px;
 }
 
 .stx-float-date { /* Crosshair Floating x-axis date label*/
@@ -418,12 +453,12 @@ html, body {
     font-size: 12px;
     font-family: 'Helvetica';
     z-index: 3;
-    padding: 3px 6px;
+    padding: 0 8px;
     text-align: center;
     width: auto;
-    height: 18px;
-    line-height: 18px;
-    font-weight: bold;
+    height: 30px;
+    line-height: 31px;
+    box-size: content-box;
 }
 
 .stx_crosshair { /* Standard Crosshair lines color */
@@ -437,6 +472,7 @@ html, body {
 .stx_crosshair_drawing { /* Crosshairs lines when drawing */
     position: absolute;
     z-index: 10;
+    pointer-events: none;
     @include themify($themes) {
         background-color: themed('CrosshairAxis');
     }
@@ -761,6 +797,28 @@ html, body {
 .stx-subholder {
     position: absolute;
     overflow: hidden;
+
+    &:before {
+        content: ' ';
+        display: none; // TODO the value should be change to `block` after receiving new background.;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        @include themify($themes) {
+            opacity: themed('ChartBackgroundOpacity');
+        }
+        background-image: url('https://static.cdnpub.info/traderoom/map.png'); // TODO the image's url should be changed after getting new image from UI/UX team.
+        background-repeat: no-repeat;
+        background-position: 50% 0;
+        -ms-background-size: cover;
+        -o-background-size: cover;
+        -moz-background-size: cover;
+        -webkit-background-size: cover;
+        background-size: cover;
+    }
 }
 
 /* -------- Colors for session shading -------- */
@@ -792,16 +850,16 @@ html, body {
         color: themed('ChartText');
     }
     font-size: 10px;
-    font-family: 'Roboto';
+    font-family: $base-font;
 }
 
 .stx_price_label {
     @include themify($themes) {
         color: themed('ChartText');
     }
+    font-weight: normal;
     font-size: 12px;
-    font-family: 'Roboto';
-    font-weight: bold;
+    font-family: $base-font;
 }
 
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
@@ -821,6 +879,7 @@ html, body {
     width: 100%;
     overflow: hidden;
     cursor: ns-resize;
+    z-index: 1;
     @include themify($themes) {
         box-shadow: 0 0 0px 2px themed('ChartBg');
         background: themed('ChartBg');
@@ -899,6 +958,7 @@ $spot-color: #0298d3;
     margin-left: -3px;
     margin-top: -3px;
     box-shadow: 0 0 0 rgba($COLOR_ORANGE, 0.6);
+    z-index: -2 !important;
 
     &:before {
         content: '\25CF';

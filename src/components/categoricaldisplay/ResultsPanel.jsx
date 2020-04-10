@@ -1,4 +1,5 @@
 import React from 'react';
+import { ArrowIcon, CategoryIconMap } from '../Icons.jsx';
 
 function getItemCount(category) {
     let count = 0;
@@ -13,30 +14,75 @@ function getItemCount(category) {
     return count;
 }
 
-const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop) => {
+const EmptyCategory = ({ category }) => (
+    getItemCount(category) === 0 && category.emptyDescription && (
+        <div className="category-content">
+            <div className="empty-category">{t.translate(category.emptyDescription)}</div>
+        </div>
+    )
+);
+
+const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle, active) => {
     let TitleClassName = '';
     if (activeHeadKey === categoryId) {
         TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
     }
 
-    return `category-title ${TitleClassName}`;
+    return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''} ${active ? 'active' : ''}`;
 };
 
+const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffset, isNestedList, handleTitleClick }) => {
+    const CategoryIcon = CategoryIconMap[category.categoryId];
 
-const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset }) => (
+    return (
+        <div
+            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle, category.active)}
+            style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
+            onClick={() => handleTitleClick(category.categoryId)}
+        >
+            <span className="category-title-left">
+                {isNestedList ? (CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />) : ''}
+                {t.translate(category.categoryName)}
+            </span>
+            {
+                ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
+                    || !category.categoryNamePostfixShowIfActive)
+                && category.categoryNamePostfix
+                && (
+                    <span className="category-name-postfix">
+                        {category.categoryNamePostfix}
+                    </span>
+                )
+            }
+            {
+                category.categorySubtitle && (
+                    <div className="category-subtitle">
+                        {t.translate(category.categorySubtitle)}
+                    </div>
+                )
+            }
+            { isNestedList ? (<ArrowIcon />) : ''}
+        </div>
+    );
+};
+
+const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
     <div
-        className={`category category-${category.categoryId}`}
+        className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''} ${category.active ? 'active' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
-        <div
-            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop)}
-            style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
-        >{t.translate(category.categoryName)}
-        </div>
+        <CategoryTitle
+            category={category}
+            activeHeadKey={activeHeadKey}
+            activeHeadTop={activeHeadTop}
+            activeHeadOffset={activeHeadOffset}
+            isNestedList={isNestedList}
+            handleTitleClick={handleTitleClick}
+        />
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
-                    className="category-content"
+                    className="category-content has-subcategory"
                     key={subcategory.subcategoryName}
                 >
                     <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
@@ -45,6 +91,7 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                             key={item.display}
                             item={item}
                             onSelectItem={onSelectItem}
+                            disableAll={disableAll}
                         />
                     ))}
                 </div>
@@ -56,19 +103,16 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                             key={`${item.display}-${idx}`}// eslint-disable-line react/no-array-index-key
                             item={item}
                             onSelectItem={onSelectItem}
+                            disableAll={disableAll}
                         />
                     ))}
                 </div>
             )}
-        { getItemCount(category) === 0 && category.emptyDescription && (
-            <div className="category-content">
-                <div className="empty-category">{t.translate(category.emptyDescription)}</div>
-            </div>
-        )}
+        <EmptyCategory category={category} />
     </div>
 );
 
-export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset }) => (
+export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
     <div className="results-panel">
         { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
             <Category
@@ -80,7 +124,10 @@ export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCate
                 activeHeadKey={activeHeadKey}
                 activeHeadTop={activeHeadTop}
                 activeHeadOffset={activeHeadOffset}
+                disableAll={disableAll}
+                isNestedList={isNestedList}
+                handleTitleClick={handleTitleClick}
             />
         )) }
     </div>
-);
+));

@@ -9,7 +9,7 @@
     bottom: 2em;
 }
 
-.cq-settings-dialog {
+.cq-chart-settings {
     display: flex;
     flex-direction: column;
     height: auto !important;
@@ -86,51 +86,39 @@
             }
         }
     }
-    .items {
-        padding: 16px 0;
-        flex-grow: 1;
+    .buttons {
+        display: flex;
+        justify-content: space-between;
+        padding: 16px 24px 24px;
+        border-radius: 0 0 4px 4px;
+        height: 72px;
+        box-sizing: border-box;
         @include themify($themes) {
-            background: themed('DialogSettingBodyBg');
+            background: themed('DialogFootBg');
+            border-top: 1px solid themed('DialogFootBorder');
         }
 
-        .item {
-            box-sizing: border-box;
-            padding: 0 16px;
-            height: 30px;
-            margin-bottom: 5px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
+        .sc-btn--delete {
+            cursor: pointer;
+            padding: 5px;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
 
-            .title {
-                font-size: 1.2em;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+            svg {
                 @include themify($themes) {
-                    color: themed('DialogBodyText');
+                    fill: themed('DialogFootDeleteIcon');
+                }
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DialogFootDeleteHoverBg');
                 }
             }
         }
-    }
-    .buttons {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 5px;
-        @include themify($themes) {
-            background: themed('DialogFootBg');
-        }
-
-        > div {
-            width: 90px;
-            height: 40px;
-            line-height: 40px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 1.4em;
-            @include themify($themes) {
-                color: themed('DialogFootText');
-            }
+        .sc-btn--reset {
+            margin-right: 8px;
+            padding: 5px 12px;
         }
     }
     .description {
@@ -146,19 +134,6 @@
         margin-right: 5px;
         padding-left: 6px;
         border-radius: 3px;
-        @include themify($themes) {
-            border: none;
-            box-shadow: 0 0 0 1px themed('defaultBorder');
-        }
-    }
-    .cq-color-picker {
-        display: inline-block;
-
-        .dropdown {
-            @include themify($themes) {
-                border: 1px solid themed('ColorPickerBorder');
-            }
-        }
     }
 }
 

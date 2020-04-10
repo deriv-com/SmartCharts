@@ -1,7 +1,49 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
-import { ArrowIcon } from './Icons.jsx';
+import {
+    ArrowIcon,
+    InputNumberPlusIcon,
+    InputNumberMinusIcon,
+    CheckboxIcon,
+    CheckboxActiveIcon,
+} from './Icons.jsx';
 import '../../sass/components/_ciq-form.scss';
+
+export const FormGroup = ({ title, type, children }) => (
+    <div className={`form__group ${type ? (`form__group--${type}`) : ''}`}>
+        {
+            title && (
+                <div className="form__label">
+                    <span> {title} </span>
+                </div>
+            )
+        }
+        <div className="form__control">
+            {children}
+        </div>
+    </div>
+);
+
+export const Checkbox = ({
+    id,
+    label,
+    checked,
+    disabled,
+    onChange,
+}) => (
+    <label
+        htmlFor={id}
+        className={`sc-checkbox ${checked ? 'sc-checkbox--checked' : ''} ${disabled ? 'sc-checkbox--disabled' : ''}`}
+        onClick={() => onChange(!checked)}
+    >
+        {
+            checked
+                ? (<CheckboxActiveIcon className="sc-checkbox__box" />)
+                : (<CheckboxIcon className="sc-checkbox__box" />)
+        }
+        <span className="sc-checkbox__label">{label}</span>
+    </label>
+);
 
 export class Slider extends React.Component {
     onChange = (val) => {
@@ -19,7 +61,7 @@ export class Slider extends React.Component {
             step = 1,
             value,
         } = this.props;
-        const barWidth = 120;// css hardcode
+        const barWidth = 238;// css hardcode
         const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
 
         return (
@@ -57,17 +99,18 @@ export class DropDown extends React.Component {
 
     render() {
         const {
-            rows, children, title, onRowClick, className,
+            subtitle, rows, children, value, onRowClick, className,
         } = this.props;
         const { open } = this.state;
         return (
-            <div className={`${className || ''} cq-dropdown`}>
+            <div className={`${className || ''} cq-dropdown ${open ? 'active' : ''}`}>
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    className={`title ${open ? 'active' : ''}`}
+                    className={`value ${open ? 'active' : ''}`}
                     onClick={this.onClick}
                     ref={(ref) => { this.titleRef = ref; }}
                 >
-                    {title}
+                    {value}
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>
@@ -100,16 +143,18 @@ export class Pattern extends React.Component {
         { width: 0, pattern: 'none' },
     ];
     render() {
-        const { pattern, lineWidth, onChange } = this.props;
-        const title = pattern !== 'none'
+        const { pattern, subtitle, lineWidth, onChange, onActive } = this.props;
+        const value = pattern !== 'none'
             ? <span className={`option ${pattern}-${lineWidth}`} />
             : <span className="none">None</span>;
 
         return (
             <DropDown
                 rows={this.patterns}
-                title={title}
+                value={value}
+                onActive={onActive}
                 onRowClick={onChange}
+                subtitle={subtitle}
             >
                 {p => (p.pattern !== 'none'
                     ? <span className={`option ${p.pattern}-${p.width}`} />
@@ -139,30 +184,39 @@ export class ColorPicker extends React.Component {
     titleRef = null;
     onClick = () => this.setState(prevState => ({ open: !prevState.open }));
     close = (e) => {
-        if (e.target !== this.titleRef) {
+        if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
             this.setState({ open: false });
         }
     };
+
+    defaultColor = () => (this.props.theme === 'light' ? '#000000' : '#ffffff')
 
     componentDidMount() { document.addEventListener('click', this.close, false); }
     componentWillUnmount() { document.removeEventListener('click', this.close); }
 
     shouldComponentUpdate(nextProps, nextState) {
-        return this.state.open !== nextState.open;
+        return (this.state.open !== nextState.open)
+        || (this.props.color !== nextProps.color)
+        || (this.props.theme !== nextProps.theme);
     }
 
     render() {
-        const { color, setColor } = this.props;
-        const backgroundColor = color === 'auto' ? '#000000' : color;
-
+        const { subtitle, color, setColor } = this.props;
+        const backgroundColor = color === 'auto' ? this.defaultColor() : color;
         return (
-            <div className="cq-color-picker">
+            <div className={`cq-color-picker ${this.state.open ? 'active' : ''}`}>
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    ref={(ref) => { this.titleRef = ref; }}
-                    className="title"
-                    style={{ backgroundColor }}
+                    className="value"
                     onClick={this.onClick}
-                />
+                    ref={(ref) => { this.titleRef = ref; }}
+                >
+                    <div
+                        className="sc-input-color"
+                        style={{ backgroundColor }}
+                    />
+                    <ArrowIcon />
+                </div>
                 <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
@@ -194,30 +248,66 @@ export const Switch = ({
     </div>
 );
 
+
+export const SwitchIcon = ({
+    id,
+    label,
+    value,
+    onChange,
+    noramIcon,
+    activeIcon,
+}) => {
+    const Icon = value ? activeIcon : noramIcon;
+    return (
+        <div className="sc-switch-icon">
+            <Icon className="sc-switch-icon__icon" />
+            <div className="sc-switch-icon__description">
+                <Checkbox
+                    id={id}
+                    label={label}
+                    checked={value}
+                    onChange={onChange}
+                />
+            </div>
+        </div>
+    );
+};
+
 // NumericInput fires onChange on Enter or onBlur
-export class NumericInput extends React.Component {
-    state = {};
+export class NumericInput extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        this.state = {
+            originalValue: '',
+            value: '',
+        };
 
-    componentWillMount() {
-        const { value } = this.props;
-        this.setState({
-            originalValue: value,
-            value,
-        });
+        this.onUpdateValue = this.onUpdateValue.bind(this);
     }
 
-    componentWillReceiveProps(newProps) {
-        const { value } = newProps;
-        if (value !== this.state.originalValue) {
-            this.setState({
+    componentDidMount() {
+        this.setState(() => ({
+            originalValue: this.props.value,
+            value: this.props.value,
+        }));
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const { value, min, max, onChange } = props;
+        let val = value;
+        if (value !== state.originalValue) {
+            if (max !== undefined && value > max) {
+                val = max;
+            } else if (min !== undefined && value < min) {
+                val = min;
+            }
+            onChange(val);
+            return {
                 originalValue: value,
-                value,
-            }, this.fireOnChange);
+                value: val,
+            };
         }
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.value !== nextState.value;
+        return null;
     }
 
     fireOnChange = () => {
@@ -233,7 +323,9 @@ export class NumericInput extends React.Component {
     };
 
     onUpdateValue = (e) => {
-        this.setState({ value: e.target.value });
+        e.persist();
+
+        this.setState(() => ({ value: e.target.value }));
     };
 
     fireOnEnter = (e) => {
@@ -242,26 +334,38 @@ export class NumericInput extends React.Component {
         }
     };
 
+    onIncrease = () => this.setState(prevState => ({ value: prevState.value + 1 }));
+    onDecrease = () => this.setState(prevState => ({ value: prevState.value - 1 }));
+
     render() {
-        const { min, max, step } = this.props;
+        const { subtitle, min, max, step } = this.props;
         return (
-            <input
-                type="number"
-                value={this.state.value}
-                onBlur={this.fireOnChange}
-                onChange={this.onUpdateValue}
-                onKeyPress={this.fireOnEnter}
-                min={min}
-                max={max}
-                step={step}
-            />
+            <div className="cq-numeric-input">
+                <input
+                    type="number"
+                    value={this.state.value}
+                    onBlur={this.fireOnChange}
+                    onChange={this.onUpdateValue}
+                    onKeyPress={this.fireOnEnter}
+                    min={min}
+                    max={max}
+                    step={step}
+                />
+                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
+                <div className="cq-numeric-input-buttons">
+                    <InputNumberPlusIcon onClick={this.onIncrease} />
+                    <InputNumberMinusIcon onClick={this.onDecrease} />
+                </div>
+            </div>
         );
     }
 }
 
 export const NumberColorPicker = ({
     value,
+    theme,
     onChange,
+    onActive,
 }) => {
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
@@ -273,10 +377,14 @@ export const NumberColorPicker = ({
         <span className="cq-numbercolorpicker">
             <NumericInput
                 value={Value}
+                subtitle={t.translate('Size')}
                 onChange={val => onValueChange(val)}
             />
             <ColorPicker
                 color={Color}
+                theme={theme}
+                onActive={onActive}
+                subtitle={t.translate('Color')}
                 setColor={val => onColorChange(val)}
             />
         </span>
