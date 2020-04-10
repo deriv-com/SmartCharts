@@ -31,7 +31,7 @@
     }
 }
 
-.ciq-chart-type {
+.sc-chart-type {
     display: flex;
     padding: 24px;
     justify-content: space-between;
@@ -48,32 +48,15 @@
         border: 1px solid transparent;
         border-radius: 4px;
         position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
-        &:last-child {
-            margin-right: 0px;
+        .ic-icon {
+            margin: 0 auto 12px;
         }
-        &__content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-radius: 4px;
-
-            .ic-icon {
-                margin-bottom: 12px;
-            }
-            &:hover {
-                @include themify($themes) {
-                    background: themed('ChartTypeHoverBg');
-                }
-            }
-        }
-        .tooltip {
-            pointer-events: none;
-        }
-        &__text {
+        .text {
             display: block;
             font-size: 14px;
             font-weight: normal;
@@ -85,16 +68,21 @@
                 color: themed('ChartTypeText');
             }
         }
+        &:last-child {
+            margin-right: 0px;
+        }
+        &:hover {
+            @include themify($themes) {
+                background: themed('ChartTypeHoverBg');
+            }
+        }
         &--active {
             background: transparent !important;
             @include themify($themes) {
                 border-color: themed('ChartTypeActiveBorder');
             }
 
-            #{ $self }__content {
-                background: transparent !important;
-            }
-            #{ $self }__text {
+            .text {
                 font-weight: bold;
                 @include themify($themes) {
                     color: themed('ChartTypeActiveText');
@@ -105,24 +93,17 @@
             cursor: initial;
             background: transparent !important;
 
-            #{ $self }__content {
+            > span {
                 opacity: 0.32;
                 background: transparent !important;
-
-                > span {
-                    pointer-events: none;
-                }
-            }
-            #{ $self }__content:hover + .tooltip {
-                opacity: 1;
-                z-index: 1;
+                pointer-events: none;
             }
         }
     }
 }
 
 .smartcharts-mobile {
-    .ciq-chart-type {
+    .sc-chart-type {
         padding: 8px 10px 24px;
 
         &__item {
@@ -133,9 +114,5 @@
                 margin-bottom: 2px;
             }
         }
-    }
-    .ciq-chart-type__item:hover .tooltip {
-        opacity: 0 !important;
-        z-index: -1 !important;
     }
 }

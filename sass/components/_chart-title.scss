@@ -212,10 +212,8 @@
         }
         .cq-menu-dropdown {
             width: 100%;
-
-            &.open {
-                margin: 0px;
-            }
+            top: 0px;
+            margin: 0px;
         }
     }
 }

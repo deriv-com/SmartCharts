@@ -1,5 +1,5 @@
 
-.ciq-toolbar-widget {
+.sc-toolbar-widget {
     position: absolute;
     border-radius: 4px;
     width: 40px;
@@ -12,16 +12,17 @@
         border: 8px solid themed('ToolbarWidgetBorder');
     }
 
-    &--bottom {
-        top: auto;
-        bottom: 38px;
-    }
     .ciq-menu {
         .cq-menu-btn {
-            .ciq-chart-mode__menu {
+            .sc-chart-mode__menu,
+            .ciq-views__menu,
+            .sc-download__menu,
+            .sc-studies__menu,
+            .sc-dtools__menu {
                 width: 40px;
                 height: 40px;
                 box-sizing: border-box;
+                padding: 8px;
 
                 .ic-icon {
                     width: 24px !important;
@@ -29,9 +30,22 @@
                     top: 0px;
 
                     svg {
+                        width: 24px !important;
+                        height: 24px !important;
+                        position: relative;
+                        bottom: 0px;
+
+                        @include themify($themes) {
+                            fill: themed('ToolbarWidgetItemIcon');
+                        }
+                    }
+                }
+            }
+            .sc-chart-mode__menu {
+                .ic-icon {
+                    svg {
                         width: 20px !important;
                         height: 20px !important;
-                        position: relative;
                         bottom: -2px;
                     }
                 }
@@ -40,19 +54,17 @@
                 @include themify($themes) {
                     background: themed('ToolbarWidgetHoverBg');
                 }
-
-                & + .tooltip {
-                    opacity: 1;
-                }
             }
         }
-        .tooltip {
-            left: calc(100% + 17px);
-        }
     }
-}
-
-.smartcharts-mobile .ciq-toolbar-widget .tooltip {
-    opacity: 0 !important;
-    pointer-events: none !important;
+    .sc-tooltip__inner {
+        left: calc(100% + 15px);
+    }
+    &--bottom {
+        top: auto;
+        bottom: 38px;
+    }
+    &:hover {
+        z-index: 5;
+    }
 }

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import {
+    FormGroup,
     Switch,
     NumericInput,
     ColorPicker,
@@ -11,26 +13,22 @@ import {
     NumberColorPicker,
     FontSetting,
 } from './Form.jsx';
+import { DeleteIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-settings-dialog.scss';
-import 'react-tabs/style/react-tabs.css';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
-    <div className={`form__group form__group--${type}`}>
-        {(type === 'select'
-         || type === 'colorpicker'
-         || group === 'OverBought'
-         || group === 'OverSold'
-        )
-            ? ''
-            : (
-                <div className="form__label">
-                    <span> {title} </span>
-                </div>
-            )}
-        <div className="form__control">
-            {Field}
-        </div>
-    </div>
+    <FormGroup
+        title={
+            (type === 'select'
+             || type === 'colorpicker'
+             || group === 'OverBought'
+             || group === 'OverSold'
+            ) ? null : title
+        }
+        type={type}
+    >
+        {Field}
+    </FormGroup>
 );
 
 
@@ -61,6 +59,7 @@ const SettingsPanelGroup = ({
                 <Pattern
                     pattern={item.value}
                     lineWidth={lineWidth}
+                    subtitle={item.title}
                     onChange={(v) => {
                         onItemChange('pattern', v.pattern);
                         onItemChange('lineWidth', v.width);
@@ -113,7 +112,7 @@ const SettingsPanelGroup = ({
         ),
     };
 
-    const input_group_name = `form__input-group--${title.toLowerCase().replace(' ', '-')}`;
+    const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
 
     return (
         <div className={`form__input-group ${input_group_name}`}>
@@ -162,36 +161,21 @@ const SettingsPanel = ({
 );
 
 
-const ResetButton = ({
-    onResetClick,
-}) => (
+const ResetButton = ({ onClick }) => (
     <button
         type="button"
-        className="reset"
-        onClick={onResetClick}
+        className="sc-btn sc-btn--outline-secondary sc-btn--reset"
+        onClick={onClick}
     >{t.translate('Reset')}
     </button>
 );
 
-const DoneButton = ({
-    setOpen,
-}) => (
+const DoneButton = ({ onClick }) => (
     <button
         type="button"
-        className="done"
-        onClick={() => setOpen(false)}
-    >{t.translate('Save')}
-    </button>
-);
-
-const CancelButton = ({
-    setOpen,
-}) => (
-    <button
-        type="button"
-        className="cancel"
-        onClick={() => setOpen(false)}
-    >{t.translate('Cancel')}
+        className="sc-btn sc-btn--primary sc-btn--save"
+        onClick={() => onClick()}
+    >{t.translate('Done')}
     </button>
 );
 
@@ -199,61 +183,72 @@ const SettingsDialog = ({
     itemGroups,
     title,
     description,
-    setOpen,
     showTabs,
     onResetClick,
     onItemChange,
-    Dialog,
+    onItemDelete,
+    SettingDialogMenu,
     theme,
+    close,
     setScrollPanel,
 }) => (
-    <Dialog
-        className="cq-dialog cq-settings-dialog"
+    <SettingDialogMenu
+        className="cq-modal--settings"
         title={title}
+        newStyle
         enableTabular={showTabs}
+        emptyMenu
         enableOverlay // this temprary, we remove it when all menus convert to modal
     >
-        {showTabs
-            ? (
-                <Tabs className="tabs--vertical">
-                    <TabList>
-                        <Tab>Settings</Tab>
-                        <Tab>Description</Tab>
-                    </TabList>
-                    <TabPanel>
-                        <SettingsPanel
-                            itemGroups={itemGroups}
-                            theme={theme}
-                            onItemChange={onItemChange}
-                            setScrollPanel={setScrollPanel}
-                        />
-                        <div className="buttons">
-                            <ResetButton onResetClick={onResetClick} />
-                            <DoneButton setOpen={setOpen} />
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-                        {description}
-                    </TabPanel>
-                </Tabs>
-            ) : (
-            <>
-                <SettingsPanel
-                    itemGroups={itemGroups}
-                    theme={theme}
-                    onItemChange={onItemChange}
-                    setScrollPanel={setScrollPanel}
-                />
-                <div className="buttons">
-                    <ResetButton onResetClick={onResetClick} />
-                    <div>
-                        <CancelButton setOpen={setOpen} />
-                        <DoneButton setOpen={setOpen} />
-                    </div>
-                </div>
-            </>
-            )}
-    </Dialog>
+        <SettingDialogMenu.Title />
+        <SettingDialogMenu.Body>
+            <div className="cq-chart-settings">
+                {showTabs
+                    ? (
+                        <Tabs className="tabs--vertical">
+                            <TabList>
+                                <Tab>Settings</Tab>
+                                <Tab>Description</Tab>
+                            </TabList>
+                            <TabPanel>
+                                <SettingsPanel
+                                    itemGroups={itemGroups}
+                                    theme={theme}
+                                    onItemChange={onItemChange}
+                                    setScrollPanel={setScrollPanel}
+                                />
+                                <div className="buttons">
+                                    <ResetButton onClick={onResetClick} />
+                                    <DoneButton onClick={close} />
+                                </div>
+                            </TabPanel>
+                            <TabPanel>
+                                {description}
+                            </TabPanel>
+                        </Tabs>
+                    ) : (
+                        <>
+                            <SettingsPanel
+                                itemGroups={itemGroups}
+                                theme={theme}
+                                onItemChange={onItemChange}
+                                setScrollPanel={setScrollPanel}
+                            />
+                            <div className="buttons">
+                                <DeleteIcon
+                                    className="sc-btn--delete"
+                                    onClick={onItemDelete}
+                                />
+                                <div>
+                                    <ResetButton onClick={onResetClick} />
+                                    <DoneButton onClick={close} />
+                                </div>
+                            </div>
+                        </>
+                    )}
+            </div>
+        </SettingDialogMenu.Body>
+    </SettingDialogMenu>
 
 );
 export default SettingsDialog;

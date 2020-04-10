@@ -2,21 +2,25 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 import MenuMobile from './MenuMobile.jsx';
+import Tooltip from './Tooltip.jsx';
 import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
-        if (e.target.className === 'cq-menu-overlay') {
-            this.props.setOpen(false);
+        if (e.target.className === 'cq-modal__overlay') {
+            this.props.handleCloseDialog();
         }
     };
 
     render() {
         const {
             open,
+            dialogStatus,
             className,
             children,
             title,
+            subTitle,
+            onBack,
             tooltip,
             onTitleClick,
             DropdownDialog,
@@ -25,37 +29,53 @@ class Menu extends Component {
             portalNodeId,
             enabled = true,
             shouldRenderDialogs,
+            handleCloseDialog,
             onMouseEnter,
             onMouseLeave,
             theme,
+            enableTabular,
+            ready,
+            emptyMenu,
             newStyle, // this props will remove after we apply new design
             // to all of components
         } = this.props;
+
+        if (!ready) return '';
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
         if (newStyle) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
-            const newDropdown = (shouldRenderDialogs
-                && (
-                    <DropdownDialog
-                        className="cq-dialog"
-                        isMobile={isMobile}
-                        isFullscreen={isFullscreen}
-                        title={title}
-                        enableOverlay
-                        isPortal={portalNode}
-                    >
-                        {rest}
-                    </DropdownDialog>
-                ));
             const modalDropdown = (
                 <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
                     <div
-                        className="cq-menu-overlay"
+                        className="cq-modal__overlay"
                         onClick={this.onOverlayClick}
                     >
-                        {newDropdown}
+                        {
+                            (shouldRenderDialogs
+                            && (
+                                <CSSTransition
+                                    appear
+                                    in={dialogStatus}
+                                    timeout={300}
+                                    classNames="cq-dialog"
+                                    unmountOnExit
+                                >
+                                    <DropdownDialog
+                                        isMobile={isMobile}
+                                        isFullscreen={isFullscreen}
+                                        title={title}
+                                        handleCloseDialog={handleCloseDialog}
+                                        subTitle={subTitle}
+                                        onBack={onBack}
+                                        enableTabular={enableTabular}
+                                    >
+                                        {rest}
+                                    </DropdownDialog>
+                                </CSSTransition>
+                            ))
+                        }
                     </div>
                 </div>
             );
@@ -68,9 +88,18 @@ class Menu extends Component {
                 portalNode,
             );
 
+            if (emptyMenu) {
+                return (open ? newDialog : '');
+            }
+
             return (
                 enabled && (
-                    <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <Tooltip
+                        className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}
+                        content={tooltip}
+                        enabled={tooltip}
+                        position="right"
+                    >
                         <div
                             className="cq-menu-btn"
                             onMouseEnter={onMouseEnter}
@@ -79,11 +108,15 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {tooltip ? (<div className="tooltip tooltip--right">{tooltip}</div>) : ''}
                         {open ? newDialog : ''}
-                    </div>
+                    </Tooltip>
                 ) || (
-                    <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+                    <Tooltip
+                        className={`ciq-menu ciq-disabled ${className || ''}`}
+                        content={tooltip}
+                        enabled={tooltip}
+                        position="right"
+                    >
                         <div
                             className="cq-menu-btn"
                             onMouseEnter={onMouseEnter}
@@ -91,8 +124,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {tooltip ? (<div className="tooltip tooltip--right">{tooltip}</div>) : ''}
-                    </div>
+                    </Tooltip>
                 )
             );
         }
