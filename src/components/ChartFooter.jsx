@@ -7,7 +7,7 @@ import '../../sass/components/sc-chart-footer.scss';
 
 
 const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => {
-    if (!context) return (null);
+    if (!context) return null;
 
     return (
         <div className="sc-chart-footer">
