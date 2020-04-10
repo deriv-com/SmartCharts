@@ -29,6 +29,8 @@ export default class DrawToolsStore {
     get context() { return this.mainStore.chart.context; }
 
     get stx() { return this.context.stx; }
+    get stateStore() { return this.mainStore.state; }
+    get crosshairStore() { return this.mainStore.crosshair; }
 
     activeDrawing = null;
     isContinuous = false;
@@ -46,11 +48,11 @@ export default class DrawToolsStore {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.stx.changeVectorType('');
-            this.computeActiveDrawTools();
+            this.drawingFinished();
         }
     };
 
-    doubleClick = () => this.computeActiveDrawTools();
+    doubleClick = () => this.drawingFinished();
 
     @computed get activeToolsNo() { return this.activeToolsGroup.reduce((a, b) => (a + b.items.length), 0); }
 
@@ -101,7 +103,7 @@ export default class DrawToolsStore {
         const count = this.stx.drawingObjects.length;
         if ((this.menu.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
             this.stx.changeVectorType('');
-            this.computeActiveDrawTools();
+            this.drawingFinished();
         }
         this._pervDrawingObjectCount = count;
     };
@@ -109,7 +111,6 @@ export default class DrawToolsStore {
     findComputedDrawing = (drawing) => {
         const group = this.activeToolsGroup.find(drawGroup => drawGroup.key === drawing.name);
         if (group) {
-            console.log(group.key);
             const drawingItem = group.items.find(item => (
                 item.v0 === drawing.v0
                     && item.v1 === drawing.v1
@@ -122,6 +123,13 @@ export default class DrawToolsStore {
             return drawingItem;
         }
         return null;
+    }
+
+    @action.bound drawingFinished() {
+        this.computeActiveDrawTools();
+        if (this.stateStore) {
+            this.crosshairStore.setCrosshairState(this.stateStore.crosshairState);
+        }
     }
 
     @action.bound clearAll() {
