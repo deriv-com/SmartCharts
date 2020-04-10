@@ -1,6 +1,5 @@
 
-.cq-dialog-overlay,
-.cq-dialog-portal {
+.cq-dialog-overlay {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -10,12 +9,7 @@
     bottom: 2em;
 }
 
-.cq-dialog-portal {
-    top: 0px;
-    left: 0px;
-}
-
-.cq-settings-dialog {
+.cq-chart-settings {
     display: flex;
     flex-direction: column;
     height: auto !important;
@@ -104,43 +98,27 @@
             border-top: 1px solid themed('DialogFootBorder');
         }
 
-        button {
-            height: 32px;
-            line-height: 32px;
-            text-align: center;
+        .sc-btn--delete {
             cursor: pointer;
-            font-size: 14px;
+            padding: 5px;
+            width: 32px;
+            height: 32px;
             border-radius: 4px;
-            padding: 0px 16.5px;
-            font-weight: bold;
-            @include themify($themes) {
-                color: themed('DialogFootText');
-            }
 
-            &.done {
+            svg {
                 @include themify($themes) {
-                    background: themed('DialogFootDoneBg');
-                    color: themed('DialogFootDoneText');
-                    border: 1px solid themed('DialogFootDoneBg');
+                    fill: themed('DialogFootDeleteIcon');
                 }
             }
-            &.reset {
-                padding: 0px 10.5px;
+            &:hover {
                 @include themify($themes) {
-                    background: themed('DialogFootResetBg');
-                    color: themed('DialogFootResetText');
-                    border: 1px solid themed('DialogFootResetBorder');
+                    background: themed('DialogFootDeleteHoverBg');
                 }
             }
-            &.cancel {
-                border: 1px solid transparent;
-                margin-right: 8px;
-                padding: 0px 7px;
-                background: transparent;
-                @include themify($themes) {
-                    color: themed('DialogFootCancelText');
-                }
-            }
+        }
+        .sc-btn--reset {
+            margin-right: 8px;
+            padding: 5px 12px;
         }
     }
     .description {

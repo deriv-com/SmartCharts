@@ -1,225 +1,178 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { connect } from '../store/Connect';
-import { Switch } from './Form.jsx';
+import { FormGroup, SwitchIcon } from './Form.jsx';
 import {
-    PositionLeftIcon,
-    PositionBottomIcon,
     SettingIcon,
-    BackIcon,
-    CloseIcon,
+    LanguageIcon,
+    ThemeIcon,
+    ChartIcon,
+    ThemeLightIcon,
+    ThemeDarkIcon,
+    SettingCountdownMap,
+    SettingHistoricalMap,
+    SettingHighestLowestMap,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-chart-setting.scss';
+import '../../sass/components/_sc-chart-setting.scss';
 
-const AssetInformationToggle = ({
+const ChartSettingItem = ({
+    title,
+    id,
+    label,
     value,
     onChange,
+    noramIcon,
+    activeIcon,
 }) => (
-    <div className="ciq-list-item">
-        <span className="ciq-icon-text">{t.translate('Asset Information')}</span>
-        <div className="ciq-action">
-            <Switch
-                value={value}
-                onChange={onChange}
-            />
-        </div>
-    </div>
-);
-
-const ThemeToggle = ({
-    position,
-    setPosition,
-}) => (
-    <div className="ciq-list-item ciq-list-item-position">
-        <span className="ciq-icon-text">{t.translate('Position')}</span>
-        <div className="ciq-action">
-            <PositionBottomIcon
-                onClick={() => setPosition('bottom')}
-                className={`${position === 'bottom' ? 'active' : ''}`}
-            />
-            <PositionLeftIcon
-                onClick={() => setPosition('left')}
-                className={`${position === 'left' ? 'active' : ''}`}
-            />
-        </div>
-    </div>
+    <FormGroup
+        title={title}
+        type={id}
+    >
+        <SwitchIcon
+            id={id}
+            label={label}
+            value={value}
+            onChange={onChange}
+            noramIcon={noramIcon}
+            activeIcon={activeIcon}
+        />
+    </FormGroup>
 );
 
 const ChartSetting = ({
-    assetInformation,
     ChartSettingMenu,
-    closeMenu,
     countdown,
     historical,
-    isAutoScale,
     isHighestLowestMarkerEnabled,
-    isMobile,
     languages,
     menuOpen,
-    position,
     selectedLanguage,
-    setAssetInformation,
-    setAutoScale,
     setHistorical,
     setLanguage,
-    setPosition,
     setTheme,
-    setView,
     showCountdown,
-    view,
     theme,
     toggleHighestLowestMarker,
-}) => {
-    const renderMain = () => (
-        <div>
-            <div className="title">
-                <div className="title-text"> {t.translate('Settings')} </div>
-                <CloseIcon className="icon-close-menu" onClick={() => closeMenu()} />
-            </div>
-            <div className="body">
-                <div className="ciq-list ciq-list-setting">
-                    {!isMobile ? <ThemeToggle setPosition={setPosition} position={position} /> : ''}
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Auto Scale')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={isAutoScale}
-                                onChange={setAutoScale}
-                            />
-                        </div>
+}) => (
+    <ChartSettingMenu
+        className="sc-chart-setting"
+        title={t.translate('Platform settings')}
+        enableTabular
+        newStyle
+    >
+        <ChartSettingMenu.Title>
+            <SettingIcon
+                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                tooltip-title={t.translate('Settings')}
+            />
+        </ChartSettingMenu.Title>
+        <ChartSettingMenu.Body>
+            <Tabs className="tabs--vertical">
+                <TabList>
+                    <Tab key="theme"><ThemeIcon />{t.translate('Themes')}</Tab>
+                    <Tab key="language"><LanguageIcon />{t.translate('Language')}</Tab>
+                    <Tab key="platform"><ChartIcon />{t.translate('Charts')}</Tab>
+                </TabList>
+                <TabPanel>
+                    <div className="sc-chart-setting__panel">
+                        <FormGroup
+                            title={t.translate('Select theme')}
+                            type="theme"
+                        >
+                            <div
+                                className={`form__group__item ${theme === 'dark' ? 'form__group__item--active' : ''}`}
+                                onClick={() => setTheme('dark')}
+                            >
+                                <ThemeDarkIcon />
+                                <div className="text">{t.translate('Dark')}</div>
+                            </div>
+                            <div
+                                className={`form__group__item ${theme === 'light' ? 'form__group__item--active' : ''}`}
+                                onClick={() => setTheme('light')}
+                            >
+                                <ThemeLightIcon />
+                                <div className="text">{t.translate('Light')}</div>
+                            </div>
+                        </FormGroup>
                     </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Dark Mode')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={(theme === 'dark')}
-                                onChange={checked => setTheme(checked ? 'dark' : 'light')}
-                            />
-                        </div>
+                </TabPanel>
+                <TabPanel>
+                    <div className="sc-chart-setting__panel">
+                        <FormGroup
+                            title={t.translate('Select language')}
+                            type="language"
+                        >
+                            {languages.map(language => (
+                                <div
+                                    className={`form__group__item ${(selectedLanguage.key === language.key) ? 'form__group__item--active' : ''}`}
+                                    key={language.key}
+                                    onClick={() => setLanguage(language.key)}
+                                >
+                                    {language.icon}
+                                    <span className="text">{language.name}</span>
+                                </div>
+                            ))}
+                        </FormGroup>
                     </div>
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Countdown')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={countdown}
-                                onChange={showCountdown}
-                            />
-                        </div>
-                    </div>
-                    {!isMobile ? <AssetInformationToggle value={assetInformation} onChange={setAssetInformation} /> : ''}
-                    <div className="ciq-list-item">
-                        <span className="ciq-icon-text">{t.translate('Historical Data Mode')}</span>
-                        <div className="ciq-action">
-                            <Switch
-                                value={historical}
-                                onChange={setHistorical}
-                            />
-                        </div>
-                    </div>
-                    <div
-                        className="ciq-list-item ciq-list-item-lng"
-                        onClick={() => setView('language')}
-                    >
-                        <span className="ciq-icon-text">{t.translate('Language')}</span>
-                        <div className="ciq-action">
-                            {selectedLanguage.icon}
-                        </div>
-                    </div>
-                    <div className={`ciq-list-item ${historical && 'disabled'}`}>
-                        <span className="ciq-icon-text">{t.translate('Show Highest/Lowest Spot')}</span>
-                        <div className="ciq-action">
-                            <Switch
+                </TabPanel>
+                <TabPanel>
+                    <div className="sc-chart-setting__panel">
+                        <ChartSettingItem
+                            title={t.translate('Interval duration')}
+                            id="countdown"
+                            label={t.translate('Display remaining time for each interval')}
+                            value={countdown}
+                            onChange={showCountdown}
+                            noramIcon={SettingCountdownMap[theme].normal}
+                            activeIcon={SettingCountdownMap[theme].active}
+                        />
+
+                        <ChartSettingItem
+                            title={t.translate('Historical data mode')}
+                            id="historical"
+                            label={t.translate('Display data for a specific date and time')}
+                            value={historical}
+                            onChange={setHistorical}
+                            noramIcon={SettingHistoricalMap[theme].normal}
+                            activeIcon={SettingHistoricalMap[theme].active}
+                        />
+
+                        <FormGroup
+                            title={t.translate('Highest and lowest spot')}
+                            id="highestlowest"
+                        >
+                            <SwitchIcon
+                                id="highestlowest"
+                                label={t.translate('Display the highest and lowest spot price')}
                                 value={isHighestLowestMarkerEnabled}
                                 onChange={toggleHighestLowestMarker}
+                                noramIcon={SettingHighestLowestMap[theme].normal}
+                                activeIcon={SettingHighestLowestMap[theme].active}
                             />
-                        </div>
+                        </FormGroup>
                     </div>
-                </div>
-            </div>
-        </div>
-    );
-    const renderLanguage = () => (
-        <div>
-            <div className="title">
-                <BackIcon
-                    className="icon-back-menu"
-                    onClick={() => setView()}
-                />
-                <div className="title-text">{t.translate('Language')}</div>
-            </div>
-            <div className="body">
-                <div className="ciq-list ciq-list-language">
-                    {languages.map(language => (
-                        <div
-                            className={`ciq-list-item ${(selectedLanguage.key === language.key) ? 'selected' : ''}`}
-                            key={language.key}
-                            onClick={() => setLanguage(language.key)}
-                        >
-                            {language.icon}
-                            <span className="ciq-icon-text">{language.name}</span>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-    return (
-        <ChartSettingMenu className="cq-chart-setting">
-            <ChartSettingMenu.Title>
-                <SettingIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Settings')}
-                />
-            </ChartSettingMenu.Title>
-            <ChartSettingMenu.Body>
-                <div className={`cq-setting-container container-${view === '' ? 'main' : view}`}>
-                    <CSSTransition
-                        in={view === ''}
-                        timeout={250}
-                        classNames="cq-setting-main animate"
-                        unmountOnExit
-                    >
-                        {renderMain()}
-                    </CSSTransition>
+                </TabPanel>
+            </Tabs>
+        </ChartSettingMenu.Body>
+    </ChartSettingMenu>
+);
 
-                    <CSSTransition
-                        in={view === 'language'}
-                        timeout={250}
-                        classNames="cq-setting-language animate"
-                        unmountOnExit
-                    >
-                        {renderLanguage()}
-                    </CSSTransition>
-                </div>
-            </ChartSettingMenu.Body>
-        </ChartSettingMenu>
-    );
-};
-
-export default connect(({ chartSetting: s, chart: c }) => ({
-    assetInformation            : s.assetInformation,
+export default connect(({ chartSetting: s }) => ({
     ChartSettingMenu            : s.ChartSettingMenu,
     closeMenu                   : s.menu.onTitleClick,
     countdown                   : s.countdown,
     historical                  : s.historical,
-    isMobile                    : c.isMobile,
     isAutoScale                 : s.isAutoScale,
     isHighestLowestMarkerEnabled: s.isHighestLowestMarkerEnabled,
     languages                   : s.languages,
     menuOpen                    : s.menu.dialog.open,
-    position                    : s.position,
     selectedLanguage            : s.language,
-    setAssetInformation         : s.setAssetInformation,
     setAutoScale                : s.setAutoScale,
     setHistorical               : s.setHistorical,
     setLanguage                 : s.setLanguage,
-    setPosition                 : s.setPosition,
     setTheme                    : s.setTheme,
-    setView                     : s.setView,
     showCountdown               : s.showCountdown,
     theme                       : s.theme,
     toggleHighestLowestMarker   : s.toggleHighestLowestMarker,
-    view                        : s.view,
 }))(ChartSetting);

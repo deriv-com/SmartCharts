@@ -1,7 +1,6 @@
 import React from 'react';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
-import ViewStore from '../store/ViewStore';
 import {
     TemplateIcon,
     AddIcon,
@@ -25,10 +24,10 @@ const ViewItem = ({
 const EmptyView = ({ onClick }) => (
     <div className="ciq-views--empty">
         <EmptyStateIcon />
-        <p>{t.translate('You have no save templates yet.')}</p>
+        <p>{t.translate('You have no saved templates yet.')}</p>
         <button type="button" className="sc-btn" onClick={onClick}>
             <AddIcon />
-            {t.translate('Add new templates')}
+            {t.translate('Add new template')}
         </button>
     </div>
 );
@@ -80,14 +79,14 @@ const Views = ({
         <ViewsMenu
             className="ciq-views-menu"
             title={t.translate('Templates')}
+            tooltip={t.translate('Templates')}
             newStyle
             portalNodeId={portalNodeId}
         >
-            <ViewsMenu.Title className="cq-menu-btn">
-                <TemplateIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Templates')}
-                />
+            <ViewsMenu.Title>
+                <div className={`ciq-views__menu ${menuOpen ? 'ciq-views__menu--active' : ''}`}>
+                    <TemplateIcon />
+                </div>
             </ViewsMenu.Title>
             <ViewsMenu.Body>
                 <div className="ciq-views">
@@ -144,7 +143,13 @@ const Views = ({
                                             <div className="ciq-views__views">
                                                 <div className="ciq-views__views__head">
                                                     <h5>{t.translate('Saved templates')}</h5>
-                                                    <button type="button" onClick={removeAll}>{t.translate('Clear all')}</button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={removeAll}
+                                                        className="sc-btn sc-btn--sm sc-btn--outline-secondary"
+                                                    >
+                                                        {t.translate('Clear all')}
+                                                    </button>
                                                 </div>
                                                 <div className="ciq-views__views__content">
                                                     <div className="ciq-views__views__list">
@@ -176,7 +181,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     ViewsMenu: s.ViewsMenu,
-    views: ViewStore.views,
+    views: s.sortedItems,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
     onChange: s.onChange,
