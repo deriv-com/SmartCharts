@@ -5,6 +5,7 @@ import { maintainHeadsUpHR }      from './headsUpHR';
 import { maintainSpanSize }       from './resizing';
 import { setMaxTicks }            from './setMaxTicks';
 import { plotterDrawText }        from './plotterDrawText';
+import { overideMeasure }         from './setMeasure';
 
 const inject = () => {
     createXAxis();
@@ -14,6 +15,7 @@ const inject = () => {
     // manageMasterDataLength();
     plotterDrawText();
     setMaxTicks();
+    overideMeasure();
 };
 
 export default inject;
