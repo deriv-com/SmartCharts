@@ -188,57 +188,61 @@ const StudyLegend = ({
     editStudy,
     infoItem,
     portalNodeId,
-}) => (
-    <StudyMenu
-        className="sc-studies"
-        isOpened={isOpened}
-        setOpen={setOpen}
-        isMobile={isMobile}
-        title={t.translate('Indicators')}
-        tooltip={t.translate('Indicators')}
-        subTitle={infoItem ? infoItem.name : null}
-        onBack={() => onInfoItem(null)}
-        newStyle
-        enableTabular
-        portalNodeId={portalNodeId}
-    >
-        <StudyMenu.Title>
-            <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
-                <IndicatorIcon />
-                <NotificationBadge notificationCount={activeStudiesNo} />
-            </div>
-        </StudyMenu.Title>
-        <StudyMenu.Body>
-            <SearchInput />
-            {infoItem ? (
-                <div className="sc-studies__info">
-                    <p>
-                        {infoItem.description}
-                    </p>
-                    <button
-                        type="button"
-                        className="sc-btn sc-btn--primary sc-btn--w100"
-                        onClick={() => onSelectItem(infoItem.id)}
-                    >
-                        {t.translate('Add')}
-                    </button>
+    updatePortalNode,
+}) => {
+    updatePortalNode(portalNodeId);
+    return (
+        <StudyMenu
+            className="sc-studies"
+            isOpened={isOpened}
+            setOpen={setOpen}
+            isMobile={isMobile}
+            title={t.translate('Indicators')}
+            tooltip={t.translate('Indicators')}
+            subTitle={infoItem ? infoItem.name : null}
+            onBack={() => onInfoItem(null)}
+            newStyle
+            enableTabular
+            portalNodeId={portalNodeId}
+        >
+            <StudyMenu.Title>
+                <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
+                    <IndicatorIcon />
+                    <NotificationBadge notificationCount={activeStudiesNo} />
                 </div>
-            ) : ''}
-            <TabularDisplay
-                onSelectTab={onSelectTab}
-                selectedTab={selectedTab}
-                categories={items}
-                searchedCategories={searchedItems}
-                onSelectItem={onSelectItem}
-                onDeleteItem={deleteStudy}
-                onEditItem={editStudy}
-                onInfoItem={onInfoItem}
-                activeItems={activeItems}
-                clearAll={deleteAll}
-            />
-        </StudyMenu.Body>
-    </StudyMenu>
-);
+            </StudyMenu.Title>
+            <StudyMenu.Body>
+                <SearchInput />
+                {infoItem ? (
+                    <div className="sc-studies__info">
+                        <p>
+                            {infoItem.description}
+                        </p>
+                        <button
+                            type="button"
+                            className="sc-btn sc-btn--primary sc-btn--w100"
+                            onClick={() => onSelectItem(infoItem.id)}
+                        >
+                            {t.translate('Add')}
+                        </button>
+                    </div>
+                ) : ''}
+                <TabularDisplay
+                    onSelectTab={onSelectTab}
+                    selectedTab={selectedTab}
+                    categories={items}
+                    searchedCategories={searchedItems}
+                    onSelectItem={onSelectItem}
+                    onDeleteItem={deleteStudy}
+                    onEditItem={editStudy}
+                    onInfoItem={onInfoItem}
+                    activeItems={activeItems}
+                    clearAll={deleteAll}
+                />
+            </StudyMenu.Body>
+        </StudyMenu>
+    );
+};
 
 export default connect(({ studies: st, chart }) => ({
     isOpened: st.open,
@@ -259,4 +263,5 @@ export default connect(({ studies: st, chart }) => ({
     editStudy: st.editStudy,
     onInfoItem: st.onInfoItem,
     infoItem: st.infoItem,
+    updatePortalNode: st.updatePortalNode,
 }))(StudyLegend);

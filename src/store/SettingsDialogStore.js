@@ -11,6 +11,7 @@ export default class SettingsDialogStore {
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
     @observable scrollPanel;
+    @observable dialogPortalNodeId = null;
 
     constructor({ mainStore, getContext, onChanged, onDeleted }) {
         this.mainStore = mainStore;
@@ -113,5 +114,6 @@ export default class SettingsDialogStore {
         theme: this.theme,
         setScrollPanel: this.setScrollPanel,
         close: this.menu.handleCloseDialog,
+        dialogPortalNodeId: this.dialogPortalNodeId,
     }));
 }

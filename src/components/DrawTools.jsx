@@ -122,65 +122,70 @@ const DrawTools = ({
     onSetting,
     onDelete,
     portalNodeId,
-}) => (
-    <DrawToolsMenu
-        className="sc-dtools"
-        title={t.translate('Drawing tools')}
-        tooltip={t.translate('Drawing tools')}
-        newStyle
-        enableTabular
-        portalNodeId={portalNodeId}
-    >
-        <DrawToolsMenu.Title>
-            <div className={`sc-dtools__menu ${menuOpen ? 'sc-dtools__menu--active' : ''}`}>
-                <DrawToolIcon />
-                <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
-            </div>
-        </DrawToolsMenu.Title>
+    updatePortalNode,
+}) => {
+    updatePortalNode(portalNodeId);
+    return (
+        <DrawToolsMenu
+            className="sc-dtools"
+            title={t.translate('Drawing tools')}
+            tooltip={t.translate('Drawing tools')}
+            newStyle
+            enableTabular
+            portalNodeId={portalNodeId}
+        >
+            <DrawToolsMenu.Title>
+                <div className={`sc-dtools__menu ${menuOpen ? 'sc-dtools__menu--active' : ''}`}>
+                    <DrawToolIcon />
+                    <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
+                </div>
+            </DrawToolsMenu.Title>
 
-        <DrawToolsMenu.Body>
-            <Tabs className="tabs--vertical">
-                <TabList>
-                    <Tab>
-                        <ActiveIcon />{t.translate('Active')}
-                        <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
-                    </Tab>
-                    <Tab><DrawToolIcon />{t.translate('All drawings')}</Tab>
-                </TabList>
-                <TabPanel>
-                    <div className="sc-dtools__panel">
-                        <ActivePanelView
-                            enabled={!activeDrawToolsItemsNo}
-                        >
-                            <div className="sc-dtools__panel__head">
-                                <button type="button" className="sc-btn sc-btn--sm sc-btn--outline-secondary" onClick={clearAll}>
-                                    <span>{t.translate('Clear all')}</span>
-                                </button>
-                            </div>
-                            <div className="sc-dtools__panel__content sc-dtools__panel__content--active">
-                                <ActiveDrawToolsList
-                                    activeDrawToolsGroup={activeDrawToolsGroup}
-                                    onSetting={onSetting}
-                                    onDelete={onDelete}
+            <DrawToolsMenu.Body>
+                <Tabs className="tabs--vertical">
+                    <TabList>
+                        <Tab>
+                            <ActiveIcon />{t.translate('Active')}
+                            <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
+                        </Tab>
+                        <Tab><DrawToolIcon />{t.translate('All drawings')}</Tab>
+                    </TabList>
+                    <TabPanel>
+                        <div className="sc-dtools__panel">
+                            <ActivePanelView
+                                enabled={!activeDrawToolsItemsNo}
+                            >
+                                <div className="sc-dtools__panel__head">
+                                    <button type="button" className="sc-btn sc-btn--sm sc-btn--outline-secondary" onClick={clearAll}>
+                                        <span>{t.translate('Clear all')}</span>
+                                    </button>
+                                </div>
+                                <div className="sc-dtools__panel__content sc-dtools__panel__content--active">
+                                    <ActiveDrawToolsList
+                                        activeDrawToolsGroup={activeDrawToolsGroup}
+                                        onSetting={onSetting}
+                                        onDelete={onDelete}
+                                    />
+                                </div>
+                            </ActivePanelView>
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div className="sc-dtools__panel">
+                            <div className="sc-dtools__panel__content">
+                                <DrawToolsList
+                                    items={drawToolsItems}
+                                    onClick={selectTool}
                                 />
                             </div>
-                        </ActivePanelView>
-                    </div>
-                </TabPanel>
-                <TabPanel>
-                    <div className="sc-dtools__panel">
-                        <div className="sc-dtools__panel__content">
-                            <DrawToolsList
-                                items={drawToolsItems}
-                                onClick={selectTool}
-                            />
                         </div>
-                    </div>
-                </TabPanel>
-            </Tabs>
-        </DrawToolsMenu.Body>
-    </DrawToolsMenu>
-);
+                    </TabPanel>
+                </Tabs>
+            </DrawToolsMenu.Body>
+        </DrawToolsMenu>
+    );
+};
+
 export default connect(({ drawTools: dt }) => ({
     clearAll: dt.clearAll,
     selectTool: dt.selectTool,
@@ -191,4 +196,5 @@ export default connect(({ drawTools: dt }) => ({
     activeDrawToolsGroup: dt.activeToolsGroup,
     onSetting: dt.onSetting,
     onDelete: dt.onDeleted,
+    updatePortalNode: dt.updatePortalNode,
 }))(DrawTools);
