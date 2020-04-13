@@ -64,7 +64,7 @@
     }
 }
 
-.cq-interval {
+.sc-interval {
     $self: &;
     display: flex;
     padding: 24px;
@@ -89,13 +89,16 @@
             }
         }
     }
+    &__info {
+        display: none;
+    }
     &__content {
         display: flex;
         flex-wrap: wrap;
         padding-top: 16px;
 
         #{ $self }__item {
-            width: 88px;
+            width: 23.9%;
             height: 32px;
             font-size: 14px;
             font-weight: normal;
@@ -105,48 +108,14 @@
             text-align: center;
             display: flex;
             justify-content: center;
-            margin: 0 4px 8px 0px;
             align-items: center;
+            margin: 0 4px 8px 0px;
             cursor: pointer;
             border-radius: 4px;
             border: 1px solid transparent;
             box-sizing: border-box;
             position: relative;
 
-            .tooltip {
-                position: absolute;
-                top: calc(50% - 17px);
-                left: 100%;
-                border-radius: 4px;
-                height: 18px;
-                width: auto;
-                white-space: nowrap;
-                padding: 8px;
-                font-size: 12px;
-                font-weight: normal;
-                font-style: normal;
-                line-height: 1.5;
-                letter-spacing: normal;
-                opacity: 0;
-                @include themify($themes) {
-                    background: themed('ChartTypeTooltipBg');
-                    color: themed('ChartTypeTooltipText');
-                }
-
-                &:before {
-                    position: absolute;
-                    width: 0;
-                    height: 0;
-                    border-top: 6px solid transparent;
-                    border-bottom: 6px solid transparent;
-                    content: ' ';
-                    top: calc(50% - 6px);
-                    left: -6px;
-                    @include themify($themes) {
-                        border-right: 6px solid themed('ChartTypeTooltipBg');
-                    }
-                }
-            }
             &:hover {
                 @include themify($themes) {
                     background: themed('TimeHoverBg');
@@ -164,28 +133,10 @@
                 cursor: initial;
                 background: transparent !important;
 
-                > span {
+                span {
                     opacity: 0.32;
                     pointer-events: none;
                 }
-                &:hover {
-                    .tooltip {
-                        opacity: 1;
-                        z-index: 2;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.cq-chart-control-left {
-    .ciq-period {
-        .cq-menu-btn {
-            padding: 0 3px !important;
-
-            .bt-priod {
-                line-height: 1.8em;
             }
         }
     }
@@ -193,44 +144,14 @@
 
 /* Mobile Style */
 .smartcharts-mobile {
-    .ciq-period {
-        padding: 0 !important;
-
-        > .cq-menu-btn {
-            padding: 0 !important;
-
-            .bt-priod {
-                > span {
-                    padding: 5px !important;
-                }
-            }
-        }
+    .sc-interval {
+        padding: 8px 10px 24px;
     }
-}
-
-.cq-chart-control-bottom .ciq-period {
-    .smartcharts-480 & {
-        // width: 70px !important;
-        top: 0px;
-
-        > .cq-menu-btn {
-            //padding: 16px 5px !important;
-        }
+    .sc-interval__info {
+        display: block;
     }
-    .smartcharts-900 & {
-        // width: 80px !important;
-        top: 0px;
-
-        > .cq-menu-btn {
-            // padding: 16px 5px !important;
-        }
-    }
-    .smartcharts-1280 & {
-        // width: 100px !important;
-        top: 0px;
-
-        // .bt-priod {
-        //     padding-top: 8px;
-        // }
+    .sc-interval__content .sc-interval__item {
+        width: 31.9% !important;
+        margin: 0 4px 8px 0px;
     }
 }

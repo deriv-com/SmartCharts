@@ -1,32 +1,18 @@
 import { action, computed, observable, reaction, when } from 'mobx';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
-import {
-    TypeAreaIcon,
-    TypeCandleIcon,
-    TypeHollowIcon,
-    TypeOhlcIcon,
-} from '../components/Icons.jsx';
 import SettingsDialogStore from './SettingsDialogStore';
 import List from '../components/List.jsx';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { ChartTypes } from '../Constant';
 
-function getChartTypes() {
-    return [
-        { id: 'mountain',      text: t.translate('Area'),   candleOnly: false, icon: TypeAreaIcon   },
-        { id: 'candle',        text: t.translate('Candle'), candleOnly: true,  icon: TypeCandleIcon },
-        { id: 'hollow_candle', text: t.translate('Hollow'), candleOnly: true,  icon: TypeHollowIcon },
-        { id: 'colored_bar',   text: t.translate('OHLC'),   candleOnly: true,  icon: TypeOhlcIcon   },
-    ];
-}
-
-const notCandles = getChartTypes()
+const notCandles = [...ChartTypes]
     .filter(t => !t.candleOnly)
     .map(t => t.id);
 
-const aggregateCharts = getChartTypes()
+const aggregateCharts = [...ChartTypes]
     .filter(t => t.settingsOnClick);
 
 function getAggregates() {
@@ -115,7 +101,7 @@ export default class ChartTypeStore {
 
     onContextReady = () => {
         this.aggregates = getAggregates();
-        this.chartTypes = getChartTypes();
+        this.chartTypes = [...ChartTypes];
 
         this.setChartTypeFromLayout(this.stx.layout);
 
@@ -212,7 +198,7 @@ export default class ChartTypeStore {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
 
         if (this.chartTypes === undefined) {
-            this.chartTypes = getChartTypes();
+            this.chartTypes = [...ChartTypes];
         }
 
         return this.chartTypes.map(t => ({

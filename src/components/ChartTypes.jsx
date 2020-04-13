@@ -2,6 +2,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import { SettingIcon } from './Icons.jsx';
+import Tooltip from './Tooltip.jsx';
 import '../../sass/components/_chart-types.scss';
 
 const ChartTypes = ({
@@ -17,6 +18,7 @@ const ChartTypes = ({
     updateProps,
     newDesign,
     types,
+    isMobile,
 }) => {
     if (Type === undefined) return (null);
 
@@ -31,24 +33,25 @@ const ChartTypes = ({
 
     if (newDesign) {
         return (
-            <div className="ciq-chart-type">
+            <div className="sc-chart-type">
                 {types.map((chartType) => {
                     const Icon = chartType.icon;
-                    let className = 'ciq-chart-type__item';
-                    className += chartType.active ? ' ciq-chart-type__item--active' : '';
-                    className += chartType.disabled ? ' ciq-chart-type__item--disabled' : '';
+                    let className = 'sc-chart-type__item';
+                    className += chartType.active ? ' sc-chart-type__item--active' : '';
+                    className += chartType.disabled ? ' sc-chart-type__item--disabled' : '';
 
                     const onClick = () => (chartType.disabled ? null : onItemClick(0, chartType));
                     return (
-                        <div
+                        <Tooltip
                             key={chartType.id}
+                            enabled={(chartType.disabled && !isMobile)}
                             className={className}
+                            content={t.translate('Available only for non-tick time intervals.')}
                             onClick={onClick}
                         >
                             <Icon />
-                            <span className="ciq-chart-type__item__text">{t.translate(chartType.text)}</span>
-                            <div className="tooltip">{t.translate('Available only for non-tick time intervals.')}</div>
-                        </div>
+                            <span className="text">{t.translate(chartType.text)}</span>
+                        </Tooltip>
                     );
                 })}
             </div>
@@ -98,7 +101,7 @@ const ChartTypes = ({
     );
 };
 
-export default connect(({ chartType, state }) => ({
+export default connect(({ chartType, state, chart }) => ({
     chartId            : state.chartId,
     ChartTypeMenu      : chartType.ChartTypeMenu,
     ChartTypeList      : chartType.ChartTypeList,
@@ -109,4 +112,5 @@ export default connect(({ chartType, state }) => ({
     Type               : chartType.type,
     updateProps        : chartType.updateProps,
     types              : chartType.types,
+    isMobile           : chart.isMobile,
 }))(ChartTypes);

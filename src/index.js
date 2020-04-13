@@ -4,6 +4,7 @@ import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
 import ChartMode from './components/ChartMode.jsx';
 import StudyLegend from './components/StudyLegend.jsx';
+import StudyLegendList from './components/StudyLegendList.jsx';
 import Comparison from './components/Comparison.jsx';
 import Views from './components/Views.jsx';
 import CrosshairToggle from './components/CrosshairToggle.jsx';
@@ -18,6 +19,7 @@ import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
+import ToolbarWidget from './components/ToolbarWidget.jsx';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
 
@@ -48,6 +50,7 @@ export {
     StudyLegend,
     Timeperiod,
     Views,
+    ToolbarWidget,
     logEvent,
     LogCategories,
     LogActions,
@@ -74,8 +77,10 @@ export default {
     Share,
     SmartChart,
     StudyLegend,
+    StudyLegendList,
     Timeperiod,
     Views,
+    ToolbarWidget,
     logEvent,
     LogCategories,
     LogActions,

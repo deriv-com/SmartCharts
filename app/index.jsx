@@ -3,8 +3,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     StudyLegend,
     Comparison,
     Views,
-    CrosshairToggle,
-    ChartSize,
     ChartMode,
     DrawTools,
     ChartSetting,
@@ -18,6 +16,7 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     LogCategories,
     LogActions,
     Marker,
+    ToolbarWidget,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -100,9 +99,10 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguages = ['EN', 'ID', 'RU', 'ES', 'FR', 'IT',
-    'PT', 'PL', 'DE', 'ZH_CN', 'VI', 'ZH_TW',
-    'TH'];
+const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
+    'IT', 'PL', 'PT', 'RU', 'TH',
+    'VI', 'ZH_CN', 'ZH_TW',
+];
 
 
 const streamManager = new StreamManager(connectionManager);
@@ -240,19 +240,22 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
+            {this.state.settings.historical ? '' : <Comparison />}
+            <ChartSetting />
+        </>
+    );
+
+    renderToolbarWidget = () => (
+        <ToolbarWidget>
             <ChartMode
                 onChartType={this.changeChartType}
                 onGranularity={this.changeGranularity}
             />
             <StudyLegend />
-            {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
             <Views />
+            <DrawTools />
             <Share />
-            {isMobile ? '' : <ChartSize />}
-            <ChartSetting />
-        </>
+        </ToolbarWidget>
     );
 
     onMessage = (e) => {
@@ -282,6 +285,7 @@ class App extends Component {
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
+                toolbarWidget={this.renderToolbarWidget}
                 chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
@@ -290,7 +294,7 @@ class App extends Component {
                 endEpoch={endEpoch}
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}
-                crosshair={this.state.crosshair}
+                crosshair={isMobile ? 0 : this.state.crosshair}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
                 shouldFetchTradingTimes

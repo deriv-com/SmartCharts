@@ -5,20 +5,22 @@
     border-radius: 4px;
     position: absolute;
     opacity: 0;
-    margin-top: 120px;
     box-shadow: 0 0 0.63em 0.03em rgba(0, 0, 0, 0.14);
-    visibility: hidden;
     z-index: -3;
+    pointer-events: none;
+    transform: translateY(3em);
     @include dialog-transition();
     @include themify($themes) {
         background: themed('DialogBodyBg');
     }
 
-    &.open {
-        visibility: visible;
-        margin-top: 0px;
+    &.cq-dialog-enter-done, &.cq-dialog-enter-active {
         opacity: 1;
+        transform: translateY(0em);
         z-index: 3;
+    }
+    &.cq-dialog-enter-done {
+        pointer-events: initial;
     }
     &__head {
         display: flex;
@@ -26,10 +28,11 @@
         border-radius: 4px 4px 0 0;
         height: 56px;
         box-sizing: border-box;
+        border-bottom: 2px solid;
         @include themify($themes) {
             color: themed('DialogHeadText');
             background: themed('DialogHeadBg');
-            border-bottom: 2px solid themed('DialogHeadBorder');
+            border-color: themed('DialogHeadBorder');
         }
 
         &--title {
@@ -38,9 +41,40 @@
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
-            min-width: 168px;
+            min-width: 200px;
+            width: 200px;
             padding: 16px;
             border-radius: 5px 0 0;
+            position: relative;
+            box-sizing: border-box;
+        }
+        &--subtitle {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            padding: 10px 4px;
+
+            .ic-icon {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                margin-right: 4px;
+
+                svg {
+                    @include themify($themes) {
+                        fill: themed('DialogHeadIcon');
+                    }
+                }
+            }
         }
         &--action {
             padding: 20px 16px;
@@ -74,9 +108,14 @@
     }
     &.cq-dialog--tabular {
         .cq-dialog__head {
+            @include themify($themes) {
+                background: themed('DialogTabularHeadBg');
+                border-color: themed('DialogTabularHeadBorder');
+            }
+
             .cq-dialog__head--title {
                 @include themify($themes) {
-                    background: themed('DialogTabularHeadBg');
+                    background: themed('DialogTabularHeadTitleBg');
                 }
             }
         }
@@ -100,9 +139,9 @@
 
             .react-tabs__tab {
                 width: 100%;
-                display: block;
+                display: flex;
                 box-sizing: border-box;
-                padding: 10px 16px;
+                padding: 10px 12px;
                 border: none;
                 border-radius: 0px;
                 font-size: 14px;
@@ -110,17 +149,61 @@
                 font-style: normal;
                 line-height: 1.43;
                 letter-spacing: normal;
+                align-items: center;
+                outline: none !important;
+                box-shadow: none !important;
+                cursor: pointer;
                 @include themify($themes) {
-                    color: themed('DialogTabularColor');
+                    color: themed('DialogTabularText');
                     border-left: 4px solid themed('DialogTabularBg');
                 }
 
+                .ic-icon {
+                    width: 16px;
+                    height: 16px;
+                    line-height: 27px;
+                    margin-right: 16px;
+                    @include themify($themes) {
+                        fill: themed('DialogTabularText');
+                    }
+
+                    svg {
+                        width: 16px;
+                        height: 16px;
+
+                        @include themify($themes) {
+                            fill: themed('DialogTabularText');
+                        }
+                    }
+                }
+                .sc-notification-badge {
+                    position: relative;
+                    margin-left: 5px;
+                    top: 0px;
+                    left: 0px;
+                }
+                &:hover {
+                    @include themify($themes) {
+                        border-left-color: themed('DialogTabularHoverTabBg');
+                        background: themed('DialogTabularHoverTabBg');
+                    }
+                }
+                &:after {
+                    display: none !important;
+                }
                 &--selected {
                     border-radius: 0px;
                     font-weight: bold;
                     @include themify($themes) {
-                        background: themed('DialogTabularActiveTabBg');
-                        border-left-color: themed('DialogTabularActiveTabBorder');
+                        color: themed('DialogTabularActiveTabText') !important;
+                        background: themed('DialogTabularActiveTabBg') !important;
+                        border-left-color: themed('DialogTabularActiveTabBorder') !important;
+                    }
+
+                    .ic-icon {
+                        @include themify($themes) {
+                            fill: themed('DialogTabularActiveTabText');
+                        }
                     }
                 }
             }

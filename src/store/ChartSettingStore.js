@@ -9,23 +9,23 @@ const languageList = [
     {
         key: 'en',
         name: 'English',
-        icon: <FlagIcons.USD />,
-    }, {
-        key: 'pt',
-        name: 'Português',
-        icon: <FlagIcons.Portugal />,
+        icon: <FlagIcons.GBP />,
     }, {
         key: 'de',
         name: 'Deutsch',
         icon: <FlagIcons.German />,
     }, {
-        key: 'ru',
-        name: 'Русский',
-        icon: <FlagIcons.Russia />,
+        key: 'pt',
+        name: 'Português',
+        icon: <FlagIcons.Portugal />,
     }, {
         key: 'fr',
         name: 'French',
         icon: <FlagIcons.French />,
+    }, {
+        key: 'ru',
+        name: 'Русский',
+        icon: <FlagIcons.Russia />,
     }, {
         key: 'th',
         name: 'Thai',
@@ -79,7 +79,6 @@ export default class ChartSettingStore {
     defaultLanguage = {};
     onSettingsChange;
     @observable assetInformation = true;
-    @observable view = '';
     @observable language = null;
     @observable position = 'bottom';
     @observable theme = 'light';
@@ -126,13 +125,7 @@ export default class ChartSettingStore {
         }
     }
 
-    @action.bound setView(view) {
-        this.view = view || '';
-    }
-
     @action.bound updateActiveLanguage(activeLanguages) {
-        this.setView(''); // return the view back to chart setting list
-
         if (activeLanguages) {
             this.languages = activeLanguages
                 .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)

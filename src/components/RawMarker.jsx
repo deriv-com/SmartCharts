@@ -11,6 +11,7 @@ class RawMarker extends React.Component {
     injectionId = null;
     hasUnmountedBeforeInjection = false;
     shouldRedraw = false;
+    canvas_height = 0;
 
     componentDidMount() {
         const { contextPromise } = this.props;
@@ -140,8 +141,15 @@ class RawMarker extends React.Component {
             });
             const prices = price_array
                 .map(price => stx.pixelFromPrice(price * 1, chart.panel));
+
+            const canvas = stx.chart.context.canvas;
+            if (canvas.style.height.indexOf(canvas.height) < 0) {
+                this.canvas_height = canvas.height;
+            }
+
             draw_callback({
                 ctx: stx.chart.context,
+                canvas_height: this.canvas_height,
                 points,
                 prices,
             });

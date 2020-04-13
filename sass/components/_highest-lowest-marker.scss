@@ -1,11 +1,16 @@
+.ciq-highlow {
+    width: 160px;
+    height: 160px;
+}
+
 .spot {
     &__shape {
         &-circule {
             border-radius: 100%;
             width: 6px;
             height: 6px;
-            margin-left: -3px;
-            margin-top: -3px;
+            margin-left: 77px;
+            margin-top: 77px;
             line-height: 1px;
             position: absolute;
 
@@ -46,7 +51,8 @@
         }
         &[data-label-pos='top'] {
             border-radius: 3px 3px 3px 0px;
-            margin-top: -40px;
+            margin-top: 42px;
+            margin-left: 79px;
 
             &:after {
                 top: 100%;
@@ -57,7 +63,8 @@
         }
         &[data-label-pos='bottom'] {
             border-radius: 0px 3px 3px;
-            margin-top: 15px;
+            margin-top: 91px;
+            margin-left: 79px;
 
             &:after {
                 bottom: 100%;

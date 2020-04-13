@@ -2,13 +2,14 @@
 .ciq-navigation-widget {
     width: 32px;
     position: absolute;
-    bottom: 2.5em;
-    left: 2.5em;
-    z-index: 30;
+    bottom: 80px;
+    left: 13px;
+    z-index: 4;
 
     &__item {
-        margin-bottom: 8px;
-
+        &--scale {
+            margin-bottom: 8px;
+        }
         &--zoom {
             .ic-icon:first-child {
                 margin-bottom: 2px;

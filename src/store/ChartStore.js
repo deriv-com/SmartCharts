@@ -23,7 +23,7 @@ import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
 import EditIcon        from '../../sass/icons/edit/ic-edit.svg';
 import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
-import JumpToTodayIcon from '../../sass/icons/chart/jump-to-today.svg';
+import HomeIcon        from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
 
@@ -104,9 +104,9 @@ class ChartStore {
         if (!this.context) { return; }
 
 
-        if (this.modalNode.clientWidth >= 1280) {
+        if (this.rootNode.clientWidth >= 1280) {
             this.containerWidth = 1280;
-        } else if (this.modalNode.clientWidth >= 900) {
+        } else if (this.rootNode.clientWidth >= 900) {
             this.containerWidth = 900;
         } else {
             this.containerWidth = 480;
@@ -121,28 +121,28 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    init = (rootNode, modalNode, props) => {
+    init = (rootNode, props) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
 
         if (window.CIQ) {
-            this._initChart(rootNode, modalNode, props);
+            this._initChart(rootNode, props);
         } else {
             import(/* webpackChunkName: "chartiq" */ 'chartiq').then(action(({ CIQ, SplinePlotter }) => {
                 CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(ResizeIcon)}</div>`;
-                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
-                CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span>(</span><span class="mouseDeleteText">right-click to delete</span><span class="mouseManageText">right-click to manage</span><span>)</span></span></span></div>`;
-                CIQ.ChartEngine.htmlControls.home = `<div class="stx_jump_today" style="display:none">${renderSVGString(JumpToTodayIcon)}</div>`;
+                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel stx-show"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
+                CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span class="mouseDeleteText">Right click to delete</span><span class="mouseManageText">Right click to manage</span></span></span></div>`;
+                CIQ.ChartEngine.htmlControls.home = `<div class="stx_jump_today" style="display:none">${renderSVGString(HomeIcon)}</div>`;
 
                 window.CIQ = CIQ;
                 SplinePlotter.plotSpline = plotSpline;
-                this._initChart(rootNode, modalNode, props);
+                this._initChart(rootNode, props);
             }));
         }
     };
 
-    @action.bound _initChart(rootNode, modalNode, props) {
+    @action.bound _initChart(rootNode, props) {
         const _self = this;
 
         // Add custom injections to the CIQ
@@ -278,7 +278,6 @@ class ChartStore {
         };
 
         this.rootNode = rootNode;
-        this.modalNode = modalNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
@@ -466,8 +465,8 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
-        deleteElement.textContent = t.translate('right-click to delete');
-        manageElement.textContent = t.translate('right-click to manage');
+        deleteElement.textContent = t.translate('Right click to delete');
+        manageElement.textContent = t.translate('Right click to manage');
 
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
         // stxx.chart.lockScroll = true;
@@ -557,13 +556,13 @@ class ChartStore {
 
         if ('ResizeObserver' in window) {
             this.resizeObserver = new ResizeObserver(this.resizeScreen);
-            this.resizeObserver.observe(modalNode);
+            this.resizeObserver.observe(rootNode);
         } else {
             import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(({ default: ResizeObserver }) => {
                 window.ResizeObserver = ResizeObserver;
-                if (stxx.isDestroyed || !modalNode) { return; }
+                if (stxx.isDestroyed || !rootNode) { return; }
                 this.resizeObserver = new ResizeObserver(this.resizeScreen);
-                this.resizeObserver.observe(modalNode);
+                this.resizeObserver.observe(rootNode);
             });
         }
     }

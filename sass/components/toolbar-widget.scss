@@ -1,0 +1,70 @@
+
+.sc-toolbar-widget {
+    position: absolute;
+    border-radius: 4px;
+    width: 40px;
+    top: 102px;
+    left: 1.2em;
+    z-index: 4;
+    box-sizing: content-box;
+    @include themify($themes) {
+        background: themed('ToolbarWidgetBg');
+        border: 8px solid themed('ToolbarWidgetBorder');
+    }
+
+    .ciq-menu {
+        .cq-menu-btn {
+            .sc-chart-mode__menu,
+            .ciq-views__menu,
+            .sc-download__menu,
+            .sc-studies__menu,
+            .sc-dtools__menu {
+                width: 40px;
+                height: 40px;
+                box-sizing: border-box;
+                padding: 8px;
+
+                .ic-icon {
+                    width: 24px !important;
+                    height: 24px !important;
+                    top: 0px;
+
+                    svg {
+                        width: 24px !important;
+                        height: 24px !important;
+                        position: relative;
+                        bottom: 0px;
+
+                        @include themify($themes) {
+                            fill: themed('ToolbarWidgetItemIcon');
+                        }
+                    }
+                }
+            }
+            .sc-chart-mode__menu {
+                .ic-icon {
+                    svg {
+                        width: 20px !important;
+                        height: 20px !important;
+                        bottom: -2px;
+                    }
+                }
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('ToolbarWidgetHoverBg');
+                }
+            }
+        }
+    }
+    .sc-tooltip__inner {
+        left: calc(100% + 15px);
+    }
+    &--bottom {
+        top: auto;
+        bottom: 38px;
+    }
+    &:hover {
+        z-index: 5;
+    }
+}

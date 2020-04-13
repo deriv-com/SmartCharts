@@ -9,7 +9,7 @@ import {
     TypeHollowGrayscaleIcon,
     TypeOhlcGrayscaleIcon,
 } from './Icons.jsx';
-import '../../sass/components/_chart-mode.scss';
+import '../../sass/components/chart-mode.scss';
 
 const UnitMap = {
     tick: 'T',
@@ -39,28 +39,32 @@ const ChartMode = ({
     Type,
     interval,
     timeUnit,
+    portalNodeId,
 }) => {
     const TypeIcon = TypeMap[Type.id];
     return (
         <ChartTypeMenu
-            className="ciq-display ciq-chart-mode"
+            className="ciq-display sc-chart-mode"
             title={t.translate('Chart types')}
+            tooltip={t.translate('Chart types')}
             newStyle
+            isFullscreen
+            portalNodeId={portalNodeId}
         >
             <ChartTypeMenu.Title>
-                <div className={`ciq-chart-mode__menu ${menuOpen ? 'active' : ''}`}>
-                    <span className="ciq-chart-mode__menu__timeperiod">
+                <div className={`sc-chart-mode__menu ${menuOpen ? 'sc-chart-mode__menu--active' : ''}`}>
+                    <span className="sc-chart-mode__menu__timeperiod">
                         {interval === 'day' ? 1 : (interval / TimeMap[timeUnit])} {UnitMap[timeUnit]}
                     </span>
                     <TypeIcon tooltip-title={t.translate(Type.text)} />
                 </div>
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
-                <div className="ciq-chart-mode__section">
-                    <div className="ciq-chart-mode__section__item">
+                <div className="sc-chart-mode__section">
+                    <div className="sc-chart-mode__section__item">
                         <ChartTypes newDesign onChange={onChartType} />
                     </div>
-                    <div className="ciq-chart-mode__section__item">
+                    <div className="sc-chart-mode__section__item">
                         <Timeperiod newDesign onChange={onGranularity} />
                     </div>
                 </div>
