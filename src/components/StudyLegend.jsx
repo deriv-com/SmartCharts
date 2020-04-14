@@ -32,10 +32,12 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
                     onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}
                 >
                     <Item.icon />
-                    {Item.name}
+                    <div className="text">
+                        <span>{Item.name}</span>
+                        {Item.bars ? (<small>{Item.bars}</small>) : ''}
+                    </div>
                 </div>
                 <div className="detail">
-                    {Item.bars ? (<span>{Item.bars}</span>) : ''}
                     {onInfoItem ? (<InfoCircleIcon className="ic-info" onClick={() => onInfoItem(Item)} />) : ''}
                     {onEditItem ? (<SettingIcon onClick={() => onEditItem(Item.dataObject)} />) : ''}
                     {onDeleteItem ? (<DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />) : ''}
@@ -80,7 +82,7 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }
                 {t.translate('Clear All')}
             </button>
         </div>
-        <div className="sc-studies__panel__body">
+        <div className="sc-studies__panel__content sc-studies__panel__content--active">
             <IndicatorList
                 items={items}
                 onDeleteItem={onDeleteItem}
@@ -104,7 +106,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                 {t.translate('Active')}
                 {
                     activeItems.length
-                        ? (<span className="budget">{activeItems.length}</span>)
+                        ? (<NotificationBadge notificationCount={activeItems.length} />)
                         : ''
                 }
             </Tab>

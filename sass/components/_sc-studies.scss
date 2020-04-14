@@ -1,5 +1,7 @@
 
 .sc-studies {
+    $self: &;
+
     .react-tabs__tab-list {
         padding-top: 64px !important;
 
@@ -9,22 +11,6 @@
 
             &:after {
                 display: none;
-            }
-            .budget {
-                width: 16px;
-                height: 16px;
-                border-radius: 10px;
-                font-size: 10px;
-                font-weight: bold;
-                font-style: normal;
-                line-height: 1.4;
-                letter-spacing: normal;
-                text-align: center;
-                margin-left: 4px;
-                @include themify($themes) {
-                    background: themed('IndicatorListItemBudgetBg');
-                    color: themed('IndicatorListItemBudgetText');
-                }
             }
         }
     }
@@ -134,8 +120,16 @@
                 }
             }
         }
-        &__body {
+        &__content {
             width: 100%;
+
+            &--active {
+                #{ $self }__list__item {
+                    height: 48px;
+                    padding: 4px 16px;
+                    cursor: initial;
+                }
+            }
         }
     }
     &--empty {
@@ -170,12 +164,9 @@
             display: flex;
             border-radius: 4px;
             box-sizing: border-box;
-            cursor: pointer;
             justify-content: space-between;
             align-items: center;
-            @include themify($themes) {
-                color: themed('IndicatorListItemText');
-            }
+            cursor: pointer;
 
             &:hover {
                 @include themify($themes) {
@@ -190,24 +181,47 @@
                 display: flex;
                 justify-content: start;
                 align-items: center;
-                font-size: 14px;
-                font-weight: normal;
-                font-style: normal;
-                line-height: 1.43;
-                letter-spacing: normal;
-                margin-right: 16px;
                 width: 100%;
                 padding: 8px 0 8px 16px;
 
                 .ic-icon {
                     margin-right: 16px;
                 }
+                .text {
+                    display: flex;
+                    flex-direction: column;
+                    padding-left: 16px;
+
+                    span {
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.43;
+                        letter-spacing: normal;
+                        margin-right: 16px;
+                        @include themify($themes) {
+                            color: themed('IndicatorListItemText');
+                        }
+                    }
+                    small {
+                        display: block;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.5;
+                        letter-spacing: normal;
+                        margin-top: 2px;
+                        @include themify($themes) {
+                            color: themed('IndicatorListItemSubText');
+                        }
+                    }
+                }
             }
             .detail {
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
-                padding: 8px 16px 8px 0px;
+                padding: 0px;
 
                 span {
                     font-size: 14px;
@@ -221,6 +235,8 @@
                 .ic-icon {
                     width: 16px;
                     height: 16px;
+                    cursor: pointer;
+                    transition: none;
 
                     svg {
                         width: 16px;
@@ -228,6 +244,9 @@
                         @include themify($themes) {
                             fill: themed('IndicatorListItemText');
                         }
+                    }
+                    &.ic-info {
+                        margin-right: 16px;
                     }
                 }
             }

@@ -54,7 +54,7 @@ export default class StudyLegendStore {
             }
             setTimeout(() => {
                 if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
-            }, 200);
+            }, 400);
         });
     }
 
@@ -91,6 +91,9 @@ export default class StudyLegendStore {
                     if (index === (panelsLen - 1)) {
                         panelObj.down.style.display = 'none';
                     }
+
+                    panelObj.panelHeight = 70;
+                    // console.log();
                 }
             });
         });
@@ -144,11 +147,11 @@ export default class StudyLegendStore {
 
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
+        console.log('onSelectItem', item);
         if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             this.changeStudyPanelTitle(sd);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-            this.menu.setOpen(false);
         }
     }
 
