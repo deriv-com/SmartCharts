@@ -142,7 +142,7 @@ const SettingsPanel = ({
     setScrollPanel,
 }) => (
     <Scrollbars
-        className="form form--indicator-setting"
+        className="sc-scrollbar form form--indicator-setting"
         ref={setScrollPanel}
         autoHide
     >

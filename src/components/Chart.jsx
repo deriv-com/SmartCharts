@@ -75,6 +75,7 @@ class Chart extends Component {
             bottomWidgets,
             enabledNavigationWidget = true,
             toolbarWidget,
+            onCrosshairChange,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -122,7 +123,7 @@ class Chart extends Component {
                                     </div>
                                     {
                                         enabledNavigationWidget
-                                            && <NavigationWidget />
+                                            && <NavigationWidget onCrosshairChange={onCrosshairChange} />
                                     }
                                     { toolbarWidget
                                         && <ToolbarWidget />
