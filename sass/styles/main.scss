@@ -262,6 +262,7 @@
 
         > div {
             opacity: 0.16;
+            width: 4px !important;
             @include themify($themes) {
                 background-color: themed('ScrollbarBg') !important;
             }
