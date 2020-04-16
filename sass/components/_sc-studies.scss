@@ -42,14 +42,14 @@
                 background: themed('IndicatorSearchBg');
             }
 
-            &:focus {
-                @include themify($themes) {
-                    border-color: themed('IndicatorSearchActiveBorder');
-                }
-            }
             &:hover {
                 @include themify($themes) {
                     border-color: themed('IndicatorSearchHoverBorder');
+                }
+            }
+            &:focus {
+                @include themify($themes) {
+                    border-color: themed('IndicatorSearchActiveBorder');
                 }
             }
         }
@@ -86,8 +86,8 @@
         &.active {
             > input {
                 @include themify($themes) {
-                    color: themed('IndicatorSearchActiveText');
-                    border-color: themed('IndicatorSearchActiveBorder');
+                    color: themed('IndicatorSearchActiveText') !important;
+                    border-color: themed('IndicatorSearchActiveBorder') !important;
                 }
             }
             .ic-icon {

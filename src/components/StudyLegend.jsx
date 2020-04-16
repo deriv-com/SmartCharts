@@ -25,7 +25,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
         {items.map(Item => (
             <div
                 key={`item--${Item.id}`}
-                className={`sc-studies__list__item ${disableAll ? 'sc-studies__list__item--disabled' : ''}`}
+                className={`sc-studies__list__item ${disableAll && 'sc-studies__list__item--disabled'}`}
             >
                 <div
                     className="info"
@@ -34,13 +34,13 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
                     <Item.icon />
                     <div className="text">
                         <span>{Item.name}</span>
-                        {Item.bars ? (<small>{Item.bars}</small>) : ''}
+                        {Item.bars && (<small>{Item.bars}</small>)}
                     </div>
                 </div>
                 <div className="detail">
-                    {onInfoItem ? (<InfoCircleIcon className="ic-info" onClick={() => onInfoItem(Item)} />) : ''}
-                    {onEditItem ? (<SettingIcon onClick={() => onEditItem(Item.dataObject)} />) : ''}
-                    {onDeleteItem ? (<DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />) : ''}
+                    {onInfoItem && (<InfoCircleIcon className="ic-info" onClick={() => onInfoItem(Item)} />)}
+                    {onEditItem && (<SettingIcon onClick={() => onEditItem(Item.dataObject)} />)}
+                    {onDeleteItem && (<DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />)}
                 </div>
             </div>
         ))}
@@ -106,8 +106,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                 {t.translate('Active')}
                 {
                     activeItems.length
-                        ? (<NotificationBadge notificationCount={activeItems.length} />)
-                        : ''
+                        && (<NotificationBadge notificationCount={activeItems.length} />)
                 }
             </Tab>
             {categories.map(Category => (
@@ -224,7 +223,7 @@ const StudyLegend = ({
         </StudyMenu.Title>
         <StudyMenu.Body>
 
-            {infoItem ? (
+            {infoItem && (
                 <div className="sc-studies__info">
                     <p>
                         {infoItem.description}
@@ -237,7 +236,7 @@ const StudyLegend = ({
                         {t.translate('Add')}
                     </button>
                 </div>
-            ) : ''}
+            )}
             <TabularDisplay
                 onSelectTab={onSelectTab}
                 selectedTab={selectedTab}

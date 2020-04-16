@@ -46,7 +46,7 @@ class Menu extends Component {
         if (newStyle) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const modalDropdown = (
-                <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                <div className={`cq-modal-dropdown ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
                         className="cq-modal__overlay"
                         onClick={this.onOverlayClick}
@@ -87,13 +87,13 @@ class Menu extends Component {
             );
 
             if (emptyMenu) {
-                return (open ? newDialog : '');
+                return (open && newDialog);
             }
 
             return (
                 enabled && (
                     <Tooltip
-                        className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}
+                        className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}
                         content={tooltip}
                         enabled={tooltip}
                         position="right"
@@ -106,7 +106,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {open ? newDialog : ''}
+                        {open && newDialog}
                     </Tooltip>
                 ) || (
                     <Tooltip
@@ -159,7 +159,7 @@ class Menu extends Component {
         return (
 
             enabled && (
-                <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                <div className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
                         className="cq-menu-btn"
                         onMouseEnter={onMouseEnter}
