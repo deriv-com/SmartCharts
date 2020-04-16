@@ -118,6 +118,12 @@ html, body {
         background-color: themed('ChartBg');
     }
 
+    > span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: no-repeat center;
+    }
     &:hover span, &:active span { /* Make buttons full opacity on hover or hit */
         opacity: 1;
     }
@@ -133,13 +139,6 @@ html, body {
         width: 16px;
         height: 16px;
     }
-}
-
-.stx-btn-panel > span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: no-repeat center;
 }
 
 /* Up/Down Arrow indicators */
@@ -251,6 +250,14 @@ html, body {
             @include themify($themes) {
                 fill: themed('ChartPanelText');
                 stroke: themed('ChartPanelText');
+            }
+        }
+        /* Add background to expand button when toggled on */
+        &.stx_solo_lit {
+            span {
+                @include themify($themes) {
+                    background: themed('ChartPanelActiveBg');
+                }
             }
         }
     }
@@ -510,12 +517,6 @@ html, body {
 .stx_panel_border { /* Divider between panels */
     width: 1px;
     color: #cccccc;
-}
-
-.stx_solo_lit span { /* Add background to expand button when toggled on */
-    background-color: #b1b7b8;
-    color: #ffffff;
-    opacity: 1;
 }
 
 /* -------- Chart Grid -------- */

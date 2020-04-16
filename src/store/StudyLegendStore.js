@@ -91,9 +91,6 @@ export default class StudyLegendStore {
                     if (index === (panelsLen - 1)) {
                         panelObj.down.style.display = 'none';
                     }
-
-                    panelObj.panelHeight = 70;
-                    // console.log();
                 }
             });
         });
@@ -147,9 +144,13 @@ export default class StudyLegendStore {
 
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
-        console.log('onSelectItem', item);
         if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
+            // As we want to keep all added item bellow the floating toolbar
+            // we should specify at last 70px height for each panel,
+            // and as chart change the height, we set it to 90px.
+            CIQ.Studies.studyLibrary[item].panelHeight = 90;
             const sd = CIQ.Studies.addStudy(this.stx, item);
+            CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
         }

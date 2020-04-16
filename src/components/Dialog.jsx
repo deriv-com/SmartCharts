@@ -1,5 +1,5 @@
 import React, { useEffect }  from 'react';
-import { CloseIcon, BackIcon } from './Icons.jsx';
+import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_ciq-dialog.scss';
 
 const Dialog = ({
@@ -7,14 +7,12 @@ const Dialog = ({
     onContainerClick,
     className,
     title,
-    subTitle,
-    onBack,
+    customHead,
     enableTabular,
     handleCloseDialog,
     updateCloseCallback,
 }) => {
     useEffect(() => updateCloseCallback(handleCloseDialog));
-
     return (
         <div
             className={`cq-dialog ${className || ''} ${enableTabular ? 'cq-dialog--tabular' : ''}`}
@@ -23,15 +21,7 @@ const Dialog = ({
             {title ? (
                 <div className="cq-dialog__head">
                     <div className="cq-dialog__head--title">{title}</div>
-                    {
-                        subTitle
-                            ? (
-                                <div className="cq-dialog__head--subtitle">
-                                    <BackIcon onClick={() => onBack()} />
-                                    {subTitle}
-                                </div>
-                            ) : ''
-                    }
+                    <div className="cq-dialog__head--custom">{customHead}</div>
                     <div className="cq-dialog__head--action">
                         <CloseIcon onClick={handleCloseDialog} />
                     </div>

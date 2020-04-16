@@ -19,8 +19,6 @@ class Menu extends Component {
             className,
             children,
             title,
-            subTitle,
-            onBack,
             tooltip,
             onTitleClick,
             DropdownDialog,
@@ -35,6 +33,7 @@ class Menu extends Component {
             theme,
             enableTabular,
             ready,
+            customHead,
             emptyMenu,
             newStyle, // this props will remove after we apply new design
             // to all of components
@@ -67,9 +66,8 @@ class Menu extends Component {
                                         isFullscreen={isFullscreen}
                                         title={title}
                                         handleCloseDialog={handleCloseDialog}
-                                        subTitle={subTitle}
-                                        onBack={onBack}
                                         enableTabular={enableTabular}
+                                        customHead={customHead}
                                     >
                                         {rest}
                                     </DropdownDialog>

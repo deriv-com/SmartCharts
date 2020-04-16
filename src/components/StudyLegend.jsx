@@ -3,7 +3,7 @@ import Scrollbars from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
-import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon } from './Icons.jsx';
+import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
 import '../../sass/components/_sc-studies.scss';
 
 const EmptyView = () => (
@@ -13,10 +13,10 @@ const EmptyView = () => (
     </div>
 );
 
-const NoResultView = () => (
+const NoResultView = ({ text }) => (
     <div className="sc-studies--empty">
-        <EmptyStateIcon />
-        <p>{t.translate('No result found.')}</p>
+        <strong>{t.translate('No results for')} “{text}” </strong>
+        <p>{t.translate('Try checking your spelling or use a different term')}</p>
     </div>
 );
 
@@ -93,7 +93,7 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }
 );
 
 
-const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategories, onSelectItem, onDeleteItem, onEditItem, onInfoItem, activeItems, clearAll }) => (
+const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategories, onSelectItem, onDeleteItem, onEditItem, onInfoItem, activeItems, clearAll, searchQuery }) => (
     <Tabs
         className="tabs--vertical"
         selectedIndex={selectedTab}
@@ -128,7 +128,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                                 disableAll={activeItems.length === 5}
                             />
                         )
-                        : (<NoResultView />)
+                        : (<NoResultView text={searchQuery} />)
                 }
             </div>
         </TabPanel>
@@ -180,6 +180,7 @@ const StudyLegend = ({
     items,
     searchedItems,
     SearchInput,
+    searchQuery,
     selectedTab,
     onSelectTab,
     onSelectItem,
@@ -198,11 +199,22 @@ const StudyLegend = ({
         isMobile={isMobile}
         title={t.translate('Indicators')}
         tooltip={t.translate('Indicators')}
-        subTitle={infoItem ? infoItem.name : null}
-        onBack={() => onInfoItem(null)}
         newStyle
         enableTabular
         portalNodeId={portalNodeId}
+        customHead={
+            infoItem
+                ? (
+                    <div className="cq-dialog__head--info">
+                        <BackIcon onClick={() => onInfoItem(null)} />
+                        {infoItem.name}
+                    </div>
+                ) : (
+                    <div className="cq-dialog__head--search">
+                        <SearchInput />
+                    </div>
+                )
+        }
     >
         <StudyMenu.Title>
             <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
@@ -211,7 +223,7 @@ const StudyLegend = ({
             </div>
         </StudyMenu.Title>
         <StudyMenu.Body>
-            <SearchInput />
+
             {infoItem ? (
                 <div className="sc-studies__info">
                     <p>
@@ -237,6 +249,7 @@ const StudyLegend = ({
                 onInfoItem={onInfoItem}
                 activeItems={activeItems}
                 clearAll={deleteAll}
+                searchQuery={searchQuery}
             />
         </StudyMenu.Body>
     </StudyMenu>
@@ -253,6 +266,7 @@ export default connect(({ studies: st, chart }) => ({
     items: st.items,
     searchedItems: st.searchedItems,
     SearchInput: st.SearchInput,
+    searchQuery: st.filterText,
     selectedTab: st.selectedTab,
     onSelectTab: st.onSelectTab,
     onSelectItem: st.onSelectItem,

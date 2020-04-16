@@ -3,8 +3,6 @@
     $self: &;
 
     .react-tabs__tab-list {
-        padding-top: 64px !important;
-
         .react-tabs__tab {
             box-shadow: none !important;
             outline: none !important;
@@ -18,13 +16,13 @@
         display: none;
     }
     .cq-lookup-input {
-        width: 200px;
-        padding: 8px;
+        width: 100%;
+        padding: 0px;
         box-sizing: border-box;
-        position: absolute;
+        position: relative;
 
         > input {
-            padding-left: 34px;
+            padding-left: 32px;
             line-height: 2em;
             font-size: 1.4em;
             border: none;
@@ -33,6 +31,7 @@
             border-radius: 4px;
             width: 100%;
             box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out;
             @include placeholder {
                 @include themify($themes) {
                     color: themed('IndicatorSearchText');
@@ -48,11 +47,16 @@
                     border-color: themed('IndicatorSearchActiveBorder');
                 }
             }
+            &:hover {
+                @include themify($themes) {
+                    border-color: themed('IndicatorSearchHoverBorder');
+                }
+            }
         }
         .ic-icon {
             position: absolute;
-            top: 14px;
-            left: 17px;
+            top: 6px;
+            left: 8px;
             width: 16px;
             height: 16px;
 
@@ -65,9 +69,9 @@
             }
             &.icon-reset {
                 left: auto;
-                right: 17px;
+                right: 8px;
                 opacity: 0;
-                top: 13px;
+                top: 5px;
                 pointer-events: none;
                 cursor: pointer;
 
@@ -107,12 +111,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 16px;
 
             p {
                 font-size: 12px;
                 font-weight: normal;
                 font-style: normal;
-                line-height: 1.5;
+                line-height: 0.1;
                 letter-spacing: normal;
                 padding: 0 8px;
                 @include themify($themes) {
@@ -135,7 +140,7 @@
     &--empty {
         display: flex;
         flex-direction: column;
-        padding: 24px;
+        padding: 8px;
         justify-content: center;
         align-content: center;
         text-align: center;
@@ -145,6 +150,18 @@
             height: 130px;
             margin: 60px auto 24px;
         }
+        strong {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            text-align: center;
+            margin-bottom: 8px;
+            @include themify($themes) {
+                color: themed('IndicatorEmptyTitleText');
+            }
+        }
         p {
             font-size: 12px;
             font-weight: normal;
@@ -152,7 +169,7 @@
             line-height: 1.5;
             letter-spacing: normal;
             text-align: center;
-            margin: 0 0 46px;
+            margin: 0px;
             @include themify($themes) {
                 color: themed('IndicatorEmptyText');
             }
