@@ -28,6 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable maxTick;
     chartControlsWidgets;
+    enabledChartFooter;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -57,7 +58,9 @@ class ChartState {
     };
 
     @action.bound updateProps({
+        networkStatus,
         chartControlsWidgets,
+        enabledChartFooter,
         chartStatusListener,
         chartType,
         clearChart,
@@ -94,8 +97,20 @@ class ChartState {
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
 
+        if (networkStatus && (
+            !this.mainStore.chart.networkStatus
+                || networkStatus.class !== this.mainStore.chart.networkStatus.class
+        )) {
+            this.mainStore.chart.networkStatus = networkStatus;
+        }
+
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (enabledChartFooter !== this.enabledChartFooter) {
+            this.enabledChartFooter = enabledChartFooter;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
