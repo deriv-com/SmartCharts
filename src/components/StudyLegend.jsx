@@ -34,7 +34,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
                     <Item.icon />
                     <div className="text">
                         <span>{Item.name}</span>
-                        {Item.bars && (<small>{Item.bars}</small>)}
+                        {Item.bars && (<small>({Item.bars})</small>)}
                     </div>
                 </div>
                 <div className="detail">

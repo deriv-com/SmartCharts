@@ -16,8 +16,8 @@ import { IndicatorsTree, ExcludedStudies } from '../Constant';
 // TODO:
 // import StudyInfo from '../study-info';
 
-const StudyNameRegex = /[^a-z0-9 \-\%\,\)\(]/gi; /* eslint-disable-line */
-const getStudyBars = (name, type) => name.replace(StudyNameRegex, '').trim().replace(type.trim(), '').trim();
+const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
+const getStudyBars = name => (name.match(StudyNameRegex) || []).pop();
 const capitalizeFirstLetter = (string) => {
     const str = string.replace(StudyNameRegex, '');
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -76,7 +76,9 @@ export default class StudyLegendStore {
                     const panelObj = this.stx.panels[id];
                     const sd = this.stx.layout.studies[id];
                     if (sd) {
-                        panelObj.title.innerHTML = `${sd.type} <span class="bars">${getStudyBars(sd.name, sd.type)}</span>`;
+                        const bars = getStudyBars(sd.name);
+                        const name = capitalizeFirstLetter(bars ? sd.name.replace(`(${bars})`, '') : sd.name);
+                        panelObj.title.innerHTML = `${name} ${bars ? `<span class="bars">(${bars})</span>` : ''}`;
 
                         // Regarding the ChartIQ.js, codes under Line 34217, edit function
                         // not mapped, this is a force to map edit function for indicators
@@ -320,21 +322,22 @@ export default class StudyLegendStore {
 
     @action.bound updateActiveStudies() {
         const stx = this.stx;
-        const studies = [];
         const activeItems = [];
+
         Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
             const studyObjCategory = IndicatorsTree.find(category => category.items.find(item => item.id === sd.type));
             const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
             if (studyObj) {
-                const bars = getStudyBars(sd.name, sd.type);
+                const bars = getStudyBars(sd.name);
                 const name = this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display;
 
                 activeItems.push({
                     ...studyObj,
+                    id: sd.inputs.id,
                     bars,
-                    name: capitalizeFirstLetter(name.replace(bars, '')),
+                    name: capitalizeFirstLetter(name.replace(bars || '', '')),
                     dataObject: {
                         stx,
                         sd,
@@ -344,20 +347,7 @@ export default class StudyLegendStore {
                     },
                 });
             }
-
-            studies.push({
-                enabled: true,
-                display:this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display,
-                dataObject: {
-                    stx,
-                    sd,
-                    inputs: sd.inputs,
-                    outputs: sd.outputs,
-                    parameters: sd.parameters,
-                },
-            });
         });
-
         this.activeItems = activeItems;
     }
 
