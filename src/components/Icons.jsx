@@ -55,9 +55,11 @@ import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 import DrawTool from '../../sass/icons/common/ic-drawing-tool.svg';
 
+import HelpCenter from '../../sass/icons/common/ic-help-center.svg';
 import Download from '../../sass/icons/common/ic-download.svg';
 import Indicator from '../../sass/icons/common/ic-indicators.svg';
 import Template from '../../sass/icons/common/ic-templates.svg';
+import FullScreen from '../../sass/icons/common/full-screen.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -227,6 +229,7 @@ export const ThemeLightIcon = Wrapper(ThemeLight);
 export const ThemeDarkIcon = Wrapper(ThemeDark);
 export const DrawToolIcon = Wrapper(DrawTool);
 export const ActiveIcon = Wrapper(Active);
+export const FullScreenIcon = Wrapper(FullScreen);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);
@@ -272,6 +275,7 @@ export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
+export const HelpCenterIcon = Wrapper(HelpCenter);
 export const DownloadIcon = Wrapper(Download);
 export const InfoIcon = Wrapper(Info);
 export const InfoCircleIcon = Wrapper(InfoCircle);
