@@ -90,8 +90,14 @@ export default class StudyLegendStore {
                         // from moving the indicator panel above the main chart
                         panelObj.up.style.display = 'none';
                     }
+
                     if (index === (panelsLen - 1)) {
                         panelObj.down.style.display = 'none';
+                    }
+
+                    // Mean chart + 1 indicator
+                    if (panelsLen === 2) {
+                        panelObj.solo.style.display = 'none';
                     }
                 }
             });
