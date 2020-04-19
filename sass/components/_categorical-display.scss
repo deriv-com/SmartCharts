@@ -37,9 +37,9 @@
             }
             > .ic-icon {
                 svg {
+                    stroke: transparent;
                     @include themify($themes) {
                         fill: themed('CatDisplayHoverSearchIcon');
-                        stroke: themed('CatDisplayHoverSearchIcon');
                     }
                 }
             }
@@ -53,9 +53,9 @@
             }
             > .ic-icon {
                 svg {
+                    stroke: transparent;
                     @include themify($themes) {
                         fill: themed('CatDisplayActiveSearchIcon');
-                        stroke: themed('CatDisplayActiveSearchIcon');
                     }
                 }
             }
@@ -72,9 +72,9 @@
             }
             > .ic-icon {
                 svg {
+                    stroke: transparent;
                     @include themify($themes) {
                         fill: themed('CatDisplayHoverSearchIcon');
-                        stroke: themed('CatDisplayHoverSearchIcon');
                     }
                 }
             }
@@ -113,9 +113,9 @@
 
                 & + .ic-icon {
                     svg {
+                        stroke: transparent;
                         @include themify($themes) {
                             fill: themed('CatDisplayActiveSearchIcon');
-                            stroke: themed('CatDisplayActiveSearchIcon');
                         }
                     }
                 }
@@ -128,9 +128,9 @@
             left: 4px;
 
             svg {
+                stroke: transparent;
                 @include themify($themes) {
                     fill: themed('CatDisplaySearchIcon');
-                    stroke: themed('CatDisplaySearchIcon');
                 }
             }
         }

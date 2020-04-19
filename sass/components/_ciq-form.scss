@@ -245,6 +245,7 @@
             svg {
                 pointer-events: none;
                 transition: transform 0.6s;
+                width: 16px;
                 @include themify($themes) {
                     fill: themed('DropdownText');
                 }
@@ -421,6 +422,7 @@
             svg {
                 pointer-events: none;
                 transition: transform 0.6s;
+                width: 16px;
                 @include themify($themes) {
                     fill: themed('DropdownText');
                 }

@@ -200,8 +200,12 @@ html, body {
 
     svg {
         position: relative;
+        width: 16px;
         left: 8px;
         top: 8px;
+        @include themify($themes) {
+            fill: themed('NavigationWidgetColor');
+        }
     }
 }
 
@@ -251,6 +255,12 @@ html, body {
             @include themify($themes) {
                 fill: themed('ChartPanelText');
                 stroke: themed('ChartPanelText');
+            }
+        }
+        .stx-ico-edit,
+        .stx-ico-close {
+            svg {
+                stroke: transparent;
             }
         }
     }

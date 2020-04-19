@@ -4,7 +4,6 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
@@ -39,24 +38,22 @@ const config = {
             {
                 test: /\.svg$/,
                 use: [
+                    'babel-loader',
                     {
-                        loader: 'svg-sprite-loader',
+                        loader: 'react-svg-loader',
                         options: {
-                            extract: true,
-                            spriteFilename: 'sprite-[hash:6].smartcharts.svg',
-                            esModule: false,
+                            jsx: true,
+                            svgo: {
+                                plugins: [
+                                    { removeTitle: false },
+                                    { removeUselessStrokeAndFill: false },
+                                    { removeUknownsAndDefaults: false },
+                                ],
+                                floatPrecision: 2,
+                            },
                         },
                     },
-                    {
-                        loader: 'svgo-loader',
-                        options: {
-                            plugins: [
-                                { removeUselessStrokeAndFill: false },
-                                { removeUnknownsAndDefaults: false },
-                            ],
-                        },
-                    },
-                ],
+                ]
             },
             {
                 test: /\.(s*)css$/,
@@ -131,7 +128,6 @@ const config = {
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
         new StyleLintPlugin(),
-        new SpriteLoaderPlugin(),
     ],
     externals: {
         mobx: 'mobx',

@@ -1,3 +1,5 @@
+import React from 'react';
+import { renderToString } from 'react-dom/server';
 import {
     action,
     observable,
@@ -28,10 +30,8 @@ import HomeIcon        from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
 
-function renderSVGString(icon) {
-    const vb = icon.viewBox.split(' ').slice(2);
-    // eslint-disable-next-line no-undef
-    return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+function renderSVGString(Icon) {
+    return renderToString(<Icon />);
 }
 
 

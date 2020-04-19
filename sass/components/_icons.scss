@@ -26,6 +26,11 @@
             }
         }
     }
+    &.ic-indices {
+        svg {
+            stroke: transparent !important;
+        }
+    }
     &.margin {
         margin: 0 5px;
     }
