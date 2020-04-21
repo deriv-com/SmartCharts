@@ -130,6 +130,20 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
+    @computed get indicatorHeightRatio() {
+        const chartHeight = this.chartNode.offsetHeight || this.chartContainerHeight;
+        const indicatorsMaxHeight = (chartHeight - 350);
+        const indicatorsMinHeight = indicatorsMaxHeight * 2 / 3;
+
+        return {
+            MaxAreaHeight: chartHeight - 320, // 320 is the fix height of market selector + floating widget
+            MinHeight: Math.floor(indicatorsMinHeight / 5),
+            MaxHeight: Math.floor(indicatorsMaxHeight / 5),
+            MinPercent: Math.floor(indicatorsMinHeight / 5) / chartHeight,
+            MaxPercent: Math.floor(indicatorsMaxHeight / 5) / chartHeight,
+        };
+    }
+
     init = (rootNode, props) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);

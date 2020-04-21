@@ -104,10 +104,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
             <Tab key="active">
                 <ActiveIcon />
                 {t.translate('Active')}
-                {
-                    activeItems.length
-                        && (<NotificationBadge notificationCount={activeItems.length} />)
-                }
+                <NotificationBadge notificationCount={activeItems.length} />
             </Tab>
             {categories.map(Category => (
                 <Tab key={`tab--${Category.id}`}>

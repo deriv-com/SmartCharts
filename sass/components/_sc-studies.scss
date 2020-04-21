@@ -63,6 +63,7 @@
             svg {
                 width: 16px;
                 height: 16px;
+                top: -1px;
                 @include themify($themes) {
                     fill: themed('IndicatorSearchIcon');
                 }

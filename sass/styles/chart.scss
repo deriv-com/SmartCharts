@@ -252,12 +252,9 @@ html, body {
                 stroke: themed('ChartPanelText');
             }
         }
-        /* Add background to expand button when toggled on */
         &.stx_solo_lit {
-            span {
-                @include themify($themes) {
-                    background: themed('ChartPanelActiveBg');
-                }
+            svg {
+                stroke: transparent !important;
             }
         }
     }

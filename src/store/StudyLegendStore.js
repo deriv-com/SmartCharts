@@ -12,6 +12,8 @@ import {
     IndicatorCatTrendDarkIcon,
 } from '../components/Icons.jsx';
 import { IndicatorsTree, ExcludedStudies } from '../Constant';
+import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
+import MinimizeIcon    from '../../sass/icons/common/ic-minimize.svg';
 
 // TODO:
 // import StudyInfo from '../study-info';
@@ -22,6 +24,11 @@ const capitalizeFirstLetter = (string) => {
     const str = string.replace(StudyNameRegex, '');
     return str.charAt(0).toUpperCase() + str.slice(1);
 };
+function renderSVGString(icon) {
+    const vb = icon.viewBox.split(' ').slice(2);
+    // eslint-disable-next-line no-undef
+    return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+}
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -32,7 +39,7 @@ export default class StudyLegendStore {
         this.menu = new MenuStore(mainStore, { route:'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            onDeleted: () => this.deleteStudy(this.helper),
+            onDeleted: () => this.deleteStudy(this.helper.sd),
             favoritesId: 'indicators',
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
@@ -58,8 +65,12 @@ export default class StudyLegendStore {
         });
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
+    previousStudies = { };
+    searchInputClassName;
+    @observable selectedTab = 1;
+    @observable filterText = '';
+    @observable activeItems = [];
+    @observable infoItem = null;
 
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
@@ -69,48 +80,14 @@ export default class StudyLegendStore {
         // and remove studies which are excluded
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
-        this.stx.append('drawPanels', () => {
-            const panelsLen = Object.keys(this.stx.panels).length;
-            Object.keys(this.stx.panels).forEach((id, index) => {
-                if (index !== 0) {
-                    const panelObj = this.stx.panels[id];
-                    const sd = this.stx.layout.studies[id];
-                    if (sd) {
-                        const bars = getStudyBars(sd.name);
-                        const name = capitalizeFirstLetter(bars ? sd.name.replace(`(${bars})`, '') : sd.name);
-                        panelObj.title.innerHTML = `${name} ${bars ? `<span class="bars">(${bars})</span>` : ''}`;
-
-                        // Regarding the ChartIQ.js, codes under Line 34217, edit function
-                        // not mapped, this is a force to map edit function for indicators
-                        if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
-                    }
-
-                    if (index === 1) {
-                        // Hide the up arrow from first indicator to prevent user
-                        // from moving the indicator panel above the main chart
-                        panelObj.up.style.display = 'none';
-                    }
-
-                    if (index === (panelsLen - 1)) {
-                        panelObj.down.style.display = 'none';
-                    }
-
-                    // Mean chart + 1 indicator
-                    if (panelsLen === 2) {
-                        panelObj.solo.style.display = 'none';
-                    }
-                }
-            });
-        });
+        this.stx.append('drawPanels', this.handleDrawPanels);
         this.renderLegend();
     };
 
-    previousStudies = { };
-    searchInputClassName;
-    @observable selectedTab = 1;
-    @observable filterText = '';
-    @observable activeItems = [];
-    @observable infoItem = null;
+
+    get context() { return this.mainStore.chart.context; }
+    get stx() { return this.context.stx; }
+    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
 
     get items() {
         return [...IndicatorsTree].map((indicator) => {
@@ -154,9 +131,7 @@ export default class StudyLegendStore {
         this.onInfoItem(null);
         if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
             // As we want to keep all added item bellow the floating toolbar
-            // we should specify at last 70px height for each panel,
-            // and as chart change the height, we set it to 90px.
-            CIQ.Studies.studyLibrary[item].panelHeight = 90;
+            CIQ.Studies.studyLibrary[item].panelHeight = this.indicatorRatio.MaxHeight;
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
@@ -254,6 +229,7 @@ export default class StudyLegendStore {
             }, 0);
         }
     }
+
     @action.bound updateStudy(study, items) {
         const updates = { };
         for (const { id, category, value, type } of items) {
@@ -312,6 +288,48 @@ export default class StudyLegendStore {
 
         this.previousStudies = CIQ.shallowClone(stx.layout.studies);
         return true;
+    }
+
+    handleDrawPanels = () => {
+        const panelsLen = Object.keys(this.stx.panels).length;
+        Object.keys(this.stx.panels).forEach((id, index) => {
+            if (index === 0) { return; }
+
+            const panelObj = this.stx.panels[id];
+            const sd = this.stx.layout.studies[id];
+            const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
+            if (sd) {
+                const bars = getStudyBars(sd.name);
+                const name = capitalizeFirstLetter(bars ? sd.name.replace(`(${bars})`, '') : sd.name);
+                panelObj.title.innerHTML = `${name} ${bars ? `<span class="bars">(${bars})</span>` : ''}`;
+
+                // Regarding the ChartIQ.js, codes under Line 34217, edit function
+                // not mapped, this is a force to map edit function for indicators
+                if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
+            }
+
+            if (index === 1 || isSolo) {
+                // Hide the up arrow from first indicator to prevent user
+                // from moving the indicator panel above the main chart
+                panelObj.up.style.display = 'none';
+            }
+
+            if (index === (panelsLen - 1) || isSolo) {
+                panelObj.down.style.display = 'none';
+            }
+
+            // Mean chart + 1 indicator
+            if (panelsLen === 2) {
+                panelObj.solo.style.display = 'none';
+            }
+
+            // Updating Max/Min icon
+            const panelInnerHtml = renderSVGString(isSolo ? MinimizeIcon : MaximizeIcon);
+            const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
+            if (InnerSoloPanel.innerHTML !== panelInnerHtml) {
+                InnerSoloPanel.innerHTML = panelInnerHtml;
+            }
+        });
     }
 
     /**

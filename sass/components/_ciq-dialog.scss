@@ -75,6 +75,11 @@
                         fill: themed('DialogHeadIcon');
                     }
                 }
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('DialogHeadIconHoverBg');
+                    }
+                }
             }
         }
         &--search {
