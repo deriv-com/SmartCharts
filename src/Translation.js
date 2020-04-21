@@ -33,7 +33,13 @@ export class Translation {
     translate(...args) {
         const curr_lang = lang_map[this.lang];
         const key = args[0].trim();
-        return curr_lang ? (curr_lang[key] || key) : key;
+        let translated = curr_lang ? (curr_lang[key] || key) : key;
+        if (args[1]) {
+            Object.keys(args[1]).forEach((prop) => {
+                translated = translated.replace(`[${prop}]`, args[1][prop]);
+            });
+        }
+        return translated;
     }
 }
 
