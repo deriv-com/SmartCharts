@@ -80,7 +80,7 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }
                 className="sc-btn sc-btn--sm sc-btn--outline-secondary"
                 onClick={() => clearAll()}
             >
-                {t.translate('Clear All')}
+                {t.translate('Clear all')}
             </button>
         </div>
         <div className="sc-studies__panel__content sc-studies__panel__content--active">
