@@ -38,6 +38,7 @@
                 }
             }
             @include themify($themes) {
+                color: themed('IndicatorSearchActiveText');
                 border: 1px solid themed('IndicatorSearchBorder');
                 background: themed('IndicatorSearchBg');
             }
