@@ -49,7 +49,7 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, disableAll }) => 
     <Scrollbars
         autoHeight
         autoHeightMax={360}
-        className="sc-studies__scroll"
+        className="sc-scrollbar sc-studies__scroll"
     >
         {categories.map(Category => (
             <div key={Category.id} className="sc-studies__category">
@@ -152,7 +152,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                     <Scrollbars
                         autoHeight
                         autoHeightMax={360}
-                        className="sc-studies__scroll"
+                        className="sc-scrollbar sc-studies__scroll"
                     >
                         <IndicatorList
                             onSelectItem={onSelectItem}

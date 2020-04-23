@@ -33,7 +33,7 @@ const DrawToolsList = ({ items, onClick }) => (
     <Scrollbars
         autoHeight
         autoHeightMax={360}
-        className="sc-dtools__list"
+        className="sc-scrollbar sc-dtools__list"
     >
         {items.map(Item => (
             <div
@@ -88,6 +88,7 @@ const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
     <Scrollbars
         autoHeight
         autoHeightMax={320}
+        className="sc-scrollbar"
     >
         {activeDrawToolsGroup.map(group => (
             group.items && group.items.length === 1

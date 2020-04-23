@@ -154,6 +154,7 @@ $themes: (
         BtnSecondaryBg: $color-grey-1,
         BtnSecondaryText: $color-black-1,
         BtnSecondaryBorder: $color-grey-1,
+        BtnSecondaryHoverBg: rgba(0, 0, 0, 0.08),
         InputDefaultText: $color-grey-1,
         InputDefaultBorder: $color-grey-5,
         InputDefaultHoverBorder: $color-grey-1,
@@ -449,6 +450,13 @@ $themes: (
         IndicatorCategoryText: $color-grey-1,
         IndicatorInfoText: $color-black-1,
         IndicatorInfoBg: $color-white,
+        FooterBg: $color-white,
+        FooterText: $color-black-1,
+        FooterBorder: $color-grey-2,
+        FooterItemHoverBg: $color-grey-4,
+        ChartStatus: $color-grey-2,
+        ChartStatusOnline: $color-green-1,
+        ChartStatusOffline: $color-red-2
     ),
     dark: (
         DefaultMain:            $color-black,
@@ -469,6 +477,7 @@ $themes: (
         BtnSecondaryBg: $color-grey-1,
         BtnSecondaryText: $color-white,
         BtnSecondaryBorder: $color-grey-7,
+        BtnSecondaryHoverBg: rgba(255, 255, 255, 0.08),
         InputDefaultBorder: $color-black-8,
         InputDefaultHoverBorder: $color-grey-7,
         InputDefaultActiveBorder: $color-green,
@@ -759,6 +768,13 @@ $themes: (
         IndicatorCategoryText: $color-grey-7,
         IndicatorInfoText: $color-grey,
         IndicatorInfoBg: $color-black,
+        FooterBg: $color-black,
+        FooterText: $color-grey,
+        FooterBorder: $color-black-3,
+        FooterItemHoverBg: $color-black-5,
+        ChartStatus: $color-grey-2,
+        ChartStatusOnline: $color-green-1,
+        ChartStatusOffline: $color-red-2
     ),
 );
 

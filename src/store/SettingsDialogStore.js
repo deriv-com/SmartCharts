@@ -6,6 +6,7 @@ import Menu from '../components/Menu.jsx';
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
+    @observable formTitle = '';
     @observable description = '';
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
@@ -89,7 +90,7 @@ export default class SettingsDialogStore {
         }
 
         groups.unshift({
-            key: this.title,
+            key: this.formTitle || this.title,
             fields: restGroup,
         });
 
