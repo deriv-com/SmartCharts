@@ -47,7 +47,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
     </div>
 );
 
-const TabularDisplaySearchPanel = ({ categories, onSelectItem, disableAll }) => (
+const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll }) => (
     <Scrollbars
         autoHeight
         autoHeightMax={360}
@@ -62,6 +62,7 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, disableAll }) => 
                     <IndicatorList
                         items={Category.foundItems}
                         onSelectItem={onSelectItem}
+                        onInfoItem={onInfoItem}
                         disableAll={disableAll}
                     />
                 </div>
@@ -121,6 +122,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                             <TabularDisplaySearchPanel
                                 categories={searchedCategories}
                                 onSelectItem={onSelectItem}
+                                onInfoItem={onInfoItem}
                                 disableAll={activeItems.length === 5}
                             />
                         )
