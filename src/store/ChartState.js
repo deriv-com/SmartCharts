@@ -28,6 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable maxTick;
     chartControlsWidgets;
+    enabledChartFooter;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -48,6 +49,8 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        this.stxx.append('zoomOut', this.enableScroll.bind(this));
+        this.stxx.append('zoomIn', this.enableScroll.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -55,7 +58,9 @@ class ChartState {
     };
 
     @action.bound updateProps({
+        networkStatus,
         chartControlsWidgets,
+        enabledChartFooter,
         chartStatusListener,
         chartType,
         clearChart,
@@ -92,8 +97,20 @@ class ChartState {
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
 
+        if (networkStatus && (
+            !this.mainStore.chart.networkStatus
+                || networkStatus.class !== this.mainStore.chart.networkStatus.class
+        )) {
+            this.mainStore.chart.networkStatus = networkStatus;
+        }
+
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (enabledChartFooter !== this.enabledChartFooter) {
+            this.enabledChartFooter = enabledChartFooter;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
@@ -311,6 +328,10 @@ class ChartState {
         this.shouldMinimiseLastDigits = status;
     }
 
+    enableScroll() {
+        this.stxx.allowScroll = true;
+    }
+
     saveLayout() {
         if (!this.chartId) return;
         const layoutData = this.stxx.exportLayout(true);
@@ -456,6 +477,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+                this.stxx.allowScroll = false;
             }
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);

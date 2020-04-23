@@ -26,6 +26,7 @@ import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
+import NetworkMonitor from './connection/NetworkMonitor';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -107,7 +108,6 @@ const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 
-
 class App extends Component {
     startingLanguage = 'en';
 
@@ -154,6 +154,9 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
+        const networkMonitor = NetworkMonitor.getInstance();
+        networkMonitor.init(requestAPI, this.handleNetworkStatus);
+
         this.state = {
             settings,
             endEpoch,
@@ -181,6 +184,8 @@ class App extends Component {
             console.log(e);
         }
     }
+
+    handleNetworkStatus = status => this.setState({ networkStatus: status });
 
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
@@ -267,7 +272,7 @@ class App extends Component {
     };
 
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch, networkStatus } = this.state;
 
         return (
             <SmartChart
@@ -291,7 +296,9 @@ class App extends Component {
                 crosshair={isMobile ? 0 : this.state.crosshair}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
+                networkStatus={networkStatus}
                 shouldFetchTradingTimes
+                enabledChartFooter
             >
                 {endEpoch ? (
                     <Marker

@@ -3,6 +3,7 @@ import {
     observable,
     reaction,
     computed }                 from 'mobx';
+import moment                  from 'moment';
 import {
     ActiveSymbols,
     BinaryAPI,
@@ -72,6 +73,8 @@ class ChartStore {
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
+    @observable serverTime;
+    @observable networkStatus;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() {
@@ -87,7 +90,13 @@ class ChartStore {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
         // TODO use constant here for chartcontrol height
-        const offsetHeight = (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) ? 40 : 0;
+        let offsetHeight = 0;
+        if (this.stateStore.enabledChartFooter) {
+            offsetHeight = 32;
+        } else if (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) {
+            offsetHeight = 40;
+        }
+
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
@@ -547,6 +556,7 @@ class ChartStore {
                 });
 
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+                this.tradingTimes.onTimeChanged(this.onServerTimeChange);
 
                 setTimeout(action(() => {
                     // Defer the render of the dialogs and dropdowns; this enables
@@ -615,6 +625,10 @@ class ChartStore {
                 selected,
             };
         });
+    }
+
+    @action.bound onServerTimeChange() {
+        this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD MMM YYYY HH:mm:ss [GMT]');
     }
 
     @action.bound onMouseEnter() {
@@ -804,6 +818,34 @@ class ChartStore {
             this.stxx.isDestroyed = true;
             this.stxx.destroy();
             this.stxx = null;
+        }
+    }
+
+    @action.bound openFullscreen() {
+        const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null)
+            || (document.webkitFullscreenElement && document.webkitFullscreenElement !== null)
+            || (document.mozFullScreenElement && document.mozFullScreenElement !== null)
+            || (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+        const docElm = this.rootNode;
+        if (!isInFullScreen) {
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            } else if (docElm.msRequestFullscreen) {
+                docElm.msRequestFullscreen();
+            }
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
         }
     }
 }

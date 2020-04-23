@@ -1,7 +1,6 @@
 import React from 'react';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
-import ViewStore from '../store/ViewStore';
 import {
     TemplateIcon,
     AddIcon,
@@ -25,10 +24,10 @@ const ViewItem = ({
 const EmptyView = ({ onClick }) => (
     <div className="ciq-views--empty">
         <EmptyStateIcon />
-        <p>{t.translate('You have no save templates yet.')}</p>
+        <p>{t.translate('You have no saved templates yet.')}</p>
         <button type="button" className="sc-btn" onClick={onClick}>
             <AddIcon />
-            {t.translate('Add new templates')}
+            {t.translate('Add new template')}
         </button>
     </div>
 );
@@ -190,7 +189,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     ViewsMenu: s.ViewsMenu,
-    views: ViewStore.views,
+    views: s.sortedItems,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
     onChange: s.onChange,

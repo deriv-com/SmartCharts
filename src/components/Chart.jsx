@@ -15,6 +15,7 @@ import 'react-tabs/style/react-tabs.css';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
+import ChartFooter from './ChartFooter.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
@@ -73,6 +74,7 @@ class Chart extends Component {
             theme,
             position,
             bottomWidgets,
+            enabledChartFooter = true,
             enabledNavigationWidget = true,
             toolbarWidget,
             onCrosshairChange,
@@ -139,8 +141,12 @@ class Chart extends Component {
                                         <BottomWidget bottomWidgets={bottomWidgets} />
                                     </BottomWidgetsContainer>
                                 </div>
-                                { chartControlsWidgets !== null
+                                { chartControlsWidgets !== null && !enabledChartFooter
                                     && <ChartControls widgets={chartControlsWidgets} />
+                                }
+                                {
+                                    enabledChartFooter
+                                        && <ChartFooter />
                                 }
                             </div>
                         </div>

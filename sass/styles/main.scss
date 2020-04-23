@@ -364,6 +364,34 @@
     }
 }
 
+.sc-chart__status {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+    opacity: 1;
+    @include themify($themes) {
+        background: themed('ChartStatus');
+    }
+
+    &--online {
+        @include themify($themes) {
+            background: themed('ChartStatusOnline');
+        }
+    }
+    &--blinker {
+        animation: blinking-network-status 0.4s infinite alternate;
+        @include themify($themes) {
+            background: themed('ChartStatusOnline');
+        }
+    }
+    &--offline {
+        @include themify($themes) {
+            background: themed('ChartStatusOffline');
+        }
+    }
+}
+
 .sc-input {
     border-radius: 4px 0 0 4px;
     height: 40px;
@@ -398,5 +426,14 @@
         @include themify($themes) {
             border-color: themed('InputDefaultActiveBorder') !important;
         }
+    }
+}
+
+@keyframes blinking-network-status {
+    40% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }
