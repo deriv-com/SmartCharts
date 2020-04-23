@@ -80,7 +80,7 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
-        crosshairState,
+        crosshair,
         zoom,
         maxTick,
     }) {
@@ -185,9 +185,9 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
-        if (crosshairState !== undefined && crosshairState !== null && crosshairState !== this.crosshairState) {
-            this.mainStore.crosshair.setCrosshairState(crosshairState);
-            this.crosshairState = crosshairState;
+        if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {
+            this.mainStore.crosshair.setCrosshairState(crosshair);
+            this.crosshairState = crosshair;
         }
 
         if (zoom) {

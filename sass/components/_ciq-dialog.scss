@@ -42,7 +42,7 @@
             line-height: 1.5;
             letter-spacing: normal;
             min-width: 200px;
-            width: 200px;
+            width: auto;
             padding: 16px;
             border-radius: 5px 0 0;
             position: relative;
@@ -114,6 +114,7 @@
             }
 
             .cq-dialog__head--title {
+                width: 200px;
                 @include themify($themes) {
                     background: themed('DialogTabularHeadTitleBg');
                 }

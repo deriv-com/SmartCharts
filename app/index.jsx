@@ -1,7 +1,6 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
     StudyLegend,
-    Comparison,
     Views,
     ChartMode,
     DrawTools,
@@ -10,8 +9,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     setSmartChartsPublicPath,
     Share,
     ChartTitle,
-    AssetInformation,
-    ComparisonList,
     logEvent,
     LogCategories,
     LogActions,
@@ -229,14 +226,12 @@ class App extends Component {
     };
     changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
     changeChartType = chartType => this.setState({ chartType });
-    changeCrosshair = crosshair => this.setState({ crosshair })
+    changeCrosshair = crosshair => this.setState({ crosshair });
 
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <AssetInformation />
-            <ComparisonList />
             <Notification
                 notifier={this.notifier}
             />
@@ -245,7 +240,6 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {this.state.settings.historical ? '' : <Comparison />}
             <ChartSetting />
         </>
     );

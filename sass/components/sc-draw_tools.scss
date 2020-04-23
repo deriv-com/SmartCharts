@@ -45,14 +45,14 @@
     &__panel {
         width: 360px;
         height: 392px;
-        padding: 16px 8px;
+        padding: 16px 0 16px 8px;
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
 
         &__head {
             text-align: right;
-            padding: 0 8px 16px;
+            padding: 0 16px 16px;
 
             .sc-btn {
                 cursor: pointer;
@@ -75,6 +75,7 @@
             height: 40px;
             padding: 10px 16px;
             display: flex;
+            margin-right: 8px;
             border-radius: 4px;
             box-sizing: border-box;
             justify-content: space-between;

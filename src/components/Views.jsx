@@ -42,7 +42,7 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
             </p>
         </div>
         <div className="ciq-views--overwrite__footer">
-            <button type="button" className="sc-btn" onClick={onCancel}>
+            <button type="button" className="sc-btn sc-btn--outline-secondary" onClick={onCancel}>
                 {t.translate('Cancel')}
             </button>
             <button type="button" className="sc-btn sc-btn--primary" onClick={onOverwrite}>
@@ -52,6 +52,38 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
     </div>
 );
 
+const ActiveListView = ({ views, removeAll, applyLayout, remove }) => {
+    if (!views.length) return '';
+
+    return (
+        <div className="ciq-views__views">
+            <div className="ciq-views__views__head">
+                <h5>{t.translate('Saved templates')}</h5>
+                <button
+                    type="button"
+                    onClick={removeAll}
+                    className="sc-btn sc-btn--sm sc-btn--outline-secondary"
+                >
+                    {t.translate('Clear all')}
+                </button>
+            </div>
+            <div className="ciq-views__views__content">
+                <div className="ciq-views__views__list">
+                    {
+                        views.map((view, i) => (
+                            <ViewItem
+                                view={view}
+                                key={view.name}
+                                onClick={e => applyLayout(i, e)}
+                                remove={e => remove(i, e)}
+                            />
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const Views = ({
     ViewsMenu,
@@ -104,7 +136,7 @@ const Views = ({
                                     )
                                 }
                                 <Scrollbars
-                                    className="ciq-scrollbar"
+                                    className="sc-scrollbar"
                                 >
                                     <div className="form form--ciq-views">
                                         <div className="form__input-group">
@@ -138,36 +170,12 @@ const Views = ({
                                             </div>
                                         </div>
                                     </div>
-                                    {views.length > 0
-                                        ? (
-                                            <div className="ciq-views__views">
-                                                <div className="ciq-views__views__head">
-                                                    <h5>{t.translate('Saved templates')}</h5>
-                                                    <button
-                                                        type="button"
-                                                        onClick={removeAll}
-                                                        className="sc-btn sc-btn--sm sc-btn--outline-secondary"
-                                                    >
-                                                        {t.translate('Clear all')}
-                                                    </button>
-                                                </div>
-                                                <div className="ciq-views__views__content">
-                                                    <div className="ciq-views__views__list">
-                                                        {
-                                                            views.map((view, i) => (
-                                                                <ViewItem
-                                                                    view={view}
-                                                                    key={view.name}
-                                                                    onClick={e => applyLayout(i, e)}
-                                                                    remove={e => remove(i, e)}
-                                                                />
-                                                            ))
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                        : ''}
+                                    <ActiveListView
+                                        views={views}
+                                        removeAll={removeAll}
+                                        applyLayout={applyLayout}
+                                        remove={remove}
+                                    />
                                 </Scrollbars>
                             </React.Fragment>
                         )

@@ -50,6 +50,12 @@ html, body {
             */
             display: none !important;
         }
+        .sc-studies-list {
+            .stx-btn-panel,
+            .stx-btn-panel {
+                display: none !important;
+            }
+        }
     }
 }
 
@@ -192,8 +198,8 @@ html, body {
     padding: 0px;
     margin-bottom: 17px;
     border-radius: 4px;
+    z-index: 12;
     cursor: pointer;
-    z-index: 30;
     @include themify($themes) {
         background: themed('NavigationWidgetBg');
     }
@@ -929,15 +935,6 @@ html, body {
     display: none;
 }
 
-.ciq-chart.ciq-screenshot .cq-menu-dropdown {
-    /*
-    There is a strange bug where dropdowns get displayed (partially)
-    when html is being rendered to canvas. So we set this to manually
-    hide it when PNG is exported.
-    */
-    display: none !important;
-}
-
 .ps--active-x > .ps__rail-x,
 .ps--active-y > .ps__rail-y {
     background-color: transparent !important;
@@ -1045,9 +1042,5 @@ $spot-color: #0298d3;
         .mStickyRightClick {
             margin-left: -2px !important;
         }
-    }
-    .ciq-chart.ciq-screenshot .stx-btn-panel {
-        //CSS images cause cross origin security error when export png
-        display: none !important;
     }
 }
