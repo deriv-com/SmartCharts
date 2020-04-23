@@ -192,6 +192,7 @@ const SettingsDialog = ({
     theme,
     close,
     setScrollPanel,
+    dialogPortalNodeId,
 }) => (
     <SettingDialogMenu
         className="cq-modal--settings"
@@ -200,6 +201,7 @@ const SettingsDialog = ({
         enableTabular={showTabs}
         emptyMenu
         enableOverlay // this temprary, we remove it when all menus convert to modal
+        portalNodeId={dialogPortalNodeId}
     >
         <SettingDialogMenu.Title />
         <SettingDialogMenu.Body>

@@ -138,6 +138,9 @@
                 }
             }
         }
+        &--active {
+            padding-right: 8px;
+        }
     }
     &--empty {
         display: flex;

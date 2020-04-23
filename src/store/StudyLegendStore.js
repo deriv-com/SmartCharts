@@ -71,6 +71,7 @@ export default class StudyLegendStore {
     @observable filterText = '';
     @observable activeItems = [];
     @observable infoItem = null;
+    @observable portalNodeIdChanged;
 
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
@@ -83,7 +84,6 @@ export default class StudyLegendStore {
         this.stx.append('drawPanels', this.handleDrawPanels);
         this.renderLegend();
     };
-
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
@@ -215,6 +215,7 @@ export default class StudyLegendStore {
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
         this.settingsDialog.description = '';
+        this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.setOpen(true);
     }
 
@@ -403,5 +404,9 @@ export default class StudyLegendStore {
 
     @action.bound onInfoItem(study) {
         this.infoItem = study;
+    }
+
+    @action.bound updatePortalNode(portalNodeId) {
+        this.portalNodeIdChanged = portalNodeId;
     }
 }

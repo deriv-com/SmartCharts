@@ -36,6 +36,7 @@ export default class DrawToolsStore {
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
     @observable activeToolsGroup = [];
+    @observable portalNodeIdChanged;
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
@@ -94,8 +95,9 @@ export default class DrawToolsStore {
 
         this.activeDrawing = drawing;
         this.activeDrawing.highlighted = false;
-        this.settingsDialog.formTitle = t.translate('Result');
         this.settingsDialog.title = title;
+        this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
+        this.settingsDialog.formTitle = t.translate('Result');
         this.settingsDialog.setOpen(true);
     }
 
@@ -211,5 +213,9 @@ export default class DrawToolsStore {
         // get the values of group and sort group by the number of their children
         // this way the single item stay at top
         this.activeToolsGroup = Object.values(groups).sort((a, b) => (a.items.length - b.items.length));
+    }
+
+    @action.bound updatePortalNode(portalNodeId) {
+        this.portalNodeIdChanged = portalNodeId;
     }
 }
