@@ -19,8 +19,6 @@ class Menu extends Component {
             className,
             children,
             title,
-            subTitle,
-            onBack,
             tooltip,
             onTitleClick,
             DropdownDialog,
@@ -35,6 +33,7 @@ class Menu extends Component {
             theme,
             enableTabular,
             ready,
+            customHead,
             emptyMenu,
             newStyle, // this props will remove after we apply new design
             // to all of components
@@ -47,7 +46,7 @@ class Menu extends Component {
         if (newStyle) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const modalDropdown = (
-                <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                <div className={`cq-modal-dropdown ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
                         className="cq-modal__overlay"
                         onClick={this.onOverlayClick}
@@ -67,9 +66,8 @@ class Menu extends Component {
                                         isFullscreen={isFullscreen}
                                         title={title}
                                         handleCloseDialog={handleCloseDialog}
-                                        subTitle={subTitle}
-                                        onBack={onBack}
                                         enableTabular={enableTabular}
+                                        customHead={customHead}
                                     >
                                         {rest}
                                     </DropdownDialog>
@@ -89,13 +87,13 @@ class Menu extends Component {
             );
 
             if (emptyMenu) {
-                return (open ? newDialog : '');
+                return (open && newDialog);
             }
 
             return (
                 enabled && (
                     <Tooltip
-                        className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}
+                        className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}
                         content={tooltip}
                         enabled={tooltip}
                         position="right"
@@ -108,7 +106,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {open ? newDialog : ''}
+                        {open && newDialog}
                     </Tooltip>
                 ) || (
                     <Tooltip
@@ -161,7 +159,7 @@ class Menu extends Component {
         return (
 
             enabled && (
-                <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                <div className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
                         className="cq-menu-btn"
                         onMouseEnter={onMouseEnter}
