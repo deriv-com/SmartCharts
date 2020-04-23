@@ -28,6 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable maxTick;
     chartControlsWidgets;
+    enabledChartFooter;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -36,6 +37,7 @@ class ChartState {
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
     get drawTools() { return this.mainStore.drawTools; }
+    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -57,7 +59,9 @@ class ChartState {
     };
 
     @action.bound updateProps({
+        networkStatus,
         chartControlsWidgets,
+        enabledChartFooter,
         chartStatusListener,
         chartType,
         clearChart,
@@ -77,7 +81,7 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
-        crosshairState,
+        crosshair,
         zoom,
         maxTick,
     }) {
@@ -94,8 +98,20 @@ class ChartState {
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
 
+        if (networkStatus && (
+            !this.mainStore.chart.networkStatus
+                || networkStatus.class !== this.mainStore.chart.networkStatus.class
+        )) {
+            this.mainStore.chart.networkStatus = networkStatus;
+        }
+
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (enabledChartFooter !== this.enabledChartFooter) {
+            this.enabledChartFooter = enabledChartFooter;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
@@ -170,9 +186,9 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
-        if (crosshairState !== undefined && crosshairState !== null && crosshairState !== this.crosshairState) {
-            this.mainStore.crosshair.setCrosshairState(crosshairState);
-            this.crosshairState = crosshairState;
+        if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {
+            this.mainStore.crosshair.setCrosshairState(crosshair);
+            this.crosshairState = crosshair;
         }
 
         if (zoom) {
@@ -371,6 +387,13 @@ class ChartState {
         if (this.chartType !== undefined) {
             layoutData.chartType = this.chartType;
         }
+
+        // Update Indictor panel height
+        Object.keys(layoutData.panels).forEach((id) => {
+            if (id === 'chart') { return; }
+            const panel = layoutData.panels[id];
+            panel.percent = this.indicatorRatio.MaxPercent;
+        });
 
         this.stxx.importLayout(layoutData, {
             managePeriodicity: true,

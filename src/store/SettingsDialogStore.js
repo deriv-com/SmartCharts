@@ -6,11 +6,13 @@ import Menu from '../components/Menu.jsx';
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
+    @observable formTitle = '';
     @observable description = '';
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
     @observable scrollPanel;
+    @observable dialogPortalNodeId = null;
 
     constructor({ mainStore, getContext, onChanged, onDeleted }) {
         this.mainStore = mainStore;
@@ -88,7 +90,7 @@ export default class SettingsDialogStore {
         }
 
         groups.unshift({
-            key: this.title,
+            key: this.formTitle || this.title,
             fields: restGroup,
         });
 
@@ -113,5 +115,6 @@ export default class SettingsDialogStore {
         theme: this.theme,
         setScrollPanel: this.setScrollPanel,
         close: this.menu.handleCloseDialog,
+        dialogPortalNodeId: this.dialogPortalNodeId,
     }));
 }

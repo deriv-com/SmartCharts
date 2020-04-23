@@ -1,5 +1,8 @@
 
 .sc-chart-setting {
+    .tabs--vertical .react-tabs__tab-list {
+        padding-top: 0px !important;
+    }
     &__panel {
         width: 536px;
         height: 564px;

@@ -210,7 +210,6 @@ export default class ChartSettingStore {
         setTimeout(() => {
             this.mainStore.chart.resizeScreen();
         }, 10);
-        this.menu.setOpen(false);
     }
 
     @action.bound setAutoScale(value) {

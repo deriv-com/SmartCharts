@@ -29,11 +29,14 @@ export default class DrawToolsStore {
     get context() { return this.mainStore.chart.context; }
 
     get stx() { return this.context.stx; }
+    get stateStore() { return this.mainStore.state; }
+    get crosshairStore() { return this.mainStore.crosshair; }
 
     activeDrawing = null;
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
     @observable activeToolsGroup = [];
+    @observable portalNodeIdChanged;
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
@@ -46,11 +49,11 @@ export default class DrawToolsStore {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.stx.changeVectorType('');
-            this.computeActiveDrawTools();
+            this.drawingFinished();
         }
     };
 
-    doubleClick = () => this.computeActiveDrawTools();
+    doubleClick = () => this.drawingFinished();
 
     @computed get activeToolsNo() { return this.activeToolsGroup.reduce((a, b) => (a + b.items.length), 0); }
 
@@ -63,7 +66,7 @@ export default class DrawToolsStore {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
-
+        let title = formatCamelCase(drawing.name);
         const typeMap = {
             color: 'colorpicker',
             fillColor: 'colorpicker',
@@ -83,9 +86,18 @@ export default class DrawToolsStore {
                 defaultValue: parameters[key],
                 type: typeMap[key],
             }));
+
+
+        const drawingItem = this.findComputedDrawing(drawing);
+        if (drawingItem) {
+            title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${drawingItem.text}`;
+        }
+
         this.activeDrawing = drawing;
         this.activeDrawing.highlighted = false;
-        this.settingsDialog.title = formatCamelCase(drawing.name);
+        this.settingsDialog.title = title;
+        this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
+        this.settingsDialog.formTitle = t.translate('Result');
         this.settingsDialog.setOpen(true);
     }
 
@@ -93,10 +105,34 @@ export default class DrawToolsStore {
         const count = this.stx.drawingObjects.length;
         if ((this.menu.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
             this.stx.changeVectorType('');
-            this.computeActiveDrawTools();
+            this.drawingFinished();
         }
         this._pervDrawingObjectCount = count;
     };
+
+    findComputedDrawing = (drawing) => {
+        const group = this.activeToolsGroup.find(drawGroup => drawGroup.key === drawing.name);
+        if (group) {
+            const drawingItem = group.items.find(item => (
+                item.v0 === drawing.v0
+                    && item.v1 === drawing.v1
+                    && item.d0 === drawing.d0
+                    && item.d1 === drawing.d1
+            ));
+            if (drawingItem) {
+                drawingItem.prefix = drawingItem.id === 'continuous' ? t.translate('Continuous') : '';
+            }
+            return drawingItem;
+        }
+        return null;
+    }
+
+    @action.bound drawingFinished() {
+        this.computeActiveDrawTools();
+        if (this.stateStore) {
+            this.crosshairStore.setCrosshairState(this.stateStore.crosshairState);
+        }
+    }
 
     @action.bound clearAll() {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
@@ -157,9 +193,9 @@ export default class DrawToolsStore {
 
             if (items[item.name]) {
                 items[item.name]++;
-                item.text = `${formatCamelCase(item.name)} - ${items[item.name]}`;
+                item.text = `${formatCamelCase(item.name)} ${items[item.name]}`;
             } else {
-                item.text = `${formatCamelCase(item.name)} - 1`;
+                item.text = `${formatCamelCase(item.name)} 1`;
                 items[item.name] = 1;
             }
 
@@ -177,5 +213,9 @@ export default class DrawToolsStore {
         // get the values of group and sort group by the number of their children
         // this way the single item stay at top
         this.activeToolsGroup = Object.values(groups).sort((a, b) => (a.items.length - b.items.length));
+    }
+
+    @action.bound updatePortalNode(portalNodeId) {
+        this.portalNodeIdChanged = portalNodeId;
     }
 }

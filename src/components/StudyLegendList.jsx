@@ -11,7 +11,7 @@ const StudyLegendListItem = ({
     <div className="stx-panel-control iconsTemplate stx-show">
         <div className="stx-panel-title">
             {item.name}
-            <span className="bars">{item.bars}</span>
+            <span className="bars">({item.bars})</span>
         </div>
         <div className="stx-btn-panel">
             <EditIcon
