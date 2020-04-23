@@ -123,6 +123,7 @@
             }
 
             .cq-dialog__head--title {
+                width: 200px;
                 @include themify($themes) {
                     background: themed('DialogTabularHeadTitleBg');
                 }

@@ -106,7 +106,7 @@
     &__panel {
         width: 360px;
         height: 392px;
-        padding: 16px 8px;
+        padding: 16px 0px 16px 8px;
         box-sizing: border-box;
 
         &__head {
@@ -181,6 +181,7 @@
         &__item {
             height: 40px;
             display: flex;
+            margin-right: 8px;
             border-radius: 4px;
             box-sizing: border-box;
             justify-content: space-between;

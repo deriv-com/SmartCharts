@@ -20,6 +20,7 @@ const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup
         title={
             (type === 'select'
+             || type === 'pattern'
              || type === 'colorpicker'
              || group === 'OverBought'
              || group === 'OverSold'
@@ -141,7 +142,7 @@ const SettingsPanel = ({
     setScrollPanel,
 }) => (
     <Scrollbars
-        className="form form--indicator-setting"
+        className="sc-scrollbar form form--indicator-setting"
         ref={setScrollPanel}
         autoHide
     >

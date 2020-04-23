@@ -38,7 +38,7 @@ const CategoricalDisplay = React.memo(({
                 isMobile
                     ? (
                         <div
-                            className="cq-scroll-panel"
+                            className="sc-scrollbar cq-scroll-panel"
                             onScroll={updateScrollSpy}
                             ref={setScrollPanel}
                         >
@@ -47,7 +47,7 @@ const CategoricalDisplay = React.memo(({
                     )
                     : (
                         <Scrollbars
-                            className="cq-scroll-panel"
+                            className="sc-scrollbar cq-scroll-panel"
                             onScroll={updateScrollSpy}
                             ref={setScrollPanel}
                         >

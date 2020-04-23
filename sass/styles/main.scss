@@ -256,10 +256,13 @@
     }
 }
 
-.ciq-scrollbar {
+.sc-scrollbar {
     > div:nth-child(3) {
+        opacity: 1 !important;
+
         > div {
             opacity: 0.16;
+            width: 4px !important;
             @include themify($themes) {
                 background-color: themed('ScrollbarBg') !important;
             }
@@ -347,7 +350,6 @@
         }
     }
     &--outline-secondary {
-        padding: 3px 12px;
         background: transparent;
         @include themify($themes) {
             border-color: themed('BtnSecondaryBorder');
@@ -355,7 +357,9 @@
         }
 
         &:hover {
-            background: transparent !important;
+            @include themify($themes) {
+                background: themed('BtnSecondaryHoverBg') !important;
+            }
         }
     }
 }

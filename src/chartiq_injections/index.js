@@ -7,7 +7,7 @@ import { setMaxTicks }            from './setMaxTicks';
 import { plotterDrawText }        from './plotterDrawText';
 import { overideMeasure }         from './setMeasure';
 
-const inject = () => {
+const inject = (option) => {
     createXAxis();
     drawCurrentPriceLine();
     maintainHeadsUpHR();
@@ -15,7 +15,7 @@ const inject = () => {
     // manageMasterDataLength();
     plotterDrawText();
     setMaxTicks();
-    overideMeasure();
+    overideMeasure(option);
 };
 
 export default inject;
