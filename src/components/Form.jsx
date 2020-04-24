@@ -65,10 +65,10 @@ export class Slider extends React.Component {
         const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
 
         return (
-            <div className="cq-slider">
-                <div className="cq-slider-range">
-                    <div className="cq-slider-bar" />
-                    <div className="cq-slider-active-bar" style={{ width: activeWidth }} />
+            <div className="sc-slider">
+                <div className="sc-slider-range">
+                    <div className="sc-slider-bar" />
+                    <div className="sc-slider-active-bar" style={{ width: activeWidth }} />
                     <input
                         type="range"
                         min={min}
@@ -103,7 +103,7 @@ export class DropDown extends React.Component {
         } = this.props;
         const { open } = this.state;
         return (
-            <div className={`${className || ''} cq-dropdown ${open ? 'active' : ''}`}>
+            <div className={`${className || ''} sc-dropdown ${open ? 'active' : ''}`}>
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
                     className={`value ${open ? 'active' : ''}`}
@@ -204,7 +204,7 @@ export class ColorPicker extends React.Component {
         const { subtitle, color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? this.defaultColor() : color;
         return (
-            <div className={`cq-color-picker ${this.state.open ? 'active' : ''}`}>
+            <div className={`sc-color-picker ${this.state.open ? 'active' : ''}`}>
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
                     className="value"
@@ -241,7 +241,7 @@ export const Switch = ({
     onChange,
 }) => (
     <div
-        className={`cq-switch ${value ? 'on' : 'off'}`}
+        className={`sc-switch ${value ? 'on' : 'off'}`}
         onClick={() => onChange(!value)}
     >
         <div className="handle" />
@@ -324,11 +324,13 @@ export class NumericInput extends React.PureComponent {
 
     onUpdateValue = (e) => {
         e.persist();
-
         this.setState(() => ({ value: e.target.value }));
     };
 
     fireOnEnter = (e) => {
+        if (['-', 'e', '+', 'E'].includes(e.key)) {
+            e.preventDefault();
+        }
         if (e.key === 'Enter') {
             this.fireOnChange();
         }
@@ -340,7 +342,7 @@ export class NumericInput extends React.PureComponent {
     render() {
         const { subtitle, min, max, step } = this.props;
         return (
-            <div className="cq-numeric-input">
+            <div className="sc-numeric-input">
                 <input
                     type="number"
                     value={this.state.value}
@@ -352,7 +354,7 @@ export class NumericInput extends React.PureComponent {
                     step={step}
                 />
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
-                <div className="cq-numeric-input-buttons">
+                <div className="sc-numeric-input-buttons">
                     <InputNumberPlusIcon onClick={this.onIncrease} />
                     <InputNumberMinusIcon onClick={this.onDecrease} />
                 </div>
@@ -374,7 +376,7 @@ export const NumberColorPicker = ({
     const onColorChange = c => onChange({ Color: c, Value    });
 
     return (
-        <span className="cq-numbercolorpicker">
+        <span className="sc-numbercolorpicker">
             <NumericInput
                 value={Value}
                 subtitle={t.translate('Size')}
@@ -399,7 +401,7 @@ export const Toggle = ({
 }) => (
     <div
         onClick={() => onChange(!active)}
-        className={`${className || ''} ${active ? 'active' : ''} cq-toggle`}
+        className={`${className || ''} ${active ? 'active' : ''} sc-toggle`}
     >
         {children}
     </div>
@@ -429,21 +431,21 @@ export const FontSetting = ({
     } = value;
 
     return (
-        <span className="cq-fontsetting">
+        <span className="sc-fontsetting">
             <Toggle
                 onChange={onBoldChange}
                 active={!!weight}
             >
-                <div className="cq-text-icon"><b>B</b></div>
+                <div className="sc-text-icon"><b>B</b></div>
             </Toggle>
             <Toggle
                 active={!!style}
                 onChange={onItalicChange}
             >
-                <div className="cq-text-icon"><i>i</i></div>
+                <div className="sc-text-icon"><i>i</i></div>
             </Toggle>
             <DropDown
-                className="cq-changefontsize"
+                className="sc-changefontsize"
                 rows={fontSizes}
                 title={size || '13px'}
                 onRowClick={onFontSizeChange}
@@ -451,7 +453,7 @@ export const FontSetting = ({
                 {p => <span className="option">{p}</span>}
             </DropDown>
             <DropDown
-                className="cq-changefontfamily"
+                className="sc-changefontfamily"
                 rows={families}
                 title={family || families[0]}
                 onRowClick={onFontFamilyChange}

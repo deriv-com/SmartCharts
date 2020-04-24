@@ -122,10 +122,9 @@ const SettingsPanelGroup = ({
                 && (
                     <SettingsPanelItem
                         key={item.id}
-                        group={title}
                         type={item.type}
                         active={item.active}
-                        title={item.title}
+                        title={item.title.replace(title, '')}
                         Field={renderMap[item.type](item)}
                     />
                 )
@@ -146,18 +145,19 @@ const SettingsPanel = ({
         ref={setScrollPanel}
         autoHide
     >
-        {itemGroups.map(group => (group.fields.length
-            ? (
+        {itemGroups.map(group => (
+            (group.fields.length > 0)
+            && (
                 <SettingsPanelGroup
                     key={group.key}
+                    group={group.key}
                     title={group.key}
                     items={group.fields}
                     theme={theme}
                     onItemChange={onItemChange}
                 />
-            ) : ''
-        ))
-        }
+            )
+        ))}
     </Scrollbars>
 );
 
