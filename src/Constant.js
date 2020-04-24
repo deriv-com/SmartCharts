@@ -219,3 +219,46 @@ export const ChartTypes = [
     { id: 'hollow_candle', text: t.translate('Hollow'), candleOnly: true,  icon: TypeHollowIcon },
     { id: 'colored_bar',   text: t.translate('OHLC'),   candleOnly: true,  icon: TypeOhlcIcon   },
 ];
+
+export const Intervals = [
+    {
+        key: 'tick',
+        single: t.translate('tick'),
+        items: [
+            {
+                interval: 1,
+                num: 1,
+            },
+        ],
+    }, {
+        key: 'minute',
+        single: t.translate('minute'),
+        plural: t.translate('minutes'),
+        items: [
+            { interval: 60, num: 1 },
+            { interval: 120, num: 2 },
+            { interval: 180, num: 3 },
+            { interval: 300, num: 5 },
+            { interval: 600, num: 10 },
+            { interval: 900, num: 15 },
+            { interval: 1800, num: 30 },
+        ],
+    }, {
+        key: 'hour',
+        single: t.translate('hour'),
+        plural: t.translate('hours'),
+        items: [
+            { interval: 3600, num: 1 },
+            { interval: 7200, num: 2 },
+            { interval: 14400, num: 4 },
+            { interval: 28800, num: 8 },
+        ],
+    }, {
+        key: 'day',
+        single: t.translate('day'),
+        plural: t.translate('days'),
+        items: [
+            { interval: 86400, num: 1 },
+        ],
+    },
+];

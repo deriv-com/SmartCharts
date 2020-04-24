@@ -4,7 +4,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationBadge from './NotificationBadge.jsx';
 import { connect } from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
-import '../../sass/components/_sc-studies.scss';
+import '../../sass/components/studylegend.scss';
 
 const EmptyView = () => (
     <div className="sc-studies--empty">
@@ -206,12 +206,12 @@ const StudyLegend = ({
             customHead={
                 infoItem
                     ? (
-                        <div className="cq-dialog__head--info">
+                        <div className="sc-dialog__head--info">
                             <BackIcon onClick={() => onInfoItem(null)} />
                             {infoItem.name}
                         </div>
                     ) : (
-                        <div className="cq-dialog__head--search">
+                        <div className="sc-dialog__head--search">
                             <SearchInput />
                         </div>
                     )

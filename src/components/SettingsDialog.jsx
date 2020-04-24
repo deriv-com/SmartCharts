@@ -14,7 +14,7 @@ import {
     FontSetting,
 } from './Form.jsx';
 import { DeleteIcon } from './Icons.jsx';
-import '../../sass/components/_ciq-settings-dialog.scss';
+import '../../sass/components/settings-dialog.scss';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup

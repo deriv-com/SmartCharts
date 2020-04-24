@@ -1,10 +1,10 @@
-.ciq-views-menu {
-    .cq-dialog {
+.sc-views-menu {
+    .sc-dialog {
         width: 320px;
     }
 }
 
-.form--ciq-views {
+.form--sc-views {
     overflow-y: hidden !important;
 
     &__input {
@@ -72,7 +72,7 @@
     }
 }
 
-.ciq-views {
+.sc-views {
     height: 304px;
     position: relative;
     border-radius: 0 0 4px 4px;
@@ -200,7 +200,6 @@
                 }
 
                 .ic-icon {
-                    opacity: 0;
                     @include themify($themes) {
                         fill: themed('TemplateListItemText');
                     }
@@ -208,10 +207,6 @@
                 &:hover {
                     @include themify($themes) {
                         background: themed('TemplateListItemHoverBg');
-                    }
-
-                    .ic-icon {
-                        opacity: 1;
                     }
                 }
             }
@@ -268,8 +263,8 @@
 }
 
 .smartcharts-mobile {
-    .ciq-views-menu {
-        .cq-dialog {
+    .sc-views-menu {
+        .sc-dialog {
             left: auto;
             width: 300px;
         }

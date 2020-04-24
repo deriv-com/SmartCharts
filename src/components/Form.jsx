@@ -7,7 +7,7 @@ import {
     CheckboxIcon,
     CheckboxActiveIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-form.scss';
+import '../../sass/components/form.scss';
 
 export const FormGroup = ({ title, type, children }) => (
     <div className={`form__group ${type ? (`form__group--${type}`) : ''}`}>

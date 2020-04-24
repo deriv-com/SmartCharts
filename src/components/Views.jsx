@@ -8,21 +8,21 @@ import {
     EmptyStateIcon,
     OverwriteStateIcon,
 } from './Icons.jsx';
-import '../../sass/components/_view.scss';
+import '../../sass/components/view.scss';
 
 const ViewItem = ({
     view,
     remove,
     onClick,
 }) => (
-    <div className="ciq-views__views__list__item" onClick={onClick}>
+    <div className="sc-views__views__list__item" onClick={onClick}>
         <span>{view.name}</span>
         <DeleteIcon onClick={remove} />
     </div>
 );
 
 const EmptyView = ({ onClick }) => (
-    <div className="ciq-views--empty">
+    <div className="sc-views--empty">
         <EmptyStateIcon />
         <p>{t.translate('You have no saved templates yet.')}</p>
         <button type="button" className="sc-btn" onClick={onClick}>
@@ -33,15 +33,15 @@ const EmptyView = ({ onClick }) => (
 );
 
 const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
-    <div className="ciq-views--overwrite">
-        <div className="ciq-views--overwrite__content">
+    <div className="sc-views--overwrite">
+        <div className="sc-views--overwrite__content">
             <OverwriteStateIcon />
             <p>
                 {templateName + t.translate(' already exists.')}<br />
                 {t.translate('Would you like to overwrite it?')}
             </p>
         </div>
-        <div className="ciq-views--overwrite__footer">
+        <div className="sc-views--overwrite__footer">
             <button type="button" className="sc-btn sc-btn--outline-secondary" onClick={onCancel}>
                 {t.translate('Cancel')}
             </button>
@@ -56,8 +56,8 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }) => {
     if (!views.length) return '';
 
     return (
-        <div className="ciq-views__views">
-            <div className="ciq-views__views__head">
+        <div className="sc-views__views">
+            <div className="sc-views__views__head">
                 <h5>{t.translate('Saved templates')}</h5>
                 <button
                     type="button"
@@ -67,8 +67,8 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }) => {
                     {t.translate('Clear all')}
                 </button>
             </div>
-            <div className="ciq-views__views__content">
-                <div className="ciq-views__views__list">
+            <div className="sc-views__views__content">
+                <div className="sc-views__views__list">
                     {
                         views.map((view, i) => (
                             <ViewItem
@@ -109,19 +109,19 @@ const Views = ({
 
     return (
         <ViewsMenu
-            className="ciq-views-menu"
+            className="sc-views-menu"
             title={t.translate('Templates')}
             tooltip={t.translate('Templates')}
             newStyle
             portalNodeId={portalNodeId}
         >
             <ViewsMenu.Title>
-                <div className={`ciq-views__menu ${menuOpen ? 'ciq-views__menu--active' : ''}`}>
+                <div className={`sc-views__menu ${menuOpen ? 'sc-views__menu--active' : ''}`}>
                     <TemplateIcon />
                 </div>
             </ViewsMenu.Title>
             <ViewsMenu.Body>
-                <div className="ciq-views">
+                <div className="sc-views">
                     {(currentRoute === 'new')
                         ? (<EmptyView onClick={onToggleNew} />)
                         : (
@@ -138,11 +138,11 @@ const Views = ({
                                 <Scrollbars
                                     className="sc-scrollbar"
                                 >
-                                    <div className="form form--ciq-views">
+                                    <div className="form form--sc-views">
                                         <div className="form__input-group">
                                             <div className="form__group">
                                                 <div className="form__control">
-                                                    <div className={`form--ciq-views__input ${isActive ? 'form--ciq-views__input--active' : ''}`}>
+                                                    <div className={`form--sc-views__input ${isActive ? 'form--sc-views__input--active' : ''}`}>
                                                         <div className="subtitle">
                                                             <span>{t.translate('Add new templates')}</span>
                                                         </div>
