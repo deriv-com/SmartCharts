@@ -9,9 +9,10 @@ export default class ActiveSymbols {
     symbolsPromise = new PendingPromise();
     isRetrievingSymbols = false;
 
-    constructor(api, tradingTimes) {
+    constructor(api, tradingTimes, activeSymbols) {
         this._api = api;
         this._tradingTimes = tradingTimes;
+        this._activeSymbols = activeSymbols || ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
     }
 
     @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
@@ -78,9 +79,9 @@ export default class ActiveSymbols {
 
         // Categorize symbols in order defined by another array; there's probably a more
         // efficient algo for this, but for just ~100 items it's not worth the effort
-        const order = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
+        // const order = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
         const orderedSymbols = [];
-        for (const o of order) {
+        for (const o of this._activeSymbols) {
             for (const p of processedSymbols) {
                 if (o === p.market) {
                     orderedSymbols.push(p);
