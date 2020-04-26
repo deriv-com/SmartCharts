@@ -10,11 +10,11 @@ class RawMarker extends React.Component {
     stx = null;
     injectionId = null;
     hasUnmountedBeforeInjection = false;
+    shouldRedraw = false;
     canvas_height = 0;
 
     componentDidMount() {
         const { contextPromise } = this.props;
-
         contextPromise.then((ctx) => {
             if (this.hasUnmountedBeforeInjection) { return; }
 
@@ -24,6 +24,22 @@ class RawMarker extends React.Component {
             this.injectionId = this.stx.append('draw', this.draw);
             this.draw();
         });
+    }
+
+    componentDidUpdate() {
+        const { shouldRedraw, contextPromise } = this.props;
+
+        if (shouldRedraw) {
+            contextPromise.then((ctx) => {
+                if (this.hasUnmountedBeforeInjection) { return; }
+
+                this.ctx = ctx;
+                this.stx = this.ctx.stx;
+
+                this.injectionId = this.stx.append('draw', this.draw);
+                this.draw();
+            });
+        }
     }
 
     componentWillUnmount() {

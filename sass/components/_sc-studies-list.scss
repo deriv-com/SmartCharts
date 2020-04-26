@@ -13,5 +13,10 @@
         top: 0px;
         margin-bottom: 10px;
         z-index: auto;
+        display: flex;
+
+        .stx-panel-title {
+            width: 100%;
+        }
     }
 }

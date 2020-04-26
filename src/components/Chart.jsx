@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
-import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
-import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import BottomWidget from './BottomWidget.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
-import ChartTable from './ChartTable.jsx';
 import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
 import StudyLegendList from './StudyLegendList.jsx';
@@ -54,8 +51,6 @@ class Chart extends Component {
     defaultTopWidgets = () => (
         <>
             <ChartTitle />
-            <AssetInformation />
-            <ComparisonList />
         </>
     );
 
@@ -82,6 +77,7 @@ class Chart extends Component {
             enabledChartFooter = true,
             enabledNavigationWidget = true,
             toolbarWidget,
+            onCrosshairChange,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -129,7 +125,7 @@ class Chart extends Component {
                                     </div>
                                     {
                                         enabledNavigationWidget
-                                            && <NavigationWidget />
+                                            && <NavigationWidget onCrosshairChange={onCrosshairChange} />
                                     }
                                     { toolbarWidget
                                         && <ToolbarWidget />
@@ -158,7 +154,6 @@ class Chart extends Component {
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
-                    <ChartTable />
                     <div id="smartcharts_modal" className="ciq-modal" />
                 </div>
             </div>

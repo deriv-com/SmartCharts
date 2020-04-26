@@ -279,9 +279,9 @@ class App extends Component {
                     }
                 }}
             />
-            <StudyLegend />
+            <StudyLegend portalNodeId="portal-node" />
             {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
+            <DrawTools portalNodeId="portal-node" />
             <Views />
             <Share portalNodeId="portal-node" />
             {isMobile ? '' : <ChartSize />}
@@ -505,11 +505,9 @@ class App extends Component {
                 </div>
                 <div className="action-section">
                     <div className="form-row">
-                        Navigation Widget <br />
-                        <button type="button" onClick={this.onWidget}>Toggle</button>
+                        <button type="button" onClick={this.onWidget}>Navigate Widget Toggle</button>
                     </div>
                     <div className="form-row">
-                        Zoom <br />
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
                         <button type="button" onClick={() => this.onChartSize(-1)}>Zoom out</button>
                     </div>

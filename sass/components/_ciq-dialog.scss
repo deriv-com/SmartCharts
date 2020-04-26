@@ -41,24 +41,25 @@
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
-            min-width: 200px;
-            width: 200px;
+            min-width: 240px;
             padding: 16px;
             border-radius: 5px 0 0;
             position: relative;
             box-sizing: border-box;
         }
-        &--subtitle {
+        &--custom {
+            width: 100%;
+        }
+        &--info {
             display: flex;
             justify-content: start;
             align-items: center;
-            width: 100%;
             font-size: 16px;
             font-weight: bold;
             font-style: normal;
             line-height: 1.5;
             letter-spacing: normal;
-            padding: 10px 4px;
+            padding: 10px 8px 10px 16px;
 
             .ic-icon {
                 width: 32px;
@@ -74,21 +75,29 @@
                         fill: themed('DialogHeadIcon');
                     }
                 }
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('DialogHeadIconHoverBg');
+                    }
+                }
             }
         }
+        &--search {
+            padding: 10px 0px 10px 12px;
+        }
         &--action {
-            padding: 20px 16px;
+            padding: 16px;
             border-radius: 0 5px 0 0;
 
             .ic-icon {
-                width: 24px;
-                height: 24px;
-                line-height: 24px;
+                width: 32px;
+                height: 32px;
+                line-height: 34px;
                 cursor: pointer;
                 border-radius: 4px;
                 padding: 4px;
                 position: relative;
-                top: -5px;
+                top: -6px;
 
                 svg {
                     @include themify($themes) {
@@ -114,6 +123,7 @@
             }
 
             .cq-dialog__head--title {
+                width: 200px;
                 @include themify($themes) {
                     background: themed('DialogTabularHeadTitleBg');
                 }
@@ -129,10 +139,11 @@
 
         .react-tabs__tab-list {
             margin: 0px;
-            width: 200px;
+            width: 240px;
+            min-width: 240px;
             border-radius: 0 0 0 5px;
             border-bottom: none;
-            padding: 16px 0 0;
+            padding: 0;
             @include themify($themes) {
                 background: themed('DialogTabularBg');
             }

@@ -20,6 +20,7 @@ const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup
         title={
             (type === 'select'
+             || type === 'pattern'
              || type === 'colorpicker'
              || group === 'OverBought'
              || group === 'OverSold'
@@ -141,7 +142,7 @@ const SettingsPanel = ({
     setScrollPanel,
 }) => (
     <Scrollbars
-        className="form form--indicator-setting"
+        className="sc-scrollbar form form--indicator-setting"
         ref={setScrollPanel}
         autoHide
     >
@@ -191,6 +192,7 @@ const SettingsDialog = ({
     theme,
     close,
     setScrollPanel,
+    dialogPortalNodeId,
 }) => (
     <SettingDialogMenu
         className="cq-modal--settings"
@@ -199,6 +201,7 @@ const SettingsDialog = ({
         enableTabular={showTabs}
         emptyMenu
         enableOverlay // this temprary, we remove it when all menus convert to modal
+        portalNodeId={dialogPortalNodeId}
     >
         <SettingDialogMenu.Title />
         <SettingDialogMenu.Body>
