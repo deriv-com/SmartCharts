@@ -90,7 +90,7 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
-const ActiveMarkets = ['synthetic_index', 'forex', 'indices', 'stocks', 'commodities'];
+const ActiveMarkets = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
 const IntervalEnum = {
     second: 1,
     minute: 60,
