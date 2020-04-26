@@ -491,14 +491,14 @@
 
 .sc-switch {
     width: 32px;
-    height: 16px;
+    height: 18px;
     position: relative;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 9px;
 
     .handle {
         position: absolute;
-        top: 1px;
+        top: 2px;
         width: 14px;
         height: 14px;
         transition: left 0.2s;
@@ -509,7 +509,7 @@
     }
     &.on {
         .handle {
-            left: 17px;
+            left: 16px;
         }
         @include themify($themes) {
             background: themed('SwitchOnBg');
@@ -517,7 +517,7 @@
     }
     &.off {
         .handle {
-            left: 1px;
+            left: 2px;
         }
         @include themify($themes) {
             background: themed('SwitchOffBg');

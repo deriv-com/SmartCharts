@@ -124,7 +124,7 @@ const SettingsPanelGroup = ({
                         key={item.id}
                         type={item.type}
                         active={item.active}
-                        title={item.title.replace(title, '')}
+                        title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
                         Field={renderMap[item.type](item)}
                     />
                 )

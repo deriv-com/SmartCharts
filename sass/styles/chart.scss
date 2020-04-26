@@ -24,6 +24,23 @@ html, body {
     &.ciq-draw-mode {
         cursor: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
     }
+    .stx-panel-study {
+        .stx-subholder {
+            &:after {
+                position: absolute;
+                content: ' ';
+                width: 100%;
+                height: 1px;
+                top: 0px;
+                left: 0px;
+                @include themify($themes) {
+                    background: themed('IndicatorAddedBorder');
+                    background-image: linear-gradient(to left, themed('IndicatorAddedBorder') 95%, themed('ChartBg') 100%); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+                }
+
+            }
+        }
+    }
     :last-child {
         z-index: 1;
     }
