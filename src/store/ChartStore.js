@@ -130,6 +130,20 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
+    @computed get indicatorHeightRatio() {
+        const chartHeight = this.chartNode.offsetHeight || this.chartContainerHeight;
+        const indicatorsMaxHeight = (chartHeight - 350);
+        const indicatorsMinHeight = indicatorsMaxHeight * 2 / 3;
+
+        return {
+            MaxAreaHeight: chartHeight - 320, // 320 is the fix height of market selector + floating widget
+            MinHeight: Math.floor(indicatorsMinHeight / 5),
+            MaxHeight: Math.floor(indicatorsMaxHeight / 5),
+            MinPercent: Math.floor(indicatorsMinHeight / 5) / chartHeight,
+            MaxPercent: Math.floor(indicatorsMaxHeight / 5) / chartHeight,
+        };
+    }
+
     init = (rootNode, props) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
@@ -140,7 +154,7 @@ class ChartStore {
         } else {
             import(/* webpackChunkName: "chartiq" */ 'chartiq').then(action(({ CIQ, SplinePlotter }) => {
                 CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(ResizeIcon)}</div>`;
-                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel stx-show"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
+                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel stx-show"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
                 CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span class="mouseDeleteText">Right click to delete</span><span class="mouseManageText">Right click to manage</span></span></span></div>`;
                 CIQ.ChartEngine.htmlControls.home = `<div class="stx_jump_today" style="display:none">${renderSVGString(HomeIcon)}</div>`;
 
@@ -155,7 +169,9 @@ class ChartStore {
         const _self = this;
 
         // Add custom injections to the CIQ
-        inject();
+        inject({
+            drawToolsStore: this.mainStore.drawTools,
+        });
 
         /**
          * only home button click part modified to avoid calling

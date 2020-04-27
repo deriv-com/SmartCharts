@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import ChartTypes from './ChartTypes.jsx';
 import StudyLegend from './StudyLegend.jsx';
-import Comparison from './Comparison.jsx';
 import Views from './Views.jsx';
 import CrosshairToggle from './CrosshairToggle.jsx';
 import Timeperiod from './Timeperiod.jsx';
@@ -18,7 +17,6 @@ export const RenderDefaultControls = ({ isMobile }) => (
         <ChartTypes />
         <Timeperiod />
         <StudyLegend />
-        <Comparison />
         <DrawTools />
         <Views />
         <Share />
@@ -44,7 +42,6 @@ const ChartControls = ({
 export default connect(({ chart,
     chartType,
     studies,
-    comparison,
     drawTools,
     view,
     share,
@@ -55,7 +52,6 @@ export default connect(({ chart,
     hasOpenMenu: (
         chartType.menu.open
             || studies.menu.open
-            || comparison.menu.open
             || drawTools.menu.open
             || view.menu.open
             || share.menu.open

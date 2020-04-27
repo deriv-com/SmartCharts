@@ -1,4 +1,4 @@
-export const overideMeasure = () => {
+export const overideMeasure = (option) => {
     CIQ.ChartEngine.prototype.append('setMeasure', function (price1, price2, tick1, tick2, hover) {
         let m = (this.drawingContainer || document).querySelector('.mMeasure');
         let message = '';
@@ -39,7 +39,16 @@ export const overideMeasure = () => {
             const mStickyInterior = mSticky && mSticky.querySelector('.mStickyInterior');
             if (mStickyInterior) {
                 const lines = [];
-                lines.push(this.name.capitalize());
+                let title = this.name.capitalize();
+
+                if (option.drawToolsStore) {
+                    const drawingItem = option.drawToolsStore.findComputedDrawing(this);
+                    if (drawingItem) {
+                        title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${drawingItem.text}`;
+                    }
+                }
+
+                lines.push(title);
                 if (this.getYValue) lines.push(this.field || this.stx.defaultPlotField || 'Close');
                 lines.push(mStickyInterior.innerHTML);
                 mStickyInterior.innerHTML = lines.join(' ');

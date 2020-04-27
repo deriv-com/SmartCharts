@@ -37,6 +37,7 @@ class ChartState {
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
     get drawTools() { return this.mainStore.drawTools; }
+    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -80,7 +81,7 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
-        crosshairState,
+        crosshair,
         zoom,
         maxTick,
     }) {
@@ -185,9 +186,9 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
-        if (crosshairState !== undefined && crosshairState !== null && crosshairState !== this.crosshairState) {
-            this.mainStore.crosshair.setCrosshairState(crosshairState);
-            this.crosshairState = crosshairState;
+        if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {
+            this.mainStore.crosshair.setCrosshairState(crosshair);
+            this.crosshairState = crosshair;
         }
 
         if (zoom) {
@@ -386,6 +387,13 @@ class ChartState {
         if (this.chartType !== undefined) {
             layoutData.chartType = this.chartType;
         }
+
+        // Update Indictor panel height
+        Object.keys(layoutData.panels).forEach((id) => {
+            if (id === 'chart') { return; }
+            const panel = layoutData.panels[id];
+            panel.percent = this.indicatorRatio.MaxPercent;
+        });
 
         this.stxx.importLayout(layoutData, {
             managePeriodicity: true,
