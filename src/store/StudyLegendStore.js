@@ -29,13 +29,17 @@ function renderSVGString(icon) {
     // eslint-disable-next-line no-undef
     return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
 }
-const updateFieldHeading = (heading) => {
-    switch (heading) {
-    case 'Result': return 'Color';
-    case '%D': return '%D Color';
-    case '%K': return '%K Color';
-    default: return heading;
+const updateFieldHeading = (heading, type) => {
+    const names = ['%D', '%K'];
+    if (
+        heading.toLowerCase() === type.toLowerCase()
+        || heading === 'Result'
+    ) {
+        return 'Color';
+    } if (names.indexOf(heading) > 0) {
+        return `${heading} Color`;
     }
+    return heading;
 };
 
 export default class StudyLegendStore {
@@ -176,7 +180,7 @@ export default class StudyLegendStore {
         }));
         const outputs = helper.outputs.map(out => ({
             id: out.name,
-            title: t.translate(updateFieldHeading(out.heading)),
+            title: t.translate(updateFieldHeading(out.heading, study.sd.type)),
             defaultValue: out.defaultOutput,
             value: out.color,
             type: 'colorpicker',

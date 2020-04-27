@@ -199,6 +199,12 @@
                     color: themed('TemplateListItemText');
                 }
 
+                .text {
+                    max-width: 240px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
                 .ic-icon {
                     @include themify($themes) {
                         fill: themed('TemplateListItemText');

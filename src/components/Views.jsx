@@ -16,7 +16,7 @@ const ViewItem = ({
     onClick,
 }) => (
     <div className="sc-views__views__list__item" onClick={onClick}>
-        <span>{view.name}</span>
+        <div className="text">{view.name}</div>
         <DeleteIcon onClick={remove} />
     </div>
 );
