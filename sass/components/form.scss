@@ -52,6 +52,7 @@
 
         #{ $self }__label {
             width: auto;
+            min-width: 70px;
         }
         #{ $self }__control {
             padding-left: 16px;
@@ -167,6 +168,9 @@
                 -webkit-appearance: none;
                 @include rangethumb();
                 margin-top: 1px;
+            }
+            &::-moz-focus-outer {
+                border: 0;
             }
         }
         .sc-slider-bar {

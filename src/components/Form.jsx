@@ -1,5 +1,6 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
+import debounce from 'lodash.debounce';
 import {
     ArrowIcon,
     InputNumberPlusIcon,
@@ -62,7 +63,8 @@ export class Slider extends React.Component {
             value,
         } = this.props;
         const barWidth = 238;// css hardcode
-        const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+        let activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+        activeWidth = activeWidth < 0 ? 0 : activeWidth;
 
         return (
             <div className="sc-slider">
@@ -310,7 +312,7 @@ export class NumericInput extends React.PureComponent {
         return null;
     }
 
-    fireOnChange = () => {
+    fireOnChange = debounce(() => {
         const { min, max, onChange } = this.props;
         const setAndChange = val => this.setState({ value: val }, () => onChange(this.state.value));
         if (max !== undefined && this.state.value > max) {
@@ -320,7 +322,7 @@ export class NumericInput extends React.PureComponent {
         } else {
             onChange(this.state.value);
         }
-    };
+    }, 300, { leading: true, trailing: false });
 
     onUpdateValue = (e) => {
         e.persist();
@@ -336,8 +338,8 @@ export class NumericInput extends React.PureComponent {
         }
     };
 
-    onIncrease = () => this.setState(prevState => ({ value: prevState.value + 1 }));
-    onDecrease = () => this.setState(prevState => ({ value: prevState.value - 1 }));
+    onIncrease = () => this.setState(prevState => ({ value: prevState.value + 1 }), this.fireOnChange);
+    onDecrease = () => this.setState(prevState => ({ value: prevState.value - 1 }), this.fireOnChange);
 
     render() {
         const { subtitle, min, max, step } = this.props;
