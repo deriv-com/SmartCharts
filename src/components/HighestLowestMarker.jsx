@@ -2,7 +2,7 @@ import React  from 'react';
 import FastMarker from './FastMarker.jsx';
 import { connect }     from '../store/Connect';
 
-import '../../sass/components/_highest-lowest-marker.scss';
+import '../../sass/components/highest-lowest-marker.scss';
 
 const HighestLowestMarker = ({
     setHighestRef,
@@ -11,7 +11,7 @@ const HighestLowestMarker = ({
     <>
         <FastMarker
             markerRef={setHighestRef}
-            className="ciq-highlow ciq-highlow--highest"
+            className="sc-highlow sc-highlow--highest"
             offsetTop={-80}
             offsetLeft={-80}
         >
@@ -24,7 +24,7 @@ const HighestLowestMarker = ({
 
         <FastMarker
             markerRef={setLowestRef}
-            className="ciq-highlow ciq-highlow--lowest"
+            className="sc-highlow sc-highlow--lowest"
             offsetTop={-80}
             offsetLeft={-80}
         >

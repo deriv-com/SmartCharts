@@ -29,6 +29,18 @@ function renderSVGString(icon) {
     // eslint-disable-next-line no-undef
     return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
 }
+const updateFieldHeading = (heading, type) => {
+    const names = ['%D', '%K'];
+    if (
+        heading.toLowerCase() === type.toLowerCase()
+        || heading === 'Result'
+    ) {
+        return 'Color';
+    } if (names.indexOf(heading) > 0) {
+        return `${heading} Color`;
+    }
+    return heading;
+};
 
 export default class StudyLegendStore {
     constructor(mainStore) {
@@ -168,7 +180,7 @@ export default class StudyLegendStore {
         }));
         const outputs = helper.outputs.map(out => ({
             id: out.name,
-            title: t.translate(out.heading),
+            title: t.translate(updateFieldHeading(out.heading, study.sd.type)),
             defaultValue: out.defaultOutput,
             value: out.color,
             type: 'colorpicker',
@@ -211,6 +223,7 @@ export default class StudyLegendStore {
         this.settingsDialog.id = study.sd.type;
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
+        this.settingsDialog.formTitle = t.translate('Result');
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
