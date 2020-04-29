@@ -140,9 +140,10 @@ const SettingsPanel = ({
     theme,
     onItemChange,
     setScrollPanel,
+    freezeScroll,
 }) => (
     <Scrollbars
-        className="sc-scrollbar form form--indicator-setting"
+        className={`sc-scrollbar ${freezeScroll ? 'sc-scrollbar--freeze' : ''} form form--indicator-setting`}
         ref={setScrollPanel}
         autoHide
     >
@@ -191,6 +192,7 @@ const SettingsDialog = ({
     SettingDialogMenu,
     theme,
     close,
+    freezeScroll,
     setScrollPanel,
     dialogPortalNodeId,
 }) => (
@@ -236,6 +238,7 @@ const SettingsDialog = ({
                                 theme={theme}
                                 onItemChange={onItemChange}
                                 setScrollPanel={setScrollPanel}
+                                freezeScroll={freezeScroll}
                             />
                             <div className="buttons">
                                 <DeleteIcon

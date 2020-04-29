@@ -87,7 +87,14 @@ export class Slider extends React.Component {
 export class DropDown extends React.Component {
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
+    onClick = () => {
+        const bounding = this.ele.getBoundingClientRect();
+        this.setState(prevState => ({
+            open: !prevState.open,
+            right: this.ele.offsetLeft, // as the dropdown is centerize
+            top: bounding.top - 67,
+        }));
+    };
     close = (e) => {
         if (e.target !== this.titleRef) {
             this.setState({ open: false });
@@ -101,9 +108,12 @@ export class DropDown extends React.Component {
         const {
             subtitle, rows, children, value, onRowClick, className,
         } = this.props;
-        const { open } = this.state;
+        const { open, right, top } = this.state;
         return (
-            <div className={`${className || ''} cq-dropdown ${open ? 'active' : ''}`}>
+            <div
+                className={`${className || ''} cq-dropdown ${open ? 'active' : ''}`}
+                ref={(ele) => { this.ele = ele; }}
+            >
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
                     className={`value ${open ? 'active' : ''}`}
@@ -113,7 +123,10 @@ export class DropDown extends React.Component {
                     {value}
                     <ArrowIcon />
                 </div>
-                <div className={`dropdown ${open ? 'active' : ''}`}>
+                <div
+                    className={`dropdown ${open ? 'active' : ''}`}
+                    style={{ right, top }}
+                >
                     {rows.map((row, idx) => (
                         <div
                             key={idx} // eslint-disable-line react/no-array-index-key
@@ -182,7 +195,14 @@ export class ColorPicker extends React.Component {
     ];
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
+    onClick = () => {
+        const bounding = this.ele.getBoundingClientRect();
+        this.setState(prevState => ({
+            open: !prevState.open,
+            right: 24,
+            top: bounding.top - 67,
+        }));
+    }
     close = (e) => {
         if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
             this.setState({ open: false });
@@ -203,8 +223,12 @@ export class ColorPicker extends React.Component {
     render() {
         const { subtitle, color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? this.defaultColor() : color;
+        const { open, right, top } = this.state;
         return (
-            <div className={`cq-color-picker ${this.state.open ? 'active' : ''}`}>
+            <div
+                ref={(ele) => { this.ele = ele; }}
+                className={`cq-color-picker ${this.state.open ? 'active' : ''}`}
+            >
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
                     className="value"
@@ -217,7 +241,10 @@ export class ColorPicker extends React.Component {
                     />
                     <ArrowIcon />
                 </div>
-                <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
+                <div
+                    className={`dropdown ${open ? 'open' : ''}`}
+                    style={{ top, right }}
+                >
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
                             {row.map(tileColor => (

@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -13,6 +13,7 @@ export default class SettingsDialogStore {
     @computed get showTabs() { return !!this.description; }
     @observable scrollPanel;
     @observable dialogPortalNodeId = null;
+    @observable freezeScroll = false;
 
     constructor({ mainStore, getContext, onChanged, onDeleted }) {
         this.mainStore = mainStore;
@@ -21,6 +22,14 @@ export default class SettingsDialogStore {
         this.onDeleted = onDeleted;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
         this.SettingDialogMenu = this.menu.connect(Menu);
+
+        reaction(() => (this.scrollPanel && this.open), () => {
+            const rootEle = this.scrollPanel.container;
+            const dropdowns = rootEle.querySelectorAll('.cq-color-picker, .cq-dropdown');
+            dropdowns.forEach((dropdown) => {
+                dropdown.addEventListener('click', () => setTimeout(() => this.checkDropdownOpen(), 50));
+            });
+        });
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -28,6 +37,16 @@ export default class SettingsDialogStore {
     get theme() { return this.mainStore.chartSetting.theme; }
 
     @computed get open() { return this.menu.open; }
+    @action.bound checkDropdownOpen() {
+        let freezeScroll = false;
+        if (!this.scrollPanel) { return; }
+        const dropdowns = this.scrollPanel.container.querySelectorAll('.cq-color-picker, .cq-dropdown');
+        dropdowns.forEach((dropdown) => {
+            if (dropdown.className.indexOf('active') !== -1) freezeScroll = true;
+        });
+
+        this.freezeScroll = freezeScroll;
+    }
     @action.bound setOpen(value) {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop(0);
@@ -116,5 +135,6 @@ export default class SettingsDialogStore {
         setScrollPanel: this.setScrollPanel,
         close: this.menu.handleCloseDialog,
         dialogPortalNodeId: this.dialogPortalNodeId,
+        freezeScroll: this.freezeScroll,
     }));
 }
