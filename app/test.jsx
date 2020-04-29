@@ -247,7 +247,7 @@ class App extends Component {
     renderTopWidgets = () => (
         <React.Fragment>
             <ChartTitle onChange={this.symbolChange} />
-            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
+            {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} /> }
             <Notification
                 notifier={this.notifier}
             />
@@ -333,9 +333,7 @@ class App extends Component {
         </ToolbarWidget>
     );
 
-    onMessage = (e) => {
-        this.notifier.notify(e);
-    }
+    onMessage = e => this.notifier.notify(e);
 
     onPriceLineDisableChange = evt => this.setState({ hidePriceLines: evt.target.checked });
 

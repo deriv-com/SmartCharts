@@ -16,7 +16,7 @@
 
     &.sc-dialog-enter-done, &.sc-dialog-enter-active {
         opacity: 1;
-        transform: translateY(0em);
+        transform: none;
         z-index: 3;
     }
     &.sc-dialog-enter-done {
