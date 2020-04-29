@@ -1,5 +1,5 @@
 
-.cq-dialog {
+.sc-dialog {
     width: auto;
     top: auto;
     border-radius: 4px;
@@ -14,12 +14,14 @@
         background: themed('DialogBodyBg');
     }
 
-    &.cq-dialog-enter-done, &.cq-dialog-enter-active {
+    &.sc-dialog-enter-done, &.sc-dialog-enter-active {
         opacity: 1;
+        // we need `transform: translateY(0em);` because of dropdown fix style
+        // this cause the dropdown the fixed style take place within the dialog
         transform: translateY(0em);
         z-index: 3;
     }
-    &.cq-dialog-enter-done {
+    &.sc-dialog-enter-done {
         pointer-events: initial;
     }
     &__head {
@@ -114,15 +116,16 @@
     }
     &__body {
         border-radius: 0 0 4px 4px;
+        position: relative;
     }
-    &.cq-dialog--tabular {
-        .cq-dialog__head {
+    &.sc-dialog--tabular {
+        .sc-dialog__head {
             @include themify($themes) {
                 background: themed('DialogTabularHeadBg');
                 border-color: themed('DialogTabularHeadBorder');
             }
 
-            .cq-dialog__head--title {
+            .sc-dialog__head--title {
                 width: 200px;
                 @include themify($themes) {
                     background: themed('DialogTabularHeadTitleBg');
@@ -235,7 +238,7 @@
 
 /* Mobile Style */
 .smartcharts-mobile {
-    .cq-dialog {
+    .sc-dialog {
         left: 10px;
         width: calc(100% - 20px);
 

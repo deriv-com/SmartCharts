@@ -3,7 +3,7 @@ import { connect } from '../store/Connect';
 import { HelpCenterIcon, FullScreenIcon } from './Icons.jsx';
 import Tooltip from './Tooltip.jsx';
 import ChartSetting from './ChartSetting.jsx';
-import '../../sass/components/sc-chart-footer.scss';
+import '../../sass/components/chart-footer.scss';
 
 
 const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => {

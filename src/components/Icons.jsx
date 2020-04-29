@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../sass/components/_icons.scss';
+import '../../sass/components/icons.scss';
 
 // Chart types:
 import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';

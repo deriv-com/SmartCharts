@@ -1,19 +1,6 @@
 .sc-dtools {
     $self: &;
 
-    .cq-dialog-overlay {
-        position: fixed;
-        transform: inherit;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-
-        .cq-dialog {
-            width: 560px;
-            height: 392px;
-        }
-    }
     .tabs--vertical .react-tabs__tab-list {
         padding-top: 0px !important;
     }

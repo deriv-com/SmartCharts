@@ -27,7 +27,7 @@ export default class SettingsDialogStore {
             if (!this.scrollPanel || !this.open) { return; }
 
             const rootEle = this.scrollPanel.container;
-            const dropdowns = rootEle.querySelectorAll('.cq-color-picker, .cq-dropdown');
+            const dropdowns = rootEle.querySelectorAll('.sc-color-picker, .sc-dropdown');
             rootEle.addEventListener('click', () => {
                 this.setFreezeScroll(false);
             });
@@ -46,7 +46,7 @@ export default class SettingsDialogStore {
     @action.bound checkDropdownOpen() {
         let freezeScroll = false;
         if (!this.scrollPanel) { return; }
-        const dropdowns = this.scrollPanel.container.querySelectorAll('.cq-color-picker, .cq-dropdown');
+        const dropdowns = this.scrollPanel.container.querySelectorAll('.sc-color-picker, .sc-dropdown');
         dropdowns.forEach((dropdown) => {
             if (dropdown.className.indexOf('active') !== -1) freezeScroll = true;
         });
@@ -109,12 +109,14 @@ export default class SettingsDialogStore {
         });
 
         for (const index in this.items) {
-            const title = this.items[index].title;
+            const item = this.items[index];
+            const title = item.title;
             const group = groups.find(x => title.indexOf(x.key) !== -1);
             if (group) {
-                group.fields.push(this.items[index]);
+                item.subtitle = title.replace(group.key, '').trim();
+                group.fields.push(item);
             } else {
-                restGroup.push(this.items[index]);
+                restGroup.push(item);
             }
         }
 
