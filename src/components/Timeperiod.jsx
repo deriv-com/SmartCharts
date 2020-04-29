@@ -31,7 +31,13 @@ const Timeperiod = ({
     const ItemClassName = (unit, time) => {
         let className = 'sc-interval__item';
 
-        if (timeUnit === unit && time === interval) {
+        if (
+            timeUnit === unit && (
+                (unit === 'minute' || unit === 'tick') && time === interval
+                || unit === 'hour' && time === (interval / 60)
+                || unit === 'day' && time === 1
+            )
+        ) {
             className += ' sc-interval__item--active';
         } else if (unit === 'tick' && chartType.id !== 'mountain') {
             className += ' sc-interval__item--disabled';
@@ -41,6 +47,7 @@ const Timeperiod = ({
     };
 
     useEffect(() => updateProps(onChange));
+
 
     if (newDesign) {
         return (
