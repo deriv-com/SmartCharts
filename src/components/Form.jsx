@@ -330,7 +330,7 @@ export class NumericInput extends React.PureComponent {
     };
 
     fireOnEnter = (e) => {
-        if (['-', 'e', '+', 'E'].includes(e.key)) {
+        if (['e', '+', 'E'].includes(e.key)) {
             e.preventDefault();
         }
         if (e.key === 'Enter') {
