@@ -24,11 +24,17 @@ export default class SettingsDialogStore {
         this.SettingDialogMenu = this.menu.connect(Menu);
 
         reaction(() => (this.scrollPanel && this.open), () => {
+            if (!this.scrollPanel || !this.open) { return; }
+
             const rootEle = this.scrollPanel.container;
             const dropdowns = rootEle.querySelectorAll('.cq-color-picker, .cq-dropdown');
+            rootEle.addEventListener('click', () => {
+                this.setFreezeScroll(false);
+            });
             dropdowns.forEach((dropdown) => {
                 dropdown.addEventListener('click', () => setTimeout(() => this.checkDropdownOpen(), 50));
             });
+            this.setFreezeScroll(false);
         });
     }
 
@@ -45,8 +51,12 @@ export default class SettingsDialogStore {
             if (dropdown.className.indexOf('active') !== -1) freezeScroll = true;
         });
 
-        this.freezeScroll = freezeScroll;
+        this.setFreezeScroll(freezeScroll);
     }
+    @action.bound setFreezeScroll(status) {
+        this.freezeScroll = status;
+    }
+
     @action.bound setOpen(value) {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop(0);
