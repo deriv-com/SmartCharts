@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Tooltip = ({
+const Tooltip = React.memo(({
     children,
     className = '',
     enabled = true,
@@ -13,8 +13,8 @@ const Tooltip = ({
         {...props}
     >
         {children}
-        <div className="sc-tooltip__inner">{content}</div>
+        {enabled && (<div className="sc-tooltip__inner">{content}</div>)}
     </div>
-);
+));
 
 export default Tooltip;

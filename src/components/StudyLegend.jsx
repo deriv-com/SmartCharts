@@ -1,8 +1,9 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
+import React        from 'react';
+import Scrollbars   from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationBadge from './NotificationBadge.jsx';
-import { connect } from '../store/Connect';
+import Tooltip      from './Tooltip.jsx';
+import { connect }  from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
 import '../../sass/components/studylegend.scss';
 
@@ -23,9 +24,11 @@ const NoResultView = ({ text }) => (
 const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll }) => (
     <div className="sc-studies__list">
         {items.map(Item => (
-            <div
+            <Tooltip
                 key={`item--${Item.id}`}
                 className={`sc-studies__list__item ${disableAll && 'sc-studies__list__item--disabled'}`}
+                enabled={!!(onEditItem || onDeleteItem)}
+                content={`${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`}
             >
                 <div
                     className="info"
@@ -42,7 +45,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
                     {onEditItem && (<SettingIcon onClick={() => onEditItem(Item.dataObject)} />)}
                     {onDeleteItem && (<DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />)}
                 </div>
-            </div>
+            </Tooltip>
         ))}
     </div>
 );

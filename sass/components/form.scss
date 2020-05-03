@@ -80,9 +80,6 @@
                 opacity: 1 !important;
             }
         }
-        .form__input-group:last-child {
-            margin-bottom: 50px;
-        }
     }
     &__input-group {
         padding: 16px 24px;
@@ -387,6 +384,7 @@
         position: absolute;
         margin-left: 10px;
         top: -6px;
+        user-select: none;
 
         span {
             padding-left: 4px;
@@ -621,6 +619,7 @@
         position: absolute;
         margin-left: 10px;
         top: -6px;
+        user-select: none;
 
         span {
             padding-left: 4px;
