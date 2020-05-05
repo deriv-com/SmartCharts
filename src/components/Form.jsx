@@ -93,13 +93,18 @@ export class DropDown extends React.Component {
         const bounding = this.ele.getBoundingClientRect();
         this.setState(prevState => ({
             open: !prevState.open,
-            right: this.ele.offsetLeft, // as the dropdown is centerize
-            top: bounding.top - 67,
+            left: !prevState.open ? bounding.left : null,
+            top: !prevState.open ? bounding.top : null,
+            width: bounding.width,
         }));
     };
     close = (e) => {
         if (e.target !== this.titleRef) {
-            this.setState({ open: false });
+            this.setState({
+                open: false,
+                left: 0,
+                top: 0,
+            });
         }
     }
 
@@ -110,11 +115,12 @@ export class DropDown extends React.Component {
         const {
             subtitle, rows, children, value, onRowClick, className,
         } = this.props;
-        const { open, right, top } = this.state;
+        const { open, left, top, width } = this.state;
         return (
             <div
                 className={`${className || ''} sc-dropdown ${open ? 'active' : ''}`}
                 ref={(ele) => { this.ele = ele; }}
+                style={{ left, top, width }}
             >
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
@@ -125,10 +131,7 @@ export class DropDown extends React.Component {
                     {value}
                     <ArrowIcon />
                 </div>
-                <div
-                    className={`dropdown ${open ? 'active' : ''}`}
-                    style={{ right, top }}
-                >
+                <div className={`dropdown ${open ? 'active' : ''}`}>
                     {rows.map((row, idx) => (
                         <div
                             key={idx} // eslint-disable-line react/no-array-index-key
@@ -201,13 +204,18 @@ export class ColorPicker extends React.Component {
         const bounding = this.ele.getBoundingClientRect();
         this.setState(prevState => ({
             open: !prevState.open,
-            right: 24,
-            top: bounding.top - 67,
+            left: !prevState.open ? bounding.left : null,
+            top: !prevState.open ? bounding.top : null,
+            width: bounding.width,
         }));
     }
     close = (e) => {
         if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
-            this.setState({ open: false });
+            this.setState({
+                open: false,
+                left: null,
+                top: null,
+            });
         }
     };
 
@@ -225,11 +233,12 @@ export class ColorPicker extends React.Component {
     render() {
         const { subtitle, color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? this.defaultColor() : color;
-        const { open, right, top } = this.state;
+        const { open, left, top, width } = this.state;
         return (
             <div
                 ref={(ele) => { this.ele = ele; }}
                 className={`sc-color-picker ${this.state.open ? 'active' : ''}`}
+                style={{ top, left, width }}
             >
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
@@ -245,7 +254,6 @@ export class ColorPicker extends React.Component {
                 </div>
                 <div
                     className={`dropdown ${open ? 'open' : ''}`}
-                    style={{ top, right }}
                 >
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">

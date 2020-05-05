@@ -16,9 +16,7 @@
 
     &.sc-dialog-enter-done, &.sc-dialog-enter-active {
         opacity: 1;
-        // we need `transform: translateY(0em);` because of dropdown fix style
-        // this cause the dropdown the fixed style take place within the dialog
-        transform: translateY(0em);
+        transform: none;
         z-index: 3;
     }
     &.sc-dialog-enter-done {

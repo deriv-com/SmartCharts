@@ -27,7 +27,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
             <Tooltip
                 key={`item--${Item.id}`}
                 className={`sc-studies__list__item ${disableAll && 'sc-studies__list__item--disabled'}`}
-                enabled={!!(onEditItem || onDeleteItem)}
+                enabled={!!(onEditItem || onDeleteItem) && (Item.bars && Item.bars.length > 30)}
                 content={`${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`}
             >
                 <div
