@@ -83,6 +83,9 @@
                 opacity: 1 !important;
             }
         }
+        .form__input-group:last-child {
+            margin-bottom: 50px;
+        }
     }
     &__input-group {
         padding: 16px 24px;
