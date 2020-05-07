@@ -86,27 +86,16 @@ export default class SettingsDialogStore {
 
     @computed get itemGroups() {
         const restGroup = [];
-        const groups = [];
-        groups.push({
-            key: '%K',
-            fields: [],
-        });
-        groups.push({
-            key: '%D',
-            fields: [],
-        });
-        groups.push({
-            key: 'OverBought',
-            fields: [],
-        });
-        groups.push({
-            key: 'OverSold',
-            fields: [],
-        });
-        groups.push({
-            key: 'Show Zones',
-            fields: [],
-        });
+        const groupNames = [
+            '%K', '%D',
+            'Lagging Span', 'Leading Span A', 'Leading Span B', 'Base Line', 'Conversion Line',
+            'Increasing Bar', 'Decreasing Bar', 'Signal', 'Jaw', 'Teeth', 'Lips',
+            'OverBought', 'OverSold',
+            'Show Zones',
+            'Show Lines',
+            'Show Fractals',
+        ];
+        const groups = groupNames.map(item => ({ key: item, fields: [] }));
 
         for (const index in this.items) {
             const item = this.items[index];

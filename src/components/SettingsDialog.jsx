@@ -114,17 +114,18 @@ const SettingsPanelGroup = ({
     };
 
     const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
+    const switchTitles = ['Show Zones', 'Show Lines', 'Show Fractals'];
 
     return (
         <div className={`form__input-group ${input_group_name}`}>
-            {title === 'Show Zones' ? '' : (<h4>{title}</h4>)}
+            {switchTitles.indexOf(title) !== -1 ? '' : (<h4>{title}</h4>)}
             {items.map(item => (renderMap[item.type]
                     && (
                         <SettingsPanelItem
                             key={item.id}
                             type={item.type}
                             active={item.active}
-                            title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
+                            title={(switchTitles.indexOf(title) !== -1) ? item.title : item.title.replace(title, '')}
                             Field={renderMap[item.type](item)}
                         />
                     )

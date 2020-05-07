@@ -318,11 +318,16 @@
                 color: themed('DropdownText');
             }
 
-            &:hover {
+            &--selected {
                 font-weight: bold;
                 @include themify($themes) {
                     background: themed('DropdownActiveBg');
                     color: themed('DropdownActiveText');
+                }
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DropdownHoverBg');
                 }
             }
         }
@@ -682,6 +687,7 @@
         }
         &:focus {
             @include themify($themes) {
+                color: themed('InputFocusText') !important;
                 border-color: themed('DefaultInputActiveBorder') !important;
             }
         }

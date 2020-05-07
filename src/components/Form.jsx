@@ -116,6 +116,7 @@ export class DropDown extends React.Component {
             subtitle, rows, children, value, onRowClick, className,
         } = this.props;
         const { open, left, top, width } = this.state;
+
         return (
             <div
                 className={`${className || ''} sc-dropdown ${open ? 'active' : ''}`}
@@ -135,7 +136,7 @@ export class DropDown extends React.Component {
                     {rows.map((row, idx) => (
                         <div
                             key={idx} // eslint-disable-line react/no-array-index-key
-                            className="row"
+                            className={`row ${row === value ? 'row--selected' : ''}`}
                             onClick={() => onRowClick && onRowClick(row)}
                         >
                             {children(row)}
