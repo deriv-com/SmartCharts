@@ -226,7 +226,7 @@ export const Intervals = [
         single: t.translate('tick'),
         items: [
             {
-                interval: 1,
+                interval: 0,
                 num: 1,
             },
         ],
