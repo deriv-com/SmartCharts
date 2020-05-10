@@ -262,3 +262,27 @@ export const Intervals = [
         ],
     },
 ];
+
+
+export const StudyGroups = [
+    '%K',
+    '%D',
+    'Aroon Up',
+    'Aroon Down',
+    'Lagging Span',
+    'Leading Span A',
+    'Leading Span B',
+    'Base Line',
+    'Conversion Line',
+    'Increasing Bar',
+    'Decreasing Bar',
+    'Signal',
+    'Jaw',
+    'Teeth',
+    'Lips',
+    'OverBought',
+    'OverSold',
+    'Show Zones',
+    'Show Lines',
+    'Show Fractals',
+];

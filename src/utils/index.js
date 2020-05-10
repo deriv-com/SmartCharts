@@ -254,3 +254,8 @@ export const formatCamelCase = (s) => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
+
+export const formatFirstCapitalCase = (string) => {
+    const str = string.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+};

@@ -11,7 +11,7 @@ import {
     IndicatorCatTrendLightIcon,
     IndicatorCatTrendDarkIcon,
 } from '../components/Icons.jsx';
-import { IndicatorsTree, ExcludedStudies } from '../Constant';
+import { IndicatorsTree, ExcludedStudies, StudyGroups } from '../Constant';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon    from '../../sass/icons/common/ic-minimize.svg';
 
@@ -30,17 +30,12 @@ function renderSVGString(icon) {
     return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
 }
 const colorPickerMapHeading = (heading, type) => {
-    const names = [
-        '%D', '%K',
-        'Increasing Bar', 'Decreasing Bar', 'Signal', 'Lagging Span', 'Leading Span A', 'Leading Span B', 'Base Line',
-        'Conversion Line', 'Jaw', 'Teeth', 'Lips',
-    ];
     if (
         heading.toLowerCase() === type.toLowerCase()
         || heading === 'Result'
     ) {
         return 'Color';
-    } if (names.indexOf(heading.trim()) > -1) {
+    } if (StudyGroups.indexOf(heading.trim()) > -1) {
         return `${heading} Color`;
     }
     return heading;

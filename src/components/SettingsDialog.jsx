@@ -23,8 +23,8 @@ const SettingsPanelItem = ({ group, title, type, Field }) => (
                      || type === 'pattern'
                      || type === 'colorpicker'
                      || type === 'numbercolorpicker'
-                     || group === 'OverBought'
-                     || group === 'OverSold'
+                     || group === 'Overbought'
+                     || group === 'Oversold'
             ) ? null : title
         }
         type={type}
@@ -114,7 +114,7 @@ const SettingsPanelGroup = ({
     };
 
     const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
-    const switchTitles = ['Show Zones', 'Show Lines', 'Show Fractals'];
+    const switchTitles = ['Show zones', 'Show lines', 'Show fractals'];
 
     return (
         <div className={`form__input-group ${input_group_name}`}>
@@ -125,7 +125,7 @@ const SettingsPanelGroup = ({
                             key={item.id}
                             type={item.type}
                             active={item.active}
-                            title={(switchTitles.indexOf(title) !== -1) ? item.title : item.title.replace(title, '')}
+                            title={item.subtitle}
                             Field={renderMap[item.type](item)}
                         />
                     )
@@ -152,7 +152,7 @@ const SettingsPanel = ({
                 <SettingsPanelGroup
                     key={group.key}
                     group={group.key}
-                    title={group.key}
+                    title={group.title}
                     items={group.fields}
                     theme={theme}
                     onItemChange={onItemChange}

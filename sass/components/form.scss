@@ -107,10 +107,26 @@
         &:first-child {
             border-top: none;
         }
-    }
-    &__input-group--show-zones {
-        #{ $self }__label {
-            font-size: 14px;
+        &--increasing-bar {
+            padding-bottom: 6px;
+        }
+        &--decreasing-bar,
+        &--show-fractals {
+            border-top: none !important;
+            padding-top: 0px;
+        }
+        &--show-zones,
+        &--show-lines,
+        &--show-fractals {
+            #{ $self }__label {
+                font-size: 14px;
+                min-width: 95px;
+            }
+        }
+        &--show-lines {
+            #{ $self }__group--switch {
+                margin-bottom: 0px;
+            }
         }
     }
 }

@@ -2,6 +2,8 @@ import { observable, action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
+import { StudyGroups } from '../Constant';
+import { formatFirstCapitalCase } from '../utils';
 
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
@@ -86,31 +88,25 @@ export default class SettingsDialogStore {
 
     @computed get itemGroups() {
         const restGroup = [];
-        const groupNames = [
-            '%K', '%D',
-            'Lagging Span', 'Leading Span A', 'Leading Span B', 'Base Line', 'Conversion Line',
-            'Increasing Bar', 'Decreasing Bar', 'Signal', 'Jaw', 'Teeth', 'Lips',
-            'OverBought', 'OverSold',
-            'Show Zones',
-            'Show Lines',
-            'Show Fractals',
-        ];
-        const groups = groupNames.map(item => ({ key: item, fields: [] }));
+        const groups = StudyGroups.map(item => ({ key: item, title: formatFirstCapitalCase(item), fields: [] }));
 
         for (const index in this.items) {
             const item = this.items[index];
             const title = item.title;
             const group = groups.find(x => title.indexOf(x.key) !== -1);
             if (group) {
-                item.subtitle = title.replace(group.key, '').trim();
+                const subtitle = title.replace(group.key, '').trim();
+                item.subtitle = formatFirstCapitalCase(subtitle === '' ? title : subtitle);
                 group.fields.push(item);
             } else {
+                item.subtitle = formatFirstCapitalCase(title.trim());
                 restGroup.push(item);
             }
         }
 
         groups.unshift({
             key: this.formTitle || this.title,
+            title: this.formTitle || this.title,
             fields: restGroup,
         });
 
