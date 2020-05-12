@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import CrosshairToggle from './CrosshairToggle.jsx';
-import '../../sass/components/_ciq-navigation-widget.scss';
+import '../../sass/components/navigation-widget.scss';
 
 import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
 

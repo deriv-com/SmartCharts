@@ -80,12 +80,14 @@ export default class SettingsDialogStore {
         });
 
         for (const index in this.items) {
-            const title = this.items[index].title;
+            const item = this.items[index];
+            const title = item.title;
             const group = groups.find(x => title.indexOf(x.key) !== -1);
             if (group) {
-                group.fields.push(this.items[index]);
+                item.subtitle = title.replace(group.key, '').trim();
+                group.fields.push(item);
             } else {
-                restGroup.push(this.items[index]);
+                restGroup.push(item);
             }
         }
 

@@ -58,7 +58,7 @@ class Menu extends Component {
                                     appear
                                     in={dialogStatus}
                                     timeout={300}
-                                    classNames="cq-dialog"
+                                    classNames="sc-dialog"
                                     unmountOnExit
                                 >
                                     <DropdownDialog

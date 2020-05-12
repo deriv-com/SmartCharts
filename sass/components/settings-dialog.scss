@@ -1,14 +1,4 @@
 
-.cq-dialog-overlay {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    bottom: 2em;
-}
-
 .cq-chart-settings {
     display: flex;
     flex-direction: column;
@@ -139,11 +129,6 @@
 
 /* Mobile Style */
 .smartcharts-mobile {
-    .cq-dialog-overlay {
-        background: rgba(0, 0, 0, 0.3);
-        visibility: hidden;
-        bottom: 0;
-    }
     .cq-dialog-active {
         visibility: visible;
         z-index: 1;

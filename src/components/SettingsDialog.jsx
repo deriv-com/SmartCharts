@@ -14,16 +14,17 @@ import {
     FontSetting,
 } from './Form.jsx';
 import { DeleteIcon } from './Icons.jsx';
-import '../../sass/components/_ciq-settings-dialog.scss';
+import '../../sass/components/settings-dialog.scss';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup
         title={
             (type === 'select'
-             || type === 'pattern'
-             || type === 'colorpicker'
-             || group === 'OverBought'
-             || group === 'OverSold'
+                     || type === 'pattern'
+                     || type === 'colorpicker'
+                     || type === 'numbercolorpicker'
+                     || group === 'OverBought'
+                     || group === 'OverSold'
             ) ? null : title
         }
         type={type}
@@ -31,7 +32,6 @@ const SettingsPanelItem = ({ group, title, type, Field }) => (
         {Field}
     </FormGroup>
 );
-
 
 const SettingsPanelGroup = ({
     title,
@@ -50,7 +50,7 @@ const SettingsPanelGroup = ({
             <ColorPicker
                 theme={theme}
                 color={item.value}
-                subtitle={item.title}
+                subtitle={item.subtitle || item.title}
                 setColor={value => onItemChange(item.id, value)}
             />
         ),
@@ -72,7 +72,7 @@ const SettingsPanelGroup = ({
             <DropDown
                 rows={Object.keys(item.options)}
                 value={item.value}
-                subtitle={item.title}
+                subtitle={item.subtitle || item.title}
                 onRowClick={value => onItemChange(item.id, value)}
             >
                 {row => row}
@@ -119,21 +119,19 @@ const SettingsPanelGroup = ({
         <div className={`form__input-group ${input_group_name}`}>
             {title === 'Show Zones' ? '' : (<h4>{title}</h4>)}
             {items.map(item => (renderMap[item.type]
-                && (
-                    <SettingsPanelItem
-                        key={item.id}
-                        group={title}
-                        type={item.type}
-                        active={item.active}
-                        title={item.title}
-                        Field={renderMap[item.type](item)}
-                    />
-                )
+                    && (
+                        <SettingsPanelItem
+                            key={item.id}
+                            type={item.type}
+                            active={item.active}
+                            title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
+                            Field={renderMap[item.type](item)}
+                        />
+                    )
             ))}
         </div>
     );
 };
-
 
 const SettingsPanel = ({
     itemGroups,
@@ -146,21 +144,21 @@ const SettingsPanel = ({
         ref={setScrollPanel}
         autoHide
     >
-        {itemGroups.map(group => (group.fields.length
-            ? (
+        {itemGroups.map(group => (
+            (group.fields.length > 0)
+            && (
                 <SettingsPanelGroup
                     key={group.key}
+                    group={group.key}
                     title={group.key}
                     items={group.fields}
                     theme={theme}
                     onItemChange={onItemChange}
                 />
-            ) : ''
-        ))
-        }
+            )
+        ))}
     </Scrollbars>
 );
-
 
 const ResetButton = ({ onClick }) => (
     <button
@@ -252,6 +250,5 @@ const SettingsDialog = ({
             </div>
         </SettingDialogMenu.Body>
     </SettingDialogMenu>
-
 );
 export default SettingsDialog;
