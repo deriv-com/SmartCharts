@@ -52,6 +52,7 @@
 
         #{ $self }__label {
             width: auto;
+            min-width: 70px;
         }
         #{ $self }__control {
             padding-left: 16px;
@@ -112,14 +113,14 @@
 }
 
 /* stylelint-disable plugin/no-unsupported-browser-features */
-.cq-slider {
+.sc-slider {
     width: 100%;
     height: 12px;
     display: flex;
     align-items: center;
     position: relative;
 
-    .cq-slider-range {
+    .sc-slider-range {
         position: relative;
         width: calc(100% - 38px);
         margin-top: 9px;
@@ -168,8 +169,11 @@
                 @include rangethumb();
                 margin-top: 1px;
             }
+            &::-moz-focus-outer {
+                border: 0;
+            }
         }
-        .cq-slider-bar {
+        .sc-slider-bar {
             width: 100%;
             outline: none;
             height: 2px;
@@ -177,7 +181,7 @@
                 background: themed('SliderBarBg');
             }
         }
-        .cq-slider-active-bar {
+        .sc-slider-active-bar {
             height: 2px;
             min-width: 10px;
             @include themify($themes) {
@@ -198,7 +202,7 @@
 }
 /* stylelint-enable plugin/no-unsupported-browser-features */
 
-.cq-dropdown {
+.sc-dropdown {
     position: relative;
     height: 40px;
     width: 100%;
@@ -374,7 +378,7 @@
     }
 }
 
-.cq-color-picker {
+.sc-color-picker {
     position: relative;
     height: 40px;
     width: 100%;
@@ -491,16 +495,16 @@
     }
 }
 
-.cq-switch {
+.sc-switch {
     width: 32px;
-    height: 16px;
+    height: 18px;
     position: relative;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 9px;
 
     .handle {
         position: absolute;
-        top: 1px;
+        top: 2px;
         width: 14px;
         height: 14px;
         transition: left 0.2s;
@@ -511,7 +515,7 @@
     }
     &.on {
         .handle {
-            left: 17px;
+            left: 16px;
         }
         @include themify($themes) {
             background: themed('SwitchOnBg');
@@ -519,7 +523,7 @@
     }
     &.off {
         .handle {
-            left: 1px;
+            left: 2px;
         }
         @include themify($themes) {
             background: themed('SwitchOffBg');
@@ -574,11 +578,11 @@
     }
 }
 
-.cq-numbercolorpicker, .cq-fontsetting {
+.sc-numbercolorpicker, .sc-fontsetting {
     display: inline-flex;
 }
 
-.cq-numbercolorpicker {
+.sc-numbercolorpicker {
     display: flex;
 
     input {
@@ -605,7 +609,7 @@
     }
 }
 
-.cq-numeric-input {
+.sc-numeric-input {
     position: relative;
     height: 40px;
     width: 100%;
@@ -667,26 +671,37 @@
             }
         }
     }
-    .cq-numeric-input-buttons {
+    .sc-numeric-input-buttons {
         display: flex;
         flex-direction: column;
         position: absolute;
-        top: 2px;
-        right: 3px;
-        border-radius: 0 4px 4px 0;
+        top: 1px;
+        right: 1px;
+        border-radius: 0 3px 3px 0;
         @include themify($themes) {
             background: themed('DialogSettingBodyBg');
         }
 
         .ic-icon {
             width: 24px;
-            height: 18px;
+            height: 19px;
             line-height: 19px;
             cursor: pointer;
 
             svg {
                 @include themify($themes) {
                     fill: themed('DropdownText');
+                }
+            }
+            &:first-child {
+                border-radius: 0 3px 0 0;
+            }
+            &:last-child {
+                border-radius: 0 0 3px;
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DefaultInputBtnHoverBg');
                 }
             }
         }
@@ -700,7 +715,7 @@
     }
 }
 
-.cq-fontsetting {
+.sc-fontsetting {
     .cq-text-icon {
         margin-right: 5px;
     }
@@ -715,23 +730,23 @@
     font-size: 1.5em;
 }
 
-.cq-changefontsize {
+.sc-changefontsize {
     width: 56px;
     margin-right: 5px;
 }
 
-.cq-changefontfamily {
+.sc-changefontfamily {
     width: 138px;
 }
 
-.cq-toggle {
+.sc-toggle {
     display: flex;
     justify-content: space-around;
     align-items: center;
 }
 
-.cq-toggle > .ic-icon,
-.cq-chart-controls .ic-icon-with-sub {
+.sc-toggle > .ic-icon,
+.sc-chart-controls .ic-icon-with-sub {
     width: 24px;
     height: 24px;
 }

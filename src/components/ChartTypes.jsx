@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import { SettingIcon } from './Icons.jsx';
 import Tooltip from './Tooltip.jsx';
-import '../../sass/components/_chart-types.scss';
+import '../../sass/components/chart-types.scss';
 
 const ChartTypes = ({
     chartId,

@@ -7,7 +7,6 @@ import BottomWidget from './BottomWidget.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
 import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
-import StudyLegendList from './StudyLegendList.jsx';
 /* css + scss */
 import '../../sass/main.scss';
 import 'react-tabs/style/react-tabs.css';
@@ -130,7 +129,6 @@ class Chart extends Component {
                                     { toolbarWidget
                                         && <ToolbarWidget />
                                     }
-                                    <StudyLegendList />
                                     <Loader />
                                     {!isChartAvailable && (
                                         <div className="cq-chart-unavailable">

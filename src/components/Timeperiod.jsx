@@ -2,7 +2,8 @@
 import React, { useEffect } from 'react';
 import { connect } from '../store/Connect';
 import Tooltip from './Tooltip.jsx';
-import '../../sass/components/_timeperiod.scss';
+import '../../sass/components/timeperiod.scss';
+import { Intervals } from '../Constant';
 
 const Timeperiod = ({
     chartId,
@@ -23,10 +24,20 @@ const Timeperiod = ({
         onChange(granularity, chartId);
         setOpen(false);
     };
+    const onIntervalClick = (chartTypeId, key, inval) => {
+        if (key === 'tick' && chartTypeId !== 'mountain') { return; }
+        onGranularityClick(inval);
+    };
     const ItemClassName = (unit, time) => {
         let className = 'sc-interval__item';
 
-        if (timeUnit === unit && time === interval) {
+        if (
+            timeUnit === unit && (
+                (unit === 'minute' || unit === 'tick') && time === interval
+                || unit === 'hour' && time === (interval / 60)
+                || unit === 'day' && time === 1
+            )
+        ) {
             className += ' sc-interval__item--active';
         } else if (unit === 'tick' && chartType.id !== 'mountain') {
             className += ' sc-interval__item--disabled';
@@ -37,6 +48,7 @@ const Timeperiod = ({
 
     useEffect(() => updateProps(onChange));
 
+
     if (newDesign) {
         return (
             <div className="sc-interval">
@@ -45,91 +57,28 @@ const Timeperiod = ({
                 </div>
                 <div className="sc-interval__info">{t.translate('Tick interval only available for "Area" Chart type.')}</div>
                 <div className="sc-interval__content">
-                    <Tooltip
-                        onClick={() => ((chartType.id === 'mountain') ? onGranularityClick(0) : null)}
-                        className={ItemClassName('tick', 1)}
-                        enabled={(chartType.id !== 'mountain' && !isMobile)}
-                        content={t.translate('Available only for "Area" chart type.')}
-                    >
-                        <span>1 {t.translate('tick')}</span>
-                    </Tooltip>
-                    <div
-                        onClick={() => onGranularityClick(60)}
-                        className={ItemClassName('minute', 1)}
-                    >
-                        <span>1 {t.translate('minute')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(120)}
-                        className={ItemClassName('minute', 2)}
-                    >
-                        <span>2 {t.translate('minutes')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(180)}
-                        className={ItemClassName('minute', 3)}
-                    >
-                        <span>3 {t.translate('minutes')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(300)}
-                        className={ItemClassName('minute', 5)}
-                    >
-                        <span>5 {t.translate('minutes')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(600)}
-                        className={ItemClassName('minute', 10)}
-                    >
-                        <span>10 {t.translate('minutes')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(900)}
-                        className={ItemClassName('minute', 15)}
-                    >
-                        <span>15 {t.translate('minutes')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(1800)}
-                        className={ItemClassName('minute', 30)}
-                    >
-                        <span>30 {t.translate('minutes')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(3600)}
-                        className={ItemClassName('hour', 60)}
-                    >
-                        <span>1 {t.translate('hour')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(7200)}
-                        className={ItemClassName('hour', 120)}
-                    >
-                        <span>2 {t.translate('hours')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(14400)}
-                        className={ItemClassName('hour', 240)}
-                    >
-                        <span>4 {t.translate('hours')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(28800)}
-                        className={ItemClassName('hour', 480)}
-                    >
-                        <span>8 {t.translate('hours')}</span>
-                    </div>
-                    <div
-                        onClick={() => onGranularityClick(86400)}
-                        className={ItemClassName('day', 'day')}
-                    >
-                        <span>1 {t.translate('day')}</span>
-                    </div>
+                    {
+                        Intervals.map(category => (
+                            category.items.map(item => (
+                                <Tooltip
+                                    key={item.interval}
+                                    onClick={() => onIntervalClick(chartType.id, category.key, item.interval)}
+                                    className={ItemClassName(category.key, item.num)}
+                                    enabled={(chartType.id !== 'mountain' && !isMobile && category.key === 'tick')}
+                                    content={t.translate('Available only for "Area" chart type.')}
+                                >
+                                    <span>{item.num} {item.num === 1 ? category.single : category.plural}</span>
+                                </Tooltip>
+                            ))
+                        ))
+                    }
                 </div>
             </div>
         );
     }
 
+    // TODO
+    // should remove this after first integerated release with deriv.app
     return (
         <TimePeriodMenu
             className="ciq-period"

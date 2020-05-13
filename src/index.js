@@ -4,7 +4,6 @@ import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
 import ChartMode from './components/ChartMode.jsx';
 import StudyLegend from './components/StudyLegend.jsx';
-import StudyLegendList from './components/StudyLegendList.jsx';
 import Comparison from './components/Comparison.jsx';
 import Views from './components/Views.jsx';
 import CrosshairToggle from './components/CrosshairToggle.jsx';
@@ -77,7 +76,6 @@ export default {
     Share,
     SmartChart,
     StudyLegend,
-    StudyLegendList,
     Timeperiod,
     Views,
     ToolbarWidget,
