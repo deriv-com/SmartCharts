@@ -32,6 +32,9 @@
     }
     &__group--select,
     &__group--colorpicker {
+        position: relative;
+        height: 40px;
+
         #{ $self }__label {
             margin-bottom: -8px;
             margin-left: 10px;
@@ -200,13 +203,16 @@
         }
     }
 }
-/* stylelint-enable plugin/no-unsupported-browser-features */
 
+/* stylelint-enable plugin/no-unsupported-browser-features */
 .sc-dropdown {
     position: relative;
     height: 40px;
     width: 100%;
     user-select: none;
+    @include themify($themes) {
+        background: themed('DropdownBg');
+    }
 
     .subtitle {
         position: absolute;
@@ -279,27 +285,27 @@
     }
     .dropdown {
         position: absolute;
-        top: 0;
+        top: 35px;
         right: 0;
         opacity: 0;
         pointer-events: none;
-        z-index: +2;
-        width: 100%;
+        z-index: 2;
         max-height: 200px;
         overflow: scroll;
         box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
         box-sizing: border-box;
         border-radius: 4px;
         font-size: 14px;
+        width: 272px;
+        transition: opacity 0.2s, top 0.2s;
         @include themify($themes) {
             background: themed('DropdownBg');
         }
 
         &.active {
-            top: 50px;
+            top: 48px;
             opacity: 1;
             pointer-events: all;
-            transition: opacity 0.3s, top 0.2s;
             @include themify($themes) {
                 box-shadow: 0 16px 16px 0 themed('DropdownActiveShadow'), 0 0 16px 0 themed('DropdownActiveShadow');
             }
@@ -312,11 +318,16 @@
                 color: themed('DropdownText');
             }
 
-            &:hover {
+            &--selected {
                 font-weight: bold;
                 @include themify($themes) {
                     background: themed('DropdownActiveBg');
                     color: themed('DropdownActiveText');
+                }
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DropdownHoverBg');
                 }
             }
         }
@@ -367,6 +378,9 @@
         border-top-width: 3px;
     }
     &.active {
+        position: fixed;
+        z-index: 2;
+
         .subtitle {
             span {
                 @include themify($themes) {
@@ -381,11 +395,15 @@
     position: relative;
     height: 40px;
     width: 100%;
+    @include themify($themes) {
+        background: themed('ColorPickerBg');
+    }
 
     .subtitle {
         position: absolute;
         margin-left: 10px;
         top: -6px;
+        user-select: none;
 
         span {
             padding-left: 4px;
@@ -439,24 +457,24 @@
     }
     .dropdown {
         position: absolute;
-        top: 50px;
+        top: 35px;
         right: -5px;
         opacity: 0;
         pointer-events: none;
-        z-index: +2;
+        z-index: 2;
         width: 266px;
         padding: 8px;
-        transition: opacity 0.1s;
         border-radius: 4px;
+        transition: opacity 0.2s, top 0.2s;
         @include themify($themes) {
             box-shadow: 0 16px 16px 0 themed('ColorPickerShadow'), 0 0 16px 0 themed('ColorPickerShadow');
             background: themed('ColorPickerBg');
         }
 
         &.open {
-            z-index: 2;
             opacity: 1;
-            pointer-events: all;
+            pointer-events: initial;
+            top: 48px;
         }
         .row {
             height: 18px;
@@ -474,6 +492,9 @@
         }
     }
     &.active {
+        position: fixed;
+        z-index: 2;
+
         .subtitle {
             span {
                 @include themify($themes) {
@@ -490,6 +511,11 @@
                 transform: scaleY(-1);
             }
         }
+    }
+    .sc-color-picker,
+    .sc-numeric-input {
+        min-width: 124px;
+        max-width: 124px;
     }
 }
 
@@ -617,6 +643,7 @@
         position: absolute;
         margin-left: 10px;
         top: -6px;
+        user-select: none;
 
         span {
             padding-left: 4px;
@@ -660,6 +687,7 @@
         }
         &:focus {
             @include themify($themes) {
+                color: themed('InputFocusText') !important;
                 border-color: themed('DefaultInputActiveBorder') !important;
             }
         }

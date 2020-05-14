@@ -190,6 +190,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            position: relative;
 
             &:hover {
                 @include themify($themes) {
@@ -234,6 +235,10 @@
                         line-height: 1.5;
                         letter-spacing: normal;
                         margin-top: 2px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        max-width: 170px;
                         @include themify($themes) {
                             color: themed('IndicatorListItemSubText');
                         }

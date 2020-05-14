@@ -138,9 +138,10 @@ const SettingsPanel = ({
     theme,
     onItemChange,
     setScrollPanel,
+    freezeScroll,
 }) => (
     <Scrollbars
-        className="sc-scrollbar form form--indicator-setting"
+        className={`sc-scrollbar ${freezeScroll ? 'sc-scrollbar--freeze' : ''} form form--indicator-setting`}
         ref={setScrollPanel}
         autoHide
     >
@@ -191,6 +192,7 @@ const SettingsDialog = ({
     close,
     setScrollPanel,
     dialogPortalNodeId,
+    freezeScroll,
 }) => (
     <SettingDialogMenu
         className="cq-modal--settings"
@@ -217,6 +219,7 @@ const SettingsDialog = ({
                                     theme={theme}
                                     onItemChange={onItemChange}
                                     setScrollPanel={setScrollPanel}
+                                    freezeScroll={freezeScroll}
                                 />
                                 <div className="buttons">
                                     <ResetButton onClick={onResetClick} />
@@ -234,6 +237,7 @@ const SettingsDialog = ({
                                 theme={theme}
                                 onItemChange={onItemChange}
                                 setScrollPanel={setScrollPanel}
+                                freezeScroll={freezeScroll}
                             />
                             <div className="buttons">
                                 <DeleteIcon
