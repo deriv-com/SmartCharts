@@ -35,6 +35,7 @@ import {
     IndicatorEnvelopeIcon,
     IndicatorAlligatorIcon,
     IndicatorFractalChaosIcon,
+    IndicatorRainbowIcon,
     // Chart Types
     TypeAreaIcon,
     TypeCandleIcon,
@@ -100,6 +101,7 @@ export const IndicatorsTree = [
         items: [
             { id: 'ma', name: t.translate('Moving Average (MA)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAveragesIcon },
             { id: 'MA Env', name: t.translate('Moving Average Envelope'), description: t.translate('There isn\'t any description here.'), icon: IndicatorEnvelopeIcon },
+            { id: 'Rainbow MA', name: t.translate('Rainbow Moving Average'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRainbowIcon },
         ],
     },
     {
@@ -200,7 +202,6 @@ export const ExcludedStudies = {
     'Trend Int': true,
     Choppiness: true,
     Disparity: true,
-    'Rainbow MA': true,
     'Rainbow Osc': true,
     'Pring KST': true,
     'Pring Sp-K': true,
