@@ -189,6 +189,7 @@ import IndicatorAverages from '../../sass/icons/indicators/ic-averages.svg';
 import IndicatorEnvelope from '../../sass/icons/indicators/ic-envelope.svg';
 import IndicatorAlligator from '../../sass/icons/indicators/ic-alligator.svg';
 import IndicatorFractalChaos from '../../sass/icons/indicators/ic-fractal-chaos.svg';
+import IndicatorRainbow from '../../sass/icons/indicators/ic-rainbow.svg';
 
 import DrawToolsChannel from '../../sass/icons/draw-tools/ic-channel.svg';
 import DrawToolsContinuous from '../../sass/icons/draw-tools/ic-continuous.svg';
@@ -333,6 +334,7 @@ export const IndicatorAveragesIcon = Wrapper(IndicatorAverages);
 export const IndicatorEnvelopeIcon = Wrapper(IndicatorEnvelope);
 export const IndicatorAlligatorIcon = Wrapper(IndicatorAlligator);
 export const IndicatorFractalChaosIcon = Wrapper(IndicatorFractalChaos);
+export const IndicatorRainbowIcon = Wrapper(IndicatorRainbow);
 
 export const MetalIcon = Wrapper(Metal);
 export const EmptyStateIcon = Wrapper(EmptyState);
