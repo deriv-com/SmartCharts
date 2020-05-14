@@ -464,6 +464,7 @@
         > .ic-icon {
             margin-right: 0;
             width: $normal-icon-size;
+            min-width: $normal-icon-size;
             height: $normal-icon-size;
         }
     }
@@ -471,6 +472,7 @@
         > .ic-icon, > .ic-frx {
             height: $large-icon-size;
             width: $large-icon-size;
+            min-width: $large-icon-size;
         }
         > .ic-icon {
             display: inline-block;
