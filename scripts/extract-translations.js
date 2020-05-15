@@ -81,7 +81,7 @@ function extractOutPot(source, translationDir) {
 
     // this way, the duplicate items also removed
     extracted_text.map(x => {
-        formatted_json[x.text.trim()] = '';
+        formatted_json[x.text.trim()] = x.text.trim();
     });
     
     const formatted_json_content = JSON.stringify(formatted_json, null, 2);
