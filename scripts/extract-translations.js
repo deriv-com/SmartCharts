@@ -77,18 +77,62 @@ function extractOutPot(source, translationDir) {
     const parsed_code = parseCode(source);
     const extracted_text = extractTextFromFunctions(...options.method_names)(parsed_code);
     const indicator_text = getIndicatorStrings();
-    let formatted_text = `\n${formatText(extracted_text)}`;
-    formatted_text += `\n\n# Indicator strings:\n\n${formatText(indicator_text)}`;
+    const formatted_json = {};
+
+    // this way, the duplicate items also removed
+    extracted_text.map(x => {
+        formatted_json[x.text.trim()] = '';
+    });
+    
+    const formatted_json_content = JSON.stringify(formatted_json, null, 2);
     try {
-        if (file_removed) { fs.appendFileSync(`${output}/messages.pot`, formatted_text); } else {
-            fs.unlinkSync(`${output}/messages.pot`);
-            fs.writeFileSync(`${output}/messages.pot`, formatted_text);
+        if (file_removed) { fs.appendFileSync(`${output}/messages.json`, formatted_json_content); } else {
+            fs.unlinkSync(`${output}/messages.json`);
+            fs.writeFileSync(`${output}/messages.json`, 'utf8', formatted_json_content);
             file_removed = true;
         }
     } catch (err) {
         file_removed = true;
         mkdirp.sync(path.resolve(output));
-        fs.writeFileSync(`${output}/messages.pot`, formatted_text);
+        fs.writeFileSync(`${output}/messages.json`, formatted_json_content);
+    }
+
+    return formatted_json;
+}
+
+function updateTranslatedFile(filename, source, translated) {
+
+    const new_translated_content = {}
+
+    Object.keys(source).forEach(key=> {
+        new_translated_content[key] = translated[key] || '';
+    });
+    const formatted_json_content = JSON.stringify(new_translated_content, null, 2);
+
+    try {
+        fs.unlinkSync(filename);
+        fs.writeFileSync(filename, 'utf8', formatted_json_content);
+    } catch (err) {
+        fs.writeFileSync(filename, formatted_json_content);
+    }
+    return true;
+}
+
+function updateOtherLanguages(source, translationDir) {
+
+    try {
+        const filenames = fs.readdirSync(translationDir)
+        const validFilenames = (filenames || []).filter(file => (file.split('.').pop() === 'json' && file !== 'messages.json'));
+
+        validFilenames.forEach(filename => {
+            const content = fs.readFileSync(translationDir + filename, 'utf-8');
+            const translated = JSON.parse(content);
+            updateTranslatedFile(translationDir + filename, source, translated);
+        });
+    } catch (err) {
+      console.error('ERROR: problem reading translation direcotry, Perhaps a permission issue exist.')
+      console.log(`ERROR: {err}`);
+      console.log(err);
     }
 }
 
@@ -96,8 +140,12 @@ const jsFile = process.argv[2];
 if (jsFile) {
     console.log('Extracting translations from', jsFile, '...');
     const s = fs.readFileSync(jsFile).toString();
-    extractOutPot(s, './translation/');
-    console.log('SUCCESS! Translations have been extracted to translations/messages.pot');
+    const extracted_text = extractOutPot(s, './translation/');
+    console.log('SUCCESS! Translations have been extracted to translations/messages.json');
+    
+    console.log('Updating other language files.');
+    updateOtherLanguages(extracted_text, './translation/');
+    console.log('SUCCESS! Updated Other translations files translations/*.json');
 } else {
     console.error('Please provide the transpiled js file!');
 }
