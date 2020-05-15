@@ -77,6 +77,7 @@ class Chart extends Component {
             enabledNavigationWidget = true,
             toolbarWidget,
             onCrosshairChange,
+            isLoading,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -87,13 +88,13 @@ class Chart extends Component {
         const ToolbarWidget = toolbarWidget;
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
+            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${isLoading ? 'smartcharts--loading' : ''} ${HasMarkers} ${contextWidth}`}>
                 <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
                     <div
                         className="cq-context"
                         ref={this.root}
                     >
-                        <div className={` ${currentPosition}`}>
+                        <div className={`${currentPosition}`}>
                             <div className="ciq-chart-area">
                                 <div className={`ciq-chart ${isChartClosed ? 'closed-chart' : ''}`}>
                                     <RenderInsideChart at="holder">
@@ -129,7 +130,6 @@ class Chart extends Component {
                                     { toolbarWidget
                                         && <ToolbarWidget />
                                     }
-                                    <Loader />
                                     {!isChartAvailable && (
                                         <div className="cq-chart-unavailable">
                                             {t.translate('Chart data is not available for this symbol.')}
@@ -146,6 +146,7 @@ class Chart extends Component {
                                     enabledChartFooter
                                         && <ChartFooter />
                                 }
+                                <Loader />
                             </div>
                         </div>
                     </div>
@@ -166,6 +167,7 @@ export default connect(({
     chartSetting,
     chartType,
     state,
+    loader,
 }) => ({
     init: chart.init,
     destroy: chart.destroy,
@@ -182,4 +184,5 @@ export default connect(({
     theme: chartSetting.theme,
     position: chartSetting.position,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
+    isLoading: loader.isActive,
 }))(Chart);

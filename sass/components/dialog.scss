@@ -116,7 +116,7 @@
         border-radius: 0 0 4px 4px;
         position: relative;
     }
-    &.sc-dialog--tabular {
+    &--tabular {
         .sc-dialog__head {
             @include themify($themes) {
                 background: themed('DialogTabularHeadBg');
