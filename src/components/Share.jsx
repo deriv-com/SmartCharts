@@ -5,16 +5,9 @@ import {
     PngIcon,
     CsvIcon,
 } from './Icons.jsx';
+import { InlineLoader } from './Loader.jsx';
 import '../../sass/components/download.scss';
 
-const Loading = () => (
-    <div className="loading">
-        <span className="loading__bullet" />
-        <span className="loading__bullet" />
-        <span className="loading__bullet" />
-        <span className="loading__bullet" />
-    </div>
-);
 
 const Share = ({
     Dialog,
@@ -39,14 +32,14 @@ const Share = ({
         </Dialog.Title>
         <Dialog.Body>
             <div className="sc-download">
-                <div
-                    className={`sc-download__item ${isLoadingPNG ? 'sc-download__item--loading' : ''}`}
+                <InlineLoader
+                    className="sc-download__item"
                     onClick={downloadPNG}
+                    enabled={isLoadingPNG}
                 >
                     <PngIcon />
                     <span className="sc-download__item__label"> {t.translate('PNG')} </span>
-                    {isLoadingPNG && <Loading />}
-                </div>
+                </InlineLoader>
                 <div
                     className="sc-download__item"
                     onClick={downloadCSV}
