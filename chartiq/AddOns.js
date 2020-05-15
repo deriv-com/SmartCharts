@@ -132,6 +132,7 @@
 			}
 
 			function completeLastBar(record){
+				if(!chart.masterData) return;
 				for(var md=chart.masterData.length-1;md>=0;md--){
 					var bar=chart.masterData[md];
 					if(bar.Close || bar.Close===0){
@@ -218,7 +219,8 @@
 					newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
 					//console.log("animating: Old",symbol,' New : ',chart.symbol);
 					var updateQuotes=[q];
-					if(chartJustAdvanced) updateQuotes.unshift(prevQuote);
+					// Don't include previous quote if tick mode. It will append, duplicating the quote
+					if(chartJustAdvanced && self.layout.interval !== 'tick') updateQuotes.unshift(prevQuote);  
 					self.updateChartData(updateQuotes, chart, newParams);
 					newParams.firstLoop = false;
 					if (tickAnimator.hasCompleted) {
@@ -495,19 +497,12 @@ new CIQ.ContinuousZoom({
 		//Attaches SmartZoom button to HTML DOM inside .chartSize element
 		this.addSmartZoomButton=function(){
 			// Don't add a button if one already exists
-			if(this.stx.controls.chartControls.querySelector('.stx-smart-zoom')) return;
-			var zoomInControl=this.stx.controls.chartControls.querySelector('.stx-zoom-in');
-			if(zoomInControl){
-				var smartZoomButton = document.createElement('span');
-				smartZoomButton.innerHTML = '<span class="stx-tooltip">SmartZoom</span>';
-				CIQ.appendClassName(smartZoomButton,"stx-smart-zoom active");
-				zoomInControl.parentNode.insertBefore(smartZoomButton, zoomInControl.nextSibling);
-
-				CIQ.safeClickTouch(smartZoomButton, (function(self){return function(e){ self.smartZoomToggle(e); e.stopPropagation(); };})(this));
-				if(!CIQ.touchDevice){
-					this.stx.makeModal(smartZoomButton);
-				}
-
+			var smartZoomButton = this.stx.registerChartControl(
+				'stx-smart-zoom',
+				'SmartZoom',
+				(function(self){return function(e){ self.smartZoomToggle(e); e.stopPropagation(); };})(this)
+			);
+			if(smartZoomButton){
 				// Listen for a layout changed event and refresh the toggle state of the button
 				this.stx.addEventListener("layout", function(event){
 					if(event.stx.layout.smartzoom === true){
@@ -854,6 +849,105 @@ new CIQ.ContinuousZoom({
 
 
 
+	/**
+	 * Creates the add-on that sets the chart UI to full-screen mode. In full-screen mode, a class `full-screen` is added
+	 * to the context element used for styling. In addition, elements with the class `full-screen-hide` are hidden.
+	 * Elements with the class `full-screen-show` that are normally hidden are shown.
+	 *
+	 * Requires `addOns.js`.
+	 *
+	 * @param {object} params Configuration parameters
+	 * @param {CIQ.ChartEngine} [params.stx] The chart object
+	 * @constructor
+	 * @name CIQ.FullScreen
+	 * @example
+	 * 	new CIQ.FullScreen({stx:stxx});
+	 * @since 7.3.0
+	 */
+	CIQ.FullScreen=function(params){
+		if(!params) params={};
+		if(!params.stx){ console.warn("The Full Screen addon requires an stx parameter"); return; }
+		this.stx=params.stx;
+		this.stx.fullScreen=this;
+		this.fullScreenButton = null;
+		this.fullScreenState = false;
+
+		//Attaches FullScreen button to HTML DOM inside .chartSize element
+		this.addFullScreenButton=function(){
+			this.fullScreenButton = this.stx.registerChartControl(
+				'stx-full-screen',
+				'Full Screen',
+				(function(self){return function(e){ self.fullScreenToggle(e); e.stopPropagation(); };})(this)
+			);
+		};
+
+		//Click event handler for the Full Screen button.
+		this.fullScreenToggle=function(e){
+			// First check for availability of the requestFullScreen function
+			if(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || document.documentElement.mozRequestFullscreen ||  document.documentElement.msRequestFullscreen ){
+				// Check if full screen is already enabled
+				if(this.getFullScreenElement()){
+					if(document.exitFullscreen) document.exitFullscreen();
+					else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+					else if(document.mozCancelFullScreen) document.mozCancelFullScreen();
+					else if(document.msExitFullscreen) document.msExitFullscreen();
+				}else{
+					// requestFullscreen methods need to be checked for again here because the browser will not allow the method to be stored in a local var
+					if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+					else if(document.documentElement.webkitRequestFullscreen) document.documentElement.webkitRequestFullscreen();
+					else if(document.documentElement.mozRequestFullscreen) document.documentElement.mozRequestFullscreen();
+					else if(document.documentElement.msRequestFullscreen) document.documentElement.msRequestFullscreen();
+				}
+			}else{
+				//If the full screen api isn't available, manually trigger the fullScreen styling
+				this.fullScreenState = !this.fullScreenState;
+				this.fullScreenRender();
+			}
+		};
+
+		// Append/remove full-screen class to context or body and update button state
+		this.fullScreenRender=function(){
+			var containerElement = null;
+			containerElement = CIQ.findClosestParent(this.stx.container, '*[cq-context], cq-context, body');
+			if(containerElement){
+				if(this.fullScreenState === true){
+					CIQ.appendClassName(this.fullScreenButton, "active");
+					CIQ.appendClassName(containerElement, "full-screen");
+				}else{
+					CIQ.unappendClassName(this.fullScreenButton, "active");
+					CIQ.unappendClassName(containerElement, "full-screen");
+				}
+				// Trigger a resize event to update the chart size
+				window.dispatchEvent(new Event('resize'));
+			}
+		};
+
+		//Handle full screen change
+		this.onFullScreenChange=function(){
+			if(this.getFullScreenElement()){
+				this.fullScreenState = true;
+			}else{
+				this.fullScreenState = false;
+			}
+			this.fullScreenRender();
+		};
+
+		this.getFullScreenElement=function(){
+			return document.fullscreenElement || document.webkitCurrentFullScreenElement|| document.mozFullScreenElement || document.msFullscreenElement;
+		};
+
+		document.addEventListener("fullscreenchange", this.onFullScreenChange.bind(this), false);
+		document.addEventListener("webkitfullscreenchange", this.onFullScreenChange.bind(this), false);
+		document.addEventListener("mozfullscreenchange", this.onFullScreenChange.bind(this), false);
+		document.addEventListener("MSFullscreenChange", this.onFullScreenChange.bind(this), false);
+
+		// Add the FullScreen button to chartControls
+		this.addFullScreenButton();
+	};
+
+
+
+
 
 	/**
 	 * Add-On that puts the chart into "sleep mode" after a period of inactivity.
@@ -913,6 +1007,176 @@ new CIQ.ContinuousZoom({
 				function(self){ return function(e){ self.wakeChart(); };}(this)
 			);
 		this.wakeChart();
+	};
+
+
+
+
+
+	/**
+	 * Add-On that allows a series to complement another series.
+	 *
+	 * The complementary series is a permanent fixture of the series which it complements.
+	 * It moves in tandem with the series, and gets removed with the series.
+	 * In all other respects, though, it behaves like its own series. It shows separately in the panel legend and plots using its own renderer.
+	 * The addon instance is attached to the chart engine as a member of the `stxx.plotComplementers` array.
+	 *
+	 * **Note:** The series created by this add-on is not exported with the layout, since it is created in tandem with the series it complements.
+	 * Currently this feature works only with non-comparison series (parameters.isComparison!==true)
+	 *
+	 * @param {object} params Configuration parameters.
+	 * @param {CIQ.ChartEngine} params.stx The chart object.
+	 * @param {string} [params.id] Unique key used by the add-on to identify itself. If not supplied, a random key is chosen.
+	 * @param {object} [params.quoteFeed] If provided, attaches the quote feed to the quote driver to satisfy any quote requests for any series created by the add-on.
+	 * @param {object} [params.behavior] If provided, used as the behavior for the quote feed supplied in this parameter list.
+	 * @param {object} [params.filter] If provided, used as the filter for the quote feed supplied in this parameter list.
+	 * @param {object} [params.decorator] Object on which a modifier for the symbol and/or display can be set.
+	 * @param {string} [params.decorator.symbol] If provided, adds this string onto the ID when creating the complementary series. Otherwise, a unique ID is used.
+	 * @param {string} [params.decorator.display] If provided, customizes the display value of the series.
+	 * @param {object} [params.renderingParameters] This is a collection of parameters that override the default rendering parameters.
+	 * 					The default parameters determine how the forecast renderer is created. These are a line of width 1 px and 0.5 opacity.
+	 * 					One can always change the rendering on the fly by setting this instance's `renderingParameters` property to a different object.
+	 * 					The default parameters can be restored by calling `this.resetRenderingParameters()` where `this` is the add-on instance.
+	 * 					Here are a few examples of rendering parameters:
+	 * ```javascript
+	 * {chartType:"scatterplot", opacity:0.5, field:"Certainty"}
+	 * {chartType:"histogram", border_color:"transparent", opacity:0.3}
+	 * {chartType:"channel", opacity:0.5, pattern:"dotted"}
+	 * {chartType:"candle", opacity:0.5, color:"blue", border_color:"blue"}
+	 * ```
+	 * @constructor
+	 * @name CIQ.PlotComplementer
+	 * @since 7.3.0
+	 * @example <caption>Use for Forecasting</caption>
+		new CIQ.PlotComplementer({
+			stx:stxx,
+			id:"forecast",
+			quoteFeed: fcstFeed.quoteFeedForecastSimulator,
+			behavior: {refreshInterval:60},
+			decorator: {symbol:"_fcst",display:" Forecast"},
+			renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
+		});
+	 */
+	CIQ.PlotComplementer=function(params){
+		var stx=params.stx;
+		var unique=CIQ.uniqueID();
+		if(!params.decorator) params.decorator={};
+		var symbolDecorator=params.decorator.symbol || "_"+unique;
+		var displayDecorator=params.decorator.display || " (addl)";
+		if(!stx.plotComplementers) stx.plotComplementers=[];
+		stx.plotComplementers.push(this);
+
+		this.id=params.id || unique;
+
+		this.defaultRenderingParameters={
+			chartType:"line",
+			width:1,
+			opacity:0.5
+		};
+
+		if(params.renderingParameters) this.defaultRenderingParameters=params.renderingParameters;
+
+		var self=this;
+		function addSeries(stx, symbol, parameters, id){
+			function verifyQuoteFeed(stx){
+				if(!stx.quoteDriver) return;
+				if(!params.quoteFeed) return;
+				for(var qf=0;qf<stx.quoteDriver.quoteFeeds.length;qf++){
+					if(stx.quoteDriver.quoteFeeds[qf].engine==params.quoteFeed) return;
+				}
+				return "err";
+			}
+			if(verifyQuoteFeed(stx)=="err") return;
+			if(!id) id=symbol;
+			if(stx.isEquationChart(symbol)) return;
+			if(!parameters) parameters={};
+			if(parameters.isComparison) return;
+			if(id && id.indexOf(symbolDecorator)==-1) {
+				var fId=id+symbolDecorator,fSymbol=symbol+symbolDecorator;
+				var masterRenderer=stx.getRendererFromSeries(id);
+				var myParms=CIQ.extend({
+					display: symbol+ displayDecorator,
+					name: fId,
+					symbol: fSymbol,
+					symbolObject: {symbol:fSymbol, generator:self.id, masterSymbol:symbol},
+					overChart: false,
+					gapDisplayStyle: true,
+					permanent: true,
+					panel: parameters.panel,
+					yAxis: parameters.yAxis,
+					shareYAxis: true,
+					loadData: !!self.quoteFeed,
+					dependentOf: masterRenderer?masterRenderer.params.name:stx.mainSeriesRenderer.params.name
+				}, self.renderingParameters);
+				if(!myParms.color) myParms.color=parameters.color || "auto";
+				stx.addSeries(fId, myParms, function(error, obj){
+					if(error) stx.removeSeries(fId, stx.chart);
+					if(stx.chart.seriesRenderers[fId]){
+						stx.chart.seriesRenderers[fId].params.display=myParms.display;
+					}
+				});
+			}
+		}
+
+		function removeSeries(stx, id, chart){
+			if(id && id.indexOf(symbolDecorator)==-1) stx.removeSeries(id+symbolDecorator, chart);
+		}
+
+		function symbolChange(obj){
+			if(obj.action=="master") {
+				if(!obj.prevSymbol) obj.prevSymbol=obj.symbol;
+				removeSeries(obj.stx, obj.prevSymbol, obj.stx.chart);
+				addSeries(obj.stx, obj.symbol);
+			}else if(obj.action=="add-series"){
+				removeSeries(obj.stx, obj.id, obj.stx.chart);
+				addSeries(obj.stx, obj.symbol, obj.parameters, obj.id);
+			}else if(obj.action=="remove-series"){
+				removeSeries(obj.stx, obj.id, obj.stx.chart);
+			}
+		}
+
+		stx.addEventListener("symbolChange", symbolChange);
+		stx.addEventListener("symbolImport", symbolChange);
+
+		/**
+		 * Resets rendering parameters back to the default settings.
+		 * These are the settings used when creating a `PlotComplementer`.
+		 * If not provided when creating a `PlotComplementer`, will use the following default: `{ chartType:"line", width:1, opacity:0.5 }`.
+		 * The rendering parameters may be set at any time after creating `PlotComplementer` to set an ad-hoc rendering right
+		 * before adding a series.
+		 *
+		 * @memberof CIQ.PlotComplementer
+		 * @since 7.3.0
+		 */
+		this.resetRenderingParameters=function(){
+			this.renderingParameters=this.defaultRenderingParameters;
+		};
+
+		/**
+		 * Sets a quote feed for the `PlotComplementer`.
+		 * Automatically called when a quote feed is provided in the constructor argument object.
+		 *
+		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy any quote requests for any series created by the add-on.
+		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter list.
+		 * @param {object} [params.filter] If provided, used as the filter for the quote feed supplied in this parameter list.
+		 * @memberof CIQ.PlotComplementer
+		 * @since 7.3.0
+		 */
+		this.setQuoteFeed=function(params){
+			if(!params.quoteFeed || !params.behavior) return;
+			var behavior=CIQ.clone(params.behavior);
+			behavior.generator=this.id;
+			var existingFilter=params.filter;
+			var filter=function(params){
+				if(existingFilter && !existingFilter(params)) return false;
+				return params.symbolObject.generator==behavior.generator;
+			};
+			stx.attachQuoteFeed(params.quoteFeed, behavior, filter);
+			this.quoteFeed=params.quoteFeed;
+		};
+
+		this.setQuoteFeed(params);
+		this.resetRenderingParameters();
 	};
 
 
@@ -1099,9 +1363,20 @@ Not this:
 			var myChart=self.chart;
 			if(!myChart.width) return;
 			var scrollOffset=0, ticksOffset=0;
-			if(stx.quoteDriver && stx.quoteDriver.behavior && stx.quoteDriver.behavior.bufferSize){
-				if(chart.moreAvailable) scrollOffset=stx.quoteDriver.behavior.bufferSize;
-				if(stx.isHistoricalMode()) ticksOffset=stx.quoteDriver.behavior.bufferSize;
+			if(stx.quoteDriver){
+				var behaviorParams={
+					symbol:chart.symbol,
+					symbolObject:chart.symbolObject,
+					interval:stx.layout.interval
+				};
+				if((behaviorParams.interval=="month" || behaviorParams.interval=="week") && !stx.dontRoll){
+					behaviorParams.interval="day";
+				}
+				var behavior=stx.quoteDriver.getQuoteFeed(behaviorParams).behavior;
+				if(behavior && behavior.bufferSize){
+					if(chart.moreAvailable) scrollOffset=behavior.bufferSize;
+					if(stx.isHistoricalMode()) ticksOffset=behavior.bufferSize;
+				}
 			}
 			myChart.baseline.defaultLevel=chart.baseline.actualLevel;
 			myChart.scroll=Math.max(0,chart.dataSet.length-stx.tickFromDate(chart.endPoints.begin)-scrollOffset)+1;

@@ -19,6 +19,7 @@ export default class TimeperiodStore {
     get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
+    @observable preparingInterval = null;
     onGranularityChange = () => null;
 
     remain = null;
@@ -121,6 +122,10 @@ export default class TimeperiodStore {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
         }
+    }
+
+    @action.bound setPreparingInterval(interval) {
+        this.preparingInterval = interval;
     }
 
     @action.bound updateDisplay() {

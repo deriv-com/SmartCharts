@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import RenderInsideChart from './RenderInsideChart.jsx';
-import ComparisonList from './ComparisonList.jsx';
 import ChartTitle from './ChartTitle.jsx';
-import AssetInformation from './AssetInformation.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
 import BottomWidget from './BottomWidget.jsx';
 import BottomWidgetsContainer from './BottomWidgetsContainer.jsx';
-import ChartTable from './ChartTable.jsx';
 import NavigationWidget from './NavigationWidget.jsx';
 import HighestLowestMarker from './HighestLowestMarker.jsx';
 /* css + scss */
@@ -17,6 +14,7 @@ import 'react-tabs/style/react-tabs.css';
 import './ui';
 
 import ChartControls from './ChartControls.jsx';
+import ChartFooter from './ChartFooter.jsx';
 import Crosshair from './Crosshair.jsx';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
@@ -25,7 +23,6 @@ import PaginationLoader from './PaginationLoader.jsx';
 class Chart extends Component {
     constructor(props) {
         super(props);
-        this.modalNode = React.createRef();
         this.root = React.createRef();
     }
 
@@ -34,7 +31,7 @@ class Chart extends Component {
         initGA();
         logPageView();
         updateProps(props);
-        init(this.root.current, this.modalNode.current, props);
+        init(this.root.current, props);
     }
 
     componentDidUpdate(prevProps) {
@@ -53,8 +50,6 @@ class Chart extends Component {
     defaultTopWidgets = () => (
         <>
             <ChartTitle />
-            <AssetInformation />
-            <ComparisonList />
         </>
     );
 
@@ -78,7 +73,11 @@ class Chart extends Component {
             theme,
             position,
             bottomWidgets,
-            enabledNavigationWidget,
+            enabledChartFooter = true,
+            enabledNavigationWidget = true,
+            toolbarWidget,
+            onCrosshairChange,
+            isLoading,
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
@@ -86,18 +85,16 @@ class Chart extends Component {
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         // if there are any markers, then increase the subholder z-index
         const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
+        const ToolbarWidget = toolbarWidget;
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${HasMarkers} ${contextWidth}`}>
-                <div
-                    className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}
-                    ref={this.modalNode}
-                >
+            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${isLoading ? 'smartcharts--loading' : ''} ${HasMarkers} ${contextWidth}`}>
+                <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
                     <div
                         className="cq-context"
                         ref={this.root}
                     >
-                        <div className={` ${currentPosition}`}>
+                        <div className={`${currentPosition}`}>
                             <div className="ciq-chart-area">
                                 <div className={`ciq-chart ${isChartClosed ? 'closed-chart' : ''}`}>
                                     <RenderInsideChart at="holder">
@@ -123,14 +120,16 @@ class Chart extends Component {
                                     <div className="cq-top-ui-widgets">
                                         <TopWidgets />
                                     </div>
-                                    {
-                                        enabledNavigationWidget
-                                            && <NavigationWidget />
-                                    }
                                     <div className="chartContainer" style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                     </div>
-                                    <Loader />
+                                    {
+                                        enabledNavigationWidget
+                                            && <NavigationWidget onCrosshairChange={onCrosshairChange} />
+                                    }
+                                    { toolbarWidget
+                                        && <ToolbarWidget />
+                                    }
                                     {!isChartAvailable && (
                                         <div className="cq-chart-unavailable">
                                             {t.translate('Chart data is not available for this symbol.')}
@@ -140,16 +139,21 @@ class Chart extends Component {
                                         <BottomWidget bottomWidgets={bottomWidgets} />
                                     </BottomWidgetsContainer>
                                 </div>
-                                { chartControlsWidgets !== null
+                                { chartControlsWidgets !== null && !enabledChartFooter
                                     && <ChartControls widgets={chartControlsWidgets} />
                                 }
+                                {
+                                    enabledChartFooter
+                                        && <ChartFooter />
+                                }
+                                <Loader />
                             </div>
                         </div>
                     </div>
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
-                    <ChartTable />
+                    <div id="smartcharts_modal" className="ciq-modal" />
                 </div>
             </div>
         );
@@ -163,6 +167,7 @@ export default connect(({
     chartSetting,
     chartType,
     state,
+    loader,
 }) => ({
     init: chart.init,
     destroy: chart.destroy,
@@ -179,4 +184,5 @@ export default connect(({
     theme: chartSetting.theme,
     position: chartSetting.position,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
+    isLoading: loader.isActive,
 }))(Chart);

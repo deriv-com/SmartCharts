@@ -249,3 +249,8 @@ export const DIRECTIONS = Object.freeze({
     UP: 'UP',
     DOWN: 'DOWN',
 });
+
+export const formatCamelCase = (s) => {
+    const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
+    return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+};

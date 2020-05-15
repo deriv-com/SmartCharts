@@ -21,19 +21,12 @@ const CrosshairToggle = ({
     if (!isVisible) return null;
 
     return (
-        <div className="ciq-menu cq-crosshair-toggle">
-            <div className="cq-menu-btn">
-                <Toggle
-                    active={state !== 0}
-                    onChange={onCrosshairToggle}
-                >
-                    <CrosshairIcon
-                        className="ic-icon-with-sub"
-                        tooltip-title={t.translate('Crosshair')}
-                    />
-                </Toggle>
-            </div>
-        </div>
+        <Toggle
+            active={state !== 0}
+            onChange={onCrosshairToggle}
+        >
+            <CrosshairIcon />
+        </Toggle>
     );
 };
 
