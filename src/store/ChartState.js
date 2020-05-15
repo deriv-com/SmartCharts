@@ -334,7 +334,7 @@ class ChartState {
     }
 
     saveLayout() {
-        if (!this.chartId) return;
+        if (!this.chartId || !this.stxx) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
         CIQ.localStorageSetItem(`layout-${this.chartId}`, json);
