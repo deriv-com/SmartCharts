@@ -1,7 +1,6 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
     StudyLegend,
-    Comparison,
     Views,
     ChartMode,
     DrawTools,
@@ -10,8 +9,6 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     setSmartChartsPublicPath,
     Share,
     ChartTitle,
-    AssetInformation,
-    ComparisonList,
     logEvent,
     LogCategories,
     LogActions,
@@ -29,6 +26,7 @@ import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
+import NetworkMonitor from './connection/NetworkMonitor';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -92,6 +90,7 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
+const ActiveMarkets = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
 const IntervalEnum = {
     second: 1,
     minute: 60,
@@ -99,16 +98,16 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguages = ['EN', 'ID', 'RU', 'ES', 'FR', 'IT',
-    'PT', 'PL', 'DE', 'ZH_CN', 'VI', 'ZH_TW',
-    'TH'];
+const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
+    'IT', 'PL', 'PT', 'RU', 'TH',
+    'VI', 'ZH_CN', 'ZH_TW',
+];
 
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-
 
 class App extends Component {
     startingLanguage = 'en';
@@ -156,6 +155,9 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
+        const networkMonitor = NetworkMonitor.getInstance();
+        networkMonitor.init(requestAPI, this.handleNetworkStatus);
+
         this.state = {
             settings,
             endEpoch,
@@ -183,6 +185,8 @@ class App extends Component {
             console.log(e);
         }
     }
+
+    handleNetworkStatus = status => this.setState({ networkStatus: status });
 
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
@@ -223,14 +227,12 @@ class App extends Component {
     };
     changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
     changeChartType = chartType => this.setState({ chartType });
-    changeCrosshair = crosshair => this.setState({ crosshair })
+    changeCrosshair = crosshair => this.setState({ crosshair });
 
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <AssetInformation />
-            <ComparisonList />
             <Notification
                 notifier={this.notifier}
             />
@@ -239,11 +241,6 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            <StudyLegend />
-            {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
-            <Views />
-            <Share />
             <ChartSetting />
         </>
     );
@@ -254,6 +251,10 @@ class App extends Component {
                 onChartType={this.changeChartType}
                 onGranularity={this.changeGranularity}
             />
+            <StudyLegend />
+            <Views />
+            <DrawTools />
+            <Share />
         </ToolbarWidget>
     );
 
@@ -272,7 +273,7 @@ class App extends Component {
     };
 
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch, networkStatus } = this.state;
 
         return (
             <SmartChart
@@ -281,6 +282,7 @@ class App extends Component {
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
+                activeSymbols={ActiveMarkets}
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
@@ -296,7 +298,9 @@ class App extends Component {
                 crosshair={isMobile ? 0 : this.state.crosshair}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
+                networkStatus={networkStatus}
                 shouldFetchTradingTimes
+                enabledChartFooter
             >
                 {endEpoch ? (
                     <Marker

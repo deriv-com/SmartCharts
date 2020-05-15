@@ -1,7 +1,6 @@
 import React from 'react';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
-import ViewStore from '../store/ViewStore';
 import {
     TemplateIcon,
     AddIcon,
@@ -9,41 +8,41 @@ import {
     EmptyStateIcon,
     OverwriteStateIcon,
 } from './Icons.jsx';
-import '../../sass/components/_view.scss';
+import '../../sass/components/view.scss';
 
 const ViewItem = ({
     view,
     remove,
     onClick,
 }) => (
-    <div className="ciq-views__views__list__item" onClick={onClick}>
-        <span>{view.name}</span>
+    <div className="sc-views__views__list__item" onClick={onClick}>
+        <div className="text">{view.name}</div>
         <DeleteIcon onClick={remove} />
     </div>
 );
 
 const EmptyView = ({ onClick }) => (
-    <div className="ciq-views--empty">
+    <div className="sc-views--empty">
         <EmptyStateIcon />
-        <p>{t.translate('You have no save templates yet.')}</p>
+        <p>{t.translate('You have no saved templates yet.')}</p>
         <button type="button" className="sc-btn" onClick={onClick}>
             <AddIcon />
-            {t.translate('Add new templates')}
+            {t.translate('Add new template')}
         </button>
     </div>
 );
 
 const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
-    <div className="ciq-views--overwrite">
-        <div className="ciq-views--overwrite__content">
+    <div className="sc-views--overwrite">
+        <div className="sc-views--overwrite__content">
             <OverwriteStateIcon />
             <p>
                 {templateName + t.translate(' already exists.')}<br />
                 {t.translate('Would you like to overwrite it?')}
             </p>
         </div>
-        <div className="ciq-views--overwrite__footer">
-            <button type="button" className="sc-btn" onClick={onCancel}>
+        <div className="sc-views--overwrite__footer">
+            <button type="button" className="sc-btn sc-btn--outline-secondary" onClick={onCancel}>
                 {t.translate('Cancel')}
             </button>
             <button type="button" className="sc-btn sc-btn--primary" onClick={onOverwrite}>
@@ -53,6 +52,38 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
     </div>
 );
 
+const ActiveListView = ({ views, removeAll, applyLayout, remove }) => {
+    if (!views.length) return '';
+
+    return (
+        <div className="sc-views__views">
+            <div className="sc-views__views__head">
+                <h5>{t.translate('Saved templates')}</h5>
+                <button
+                    type="button"
+                    onClick={removeAll}
+                    className="sc-btn sc-btn--sm sc-btn--outline-secondary"
+                >
+                    {t.translate('Clear all')}
+                </button>
+            </div>
+            <div className="sc-views__views__content">
+                <div className="sc-views__views__list">
+                    {
+                        views.map((view, i) => (
+                            <ViewItem
+                                view={view}
+                                key={view.name}
+                                onClick={e => applyLayout(i, e)}
+                                remove={e => remove(i, e)}
+                            />
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const Views = ({
     ViewsMenu,
@@ -78,19 +109,19 @@ const Views = ({
 
     return (
         <ViewsMenu
-            className="ciq-views-menu"
+            className="sc-views-menu"
             title={t.translate('Templates')}
+            tooltip={t.translate('Templates')}
             newStyle
             portalNodeId={portalNodeId}
         >
-            <ViewsMenu.Title className="cq-menu-btn">
-                <TemplateIcon
-                    className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate('Templates')}
-                />
+            <ViewsMenu.Title>
+                <div className={`sc-views__menu ${menuOpen ? 'sc-views__menu--active' : ''}`}>
+                    <TemplateIcon />
+                </div>
             </ViewsMenu.Title>
             <ViewsMenu.Body>
-                <div className="ciq-views">
+                <div className="sc-views">
                     {(currentRoute === 'new')
                         ? (<EmptyView onClick={onToggleNew} />)
                         : (
@@ -105,13 +136,13 @@ const Views = ({
                                     )
                                 }
                                 <Scrollbars
-                                    className="ciq-scrollbar"
+                                    className="sc-scrollbar"
                                 >
-                                    <div className="form form--ciq-views">
+                                    <div className="form form--sc-views">
                                         <div className="form__input-group">
                                             <div className="form__group">
                                                 <div className="form__control">
-                                                    <div className={`form--ciq-views__input ${isActive ? 'form--ciq-views__input--active' : ''}`}>
+                                                    <div className={`form--sc-views__input ${isActive ? 'form--sc-views__input--active' : ''}`}>
                                                         <div className="subtitle">
                                                             <span>{t.translate('Add new templates')}</span>
                                                         </div>
@@ -139,30 +170,12 @@ const Views = ({
                                             </div>
                                         </div>
                                     </div>
-                                    {views.length > 0
-                                        ? (
-                                            <div className="ciq-views__views">
-                                                <div className="ciq-views__views__head">
-                                                    <h5>{t.translate('Saved templates')}</h5>
-                                                    <button type="button" onClick={removeAll}>{t.translate('Clear all')}</button>
-                                                </div>
-                                                <div className="ciq-views__views__content">
-                                                    <div className="ciq-views__views__list">
-                                                        {
-                                                            views.map((view, i) => (
-                                                                <ViewItem
-                                                                    view={view}
-                                                                    key={view.name}
-                                                                    onClick={e => applyLayout(i, e)}
-                                                                    remove={e => remove(i, e)}
-                                                                />
-                                                            ))
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                        : ''}
+                                    <ActiveListView
+                                        views={views}
+                                        removeAll={removeAll}
+                                        applyLayout={applyLayout}
+                                        remove={remove}
+                                    />
                                 </Scrollbars>
                             </React.Fragment>
                         )
@@ -176,7 +189,7 @@ const Views = ({
 
 export default connect(({ view: s }) => ({
     ViewsMenu: s.ViewsMenu,
-    views: ViewStore.views,
+    views: s.sortedItems,
     routes: s.routes,
     onOverwrite: s.onOverwrite,
     onChange: s.onChange,

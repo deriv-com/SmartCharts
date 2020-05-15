@@ -1,61 +1,37 @@
-import React  from 'react';
+import React, { useEffect }  from 'react';
 import { CloseIcon } from './Icons.jsx';
-import '../../sass/components/_ciq-dialog.scss';
+import '../../sass/components/dialog.scss';
 
 const Dialog = ({
-    open,
     children,
     onContainerClick,
-    className,
+    className = '',
     title,
-    setOpen,
-    enableTabular,
-    enableOverlay,
-    isPortal,
-}) => (
-    <>
-        {enableOverlay ? (
-            <div className={`${isPortal ? 'cq-dialog-portal' : 'cq-dialog-overlay'} ${open ? 'cq-dialog-active' : ''}`}>
-                <div
-                    className={`${className || 'cq-dialog'} ${enableTabular ? 'cq-dialog--tabular' : ''} ${open ? ' open' : ''}`}
-                    onClick={onContainerClick}
-                >
-                    {title ? (
-                        <div className="cq-dialog__head">
-                            <div className="cq-dialog__head--title">{title}</div>
-                            <div className="cq-dialog__head--action">
-                                <CloseIcon
-                                    onClick={() => setOpen(false)}
-                                />
-                            </div>
-                        </div>
-                    ) : ''}
-                    <div className="cq-dialog__body">
-                        {children}
+    customHead,
+    enableTabular = false,
+    handleCloseDialog,
+    updateCloseCallback,
+}) => {
+    useEffect(() => updateCloseCallback(handleCloseDialog));
+    return (
+        <div
+            className={`sc-dialog ${className} ${enableTabular ? 'sc-dialog--tabular' : ''}`}
+            onClick={onContainerClick}
+        >
+            {title && (
+                <div className="sc-dialog__head">
+                    <div className="sc-dialog__head--title">{title}</div>
+                    {customHead && (<div className="sc-dialog__head--custom">{customHead}</div>)}
+                    <div className="sc-dialog__head--action">
+                        <CloseIcon onClick={handleCloseDialog} />
                     </div>
                 </div>
+            ) }
+            <div className="sc-dialog__body">
+                {children}
             </div>
-        ) : (
-            <div
-                className={`${className || 'cq-dialog'} ${enableTabular ? 'cq-dialog--tabular' : ''} ${open ? ' open' : ''}`}
-                onClick={onContainerClick}
-            >
-                {title ? (
-                    <div className="cq-dialog__head">
-                        <div className="cq-dialog__head--title">{title}</div>
-                        <div className="cq-dialog__head--action">
-                            <CloseIcon
-                                onClick={() => setOpen(false)}
-                            />
-                        </div>
-                    </div>
-                ) : ''}
-                <div className="cq-dialog__body">
-                    {children}
-                </div>
-            </div>
-        )}
-    </>
-);
+        </div>
+    );
+};
 
 export default Dialog;

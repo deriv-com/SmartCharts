@@ -18,6 +18,7 @@ export default class MenuStore {
         return this.mainStore.routing;
     }
 
+    @observable dialogStatus = false;
     @observable route = '';
     @computed get open() { return this.dialog.open; }
     @action.bound setOpen(val) {
@@ -30,6 +31,8 @@ export default class MenuStore {
 
     blurInput() {
         const stx = this.context.stx;
+        setTimeout(this.handleDialogStatus, 300);
+
         if (this.open === false) {
             document.activeElement.blur();
             stx.modalEnd();
@@ -40,7 +43,6 @@ export default class MenuStore {
         stx.allowScroll = stx.allowZoom = !this.open;
     }
 
-
     @action.bound onTitleClick(e) {
         if (e) {
             e.stopPropagation();
@@ -48,10 +50,22 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
 
+    @action.bound handleDialogStatus() {
+        this.dialogStatus = this.open;
+    }
+
+    @action.bound handleCloseDialog() {
+        this.dialogStatus = false;
+        setTimeout(() => this.setOpen(false), 300);
+    }
+
     connect = connect(({ chart: c, chartSetting }) => ({
+        ready: c.context,
         setOpen: this.setOpen,
         open: this.open,
+        dialogStatus: this.dialogStatus,
         onTitleClick: this.onTitleClick,
+        handleCloseDialog: this.handleCloseDialog,
         DropdownDialog: this.DropDownDialog,
         isMobile: c.isMobile,
         shouldRenderDialogs: c.shouldRenderDialogs,

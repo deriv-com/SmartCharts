@@ -1,0 +1,118 @@
+.ciq-chart-types {
+    .cq-menu-dropdown {
+        width: 424px;
+        height: 174px;
+        box-sizing: border-box;
+
+        .body {
+            padding: 0 7px 0 16px;
+        }
+    }
+    .ciq-list {
+        padding-right: 9px;
+
+        .ciq-list-item {
+            padding: 0;
+            justify-content: space-between;
+
+            > .left {
+                display: inline-flex;
+                align-items: center;
+            }
+            > .ciq-aggregate-setting {
+                margin-right: 5px;
+            }
+            :last-child {
+                .ic-icon > svg {
+                    stroke: none;
+                }
+            }
+        }
+    }
+}
+
+.sc-chart-type {
+    display: flex;
+    padding: 24px;
+    justify-content: space-between;
+    @include themify($themes) {
+        background: themed('ChartTypeBg');
+    }
+
+    &__item {
+        $self: &;
+        width: 25%;
+        height: 88px;
+        margin-right: 8px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .ic-icon {
+            margin: 0 auto 12px;
+        }
+        .text {
+            display: block;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            text-align: center;
+            @include themify($themes) {
+                color: themed('ChartTypeText');
+            }
+        }
+        &:last-child {
+            margin-right: 0px;
+        }
+        &:hover {
+            @include themify($themes) {
+                background: themed('ChartTypeHoverBg');
+            }
+        }
+        &--active {
+            background: transparent !important;
+            @include themify($themes) {
+                border-color: themed('ChartTypeActiveBorder');
+            }
+
+            .text {
+                font-weight: bold;
+                @include themify($themes) {
+                    color: themed('ChartTypeActiveText');
+                }
+            }
+        }
+        &--disabled {
+            cursor: initial;
+            background: transparent !important;
+
+            > span {
+                opacity: 0.32;
+                background: transparent !important;
+                pointer-events: none;
+            }
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .sc-chart-type {
+        padding: 8px 10px 24px;
+
+        &__item {
+            height: 64px;
+            width: 64px;
+
+            .ic-icon {
+                margin-bottom: 2px;
+            }
+        }
+    }
+}

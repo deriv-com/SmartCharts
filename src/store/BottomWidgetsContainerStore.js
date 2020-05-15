@@ -25,7 +25,7 @@ export default class BottomWidgetsContainerStore {
     }
 
     initial = () => {
-        this.stx.append('drawPanels', () => this.updateChartHeight());
+        this.stx.append('drawPanels', this.updateChartHeight);
         this.isReadyToShow = true;
     }
 
@@ -34,7 +34,7 @@ export default class BottomWidgetsContainerStore {
         this.totalHeight          = Object.keys(this.stx.panels).reduce((acc, key) => (acc + (this.stx.panels[key].hidden ? 0 : this.stx.panels[key].height)), 0);
         const margin              = this.totalHeight > this.mainChartHeight ? 0 : 30;
         const panelPosition       = this.mainStore.chartSetting.position;
-        const chartControlsHeight = panelPosition === 'bottom' && this.mainStore.state.chartControlsWidgets ? 40 : 0;
+        const chartControlsHeight = panelPosition === 'bottom' && this.mainStore.state.chartControlsWidgets ? 32 : 0;
         this.top                  = this.mainChartHeight - margin - 200;
         this.bottom               = this.totalHeight - this.mainChartHeight + margin + chartControlsHeight;
     }
@@ -61,9 +61,13 @@ export default class BottomWidgetsContainerStore {
                 margin = 10;
             }
 
-            this.stx.chart.yAxis.initialMarginTop = marginTop;
-            this.stx.chart.yAxis.initialMarginBottom = margin;
-            this.stx.draw();
+            if (this.stx.chart.yAxis.initialMarginTop !== marginTop
+                && this.stx.chart.yAxis.initialMarginBottom !== margin
+            ) {
+                this.stx.chart.yAxis.initialMarginTop = marginTop;
+                this.stx.chart.yAxis.initialMarginBottom = margin;
+                this.stx.draw();
+            }
             if (!this.mainStore.state.shouldMinimiseLastDigits) {
                 this.mainStore.state.setShouldMinimiseLastDigit(this.stx.chart.panel.height < 460);
             }

@@ -1,25 +1,26 @@
 import { observable, action, computed } from 'mobx';
 import { connect } from './Connect';
-import Dialog from '../components/Dialog.jsx';
 import MenuStore from './MenuStore';
+import Menu from '../components/Menu.jsx';
 
 export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
+    @observable formTitle = '';
     @observable description = '';
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
     @computed get showTabs() { return !!this.description; }
     @observable scrollPanel;
+    @observable dialogPortalNodeId = null;
 
-    constructor({
-        mainStore, getContext, onChanged,
-    }) {
+    constructor({ mainStore, getContext, onChanged, onDeleted }) {
         this.mainStore = mainStore;
         this.getContext = getContext;
         this.onChanged = onChanged;
+        this.onDeleted = onDeleted;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
-        this.Dialog = this.menu.dialog.connect(Dialog);
+        this.SettingDialogMenu = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
@@ -28,7 +29,7 @@ export default class SettingsDialogStore {
 
     @computed get open() { return this.menu.open; }
     @action.bound setOpen(value) {
-        if (value) {
+        if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop(0);
         }
         return this.menu.setOpen(value);
@@ -38,6 +39,11 @@ export default class SettingsDialogStore {
         const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
         this.items = items;
         this.onChanged(items);
+    }
+
+    @action.bound onItemDelete() {
+        this.menu.setOpen(false);
+        if (this.onDeleted) this.onDeleted();
     }
 
     @action.bound onItemChange(id, newValue) {
@@ -74,17 +80,19 @@ export default class SettingsDialogStore {
         });
 
         for (const index in this.items) {
-            const title = this.items[index].title;
+            const item = this.items[index];
+            const title = item.title;
             const group = groups.find(x => title.indexOf(x.key) !== -1);
             if (group) {
-                group.fields.push(this.items[index]);
+                item.subtitle = title.replace(group.key, '').trim();
+                group.fields.push(item);
             } else {
-                restGroup.push(this.items[index]);
+                restGroup.push(item);
             }
         }
 
         groups.unshift({
-            key: this.title,
+            key: this.formTitle || this.title,
             fields: restGroup,
         });
 
@@ -100,13 +108,15 @@ export default class SettingsDialogStore {
         title: this.title,
         description: this.description,
         showTabs: this.showTabs,
-        setOpen: this.setOpen,
         onResetClick: this.onResetClick,
         onItemChange: this.onItemChange,
         onItemActive: this.onItemActive,
-        Dialog: this.Dialog,
+        onItemDelete: this.onItemDelete,
+        SettingDialogMenu: this.SettingDialogMenu,
         open: this.open,
         theme: this.theme,
         setScrollPanel: this.setScrollPanel,
+        close: this.menu.handleCloseDialog,
+        dialogPortalNodeId: this.dialogPortalNodeId,
     }));
 }

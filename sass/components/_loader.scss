@@ -1,15 +1,15 @@
-.cq-loader .cq-loader-spin, .cq-comparison-loader, .cq-loading {
+.sc-loader .sc-loader-spin, .cq-comparison-loader, .cq-loading {
     background-image: svg-load('./icons/loading/loading-spin.svg');
     background-size: cover;
 }
 
 .smartcharts-dark {
-    .cq-loader .cq-loader-spin, .cq-comparison-loader, .cq-loading {
+    .sc-loader .sc-loader-spin, .cq-comparison-loader, .cq-loading {
         background-image: svg-load('./icons/loading/loading-spin-white.svg');
     }
 }
 
-.cq-loader {
+.sc-loader {
     display: none;
     position: absolute;
     height: 100%;
@@ -21,7 +21,7 @@
         display: block;
         z-index: 9;
     }
-    .cq-loader-spin {
+    .sc-loader-spin {
         position: absolute;
         height: 50px;
         width: 50px;
@@ -34,7 +34,7 @@
             stroke: themed('Loading');
         }
     }
-    .cq-loader-status {
+    .sc-loader-status {
         padding-top: 5px;
         position: absolute;
         height: 20px;
@@ -58,4 +58,78 @@
     background-size: contain;
     margin-bottom: 2px;
     margin-left: 1px;
+}
+
+.sc-inline-loader {
+    position: relative;
+
+    &:after {
+        border-radius: 3px;
+        position: absolute;
+        content: ' ';
+        left: 0px;
+        top: 0px;
+        width: 100%;
+        height: 100%;
+    }
+    &__inner {
+        width: 50px;
+        height: 14px;
+        position: absolute;
+        top: calc(50% - 7px);
+        left: calc(50% - 25px);
+        opacity: 1 !important;
+
+        &__bullet {
+            height: 100%;
+            width: 4px;
+            margin: 0 2px;
+            display: inline-block;
+            border-radius: 3px;
+            -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            @include themify($themes) {
+                background-color: themed('LoadingBg');
+            }
+
+            &:nth-child(2) {
+                -webkit-animation-delay: -1.1s;
+                animation-delay: -1.1s;
+            }
+            &:nth-child(3) {
+                -webkit-animation-delay: -1s;
+                animation-delay: -1s;
+            }
+            &:nth-child(4) {
+                -webkit-animation-delay: -0.9s;
+                animation-delay: -0.9s;
+            }
+        }
+    }
+    &--enable {
+        > span,
+        > div {
+            opacity: 0.32;
+        }
+    }
+}
+
+@-webkit-keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        -webkit-transform: scaleY(1);
+    }
+}
+
+@keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }
+    20% {
+        transform: scaleY(1);
+        -webkit-transform: scaleY(1);
+    }
 }

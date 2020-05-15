@@ -5,16 +5,9 @@ import {
     PngIcon,
     CsvIcon,
 } from './Icons.jsx';
-import '../../sass/components/_ciq-download.scss';
+import { InlineLoader } from './Loader.jsx';
+import '../../sass/components/download.scss';
 
-const Loading = () => (
-    <div className="loading">
-        <span className="loading__bullet" />
-        <span className="loading__bullet" />
-        <span className="loading__bullet" />
-        <span className="loading__bullet" />
-    </div>
-);
 
 const Share = ({
     Dialog,
@@ -25,34 +18,34 @@ const Share = ({
     portalNodeId,
 }) => (
     <Dialog
-        className="cq-download-menu"
+        className="sc-download-menu"
         title={t.translate('Download')}
+        tooltip={t.translate('Download')}
         newStyle
         isFullscreen
         portalNodeId={portalNodeId}
     >
         <Dialog.Title>
-            <DownloadIcon
-                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                tooltip-title={t.translate('Download')}
-            />
+            <div className={`sc-download__menu ${menuOpen ? 'sc-download__menu--active' : ''}`}>
+                <DownloadIcon />
+            </div>
         </Dialog.Title>
         <Dialog.Body>
-            <div className="cq-download">
-                <div
-                    className={`cq-download__item ${isLoadingPNG ? 'cq-download__item--loading' : ''}`}
+            <div className="sc-download">
+                <InlineLoader
+                    className="sc-download__item"
                     onClick={downloadPNG}
+                    enabled={isLoadingPNG}
                 >
                     <PngIcon />
-                    <span className="cq-download__item__label"> {t.translate('PNG')} </span>
-                    {isLoadingPNG && <Loading />}
-                </div>
+                    <span className="sc-download__item__label"> {t.translate('PNG')} </span>
+                </InlineLoader>
                 <div
-                    className="cq-download__item"
+                    className="sc-download__item"
                     onClick={downloadCSV}
                 >
                     <CsvIcon />
-                    <span className="cq-download__item__label"> {t.translate('CSV')}</span>
+                    <span className="sc-download__item__label"> {t.translate('CSV')}</span>
                 </div>
             </div>
         </Dialog.Body>
