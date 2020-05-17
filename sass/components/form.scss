@@ -394,7 +394,7 @@
 .sc-color-picker {
     position: relative;
     height: 40px;
-    width: 100%;
+    width: 272px;
     @include themify($themes) {
         background: themed('ColorPickerBg');
     }
@@ -457,7 +457,7 @@
     }
     .dropdown {
         position: absolute;
-        right: -5px;
+        right: 0px;
         opacity: 0;
         pointer-events: none;
         z-index: 2;
@@ -465,6 +465,7 @@
         padding: 8px;
         border-radius: 4px;
         transform: translateY(-8px);
+        box-sizing: border-box;
         transition: opacity 0.2s, transform 0.2s;
         @include themify($themes) {
             box-shadow: 0 16px 16px 0 themed('ColorPickerShadow'), 0 0 16px 0 themed('ColorPickerShadow');
@@ -634,6 +635,9 @@
     .sc-numeric-input {
         width: 124px;
         min-width: 124px;
+    }
+    .sc-color-picker {
+        width: 124px;
     }
 }
 
