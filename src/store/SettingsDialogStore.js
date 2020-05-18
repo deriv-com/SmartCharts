@@ -42,7 +42,7 @@ export default class SettingsDialogStore {
     get theme() { return this.mainStore.chartSetting.theme; }
 
     @computed get open() { return this.menu.open; }
-    @action.bound checkDropdownOpen() {
+    checkDropdownOpen = () => {
         let freezeScroll = false;
         if (!this.scrollPanel) { return; }
         const dropdowns = this.scrollPanel.container.querySelectorAll('.sc-color-picker, .sc-dropdown');
