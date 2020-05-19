@@ -276,6 +276,11 @@
             }
         }
     }
+    &--freeze {
+        > div {
+            overflow: hidden !important;
+        }
+    }
 }
 
 .sc-notification-badge {

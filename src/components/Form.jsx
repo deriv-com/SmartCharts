@@ -89,10 +89,22 @@ export class Slider extends React.Component {
 export class DropDown extends React.Component {
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
+    onClick = () => {
+        const bounding = this.ele.getBoundingClientRect();
+        this.setState(prevState => ({
+            open: !prevState.open,
+            left: !prevState.open ? bounding.left : null,
+            top: !prevState.open ? bounding.top : null,
+            width: bounding.width,
+        }));
+    };
     close = (e) => {
         if (e.target !== this.titleRef) {
-            this.setState({ open: false });
+            this.setState({
+                open: false,
+                left: 0,
+                top: 0,
+            });
         }
     }
 
@@ -103,9 +115,13 @@ export class DropDown extends React.Component {
         const {
             subtitle, rows, children, value, onRowClick, className,
         } = this.props;
-        const { open } = this.state;
+        const { open, left, top, width } = this.state;
         return (
-            <div className={`${className || ''} sc-dropdown ${open ? 'active' : ''}`}>
+            <div
+                className={`${className || ''} sc-dropdown ${open ? 'active' : ''}`}
+                ref={(ele) => { this.ele = ele; }}
+                style={{ left, top, width }}
+            >
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
                     className={`value ${open ? 'active' : ''}`}
@@ -119,7 +135,7 @@ export class DropDown extends React.Component {
                     {rows.map((row, idx) => (
                         <div
                             key={idx} // eslint-disable-line react/no-array-index-key
-                            className="row"
+                            className={`row ${row === value ? 'row--selected' : ''}`}
                             onClick={() => onRowClick && onRowClick(row)}
                         >
                             {children(row)}
@@ -184,10 +200,22 @@ export class ColorPicker extends React.Component {
     ];
     state = { open: false };
     titleRef = null;
-    onClick = () => this.setState(prevState => ({ open: !prevState.open }));
+    onClick = () => {
+        const bounding = this.ele.getBoundingClientRect();
+        this.setState(prevState => ({
+            open: !prevState.open,
+            left: !prevState.open ? bounding.left : null,
+            top: !prevState.open ? bounding.top : null,
+            width: bounding.width,
+        }));
+    }
     close = (e) => {
         if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
-            this.setState({ open: false });
+            this.setState({
+                open: false,
+                left: null,
+                top: null,
+            });
         }
     };
 
@@ -205,8 +233,13 @@ export class ColorPicker extends React.Component {
     render() {
         const { subtitle, color, setColor } = this.props;
         const backgroundColor = color === 'auto' ? this.defaultColor() : color;
+        const { open, left, top, width } = this.state;
         return (
-            <div className={`sc-color-picker ${this.state.open ? 'active' : ''}`}>
+            <div
+                ref={(ele) => { this.ele = ele; }}
+                className={`sc-color-picker ${this.state.open ? 'active' : ''}`}
+                style={{ top, left, width }}
+            >
                 {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
                     className="value"
@@ -219,7 +252,7 @@ export class ColorPicker extends React.Component {
                     />
                     <ArrowIcon />
                 </div>
-                <div className={`dropdown ${this.state.open ? 'open' : ''}`}>
+                <div className={`dropdown ${open ? 'open' : ''}`}>
                     {this.colorMap.map((row, rowIdx) => (
                         <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
                             {row.map(tileColor => (
