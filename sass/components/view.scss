@@ -195,6 +195,7 @@
                 line-height: 1.43;
                 letter-spacing: normal;
                 cursor: pointer;
+                position: relative;
                 @include themify($themes) {
                     color: themed('TemplateListItemText');
                 }
@@ -209,6 +210,12 @@
                     @include themify($themes) {
                         fill: themed('TemplateListItemText');
                     }
+                }
+                .sc-tooltip__inner {
+                    width: 304px;
+                    height: auto;
+                    white-space: break-spaces;
+                    text-align: center;
                 }
                 &:hover {
                     @include themify($themes) {

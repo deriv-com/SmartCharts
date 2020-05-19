@@ -52,6 +52,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
 
 const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll }) => (
     <Scrollbars
+        autoHide
         autoHeight
         autoHeightMax={360}
         className="sc-scrollbar sc-studies__scroll"

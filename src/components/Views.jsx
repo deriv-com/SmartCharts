@@ -1,6 +1,7 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
-import { connect } from '../store/Connect';
+import React        from 'react';
+import Scrollbars   from 'tt-react-custom-scrollbars';
+import { connect }  from '../store/Connect';
+import Tooltip      from './Tooltip.jsx';
 import {
     TemplateIcon,
     AddIcon,
@@ -15,10 +16,15 @@ const ViewItem = ({
     remove,
     onClick,
 }) => (
-    <div className="sc-views__views__list__item" onClick={onClick}>
+    <Tooltip
+        className="sc-views__views__list__item"
+        onClick={onClick}
+        enabled={view.name.length > 27}
+        content={view.name}
+    >
         <div className="text">{view.name}</div>
         <DeleteIcon onClick={remove} />
-    </div>
+    </Tooltip>
 );
 
 const EmptyView = ({ onClick }) => (
@@ -136,6 +142,7 @@ const Views = ({
                                     )
                                 }
                                 <Scrollbars
+                                    autoHide
                                     className="sc-scrollbar"
                                 >
                                     <div className="form form--sc-views">

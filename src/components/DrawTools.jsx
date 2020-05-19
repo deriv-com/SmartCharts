@@ -86,6 +86,7 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }) => (
 
 const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
     <Scrollbars
+        autoHide
         autoHeight
         autoHeightMax={320}
         className="sc-scrollbar"

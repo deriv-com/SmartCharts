@@ -1,6 +1,7 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
 import debounce from 'lodash.debounce';
+import Scrollbars   from 'tt-react-custom-scrollbars';
 import {
     ArrowIcon,
     InputNumberPlusIcon,
@@ -128,10 +129,15 @@ export class DropDown extends React.Component {
                     onClick={this.onClick}
                     ref={(ref) => { this.titleRef = ref; }}
                 >
-                    {value}
+                    <span className="text">{value}</span>
                     <ArrowIcon />
                 </div>
-                <div className={`dropdown ${open ? 'active' : ''}`}>
+                <Scrollbars
+                    autoHide
+                    autoHeight
+                    autoHeightMax={200}
+                    className={`sc-scrollbar dropdown ${open ? 'active' : ''}`}
+                >
                     {rows.map((row, idx) => (
                         <div
                             key={idx} // eslint-disable-line react/no-array-index-key
@@ -141,7 +147,7 @@ export class DropDown extends React.Component {
                             {children(row)}
                         </div>
                     ))}
-                </div>
+                </Scrollbars>
             </div>
         );
     }

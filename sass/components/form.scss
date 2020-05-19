@@ -78,11 +78,6 @@
                 }
             }
         }
-        &:hover {
-            > div:nth-child(3) {
-                opacity: 1 !important;
-            }
-        }
         .form__input-group:last-child {
             margin-bottom: 50px;
         }
@@ -259,6 +254,12 @@
                     fill: themed('DropdownText');
                 }
             }
+        }
+        .text {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 220px;
+            overflow: hidden;
         }
         &:after {
             content: ' ';

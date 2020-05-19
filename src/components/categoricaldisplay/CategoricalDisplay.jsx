@@ -47,6 +47,7 @@ const CategoricalDisplay = React.memo(({
                     )
                     : (
                         <Scrollbars
+                            autoHide
                             className="sc-scrollbar cq-scroll-panel"
                             onScroll={updateScrollSpy}
                             ref={setScrollPanel}
