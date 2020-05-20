@@ -2,6 +2,7 @@ import React        from 'react';
 import Scrollbars   from 'tt-react-custom-scrollbars';
 import { connect }  from '../store/Connect';
 import Tooltip      from './Tooltip.jsx';
+import { wrapText } from '../utils';
 import {
     TemplateIcon,
     AddIcon,
@@ -20,7 +21,7 @@ const ViewItem = ({
         className="sc-views__views__list__item"
         onClick={onClick}
         enabled={view.name.length > 27}
-        content={view.name}
+        content={wrapText(view.name, 40)}
     >
         <div className="text">{view.name}</div>
         <DeleteIcon onClick={remove} />

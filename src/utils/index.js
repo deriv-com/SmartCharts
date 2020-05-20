@@ -254,3 +254,15 @@ export const formatCamelCase = (s) => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
+
+export const wrapText = (str, letter_count) => {
+    if (str.length > letter_count) {
+        let wrappedStr = str;
+        const count = Math.floor(str.length / letter_count);
+        for (let i = 1; i <= count; i++) {
+            wrappedStr = `${wrappedStr.slice(0, letter_count * i)} ${wrappedStr.slice(letter_count * i, wrappedStr.length)}`;
+        }
+        return wrappedStr;
+    }
+    return str;
+};
