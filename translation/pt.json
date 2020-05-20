@@ -5,7 +5,7 @@
   "[symbol] market is presently closed.": "O mercado de [symbol] está atualmente fechado.",
   "Active": "Ativo",
   "Add": "Adicionar",
-  "Add new template": "Adicionar novo template",
+  "Add new template": "Adicionar novo modelo",
   "Add new templates": "Adicionar novo modelo",
   "ADX/DMS": "ADX/DMS",
   "All drawings": "Todos os desenhos",
@@ -135,7 +135,7 @@
   "Would you like to overwrite it?": "Deseja substituí-lo?",
   "You have no active drawings yet.": "Você ainda não tem nenhum indicador.",
   "You have no active indicators yet.": "Você ainda não tem nenhum indicador.",
-  "You have no saved templates yet.": "You have no saved templates yet.",
+  "You have no saved templates yet.": "Você ainda não tem modelos salvos.",
   "Zig Zag": "Zig Zag",
   "Zoom in": "Aumentar o zoom",
   "Zoom out": "Diminuir o zoom"
