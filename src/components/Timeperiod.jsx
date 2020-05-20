@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import { connect } from '../store/Connect';
 import Tooltip from './Tooltip.jsx';
+import { InlineLoader } from './Loader.jsx';
 import '../../sass/components/timeperiod.scss';
 import { Intervals } from '../Constant';
 
@@ -19,6 +20,9 @@ const Timeperiod = ({
     updateProps,
     newDesign,
     chartType,
+    isLoading,
+    setPreparingInterval,
+    preparingInterval,
 }) => {
     const onGranularityClick = (granularity) => {
         onChange(granularity, chartId);
@@ -26,8 +30,11 @@ const Timeperiod = ({
     };
     const onIntervalClick = (chartTypeId, key, inval) => {
         if (key === 'tick' && chartTypeId !== 'mountain') { return; }
+        setPreparingInterval(inval);
         onGranularityClick(inval);
     };
+    const enableTooltip = key => ((chartType.id !== 'mountain' && !isMobile && key === 'tick'));
+    const enableLoader = inval => (isLoading && inval === preparingInterval);
     const ItemClassName = (unit, time) => {
         let className = 'sc-interval__item';
 
@@ -48,7 +55,6 @@ const Timeperiod = ({
 
     useEffect(() => updateProps(onChange));
 
-
     if (newDesign) {
         return (
             <div className="sc-interval">
@@ -63,11 +69,15 @@ const Timeperiod = ({
                                 <Tooltip
                                     key={item.interval}
                                     onClick={() => onIntervalClick(chartType.id, category.key, item.interval)}
-                                    className={ItemClassName(category.key, item.num)}
-                                    enabled={(chartType.id !== 'mountain' && !isMobile && category.key === 'tick')}
+                                    className={`${ItemClassName(category.key, item.num)} ${enableLoader(item.interval) ? 'pre-loading' : ''}`}
+                                    enabled={enableTooltip(category.key)}
                                     content={t.translate('Available only for "Area" chart type.')}
                                 >
-                                    <span>{item.num} {item.num === 1 ? category.single : category.plural}</span>
+                                    <InlineLoader
+                                        enabled={enableLoader(item.interval)}
+                                    >
+                                        <span>{item.num} {item.num === 1 ? category.single : category.plural}</span>
+                                    </InlineLoader>
                                 </Tooltip>
                             ))
                         ))
@@ -168,7 +178,7 @@ const Timeperiod = ({
     );
 };
 
-export default connect(({ timeperiod: s, state, chartType }) => ({
+export default connect(({ timeperiod: s, state, chartType, loader }) => ({
     chartId         : state.chartId,
     timeUnit        : s.timeUnit,
     interval        : s.interval,
@@ -180,4 +190,7 @@ export default connect(({ timeperiod: s, state, chartType }) => ({
     timeUnit_display: s.timeUnit_display,
     updateProps     : s.updateProps,
     chartType       : chartType.type,
+    isLoading       : loader.isActive,
+    preparingInterval       : s.preparingInterval,
+    setPreparingInterval    : s.setPreparingInterval,
 }))(Timeperiod);

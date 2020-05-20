@@ -35,6 +35,7 @@ import {
     IndicatorEnvelopeIcon,
     IndicatorAlligatorIcon,
     IndicatorFractalChaosIcon,
+    IndicatorRainbowIcon,
     // Chart Types
     TypeAreaIcon,
     TypeCandleIcon,
@@ -64,7 +65,7 @@ export const IndicatorsTree = [
             { id: 'Detrended', name: t.translate('Detrended Price Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorDTrendedIcon },
             { id: 'Gator', name: t.translate('Gator Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorGatorIcon },
             { id: 'macd', name: t.translate('MACD'), description: t.translate('There isn\'t any description here.'), icon: IndicatorMacdIcon },
-            { id: 'Price ROC', name: t.translate('Rate of Change'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRateChangeIcon },
+            { id: 'Price ROC', name: t.translate('Price Rate of Change'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRateChangeIcon },
             { id: 'rsi', name: t.translate('Relative Strength Index (RSI)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRSIIcon },
             { id: 'stochastics', name: t.translate('Stochastic Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticOscillatorIcon },
             { id: 'Stch Mtm', name: t.translate('Stochastic Momentum Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticMomentumIcon },
@@ -100,6 +101,7 @@ export const IndicatorsTree = [
         items: [
             { id: 'ma', name: t.translate('Moving Average (MA)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAveragesIcon },
             { id: 'MA Env', name: t.translate('Moving Average Envelope'), description: t.translate('There isn\'t any description here.'), icon: IndicatorEnvelopeIcon },
+            { id: 'Rainbow MA', name: t.translate('Rainbow Moving Average'), description: t.translate('There isn\'t any description here.'), icon: IndicatorRainbowIcon },
         ],
     },
     {
@@ -142,7 +144,7 @@ export const ExcludedStudies = {
     'STD Dev': true,
     Swing: true,
     'Acc Swing': true,
-    'Price ROC': true,
+    'Price ROC': false,
     Momentum: true,
     'Hist Vol': true,
     'Pretty Good': true,
@@ -200,7 +202,6 @@ export const ExcludedStudies = {
     'Trend Int': true,
     Choppiness: true,
     Disparity: true,
-    'Rainbow MA': true,
     'Rainbow Osc': true,
     'Pring KST': true,
     'Pring Sp-K': true,
@@ -226,7 +227,7 @@ export const Intervals = [
         single: t.translate('tick'),
         items: [
             {
-                interval: 1,
+                interval: 0,
                 num: 1,
             },
         ],
