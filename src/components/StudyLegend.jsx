@@ -7,6 +7,8 @@ import { connect }  from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
 import '../../sass/components/studylegend.scss';
 
+const StudyIcon = ({ Icon, props }) => (<Icon {...props} />);
+
 const EmptyView = () => (
     <div className="sc-studies--empty">
         <EmptyStateIcon />
@@ -34,7 +36,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
                     className="info"
                     onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}
                 >
-                    <Item.icon />
+                    <StudyIcon Icon={Item.icon} />
                     <div className="text">
                         <span>{Item.name}</span>
                         {Item.bars && (<small>({Item.bars})</small>)}
@@ -112,7 +114,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
             </Tab>
             {categories.map(Category => (
                 <Tab key={`tab--${Category.id}`}>
-                    <Category.icon />
+                    <StudyIcon Icon={Category.icon} />
                     {Category.name}
                 </Tab>
             ))}

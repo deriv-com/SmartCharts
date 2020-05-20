@@ -9,7 +9,8 @@ export class Translation {
         if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
         } else {
-            import(/* webpackChunkName: "[request]" */ `../translation/${lang}.json`)
+            const path = `../translation/${lang}.json`;
+            import(/* webpackChunkName: "[request]" */path)
                 .then((imported_lang) => {
                     if (imported_lang) {
                         lang_map[lang] = imported_lang.default;

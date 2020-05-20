@@ -5,6 +5,8 @@ import { SettingIcon } from './Icons.jsx';
 import Tooltip from './Tooltip.jsx';
 import '../../sass/components/chart-types.scss';
 
+const TypeIcon = ({ Icon, props }) => (<Icon {...props} />);
+
 const ChartTypes = ({
     chartId,
     ChartTypeList,
@@ -66,7 +68,8 @@ const ChartTypes = ({
             title={t.translate('Chart types')}
         >
             <ChartTypeMenu.Title>
-                <Type.icon
+                <TypeIcon
+                    Icon={Type.icon}
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate(Type.text)}
                 />
@@ -80,7 +83,7 @@ const ChartTypes = ({
                         {T => (
                             <>
                                 <span className="left">
-                                    <T.icon  className={`margin ${T.active ? 'active' : ''}`} />
+                                    <TypeIcon Icon={Type.icon} className={`margin ${T.active ? 'active' : ''}`} />
                                     <span className="ciq-icon-text">{T.text}</span>
                                 </span>
                                 {T.settingsOnClick
