@@ -55,11 +55,13 @@ html, body {
         background: themed('ChartBg');
     }
 
-    &.ciq-screenshot {
+    &--screenshot {
+        .cq-symbol-select-btn .ic-icon,
         .cq-menu-dropdown,
         .sc-toolbar-widget,
         .ciq-navigation-widget,
-        .stx_jump_today.home {
+        .stx_jump_today.home,
+        .stx-panel-control .stx-btn-panel {
             /*
             There is a strange bug where dropdowns get displayed (partially)
             when html is being rendered to canvas. So we set this to manually
@@ -67,11 +69,11 @@ html, body {
             */
             display: none !important;
         }
-        .sc-studies-list {
-            .stx-btn-panel,
-            .stx-btn-panel {
-                display: none !important;
-            }
+        .stx-panel-control {
+            left: 5px;
+        }
+        .cq-symbol-select-btn .cq-symbol-info {
+            margin: 0 !important;
         }
     }
 }
