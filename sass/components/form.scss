@@ -319,16 +319,16 @@
                 color: themed('DropdownText');
             }
 
-            &--selected {
-                font-weight: bold;
-                @include themify($themes) {
-                    background: themed('DropdownActiveBg');
-                    color: themed('DropdownActiveText');
-                }
-            }
             &:hover {
                 @include themify($themes) {
                     background: themed('DropdownHoverBg');
+                }
+            }
+            &--selected {
+                font-weight: bold;
+                @include themify($themes) {
+                    background: themed('DropdownActiveBg') !important;
+                    color: themed('DropdownActiveText');
                 }
             }
         }
