@@ -131,13 +131,14 @@ class ChartStore {
     }
 
     @computed get indicatorHeightRatio() {
-        const chartHeight = this.chartNode.offsetHeight || this.chartContainerHeight;
-        const indicatorsHeight = (chartHeight - 320) / 5;
+        const chartHeight = this.chartNode.offsetHeight;
+        const isSmallScreen = chartHeight < 780;
+        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 360 : 340)) / 5);
 
         return {
             height: indicatorsHeight,
-            heightOnAdd: indicatorsHeight + 25,
-            percent: indicatorsHeight / chartHeight,
+            heightOnAdd: indicatorsHeight + (isSmallScreen ? 17 : 27),
+            percent: (indicatorsHeight / chartHeight),
         };
     }
 
