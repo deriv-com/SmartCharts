@@ -75,10 +75,12 @@
                 transition: transform 0.2s ease-in-out;
             }
         }
-        > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
+        > .ic-icon,
+        > .ic-frx,
+        > .ic-wld,
+        > .ic-otc {
             height: $large-icon-size;
             width: $large-icon-size;
-            transform: scale(1.3);
 
             > svg {
                 height: $large-icon-size;
