@@ -26,6 +26,7 @@ class ChartState {
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
     @observable crosshairState = 1;
+    @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
     chartControlsWidgets;
     enabledChartFooter;
@@ -84,6 +85,7 @@ class ChartState {
         crosshair,
         zoom,
         maxTick,
+        crosshairTooltipLeftAllow,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -189,6 +191,11 @@ class ChartState {
         if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {
             this.mainStore.crosshair.setCrosshairState(crosshair);
             this.crosshairState = crosshair;
+        }
+
+        if (crosshairTooltipLeftAllow !== undefined
+            && this.crosshairTooltipLeftAllow !== crosshairTooltipLeftAllow) {
+            this.crosshairTooltipLeftAllow = crosshairTooltipLeftAllow;
         }
 
         if (zoom) {
