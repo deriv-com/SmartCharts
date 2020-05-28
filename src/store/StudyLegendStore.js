@@ -143,7 +143,7 @@ export default class StudyLegendStore {
         this.onInfoItem(null);
         if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
             // As we want to keep all added item bellow the floating toolbar
-            CIQ.Studies.studyLibrary[item].panelHeight = this.indicatorRatio.MaxHeight;
+            CIQ.Studies.studyLibrary[item].panelHeight = this.indicatorRatio.heightOnAdd;
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
