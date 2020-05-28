@@ -142,6 +142,14 @@
             z-index: 108 !important;
         }
     }
+    &--loading {
+        .cq-menu-btn,
+        .sc-toolbar-widget,
+        .ciq-navigation-widget,
+        .sc-chart-footer {
+            opacity: 0.24;
+        }
+    }
     /* Mobile Style */
     .smartcharts-mobile {
         user-select: none;
@@ -266,6 +274,11 @@
             @include themify($themes) {
                 background-color: themed('ScrollbarBg') !important;
             }
+        }
+    }
+    &--freeze {
+        > div {
+            overflow: hidden !important;
         }
     }
 }

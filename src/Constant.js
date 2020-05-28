@@ -35,6 +35,7 @@ import {
     IndicatorEnvelopeIcon,
     IndicatorAlligatorIcon,
     IndicatorFractalChaosIcon,
+    IndicatorRainbowIcon,
     // Chart Types
     TypeAreaIcon,
     TypeCandleIcon,
@@ -86,7 +87,7 @@ export const IndicatorsTree = [
             },
             {
                 id: 'Price ROC',
-                name: t.translate('Rate of Change'),
+                name: t.translate('Price Rate of Change'),
                 description: t.translate('The Price Rate-of-Change (ROC) indicator displays the difference between the current price and the price x-time periods ago. The difference can be displayed in either points or as a percentage.'),
                 icon: IndicatorRateChangeIcon,
             },
@@ -195,6 +196,12 @@ export const IndicatorsTree = [
                 description: t.translate('The Moving Average Envelope (MAE) helps to identify strong price movement that indicatesthe start of a trend. The MAE creates a moving average line as well as 2 bands around it. Intheory, when the market price touches the upper or lower bands, a trend reversal will occur,indicating a buy signal.'),
                 icon: IndicatorEnvelopeIcon,
             },
+            {
+                id: 'Rainbow MA',
+                name: t.translate('Rainbow Moving Average'),
+                description: t.translate('The Rainbow Moving Average (RMA) displays several moving average lines simultaneously.When the lines intersect, it’s an indicator of price reversal and the angle of the lines are helpful to predict the trend strength. The steeper the curve, the stronger the trend. When the pricecrosses the moving average lines from below, it signals an upward trend. When the pricecrosses the moving average lines from above, it signals a downward trend. The RMA is easierto use compared to using several different moving average indicators at once.'),
+                icon: IndicatorRainbowIcon,
+            },
         ],
     },
     {
@@ -247,7 +254,7 @@ export const ExcludedStudies = {
     'STD Dev': true,
     Swing: true,
     'Acc Swing': true,
-    'Price ROC': true,
+    'Price ROC': false,
     Momentum: true,
     'Hist Vol': true,
     'Pretty Good': true,
@@ -305,7 +312,6 @@ export const ExcludedStudies = {
     'Trend Int': true,
     Choppiness: true,
     Disparity: true,
-    'Rainbow MA': true,
     'Rainbow Osc': true,
     'Pring KST': true,
     'Pring Sp-K': true,
@@ -331,7 +337,7 @@ export const Intervals = [
         single: t.translate('tick'),
         items: [
             {
-                interval: 1,
+                interval: 0,
                 num: 1,
             },
         ],
