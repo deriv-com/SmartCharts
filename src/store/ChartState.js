@@ -392,7 +392,7 @@ class ChartState {
         Object.keys(layoutData.panels).forEach((id) => {
             if (id === 'chart') { return; }
             const panel = layoutData.panels[id];
-            panel.percent = this.indicatorRatio.MaxPercent;
+            panel.percent = this.indicatorRatio.percent;
         });
 
         this.stxx.importLayout(layoutData, {
