@@ -383,7 +383,8 @@ class CrosshairStore {
 
         crosshair.style.transform = `translate(${left}px, ${top}px)`;
 
-        const arrow = left <= MAX_TOOLTIP_WIDTH ? 'arrow-left' : 'arrow-right';
+        const tooltipRightLimit = this.mainStore.state.crosshairTooltipLeftAllow || MAX_TOOLTIP_WIDTH;
+        const arrow = (left <= tooltipRightLimit) ? 'arrow-left' : 'arrow-right';
         if (arrow !== this.prev_arrow) {
             crosshair.classList.remove(this.prev_arrow);
             crosshair.classList.add(arrow);
