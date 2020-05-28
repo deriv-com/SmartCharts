@@ -66,8 +66,18 @@ export const IndicatorsTree = [
                 description: t.translate('Developed by Tushar Chande in 1995, Aroon is an indicator system that determines whether a stock is trending or not and how strong the trend is. There are two separate indicators: Aroon-Up and Aroon-Down. A 25-day Aroon-Up measures the number of days since a 25-day high. A 25-day Aroon-Down measures the number of days since a 25-day low.'),
                 icon: IndicatorAwesomeOscillatorIcon,
             },
-            { id: 'Detrended', name: t.translate('Detrended Price Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorDTrendedIcon },
-            { id: 'Gator', name: t.translate('Gator Oscillator'), description: t.translate('There isn\'t any description here.'), icon: IndicatorGatorIcon },
+            {
+                id: 'Detrended',
+                name: t.translate('Detrended Price Oscillator'),
+                description: t.translate('The Detrended Price Oscillator (DPO) helps to identify price cycles without the influence ofshort- and long-term trends. The DPO compares a simple moving average to a historical pricenear the middle of a specified period. It also shows the peaks and drops over that particularperiod, making it easier to predict buy points.'),
+                icon: IndicatorDTrendedIcon,
+            },
+            {
+                id: 'Gator',
+                name: t.translate('Gator Oscillator'),
+                description: t.translate('The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligatorindicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase(absence of a trend) is when the bars on both sides are red. The awakening phase (formationof a trend) is when there are red and green bars on both sides. When there are green bars onboth sides, it indicates the eating phase (trend strengthening). A solitary red bar appearingafter the eating phase indicates the beginning of the sated phase (trend approaching its end).'),
+                icon: IndicatorGatorIcon,
+            },
             {
                 id: 'macd',
                 name: t.translate('MACD'),
@@ -92,7 +102,12 @@ export const IndicatorsTree = [
                 description: t.translate('A technical momentum indicator that compares a security\'s closing price to its price range over a given time period. The oscillator\'s sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result.'),
                 icon: IndicatorStochasticOscillatorIcon,
             },
-            { id: 'Stch Mtm', name: t.translate('Stochastic Momentum Index'), description: t.translate('There isn\'t any description here.'), icon: IndicatorStochasticMomentumIcon },
+            {
+                id: 'Stch Mtm',
+                name: t.translate('Stochastic Momentum Index'),
+                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions inthe market and to predict bearish or bullish trends. It calculates the distance between thecurrent closing price and the median of the high/low range, and displays 2 lines on the chart:the first (known as %K) represents the price movement while the second (known as %D) is amoving average of the first line. If the closing price is higher than the median of the high/lowrange, the SMI returns a positive value. If the closing price is lower than the average price, anegative value is returned. Values above 40 indicate a bullish trend while values below -40indicate a bearish trend.'),
+                icon: IndicatorStochasticMomentumIcon,
+            },
             {
                 id: 'Williams %R',
                 name: t.translate('William\'s Percent Range'),
@@ -136,7 +151,12 @@ export const IndicatorsTree = [
                 description: t.translate('The parabolic SAR is calculated almost independently for each trend in the price. When the price is in an uptrend, the SAR emerges below the price and converges upwards towards it. Similarly, on a downtrend, the SAR emerges above the price and converges downwards. At each step within a trend, the SAR is calculated one period in advance.'),
                 icon:  IndicatorParabolicIcon,
             },
-            { id: 'ZigZag', name: t.translate('Zig Zag'), description: t.translate('There isn\'t any description here.'), icon: IndicatorZigZagIcon },
+            {
+                id: 'ZigZag',
+                name: t.translate('Zig Zag'),
+                description: t.translate('Zig Zag helps to identify trend reversals and filters out relatively small price movements bydetermining the support and resistance levels of the market. It accepts a percentage ofdeviation as the input and displays a line if the price change is larger than the percentage ofdeviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.'),
+                icon: IndicatorZigZagIcon,
+            },
         ],
     },
     {
@@ -163,8 +183,18 @@ export const IndicatorsTree = [
         name: t.translate('Moving averages'),
         icon: IndicatorCatAveragesIcon,
         items: [
-            { id: 'ma', name: t.translate('Moving Average (MA)'), description: t.translate('There isn\'t any description here.'), icon: IndicatorAveragesIcon },
-            { id: 'MA Env', name: t.translate('Moving Average Envelope'), description: t.translate('There isn\'t any description here.'), icon: IndicatorEnvelopeIcon },
+            {
+                id: 'ma',
+                name: t.translate('Moving Average (MA)'),
+                description: t.translate('The Moving Average (MA) helps to identify the overall market trend by filtering out short-termprice fluctuations. Using historical data, it calculates the average price over a specific periodand plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, adowntrend if it moves downwards. A buy signal occurs when the price moves above the MAline.'),
+                icon: IndicatorAveragesIcon,
+            },
+            {
+                id: 'MA Env',
+                name: t.translate('Moving Average Envelope'),
+                description: t.translate('The Moving Average Envelope (MAE) helps to identify strong price movement that indicatesthe start of a trend. The MAE creates a moving average line as well as 2 bands around it. Intheory, when the market price touches the upper or lower bands, a trend reversal will occur,indicating a buy signal.'),
+                icon: IndicatorEnvelopeIcon,
+            },
         ],
     },
     {
