@@ -106,7 +106,7 @@ export const IndicatorsTree = [
             {
                 id: 'Stch Mtm',
                 name: t.translate('Stochastic Momentum Index'),
-                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions inthe market and to predict bearish or bullish trends. It calculates the distance between thecurrent closing price and the median of the high/low range, and displays 2 lines on the chart: the first (known as %K) represents the price movement while the second (known as %D) is a moving average of the first line. If the closing price is higher than the median of the high/lowrange, the SMI returns a positive value. If the closing price is lower than the average price, a negative value is returned. Values above 40 indicate a bullish trend while values below -40indicate a bearish trend.'),
+                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions inthe market and to predict bearish or bullish trends. It calculates the distance between the current closing price and the median of the high/low range, and displays 2 lines on the chart: the first (known as %K) represents the price movement while the second (known as %D) is a moving average of the first line. If the closing price is higher than the median of the high/low range, the SMI returns a positive value. If the closing price is lower than the average price, a negative value is returned. Values above 40 indicate a bullish trend while values below -40 indicate a bearish trend.'),
                 icon: IndicatorStochasticMomentumIcon,
             },
             {
@@ -187,13 +187,13 @@ export const IndicatorsTree = [
             {
                 id: 'ma',
                 name: t.translate('Moving Average (MA)'),
-                description: t.translate('The Moving Average (MA) helps to identify the overall market trend by filtering out short-term price fluctuations. Using historical data, it calculates the average price over a specific period and plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, a downtrend if it moves downwards. A buy signal occurs when the price moves above the MAline.'),
+                description: t.translate('The Moving Average (MA) helps to identify the overall market trend by filtering out short-term price fluctuations. Using historical data, it calculates the average price over a specific period and plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, a downtrend if it moves downwards. A buy signal occurs when the price moves above the MA line.'),
                 icon: IndicatorAveragesIcon,
             },
             {
                 id: 'MA Env',
                 name: t.translate('Moving Average Envelope'),
-                description: t.translate('The Moving Average Envelope (MAE) helps to identify strong price movement that indicates the start of a trend. The MAE creates a moving average line as well as 2 bands around it. Intheory, when the market price touches the upper or lower bands, a trend reversal will occur, indicating a buy signal.'),
+                description: t.translate('The Moving Average Envelope (MAE) helps to identify strong price movement that indicates the start of a trend. The MAE creates a moving average line as well as 2 bands around it. In theory, when the market price touches the upper or lower bands, a trend reversal will occur, indicating a buy signal.'),
                 icon: IndicatorEnvelopeIcon,
             },
             {
