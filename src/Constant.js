@@ -64,7 +64,7 @@ export const IndicatorsTree = [
             {
                 id: 'Awesome',
                 name: t.translate('Awesome Oscillator'),
-                description: t.translate('Developed by Tushar Chande in 1995, Aroon is an indicator system that determines whether a stock is trending or not and how strong the trend is. There are two separate indicators: Aroon-Up and Aroon-Down. A 25-day Aroon-Up measures the number of days since a 25-day high. A 25-day Aroon-Down measures the number of days since a 25-day low.'),
+                description: t.translate('The Awesome Oscillator is an indicator used to measure market momentum. AO calculates the difference of a 34 Period and 5 Period Simple Moving Averages. The Simple Moving Averages that are used are not calculated using closing price but rather each bar\'s midpoints. AO is generally used to affirm trends or to anticipate possible reversals.'),
                 icon: IndicatorAwesomeOscillatorIcon,
             },
             {
