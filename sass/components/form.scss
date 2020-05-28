@@ -259,6 +259,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             max-width: 220px;
+            min-width: 210px;
             overflow: hidden;
         }
         &:after {
