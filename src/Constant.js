@@ -70,13 +70,13 @@ export const IndicatorsTree = [
             {
                 id: 'Detrended',
                 name: t.translate('Detrended Price Oscillator'),
-                description: t.translate('The Detrended Price Oscillator (DPO) helps to identify price cycles without the influence ofshort- and long-term trends. The DPO compares a simple moving average to a historical pricenear the middle of a specified period. It also shows the peaks and drops over that particularperiod, making it easier to predict buy points.'),
+                description: t.translate('The Detrended Price Oscillator (DPO) helps to identify price cycles without the influence of short- and long-term trends. The DPO compares a simple moving average to a historical pricenear the middle of a specified period. It also shows the peaks and drops over that particular period, making it easier to predict buy points.'),
                 icon: IndicatorDTrendedIcon,
             },
             {
                 id: 'Gator',
                 name: t.translate('Gator Oscillator'),
-                description: t.translate('The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligatorindicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase(absence of a trend) is when the bars on both sides are red. The awakening phase (formationof a trend) is when there are red and green bars on both sides. When there are green bars onboth sides, it indicates the eating phase (trend strengthening). A solitary red bar appearingafter the eating phase indicates the beginning of the sated phase (trend approaching its end).'),
+                description: t.translate('The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligator indicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase (absence of a trend) is when the bars on both sides are red. The awakening phase (formation of a trend) is when there are red and green bars on both sides. When there are green bars on both sides, it indicates the eating phase (trend strengthening). A solitary red bar appearing after the eating phase indicates the beginning of the sated phase (trend approaching its end).'),
                 icon: IndicatorGatorIcon,
             },
             {
@@ -106,7 +106,7 @@ export const IndicatorsTree = [
             {
                 id: 'Stch Mtm',
                 name: t.translate('Stochastic Momentum Index'),
-                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions inthe market and to predict bearish or bullish trends. It calculates the distance between thecurrent closing price and the median of the high/low range, and displays 2 lines on the chart:the first (known as %K) represents the price movement while the second (known as %D) is amoving average of the first line. If the closing price is higher than the median of the high/lowrange, the SMI returns a positive value. If the closing price is lower than the average price, anegative value is returned. Values above 40 indicate a bullish trend while values below -40indicate a bearish trend.'),
+                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions inthe market and to predict bearish or bullish trends. It calculates the distance between thecurrent closing price and the median of the high/low range, and displays 2 lines on the chart: the first (known as %K) represents the price movement while the second (known as %D) is a moving average of the first line. If the closing price is higher than the median of the high/lowrange, the SMI returns a positive value. If the closing price is lower than the average price, a negative value is returned. Values above 40 indicate a bullish trend while values below -40indicate a bearish trend.'),
                 icon: IndicatorStochasticMomentumIcon,
             },
             {
@@ -155,7 +155,7 @@ export const IndicatorsTree = [
             {
                 id: 'ZigZag',
                 name: t.translate('Zig Zag'),
-                description: t.translate('Zig Zag helps to identify trend reversals and filters out relatively small price movements bydetermining the support and resistance levels of the market. It accepts a percentage ofdeviation as the input and displays a line if the price change is larger than the percentage ofdeviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.'),
+                description: t.translate('Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.'),
                 icon: IndicatorZigZagIcon,
             },
         ],
@@ -187,19 +187,19 @@ export const IndicatorsTree = [
             {
                 id: 'ma',
                 name: t.translate('Moving Average (MA)'),
-                description: t.translate('The Moving Average (MA) helps to identify the overall market trend by filtering out short-termprice fluctuations. Using historical data, it calculates the average price over a specific periodand plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, adowntrend if it moves downwards. A buy signal occurs when the price moves above the MAline.'),
+                description: t.translate('The Moving Average (MA) helps to identify the overall market trend by filtering out short-term price fluctuations. Using historical data, it calculates the average price over a specific period and plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, a downtrend if it moves downwards. A buy signal occurs when the price moves above the MAline.'),
                 icon: IndicatorAveragesIcon,
             },
             {
                 id: 'MA Env',
                 name: t.translate('Moving Average Envelope'),
-                description: t.translate('The Moving Average Envelope (MAE) helps to identify strong price movement that indicatesthe start of a trend. The MAE creates a moving average line as well as 2 bands around it. Intheory, when the market price touches the upper or lower bands, a trend reversal will occur,indicating a buy signal.'),
+                description: t.translate('The Moving Average Envelope (MAE) helps to identify strong price movement that indicates the start of a trend. The MAE creates a moving average line as well as 2 bands around it. Intheory, when the market price touches the upper or lower bands, a trend reversal will occur, indicating a buy signal.'),
                 icon: IndicatorEnvelopeIcon,
             },
             {
                 id: 'Rainbow MA',
                 name: t.translate('Rainbow Moving Average'),
-                description: t.translate('The Rainbow Moving Average (RMA) displays several moving average lines simultaneously.When the lines intersect, it’s an indicator of price reversal and the angle of the lines are helpful to predict the trend strength. The steeper the curve, the stronger the trend. When the pricecrosses the moving average lines from below, it signals an upward trend. When the pricecrosses the moving average lines from above, it signals a downward trend. The RMA is easierto use compared to using several different moving average indicators at once.'),
+                description: t.translate('The Rainbow Moving Average (RMA) displays several moving average lines simultaneously. When the lines intersect, it’s an indicator of price reversal and the angle of the lines are helpful to predict the trend strength. The steeper the curve, the stronger the trend. When the price crosses the moving average lines from below, it signals an upward trend. When the price crosses the moving average lines from above, it signals a downward trend. The RMA is easier to use compared to using several different moving average indicators at once.'),
                 icon: IndicatorRainbowIcon,
             },
         ],
