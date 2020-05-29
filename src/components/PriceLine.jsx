@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class PriceLine extends Component {
     componentDidMount() {
@@ -7,35 +7,32 @@ class PriceLine extends Component {
 
     render() {
         const {
-            top,
             className,
             draggable,
             isDragging,
             priceDisplay,
             setDragLine,
             visible,
-            zIndex,
-            uncentered,
-            offScreen,
+            lineStyle,
+            color,
+            foregroundColor,
+            width,
         } = this.props;
 
         return (
             <div
                 className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                style={{top, zIndex}}
+                style={{ top: 0, color: foregroundColor, borderColor: color }}
                 ref={setDragLine}
-                hidden={visible ? undefined : 'true'}
-                uncentered={uncentered ? 'true' : undefined}
-                off-screen={offScreen ? 'true' : undefined}
+                hidden={!visible}
             >
-                <div
-                    className="drag-line"
-                />
-                <div className="drag-price">
+                <div className="drag-line" style={{ borderTopStyle: lineStyle }} />
+                <div className="draggable-area" />
+                <div className="drag-price" style={{ backgroundColor: color, width }}>
                     <div className="price">{priceDisplay}</div>
                 </div>
             </div>
-        )
+        );
     }
 }
 

@@ -1,58 +1,39 @@
-cq-context{
-    .ciq-chart-types {
-        .ciq-toggle-asset-information {
-            font-size: 10px;
-            display: flex;
-            color: black;
+.ciq-chart-types {
+    .cq-menu-dropdown {
+        width: 200px;
+        box-sizing: border-box;
+
+        .body {
+            padding: 0 7px 0 16px;
+        }
+    }
+    .ciq-list {
+        padding-right: 9px;
+
+        .ciq-list-item {
+            padding: 0;
             justify-content: space-between;
-            align-items: center;
-            position: relative;
-            top: -5px;
-        }
-        .cq-menu-dropdown {
-            width: 200px;
-            padding: 16px;
-            background: #fafafa;
-            box-sizing: border-box;
-        }
-        .ciq-title {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            .ciq-icon {
-                background-position: 50% 50%;
-                background-repeat: no-repeat;
-            }
-        }
-        .ciq-list {
-            .ciq-list-item {
-                padding: 0;
-                display: flex;
-                justify-content: flex-start;
+
+            > .left {
+                display: inline-flex;
                 align-items: center;
-                &.selected{
-                    background: transparent;
-                }
-                &.active {
-                    color: #4C5794;
-                    font-weight: bold;
-                    background-color: #F2F3F8;
-                    .ic-icon{
-                        box-shadow: none;
-                        background: transparent;
-                    }
+            }
+            > .ciq-aggregate-setting {
+                margin-right: 5px;
+            }
+            :last-child {
+                .ic-icon > svg {
+                    stroke: none;
                 }
             }
         }
     }
-    &.smartcharts-mobile{
-        .ciq-chart-types {
-            .ciq-toggle-asset-information{
-                margin: 15px 15px 0 ;
-            }
-            .ciq-list {
-                margin: 0px 15px;
-            }
+}
+
+.smartcharts-mobile {
+    .ciq-chart-types {
+        .ciq-toggle-asset-information {
+            margin: 15px 15px 0;
         }
     }
 }

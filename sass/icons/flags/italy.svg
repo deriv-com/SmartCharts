@@ -1,0 +1,20 @@
+<svg  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="16" viewBox="0 0 24 16">
+  <title>italy</title>
+  <g>
+    <g>
+      <path d="M8,1H2.5A1.5,1.5,0,0,0,1,2.5v11A1.5,1.5,0,0,0,2.5,15H8V1M2.5,0H2A2,2,0,0,0,0,2V14a2,2,0,0,0,2,2h.5A2.5,2.5,0,0,1,0,13.5H0V2.5H0A2.5,2.5,0,0,1,2.5,0" transform="translate(0 0)" fill="#1bb65d"/>
+    </g>
+    <g>
+      <path d="M21.5,1H16V15h5.5A1.5,1.5,0,0,0,23,13.5V2.5A1.5,1.5,0,0,0,21.5,1M22,0h-.5A2.5,2.5,0,0,1,24,2.5v11A2.5,2.5,0,0,1,21.5,16H22a2,2,0,0,0,2-2V2a2,2,0,0,0-2-2" transform="translate(0 0)" fill="#e43d4c"/>
+    </g>
+    <g>
+      <path d="M16,16h0M16,1H8V15h8V1" transform="translate(0 0)" fill="#fff"/>
+    </g>
+    <g>
+      <path d="M8,0H2.5A2.5,2.5,0,0,0,0,2.5v11A2.5,2.5,0,0,0,2.5,16H8V15H2.5A1.5,1.5,0,0,1,1,13.5V2.5A1.5,1.5,0,0,1,2.5,1H8V0" transform="translate(0 0)" fill="#1aaf59"/>
+      <path d="M21.5,0H16V1h5.5A1.5,1.5,0,0,1,23,2.5v11A1.5,1.5,0,0,1,21.5,15H16v1h5.5A2.5,2.5,0,0,0,24,13.5V2.5A2.5,2.5,0,0,0,21.5,0" transform="translate(0 0)" fill="#db3b49"/>
+      <polyline points="16 0 8 0 8 1 16 1 16 0" fill="#f5f5f5"/>
+      <polyline points="16 15 8 15 8 16 16 16 16 15" fill="#f5f5f5"/>
+    </g>
+  </g>
+</svg>

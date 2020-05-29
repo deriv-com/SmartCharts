@@ -1,63 +1,49 @@
 import React from 'react';
-import {connect} from '../store/Connect';
+import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
-import PriceLine from './PriceLine.jsx';
-import Shade from './Shade.jsx';
 
-const Barrier = ({
-    barrierColor,
-    visible,
+const Barrier = React.memo(({
+    shadeColor = '#39b19d',
+    color = '#39b19d',
+    foregroundColor = '#ffffff',
     HighPriceLine,
     LowPriceLine,
-    aboveShade,
-    belowShade,
-    betweenShade,
-}) => {
-    return (
-        <div
-            className={`barrier ${barrierColor}`}
-        >
-            <HighPriceLine />
-            <LowPriceLine />
-            <Shade
-                className='top-shade'
-                top={aboveShade.top}
-                bottom={aboveShade.bottom}
-                visible={aboveShade.visible}
-            />
-            <Shade
-                className='between-shade'
-                top={betweenShade.top}
-                bottom={betweenShade.bottom}
-                visible={betweenShade.visible}
-            />
-            <Shade
-                className='bottom-shade'
-                top={belowShade.top}
-                bottom={belowShade.bottom}
-                visible={belowShade.visible}
-            />
-        </div>
-    );
-};
+    AboveShade,
+    BetweenShade,
+    BelowShade,
+    hidePriceLines,
+    lineStyle,
+    isInitialized,
+    priceLabelWidth,
+}) => (isInitialized && (
+    <div
+        className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        style={{ '--shade-color': shadeColor }}
+    >
+        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} />
+        <AboveShade />
+        <BetweenShade />
+        <BelowShade />
+    </div>
+)));
+
 
 export default connect(
+    store => ({
+        HighPriceLine: store.HighPriceLine,
+        LowPriceLine: store.LowPriceLine,
+        AboveShade: store.AboveShade,
+        BetweenShade: store.BetweenShade,
+        BelowShade: store.BelowShade,
+        shadeColor: store.shadeColor,
+        color: store.color,
+        foregroundColor: store.foregroundColor,
+        hidePriceLines: store.hidePriceLines,
+        lineStyle: store.lineStyle,
+        isInitialized: store.isInitialized,
+        destructor: store.destructor,
+        priceLabelWidth: store.priceLabelWidth,
+    }),
     BarrierStore,
-    (store) => ({
-        HighPriceLine: store._high_barrier.connect(PriceLine),
-        LowPriceLine: store._low_barrier.connect(PriceLine),
-        aboveShade: store.aboveShade.clone(),
-        belowShade: store.belowShade.clone(),
-        betweenShade: store.betweenShade.clone(),
-        barrierColor: store.barrierColor
-    }), 
-    (store, {color, shade, high, low, relative, draggable, onBarrierChange,}) => {
-        if(color) store.barrierColor = color;
-        if(shade) store.shadeState = `SHADE_${shade}`.toUpperCase();
-        if(high) store.high_barrier = high;
-        if(low) store.low_barrier = low;
-        if(relative) store.relative = relative;
-        if(draggable) store.draggable = draggable;
-        if(onBarrierChange) store.onBarrierChange = onBarrierChange;
-    }
 )(Barrier);

@@ -1,36 +1,104 @@
 import React, { Component } from 'react';
-import {stxtap} from '../store/utils';
+import ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
+import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
+    onOverlayClick = (e) => {
+        if (e.target.className === 'cq-menu-overlay') {
+            this.props.setOpen(false);
+        }
+    };
+
     render() {
         const {
             open,
             className,
             children,
+            title,
             onTitleClick,
             DropdownDialog,
+            isMobile,
+            isFullscreen,
+            modalNode,
+            enabled = true,
+            shouldRenderDialogs,
+            onMouseEnter,
+            onMouseLeave,
         } = this.props;
-        const first = React.Children.map(children, (child, i) => i === 0 ? child : null);
-        const rest  = React.Children.map(children, (child, i) => i !== 0 ? child : null);
+
+        const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
+        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
+
+        const dropdown = (shouldRenderDialogs
+            && (
+                <CSSTransition
+                    in={open}
+                    timeout={150}
+                    classNames="cq-menu-dropdown"
+                >
+                    <DropdownDialog
+                        className="cq-menu-dropdown"
+                        isMobile={isMobile}
+                        isFullscreen={isFullscreen}
+                    >
+                        {title
+                    && (
+                        <div className="title">
+                            <div className="title-text">{title}</div>
+                            <CloseIcon
+                                className="icon-close-menu"
+                                onClick={onTitleClick}
+                            />
+                        </div>
+                    )
+                        }
+                        {rest}
+                    </DropdownDialog>
+                </CSSTransition>
+            ));
 
         return (
-            <div className={`ciq-menu ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
-                <div
-                    className="cq-menu-btn"
-                    // onClick={onTitleClick}
-                    ref={el => stxtap(el, onTitleClick)}
-                >
-                    {first}
+            enabled && (
+                <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                    <div
+                        className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                        onClick={onTitleClick}
+                    >
+                        {first}
+                    </div>
+                    {(isMobile && modalNode)
+                    && ReactDOM.createPortal(
+                        <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                            <div
+                                className="cq-menu-overlay"
+                                onClick={this.onOverlayClick}
+                            >
+                                {dropdown}
+                            </div>
+                        </div>,
+                        modalNode,
+                    )
+                || (dropdown)}
                 </div>
-                <DropdownDialog className='cq-menu-dropdown'>
-                    {rest}
-                </DropdownDialog>
-            </div>
+            ) || (
+                <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+                    <div
+                        className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                    >
+                        {first}
+                    </div>
+                </div>
+            )
         );
     }
 }
 
-Menu.Title = ({children}) => children;
-Menu.Body  = ({children}) => children;
+Menu.Title = ({ children }) => children;
+Menu.Body  = ({ children }) => children;
 
 export default Menu;

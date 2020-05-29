@@ -1,0 +1,76 @@
+.ciq-list {
+    position: relative;
+    box-sizing: border-box;
+
+    &.ps {
+        padding-right: 11px;
+    }
+    &.scrollbar-container {
+        .ciq-list-item {
+            &:first-child {
+                margin-top: 16px;
+            }
+            &:nth-last-child(-n+3) {
+                margin-bottom: 16px;
+            }
+        }
+    }
+    .ciq-list-item {
+        cursor: pointer;
+        line-height: normal;
+        font-size: 1.2em;
+        height: auto;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        border-bottom: none;
+        box-sizing: border-box;
+        @include themify($themes) {
+            color: themed('ListLiText');
+            background: themed('ListLiBg');
+            border: 1px solid themed('ListLiBorder');
+            border-top: none;
+        }
+
+        &:first-child {
+            margin-top: 18px;
+            border-radius: 4px 4px 0 0;
+            @include themify($themes) {
+                border-top: 1px solid themed('ListLiBorder');
+            }
+        }
+        &:last-child {
+            border-radius: 0 0 4px 4px;
+            margin-bottom: 18px;
+        }
+        &:hover {
+            @include themify($themes) {
+                background-color: themed('ListHoverLiBg');
+            }
+        }
+        &.active {
+            font-weight: bold;
+            @include themify($themes) {
+                color: themed('ListActiveLiText');
+                background-color: themed('ListActiveLiBg');
+            }
+        }
+        &.disabled {
+            pointer-events: none;
+
+            > * {
+                opacity: 0.2;
+                cursor: auto;
+            }
+        }
+    }
+    > div:nth-child(3) {
+        > div {
+            opacity: 0.16;
+            @include themify($themes) {
+                background-color: themed('ListScroll') !important;
+            }
+        }
+    }
+}

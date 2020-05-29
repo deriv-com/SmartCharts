@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-  <title>ic-otc-normal</title>
-  <path d="M8,0A8,8,0,1,1,0,8,8,8,0,0,1,8,0" transform="translate(0 0)" fill="#b0b3bf"/>
-  <path d="M11,12V11h2v1H11m0-2V9h2v1H11m3-2H10v6.71a7,7,0,0,0,4-3.1V8" transform="translate(0 0)" fill="#fff"/>
-  <path d="M6,13V12H8v1H6M3,11V10H5v1H3m3,0V10H8v1H6M3,9V8H5V9H3M6,9V8H8V9H6M6,3H5V5H3V6H2v5.61A7,7,0,0,0,3,12.9V12H5v1H3.1A7,7,0,0,0,8,15a6.63,6.63,0,0,0,1-.07V6H8V5H6V3" transform="translate(0 0)" fill="#fff"/>
+    <g fill-rule="evenodd">
+        <path d="M9.5 6.5H13A1.5 1.5 0 0 1 14.5 8v6.5h-5v-8zm2.5 2h1l-.5-.5v1l.5-.5h-1zm0 0h-1l.5.5V8l-.5.5h1zm0 2h1l-.5-.5v1l.5-.5h-1zm0 0h-1l.5.5v-1l-.5.5h1zM6.5 3.5h2v1h1v10h-8v-10h1v-1h2v-2h2v2zM4 7.5h1L4.5 7v1l.5-.5H4zm0 0H3l.5.5V7l-.5.5h1zm3 0h1L7.5 7v1l.5-.5H7zm0 0H6l.5.5V7l-.5.5h1zm-3 2h1L4.5 9v1l.5-.5H4zm0 0H3l.5.5V9l-.5.5h1zm3 0h1L7.5 9v1l.5-.5H7zm0 0H6l.5.5V9l-.5.5h1zm-3 2h1l-.5-.5v1l.5-.5H4zm0 0H3l.5.5v-1l-.5.5h1zm3 0h1l-.5-.5v1l.5-.5H7zm0 0H6l.5.5v-1l-.5.5h1z"/>
+    </g>
 </svg>

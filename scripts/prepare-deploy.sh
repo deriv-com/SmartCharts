@@ -12,7 +12,6 @@ if [ "$TRAVIS_BRANCH" = "master" ]; then
         mv ghpages/beta .
     fi
     rm -fR ghpages
-    yarn build-travis
     mkdir ghpages
     mv dist ghpages/
     if [ -d beta ]; then
@@ -24,7 +23,6 @@ fi
 if [ "$TRAVIS_BRANCH" = "dev" ]; then
     # When deploying to beta, build, then rename dist folder to beta, then replace the beta
     # folder in gh-pages with this new beta folder.
-    yarn build-travis
     git clone --branch gh-pages https://github.com/$TRAVIS_REPO_SLUG ghpages --depth 1
     rm -fR ghpages/beta
     mkdir ghpages/beta
@@ -33,12 +31,11 @@ fi
 
 # Do not deploy any other branch aside dev and master
 if [ "$TRAVIS_BRANCH" = "dev" ] || [ "$TRAVIS_BRANCH" = "master" ]; then
-    # copy over demo css and index.html
+    # copy over index.html
     DEPLOY_DIR=ghpages
     if [ "$TRAVIS_BRANCH" = "dev" ]; then
         DEPLOY_DIR=ghpages/beta
     fi
-    cp -R css "$DEPLOY_DIR"
     cp index.html "$DEPLOY_DIR"
 fi
 

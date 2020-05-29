@@ -1,20 +1,124 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import SettingsDialogStore from './SettingsDialogStore';
+import SettingsDialog from '../components/SettingsDialog.jsx';
+import Menu from '../components/Menu.jsx';
+import { CategoricalDisplay } from '../components/categoricaldisplay';
+import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+
 // TODO:
 // import StudyInfo from '../study-info';
 
 export default class StudyLegendStore {
     constructor(mainStore) {
+        this.excludedStudies = {
+            Beta: true,
+            // volume is not supported in chart
+            Klinger: true,
+            'Trade Vol': true,
+            'Vol ROC': true,
+            'Price Vol': true,
+            'Pos Vol': true,
+            'Neg Vol': true,
+            'On Bal Vol': true,
+            'Vol Osc': true,
+            volume: true,
+            'vol undr': true,
+            'vol profile': true,
+            'W MFI': true,
+            EOM: true,
+            'Chaikin MF': true,
+            Twiggs: true,
+            // end volume
+            'Aroon Osc': true,
+            'Lin R2': true,
+            'Lin Fcst': true,
+            'Lin Incpt': true,
+            'Time Fcst': true,
+            'VT Filter': true,
+            TRIX: true,
+            'STD Dev': true,
+            Swing: true,
+            'Acc Swing': true,
+            'Price ROC': true,
+            Momentum: true,
+            'Hist Vol': true,
+            'Pretty Good': true,
+            Ultimate: true,
+            'Chaikin Vol': true,
+            'Price Osc': true,
+            'True Range': true,
+            ATR: true,
+            'Ehler Fisher': true,
+            Schaff: true,
+            QStick: true,
+            Coppock: true,
+            'Chande Mtm': true,
+            'Chande Fcst': true,
+            'Intraday Mtm': true,
+            RAVI: true,
+            'Random Walk': true,
+            'High Low': true,
+            'High-Low': true,
+            'Med Price': true,
+            'Fractal Chaos': true,
+            GAPO: true,
+            'Prime Number Bands': true,
+            'Prime Number': true,
+            HHV: true,
+            LLV: true,
+            'Mass Idx': true,
+            Keltner: true,
+            'Elder Ray': true,
+            'Elder Force': true,
+            'LR Slope': true,
+            COG: true,
+            'Typical Price': true,
+            'Weighted Close': true,
+            'M Flow': true,
+            'W Acc Dist': true,
+            'val lines': true,
+            correl: true,
+            PMO: true,
+            'Rel Vol': true,
+            'ATR Bands': true,
+            'STARC Bands': true,
+            'ATR Trailing Stop': true,
+            'Boll BW': true,
+            'Boll %b': true,
+            'Rel Vig': true,
+            'Elder Impulse': true,
+            'Pivot Points': true,
+            VWAP: true,
+            AVWAP: true,
+            'P Rel': true,
+            'Perf Idx': true,
+            Ulcer: true,
+            'Bal Pwr': true,
+            'Trend Int': true,
+            Choppiness: true,
+            Disparity: true,
+            'Rainbow MA': true,
+            'Rainbow Osc': true,
+            'Pring KST': true,
+            'Pring Sp-K': true,
+            Darvas: true,
+            Supertrend: true,
+            Vortex: true,
+            PSY: true,
+            'MA Dev': true,
+            Shinohara: true,
+            'VT HZ Filter': true,
+        };
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
-        this.menu = new MenuStore({getContext: () => this.context});
+        this.menu = new MenuStore(mainStore, { route:'indicators' });
         this.categoricalDisplay = new CategoricalDisplayStore({
             activeOptions: [
-                { id: 'edit', onClick: (item) => this.editStudy(item) },
-                { id: 'delete', onClick: (item) => this.deleteStudy(item) },
+                { id: 'edit', onClick: item => this.editStudy(item) },
+                { id: 'delete', onClick: item => this.deleteStudy(item) },
             ],
             getIsShown: () => this.menu.open,
             getCategoricalItems: () => this.categorizedStudies,
@@ -23,69 +127,118 @@ export default class StudyLegendStore {
             placeholderText: t.translate('"Mass Index" or "Doji Star"'),
             favoritesId: 'indicators',
             mainStore,
+            searchInputClassName: () => this.searchInputClassName,
+            limitInfo: t.translate('Up to 5 active indicators allowed.'),
         });
         this.settingsDialog = new SettingsDialogStore({
-            getContext: () => this.mainStore.chart.context,
+            mainStore,
             onDeleted: () => this.deleteStudy(this.helper),
-            onStared: () => this.starStudy(this.helper),
+            favoritesId: 'indicators',
             onChanged: items => this.updateStudy(this.helper.sd, items),
         });
+        this.StudyCategoricalDisplay = this.categoricalDisplay.connect(CategoricalDisplay);
+        this.StudyMenu = this.menu.connect(Menu);
+        this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
 
     onContextReady = () => {
-        window.stx = this.stx;
-        this.begin();
-    }
+        this.stx.callbacks.studyOverlayEdit = this.editStudy;
+        this.stx.callbacks.studyPanelEdit = this.editStudy;
+        // to remove studies if user has already more than 5
+        // and remove studies which are excluded
+        this.removeExtraStudies();
+        this.stx.append('createDataSet', this.renderLegend);
+        this.stx.append('drawPanels', () => {
+            const panel = Object.keys(this.stx.panels)[1];
+            if (panel) {
+                // Hide the up arrow from first indicator to prevent user
+                // from moving the indicator panel above the main chart
+                this.stx.panels[panel].up.style.display = 'none';
+            }
+        });
+        this.renderLegend();
+    };
 
-    injections = [];
     previousStudies = { };
-
+    searchInputClassName;
+    @observable hasReachedLimits = false;
     @observable activeStudies = {
         categoryName: t.translate('Active'),
+        categoryNamePostfix: '',
         categoryId: 'active',
         hasSubcategory: false,
         emptyDescription: t.translate('There are no active indicators yet.'),
         data: [],
     };
 
-    begin() {
-        this.stx.callbacks.studyOverlayEdit = study => this.editStudy(study);
-        this.stx.callbacks.studyPanelEdit = study => this.editStudy(study);
-        this.injections.push(this.stx.append('createDataSet', () => this.renderLegend()));
-        this.renderLegend();
-    }
-
     get categorizedStudies() {
         const data = [];
-        Object.keys(CIQ.Studies.studyLibrary).forEach(studyId => {
-            const study = CIQ.Studies.studyLibrary[studyId];
-            data.push({
-                enabled: true,
-                display: t.translate(study.name),
-                dataObject: studyId,
-                itemId: studyId,
-            });
+
+        Object.keys(CIQ.Studies.studyLibrary).forEach((studyId) => {
+            if (!this.excludedStudies[studyId]) {
+                const study = CIQ.Studies.studyLibrary[studyId];
+                data.push({
+                    enabled: true,
+                    display: t.translate(study.name),
+                    dataObject: studyId,
+                    itemId: studyId,
+                });
+            }
         });
+        const categoryNamePostfix = `(${this.activeStudies.data.length}/5)`;
         const category = {
             categoryName: t.translate('Indicators'),
+            categoryNamePostfix,
+            categoryNamePostfixShowIfActive: true,
             categoryId: 'indicators',
+            categorySubtitle: t.translate('Up to 5 active indicators allowed.'),
             hasSubcategory: false,
-            data
+            data,
         };
         return [category];
     }
 
+    @action.bound removeExtraStudies() {
+        if (this.stx.layout && this.stx.layout.studies) {
+            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
+                const type = this.stx.layout.studies[study].type;
+                if (idx >= 5 || this.excludedStudies[type]) {
+                    setTimeout(() => {
+                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
+                        this.renderLegend();
+                    }, 0);
+                }
+            });
+        }
+    }
+
     @action.bound onSelectItem(item) {
-        CIQ.Studies.addStudy(this.stx, item);
-        this.menu.setOpen(false);
+        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
+            const sd = CIQ.Studies.addStudy(this.stx, item);
+            this.changeStudyPanelTitle(sd);
+            logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.menu.setOpen(false);
+        }
+    }
+
+    // Temporary prevent user from adding more than 5 indicators
+    // TODO All traces can be removed after new design for studies
+    @action.bound updateStyle() {
+        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
+    }
+
+    @action.bound updateProps({ searchInputClassName }) {
+        this.searchInputClassName = searchInputClassName;
     }
 
     @action.bound editStudy(study) {
         const helper = new CIQ.Studies.DialogHelper(study);
         this.helper = helper;
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${helper.name}`);
 
         const attributes = helper.attributes;
         const inputs = helper.inputs.map(inp => ({
@@ -106,8 +259,8 @@ export default class StudyLegendStore {
             type: 'colorpicker',
             category: 'outputs',
         }));
-        const parameters = helper.parameters.map(par => {
-            let shared = {
+        const parameters = helper.parameters.map((par) => {
+            const shared = {
                 title: t.translate(par.heading),
                 ...attributes[par.name],
                 category: 'parameters',
@@ -120,7 +273,9 @@ export default class StudyLegendStore {
                     defaultValue: par.defaultValue,
                     type: 'switch',
                 };
-            } else if (par.defaultValue.constructor === Number) {
+            }
+
+            if (par.defaultValue.constructor === Number) {
                 return {
                     ...shared,
                     id: par.name,
@@ -135,38 +290,43 @@ export default class StudyLegendStore {
                     },
                 };
             }
-            throw 'Unrecognised parameter!';
+            throw new Error('Unrecognised parameter!');
         });
 
-        this.settingsDialog.items = [...inputs, ...outputs, ...parameters];
-        this.settingsDialog.title = study.sd.name.toUpperCase();
+        this.settingsDialog.id = study.sd.type;
+        this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
+        this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
         this.settingsDialog.description = '';
-        this.settingsDialog.stared = !!this.categoricalDisplay.favoritesMap[helper.name];
         this.settingsDialog.setOpen(true);
     }
-    @action.bound starStudy(study) {
-        this.categoricalDisplay.setFavoriteById(study.name);
-    }
+
     @action.bound deleteStudy(study) {
         const sd = study.sd;
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${sd.name}`);
         if (!sd.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
-            setTimeout(
-                () => {
-                    CIQ.Studies.removeStudy(this.stx, sd);
-                    this.renderLegend();
-                }, 0
-            );
+            setTimeout(() => {
+                CIQ.Studies.removeStudy(this.stx, sd);
+                this.renderLegend();
+            }, 0);
         }
     }
     @action.bound updateStudy(study, items) {
         const updates = { };
-        for(const {id, category, value} of items) {
-            if(study[category][id] !== value) {
+        for (const { id, category, value, type } of items) {
+            let isChanged;
+            if (type === 'numbercolorpicker') {
+                isChanged = study[category][`${id}Color`] !== value.Color
+                    || study[category][`${id}Value`] !== value.Value;
+            } else {
+                isChanged = study[category][id] !== value;
+            }
+
+            if (isChanged) {
                 updates[category] = updates[category] || { };
                 if (typeof value === 'object') {
                     for (const suffix in value) {
@@ -177,9 +337,21 @@ export default class StudyLegendStore {
                 }
             }
         }
+        if (Object.keys(updates).length === 0) return;
         this.helper.updateStudy(updates);
+        this.updateActiveStudies();
         this.stx.draw();
-        this.settingsDialog.title = this.helper.sd.name.toUpperCase();
+        this.changeStudyPanelTitle(this.helper.sd);
+        this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
+    }
+
+    changeStudyPanelTitle(sd) {
+        // Remove numbers from the end of indicator titles in mobile
+        if (this.mainStore.chart.isMobile) {
+            this.stx.panels[sd.panel].display = sd.type;
+            this.stx.draw();
+            this.mainStore.state.saveLayout();
+        }
     }
 
     shouldRenderLegend() {
@@ -205,18 +377,30 @@ export default class StudyLegendStore {
     /**
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
-    renderLegend() {
-        if(!this.shouldRenderLegend()) {return;}
+    renderLegend = () => {
+        if (!this.shouldRenderLegend()) { return; }
 
+        this.updateActiveStudies();
+        // Temporary prevent user from adding more than 5 indicators
+        // All traces can be removed after new design for studies
+        this.updateStyle();
+    };
+
+    @action.bound setReachedLimit() {
+        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        this.hasReachedLimits = hasReachedLimit;
+    }
+
+    @action.bound updateActiveStudies() {
         const stx = this.stx;
         const studies = [];
-        Object.keys(stx.layout.studies).forEach(id => {
-            let sd = stx.layout.studies[id];
+        Object.keys(stx.layout.studies || []).forEach((id) => {
+            const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
 
             studies.push({
                 enabled: true,
-                display: sd.inputs.display,
+                display:this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display,
                 dataObject: {
                     stx,
                     sd,
@@ -228,15 +412,8 @@ export default class StudyLegendStore {
         });
 
         this.activeStudies.data = studies;
-    }
-
-    @action.bound cleanUp() {
-        if (this.context && this.injections) {
-            for (const inj of this.injections) {
-                this.stx.removeInjection(inj);
-            }
-            this.injections = [];
-        }
+        this.activeStudies.categoryNamePostfix = `(${studies.length}/5)`;
+        this.setReachedLimit();
     }
 
     @action.bound clearStudies() {

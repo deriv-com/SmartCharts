@@ -1,52 +1,45 @@
-import React, {PureComponent} from 'react';
-import { createElement } from './ui/utils';
+import { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { MobxProvider } from '../store/Connect';
-import PropTypes from 'prop-types';
+import { createElement } from './ui/utils';
+import { connect } from '../store/Connect';
 
-class Wrapper extends React.Component {
+const inChartPrefix = 'cq-inchart-';
+
+// Render given Components under stx-holder to position it relative to the active symbol chart.
+class RenderInsideChart extends Component {
     constructor(props) {
         super(props);
-        this.state = { children: null }
-    }
+        const { at = 'holder', contextPromise } = props;
 
-    componentDidMount() {
-        this.setState({children: this.props.children});
-    }
+        contextPromise.then((context) => {
+            const nodeName = `${inChartPrefix}${at}`;
+            // reuse existing node when possible:
+            let elem = context.topNode.querySelector(`.${nodeName}`);
+            if (!elem) {
+                elem = createElement(`<div class="${nodeName}"></div>`);
+                context.stx.chart.panel[at].appendChild(elem);
+            }
 
-    render() {
-        return this.state.children;
-    }
-}
-// Render given Components under stx-holder to position it relative to the active symbol chart.
-// NOTE: Do NOT place this component as root; props will not update properly.
-class RenderInsideChart extends PureComponent {
-    static contextTypes = { promise: PropTypes.object, mobxStores: PropTypes.object };
-
-    componentDidMount() {
-        const at = this.props && this.props.at || 'holder';
-
-        this.context.promise.then((context) => {
-            const stx = context.stx;
-            const elem = createElement(`<div></div>`);
-            const marker = stx.chart.panel[at].appendChild(elem);
-            ReactDOM.render(
-                <MobxProvider store={this.context.mobxStores}>
-                    <Wrapper ref={r => this.wrapper = r}>
-                        {this.props.children}
-                    </Wrapper>
-                </MobxProvider>,
-                marker
-            );
+            this.container = elem;
+            this.forceUpdate(); // force render to be called after getting the container
         });
     }
 
-    render () {
-        if(this.wrapper) {
-            setTimeout(() => this.wrapper.setState({children: this.props.children}), 0);
+    render() {
+        if (!this.props.isChartReady) return (null);
+        if (this.props.hideInScrollToEpoch && this.props.isChartScrollingToEpoch) return (null);
+        if (this.container) {
+            return ReactDOM.createPortal(
+                this.props.children,
+                this.container,
+            );
         }
         return (null);
     }
-};
+}
 
-export default RenderInsideChart;
+export default connect(({ chart, state }) => ({
+    contextPromise: chart.contextPromise,
+    isChartReady: state.isChartReady,
+    isChartScrollingToEpoch: state.isChartScrollingToEpoch,
+}))(RenderInsideChart);

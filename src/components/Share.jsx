@@ -1,73 +1,64 @@
 import React from 'react';
-import Menu from './Menu.jsx';
 import { connect } from '../store/Connect';
 import {
-    ShareIcon,
-    CopyIcon,
+    DownloadIcon,
+    PngIcon,
+    CsvIcon,
 } from './Icons.jsx';
-import '../../sass/_ciq-share.scss';
+import '../../sass/components/_ciq-download.scss';
 
 
 const Share = ({
-    Menu,
+    ShareMenu,
     menuOpen,
-    shareLink,
     downloadCSV,
     downloadPNG,
-    copyToClipboard,
-    resetCopyTooltip,
-    copyTooltip,
-    onInputRef,
-}) => {
-    return (
-        <Menu className="cq-share">
-            <Menu.Title>
-                <ShareIcon
-                    className = {menuOpen ? 'active' : ''}
-                    tooltip-title={t.translate("Share")}
-                />
-            </Menu.Title>
-            <Menu.Body>
-                <div className='title'> {t.translate('Share / Download Chart')} </div>
-                <div className='body'>
-                    <div className='caption1'>{t.translate('Share link')}</div>
-                    <div className='content'>
-                        <input
-                            ref={onInputRef}
-                            value={shareLink}
-                        />
-                        <CopyIcon
-                            onClick={copyToClipboard}
-                            onMouseOut={resetCopyTooltip}
-                            tooltip-title={copyTooltip}
-                        />
-                    </div>
-
-                    <div className='caption2'>{t.translate('Download chart')}</div>
-                    <div className='content'>
+    isLoadingPNG,
+}) => (
+    <ShareMenu
+        className="cq-download"
+        title={t.translate('Download Chart')}
+    >
+        <ShareMenu.Title>
+            <DownloadIcon
+                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                tooltip-title={t.translate('Download')}
+            />
+        </ShareMenu.Title>
+        <ShareMenu.Body>
+            <div className="body">
+                <div className="content">
+                    <div className="ciq-list ciq-list-download">
                         <div
-                            className='download-btn'
+                            className="ciq-list-item"
                             onClick={downloadPNG}
-                        > PNG </div>
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as PNG')}
+                                {isLoadingPNG && <span className="cq-loading" />}
+                            </span>
+                            <PngIcon />
+                        </div>
                         <div
-                            className='download-btn'
+                            className="ciq-list-item"
                             onClick={downloadCSV}
-                        > CSV </div>
+                        >
+                            <span className="ciq-icon-text">
+                                {t.translate('Download as CSV')}
+                            </span>
+                            <CsvIcon />
+                        </div>
                     </div>
                 </div>
-            </Menu.Body>
-        </Menu>
-    );
-};
+            </div>
+        </ShareMenu.Body>
+    </ShareMenu>
+);
 
-export default connect(({share: s}) => ({
-    Menu: s.menu.connect(Menu),
-    menuOpen: s.menu.dialog.open,
-    shareLink: s.shareLink,
-    downloadPNG: s.downloadPNG,
-    downloadCSV: s.downloadCSV,
-    copyToClipboard: s.copyToClipboard,
-    onInputRef: s.onInputRef,
-    resetCopyTooltip:  s.resetCopyTooltip,
-    copyTooltip: s.copyTooltip,
+export default connect(({ share: d }) => ({
+    ShareMenu: d.ShareMenu,
+    menuOpen: d.menu.dialog.open,
+    downloadPNG: d.downloadPNG,
+    downloadCSV: d.downloadCSV,
+    isLoadingPNG: d.isLoadingPNG,
 }))(Share);

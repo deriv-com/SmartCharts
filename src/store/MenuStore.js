@@ -1,26 +1,42 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { action, computed, reaction, observable, when } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import Dialog from '../components/Dialog.jsx';
 
-const allMenues = [];
-
 export default class MenuStore {
-    constructor({getContext}) {
-        this.getContext = getContext;
-        this.dialog = new DialogStore();
+    constructor(mainStore, options) {
+        this.mainStore = mainStore;
+        this.dialog = new DialogStore(mainStore);
         reaction(() => this.open, () => this.blurInput());
-        allMenues.push(this);
+        when(() => this.mainStore.chart.context, this.onContextReady);
+        if (options && options.route) { this.route = options.route; }
+        this.DropDownDialog = this.dialog.connect(Dialog);
     }
 
-    get context() { return this.getContext(); }
+    get context() { return this.mainStore.chart.context; }
 
+    onContextReady = () => {
+        this.modalNode = this.mainStore.chart.modalNode;
+    };
+
+    get routingStore() {
+        return this.mainStore.routing;
+    }
+
+    @observable modalNode = null;
+    @observable route = '';
     @computed get open() { return this.dialog.open; }
-    @action.bound setOpen(val) { this.dialog.setOpen(val); }
+    @action.bound setOpen(val) {
+        this.dialog.setOpen(val);
+        /**
+         *  Update the url hash by considering the dialog `route` and `open`
+         */
+        this.routingStore.updateRoute(this.route, val);
+    }
 
     blurInput() {
         const stx = this.context.stx;
-        if(this.open === false) {
+        if (this.open === false) {
             document.activeElement.blur();
             stx.modalEnd();
         } else {
@@ -30,6 +46,7 @@ export default class MenuStore {
         stx.allowScroll = stx.allowZoom = !this.open;
     }
 
+
     @action.bound onTitleClick(e) {
         if (e) {
             e.stopPropagation();
@@ -37,9 +54,13 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
 
-    connect = connect(() => ({
+    connect = connect(({ chart: c }) => ({
+        setOpen: this.setOpen,
         open: this.open,
         onTitleClick: this.onTitleClick,
-        DropdownDialog: this.dialog.connect(Dialog),
+        DropdownDialog: this.DropDownDialog,
+        modalNode: this.modalNode,
+        isMobile: c.isMobile,
+        shouldRenderDialogs: c.shouldRenderDialogs,
     }))
 }

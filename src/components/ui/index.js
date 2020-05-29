@@ -1,4 +1,3 @@
-import CIQ from 'chartiq';
 
 /**
  * Set this flag to true to bypass bindings when adding a component to the DOM.

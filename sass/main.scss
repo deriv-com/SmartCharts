@@ -1,0 +1,28 @@
+/*
+ Edit (and rename) this file to implement your own style. Please avoid editing the imported _ciq...scss files
+ other than _ciq_general.scss so that you can receive upgrades without having to reimplement your changes.
+ Instead, override any styles from within this file, or substitute the includes with your own.
+
+ _ciq-general.scss contains generalized css that affects the entire page. This is necessary
+ for the sample project but may not be required for your application.
+
+ _ciq-components.scss contains the main styles for the ChartIQ component library. Set your
+ theme colors, fonts, etc in this file.
+
+_ciq-night.scss contains css overrides for a night (dark) theme. Use this as a template
+for building additional themes.
+
+ _ciq-extras.scss includes styling for ChartIQ plugins. You may not require this at all.
+
+ Run sass to generate a css file from this file and the included _ciq files. Include that css
+ in your html.
+
+ */
+/* TODO: deal with translations on all :after and :before content */
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,400,500,700&display=swap&subset=cyrillic,cyrillic-ext,latin-ext,vietnamese');
+@import 'styles/chart';
+@import 'styles/main';
+@import 'components/barrier';
+@import 'components/loader';
+@import 'ciq-extras'; /* Plugins and other pieces */
+// Add an import for your overrides here and then recompile the SASS

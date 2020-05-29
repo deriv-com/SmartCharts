@@ -1,57 +1,68 @@
 import React from 'react';
+import Scrollbars from 'tt-react-custom-scrollbars';
 import { connect } from '../store/Connect';
-import Menu from './Menu.jsx';
-import List from './List.jsx';
 import { DrawIcon, ClearIcon, MeasureIcon } from './Icons.jsx';
-import '../../sass/_draw-tools.scss';
+import '../../sass/components/_draw-tools.scss';
 
 const DrawTools = ({
     clearAll,
-    noTool,
     selectTool,
-    clearDrawings,
-    Menu,
+    DrawToolsMenu,
     menuOpen,
-    DrawList,
-}) => {
-    return (
-        <Menu
-            className="ciq-draw-tools"
-            >
-            <Menu.Title>
-                <DrawIcon
-                    className={`${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate("Draw tools")} />
-            </Menu.Title>
+    drawToolsItems,
+}) => (
+    <DrawToolsMenu
+        className="ciq-draw-tools"
+        title={t.translate('Draw tools')}
+    >
+        <DrawToolsMenu.Title>
+            <DrawIcon
+                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                tooltip-title={t.translate('Draw tools')}
+            />
+        </DrawToolsMenu.Title>
 
-            <Menu.Body>
-                <div className='title'>
-                    <div className='ciq-bars-title'>{t.translate("Draw tools")}</div>
-                    <div className='ciq-bars-buttons'>
-                        <ClearIcon 
-                            onClick={clearAll} 
-                            tooltip-title={t.translate("Clear All")} />
-                        <MeasureIcon 
+        <DrawToolsMenu.Body>
+            <div className="body">
+                <Scrollbars
+                    autoHeight
+                    autoHeightMax={260}
+                    className="ciq-list"
+                >
+                    <div className="cq-draw-buttons">
+                        <div className="cq-draw-button" onClick={clearAll}>
+                            <ClearIcon />
+                            <span>{t.translate('Clear All')}</span>
+                        </div>
+                        <div
+                            className="cq-draw-button"
                             onClick={() => selectTool('measure')}
-                            tooltip-title={t.translate("Measure")} />
+                            style={{ display: 'none'  /* TODO: measurement tool doesn't show measurement */ }}
+                        >
+                            <MeasureIcon />
+                            <span>{t.translate('Measure')}</span>
+                        </div>
                     </div>
-                </div>
-                <div className='body'>
-                    <DrawList />
-                </div>
-            </Menu.Body>
-        </Menu>
-    );
-};
+                    {drawToolsItems.map(it => (
+                        <div
+                            key={it.id}
+                            className="ciq-list-item"
+                            onClick={() => selectTool(it.id)}
+                        >
+                            {it.text}
+                        </div>
+                    ))}
+                </Scrollbars>
 
-export default connect(
-    ({ drawTools: dt }) => ({
-        clearAll: dt.clearAll,
-        noTool: dt.noTool,
-        selectTool: dt.selectTool,
-        clearDrawings: dt.clearDrawings,
-        Menu: dt.menu.connect(Menu),
-        menuOpen: dt.menu.open,
-        DrawList: dt.list.connect(List),
-    })
-)(DrawTools);
+            </div>
+        </DrawToolsMenu.Body>
+    </DrawToolsMenu>
+);
+
+export default connect(({ drawTools: dt }) => ({
+    clearAll: dt.clearAll,
+    selectTool: dt.selectTool,
+    DrawToolsMenu: dt.DrawToolsMenu,
+    menuOpen: dt.menu.open,
+    drawToolsItems: dt.drawToolsItems,
+}))(DrawTools);

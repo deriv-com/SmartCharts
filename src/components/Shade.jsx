@@ -1,15 +1,17 @@
 import React from 'react';
 
 const Shade = ({
-    top,
-    bottom,
+    // top,
+    // bottom,
+    // right,
     visible,
     className,
+    setShadeRef,
 }) => (
     <div
-        className={`shade ${className || ''}`}
-        style={{top, bottom}}
-        hidden={visible ? undefined : 'true'}
+        className={`shade ${className || ''} ${visible ? '' : 'hidden'}`}
+        ref={setShadeRef}
+        style={{ top: -120 }}
     />
 );
 

@@ -3,34 +3,32 @@ import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
     @observable price = '';
-    @observable showStable = true;
     @observable isIncrease = false;
+    @observable status = '';
     oldPrice = '';
 
-    @action.bound setPrice(val) {
-        this.price = val;
-        const oldVal = +this.oldPrice;
-        const newVal = +this.price;
+    @action.bound setPrice(val, prevPrice) {
+        const oldVal = prevPrice || +this.oldPrice;
+        const newVal = +val;
         let isIncrease = false;
-        if (newVal > oldVal) {isIncrease = true;}
-        else if (newVal === oldVal) {
-            this.setShowStable(true);
-            return false;
+        if (newVal > oldVal) {
+            isIncrease = true;
+            this.status = 'up';
+        } else if (newVal < oldVal) {
+            this.status = 'down';
+        } else {
+            this.status = '';
+            return;
         }
-        this.setShowStable(false);
-        setTimeout(() => this.setShowStable(true), 0);
+        this.price = val;
         this.oldPrice = this.price;
         this.isIncrease = isIncrease;
     }
 
-    @action.bound setShowStable(val) {
-        this.showStable = val;
-    }
-
     connect = connect(() => ({
         price: this.price,
-        showStable: this.showStable,
         isIncrease: this.isIncrease,
-        className: this.className
+        status: this.status,
+        className: this.className,
     }));
 }

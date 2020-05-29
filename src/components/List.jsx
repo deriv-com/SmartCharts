@@ -1,40 +1,35 @@
 import React from 'react';
-import '../../sass/_ciq-list.scss';
+import Scrollbars from 'tt-react-custom-scrollbars';
+import '../../sass/components/_ciq-list.scss';
 
 const List = ({
     height,
-    selectedIdx,
     items,
     onItemClick,
-    onItemRef,
-    onRootRef,
     children,
 }) => {
-    const hasFunctionAsChildren = (typeof children == 'function');
+    const hasFunctionAsChildren = (typeof children === 'function');
     const renderRow = hasFunctionAsChildren ? children : (item => item.text);
-    const itemClassName = (it, idx) => {
-        return 'ciq-list-item' +
-               ` ${idx === selectedIdx ? 'selected' : ''}` +
-               ` ${it.disabled ? 'disabled' : ''}` +
-               ` ${it.active ? 'active' : ''}`;
-    };
+    const itemClassName = it => 'ciq-list-item'
+               + ` ${it.disabled ? 'disabled' : ''}`
+               + ` ${it.active ? 'active' : ''}`;
     return (
-        <div
-            className='ciq-list'
-            style={height && {height: `${height}px`}}
-            ref={onRootRef}
+        <Scrollbars
+            className="ciq-list"
+            autoHeight
+            autoHide
+            style={height && { height: `${height}px` }}
         >
             {items.map((it, idx) => (
                 <div
                     key={it.id}
-                    className={itemClassName(it, idx)}
+                    className={itemClassName(it)}
                     onClick={() => onItemClick(idx, it)}
-                    ref={ref => onItemRef(idx, ref)}
                 >
                     {renderRow(it)}
                 </div>
             ))}
-        </div>
+        </Scrollbars>
     );
 };
 

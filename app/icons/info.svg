@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/system/light/alert message/info</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="icons/system/light/alert-message/info" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <circle id="Oval" fill="#2196F3" cx="8" cy="8" r="8"></circle>
+            <g id="Group-2" transform="translate(6.500000, 4.000000)" fill="#FFFFFF">
+                <circle id="Oval-2" cx="1.5" cy="1" r="1"></circle>
+                <rect id="Rectangle" x="0.5" y="3" width="2" height="5" rx="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,26 +1,26 @@
-import React, {PureComponent} from 'react';
-import contextAware from '../contextAware';
+import React from 'react';
 import {
-    MinusIcon as ZoomOut,
-    AddIcon as ZoomIn,
+    ZoomInIcon,
+    ZoomOutIcon,
 } from './Icons.jsx';
+import '../../sass/components/_chart-size.scss';
+import { connect } from '../store/Connect';
 
-class ChartSize extends PureComponent {
-    onContextReady (context) {
-        this.stx = context.stx;
-    }
+const ChartSize = ({
+    zoomIn,
+    zoomOut,
+}) => (
+    <div className="ciq-menu cq-chart-size">
+        <div className="cq-menu-btn">
+            <ZoomOutIcon className="ic-icon-with-sub cq-zoom-out" tooltip-title={t.translate('Zoom out')} onClick={zoomOut} />
+        </div>
+        <div className="cq-menu-btn">
+            <ZoomInIcon className="ic-icon-with-sub cq-zoom-in" tooltip-title={t.translate('Zoom in')} onClick={zoomIn} />
+        </div>
+    </div>
+);
 
-    zoomIn = () => this.stx.zoomIn();
-    zoomOut = () => this.stx.zoomOut();
-
-    render () {
-        return (
-            <div className="cq-chart-size">
-                <ZoomOut className='cq-zoom-out' tooltip-title={t.translate("Zoom out")} onClick={this.zoomOut} />
-                <ZoomIn className='cq-zoom-in' tooltip-title={t.translate("Zoom in")} onClick={this.zoomIn} />
-            </div>
-        );
-    }
-};
-
-export default contextAware(ChartSize);
+export default connect(({ chartSize }) => ({
+    zoomIn: chartSize.zoomIn,
+    zoomOut: chartSize.zoomOut,
+}))(ChartSize);

@@ -7,198 +7,153 @@ msgstr ""
 "X-Crowdin-File: /dev/translation/messages.pot\n"
 "Project-Id-Version: smartcharts\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Last-Translator: binarycom <jy@binary.com>\n"
+"Last-Translator: binarycom\n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
-"PO-Revision-Date: 2018-04-12 22:01-0400\n"
+"PO-Revision-Date: 2019-05-06 01:42\n"
 
-msgid "CLOSED"
+msgid " already exists."
 msgstr ""
 
-msgid "Favorites"
+msgid "[symbol] feed is delayed by [delay] minutes"
 msgstr ""
 
-msgid "There are no favorites yet."
-msgstr ""
-
-msgid "Chart data is not available for this symbol."
-msgstr ""
-
-msgid "PRICE"
-msgstr ""
-
-msgid "OPEN"
-msgstr ""
-
-msgid "CLOSE"
-msgstr ""
-
-msgid "HIGH"
-msgstr ""
-
-msgid "LOW"
-msgstr ""
-
-msgid "Chart types"
-msgstr ""
-
-msgid "Toggle Asset Information"
-msgstr ""
-
-msgid "Studies"
-msgstr ""
-
-msgid "Comparison"
-msgstr ""
-
-msgid "Templates"
-msgstr ""
-
-msgid "Template name"
-msgstr ""
-
-msgid "There is no template added by you."
-msgstr ""
-
-msgid "Click + icon to add one."
-msgstr ""
-
-msgid "Crosshair"
-msgstr ""
-
-msgid "Time period"
-msgstr ""
-
-msgid "Tick"
-msgstr ""
-
-msgid "Minute"
-msgstr ""
-
-msgid "Hour"
-msgstr ""
-
-msgid "Day"
-msgstr ""
-
-msgid "Zoom out"
-msgstr ""
-
-msgid "Zoom in"
-msgstr ""
-
-msgid "Draw tools"
-msgstr ""
-
-msgid "Clear All"
-msgstr ""
-
-msgid "Measure"
-msgstr ""
-
-msgid "Share"
-msgstr ""
-
-msgid "Share / Download Chart"
-msgstr ""
-
-msgid "Share link"
-msgstr ""
-
-msgid "Download chart"
-msgstr ""
-
-msgid "RESET"
-msgstr ""
-
-msgid "DONE"
-msgstr ""
-
-msgid "right-click to delete"
-msgstr ""
-
-msgid "right-click to manage"
+msgid "[symbol] market is now opened."
 msgstr ""
 
 msgid "[symbol] market is presently closed."
 msgstr ""
 
-msgid "Streaming for [symbol] is not available due to license restrictions"
-msgstr ""
-
-msgid "Line"
-msgstr ""
-
-msgid "Dot"
-msgstr ""
-
-msgid "Colored Dot"
-msgstr ""
-
-msgid "Spline"
-msgstr ""
-
-msgid "Baseline"
-msgstr ""
-
-msgid "Candle"
-msgstr ""
-
-msgid "OHLC"
-msgstr ""
-
-msgid "Hollow Candle"
-msgstr ""
-
 msgid "\"Mass Index\" or \"Doji Star\""
-msgstr ""
-
-msgid "Indicators"
 msgstr ""
 
 msgid "Active"
 msgstr ""
 
-msgid "There are no active indicators yet."
-msgstr ""
-
-msgid "\"AUD/JPY\" or \"Apple\""
-msgstr ""
-
-msgid "There are no active comparisons yet."
+msgid "Add New"
 msgstr ""
 
 msgid "Annotation"
 msgstr ""
 
+msgid "Asset Information"
+msgstr ""
+
+msgid "Auto Scale"
+msgstr ""
+
 msgid "Average Line"
+msgstr ""
+
+msgid "Baseline"
+msgstr ""
+
+msgid "Box Size"
+msgstr ""
+
+msgid "C"
 msgstr ""
 
 msgid "Callout"
 msgstr ""
 
+msgid "CANCEL"
+msgstr ""
+
+msgid "Candle"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
 msgid "Channel"
+msgstr ""
+
+msgid "Chart data is not available for this symbol."
+msgstr ""
+
+msgid "Chart Table"
+msgstr ""
+
+msgid "Chart types"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "CLOSE"
+msgstr ""
+
+msgid "CLOSED"
+msgstr ""
+
+msgid "Colored Dot"
+msgstr ""
+
+msgid "Comparison"
 msgstr ""
 
 msgid "Continuous"
 msgstr ""
 
+msgid "Countdown"
+msgstr ""
+
+msgid "Crosshair"
+msgstr ""
+
 msgid "Crossline"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Date"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "DONE"
 msgstr ""
 
 msgid "Doodle"
 msgstr ""
 
+msgid "Dot"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Download as CSV"
+msgstr ""
+
+msgid "Download as PNG"
+msgstr ""
+
+msgid "Download Chart"
+msgstr ""
+
+msgid "Draw tools"
+msgstr ""
+
 msgid "Ellipse"
 msgstr ""
 
-msgid "Fib Retracement"
+msgid "Favorites"
 msgstr ""
 
 msgid "Fib Arc"
 msgstr ""
 
 msgid "Fib Fan"
+msgstr ""
+
+msgid "Fib Retracement"
 msgstr ""
 
 msgid "Fib Time Zone"
@@ -210,13 +165,100 @@ msgstr ""
 msgid "Gartley"
 msgstr ""
 
+msgid "H"
+msgstr ""
+
+msgid "Heikin Ashi"
+msgstr ""
+
+msgid "High"
+msgstr ""
+
+msgid "HIGH"
+msgstr ""
+
+msgid "Historical Data Mode"
+msgstr ""
+
+msgid "Hollow Candle"
+msgstr ""
+
 msgid "Horizontal"
+msgstr ""
+
+msgid "Hour"
+msgstr ""
+
+msgid "Indicators"
+msgstr ""
+
+msgid "Interval"
+msgstr ""
+
+msgid "Kagi"
+msgstr ""
+
+msgid "L"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Last digits stats for latest 1000 ticks on "
+msgstr ""
+
+msgid "Line"
+msgstr ""
+
+msgid "Line Break"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "LOW"
+msgstr ""
+
+msgid "Measure"
+msgstr ""
+
+msgid "Minute"
+msgstr ""
+
+msgid "O"
+msgstr ""
+
+msgid "OHLC"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "OPEN"
+msgstr ""
+
+msgid "OVERWRITE"
 msgstr ""
 
 msgid "Pitchfork"
 msgstr ""
 
+msgid "Point & Figure"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Price Lines"
+msgstr ""
+
 msgid "Quadrant Lines"
+msgstr ""
+
+msgid "Range"
+msgstr ""
+
+msgid "Range Bars"
 msgstr ""
 
 msgid "Ray"
@@ -228,7 +270,43 @@ msgstr ""
 msgid "Regression Line"
 msgstr ""
 
+msgid "Renko"
+msgstr ""
+
+msgid "RESET"
+msgstr ""
+
+msgid "Retrieving Chart Data..."
+msgstr ""
+
+msgid "Retrieving Chart Engine..."
+msgstr ""
+
+msgid "Retrieving Market Symbols..."
+msgstr ""
+
+msgid "Retrieving Trading Times..."
+msgstr ""
+
+msgid "Reversal"
+msgstr ""
+
+msgid "Reversal Percentage"
+msgstr ""
+
+msgid "right-click to delete"
+msgstr ""
+
+msgid "right-click to manage"
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
 msgid "Segment"
+msgstr ""
+
+msgid "Settings"
 msgstr ""
 
 msgid "Shape - Arrow"
@@ -255,13 +333,55 @@ msgstr ""
 msgid "Speed Resistance Line"
 msgstr ""
 
+msgid "Spline"
+msgstr ""
+
+msgid "SPOT"
+msgstr ""
+
+msgid "Streaming for [symbol] is not available due to license restrictions"
+msgstr ""
+
+msgid "Table"
+msgstr ""
+
+msgid "Template name"
+msgstr ""
+
+msgid "Templates"
+msgstr ""
+
+msgid "There are no active comparisons yet."
+msgstr ""
+
+msgid "There are no active indicators yet."
+msgstr ""
+
+msgid "There are no favorites yet."
+msgstr ""
+
+msgid "Tick"
+msgstr ""
+
 msgid "Time Cycle"
 msgstr ""
 
 msgid "Tirone Levels"
 msgstr ""
 
+msgid "Underlying Assets"
+msgstr ""
+
 msgid "Vertical"
+msgstr ""
+
+msgid "Would you like to overwrite it?"
+msgstr ""
+
+msgid "Zoom in"
+msgstr ""
+
+msgid "Zoom out"
 msgstr ""
 
 msgid "RSI"
@@ -289,9 +409,6 @@ msgid "Type"
 msgstr ""
 
 msgid "Offset"
-msgstr ""
-
-msgid "Underlay"
 msgstr ""
 
 msgid "MA"
@@ -607,9 +724,6 @@ msgid "High Minus Low"
 msgstr ""
 
 msgid "Median Price"
-msgstr ""
-
-msgid "Overlay"
 msgstr ""
 
 msgid "Moving Average Envelope"
@@ -1152,9 +1266,6 @@ msgstr ""
 msgid "Pring's Special K"
 msgstr ""
 
-msgid "Interval"
-msgstr ""
-
 msgid "Darvas Box"
 msgstr ""
 
@@ -1234,5 +1345,11 @@ msgid "Strong Ratio"
 msgstr ""
 
 msgid "Weak Ratio"
+msgstr ""
+
+msgid "Closed"
+msgstr ""
+
+msgid "Opens in:"
 msgstr ""
 

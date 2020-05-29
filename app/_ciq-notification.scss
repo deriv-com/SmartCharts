@@ -1,0 +1,94 @@
+@keyframes cq-slide-down {
+    0% {
+        top: -32px;
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        top: 0;
+    }
+}
+
+@keyframes cq-slide-up {
+    100% {
+        height: 0;
+        opacity: 0;
+    }
+}
+
+.cq-notifications {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    z-index: +3;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .notification {
+        position: relative;
+        margin-top: 4px;
+        height: 32px;
+        animation: cq-slide-down 0.3s;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 1.4em;
+        border: 1px solid #fdd063;
+        border-radius: 3px;
+
+        &.warning {
+            background: #fff8e2;
+        }
+        &.success {
+            border-color: #008006;
+            background: #cceea1;
+        }
+        &.info {
+            border-color: #009afa;
+            background: #e0f2fe;
+        }
+        &.error {
+            border-color: #ff3d38;
+            background: #ffeaee;
+        }
+        &.hide {
+            animation: cq-slide-up 0.3s forwards;
+        }
+        &.down {
+            margin-top: 50px;
+        }
+        .close-icon {
+            background: svg-load('./icons/ic-close.svg') no-repeat scroll center center;
+            cursor: pointer;
+            margin: 0px 5px;
+            position: relative;
+            padding: 5px;
+        }
+        .ic-icon {
+            position: relative;
+            padding: 0 5px;
+        }
+        .icon-notification-warning {
+            background: svg-load('./icons/warning.svg') no-repeat scroll center center;
+        }
+        .icon-notification-error {
+            background: svg-load('./icons/error.svg') no-repeat scroll center center;
+        }
+        .icon-notification-info {
+            background: svg-load('./icons/info.svg') no-repeat scroll center center;
+        }
+        .icon-notification-success {
+            background: svg-load('./icons/success.svg') no-repeat scroll center center;
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .cq-notifications {
+        position: relative;
+        right: 0px;
+        top: 0px;
+    }
+}

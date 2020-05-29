@@ -12,7 +12,7 @@ class Context {
         this.params = params || {};
         this.stx = stx;
         this.topNode = topNode;
-        let storage = Context.assembleContext(topNode);
+        const storage = Context.assembleContext(topNode);
         this.advertised = {};
         topNode.CIQ.UI.context = this;
         // Search through all of the components that have registered themselves. Call setContext() on each
@@ -31,19 +31,10 @@ class Context {
      * @private
      */
     static assembleContext(contextElement) {
-        if (!contextElement.CIQ) contextElement.CIQ = {}; // claim our namespace
-        if (!contextElement.CIQ.UI) contextElement.CIQ.UI = {};
-        if (!contextElement.CIQ.UI.Components) contextElement.CIQ.UI.Components = [];
+        if (!contextElement.CIQ) { contextElement.CIQ = {}; } // claim our namespace
+        if (!contextElement.CIQ.UI) { contextElement.CIQ.UI = {}; }
+        if (!contextElement.CIQ.UI.Components) { contextElement.CIQ.UI.Components = []; }
         return contextElement.CIQ.UI;
-    }
-
-    /**
-     * Abstract method that should be overridden
-     * @param  {Object} data A symbol data object acceptible for {@link CIQ.ChartEngine#newChart}
-     * @memberof CIQ.UI.Context
-     */
-    changeSymbol(data) {
-        console.log('Please implement CIQ.UI.Context.prototype.changeSymbol');
     }
 
     /**
