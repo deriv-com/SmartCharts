@@ -9,16 +9,15 @@ export class Translation {
         if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
         } else {
-            const path = `../translation/${lang}.json`;
-            import(/* webpackChunkName: "[request]" */path)
-                .then((imported_lang) => {
-                    if (imported_lang) {
-                        lang_map[lang] = imported_lang.default;
-                        this.lang = lang;
-                    } else {
-                        console.error('Unsupported language:', lang);
-                    }
-                });
+           import(/* webpackChunkName: "[request]" */`../translation/${lang}.json`)
+               .then((imported_lang) => {
+                   if (imported_lang) {
+                       lang_map[lang] = imported_lang.default;
+                       this.lang = lang;
+                   } else {
+                       console.error('Unsupported language:', lang);
+                   }
+               });
         }
     }
 
