@@ -51,7 +51,7 @@ commands:
     steps:
       - run:
           name: "yarn build"
-          command: node_modules/gulp/bin/gulp.js build-min
+          command: yarn build-travis
   deploy:
     description: "Deploy to static branches"
     parameters:
