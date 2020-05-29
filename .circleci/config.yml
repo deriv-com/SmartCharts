@@ -141,7 +141,7 @@ jobs:
       - image: circleci/node:8.10.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - build
       - deploy:
           target_branch: "staging"
@@ -151,7 +151,7 @@ jobs:
       - image: circleci/node:8.10.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - build
       - deploy:
           target_branch: "production"
@@ -161,7 +161,7 @@ jobs:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - build
       - docker:
           target: "production"
