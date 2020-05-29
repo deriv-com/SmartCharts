@@ -134,7 +134,6 @@ const config = {
         new SpriteLoaderPlugin(),
     ],
     externals: {
-        mobx: 'mobx',
         react: {
             root: 'React',
             commonjs: 'react',
@@ -144,11 +143,6 @@ const config = {
             commonjs: 'react-dom',
             commonjs2: 'react-dom',
             root: 'ReactDOM',
-        },
-        'mobx-react': {
-            commonjs: 'mobx-react',
-            commonjs2: 'mobx-react',
-            root: 'mobxReact',
         },
         'babel-polyfill': 'babel-polyfill',
         'react-transition-group':  {
