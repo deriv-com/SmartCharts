@@ -15,9 +15,6 @@ import { IndicatorsTree, ExcludedStudies } from '../Constant';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon    from '../../sass/icons/common/ic-minimize.svg';
 
-// TODO:
-// import StudyInfo from '../study-info';
-
 const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
 const getStudyBars = name => (name.match(StudyNameRegex) || []).pop();
 const capitalizeFirstLetter = (string) => {
@@ -27,7 +24,7 @@ const capitalizeFirstLetter = (string) => {
 function renderSVGString(icon) {
     const vb = icon.viewBox.split(' ').slice(2);
     // eslint-disable-next-line no-undef
-    return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+    return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
 }
 const updateFieldHeading = (heading, type) => {
     const names = ['%D', '%K'];
@@ -314,8 +311,10 @@ export default class StudyLegendStore {
             const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
             if (sd) {
                 const bars = getStudyBars(sd.name);
-                const name = capitalizeFirstLetter(bars ? sd.name.replace(`(${bars})`, '') : sd.name);
-                panelObj.title.innerHTML = `${name} ${bars ? `<span class="bars">(${bars})</span>` : ''}`;
+                if (bars) {
+                    const name = capitalizeFirstLetter(sd.name.replace(`(${bars})`, ''));
+                    panelObj.title.innerHTML = `${name} <span class="bars">(${bars})</span>`;
+                }
 
                 // Regarding the ChartIQ.js, codes under Line 34217, edit function
                 // not mapped, this is a force to map edit function for indicators
@@ -338,10 +337,12 @@ export default class StudyLegendStore {
             }
 
             // Updating Max/Min icon
-            const panelInnerHtml = renderSVGString(isSolo ? MinimizeIcon : MaximizeIcon);
-            const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-            if (InnerSoloPanel.innerHTML !== panelInnerHtml) {
-                InnerSoloPanel.innerHTML = panelInnerHtml;
+            if (panelObj.solo.style.display !== 'none') {
+                const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
+                const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
+                if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
+                    InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
+                }
             }
         });
     }

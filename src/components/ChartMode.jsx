@@ -62,10 +62,10 @@ const ChartMode = ({
             <ChartTypeMenu.Body>
                 <div className="sc-chart-mode__section">
                     <div className="sc-chart-mode__section__item">
-                        <ChartTypes newDesign onChange={onChartType} />
+                        <ChartTypes onChange={onChartType} />
                     </div>
                     <div className="sc-chart-mode__section__item">
-                        <Timeperiod newDesign onChange={onGranularity} />
+                        <Timeperiod onChange={onGranularity} />
                     </div>
                 </div>
             </ChartTypeMenu.Body>
