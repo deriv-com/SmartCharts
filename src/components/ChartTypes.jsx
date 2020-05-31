@@ -5,7 +5,7 @@ import { SettingIcon } from './Icons.jsx';
 import Tooltip from './Tooltip.jsx';
 import '../../sass/components/chart-types.scss';
 
-const TypeIcon = ({ Icon, props }) => (<Icon {...props} />);
+const TypeIcon = ({ Icon, props }) => <Icon {...props} />;
 
 const ChartTypes = ({
     chartId,

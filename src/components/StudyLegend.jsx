@@ -7,7 +7,7 @@ import { connect }  from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
 import '../../sass/components/studylegend.scss';
 
-const StudyIcon = ({ Icon, props }) => (<Icon {...props} />);
+const StudyIcon = ({ Icon, props }) => <Icon {...props} />;
 
 const EmptyView = () => (
     <div className="sc-studies--empty">
