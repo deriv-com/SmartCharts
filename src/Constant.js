@@ -82,7 +82,7 @@ export const IndicatorsTree = [
             {
                 id: 'macd',
                 name: t.translate('MACD'),
-                description: t.translate('MACD is a trading indicator used in technical analysis of stock prices.It is supposed to reveal changes in the strength, direction, momentum, and duration of a trend in a stock\'s price.'),
+                description: t.translate('MACD is a trading indicator used in technical analysis of stock prices. It is supposed to reveal changes in the strength, direction, momentum, and duration of a trend in a stock\'s price.'),
                 icon: IndicatorMacdIcon,
             },
             {
