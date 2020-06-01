@@ -106,7 +106,7 @@ export const IndicatorsTree = [
             {
                 id: 'Stch Mtm',
                 name: t.translate('Stochastic Momentum Index'),
-                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions inthe market and to predict bearish or bullish trends. It calculates the distance between the current closing price and the median of the high/low range, and displays 2 lines on the chart: the first (known as %K) represents the price movement while the second (known as %D) is a moving average of the first line. If the closing price is higher than the median of the high/low range, the SMI returns a positive value. If the closing price is lower than the average price, a negative value is returned. Values above 40 indicate a bullish trend while values below -40 indicate a bearish trend.'),
+                description: t.translate('The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions in the market and to predict bearish or bullish trends. It calculates the distance between the current closing price and the median of the high/low range, and displays 2 lines on the chart: the first (known as %K) represents the price movement while the second (known as %D) is a moving average of the first line. If the closing price is higher than the median of the high/low range, the SMI returns a positive value. If the closing price is lower than the average price, a negative value is returned. Values above 40 indicate a bullish trend while values below -40 indicate a bearish trend.'),
                 icon: IndicatorStochasticMomentumIcon,
             },
             {
