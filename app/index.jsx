@@ -294,6 +294,7 @@ class App extends Component {
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}
                 crosshair={isMobile ? 0 : null}
+                crosshairTooltipLeftAllow={660}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
                 networkStatus={networkStatus}
