@@ -131,16 +131,14 @@ class ChartStore {
     }
 
     @computed get indicatorHeightRatio() {
-        const chartHeight = this.chartNode.offsetHeight || this.chartContainerHeight;
-        const indicatorsMaxHeight = (chartHeight - 350);
-        const indicatorsMinHeight = indicatorsMaxHeight * 2 / 3;
+        const chartHeight = this.chartNode.offsetHeight;
+        const isSmallScreen = chartHeight < 780;
+        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 360 : 340)) / 5);
 
         return {
-            MaxAreaHeight: chartHeight - 320, // 320 is the fix height of market selector + floating widget
-            MinHeight: Math.floor(indicatorsMinHeight / 5),
-            MaxHeight: Math.floor(indicatorsMaxHeight / 5),
-            MinPercent: Math.floor(indicatorsMinHeight / 5) / chartHeight,
-            MaxPercent: Math.floor(indicatorsMaxHeight / 5) / chartHeight,
+            height: indicatorsHeight,
+            heightOnAdd: indicatorsHeight + (isSmallScreen ? 17 : 27),
+            percent: (indicatorsHeight / chartHeight),
         };
     }
 
