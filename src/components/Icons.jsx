@@ -204,17 +204,16 @@ import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
 export const Wrapper = SvgLogo => (props) => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
-    const vb = SvgLogo.viewBox.split(' ').slice(2);
 
     return (
         <span
             className={className}
             tooltip-title={tooltip}
             {...p}
+            style={{
+                backgroundImage: `url(${SvgLogo.url})`,
+            }}
         >
-            <svg width={vb[0]} height={vb[1]}>
-                <use xlinkHref={__webpack_public_path__ + SvgLogo.url /* eslint-disable-line no-undef */} />
-            </svg>
             {tooltip && (
                 <>
                     <br />

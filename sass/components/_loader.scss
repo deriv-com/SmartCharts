@@ -1,11 +1,11 @@
 .sc-loader .sc-loader-spin, .cq-comparison-loader, .cq-loading {
-    background-image: svg-load('./icons/loading/loading-spin.svg');
+    background-image: url('./icons/loading/loading-spin.svg');
     background-size: cover;
 }
 
 .smartcharts-dark {
     .sc-loader .sc-loader-spin, .cq-comparison-loader, .cq-loading {
-        background-image: svg-load('./icons/loading/loading-spin-white.svg');
+        background-image: url('./icons/loading/loading-spin-white.svg');
     }
 }
 

@@ -147,3 +147,10 @@
         display: none;
     }
 }
+
+svg {
+    @include themify($themes) {
+        fill: themed('MenuIcon');
+        stroke: themed('MenuIcon');
+    }
+}

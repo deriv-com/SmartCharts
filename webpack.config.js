@@ -4,7 +4,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
+// const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
+const SpritePlugin = require('extract-svg-sprite-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const isApp = process.env.BUILD_MODE === 'app';
@@ -38,35 +39,30 @@ const config = {
         rules: [
             {
                 test: /\.svg$/,
-                use: [
-                    {
-                        loader: 'svg-sprite-loader',
-                        options: {
-                            extract: true,
-                            spriteFilename: 'sprite-[hash:6].smartcharts.svg',
-                            esModule: false,
-                        },
-                    },
-                    {
-                        loader: 'svgo-loader',
-                        options: {
-                            plugins: [
-                                { removeUselessStrokeAndFill: false },
-                                { removeUnknownsAndDefaults: false },
-                            ],
-                        },
-                    },
-                ],
+                loader: SpritePlugin.loader
             },
+            // {
+            //     test: /\.css$/,
+            //     use: [
+            //         'style-loader',
+            //         'css-loader',
+            //         SpritePlugin.cssLoader,
+            //         'postcss-loader',
+            //         'sass-loader'
+            //     ]
+            // },
             {
                 test: /\.(s*)css$/,
                 use: [
                     'css-hot-loader',
-                    MiniCssExtractPlugin.loader,
+                    'style-loader',
+                    // MiniCssExtractPlugin.loader,
                     {
                         loader: 'css-loader',
                         options: { sourceMap: true },
-                    }, {
+                    },
+                    SpritePlugin.cssLoader,
+                    {
                         loader: 'postcss-loader',
                         options: {
                             ident: 'postcss',
@@ -88,6 +84,61 @@ const config = {
                         },
                     }],
             },
+
+
+            // {
+            //     test: /\.svg$/,
+            //     use: [
+            //         {
+            //             loader: 'svg-sprite-loader',
+            //             options: {
+            //                 extract: true,
+            //                 spriteFilename: 'sprite-[hash:6].smartcharts.svg',
+            //                 esModule: false,
+            //             },
+            //         },
+            //         {
+            //             loader: 'svgo-loader',
+            //             options: {
+            //                 plugins: [
+            //                     { removeUselessStrokeAndFill: false },
+            //                     { removeUnknownsAndDefaults: false },
+            //                 ],
+            //             },
+            //         },
+            //     ],
+            // },
+            // {
+            //     test: /\.(s*)css$/,
+            //     use: [
+            //         'css-hot-loader',
+            //         MiniCssExtractPlugin.loader,
+            //         {
+            //             loader: 'css-loader',
+            //             options: { sourceMap: true },
+            //         }, {
+            //             loader: 'postcss-loader',
+            //             options: {
+            //                 ident: 'postcss',
+            //                 plugins: loader => [
+            //                     require('postcss-import')({ root: loader.resourcePath }),
+            //                     require('postcss-preset-env')(),
+            //                     require('postcss-inline-svg'),
+            //                     require('postcss-svgo'),
+            //                 ],
+            //             },
+            //         }, {
+            //             loader: 'sass-loader',
+            //             options: {
+            //                 sourceMap: true,
+            //                 data: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
+            //                 includePaths: [
+            //                     path.resolve(__dirname, './src'),
+            //                 ],
+            //             },
+            //         }],
+            // },
+
             { parser: { amd: false } },
             {
                 test: /\.(js|jsx)$/,
@@ -131,7 +182,12 @@ const config = {
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
         new StyleLintPlugin(),
-        new SpriteLoaderPlugin(),
+        // new SpriteLoaderPlugin(),
+        new SpritePlugin({
+            spriteType: 'stack',
+            // filename: '[contenthash]-svg-files.svg',
+            publicPath: '/dist/',
+        })
     ],
     externals: {
         mobx: 'mobx',

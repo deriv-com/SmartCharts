@@ -831,7 +831,7 @@ html, body {
         @include themify($themes) {
             opacity: themed('ChartBackgroundOpacity');
         }
-        background-image: url('https://static.cdnpub.info/traderoom/map.png'); // TODO the image's url should be changed after getting new image from UI/UX team.
+        // background-image: url('https://static.cdnpub.info/traderoom/map.png'); // TODO the image's url should be changed after getting new image from UI/UX team.
         background-repeat: no-repeat;
         background-position: 50% 0;
         -ms-background-size: cover;
