@@ -1,65 +1,8 @@
-import React from 'react';
 import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { FlagIcons } from '../components/Icons.jsx';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
-
-const languageList = [
-    {
-        key: 'en',
-        name: 'English',
-        icon: <FlagIcons.GBP />,
-    }, {
-        key: 'de',
-        name: 'Deutsch',
-        icon: <FlagIcons.German />,
-    }, {
-        key: 'pt',
-        name: 'Português',
-        icon: <FlagIcons.Portugal />,
-    }, {
-        key: 'fr',
-        name: 'French',
-        icon: <FlagIcons.French />,
-    }, {
-        key: 'ru',
-        name: 'Русский',
-        icon: <FlagIcons.Russia />,
-    }, {
-        key: 'th',
-        name: 'Thai',
-        icon: <FlagIcons.Thailand />,
-    }, {
-        key: 'id',
-        name: 'Indonesia',
-        icon: <FlagIcons.Indonesia />,
-    }, {
-        key: 'vi',
-        name: 'Tiếng Việt',
-        icon: <FlagIcons.Vietnam />,
-    }, {
-        key: 'it',
-        name: 'Italiano',
-        icon: <FlagIcons.Italy />,
-    }, {
-        key: 'zh_cn',
-        name: '简体中文',
-        icon: <FlagIcons.Chinese />,
-    }, {
-        key: 'pl',
-        name: 'Polish',
-        icon: <FlagIcons.Poland />,
-    }, {
-        key: 'zh_tw',
-        name: '繁體中文',
-        icon: <FlagIcons.ChineseTraditional />,
-    }, {
-        key: 'es',
-        name: 'espanyol',
-        icon: <FlagIcons.Spanish />,
-    },
-];
+import { Languages } from '../Constant.js';
 
 export default class ChartSettingStore {
     constructor(mainStore) {
@@ -92,7 +35,7 @@ export default class ChartSettingStore {
         const { assetInformation, countdown, historical, language, position, isAutoScale, isHighestLowestMarkerEnabled, theme, activeLanguages } = settings;
 
         if (!(
-            (!activeLanguages && languageList.every(x => this.languages.find(y => y.key === x.key)))
+            (!activeLanguages && Languages.every(x => this.languages.find(y => y.key === x.key)))
             || (
                 activeLanguages
                 && this.languages.length === activeLanguages.length
@@ -128,9 +71,9 @@ export default class ChartSettingStore {
     @action.bound updateActiveLanguage(activeLanguages) {
         if (activeLanguages) {
             this.languages = activeLanguages
-                .map(lngKey => languageList.find(lng => lng.key.toUpperCase() === lngKey) || null)
+                .map(lngKey => Languages.find(lng => lng.key.toUpperCase() === lngKey) || null)
                 .filter(x => x);
-        } else this.languages = languageList;
+        } else this.languages = Languages;
 
         // set default language as the first item of active languages or Eng
         this.defaultLanguage = this.languages[0];
