@@ -60,17 +60,17 @@ commands:
           no_output_timeout: 30m
           command: yarn build-travis
   deploy:
-    description: "Deploy to static branches"
+    description: "Deploy"
     parameters:
       target_branch:
         type: string
     steps:
       - checkout
       - attach_workspace:
-          at: www
+          at: dist
       - run:
           name: Tag build
-          command: echo "<< parameters.target_branch >> $(date)" > www/version
+          command: echo "<< parameters.target_branch >> $(date)" > dist/version
       - run:
           name: Install and configure dependencies
           command: |
@@ -81,8 +81,8 @@ commands:
           fingerprints:
             - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
       - run:
-          name: Deploy docs to gh-pages branch
-          command: gh-pages -d www --branch << parameters.target_branch >>
+          name: Deploy docs to << parameters.target_branch >>  branch
+          command: gh-pages -d dist --branch << parameters.target_branch >>
   docker_build_push:
     description: "Build Docker image"
     parameters:
@@ -127,6 +127,7 @@ commands:
                 kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/<< parameters.k8s_svc_name >> << parameters.k8s_svc_name >>=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_TAG}
               fi
             done
+
 jobs:
   test:
     docker:
@@ -135,43 +136,47 @@ jobs:
       - git_checkout_from_cache
       - yarn_install
       - test
-
   release_beta:
     docker:
-      - image: circleci/node:8.10.0-stretch
+      - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
       - deploy:
           target_branch: "staging"
 
   release_production:
     docker:
-      - image: circleci/node:8.10.0-stretch
+      - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
       - deploy:
           target_branch: "production"
-
   release_aws_production:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
-      - docker:
-          target: "production"
+      - docker_build_push:
+          docker_image_tag: latest
       - k8s_deploy:
-          target: "production"
-
+          k8s_svc_name: "charts-binary-com"
+      
 workflows:
   test:
     jobs:
-      - test
+      - test:
+          filters:
+            branches:
+              ignore: /^master$/
   release:
     jobs:
       - release_beta:
@@ -184,10 +189,11 @@ workflows:
               ignore: /.*/
             tags:
               only: /^production.*/
-      - release_production:
+      - release_aws_production:
           filters:
             branches:
               ignore: /.*/
             tags:
-              only: /^aws\-production.*/
+              only: /^test-production.*/
           context: binary-frontend-artifact-upload
+
