@@ -1,4 +1,4 @@
-
+import React from 'react';
 import {
     DrawToolsChannelIcon,
     DrawToolsContinuousIcon,
@@ -41,6 +41,7 @@ import {
     TypeCandleIcon,
     TypeHollowIcon,
     TypeOhlcIcon,
+    FlagIcons,
 } from './components/Icons.jsx';
 
 export const drawTools = {
@@ -371,5 +372,58 @@ export const Intervals = [
         items: [
             { interval: 86400, num: 1 },
         ],
+    },
+];
+
+
+export const Languages = [
+    {
+        key: 'en',
+        name: 'English',
+        icon: <FlagIcons.GBP />,
+    }, {
+        key: 'pt',
+        name: 'Português',
+        icon: <FlagIcons.Portugal />,
+    }, {
+        key: 'fr',
+        name: 'French',
+        icon: <FlagIcons.French />,
+    }, {
+        key: 'ru',
+        name: 'Русский',
+        icon: <FlagIcons.Russia />,
+    }, {
+        key: 'th',
+        name: 'Thai',
+        icon: <FlagIcons.Thailand />,
+    }, {
+        key: 'id',
+        name: 'Indonesia',
+        icon: <FlagIcons.Indonesia />,
+    }, {
+        key: 'vi',
+        name: 'Tiếng Việt',
+        icon: <FlagIcons.Vietnam />,
+    }, {
+        key: 'it',
+        name: 'Italiano',
+        icon: <FlagIcons.Italy />,
+    }, {
+        key: 'zh_cn',
+        name: '简体中文',
+        icon: <FlagIcons.Chinese />,
+    }, {
+        key: 'pl',
+        name: 'Polish',
+        icon: <FlagIcons.Poland />,
+    }, {
+        key: 'zh_tw',
+        name: '繁體中文',
+        icon: <FlagIcons.ChineseTraditional />,
+    }, {
+        key: 'es',
+        name: 'espanyol',
+        icon: <FlagIcons.Spanish />,
     },
 ];

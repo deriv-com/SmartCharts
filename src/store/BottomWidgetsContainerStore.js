@@ -56,13 +56,14 @@ export default class BottomWidgetsContainerStore {
             }
 
             const graphHeight = this.mainStore.chart.chartContainerHeight - marginTop - margin;
+
             if (graphHeight < 120) {
                 marginTop = 85;
                 margin = 10;
             }
 
             if (this.stx.chart.yAxis.initialMarginTop !== marginTop
-                && this.stx.chart.yAxis.initialMarginBottom !== margin
+                || this.stx.chart.yAxis.initialMarginBottom !== margin
             ) {
                 this.stx.chart.yAxis.initialMarginTop = marginTop;
                 this.stx.chart.yAxis.initialMarginBottom = margin;
