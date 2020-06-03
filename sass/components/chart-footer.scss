@@ -15,10 +15,10 @@
     }
 
     .ciq-menu {
-        padding: 8px;
-        cursor: pointer;
-
         .cq-menu-btn {
+            padding: 8px;
+            cursor: pointer;
+
             .ic-icon {
                 width: 16px;
                 height: 16px;
@@ -76,7 +76,7 @@
             }
         }
         .sc-tooltip__inner {
-            top: -35px;
+            top: 9px;
         }
         .sc-tooltip__inner:before {
             display: none;
