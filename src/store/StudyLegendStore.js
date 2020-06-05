@@ -314,9 +314,12 @@ export default class StudyLegendStore {
             const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
             if (sd) {
                 const bars = getStudyBars(sd.name);
+                const hasDash = sd.name.indexOf('-') !== -1;
                 if (bars) {
-                    const name = capitalizeFirstLetter(sd.name.replace(`(${bars})`, ''));
+                    const name = capitalizeFirstLetter(sd.name.replace(`(${bars})`, '').replace('-', ' '));
                     panelObj.title.innerHTML = `${name} <span class="bars">(${bars})</span>`;
+                } else if (hasDash) {
+                    panelObj.title.innerHTML = sd.name.replace('-', ' ');
                 }
                 // Regarding the ChartIQ.js, codes under Line 34217, edit function
                 // not mapped, this is a force to map edit function for indicators
