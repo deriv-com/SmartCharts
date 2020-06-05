@@ -4,9 +4,9 @@ class NetworkMonitor {
     static _instance;
 
     status_config = {
-        online: { class: 'online', tooltip: 'Online' },
-        offline: { class: 'offline', tooltip: 'Offline' },
-        blinking: { class: 'blinker', tooltip: 'Connecting to server' },
+        online: { class: 'online', tooltip: t.translate('Online') },
+        offline: { class: 'offline', tooltip: t.translate('Offline') },
+        blinking: { class: 'blinker', tooltip: t.translate('Connecting to server') },
     };
     last_status;
     last_is_online;

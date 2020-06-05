@@ -222,7 +222,7 @@ export default class StudyLegendStore {
 
         this.settingsDialog.id = study.sd.type;
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
-        this.settingsDialog.title = t.translate(study.sd.libraryEntry.name);
+        this.settingsDialog.title = study.sd.libraryEntry.name;
         this.settingsDialog.formTitle = t.translate('Result');
         // TODO:
         // const description = StudyInfo[study.sd.type];
@@ -378,7 +378,7 @@ export default class StudyLegendStore {
                     ...studyObj,
                     id: sd.inputs.id,
                     bars,
-                    name: capitalizeFirstLetter(name.replace(bars || '', '')),
+                    name: capitalizeFirstLetter(name.replace(bars || '', '').replace('-', ' ')),
                     dataObject: {
                         stx,
                         sd,
