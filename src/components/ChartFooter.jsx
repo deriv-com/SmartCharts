@@ -14,6 +14,7 @@ const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => 
             <Tooltip
                 className="sc-chart-footer__item sc-chart-footer__item--status"
                 content={`${t.translate('Network status')}: ${networkStatus ? (t.translate(networkStatus.tooltip)) : ''}`}
+                enabled
             >
                 <div className={`sc-chart__status sc-chart__status--${networkStatus ? networkStatus.class : 'offline'}`} />
             </Tooltip>

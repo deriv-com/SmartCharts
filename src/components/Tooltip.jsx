@@ -3,7 +3,7 @@ import React from 'react';
 const Tooltip = ({
     children,
     className = '',
-    enabled = true,
+    enabled = false,
     content,
     position = 'top', // top, right
     ...props
