@@ -7,28 +7,18 @@ import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
 import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { IndicatorsTree, ExcludedStudies } from '../Constant';
+import { prepareIndicatorName, renderSVGString } from '../utils';
 import {
     IndicatorCatTrendLightIcon,
     IndicatorCatTrendDarkIcon,
 } from '../components/Icons.jsx';
-import { IndicatorsTree, ExcludedStudies } from '../Constant';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon    from '../../sass/icons/common/ic-minimize.svg';
 
 // TODO:
 // import StudyInfo from '../study-info';
 
-const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
-const getStudyBars = name => (name.match(StudyNameRegex) || []).pop();
-const capitalizeFirstLetter = (string) => {
-    const str = string.replace(StudyNameRegex, '');
-    return str.charAt(0).toUpperCase() + str.slice(1);
-};
-function renderSVGString(icon) {
-    const vb = icon.viewBox.split(' ').slice(2);
-    // eslint-disable-next-line no-undef
-    return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
-}
 const updateFieldHeading = (heading, type) => {
     const names = ['%D', '%K'];
     if (
@@ -313,14 +303,11 @@ export default class StudyLegendStore {
             const sd = this.stx.layout.studies[id];
             const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
             if (sd) {
-                const bars = getStudyBars(sd.name);
-                const hasDash = sd.name.indexOf('-') !== -1;
-                if (bars) {
-                    const name = capitalizeFirstLetter(sd.name.replace(`(${bars})`, '').replace('-', ' '));
-                    panelObj.title.innerHTML = `${name} <span class="bars">(${bars})</span>`;
-                } else if (hasDash) {
-                    panelObj.title.innerHTML = sd.name.replace('-', ' ');
+                const nameObj = prepareIndicatorName(sd.name);
+                if (nameObj.name.trim() !== sd.name.trim()) {
+                    panelObj.title.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
                 }
+
                 // Regarding the ChartIQ.js, codes under Line 34217, edit function
                 // not mapped, this is a force to map edit function for indicators
                 if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
@@ -374,14 +361,13 @@ export default class StudyLegendStore {
             const studyObjCategory = IndicatorsTree.find(category => category.items.find(item => item.id === sd.type));
             const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
             if (studyObj) {
-                const bars = getStudyBars(sd.name);
-                const name = this.mainStore.chart.isMobile ? t.translate(sd.libraryEntry.name) : sd.inputs.display;
+                const nameObj = prepareIndicatorName(sd.name);
 
                 activeItems.push({
                     ...studyObj,
                     id: sd.inputs.id,
-                    bars,
-                    name: capitalizeFirstLetter(name.replace(bars || '', '').replace('-', ' ')),
+                    bars: nameObj.bars,
+                    name: nameObj.name,
                     dataObject: {
                         stx,
                         sd,
