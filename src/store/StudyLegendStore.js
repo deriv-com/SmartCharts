@@ -84,6 +84,7 @@ export default class StudyLegendStore {
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', this.handleDrawPanels);
+        this.stx.append('panelClose', this.updateActiveStudies);
         this.renderLegend();
     };
 
