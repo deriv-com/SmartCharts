@@ -21,7 +21,7 @@ const ViewItem = ({
         className="sc-views__views__list__item"
         onClick={onClick}
         enabled={view.name.length > 27}
-        content={wrapText(view.name, 47)}
+        content={wrapText(view.name, 42)}
     >
         <div className="text">{view.name}</div>
         <DeleteIcon onClick={remove} />
