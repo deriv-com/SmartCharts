@@ -1,4 +1,5 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
+
 import React from 'react';
 import debounce from 'lodash.debounce';
 import {
@@ -32,18 +33,21 @@ export const Checkbox = ({
     disabled,
     onChange,
 }) => (
-    <label
-        htmlFor={id}
-        className={`sc-checkbox ${checked ? 'sc-checkbox--checked' : ''} ${disabled ? 'sc-checkbox--disabled' : ''}`}
+    <span
         onClick={() => onChange(!checked)}
     >
-        {
-            checked
-                ? (<CheckboxActiveIcon className="sc-checkbox__box" />)
-                : (<CheckboxIcon className="sc-checkbox__box" />)
-        }
-        <span className="sc-checkbox__label">{label}</span>
-    </label>
+        <label
+            htmlFor={id}
+            className={`sc-checkbox ${checked ? 'sc-checkbox--checked' : ''} ${disabled ? 'sc-checkbox--disabled' : ''}`}
+        >
+            {
+                checked
+                    ? (<CheckboxActiveIcon className="sc-checkbox__box" />)
+                    : (<CheckboxIcon className="sc-checkbox__box" />)
+            }
+            <span className="sc-checkbox__label">{label}</span>
+        </label>
+    </span>
 );
 
 export class Slider extends React.Component {

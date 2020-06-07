@@ -75,6 +75,11 @@ html, body {
         .cq-symbol-select-btn .cq-symbol-info {
             margin: 0 !important;
         }
+        .sc-studies-list {
+            .stx-btn-panel {
+                display: none !important;
+            }
+        }
     }
 }
 
