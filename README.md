@@ -4,21 +4,36 @@
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library. You can install the library to your project via:
 
+
     yarn add @binary-com/smartcharts      # Release
     yarn add @binary-com/smartcharts@beta # Beta
+
+## Installing
+
+Using npm:
+
+```bash
+$ npm install @binary-com/smartcharts
+```
+
+Using yarn:
+
+```bash
+$ yarn add @binary-com/smartcharts
+```
 
 **Important Note:** the license for the library is tied to the `binary.com` domain name; it will not work in github pages.
 
 ## Commands:
-- use `yarn install` to install dependencies
-- use `yarn start` to launch webpack dev server
-- use `yarn build` to build the library
-- use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
-- use `yarn analyze` to run webpack-bundle-analyzer
-- use `yarn test` to run unit tests
-- use `yarn coverage` to see test coverage
+- use `npm install` to install dependencies
+- use `npm start` to launch webpack dev server
+- use `npm run build` to build the library
+- use `npm run build:app` to build the [charts.binary.com](https://charts.binary.com/) app
+- use `npm run analyze` to run webpack-bundle-analyzer
+- use `npm run test` to run unit tests
+- use `npm run coverage` to see test coverage
 
-> Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
+> Note: eventhough both `npm run build` and `npm run build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
 ## Usage 
 
@@ -26,8 +41,8 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 
 In the `app` folder, we provide a working webpack project that uses the smartcharts library. Simply `cd` to that directory and run:
 
-    yarn install
-    yarn start
+    npm install
+    npm start
 
 The sample app should be running in http://localhost:8080. 
 
@@ -339,7 +354,7 @@ position | determine the position of toolbar, which can be `top, bottom`. Defaul
 
 To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
 
-    yarn test
+    npm run test
 
 Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
 
@@ -366,7 +381,7 @@ We organise the development in Trello. Here is the standard workflow of how a fe
 
 Some issues only show up for library users, so it is helpful to test the NPM package before deploying it to library users. You can do this by building the library directly into the node_modules directory of an app that uses the SmartCharts library. For example to test the library build on binary-static you can execute:
 
-    yarn watch --output-path '../binary-static/node_modules/@binary-com/smartcharts/dist'
+    npm run watch '../binary-static/node_modules/@binary-com/smartcharts/dist'
 
 Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder. 
 
@@ -390,7 +405,7 @@ t.setLanguage('fr'); // components need to be rerendered for changes to take aff
 
 Each time a new translation string is added to the code, you need to update the `messages.pot` via:
 
-    yarn translations
+    npm run translations
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
@@ -522,11 +537,11 @@ Note that **for independent components, the `mapperFunction` is applied to the s
 
 To publish to production:
 
-    yarn build && yarn publish
+    npm run build && npm publish
 
 To publish to beta:
 
-    yarn build && yarn publish --tag beta
+    npm run build && npm publish --tag beta
 
 ### Deploy to [charts.binary.com](https://charts.binary.com/)
 
@@ -534,8 +549,8 @@ To publish to beta:
 
 The following commands will build and deploy to charts.binary.com (*Make sure you are in the right branch!*); you will need push access to this repository for the commands to work:
 
-    yarn deploy:beta        # charts.binary.com/beta
-    yarn deploy:production  # charts.binary.com
+    npm run deploy:beta        # charts.binary.com/beta
+    npm run deploy:production  # charts.binary.com
 
 ### Deploy to Github Pages
 
@@ -556,14 +571,14 @@ For each feature/fix you want to add we recommend you deploy an instance of Smar
  
 Here on, to deploy a folder (e.g. `myfoldername`):
 
-    yarn build-travis && yarn gh-pages:folder myfoldername
+    npm run build-travis && npm run gh-pages:folder 'myfoldername'
 
 Now you should be able to see your SmartCharts app on `brucebinary.binary.sx/myfoldername`.
 
 Alternatively you can deploy directly to the domain itself (note that this **erases all folders**; could be useful for cleanup). In our example, the following command will deploy to `brucebinary.binary.sx`:
 
-    yarn build-travis && echo 'brucebinary.binary.sx' > CNAME && yarn gh-pages
+    npm run build-travis && echo 'brucebinary.binary.sx' > CNAME && npm run gh-pages
 
-> Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
+> Note: `npm run build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
 
 There may be occasions where you would want to deploy development versions of the webpack bundles. Quick way to do this is to change the [`--mode` parameter](https://webpack.js.org/concepts/mode/) in `build` npm command in `package.json` to from `production` to `development`.
