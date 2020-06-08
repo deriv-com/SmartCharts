@@ -35,8 +35,7 @@
     "gh-pages:folder": "./node_modules/gh-pages/bin/gh-pages.js --src '{index.html,manifest.json,sw.js,dist/**,Dockerfile,.dockerignore,default.conf,.circleci/**}' --dest $1",
     "translations": "npm run build && node scripts/extract-translations.js ./dist/smartcharts.js",
     "deploy:production": "npm run build-travis && echo 'charts.binary.com' > CNAME  && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
-    "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'",
-    "deploy:shayan": "f () { gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME,Dockerfile,.dockerignore,default.conf,.circleci/**}' --repo $1 --dest $2 ;}; f"
+    "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
