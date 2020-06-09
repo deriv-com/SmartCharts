@@ -260,6 +260,13 @@
                 }
             }
         }
+        .text {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 220px;
+            min-width: 210px;
+            overflow: hidden;
+        }
         &:after {
             content: ' ';
             position: absolute;
@@ -318,16 +325,16 @@
                 color: themed('DropdownText');
             }
 
-            &--selected {
-                font-weight: bold;
-                @include themify($themes) {
-                    background: themed('DropdownActiveBg');
-                    color: themed('DropdownActiveText');
-                }
-            }
             &:hover {
                 @include themify($themes) {
                     background: themed('DropdownHoverBg');
+                }
+            }
+            &--selected {
+                font-weight: bold;
+                @include themify($themes) {
+                    background: themed('DropdownActiveBg') !important;
+                    color: themed('DropdownActiveText') !important;
                 }
             }
         }
