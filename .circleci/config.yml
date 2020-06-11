@@ -58,7 +58,7 @@ commands:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: yarn build
+          command: yarn build-travis
   deploy:
     description: "Deploy"
     parameters:
@@ -79,7 +79,7 @@ commands:
             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
           fingerprints:
-            - "ab:71:4a:23:8e:41:84:c7:6f:b6:3a:18:45:d5:b5:de"
+            - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
       - run:
           name: Deploy docs to gh-pages branch
           command: node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >>
@@ -142,6 +142,7 @@ jobs:
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - build
       - deploy:
           target_branch: "staging"
   release_production:
