@@ -58,7 +58,7 @@ commands:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: yarn build-travis
+          command: yarn build
   deploy:
     description: "Deploy"
     parameters:
