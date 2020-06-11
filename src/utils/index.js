@@ -255,6 +255,25 @@ export const formatCamelCase = (s) => {
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
+export const prepareIndicatorName = (name) => {
+    const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
+    const getStudyBars = str => (str.match(StudyNameRegex) || []).pop();
+    // const capitalizeFirstLetter = (string) => {
+    //     const str = string.replace(StudyNameRegex, '');
+    //     return str.charAt(0).toUpperCase() + str.slice(1);
+    // };
+    const bars = getStudyBars(name);
+    return {
+        name: formatCamelCase(name.replace(`(${bars})`, '').replace('-', ' ')).trim(),
+        bars,
+    };
+};
+
+export const renderSVGString = (icon) =>  {
+    const vb = icon.viewBox.split(' ').slice(2);
+    // eslint-disable-next-line no-undef
+    return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+};
 export const wrapText = (str, letter_count) => {
     if (str.length > letter_count) {
         let wrappedStr = str;
