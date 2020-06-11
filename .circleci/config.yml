@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   k8s: circleci/kubernetes@0.7.0
-  s3: circleci/aws-s3@1.0.13
 commands:
   git_checkout_from_cache:
     description: "Git checkout and save cache"
@@ -59,9 +58,12 @@ commands:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: yarn build-travis
-  compress:
-    description: "Compress"
+          command: yarn build
+  deploy:
+    description: "Deploy"
+    parameters:
+      target_branch:
+        type: string
     steps:
       - checkout
       - attach_workspace:
@@ -77,10 +79,10 @@ commands:
             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
           fingerprints:
-            - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
+            - "ab:71:4a:23:8e:41:84:c7:6f:b6:3a:18:45:d5:b5:de"
       - run:
           name: Deploy docs to gh-pages branch
-          command: node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >> --message '[skip ci]'
+          command: node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >>
   docker_build_push:
     description: "Build Docker image"
     parameters:
@@ -94,9 +96,6 @@ commands:
           name: Building docker image
           command: |
             docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_TAG} -t ${DOCKHUB_ORGANISATION}/binary-static-charts:<< parameters.docker_image_tag >> .
-  docker_push:
-    description: "Push image to docker hub"
-    steps:
       - run: 
           name: Pushing Image to docker hub
           command: |
@@ -137,7 +136,24 @@ jobs:
       - git_checkout_from_cache
       - yarn_install
       - test
-  build_staging:
+  release_beta:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - git_checkout_from_cache
+      - yarn_install
+      - deploy:
+          target_branch: "staging"
+  release_production:
+    docker:
+      - image: circleci/node:12.13.0-stretch
+    steps:
+      - git_checkout_from_cache
+      - yarn_install
+      - build
+      - deploy:
+          target_branch: "production"
+  release_aws_production:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
@@ -145,77 +161,35 @@ jobs:
       - yarn_install
       - test
       - build
-      - docker_build
-      - docker_push
-  build_production:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-    steps:
-      - git_checkout_from_cache
-      - yarn_install
-      - test
-      - build
-      - compress
-      - upload_artifact
-      - upload_checksum
-      - docker_build:
+      - docker_build_push:
           docker_image_tag: latest
-      - docker_push
-  deploy_staging:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-    steps:
-      - k8s_deploy
-  deploy_production:
-    docker:
-      - image: circleci/node:12.13.0-stretch
-    steps:
       - k8s_deploy:
           k8s_svc_name: "charts-binary-com"
-      
+
 workflows:
-  build_and_push_dev:
+  test:
     jobs:
       - test:
           filters:
+            branches:
+              ignore: /^master$/
+  release:
+    jobs:
+      - release_beta:
+          filters:
+            branches:
+              only: /^master$/
+      - release_production:
+          filters:
+            branches:
+              ignore: /.*/
             tags:
-              ignore: 
-                - /^staging.*/
-                - /^production.*/
+              only: /^production.*/
+      - release_aws_production:
+          filters:
+            branches:
+              ignore: /.*/
+              # tags:
+              # only: /^production.*/
+          context: binary-frontend-artifact-upload
 
-  build_deploy_staging:
-    jobs:
-      - build_staging:
-          context: binary-frontend-artifact-upload
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^staging.*/
-      - deploy_staging:
-          context: binary-frontend-artifact-upload
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^staging.*/
-          requires:
-            - build_staging
-  build_deploy_production:
-    jobs:
-      - build_production:
-          context: binary-frontend-artifact-upload
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^production.*/
-      - deploy_production:
-          context: binary-frontend-artifact-upload
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^production.*/
-          requires:
-            - build_production
