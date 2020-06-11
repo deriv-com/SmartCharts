@@ -155,8 +155,6 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
-        const networkMonitor = NetworkMonitor.getInstance();
-        networkMonitor.init(requestAPI, this.handleNetworkStatus);
 
         this.state = {
             settings,
@@ -165,6 +163,11 @@ class App extends Component {
             granularity,
             isConnectionOpened: true,
         };
+    }
+
+    componentDidMount() {
+        const networkMonitor = NetworkMonitor.getInstance();
+        networkMonitor.init(requestAPI, this.handleNetworkStatus);
     }
 
     /*

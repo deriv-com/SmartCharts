@@ -281,6 +281,12 @@
             .ic-info {
                 opacity: 0;
             }
+            .sc-tooltip__inner {
+                width: 280px;
+                height: auto;
+                white-space: break-spaces;
+                text-align: center;
+            }
             &--disabled {
                 opacity: 0.3;
                 pointer-events: none;
