@@ -74,7 +74,7 @@ commands:
       - run:
           name: Install and configure dependencies
           command: |
-            sudo yarn global add gh-pages@2.0.1
+            sudo yarn global add gh-pages@2.1.0
             git config user.email "sysadmin+frontend@binary.com"
             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
