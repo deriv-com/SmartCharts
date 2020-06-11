@@ -81,7 +81,7 @@ commands:
             - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
       - run:
           name: Deploy docs to gh-pages branch
-          command: node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >>
+          command: node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >> --message 'skip ci'
   docker_build_push:
     description: "Build Docker image"
     parameters:
@@ -141,7 +141,6 @@ jobs:
     steps:
       - git_checkout_from_cache
       - yarn_install
-      - build
       - deploy:
           target_branch: "staging"
   release_production:
