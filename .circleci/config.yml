@@ -84,6 +84,9 @@ commands:
           name: Deploy docs to gh-pages branch
           command: |
             whoami
+            pwd
+            ls ./node_modules/gh-pages/bin/
+            node ./node_modules/gh-pages/bin/gh-pages.js -d dist --branch << parameters.target_branch >>
             gh-pages -d dist --branch << parameters.target_branch >> --message '[skip ci]'
   docker_build_push:
     description: "Build Docker image"
