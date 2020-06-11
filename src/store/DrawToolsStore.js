@@ -90,7 +90,7 @@ export default class DrawToolsStore {
 
         const drawingItem = this.findComputedDrawing(drawing);
         if (drawingItem) {
-            title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${drawingItem.text}`;
+            title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(drawingItem.text, { num: (drawingItem.num || ' ') })}`;
         }
 
         this.activeDrawing = drawing;
@@ -193,18 +193,21 @@ export default class DrawToolsStore {
 
             if (items[item.name]) {
                 items[item.name]++;
-                item.text = `${formatCamelCase(item.name)} ${items[item.name]}`;
+                item.num = items[item.name];
             } else {
-                item.text = `${formatCamelCase(item.name)} 1`;
+                item.num = ' ';
                 items[item.name] = 1;
             }
 
             if (groups[item.name]) {
+                item.text = groups[item.name].name;
                 groups[item.name].items.push(item);
             } else {
+                const group_name = drawTools[item.name] ? drawTools[item.name].text : item.name;
+                item.text = group_name;
                 groups[item.name] = {
                     key: item.name,
-                    name: drawTools[item.name] ? drawTools[item.name].text : item.name,
+                    name: group_name,
                     items: [item],
                 };
             }
