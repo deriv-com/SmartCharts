@@ -67,14 +67,14 @@ commands:
     steps:
       - checkout
       - attach_workspace:
-          at: www
+          at: dist
       - run:
           name: Tag build
-          command: echo "<< parameters.target_branch >> $(date)" > www/version
+          command: echo "<< parameters.target_branch >> $(date)" > dist/version
       - run:
           name: Install and configure dependencies
           command: |
-            sudo npm install -g gh-pages@2.0.1
+            sudo yarn add gh-pages@2.0.1
             git config user.email "sysadmin+frontend@binary.com"
             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
@@ -82,7 +82,7 @@ commands:
             - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
       - run:
           name: Deploy docs to gh-pages branch
-          command: gh-pages -d www --branch << parameters.target_branch >> --message '[skip ci]'
+          command: node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >> --message '[skip ci]'
   docker_build_push:
     description: "Build Docker image"
     parameters:
