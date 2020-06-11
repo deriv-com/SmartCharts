@@ -71,12 +71,12 @@ commands:
       - run:
           name: Tag build
           command: echo "<< parameters.target_branch >> $(date)" > dist/version
-      - run:
-          name: Install and configure dependencies
-          command: |
-            sudo yarn add gh-pages@2.0.1
-            git config user.email "sysadmin+frontend@binary.com"
-            git config user.name "sysadmin-frontend-binary"
+#       - run:
+#           name: Install and configure dependencies
+#           command: |
+#             sudo yarn add gh-pages@2.0.1
+#             git config user.email "sysadmin+frontend@binary.com"
+#             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
           fingerprints:
             - "ab:71:4a:23:8e:41:84:c7:6f:b6:3a:18:45:d5:b5:de"
