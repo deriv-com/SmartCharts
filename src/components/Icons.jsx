@@ -126,6 +126,9 @@ import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-ind
 import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index.svg';
 import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index.svg';
 import Vol1S10 from '../../sass/icons/active-symbols/volatility/1s10 index/ic-10-1s-index.svg';
+import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light-25(1s)index.svg';
+import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
+import Vol1S75 from '../../sass/icons/active-symbols/volatility/1s75 index/light-75(1s) index.svg';
 import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
@@ -470,6 +473,9 @@ export const ItemIconMap = {
     R_75: Wrapper(Vol75),
     R_100: Wrapper(Vol100),
     '1HZ10V': Wrapper(Vol1S10),
+    '1HZ25V': Wrapper(Vol1S25),
+    '1HZ50V': Wrapper(Vol1S50),
+    '1HZ75V': Wrapper(Vol1S75),
     '1HZ100V': Wrapper(Vol1S100),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
