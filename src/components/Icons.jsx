@@ -457,7 +457,6 @@ export const ItemIconMap = {
     FCHI: FlagIconMap.French,
     SSMI: FlagIconMap.CHF,
     GDAXI: FlagIconMap.German,
-
     /* Commodities */
     frxBROUSD: Wrapper(OilUSD),
     frxXAUUSD: MetalIcon,
@@ -491,12 +490,12 @@ function frx(flagA, flagB) {
     ItemIconMap[`frx${flagA}${flagB}`] = createCompositeIcon(A, B, 'ic-frx');
 }
 
-const OTCBadgeIcon = Wrapper(OTCBadge);
+export const OTCBadgeIcon = Wrapper(OTCBadge);
 const SmartFXIcon  = Wrapper(SmartFX);
 
 function otc(flag, symbol) {
     const FlagIcon = FlagIconMap[flag];
-    ItemIconMap[symbol] = createCompositeIcon(FlagIcon, OTCBadgeIcon, 'ic-otc');
+    ItemIconMap[symbol] = FlagIcon;
 }
 
 function wld(flag) {
