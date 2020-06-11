@@ -88,7 +88,7 @@ commands:
             ls ./node_modules/gh-pages/bin/
             node ./node_modules/gh-pages/bin/gh-pages --version
             # node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >>
-            gh-pages -d dist --branch << parameters.target_branch >>
+            sudo gh-pages -d dist --branch << parameters.target_branch >>
   docker_build_push:
     description: "Build Docker image"
     parameters:
