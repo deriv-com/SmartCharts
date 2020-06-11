@@ -74,7 +74,7 @@ commands:
       - run:
           name: Install and configure dependencies
           command: |
-            sudo yarn global add gh-pages@2.0.1
+            sudo yarn add gh-pages@2.0.1
             git config user.email "sysadmin+frontend@binary.com"
             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
@@ -87,8 +87,8 @@ commands:
             pwd
             ls ./node_modules/gh-pages/bin/
             node ./node_modules/gh-pages/bin/gh-pages --version
-            node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >>
-            # sudo gh-pages -d dist --branch << parameters.target_branch >>
+            # node ./node_modules/gh-pages/bin/gh-pages -d dist --branch << parameters.target_branch >>
+            gh-pages -d dist --branch << parameters.target_branch >>
   docker_build_push:
     description: "Build Docker image"
     parameters:
