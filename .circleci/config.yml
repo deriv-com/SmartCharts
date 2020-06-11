@@ -79,7 +79,7 @@ commands:
             git config user.name "sysadmin-frontend-binary"
       - add_ssh_keys:
           fingerprints:
-            - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
+            - "ab:71:4a:23:8e:41:84:c7:6f:b6:3a:18:45:d5:b5:de"
       - run:
           name: Deploy docs to gh-pages branch
           command: |
