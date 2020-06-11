@@ -132,7 +132,7 @@
   "You have no active drawings yet.": "还没有任何激活图形。",
   "You have no active indicators yet.": "还没有任何激活指标。",
   "You have no saved templates yet.": "您尚未保存任何模板。",
-  "Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.": "Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.",
+  "Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.": "之字形指标通过确定市场的支持位和阻力位，帮助识别趋势反转并过滤相对较小的价格波动。它接受特定的偏差百分比作为输入，如果价格变化大于该偏差百分比，则显示一条线。之字形指标忽略任何横向波动，对于滤除“市场噪音”很有用。",
   "Zoom in": "放大",
   "Zoom out": "缩小"
 }
