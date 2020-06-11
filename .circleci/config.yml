@@ -141,6 +141,7 @@ jobs:
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - build
       - deploy:
           target_branch: "staging"
   release_production:
