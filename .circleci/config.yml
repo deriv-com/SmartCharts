@@ -189,7 +189,7 @@ workflows:
           filters:
             branches:
               ignore: /.*/
-              # tags:
-              # only: /^production.*/
+              tags:
+              only: /^production.*/
           context: binary-frontend-artifact-upload
 
