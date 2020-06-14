@@ -3,7 +3,7 @@
   "[symbol] feed is delayed by [delay] minutes": "Il feed [symbol] è in ritardo di [delay] minuti",
   "[symbol] market is now opened.": "Il mercato [symbol] è aperto.",
   "[symbol] market is presently closed.": "Il mercato di [symbol] è momentaneamente chiuso.",
-  "A technical momentum indicator that compares a security's closing price to its price range over a given time period. The oscillator's sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result.": "A technical momentum indicator that compares a security's closing price to its price range over a given time period. The oscillator's sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result.",
+  "A technical momentum indicator that compares a security's closing price to its price range over a given time period. The oscillator's sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result.": "Indicatore momentum tecnico che mette a confronto un prezzo di chiusura di sicurezza e il relativo intervallo di prezzo in un certo periodo di tempo. La sensibilità dell'indicatore ai movimenti di mercato può essere limitata regolando il periodo di tempo o considerando una media mobile del risultato.",
   "Active": "Attivo",
   "Add": "Aggiungi",
   "Add new template": "Aggiungi nuovi modelli",
