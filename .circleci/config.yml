@@ -74,8 +74,8 @@ commands:
       - run:
           name: Install and configure dependencies
           command: |
-            git config user.email "sysadmin+frontend@binary.com"
-            git config user.name "sysadmin-frontend-binary"
+            git config user.email "ci-build@bianry.com "
+            git config user.name "ci-build"
       - add_ssh_keys:
           fingerprints:
             - "01:67:4a:6d:26:9c:70:c4:1a:60:91:88:d9:dd:f0:83"
