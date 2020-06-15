@@ -194,4 +194,3 @@ workflows:
             tags:
               only: /^production.*/
           context: binary-frontend-artifact-upload
-
