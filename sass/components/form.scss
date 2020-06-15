@@ -110,6 +110,11 @@
             margin-bottom: 80px;
         }
     }
+    &--drawing-tool {
+        .sc-scrollbar {
+            height: 280px;
+        }
+    }
 }
 
 /* stylelint-disable plugin/no-unsupported-browser-features */
@@ -299,7 +304,7 @@
         box-sizing: border-box;
         border-radius: 4px;
         font-size: 14px;
-        width: 266px;
+        width: 272px;
         transform: translateY(-8px);
         transition: opacity 0.2s, transform 0.2s;
         @include themify($themes) {
