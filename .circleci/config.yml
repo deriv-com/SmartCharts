@@ -173,8 +173,8 @@ workflows:
     jobs:
       - test:
           filters:
-            branches:
-              ignore: /^master$/
+            tags:
+              ignore: /^production.*/
   release:
     jobs:
       - release_beta:
