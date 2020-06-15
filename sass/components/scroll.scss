@@ -1,0 +1,58 @@
+
+.sc-scrollbar {
+    $self: &;
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    margin-right: 4px;
+    /* Firefox only */
+    scrollbar-width: thin;
+    @include themify($themes) {
+        scrollbar-color: rthemed('ScrollbarBg') rgba(themed('ScrollbarBg'), 0.32);
+    }
+
+    /* Let's get this party started */
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: transparent;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        -webkit-box-shadow: transparent;
+        @include themify($themes) {
+            background: themed('ScrollbarBg');
+        }
+    }
+    &--auto-hide {
+        &::-webkit-scrollbar-thumb {
+            display: none;
+        }
+    }
+    &--hover {
+        &::-webkit-scrollbar-thumb {
+            display: inherit !important;
+        }
+    }
+    &--freeze {
+        overflow: hidden !important;
+    }
+}
+
+.smartcharts-mobile {
+    .sc-scrollbar {
+        &--auto-hide {
+            &::-webkit-scrollbar-thumb {
+                display: inherit !important;
+            }
+        }
+    }
+}

@@ -1,8 +1,8 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
+import React                from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { connect } from '../store/Connect';
-import NotificationBadge from './NotificationBadge.jsx';
+import Scroll               from './Scroll.jsx';
+import { connect }          from '../store/Connect';
+import NotificationBadge    from './NotificationBadge.jsx';
 import {
     DrawToolIcon,
     ActiveIcon,
@@ -30,10 +30,10 @@ const Info = ({ Icon, text, num, bars }) => (
 );
 
 const DrawToolsList = ({ items, onClick }) => (
-    <Scrollbars
-        autoHeight
-        autoHeightMax={360}
-        className="sc-scrollbar sc-dtools__list"
+    <Scroll
+        autoHide
+        height={360}
+        className="sc-dtools__list"
     >
         {items.map(Item => (
             <div
@@ -47,7 +47,7 @@ const DrawToolsList = ({ items, onClick }) => (
                 />
             </div>
         ))}
-    </Scrollbars>
+    </Scroll>
 );
 
 const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }) => (
@@ -86,10 +86,9 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }) => (
 );
 
 const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
-    <Scrollbars
-        autoHeight
-        autoHeightMax={320}
-        className="sc-scrollbar"
+    <Scroll
+        autoHide
+        height={320}
     >
         {activeDrawToolsGroup.map(group => (
             group.items && group.items.length === 1
@@ -110,7 +109,7 @@ const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
                     />
                 )
         ))}
-    </Scrollbars>
+    </Scroll>
 );
 
 const DrawTools = ({

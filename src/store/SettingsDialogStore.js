@@ -1,4 +1,4 @@
-import { observable, action, computed, reaction } from 'mobx';
+import { observable, action, computed, when } from 'mobx';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -7,6 +7,7 @@ export default class SettingsDialogStore {
     @observable items = []; // [{id: '', title: '', value: ''}]
     @observable title = '';
     @observable formTitle = '';
+    @observable formClassname = '';
     @observable description = '';
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
@@ -22,12 +23,11 @@ export default class SettingsDialogStore {
         this.onDeleted = onDeleted;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
         this.SettingDialogMenu = this.menu.connect(Menu);
-        reaction(() => (this.scrollPanel && this.open), () => {
+        when(() => (this.scrollPanel && this.open), () => {
             if (!this.scrollPanel || !this.open) { return; }
 
-            const rootEle = this.scrollPanel.container;
-            const dropdowns = rootEle.querySelectorAll('.sc-color-picker, .sc-dropdown');
-            rootEle.addEventListener('click', () => {
+            const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
+            this.scrollPanel.addEventListener('click', () => {
                 this.setFreezeScroll(false);
             });
             dropdowns.forEach((dropdown) => {
@@ -45,7 +45,7 @@ export default class SettingsDialogStore {
     checkDropdownOpen = () => {
         let freezeScroll = false;
         if (!this.scrollPanel) { return; }
-        const dropdowns = this.scrollPanel.container.querySelectorAll('.sc-color-picker, .sc-dropdown');
+        const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
         dropdowns.forEach((dropdown) => {
             if (dropdown.className.indexOf('active') !== -1) freezeScroll = true;
         });
@@ -57,7 +57,7 @@ export default class SettingsDialogStore {
     }
     @action.bound setOpen(value) {
         if (value && this.scrollPanel) {
-            this.scrollPanel.scrollTop(0);
+            this.scrollPanel.scrollTop = 0;
         }
         return this.menu.setOpen(value);
     }
@@ -133,6 +133,7 @@ export default class SettingsDialogStore {
         items: this.items,
         itemGroups: this.itemGroups,
         title: this.title,
+        formClassname: this.formClassname,
         description: this.description,
         showTabs: this.showTabs,
         onResetClick: this.onResetClick,

@@ -62,31 +62,6 @@
             width: auto;
         }
     }
-    &--indicator-setting {
-        min-width: 320px;
-        max-width: 320px;
-        min-height: 272px;
-        max-height: 272px;
-        @include themify($themes) {
-            background: themed('DialogSettingBodyBg');
-        }
-
-        > div:nth-child(3) {
-            > div {
-                @include themify($themes) {
-                    background-color: themed('ListScroll') !important;
-                }
-            }
-        }
-        &:hover {
-            > div:nth-child(3) {
-                opacity: 1 !important;
-            }
-        }
-        .form__input-group:last-child {
-            margin-bottom: 50px;
-        }
-    }
     &__input-group {
         padding: 16px 24px;
         @include themify($themes) {
@@ -109,8 +84,30 @@
         }
     }
     &__input-group--show-zones {
+        margin-bottom: 30px;
+
         #{ $self }__label {
             font-size: 14px;
+        }
+    }
+    &--indicator-setting {
+        min-width: 320px;
+        max-width: 320px;
+        min-height: 280px;
+        max-height: 280px;
+        overflow: hidden;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
+
+        #{ $self }__input-group {
+            width: 320px !important;
+            box-sizing: border-box;
+        }
+    }
+    &--fractal-chaos-bands {
+        .form__group--switch {
+            margin-bottom: 80px;
         }
     }
 }
@@ -292,17 +289,17 @@
     }
     .dropdown {
         position: absolute;
-        right: 0;
+        right: -4px;
         opacity: 0;
         pointer-events: none;
         z-index: 2;
-        max-height: 200px;
+        max-height: 2px;
         overflow: scroll;
         box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
         box-sizing: border-box;
         border-radius: 4px;
         font-size: 14px;
-        width: 272px;
+        width: 266px;
         transform: translateY(-8px);
         transition: opacity 0.2s, transform 0.2s;
         @include themify($themes) {
@@ -310,9 +307,11 @@
         }
 
         &.active {
-            transform: translateY(8px);
             opacity: 1;
+            overflow: hidden;
+            max-height: 200px;
             pointer-events: all;
+            transform: translateY(8px);
             @include themify($themes) {
                 box-shadow: 0 16px 16px 0 themed('DropdownActiveShadow'), 0 0 16px 0 themed('DropdownActiveShadow');
             }
@@ -401,7 +400,7 @@
 .sc-color-picker {
     position: relative;
     height: 40px;
-    width: 272px;
+    width: 100%;
     @include themify($themes) {
         background: themed('ColorPickerBg');
     }

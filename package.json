@@ -124,7 +124,6 @@
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",
     "react-tabs": "^3.0.0",
-    "tt-react-custom-scrollbars": "4.2.1-tt2",
     "url-search-params-polyfill": "^7.0.0"
   },
   "peerDependencies": {

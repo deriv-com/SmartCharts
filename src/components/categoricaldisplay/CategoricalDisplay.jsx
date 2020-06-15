@@ -1,6 +1,6 @@
-import React from 'react';
+import React    from 'react';
+import Scroll   from '../Scroll.jsx';
 import '../../../sass/components/_categorical-display.scss';
-import Scrollbars from 'tt-react-custom-scrollbars';
 
 const CategoricalDisplay = React.memo(({
     onSelectItem,
@@ -9,7 +9,6 @@ const CategoricalDisplay = React.memo(({
     ResultsPanel,
     FilterPanel,
     SearchInput,
-    isMobile,
     height,
     id,
     searchInputClassName,
@@ -34,27 +33,13 @@ const CategoricalDisplay = React.memo(({
                 <SearchInput searchInputClassName={searchInputClassName} />
                 {!isNestedList && <FilterPanel /> }
             </div>
-            {
-                isMobile
-                    ? (
-                        <div
-                            className="sc-scrollbar cq-scroll-panel"
-                            onScroll={updateScrollSpy}
-                            ref={setScrollPanel}
-                        >
-                            {innerPanel}
-                        </div>
-                    )
-                    : (
-                        <Scrollbars
-                            className="sc-scrollbar cq-scroll-panel"
-                            onScroll={updateScrollSpy}
-                            ref={setScrollPanel}
-                        >
-                            {innerPanel}
-                        </Scrollbars>
-                    )
-            }
+            <Scroll
+                autoHide
+                onScroll={updateScrollSpy}
+                setPanel={setScrollPanel}
+            >
+                {innerPanel}
+            </Scroll>
         </div>
     );
 });

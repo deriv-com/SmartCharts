@@ -1,5 +1,5 @@
 import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
+import Scroll from './Scroll.jsx';
 import '../../sass/components/_ciq-list.scss';
 
 const List = ({
@@ -14,7 +14,7 @@ const List = ({
                + ` ${it.disabled ? 'disabled' : ''}`
                + ` ${it.active ? 'active' : ''}`;
     return (
-        <Scrollbars
+        <Scroll
             className="ciq-list"
             autoHeight
             autoHide
@@ -29,7 +29,7 @@ const List = ({
                     {renderRow(it)}
                 </div>
             ))}
-        </Scrollbars>
+        </Scroll>
     );
 };
 

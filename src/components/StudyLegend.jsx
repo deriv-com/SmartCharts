@@ -1,8 +1,8 @@
 import React        from 'react';
-import Scrollbars   from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationBadge from './NotificationBadge.jsx';
 import Tooltip      from './Tooltip.jsx';
+import Scroll       from './Scroll.jsx';
 import { connect }  from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
 import '../../sass/components/studylegend.scss';
@@ -53,10 +53,8 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
 );
 
 const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll }) => (
-    <Scrollbars
-        autoHeight
-        autoHeightMax={360}
-        className="sc-scrollbar sc-studies__scroll"
+    <Scroll
+        autoHide
     >
         {categories.map(Category => (
             <div key={Category.id} className="sc-studies__category">
@@ -73,7 +71,7 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disab
                 </div>
             </div>
         ))}
-    </Scrollbars>
+    </Scroll>
 );
 
 const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }) => (
@@ -154,10 +152,9 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
         {categories.map(Category => (
             <TabPanel key={`panel--${Category.id}`}>
                 <div className="sc-studies__panel">
-                    <Scrollbars
-                        autoHeight
-                        autoHeightMax={360}
-                        className="sc-scrollbar sc-studies__scroll"
+                    <Scroll
+                        autoHide
+                        height={360}
                     >
                         <IndicatorList
                             onSelectItem={onSelectItem}
@@ -165,7 +162,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                             items={Category.items}
                             disableAll={activeItems.length === 5}
                         />
-                    </Scrollbars>
+                    </Scroll>
                 </div>
             </TabPanel>
         ))}

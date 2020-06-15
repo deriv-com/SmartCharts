@@ -172,7 +172,7 @@
         }
     }
     .category-content {
-        margin: 0 16px 4px;
+        margin: 0 7px 4px 8px;
         border-radius: 4px;
         @include themify($themes) {
             border: 1px solid themed('CatDisplayCatContentBorder');
@@ -406,19 +406,13 @@
             background-color: #f2f3f8;
         }
     }
-    .cq-scroll-panel {
+    .sc-scrollbar {
         position: relative;
         min-height: 320px;
+        width: 100%;
 
-        > div:nth-child(3) {
-            z-index: 9;
-
-            > div {
-                opacity: 0.16;
-                @include themify($themes) {
-                    background-color: themed('ListScroll') !important;
-                }
-            }
+        .category:last-child {
+            padding-bottom: 3em;
         }
     }
     .ciq-item-display {
@@ -437,6 +431,8 @@
 
 /* Active Symbol Icons */
 .cq-categorical-display .results-panel {
+    width: 308px;
+
     .cq-active-options {
         float: right;
         display: inline-flex;
@@ -506,19 +502,20 @@
     .cq-lookup-input {
         margin: 16px 8px;
     }
-    .cq-scroll-panel {
-        .category:last-child {
-            padding-bottom: 3em;
-        }
-    }
     .cq-item, .cq-active-item {
         height: 40px;
     }
     .cq-filter-panel {
         display: none;
     }
+    .sc-scrollbar {
+        width: calc(100% - 4px) !important;
+    }
     .results-panel {
+        width: 100% !important;
+
         .category {
+            width: 100%;
             padding: 0px;
             max-height: 40px;
             overflow-y: hidden;
@@ -575,7 +572,7 @@
                 padding-right: 7px;
             }
             &:last-child {
-                padding-bottom: 0px !important;
+                padding-bottom: 8px !important;
             }
             &.active {
                 max-height: 1500px;
@@ -609,13 +606,6 @@
         }
         .cq-lookup-input {
             margin: 16px 8px;
-        }
-        .cq-scroll-panel {
-            overflow-y: scroll;
-
-            .category:last-child {
-                padding-bottom: 3em;
-            }
         }
         .cq-item, .cq-active-item {
             height: 40px;
