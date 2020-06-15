@@ -141,6 +141,7 @@ jobs:
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
       - deploy:
           target_branch: "staging"
@@ -150,6 +151,7 @@ jobs:
     steps:
       - git_checkout_from_cache
       - yarn_install
+      - test
       - build
       - deploy:
           target_branch: "production"
