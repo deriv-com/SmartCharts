@@ -1,4 +1,4 @@
-import { observable, action, computed, when } from 'mobx';
+import { observable, action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -23,9 +23,8 @@ export default class SettingsDialogStore {
         this.onDeleted = onDeleted;
         this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
         this.SettingDialogMenu = this.menu.connect(Menu);
-        when(() => (this.scrollPanel && this.open), () => {
+        reaction(() => this.open, () => {
             if (!this.scrollPanel || !this.open) { return; }
-
             const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
             this.scrollPanel.addEventListener('click', () => {
                 this.setFreezeScroll(false);
@@ -34,6 +33,8 @@ export default class SettingsDialogStore {
                 dropdown.addEventListener('click', () => setTimeout(() => this.checkDropdownOpen(), 50));
             });
             this.setFreezeScroll(false);
+        }, {
+            delay: 300,
         });
     }
 
