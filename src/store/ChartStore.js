@@ -71,12 +71,8 @@ class ChartStore {
     @observable networkStatus;
 
     get loader() { return this.mainStore.loader; }
-    get routingStore() {
-        return this.mainStore.routing;
-    }
-    get stateStore() {
-        return this.mainStore.state;
-    }
+    get routingStore() { return this.mainStore.routing; }
+    get stateStore() { return this.mainStore.state; }
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
@@ -509,8 +505,8 @@ class ChartStore {
             chart: {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
-                    initialMarginTop: 125,
-                    initialMarginBottom: 100,
+                    initialMarginTop: this.stateStore.yAxisMargin.top,
+                    initialMarginBottom: this.stateStore.yAxisMargin.bottom,
                     // position: 'left',
                     displayBorder: true,
                     justifyRight: false,
