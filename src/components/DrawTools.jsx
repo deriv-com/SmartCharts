@@ -19,11 +19,11 @@ const ActivePanelView = ({ enabled, children }) =>  (enabled ? (
     </div>
 ) : children);
 
-const Info = ({ Icon, text, bars }) => (
+const Info = ({ Icon, text, num, bars }) => (
     <div className="info">
         {Icon ? (<Icon className="icon" />) : ''}
         <div className="text">
-            <span>{text}</span>
+            <span>{t.translate(text, { num: (num || ' ') })}</span>
             {bars ? (<small>({bars} bars)</small>) : ''}
         </div>
     </div>
@@ -56,6 +56,7 @@ const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }) => (
             Icon={item.icon}
             text={item.text}
             bars={item.bars}
+            num={item.num}
         />
         <div className="actions">
             <SettingIcon onClick={() => onSetting(item.index)} />
@@ -67,7 +68,7 @@ const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }) => (
 const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }) => (
     <div className="sc-dtools__category">
         <div className="sc-dtools__category__head">
-            {group.name}
+            {t.translate(group.name, { num: ' ' })}
         </div>
         <div className="sc-dtools__category__body">
             <div className="sc-dtools__list">
