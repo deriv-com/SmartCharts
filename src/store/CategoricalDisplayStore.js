@@ -20,7 +20,7 @@ export default class CategoricalDisplayStore {
         getCurrentActiveSubCategory,
         searchInputClassName,
     }) {
-        reaction(() => getIsShown, () => {
+        reaction(() => (getIsShown && getIsShown() && this.scrollPanel), () => {
             if (getIsShown() && this.scrollPanel) {
                 const activeItemCount = getActiveCategory ? getActiveCategory().data.length : 0;
                 this.focusedCategoryKey = null;
@@ -37,12 +37,12 @@ export default class CategoricalDisplayStore {
                 if (activeItemCount) {
                     this.activeCategoryKey = 'active';
                     this.activeHeadKey = null;
-                    this.scrollPanel.scrollTo = 0;
+                    this.scrollPanel.scrollTop = 0;
                 } else if (el) {
-                    this.scrollPanel.scrollTo = el.offsetTop;
+                    this.scrollPanel.scrollTop = el.offsetTop;
 
                     if (el_active_sub_category) {
-                        this.scrollPanel.scrollTo = (el.offsetTop + el_active_sub_category.offsetTop - 40);
+                        this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - 40);
                     }
                 }
                 setTimeout(() => { this.pauseScrollSpy = false; }, 20);
@@ -53,7 +53,11 @@ export default class CategoricalDisplayStore {
                         this.searchInput.current.focus();
                     }, 0);
                 }
+            } else if (!getIsShown()) {
+                this.scrollPanel = null;
             }
+        }, {
+            delay: 200,
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
@@ -328,7 +332,7 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel =  element;
+        if (!this.scrollPanel) this.scrollPanel = element;
     }
 
     @action.bound handleTitleClick(categoryId) {
