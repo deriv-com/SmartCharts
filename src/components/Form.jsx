@@ -132,7 +132,7 @@ export class DropDown extends React.Component {
                     onClick={this.onClick}
                     ref={(ref) => { this.titleRef = ref; }}
                 >
-                    {value}
+                    <span className="text">{value}</span>
                     <ArrowIcon />
                 </div>
                 <div className={`dropdown ${open ? 'active' : ''}`}>

@@ -200,7 +200,7 @@
 .sc-tooltip {
     &__inner {
         position: absolute;
-        top: -44px;
+        top: 0px;
         left: 50%;
         border-radius: 4px;
         height: 34px;
@@ -214,7 +214,7 @@
         letter-spacing: normal;
         opacity: 0;
         box-sizing: border-box;
-        transform: translateX(-50%);
+        transform: translateX(-50%) translateY(calc(-100% - 8px));
         pointer-events: none;
         @include themify($themes) {
             background: themed('TooltipBg');
@@ -226,11 +226,12 @@
             width: 0;
             height: 0;
             content: ' ';
-            top: 34px;
+            bottom: 0px;
             left: calc(50% - 6px);
             background: transparent;
             border-right: 6px solid transparent;
             border-left: 6px solid transparent;
+            transform: translateY(100%);
             @include themify($themes) {
                 border-top: 6px solid themed('TooltipBg');
             }
@@ -243,11 +244,12 @@
             transform: none;
 
             &:before {
-                top: calc(50% - 6px);
                 left: -6px;
+                bottom: calc(50% - 6px);
                 border-top: 6px solid transparent !important;
                 border-bottom: 6px solid transparent !important;
                 border-left: none;
+                transform: translateY(0);
                 @include themify($themes) {
                     border-right: 6px solid themed('TooltipBg');
                 }

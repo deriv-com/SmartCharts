@@ -76,7 +76,7 @@ const Timeperiod = ({
                                     <InlineLoader
                                         enabled={enableLoader(item.interval)}
                                     >
-                                        <span>{item.num} {item.num === 1 ? category.single : category.plural}</span>
+                                        <span>{item.num} {t.translate(item.num === 1 ? category.single : category.plural)}</span>
                                     </InlineLoader>
                                 </Tooltip>
                             ))
