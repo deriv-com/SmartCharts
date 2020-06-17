@@ -1,6 +1,6 @@
 import React    from 'react';
 import Scroll   from '../Scroll.jsx';
-import '../../../sass/components/_categorical-display.scss';
+import '../../../sass/components/categorical-display.scss';
 
 const CategoricalDisplay = React.memo(({
     onSelectItem,
@@ -25,11 +25,11 @@ const CategoricalDisplay = React.memo(({
     );
     return (
         <div
-            className={`cq-categorical-display ${isNestedList ? 'cq-categorical-display--nested' : ''}`}
+            className={`sc-categorical-display ${isNestedList ? 'sc-categorical-display--nested' : ''}`}
             style={{ height }}
             id={id}
         >
-            <div className="cq-lookup-filters">
+            <div className="sc-lookup-filters">
                 <SearchInput searchInputClassName={searchInputClassName} />
                 {!isNestedList && <FilterPanel /> }
             </div>

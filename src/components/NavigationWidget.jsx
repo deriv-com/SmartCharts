@@ -19,18 +19,18 @@ const NavigationWidget = ({
 
     return (
         <div
-            className="ciq-navigation-widget"
+            className="sc-navigation-widget"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             <div
-                className={`ciq-navigation-widget__item ciq-navigation-widget__item--scale ${!enableScale ? 'ciq-navigation-widget__item--hidden' : ''}`}
+                className={`sc-navigation-widget__item sc-navigation-widget__item--scale ${!enableScale ? 'sc-navigation-widget__item--hidden' : ''}`}
                 onClick={onScale}
             >
                 <ScaleIcon />
             </div>
             <div
-                className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom"
+                className="sc-navigation-widget__item sc-navigation-widget__item--zoom"
             >
                 <ZoominIcon onClick={zoomIn} />
                 <CrosshairToggle onChange={onCrosshairChange} />

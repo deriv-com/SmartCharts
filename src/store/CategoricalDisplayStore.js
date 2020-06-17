@@ -315,15 +315,23 @@ export default class CategoricalDisplayStore {
         }, 0);
     }
 
-    @action.bound handleFilterClick(category) {
-        const el = this.categoryElements[category.categoryId];
+    @action.bound handleFilterClick(categoryId) {
+        const el = this.categoryElements[categoryId];
 
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
-            this.scrollPanel.scrollTop = el.offsetTop;
-            this.focusedCategoryKey = category.categoryId;
+            if (this.chart.isMobile) {
+                this.scrollPanel.scroll({
+                    top: el.offsetTop - 40,
+                    left: 0,
+                    behavior: 'smooth',
+                });
+            } else {
+                this.scrollPanel.scrollTop = el.offsetTop;
+            }
+            this.focusedCategoryKey = categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
@@ -340,6 +348,10 @@ export default class CategoricalDisplayStore {
         for (const item of this.filteredItems) {
             if (item.categoryId === categoryId) {
                 item.active = !item.active;
+
+                if (item.active) {
+                    setTimeout(() => this.handleFilterClick(categoryId), 250);
+                }
             }
 
             if (item.active && item.categoryId !== 'favorite') {
@@ -348,9 +360,7 @@ export default class CategoricalDisplayStore {
         }
 
         this.activeHeadTop = null;
-        setTimeout(() => {
-            this.updateScrollSpy();
-        }, 0);
+        setTimeout(() => this.updateScrollSpy(), 0);
     }
 
     connect = connect(() => ({
@@ -365,7 +375,6 @@ export default class CategoricalDisplayStore {
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
-        isMobile: this.chart.isMobile,
         height: this.height,
     }))
 }
