@@ -81,7 +81,7 @@
   "Range": "Rango",
   "Range Bars": "Barras de Rango",
   "Ray [num]": "Ray [num]",
-  "Rectangle [num]": "Rectangle [num]",
+  "Rectangle [num]": "Rectángulo [num]",
   "Renko": "Renko",
   "Reset": "Restablecer",
   "Result": "Resultado",
@@ -123,7 +123,7 @@
   "Tick": "Tick",
   "Tick interval only available for \\\"Area\\\" Chart type.": "El intervalo de tick solo está disponible para el tipo de gráfico \\\"Área\\\".",
   "Time interval": "Intervalo de tiempo",
-  "Trend [num]": "Trend [num]",
+  "Trend [num]": "Tendencia [num]",
   "Try checking your spelling or use a different term": "Intente revisar su ortografía o use un término diferente",
   "Underlying Assets": "Activos Subyacentes",
   "Up to 5 active indicators allowed.": "Hasta 5 indicadores activos permitidos.",
@@ -132,7 +132,7 @@
   "You have no active drawings yet.": "Aún no tiene dibujos activos.",
   "You have no active indicators yet.": "Aún no tiene indicadores activos.",
   "You have no saved templates yet.": "Aún no tiene plantillas guardadas.",
-  "Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.": "Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.",
+  "Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.": "Zig Zag ayuda a identificar cambios de tendencia y filtra movimientos de precios relativamente pequeños al determinar los niveles de soporte y resistencia del mercado. Acepta un porcentaje de desviación como entrada y muestra una línea si el cambio de precio es mayor que el porcentaje de desviación. Zig Zag ignora cualquier movimiento lateral y es útil para filtrar el \"ruido del mercado\".",
   "Zoom in": "Acercar",
   "Zoom out": "Alejar"
 }
