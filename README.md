@@ -119,6 +119,7 @@ maxTick | Set the max number of first points/candles in the visible chart area. 
 crosshair | Set state of Crosshair Component. Allowed values are undefined, 0,1,2. Defaults to `undefined`
 crosshairTooltipLeftAllow | Set max left position which chart allow to render left side tooltip of crosshair, if mouse position before this size, the crosshair tooltip move to right side of mouse, if set `null` then chart specify `315px` as default value. Defaults to `null` 
 zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
+yAxisMargin | Set the margins of chart yAxis. It's an object that takes two parameters, `bottom` for margin bottom of chart, and `top` for the top margin of chart. 
 
 ### Chart Settings
 
