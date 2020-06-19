@@ -1,38 +1,11 @@
-import { action, reaction, when, observable } from 'mobx';
+import { action, reaction, when, observable, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
-import {
-    DrawToolsChannelIcon,
-    DrawToolsContinuousIcon,
-    DrawToolsFibonaccifanIcon,
-    DrawToolsHorizontalIcon,
-    DrawToolsLineIcon,
-    DrawToolsRayIcon,
-    DrawToolsRectangleIcon,
-    DrawToolsTrendIcon,
-    DrawToolsVerticalIcon,
-} from '../components/Icons.jsx';
-
-// camelCase to spaces separated capitalized string.
-const formatCamelCase = (s) => {
-    const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
-    return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
-};
-
-const drawTools = {
-    channel:    { id: 'channel',     text: t.translate('Channel'), icon: DrawToolsChannelIcon },
-    continuous: { id: 'continuous',  text: t.translate('Continuous'), icon: DrawToolsContinuousIcon },
-    fibfan:     { id: 'fibfan',      text: t.translate('Fib Fan'), icon: DrawToolsFibonaccifanIcon },
-    horizontal: { id: 'horizontal',  text: t.translate('Horizontal'), icon: DrawToolsHorizontalIcon },
-    line:       { id: 'line',        text: t.translate('Line'), icon: DrawToolsLineIcon },
-    ray:        { id: 'ray',         text: t.translate('Ray'), icon: DrawToolsRayIcon },
-    rectangle:  { id: 'rectangle',   text: t.translate('Rectangle'), icon: DrawToolsRectangleIcon },
-    tirone:     { id: 'tirone',      text: t.translate('Trend'), icon: DrawToolsTrendIcon },
-    vertical:   { id: 'vertical',    text: t.translate('Vertical'), icon: DrawToolsVerticalIcon },
-};
+import { formatCamelCase } from '../utils';
+import { drawTools } from '../Constant';
 
 export default class DrawToolsStore {
     constructor(mainStore) {
@@ -56,40 +29,44 @@ export default class DrawToolsStore {
     get context() { return this.mainStore.chart.context; }
 
     get stx() { return this.context.stx; }
+    get stateStore() { return this.mainStore.state; }
+    get crosshairStore() { return this.mainStore.crosshair; }
 
     activeDrawing = null;
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
-    @observable activeTools = [];
+    @observable activeToolsGroup = [];
+    @observable portalNodeIdChanged;
 
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
+        document.addEventListener('dblclick', this.doubleClick);
         this.stx.addEventListener('drawing', this.noTool);
-        this.stx.prepend('deleteHighlighted', this.onDeleteHighlighted);
+        this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
     };
 
     closeOnEscape = (e) => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.stx.changeVectorType('');
+            this.drawingFinished();
         }
     };
 
-    @action.bound onDeleteHighlighted(callRightClick) {
-        for (const drawing of this.stx.drawingObjects) {
-            if (callRightClick) {
-                this.showDrawToolDialog(drawing);
-                return true; // Override default behaviour; prevent ChartIQ from deleting the drawing
-            }
-        }
-        return false;
+    doubleClick = () => this.drawingFinished();
+
+    @computed get activeToolsNo() { return this.activeToolsGroup.reduce((a, b) => (a + b.items.length), 0); }
+
+    @action.bound onRightClickDrawing(drawing) {
+        this.showDrawToolDialog(drawing);
+        return true;
     }
 
     showDrawToolDialog(drawing) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
-
+        let title = formatCamelCase(drawing.name);
         const typeMap = {
             color: 'colorpicker',
             fillColor: 'colorpicker',
@@ -109,9 +86,18 @@ export default class DrawToolsStore {
                 defaultValue: parameters[key],
                 type: typeMap[key],
             }));
+
+
+        const drawingItem = this.findComputedDrawing(drawing);
+        if (drawingItem) {
+            title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(drawingItem.text, { num: (drawingItem.num || ' ') })}`;
+        }
+
         this.activeDrawing = drawing;
         this.activeDrawing.highlighted = false;
-        this.settingsDialog.title = formatCamelCase(drawing.name);
+        this.settingsDialog.title = title;
+        this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
+        this.settingsDialog.formTitle = t.translate('Result');
         this.settingsDialog.setOpen(true);
     }
 
@@ -119,9 +105,34 @@ export default class DrawToolsStore {
         const count = this.stx.drawingObjects.length;
         if ((this.menu.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
             this.stx.changeVectorType('');
+            this.drawingFinished();
         }
         this._pervDrawingObjectCount = count;
     };
+
+    findComputedDrawing = (drawing) => {
+        const group = this.activeToolsGroup.find(drawGroup => drawGroup.key === drawing.name);
+        if (group) {
+            const drawingItem = group.items.find(item => (
+                item.v0 === drawing.v0
+                    && item.v1 === drawing.v1
+                    && item.d0 === drawing.d0
+                    && item.d1 === drawing.d1
+            ));
+            if (drawingItem) {
+                drawingItem.prefix = drawingItem.id === 'continuous' ? t.translate('Continuous') : '';
+            }
+            return drawingItem;
+        }
+        return null;
+    }
+
+    @action.bound drawingFinished() {
+        this.computeActiveDrawTools();
+        if (this.stateStore) {
+            this.crosshairStore.setCrosshairState(this.stateStore.crosshairState);
+        }
+    }
 
     @action.bound clearAll() {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
@@ -139,7 +150,6 @@ export default class DrawToolsStore {
             this.isContinuous = true;
         }
         this.menu.setOpen(false);
-        // let drawingParameters = CIQ.Drawing.getDrawingParameters(stx, id);
     }
 
     @action.bound onChanged(items) {
@@ -152,9 +162,9 @@ export default class DrawToolsStore {
     }
 
     @action.bound onDeleted(indx) {
-        if (!indx && !this.activeDrawing) { return; }
+        if (indx === undefined && !this.activeDrawing) { return; }
 
-        if (indx && this.stx.drawingObjects[indx]) {
+        if (indx !== undefined && indx >= 0 && this.stx.drawingObjects[indx]) {
             this.activeDrawing = this.stx.drawingObjects[indx];
         }
 
@@ -172,18 +182,43 @@ export default class DrawToolsStore {
 
     @action.bound computeActiveDrawTools() {
         const items = {};
-        this.activeTools = this.stx.drawingObjects.map((item, indx) => {
+        const ignoreBarType = ['vertical', 'horizontal'];
+        const groups = {};
+        this.stx.drawingObjects.forEach((item, indx) => {
             item = ((drawTools[item.name]) ? { ...item, ...drawTools[item.name] } : item);
             item.index = indx;
+            item.bars = (ignoreBarType.indexOf(item.name) === -1)
+                ? (Math.abs(parseInt(item.p1[0] - item.p0[0], 10)) + 1)
+                : null;
 
             if (items[item.name]) {
                 items[item.name]++;
-                item.text = `${item.name} - ${items[item.name]}`;
+                item.num = items[item.name];
             } else {
+                item.num = ' ';
                 items[item.name] = 1;
             }
 
-            return item;
+            if (groups[item.name]) {
+                item.text = groups[item.name].name;
+                groups[item.name].items.push(item);
+            } else {
+                const group_name = drawTools[item.name] ? drawTools[item.name].text : item.name;
+                item.text = group_name;
+                groups[item.name] = {
+                    key: item.name,
+                    name: group_name,
+                    items: [item],
+                };
+            }
         });
+
+        // get the values of group and sort group by the number of their children
+        // this way the single item stay at top
+        this.activeToolsGroup = Object.values(groups).sort((a, b) => (a.items.length - b.items.length));
+    }
+
+    @action.bound updatePortalNode(portalNodeId) {
+        this.portalNodeIdChanged = portalNodeId;
     }
 }

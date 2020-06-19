@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import CrosshairToggle from './CrosshairToggle.jsx';
-import '../../sass/components/_ciq-navigation-widget.scss';
+import '../../sass/components/navigation-widget.scss';
 
 import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
 
@@ -13,6 +13,7 @@ const NavigationWidget = ({
     enableScale,
     onMouseEnter,
     onMouseLeave,
+    onCrosshairChange,
 }) => {
     if (!context) return '';
 
@@ -32,7 +33,7 @@ const NavigationWidget = ({
                 className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom"
             >
                 <ZoominIcon onClick={zoomIn} />
-                <CrosshairToggle />
+                <CrosshairToggle onChange={onCrosshairChange} />
                 <ZoomoutIcon onClick={zoomOut} />
             </div>
         </div>

@@ -142,6 +142,14 @@
             z-index: 108 !important;
         }
     }
+    &--loading {
+        .cq-menu-btn,
+        .sc-toolbar-widget,
+        .ciq-navigation-widget,
+        .sc-chart-footer {
+            opacity: 0.24;
+        }
+    }
     /* Mobile Style */
     .smartcharts-mobile {
         user-select: none;
@@ -152,7 +160,8 @@
     }
 }
 
-.ciq-modal .cq-menu-overlay {
+.cq-modal__overlay {
+    display: flex;
     width: 100%;
     height: 100%;
     align-items: center;
@@ -162,10 +171,15 @@
     left: 0;
     bottom: 0;
     right: 0;
-    z-index: 9999;
     overflow: hidden;
-    @include themify($themes) {
-        background: themed('DialogOverlay');
+}
+
+.ciq-modal {
+    .cq-modal__overlay {
+        z-index: 9999;
+        @include themify($themes) {
+            background: themed('DialogOverlay');
+        }
     }
 }
 
@@ -186,7 +200,7 @@
 .sc-tooltip {
     &__inner {
         position: absolute;
-        top: -44px;
+        top: 0px;
         left: 50%;
         border-radius: 4px;
         height: 34px;
@@ -200,7 +214,7 @@
         letter-spacing: normal;
         opacity: 0;
         box-sizing: border-box;
-        transform: translateX(-50%);
+        transform: translateX(-50%) translateY(calc(-100% - 8px));
         pointer-events: none;
         @include themify($themes) {
             background: themed('TooltipBg');
@@ -212,11 +226,12 @@
             width: 0;
             height: 0;
             content: ' ';
-            top: 34px;
+            bottom: 0px;
             left: calc(50% - 6px);
             background: transparent;
             border-right: 6px solid transparent;
             border-left: 6px solid transparent;
+            transform: translateY(100%);
             @include themify($themes) {
                 border-top: 6px solid themed('TooltipBg');
             }
@@ -229,11 +244,12 @@
             transform: none;
 
             &:before {
-                top: calc(50% - 6px);
                 left: -6px;
+                bottom: calc(50% - 6px);
                 border-top: 6px solid transparent !important;
                 border-bottom: 6px solid transparent !important;
                 border-left: none;
+                transform: translateY(0);
                 @include themify($themes) {
                     border-right: 6px solid themed('TooltipBg');
                 }
@@ -250,17 +266,43 @@
     }
 }
 
-.ciq-scrollbar {
+.sc-scrollbar {
     > div:nth-child(3) {
+        opacity: 1 !important;
+
         > div {
             opacity: 0.16;
+            width: 4px !important;
             @include themify($themes) {
                 background-color: themed('ScrollbarBg') !important;
             }
         }
     }
+    &--freeze {
+        > div {
+            overflow: hidden !important;
+        }
+    }
 }
 
+.sc-notification-badge {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    font-size: 10px;
+    font-weight: bold;
+    font-style: normal;
+    line-height: 1.5;
+    letter-spacing: normal;
+    text-align: center;
+    @include themify($themes) {
+        background: themed('NotificationBadgeBg');
+        color: themed('NotificationBadgeText');
+    }
+}
 /* -------------------------- buttons -------------------------------------*/
 .sc-btn {
     padding: 5px 16px;
@@ -323,7 +365,6 @@
         }
     }
     &--outline-secondary {
-        padding: 3px 12px;
         background: transparent;
         @include themify($themes) {
             border-color: themed('BtnSecondaryBorder');
@@ -331,7 +372,37 @@
         }
 
         &:hover {
-            background: transparent !important;
+            @include themify($themes) {
+                background: themed('BtnSecondaryHoverBg') !important;
+            }
+        }
+    }
+}
+
+.sc-chart__status {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    margin: 4px 0;
+    opacity: 1;
+    @include themify($themes) {
+        background: themed('ChartStatus');
+    }
+
+    &--online {
+        @include themify($themes) {
+            background: themed('ChartStatusOnline');
+        }
+    }
+    &--blinker {
+        animation: blinking-network-status 0.4s infinite alternate;
+        @include themify($themes) {
+            background: themed('ChartStatusOnline');
+        }
+    }
+    &--offline {
+        @include themify($themes) {
+            background: themed('ChartStatusOffline');
         }
     }
 }
@@ -370,5 +441,14 @@
         @include themify($themes) {
             border-color: themed('InputDefaultActiveBorder') !important;
         }
+    }
+}
+
+@keyframes blinking-network-status {
+    40% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
     }
 }

@@ -1,7 +1,9 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 import Scrollbars from 'tt-react-custom-scrollbars';
 import {
+    FormGroup,
     Switch,
     NumericInput,
     ColorPicker,
@@ -11,29 +13,25 @@ import {
     NumberColorPicker,
     FontSetting,
 } from './Form.jsx';
-import '../../sass/components/_ciq-settings-dialog.scss';
-import 'react-tabs/style/react-tabs.css';
+import { DeleteIcon } from './Icons.jsx';
+import '../../sass/components/settings-dialog.scss';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
-    <div className={`form__group form__group--${type}`}>
-        {(type === 'select'
-         || type === 'colorpicker'
-         || group === 'OverBought'
-         || group === 'OverSold'
-         || type === 'pattern'
-        )
-            ? ''
-            : (
-                <div className="form__label">
-                    <span> {title} </span>
-                </div>
-            )}
-        <div className="form__control">
-            {Field}
-        </div>
-    </div>
+    <FormGroup
+        title={
+            (type === 'select'
+                     || type === 'pattern'
+                     || type === 'colorpicker'
+                     || type === 'numbercolorpicker'
+                     || group === 'OverBought'
+                     || group === 'OverSold'
+            ) ? null : title
+        }
+        type={type}
+    >
+        {Field}
+    </FormGroup>
 );
-
 
 const SettingsPanelGroup = ({
     title,
@@ -52,7 +50,7 @@ const SettingsPanelGroup = ({
             <ColorPicker
                 theme={theme}
                 color={item.value}
-                subtitle={item.title}
+                subtitle={item.subtitle || item.title}
                 setColor={value => onItemChange(item.id, value)}
             />
         ),
@@ -74,7 +72,7 @@ const SettingsPanelGroup = ({
             <DropDown
                 rows={Object.keys(item.options)}
                 value={item.value}
-                subtitle={item.title}
+                subtitle={item.subtitle || item.title}
                 onRowClick={value => onItemChange(item.id, value)}
             >
                 {row => row}
@@ -115,85 +113,69 @@ const SettingsPanelGroup = ({
         ),
     };
 
-    const input_group_name = `form__input-group--${title.toLowerCase().replace(' ', '-')}`;
+    const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
 
     return (
         <div className={`form__input-group ${input_group_name}`}>
             {title === 'Show Zones' ? '' : (<h4>{title}</h4>)}
             {items.map(item => (renderMap[item.type]
-                && (
-                    <SettingsPanelItem
-                        key={item.id}
-                        group={title}
-                        type={item.type}
-                        active={item.active}
-                        title={item.title}
-                        Field={renderMap[item.type](item)}
-                    />
-                )
+                    && (
+                        <SettingsPanelItem
+                            key={item.id}
+                            type={item.type}
+                            active={item.active}
+                            title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
+                            Field={renderMap[item.type](item)}
+                        />
+                    )
             ))}
         </div>
     );
 };
-
 
 const SettingsPanel = ({
     itemGroups,
     theme,
     onItemChange,
     setScrollPanel,
+    freezeScroll,
 }) => (
     <Scrollbars
-        className="form form--indicator-setting"
+        className={`sc-scrollbar ${freezeScroll ? 'sc-scrollbar--freeze' : ''} form form--indicator-setting`}
         ref={setScrollPanel}
         autoHide
     >
-        {itemGroups.map(group => (group.fields.length
-            ? (
+        {itemGroups.map(group => (
+            (group.fields.length > 0)
+            && (
                 <SettingsPanelGroup
                     key={group.key}
+                    group={group.key}
                     title={group.key}
                     items={group.fields}
                     theme={theme}
                     onItemChange={onItemChange}
                 />
-            ) : ''
-        ))
-        }
+            )
+        ))}
     </Scrollbars>
 );
 
-
-const ResetButton = ({
-    onClick,
-}) => (
+const ResetButton = ({ onClick }) => (
     <button
         type="button"
-        className="sc-btn sc-btn--outline-secondary"
+        className="sc-btn sc-btn--outline-secondary sc-btn--reset"
         onClick={onClick}
     >{t.translate('Reset')}
     </button>
 );
 
-const DoneButton = ({
-    onClick,
-}) => (
+const DoneButton = ({ onClick }) => (
     <button
         type="button"
         className="sc-btn sc-btn--primary sc-btn--save"
         onClick={() => onClick()}
-    >{t.translate('Save')}
-    </button>
-);
-
-const CancelButton = ({
-    onClick,
-}) => (
-    <button
-        type="button"
-        className="sc-btn sc-btn--cancel"
-        onClick={() => onClick()}
-    >{t.translate('Cancel')}
+    >{t.translate('Done')}
     </button>
 );
 
@@ -204,10 +186,13 @@ const SettingsDialog = ({
     showTabs,
     onResetClick,
     onItemChange,
+    onItemDelete,
     SettingDialogMenu,
     theme,
     close,
     setScrollPanel,
+    dialogPortalNodeId,
+    freezeScroll,
 }) => (
     <SettingDialogMenu
         className="cq-modal--settings"
@@ -216,6 +201,7 @@ const SettingsDialog = ({
         enableTabular={showTabs}
         emptyMenu
         enableOverlay // this temprary, we remove it when all menus convert to modal
+        portalNodeId={dialogPortalNodeId}
     >
         <SettingDialogMenu.Title />
         <SettingDialogMenu.Body>
@@ -233,6 +219,7 @@ const SettingsDialog = ({
                                     theme={theme}
                                     onItemChange={onItemChange}
                                     setScrollPanel={setScrollPanel}
+                                    freezeScroll={freezeScroll}
                                 />
                                 <div className="buttons">
                                     <ResetButton onClick={onResetClick} />
@@ -250,11 +237,15 @@ const SettingsDialog = ({
                                 theme={theme}
                                 onItemChange={onItemChange}
                                 setScrollPanel={setScrollPanel}
+                                freezeScroll={freezeScroll}
                             />
                             <div className="buttons">
-                                <ResetButton onClick={onResetClick} />
+                                <DeleteIcon
+                                    className="sc-btn--delete"
+                                    onClick={onItemDelete}
+                                />
                                 <div>
-                                    <CancelButton onClick={close} />
+                                    <ResetButton onClick={onResetClick} />
                                     <DoneButton onClick={close} />
                                 </div>
                             </div>
@@ -263,6 +254,5 @@ const SettingsDialog = ({
             </div>
         </SettingDialogMenu.Body>
     </SettingDialogMenu>
-
 );
 export default SettingsDialog;

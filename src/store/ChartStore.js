@@ -3,6 +3,7 @@ import {
     observable,
     reaction,
     computed }                 from 'mobx';
+import moment                  from 'moment';
 import {
     ActiveSymbols,
     BinaryAPI,
@@ -16,7 +17,9 @@ import plotSpline              from '../SplinePlotter';
 import {
     calculateTimeUnitInterval,
     getUTCDate,
-    cloneCategories }          from '../utils';
+    cloneCategories,
+    prepareIndicatorName,
+    renderSVGString }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
 
 import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
@@ -25,14 +28,6 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import HomeIcon        from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
-// import '../utils/raf';
-
-function renderSVGString(icon) {
-    const vb = icon.viewBox.split(' ').slice(2);
-    // eslint-disable-next-line no-undef
-    return `<svg width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
-}
-
 
 class ChartStore {
     static keystrokeHub;
@@ -72,14 +67,12 @@ class ChartStore {
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
+    @observable serverTime;
+    @observable networkStatus;
 
     get loader() { return this.mainStore.loader; }
-    get routingStore() {
-        return this.mainStore.routing;
-    }
-    get stateStore() {
-        return this.mainStore.state;
-    }
+    get routingStore() { return this.mainStore.routing; }
+    get stateStore() { return this.mainStore.state; }
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
@@ -87,7 +80,13 @@ class ChartStore {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
         // TODO use constant here for chartcontrol height
-        const offsetHeight = (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) ? 40 : 0;
+        let offsetHeight = 0;
+        if (this.stateStore.enabledChartFooter) {
+            offsetHeight = 32;
+        } else if (panelPosition === 'bottom' && this.stateStore.chartControlsWidgets) {
+            offsetHeight = 40;
+        }
+
         this.chartHeight = this.chartNode.offsetHeight;
         this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
     }
@@ -121,6 +120,18 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
+    @computed get indicatorHeightRatio() {
+        const chartHeight = this.chartNode.offsetHeight;
+        const isSmallScreen = chartHeight < 780;
+        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 360 : 340)) / 5);
+
+        return {
+            height: indicatorsHeight,
+            heightOnAdd: indicatorsHeight + (isSmallScreen ? 17 : 27),
+            percent: (indicatorsHeight / chartHeight),
+        };
+    }
+
     init = (rootNode, props) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
@@ -131,8 +142,8 @@ class ChartStore {
         } else {
             import(/* webpackChunkName: "chartiq" */ 'chartiq').then(action(({ CIQ, SplinePlotter }) => {
                 CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(ResizeIcon)}</div>`;
-                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel stx-show"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
-                CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span class="mouseDeleteText">right-click to delete</span><span class="mouseManageText">Right-click to manage</span></span></span></div>`;
+                CIQ.ChartEngine.htmlControls.iconsTemplate = `<div class="stx-panel-control"><div class="stx-panel-title"></div><div class="stx-btn-panel stx-show"><span class="stx-ico-up">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-down">${renderSVGString(DownIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-focus">${renderSVGString(MaximizeIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-edit">${renderSVGString(EditIcon)}</span></div><div class="stx-btn-panel stx-show"><span class="stx-ico-close">${renderSVGString(DeleteIcon)}</span></div></div>`;
+                CIQ.ChartEngine.htmlControls.mSticky = `<div class="stx_sticky"> <span class="mStickyInterior"></span> <span class="mStickyRightClick"><span class="overlayEdit stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="overlayTrashCan stx-btn" style="display:none"><span class="ic-edit">${renderSVGString(EditIcon)}</span><span class="ic-delete">${renderSVGString(DeleteIcon)}</span></span> <span class="mouseDeleteInstructions"><span class="mouseDeleteText">Right click to delete</span><span class="mouseManageText">Right click to manage</span></span></span></div>`;
                 CIQ.ChartEngine.htmlControls.home = `<div class="stx_jump_today" style="display:none">${renderSVGString(HomeIcon)}</div>`;
 
                 window.CIQ = CIQ;
@@ -146,7 +157,9 @@ class ChartStore {
         const _self = this;
 
         // Add custom injections to the CIQ
-        inject();
+        inject({
+            drawToolsStore: this.mainStore.drawTools,
+        });
 
         /**
          * only home button click part modified to avoid calling
@@ -368,6 +381,88 @@ class ChartStore {
             };
             CIQ[yaxisLabelStyle](params);
         };
+        CIQ.ChartEngine.prototype.displaySticky = function (params) {
+            const m = this.controls.mSticky;
+            if (!m) return;
+            const mi = m.querySelector('.mStickyInterior');
+            if (!mi) return;
+            const overlayTrashCan = m.querySelector('.overlayTrashCan');
+            const overlayEdit = m.querySelector('.overlayEdit');
+            const mouseDeleteInstructions = m.querySelector('.mouseDeleteInstructions');
+            const longPressText = m.querySelector('.stickyLongPressText');
+            CIQ.unappendClassName(mouseDeleteInstructions, 'no_edit');
+            // backwards compatibility:
+            if (!params || typeof (params) !== 'object') {
+                params = {
+                    message: arguments[0], // eslint-disable-line prefer-rest-params
+                    backgroundColor: arguments[1], // eslint-disable-line prefer-rest-params
+                    forceShow: arguments[2], // eslint-disable-line prefer-rest-params
+                    noDelete: arguments[3], // eslint-disable-line prefer-rest-params
+                    type: arguments[4], // eslint-disable-line prefer-rest-params
+                };
+            }
+
+            let message = params.message, backgroundColor = params.backgroundColor;
+            const type = params.type,
+                noEdit = params.noEdit,
+                forceShow = params.forceShow,
+                noDelete = params.noDelete;
+            if (!forceShow && !message) {
+                mi.innerHTML = '';
+                m.style.display = 'none';
+                if (overlayTrashCan) overlayTrashCan.style.display = 'none';
+                if (overlayEdit) overlayEdit.style.display = 'none';
+                if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'none';
+                if (longPressText) longPressText.style.display = 'none';
+            } else {
+                if (!message) message = '';
+                if (backgroundColor === 'auto') backgroundColor = this.defaultColor;
+                if (forceShow && !message) {
+                    mi.style.backgroundColor = '';
+                    mi.style.color = '';
+                    mi.style.display = 'none';
+                } else if (backgroundColor) {
+                    mi.style.backgroundColor = backgroundColor;
+                    mi.style.color = CIQ.chooseForegroundColor(backgroundColor);
+                    mi.style.display = 'inline-block';
+                } else {
+                    mi.style.backgroundColor = '';
+                    mi.style.color = '';
+                    mi.style.display = 'inline-block';
+                }
+
+                // This line ony changed
+                const nameObj = prepareIndicatorName(message);
+                mi.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
+
+                const rtClick = m.querySelector('.mStickyRightClick');
+                rtClick.className = 'mStickyRightClick';  // reset
+                if (type) CIQ.appendClassName(rtClick, `rightclick_${type}`);
+                rtClick.style.display = '';
+                m.style.display = 'inline-block';
+                if (noDelete || this.bypassRightClick === true || this.bypassRightClick[type]) {
+                    rtClick.style.display = 'none';
+                } else if (this.highlightViaTap || this.touches.length) {
+                    if (overlayTrashCan) overlayTrashCan.style.display = 'inline-block';
+                    if (overlayEdit && !noEdit) overlayEdit.style.display = 'inline-block';
+                    if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'none';
+                    if (longPressText) longPressText.style.display = 'none';
+                    CIQ[`${message === '' ? '' : 'un'}appendClassName`](m, 'hide');
+                } else {
+                    if (noEdit) CIQ.appendClassName(mouseDeleteInstructions, 'no_edit');
+                    if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'block';
+                    if (longPressText) {
+                        longPressText.style.display = 'none';
+                        const drag = this.preferences.dragging;
+                        if (drag && params.panel && !params.panel.noDrag) {
+                            if ((drag === true || drag.study) && type === 'study') longPressText.style.display = 'block';
+                            else if ((drag === true || drag.series) && type === 'series') longPressText.style.display = 'block';
+                        }
+                    }
+                }
+                this.positionSticky(m);
+            }
+        };
 
         const {
             symbol,
@@ -382,11 +477,12 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
+            activeSymbols,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, activeSymbols));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -409,8 +505,8 @@ class ChartStore {
             chart: {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
-                    initialMarginTop: 125,
-                    initialMarginBottom: 100,
+                    initialMarginTop: this.stateStore.yAxisMargin.top,
+                    initialMarginBottom: this.stateStore.yAxisMargin.bottom,
                     // position: 'left',
                     displayBorder: true,
                     justifyRight: false,
@@ -465,8 +561,8 @@ class ChartStore {
 
         const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
         const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
-        deleteElement.textContent = t.translate('right-click to delete');
-        manageElement.textContent = t.translate('right-click to manage');
+        deleteElement.textContent = t.translate('Right click to delete');
+        manageElement.textContent = t.translate('Right click to manage');
 
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
         // stxx.chart.lockScroll = true;
@@ -545,6 +641,7 @@ class ChartStore {
                 });
 
                 this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+                this.tradingTimes.onTimeChanged(this.onServerTimeChange);
 
                 setTimeout(action(() => {
                     // Defer the render of the dialogs and dropdowns; this enables
@@ -613,6 +710,10 @@ class ChartStore {
                 selected,
             };
         });
+    }
+
+    @action.bound onServerTimeChange() {
+        this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD MMM YYYY HH:mm:ss [GMT]');
     }
 
     @action.bound onMouseEnter() {
@@ -802,6 +903,34 @@ class ChartStore {
             this.stxx.isDestroyed = true;
             this.stxx.destroy();
             this.stxx = null;
+        }
+    }
+
+    @action.bound openFullscreen() {
+        const isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null)
+            || (document.webkitFullscreenElement && document.webkitFullscreenElement !== null)
+            || (document.mozFullScreenElement && document.mozFullScreenElement !== null)
+            || (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+        const docElm = this.rootNode;
+        if (!isInFullScreen) {
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.mozRequestFullScreen) {
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullScreen) {
+                docElm.webkitRequestFullScreen();
+            } else if (docElm.msRequestFullscreen) {
+                docElm.msRequestFullscreen();
+            }
+        } else if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
         }
     }
 }

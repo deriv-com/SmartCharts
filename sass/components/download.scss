@@ -1,16 +1,7 @@
 
 .sc-download-menu {
-    .cq-dialog-overlay {
-        position: fixed;
-        transform: inherit;
-        top: 0px;
-        left: 0px;
-        width: 100%;
-        height: 100%;
-
-        .cq-dialog {
-            width: 320px;
-        }
+    .sc-dialog {
+        width: 320px;
     }
 }
 
@@ -69,63 +60,9 @@
         }
     }
     .sc-download-menu {
-        .cq-dialog {
+        .sc-dialog {
             left: auto;
             width: 300px;
         }
-    }
-}
-
-.loading {
-    margin: 0px auto;
-    width: 50px;
-    height: 14px;
-    text-align: center;
-    font-size: 10px;
-
-    &__bullet {
-        height: 100%;
-        width: 4px;
-        margin: 0 2px;
-        display: inline-block;
-        border-radius: 3px;
-        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        @include themify($themes) {
-            background-color: themed('LoadingBg');
-        }
-
-        &:nth-child(2) {
-            -webkit-animation-delay: -1.1s;
-            animation-delay: -1.1s;
-        }
-        &:nth-child(3) {
-            -webkit-animation-delay: -1s;
-            animation-delay: -1s;
-        }
-        &:nth-child(4) {
-            -webkit-animation-delay: -0.9s;
-            animation-delay: -0.9s;
-        }
-    }
-}
-
-@-webkit-keyframes sk-stretchdelay {
-    0%, 40%, 100% {
-        -webkit-transform: scaleY(0.4);
-    }
-    20% {
-        -webkit-transform: scaleY(1);
-    }
-}
-
-@keyframes sk-stretchdelay {
-    0%, 40%, 100% {
-        transform: scaleY(0.4);
-        -webkit-transform: scaleY(0.4);
-    }
-    20% {
-        transform: scaleY(1);
-        -webkit-transform: scaleY(1);
     }
 }

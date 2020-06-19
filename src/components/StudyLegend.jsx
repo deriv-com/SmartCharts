@@ -1,10 +1,13 @@
-import React from 'react';
-import Scrollbars from 'tt-react-custom-scrollbars';
+import React        from 'react';
+import Scrollbars   from 'tt-react-custom-scrollbars';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import NotificationBadge from './NotificationBadge.jsx';
-import { connect } from '../store/Connect';
-import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon } from './Icons.jsx';
-import '../../sass/components/_sc-studies.scss';
+import Tooltip      from './Tooltip.jsx';
+import { connect }  from '../store/Connect';
+import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons.jsx';
+import '../../sass/components/studylegend.scss';
+
+const StudyIcon = ({ Icon, props }) => <Icon {...props} />;
 
 const EmptyView = () => (
     <div className="sc-studies--empty">
@@ -13,43 +16,47 @@ const EmptyView = () => (
     </div>
 );
 
-const NoResultView = () => (
+const NoResultView = ({ text }) => (
     <div className="sc-studies--empty">
-        <EmptyStateIcon />
-        <p>{t.translate('No result found.')}</p>
+        <strong>{t.translate('No results for')} “{text}” </strong>
+        <p>{t.translate('Try checking your spelling or use a different term')}</p>
     </div>
 );
 
 const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll }) => (
     <div className="sc-studies__list">
         {items.map(Item => (
-            <div
+            <Tooltip
                 key={`item--${Item.id}`}
-                className={`sc-studies__list__item ${disableAll ? 'sc-studies__list__item--disabled' : ''}`}
+                className={`sc-studies__list__item ${disableAll && 'sc-studies__list__item--disabled'}`}
+                enabled={!!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30)}
+                content={`${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`}
             >
                 <div
                     className="info"
                     onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}
                 >
-                    <Item.icon />
-                    {Item.name}
+                    <StudyIcon Icon={Item.icon} />
+                    <div className="text">
+                        <span>{Item.name}</span>
+                        {Item.bars && (<small>({Item.bars})</small>)}
+                    </div>
                 </div>
                 <div className="detail">
-                    {Item.bars ? (<span>{Item.bars}</span>) : ''}
-                    {onInfoItem ? (<InfoCircleIcon className="ic-info" onClick={() => onInfoItem(Item)} />) : ''}
-                    {onEditItem ? (<SettingIcon onClick={() => onEditItem(Item.dataObject)} />) : ''}
-                    {onDeleteItem ? (<DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />) : ''}
+                    {onInfoItem && (<InfoCircleIcon className="ic-info" onClick={() => onInfoItem(Item)} />)}
+                    {onEditItem && (<SettingIcon onClick={() => onEditItem(Item.dataObject)} />)}
+                    {onDeleteItem && (<DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />)}
                 </div>
-            </div>
+            </Tooltip>
         ))}
     </div>
 );
 
-const TabularDisplaySearchPanel = ({ categories, onSelectItem, disableAll }) => (
+const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll }) => (
     <Scrollbars
         autoHeight
         autoHeightMax={360}
-        className="sc-studies__scroll"
+        className="sc-scrollbar sc-studies__scroll"
     >
         {categories.map(Category => (
             <div key={Category.id} className="sc-studies__category">
@@ -60,6 +67,7 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, disableAll }) => 
                     <IndicatorList
                         items={Category.foundItems}
                         onSelectItem={onSelectItem}
+                        onInfoItem={onInfoItem}
                         disableAll={disableAll}
                     />
                 </div>
@@ -77,10 +85,10 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }
                 className="sc-btn sc-btn--sm sc-btn--outline-secondary"
                 onClick={() => clearAll()}
             >
-                {t.translate('Clear All')}
+                {t.translate('Clear all')}
             </button>
         </div>
-        <div className="sc-studies__panel__body">
+        <div className="sc-studies__panel__content sc-studies__panel__content--active">
             <IndicatorList
                 items={items}
                 onDeleteItem={onDeleteItem}
@@ -91,7 +99,7 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }
 );
 
 
-const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategories, onSelectItem, onDeleteItem, onEditItem, onInfoItem, activeItems, clearAll }) => (
+const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategories, onSelectItem, onDeleteItem, onEditItem, onInfoItem, activeItems, clearAll, searchQuery }) => (
     <Tabs
         className="tabs--vertical"
         selectedIndex={selectedTab}
@@ -102,15 +110,11 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
             <Tab key="active">
                 <ActiveIcon />
                 {t.translate('Active')}
-                {
-                    activeItems.length
-                        ? (<span className="budget">{activeItems.length}</span>)
-                        : ''
-                }
+                <NotificationBadge notificationCount={activeItems.length} />
             </Tab>
             {categories.map(Category => (
                 <Tab key={`tab--${Category.id}`}>
-                    <Category.icon />
+                    <StudyIcon Icon={Category.icon} />
                     {Category.name}
                 </Tab>
             ))}
@@ -123,15 +127,16 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                             <TabularDisplaySearchPanel
                                 categories={searchedCategories}
                                 onSelectItem={onSelectItem}
+                                onInfoItem={onInfoItem}
                                 disableAll={activeItems.length === 5}
                             />
                         )
-                        : (<NoResultView />)
+                        : (<NoResultView text={searchQuery} />)
                 }
             </div>
         </TabPanel>
         <TabPanel key="panel--active">
-            <div className="sc-studies__panel">
+            <div className="sc-studies__panel sc-studies__panel--active">
                 {
                     activeItems.length
                         ? (
@@ -152,7 +157,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                     <Scrollbars
                         autoHeight
                         autoHeightMax={360}
-                        className="sc-studies__scroll"
+                        className="sc-scrollbar sc-studies__scroll"
                     >
                         <IndicatorList
                             onSelectItem={onSelectItem}
@@ -178,6 +183,7 @@ const StudyLegend = ({
     items,
     searchedItems,
     SearchInput,
+    searchQuery,
     selectedTab,
     onSelectTab,
     onSelectItem,
@@ -187,56 +193,74 @@ const StudyLegend = ({
     deleteStudy,
     editStudy,
     infoItem,
-}) => (
-    <StudyMenu
-        className="sc-studies"
-        isOpened={isOpened}
-        setOpen={setOpen}
-        isMobile={isMobile}
-        title={t.translate('Indicators')}
-        tooltip={t.translate('Indicators')}
-        subTitle={infoItem ? infoItem.name : null}
-        onBack={() => onInfoItem(null)}
-        newStyle
-        enableTabular
-    >
-        <StudyMenu.Title>
-            <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
-                <IndicatorIcon />
-                <NotificationBadge notificationCount={activeStudiesNo} />
-            </div>
-        </StudyMenu.Title>
-        <StudyMenu.Body>
-            <SearchInput />
-            {infoItem ? (
-                <div className="sc-studies__info">
-                    <p>
-                        {infoItem.description}
-                    </p>
-                    <button
-                        type="button"
-                        className="sc-btn sc-btn--primary sc-btn--w100"
-                        onClick={() => onSelectItem(infoItem.id)}
-                    >
-                        {t.translate('Add')}
-                    </button>
+    portalNodeId,
+    updatePortalNode,
+}) => {
+    updatePortalNode(portalNodeId);
+    return (
+        <StudyMenu
+            className="sc-studies"
+            isOpened={isOpened}
+            setOpen={setOpen}
+            isMobile={isMobile}
+            title={t.translate('Indicators')}
+            tooltip={t.translate('Indicators')}
+            newStyle
+            enableTabular
+            portalNodeId={portalNodeId}
+            customHead={
+                infoItem
+                    ? (
+                        <div className="sc-dialog__head--info">
+                            <BackIcon onClick={() => onInfoItem(null)} />
+                            {infoItem.name}
+                        </div>
+                    ) : (
+                        <div className="sc-dialog__head--search">
+                            <SearchInput />
+                        </div>
+                    )
+            }
+        >
+            <StudyMenu.Title>
+                <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
+                    <IndicatorIcon />
+                    <NotificationBadge notificationCount={activeStudiesNo} />
                 </div>
-            ) : ''}
-            <TabularDisplay
-                onSelectTab={onSelectTab}
-                selectedTab={selectedTab}
-                categories={items}
-                searchedCategories={searchedItems}
-                onSelectItem={onSelectItem}
-                onDeleteItem={deleteStudy}
-                onEditItem={editStudy}
-                onInfoItem={onInfoItem}
-                activeItems={activeItems}
-                clearAll={deleteAll}
-            />
-        </StudyMenu.Body>
-    </StudyMenu>
-);
+            </StudyMenu.Title>
+            <StudyMenu.Body>
+
+                {infoItem && (
+                    <div className="sc-studies__info">
+                        <p>
+                            {infoItem.description}
+                        </p>
+                        <button
+                            type="button"
+                            className="sc-btn sc-btn--primary sc-btn--w100"
+                            onClick={() => onSelectItem(infoItem.id)}
+                        >
+                            {t.translate('Add')}
+                        </button>
+                    </div>
+                )}
+                <TabularDisplay
+                    onSelectTab={onSelectTab}
+                    selectedTab={selectedTab}
+                    categories={items}
+                    searchedCategories={searchedItems}
+                    onSelectItem={onSelectItem}
+                    onDeleteItem={deleteStudy}
+                    onEditItem={editStudy}
+                    onInfoItem={onInfoItem}
+                    activeItems={activeItems}
+                    clearAll={deleteAll}
+                    searchQuery={searchQuery}
+                />
+            </StudyMenu.Body>
+        </StudyMenu>
+    );
+};
 
 export default connect(({ studies: st, chart }) => ({
     isOpened: st.open,
@@ -249,6 +273,7 @@ export default connect(({ studies: st, chart }) => ({
     items: st.items,
     searchedItems: st.searchedItems,
     SearchInput: st.SearchInput,
+    searchQuery: st.filterText,
     selectedTab: st.selectedTab,
     onSelectTab: st.onSelectTab,
     onSelectItem: st.onSelectItem,
@@ -257,4 +282,5 @@ export default connect(({ studies: st, chart }) => ({
     editStudy: st.editStudy,
     onInfoItem: st.onInfoItem,
     infoItem: st.infoItem,
+    updatePortalNode: st.updatePortalNode,
 }))(StudyLegend);

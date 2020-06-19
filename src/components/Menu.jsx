@@ -7,7 +7,7 @@ import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
-        if (e.target.className === 'cq-menu-overlay') {
+        if (e.target.className === 'cq-modal__overlay') {
             this.props.handleCloseDialog();
         }
     };
@@ -19,8 +19,6 @@ class Menu extends Component {
             className,
             children,
             title,
-            subTitle,
-            onBack,
             tooltip,
             onTitleClick,
             DropdownDialog,
@@ -35,6 +33,7 @@ class Menu extends Component {
             theme,
             enableTabular,
             ready,
+            customHead,
             emptyMenu,
             newStyle, // this props will remove after we apply new design
             // to all of components
@@ -47,37 +46,34 @@ class Menu extends Component {
         if (newStyle) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const modalDropdown = (
-                <div className={`cq-modal-dropdown ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                <div className={`cq-modal-dropdown ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
-                        className="cq-menu-overlay"
+                        className="cq-modal__overlay"
                         onClick={this.onOverlayClick}
                     >
-                        <div className={`${portalNode ? 'cq-dialog-portal' : 'cq-dialog-overlay'}`}>
-                            {
-                                (shouldRenderDialogs
-                                && (
-                                    <CSSTransition
-                                        appear
-                                        in={dialogStatus}
-                                        timeout={300}
-                                        classNames="cq-dialog"
-                                        unmountOnExit
+                        {
+                            (shouldRenderDialogs
+                            && (
+                                <CSSTransition
+                                    appear
+                                    in={dialogStatus}
+                                    timeout={300}
+                                    classNames="sc-dialog"
+                                    unmountOnExit
+                                >
+                                    <DropdownDialog
+                                        isMobile={isMobile}
+                                        isFullscreen={isFullscreen}
+                                        title={title}
+                                        handleCloseDialog={handleCloseDialog}
+                                        enableTabular={enableTabular}
+                                        customHead={customHead}
                                     >
-                                        <DropdownDialog
-                                            isMobile={isMobile}
-                                            isFullscreen={isFullscreen}
-                                            title={title}
-                                            handleCloseDialog={handleCloseDialog}
-                                            subTitle={subTitle}
-                                            onBack={onBack}
-                                            enableTabular={enableTabular}
-                                        >
-                                            {rest}
-                                        </DropdownDialog>
-                                    </CSSTransition>
-                                ))
-                            }
-                        </div>
+                                        {rest}
+                                    </DropdownDialog>
+                                </CSSTransition>
+                            ))
+                        }
                     </div>
                 </div>
             );
@@ -91,13 +87,13 @@ class Menu extends Component {
             );
 
             if (emptyMenu) {
-                return (open ? newDialog : '');
+                return (open && newDialog);
             }
 
             return (
                 enabled && (
                     <Tooltip
-                        className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}
+                        className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}
                         content={tooltip}
                         enabled={tooltip}
                         position="right"
@@ -110,7 +106,7 @@ class Menu extends Component {
                         >
                             {first}
                         </div>
-                        {open ? newDialog : ''}
+                        {open && newDialog}
                     </Tooltip>
                 ) || (
                     <Tooltip
@@ -163,7 +159,7 @@ class Menu extends Component {
         return (
 
             enabled && (
-                <div className={`ciq-menu ciq-enabled ${className || ''} ${open ? 'stxMenuActive' : ''}`}>
+                <div className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
                         className="cq-menu-btn"
                         onMouseEnter={onMouseEnter}

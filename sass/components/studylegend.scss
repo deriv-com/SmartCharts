@@ -1,0 +1,341 @@
+
+.sc-studies {
+    $self: &;
+
+    .react-tabs__tab-list {
+        .react-tabs__tab {
+            box-shadow: none !important;
+            outline: none !important;
+
+            &:after {
+                display: none;
+            }
+        }
+    }
+    .hidden {
+        display: none;
+    }
+    .cq-lookup-input {
+        width: 100%;
+        padding: 0px;
+        box-sizing: border-box;
+        position: relative;
+
+        > input {
+            padding-left: 32px;
+            line-height: 2em;
+            font-size: 1.4em;
+            border: none;
+            outline: 0;
+            background-color: transparent;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease-in-out;
+            @include placeholder {
+                @include themify($themes) {
+                    color: themed('IndicatorSearchText');
+                }
+            }
+            @include themify($themes) {
+                color: themed('IndicatorSearchActiveText');
+                border: 1px solid themed('IndicatorSearchBorder');
+                background: themed('IndicatorSearchBg');
+            }
+
+            &:hover {
+                @include themify($themes) {
+                    border-color: themed('IndicatorSearchHoverBorder');
+                }
+            }
+            &:focus {
+                @include themify($themes) {
+                    border-color: themed('IndicatorSearchActiveBorder');
+                }
+            }
+        }
+        .ic-icon {
+            position: absolute;
+            top: 6px;
+            left: 8px;
+            width: 16px;
+            height: 16px;
+
+            svg {
+                width: 16px;
+                height: 16px;
+                top: -1px;
+                @include themify($themes) {
+                    fill: themed('IndicatorSearchIcon');
+                }
+            }
+            &.icon-reset {
+                left: auto;
+                right: 8px;
+                opacity: 0;
+                top: 5px;
+                pointer-events: none;
+                cursor: pointer;
+
+                svg {
+                    stroke: none;
+                    @include themify($themes) {
+                        fill: themed('IndicatorSearchIconReset');
+                    }
+                }
+            }
+        }
+        &.active {
+            > input {
+                @include themify($themes) {
+                    color: themed('IndicatorSearchActiveText') !important;
+                    border-color: themed('IndicatorSearchActiveBorder') !important;
+                }
+            }
+            .ic-icon {
+                &.icon-reset {
+                    opacity: 1;
+                    pointer-events: initial;
+                }
+            }
+        }
+    }
+    .cq-dialog__body {
+        position: relative;
+    }
+    &__panel {
+        width: 360px;
+        height: 392px;
+        padding: 16px 0px 16px 8px;
+        box-sizing: border-box;
+
+        &__head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+
+            p {
+                font-size: 12px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 0.1;
+                letter-spacing: normal;
+                padding: 0 8px;
+                @include themify($themes) {
+                    color: themed('IndicatorListItemText');
+                }
+            }
+        }
+        &__content {
+            width: 100%;
+
+            &--active {
+                #{ $self }__list__item {
+                    height: 48px;
+                    padding: 4px 16px;
+                    cursor: initial;
+                }
+            }
+        }
+        &--active {
+            padding-right: 8px;
+        }
+    }
+    &--empty {
+        display: flex;
+        flex-direction: column;
+        padding: 8px;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
+
+        > .ic-icon {
+            width: 130px;
+            height: 130px;
+            margin: 60px auto 24px;
+        }
+        strong {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            text-align: center;
+            margin-bottom: 8px;
+            @include themify($themes) {
+                color: themed('IndicatorEmptyTitleText');
+            }
+        }
+        p {
+            font-size: 12px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: center;
+            margin: 0px;
+            @include themify($themes) {
+                color: themed('IndicatorEmptyText');
+            }
+        }
+    }
+    &__list {
+        &__item {
+            height: 40px;
+            display: flex;
+            margin-right: 8px;
+            border-radius: 4px;
+            box-sizing: border-box;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                @include themify($themes) {
+                    background: themed('IndicatorListItemHoverBg');
+                }
+
+                .ic-info {
+                    opacity: 1;
+                }
+            }
+            .info {
+                display: flex;
+                justify-content: start;
+                align-items: center;
+                width: 100%;
+                padding: 8px 0 8px 16px;
+
+                .ic-icon {
+                    margin-right: 16px;
+                }
+                .text {
+                    display: flex;
+                    flex-direction: column;
+                    padding-left: 16px;
+
+                    span {
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.43;
+                        letter-spacing: normal;
+                        margin-right: 16px;
+                        @include themify($themes) {
+                            color: themed('IndicatorListItemText');
+                        }
+                    }
+                    small {
+                        display: block;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.5;
+                        letter-spacing: normal;
+                        margin-top: 2px;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        max-width: 170px;
+                        @include themify($themes) {
+                            color: themed('IndicatorListItemSubText');
+                        }
+                    }
+                }
+            }
+            .detail {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                padding: 0px;
+
+                span {
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-style: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    text-align: right;
+                    margin-left: 8px;
+                }
+                .ic-icon {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                    transition: none;
+
+                    svg {
+                        width: 16px;
+                        height: 16px;
+                        @include themify($themes) {
+                            fill: themed('IndicatorListItemText');
+                        }
+                    }
+                    &.ic-info {
+                        margin-right: 16px;
+                    }
+                }
+            }
+            .ic-info {
+                opacity: 0;
+            }
+            .sc-tooltip__inner {
+                width: 280px;
+                height: auto;
+                white-space: break-spaces;
+                text-align: center;
+            }
+            &--disabled {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+        }
+    }
+    &__category {
+        &__head {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            padding: 8px;
+            @include themify($themes) {
+                color: themed('IndicatorCategoryText');
+            }
+        }
+        &__body {
+            width: 100%;
+        }
+    }
+    &__info {
+        width: 360px;
+        position: absolute;
+        right: 0px;
+        height: 100%;
+        padding: 16px 24px;
+        box-sizing: border-box;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        @include themify($themes) {
+            color: themed('IndicatorInfoText');
+            background: themed('IndicatorInfoBg');
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            margin: 0px;
+        }
+        .btn {
+            width: 100%;
+        }
+    }
+}

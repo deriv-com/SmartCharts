@@ -38,8 +38,10 @@ export default class ShareStore {
             .then((html2canvas) => {
                 // since react rerenders is not immediate, we use CIQ.appendClassName to
                 // immediately append/unappend class name before taking screenshot.
-                CIQ.appendClassName(this.screenshotArea, 'ciq-screenshot');
-                html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
+                CIQ.appendClassName(this.screenshotArea, 'ciq-chart--screenshot');
+                setTimeout(() => {
+                    html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
+                }, 0);
             });
 
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
@@ -54,7 +56,7 @@ export default class ShareStore {
             newTab,
         );
         this.isLoadingPNG = false;
-        CIQ.unappendClassName(this.screenshotArea, 'ciq-screenshot');
+        CIQ.unappendClassName(this.screenshotArea, 'ciq-chart--screenshot');
     }
 
     @action.bound downloadCSV() {

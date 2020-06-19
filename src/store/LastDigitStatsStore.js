@@ -11,6 +11,7 @@ export default class LastDigitStatsStore {
             // TODO: call onMasterDataUpdate on symobl change.
             this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
             this.mainStore.chart.feed.onMasterDataReinitialize(() => {
+                this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
                 this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
             });
         });

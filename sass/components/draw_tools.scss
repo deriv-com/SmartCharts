@@ -1,0 +1,184 @@
+.sc-dtools {
+    $self: &;
+
+    .tabs--vertical .react-tabs__tab-list {
+        padding-top: 0px !important;
+    }
+    &--empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100%;
+
+        > .ic-icon {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 24px;
+        }
+        p {
+            font-size: 12px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: center;
+            margin: 0 0 46px;
+            @include themify($themes) {
+                color: themed('DrawToolsEmptyText');
+            }
+        }
+    }
+    &__panel {
+        width: 360px;
+        height: 392px;
+        padding: 16px 0 16px 8px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+        &__head {
+            text-align: right;
+            padding: 0 16px 16px;
+
+            .sc-btn {
+                cursor: pointer;
+            }
+        }
+        &__content {
+            box-sizing: border-box;
+
+            &--active {
+                #{ $self }__list__item {
+                    height: 48px;
+                    padding: 4px 16px;
+                    cursor: initial;
+                }
+            }
+        }
+    }
+    &__list {
+        &__item {
+            height: 40px;
+            padding: 10px 16px;
+            display: flex;
+            margin-right: 8px;
+            border-radius: 4px;
+            box-sizing: border-box;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            @include themify($themes) {
+                color: themed('DrawToolsItemText');
+            }
+
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DrawToolsHoverBg');
+                }
+            }
+            .info {
+                display: flex;
+                align-items: center;
+
+                .text {
+                    display: flex;
+                    flex-direction: column;
+                    padding-left: 16px;
+
+                    span {
+                        font-size: 14px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.43;
+                        letter-spacing: normal;
+                        margin-right: 16px;
+                    }
+                    small {
+                        display: block;
+                        font-size: 12px;
+                        font-weight: normal;
+                        font-style: normal;
+                        line-height: 1.5;
+                        letter-spacing: normal;
+                        margin-top: 2px;
+                        @include themify($themes) {
+                            color: themed('DrawToolsItemSubText');
+                        }
+                    }
+                }
+            }
+            .actions {
+                display: flex;
+                justify-content: space-between;
+
+                small {
+                    font-size: 14px;
+                    font-weight: normal;
+                    font-style: normal;
+                    line-height: 1.43;
+                    letter-spacing: normal;
+                    text-align: right;
+                }
+                .ic-icon {
+                    cursor: pointer;
+
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('DrawToolsItemIcon');
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &__category {
+        margin-top: 16px;
+
+        &__head {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            margin-bottom: 8px;
+            @include themify($themes) {
+                color: themed('DrawToolsItemSubText');
+            }
+        }
+    }
+    .cq-menu-dropdown {
+        width: 200px;
+        box-sizing: border-box;
+        overflow: visible !important;
+
+        .body {
+            padding: 0 7px 0 16px;
+            overflow: visible;
+
+            .cq-draw-buttons {
+                display: flex;
+                margin-top: 18px;
+            }
+            .cq-draw-buttons + div {
+                border-radius: 4px 4px 0 0;
+            }
+            .cq-draw-button {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                cursor: pointer;
+                margin: 0 0 8px;
+                border-radius: 3px;
+                font-weight: bold;
+
+                @include themify($themes) {
+                    border: solid themed('DropdownBorder') 1px;
+                }
+            }
+            .ciq-list {
+                padding-right: 9px;
+            }
+        }
+    }
+}

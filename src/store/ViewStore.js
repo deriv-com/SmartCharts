@@ -1,4 +1,4 @@
-import { observable, action, reaction } from 'mobx';
+import { observable, action, reaction, computed } from 'mobx';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
@@ -36,6 +36,10 @@ export default class ViewStore {
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
     get loader() { return this.mainStore.loader; }
+
+    @computed get sortedItems() {
+        return [...ViewStore.views].sort((a, b) => (a.name < b.name ? -1 : 1));
+    }
 
     static updateLocalStorage() {
         CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
@@ -85,7 +89,7 @@ export default class ViewStore {
     }
 
     @action.bound remove(idx, e) {
-        ViewStore.views = ViewStore.views.filter((x, index) => idx !== index);
+        ViewStore.views = this.sortedItems.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');

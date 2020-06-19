@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from '../store/Connect';
-import '../../sass/components/_chart-title.scss';
+import '../../sass/components/chart-title.scss';
 
 const ChartTitle = ({
     chartId,

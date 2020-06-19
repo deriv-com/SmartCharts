@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../sass/components/_icons.scss';
+import '../../sass/components/icons.scss';
 
 // Chart types:
 import BaseLine from '../../sass/icons/chart settings/chart types/baseline/ic-baseline-normal.svg';
@@ -19,7 +19,6 @@ import Spline from '../../sass/icons/chart settings/chart types/spline/ic-spline
 import Table from '../../sass/icons/chart settings/chart types/table/table.svg';
 import Png from '../../sass/icons/download/ic-png.svg';
 import Csv from '../../sass/icons/download/ic-csv.svg';
-
 
 import Add from '../../sass/icons/chart settings/zoom-in/ic-zoomin-light.svg';
 import AddBold from '../../sass/icons/common/ic-add.svg';
@@ -56,9 +55,11 @@ import Back from '../../sass/icons/back/ic-back.svg';
 import DrawCursor from '../../sass/icons/pencil/ic-pencil.svg';
 import DrawTool from '../../sass/icons/common/ic-drawing-tool.svg';
 
+import HelpCenter from '../../sass/icons/common/ic-help-center.svg';
 import Download from '../../sass/icons/common/ic-download.svg';
 import Indicator from '../../sass/icons/common/ic-indicators.svg';
 import Template from '../../sass/icons/common/ic-templates.svg';
+import FullScreen from '../../sass/icons/common/full-screen.svg';
 
 import Warning from '../../sass/icons/alert message/warning.svg';
 import Error from '../../sass/icons/alert message/error.svg';
@@ -125,6 +126,9 @@ import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-ind
 import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index.svg';
 import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index.svg';
 import Vol1S10 from '../../sass/icons/active-symbols/volatility/1s10 index/ic-10-1s-index.svg';
+import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light-25(1s)index.svg';
+import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
+import Vol1S75 from '../../sass/icons/active-symbols/volatility/1s75 index/light-75(1s) index.svg';
 import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
@@ -136,10 +140,33 @@ import EmptyState from '../../sass/icons/shape/ic-empty-state.svg';
 import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
 import InfoCircle from '../../sass/icons/common/ic-info.svg';
 
+import Language from '../../sass/icons/common/ic-language.svg';
+import Theme from '../../sass/icons/common/ic-theme.svg';
+import Chart from '../../sass/icons/common/ic-charts.svg';
+import Checkbox from '../../sass/icons/common/ic-checkbox.svg';
+import CheckboxActive from '../../sass/icons/common/ic-checkbox-active.svg';
+
+import ThemeLight from '../../sass/icons/setting/ic-theme-light.svg';
+import ThemeDark from '../../sass/icons/setting/ic-theme-dark.svg';
+
+import SettingCountdownLightNormal from '../../sass/icons/setting/countdown/ic-countdown-light-normal.svg';
+import SettingCountdownLightActive from '../../sass/icons/setting/countdown/ic-countdown-light-active.svg';
+import SettingCountdownDarkNormal from '../../sass/icons/setting/countdown/ic-countdown-dark-normal.svg';
+import SettingCountdownDarkActive from '../../sass/icons/setting/countdown/ic-countdown-dark-active.svg';
+
+import SettingHistoricalLightNormal from '../../sass/icons/setting/historical/ic-historical-light-normal.svg';
+import SettingHistoricalLightActive from '../../sass/icons/setting/historical/ic-historical-light-active.svg';
+import SettingHistoricalDarkNormal from '../../sass/icons/setting/historical/ic-historical-dark-normal.svg';
+import SettingHistoricalDarkActive from '../../sass/icons/setting/historical/ic-historical-dark-active.svg';
+
+import SettingHighestLowestLightNormal from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-light-normal.svg';
+import SettingHighestLowestLightActive from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-light-active.svg';
+import SettingHighestLowestDarkNormal from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-dark-normal.svg';
+import SettingHighestLowestDarkActive from '../../sass/icons/setting/highest-lowest/ic-highest-lowest-dark-active.svg';
+
 import IndicatorCatMomentum from '../../sass/icons/indicators/ic-momentum.svg';
 import IndicatorCatTrendLight from '../../sass/icons/indicators/ic-trend-light.svg';
 import IndicatorCatTrendDark from '../../sass/icons/indicators/ic-trend-dark.svg';
-
 import IndicatorCatVolatility from '../../sass/icons/indicators/ic-volatility.svg';
 import IndicatorCatAverages from '../../sass/icons/indicators/ic-cat-averages.svg';
 import IndicatorCatOther from '../../sass/icons/indicators/ic-other.svg';
@@ -165,6 +192,7 @@ import IndicatorAverages from '../../sass/icons/indicators/ic-averages.svg';
 import IndicatorEnvelope from '../../sass/icons/indicators/ic-envelope.svg';
 import IndicatorAlligator from '../../sass/icons/indicators/ic-alligator.svg';
 import IndicatorFractalChaos from '../../sass/icons/indicators/ic-fractal-chaos.svg';
+import IndicatorRainbow from '../../sass/icons/indicators/ic-rainbow.svg';
 
 import DrawToolsChannel from '../../sass/icons/draw-tools/ic-channel.svg';
 import DrawToolsContinuous from '../../sass/icons/draw-tools/ic-continuous.svg';
@@ -201,8 +229,11 @@ export const Wrapper = SvgLogo => (props) => {
 };
 
 export const DrawingCursorIcon = Wrapper(DrawCursor);
+export const ThemeLightIcon = Wrapper(ThemeLight);
+export const ThemeDarkIcon = Wrapper(ThemeDark);
 export const DrawToolIcon = Wrapper(DrawTool);
 export const ActiveIcon = Wrapper(Active);
+export const FullScreenIcon = Wrapper(FullScreen);
 
 // Chart Types:
 export const BaseLineIcon = Wrapper(BaseLine);
@@ -248,6 +279,7 @@ export const EditIcon = Wrapper(Edit);
 export const SettingIcon = Wrapper(Edit);
 export const ArrowIcon = Wrapper(Arrow);
 export const FavoriteIcon = Wrapper(Star);
+export const HelpCenterIcon = Wrapper(HelpCenter);
 export const DownloadIcon = Wrapper(Download);
 export const InfoIcon = Wrapper(Info);
 export const InfoCircleIcon = Wrapper(InfoCircle);
@@ -260,6 +292,12 @@ export const HomeIcon = Wrapper(Home);
 export const ScaleIcon = Wrapper(Scale);
 export const ZoominIcon = Wrapper(Zoomin);
 export const ZoomoutIcon = Wrapper(Zoomout);
+
+export const LanguageIcon = Wrapper(Language);
+export const ThemeIcon = Wrapper(Theme);
+export const ChartIcon = Wrapper(Chart);
+export const CheckboxIcon = Wrapper(Checkbox);
+export const CheckboxActiveIcon = Wrapper(CheckboxActive);
 
 export const TypeAreaIcon = Wrapper(TypeArea);
 export const TypeCandleIcon = Wrapper(TypeCandle);
@@ -299,6 +337,7 @@ export const IndicatorAveragesIcon = Wrapper(IndicatorAverages);
 export const IndicatorEnvelopeIcon = Wrapper(IndicatorEnvelope);
 export const IndicatorAlligatorIcon = Wrapper(IndicatorAlligator);
 export const IndicatorFractalChaosIcon = Wrapper(IndicatorFractalChaos);
+export const IndicatorRainbowIcon = Wrapper(IndicatorRainbow);
 
 export const MetalIcon = Wrapper(Metal);
 export const EmptyStateIcon = Wrapper(EmptyState);
@@ -339,6 +378,39 @@ export const CategoryIconMap = {
     indicators: Wrapper(Indicator),
 };
 
+export const SettingCountdownMap = {
+    light: {
+        normal: Wrapper(SettingCountdownLightNormal),
+        active: Wrapper(SettingCountdownLightActive),
+    },
+    dark: {
+        normal: Wrapper(SettingCountdownDarkNormal),
+        active: Wrapper(SettingCountdownDarkActive),
+    },
+};
+
+export const SettingHistoricalMap = {
+    light: {
+        normal: Wrapper(SettingHistoricalLightNormal),
+        active: Wrapper(SettingHistoricalLightActive),
+    },
+    dark: {
+        normal: Wrapper(SettingHistoricalDarkNormal),
+        active: Wrapper(SettingHistoricalDarkActive),
+    },
+};
+
+export const SettingHighestLowestMap = {
+    light: {
+        normal: Wrapper(SettingHighestLowestLightNormal),
+        active: Wrapper(SettingHighestLowestLightActive),
+    },
+    dark: {
+        normal: Wrapper(SettingHighestLowestDarkNormal),
+        active: Wrapper(SettingHighestLowestDarkActive),
+    },
+};
+
 const FlagIconMap = {
     AUD: Wrapper(AUD),
     CAD: Wrapper(CAD),
@@ -363,6 +435,7 @@ const FlagIconMap = {
 
 export const FlagIcons = {
     USD: Wrapper(USD),
+    GBP: Wrapper(GBP),
     German: Wrapper(German),
     French: Wrapper(French),
     Portugal: Wrapper(Portugal),
@@ -387,7 +460,6 @@ export const ItemIconMap = {
     FCHI: FlagIconMap.French,
     SSMI: FlagIconMap.CHF,
     GDAXI: FlagIconMap.German,
-
     /* Commodities */
     frxBROUSD: Wrapper(OilUSD),
     frxXAUUSD: MetalIcon,
@@ -401,6 +473,9 @@ export const ItemIconMap = {
     R_75: Wrapper(Vol75),
     R_100: Wrapper(Vol100),
     '1HZ10V': Wrapper(Vol1S10),
+    '1HZ25V': Wrapper(Vol1S25),
+    '1HZ50V': Wrapper(Vol1S50),
+    '1HZ75V': Wrapper(Vol1S75),
     '1HZ100V': Wrapper(Vol1S100),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
@@ -421,12 +496,12 @@ function frx(flagA, flagB) {
     ItemIconMap[`frx${flagA}${flagB}`] = createCompositeIcon(A, B, 'ic-frx');
 }
 
-const OTCBadgeIcon = Wrapper(OTCBadge);
+export const OTCBadgeIcon = Wrapper(OTCBadge);
 const SmartFXIcon  = Wrapper(SmartFX);
 
 function otc(flag, symbol) {
     const FlagIcon = FlagIconMap[flag];
-    ItemIconMap[symbol] = createCompositeIcon(FlagIcon, OTCBadgeIcon, 'ic-otc');
+    ItemIconMap[symbol] = FlagIcon;
 }
 
 function wld(flag) {

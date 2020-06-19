@@ -1,0 +1,793 @@
+
+.form {
+    $self: &;
+    padding: 8px 0px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    box-sizing: border-box;
+
+    #{ $self }__label {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 10px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.4;
+        letter-spacing: normal;
+        @include themify($themes) {
+            color: themed('DialogBodyText');
+        }
+    }
+    #{ $self }__control {
+        display: block;
+    }
+    &__group {
+        box-sizing: border-box;
+        padding: 0;
+        margin-bottom: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    &__group--select,
+    &__group--colorpicker {
+        position: relative;
+        height: 40px;
+
+        #{ $self }__label {
+            margin-bottom: -8px;
+            margin-left: 10px;
+
+            span {
+                padding-left: 2px;
+                padding-right: 2px;
+                z-index: 1;
+                @include themify($themes) {
+                    background: themed('DialogSettingBodyBg');
+                }
+            }
+        }
+    }
+    &__group--switch {
+        flex-direction: row;
+        justify-content: flex-start;
+
+        #{ $self }__label {
+            width: auto;
+            min-width: 70px;
+        }
+        #{ $self }__control {
+            padding-left: 16px;
+            width: auto;
+        }
+    }
+    &--indicator-setting {
+        min-width: 320px;
+        max-width: 320px;
+        min-height: 272px;
+        max-height: 272px;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
+
+        > div:nth-child(3) {
+            > div {
+                @include themify($themes) {
+                    background-color: themed('ListScroll') !important;
+                }
+            }
+        }
+        &:hover {
+            > div:nth-child(3) {
+                opacity: 1 !important;
+            }
+        }
+        .form__input-group:last-child {
+            margin-bottom: 50px;
+        }
+    }
+    &__input-group {
+        padding: 16px 24px;
+        @include themify($themes) {
+            border-top: 4px solid themed('DialogSettingSectionDivider');
+        }
+
+        h4 {
+            font-size: 14px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            margin: 0 0 16px;
+            @include themify($themes) {
+                color: themed('DialogSettingSectionText');
+            }
+        }
+        &:first-child {
+            border-top: none;
+        }
+    }
+    &__input-group--show-zones {
+        #{ $self }__label {
+            font-size: 14px;
+        }
+    }
+}
+
+/* stylelint-disable plugin/no-unsupported-browser-features */
+.sc-slider {
+    width: 100%;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    .sc-slider-range {
+        position: relative;
+        width: calc(100% - 38px);
+        margin-top: 9px;
+        padding-right: 8px;
+        height: 12px;
+
+        > input, div {
+            position: absolute;
+            left: 0px;
+            top: 0px;
+        }
+        input[type='range'] {
+            -webkit-appearance: none;
+            width: 100%;
+            margin: 0;
+            background: transparent;
+            height: 12px;
+            top: -5px;
+
+            &:focus {
+                outline: none;
+            }
+            &::-webkit-slider-runnable-track {
+                @include rangetrack();
+            }
+            &::-moz-range-track {
+                @include rangetrack();
+                height: 14px;
+                margin-top: -3px;
+                top: -3px;
+            }
+            &::-ms-track {
+                @include rangetrack();
+                color: transparent;
+            }
+            &::-ms-thumb {
+                @include rangethumb();
+                margin-top: 0px;
+            }
+            &::-moz-range-thumb {
+                @include rangethumb();
+                margin-top: 0px;
+            }
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                @include rangethumb();
+                margin-top: 1px;
+            }
+            &::-moz-focus-outer {
+                border: 0;
+            }
+        }
+        .sc-slider-bar {
+            width: 100%;
+            outline: none;
+            height: 2px;
+            @include themify($themes) {
+                background: themed('SliderBarBg');
+            }
+        }
+        .sc-slider-active-bar {
+            height: 2px;
+            min-width: 10px;
+            @include themify($themes) {
+                background: themed('SliderBarActiveBg');
+            }
+        }
+    }
+    > div:last-child {
+        text-align: right;
+        flex-grow: 1;
+        font-weight: bold;
+        font-size: 14px;
+        width: 26px;
+        @include themify($themes) {
+            color: themed('SliderText');
+        }
+    }
+}
+
+/* stylelint-enable plugin/no-unsupported-browser-features */
+.sc-dropdown {
+    position: relative;
+    height: 40px;
+    width: 100%;
+    user-select: none;
+    @include themify($themes) {
+        background: themed('DropdownBg');
+    }
+
+    .subtitle {
+        position: absolute;
+        margin-left: 10px;
+        top: -6px;
+
+        span {
+            padding-left: 4px;
+            padding-right: 4px;
+            z-index: 1;
+            @include themify($themes) {
+                background: themed('DropdownSubtitleBg');
+                color: themed('DropdownSubtitleText');
+            }
+        }
+    }
+    .value {
+        height: 40px;
+        padding: 10px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+        text-transform: capitalize;
+        @include themify($themes) {
+            color: themed('DropdownText') !important;
+            border: 1px solid themed('DropdownBorder');
+        }
+
+        .ic-icon {
+            line-height: 35px;
+
+            svg {
+                pointer-events: none;
+                transition: transform 0.6s;
+                @include themify($themes) {
+                    fill: themed('DropdownText');
+                }
+            }
+        }
+        .text {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 220px;
+            min-width: 210px;
+            overflow: hidden;
+        }
+        &:after {
+            content: ' ';
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+        }
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder');
+            }
+        }
+        &.active {
+            @include themify($themes) {
+                border-color: themed('DropdownActiveBorder');
+            }
+
+            svg {
+                transform: scaleY(-1);
+            }
+        }
+    }
+    .dropdown {
+        position: absolute;
+        right: 0;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 2;
+        max-height: 200px;
+        overflow: scroll;
+        box-shadow: 0 2px 8px 0 rgba(42, 48, 82, 0.14);
+        box-sizing: border-box;
+        border-radius: 4px;
+        font-size: 14px;
+        width: 272px;
+        transform: translateY(-8px);
+        transition: opacity 0.2s, transform 0.2s;
+        @include themify($themes) {
+            background: themed('DropdownBg');
+        }
+
+        &.active {
+            transform: translateY(8px);
+            opacity: 1;
+            pointer-events: all;
+            @include themify($themes) {
+                box-shadow: 0 16px 16px 0 themed('DropdownActiveShadow'), 0 0 16px 0 themed('DropdownActiveShadow');
+            }
+        }
+        .row {
+            cursor: pointer;
+            padding: 10px 16px 9px;
+            text-transform: capitalize;
+            @include themify($themes) {
+                color: themed('DropdownText');
+            }
+
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DropdownHoverBg');
+                }
+            }
+            &--selected {
+                font-weight: bold;
+                @include themify($themes) {
+                    background: themed('DropdownActiveBg') !important;
+                    color: themed('DropdownActiveText') !important;
+                }
+            }
+        }
+    }
+
+    // Pattern
+    .option {
+        display: inline-block;
+        width: 100%;
+        pointer-events: none;
+        margin-right: 16px;
+    }
+    /* Line style types */
+    .solid-1 {
+        border-top-style: solid;
+        border-top-width: 1px;
+    }
+    .dotted-1 {
+        border-top-style: dotted;
+        border-top-width: 1px;
+    }
+    .dashed-1 {
+        border-top-style: dashed;
+        border-top-width: 1px;
+    }
+    .solid-3 {
+        border-top-style: solid;
+        border-top-width: 2px;
+    }
+    .dotted-3 {
+        border-top-style: dotted;
+        border-top-width: 2px;
+    }
+    .dashed-3 {
+        border-top-style: dashed;
+        border-top-width: 2px;
+    }
+    .solid-5 {
+        border-top-style: solid;
+        border-top-width: 3px;
+    }
+    .dotted-5 {
+        border-top-style: dotted;
+        border-top-width: 3px;
+    }
+    .dashed-5 {
+        border-top-style: dashed;
+        border-top-width: 3px;
+    }
+    &.active {
+        position: fixed;
+        z-index: 2;
+
+        .subtitle {
+            span {
+                @include themify($themes) {
+                    color: themed('DropdownActiveBorder');
+                }
+            }
+        }
+    }
+}
+
+.sc-color-picker {
+    position: relative;
+    height: 40px;
+    width: 272px;
+    @include themify($themes) {
+        background: themed('ColorPickerBg');
+    }
+
+    .subtitle {
+        position: absolute;
+        margin-left: 10px;
+        top: -6px;
+        user-select: none;
+
+        span {
+            padding-left: 4px;
+            padding-right: 4px;
+            z-index: 1;
+            @include themify($themes) {
+                background: themed('ColorPickerSubtitleBg');
+                color: themed('ColorPickerSubtitleText');
+            }
+        }
+    }
+    .value {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        padding: 10px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        @include themify($themes) {
+            background-color: themed('ColorPickerBg');
+            color: themed('DropdownText') !important;
+            border: 1px solid themed('DropdownBorder');
+        }
+
+        .sc-input-color {
+            height: 100%;
+            width: 100%;
+            border-radius: 4px;
+            margin-right: 16px;
+        }
+        .ic-icon {
+            line-height: 35px;
+
+            svg {
+                pointer-events: none;
+                transition: transform 0.6s;
+                @include themify($themes) {
+                    fill: themed('DropdownText');
+                }
+            }
+        }
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder');
+            }
+        }
+    }
+    .dropdown {
+        position: absolute;
+        right: 0px;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 2;
+        width: 266px;
+        padding: 8px;
+        border-radius: 4px;
+        transform: translateY(-8px);
+        box-sizing: border-box;
+        transition: opacity 0.2s, transform 0.2s;
+        @include themify($themes) {
+            box-shadow: 0 16px 16px 0 themed('ColorPickerShadow'), 0 0 16px 0 themed('ColorPickerShadow');
+            background: themed('ColorPickerBg');
+        }
+
+        &.open {
+            opacity: 1;
+            pointer-events: initial;
+            transform: translateY(8px);
+        }
+        .row {
+            height: 18px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2px;
+            align-items: center;
+
+            .tile-color {
+                width: 15px;
+                height: 15px;
+                cursor: pointer;
+            }
+        }
+    }
+    &.active {
+        position: fixed;
+        z-index: 2;
+
+        .subtitle {
+            span {
+                @include themify($themes) {
+                    color: themed('DropdownActiveBorder');
+                }
+            }
+        }
+        .value {
+            @include themify($themes) {
+                border-color: themed('ColorPickerActiveBorder');
+            }
+
+            svg {
+                transform: scaleY(-1);
+            }
+        }
+    }
+    .sc-color-picker,
+    .sc-numeric-input {
+        min-width: 124px;
+        max-width: 124px;
+    }
+}
+
+.sc-switch {
+    width: 32px;
+    height: 18px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 9px;
+
+    .handle {
+        position: absolute;
+        top: 2px;
+        width: 14px;
+        height: 14px;
+        transition: left 0.2s;
+        border-radius: 7px;
+        @include themify($themes) {
+            background: themed('SwitchHandle');
+        }
+    }
+    &.on {
+        .handle {
+            left: 16px;
+        }
+        @include themify($themes) {
+            background: themed('SwitchOnBg');
+        }
+    }
+    &.off {
+        .handle {
+            left: 2px;
+        }
+        @include themify($themes) {
+            background: themed('SwitchOffBg');
+        }
+    }
+}
+
+.sc-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &__input {
+        display: none;
+    }
+    &__label {
+        font-size: 14px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.43;
+        letter-spacing: normal;
+    }
+    &__box {
+        border-radius: 2px;
+
+        svg {
+            border-radius: 2px;
+            @include themify($themes) {
+                fill: themed('CheckboxBg');
+            }
+        }
+    }
+    &--checked {
+        .sc-checkbox__box svg {
+            @include themify($themes) {
+                background: themed('CheckboxActiveBg');
+                fill: themed('CheckboxActiveBg');
+            }
+        }
+    }
+}
+
+.sc-switch-icon {
+    display: flex;
+
+    &__icon {
+        width: 160px;
+        height: 120px;
+    }
+    &__description {
+        padding-left: 16px;
+    }
+}
+
+.sc-numbercolorpicker, .sc-fontsetting {
+    display: inline-flex;
+}
+
+.sc-numbercolorpicker {
+    display: flex;
+
+    input {
+        box-shadow: none !important;
+        @include themify($themes) {
+            background: themed('InputBg');
+            border: 1px solid themed('InputBorder');
+            color: themed('InputText');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('InputHoverBorder') !important;
+            }
+        }
+        &:focus {
+            @include themify($themes) {
+                border-color: themed('ColorPickerActiveBorder') !important;
+            }
+        }
+    }
+    .field {
+        width: 50%;
+    }
+    .sc-numeric-input {
+        width: 124px;
+        min-width: 124px;
+    }
+    .sc-color-picker {
+        width: 124px;
+    }
+}
+
+.sc-numeric-input {
+    position: relative;
+    height: 40px;
+    width: 100%;
+    margin-right: 25px;
+
+    .subtitle {
+        position: absolute;
+        margin-left: 10px;
+        top: -6px;
+        user-select: none;
+
+        span {
+            padding-left: 4px;
+            padding-right: 4px;
+            z-index: 1;
+            @include themify($themes) {
+                color: themed('ColorPickerSubtitleText');
+                background: themed('DialogSettingBodyBg');
+            }
+        }
+    }
+    input[type='number'] {
+        -moz-appearance: textfield;
+        height: 40px;
+        line-height: 40px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-sizing: border-box;
+        padding: 10px 12px;
+        width: 100% !important;
+        box-shadow: none !important;
+        outline: none;
+        @include themify($themes) {
+            color: themed('DropdownText') !important;
+            border: 1px solid themed('DropdownBorder');
+        }
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        &:hover,
+        &:focus {
+            -moz-appearance: textfield;
+        }
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder') !important;
+            }
+        }
+        &:focus {
+            @include themify($themes) {
+                color: themed('InputFocusText') !important;
+                border-color: themed('DefaultInputActiveBorder') !important;
+            }
+        }
+        &:focus + .subtitle > span {
+            @include themify($themes) {
+                color: themed('DefaultInputActiveBorder') !important;
+            }
+        }
+    }
+    .sc-numeric-input-buttons {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        border-radius: 0 3px 3px 0;
+        @include themify($themes) {
+            background: themed('DialogSettingBodyBg');
+        }
+
+        .ic-icon {
+            width: 24px;
+            height: 19px;
+            line-height: 19px;
+            cursor: pointer;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('DropdownText');
+                }
+            }
+            &:first-child {
+                border-radius: 0 3px 0 0;
+            }
+            &:last-child {
+                border-radius: 0 0 3px;
+            }
+            &:hover {
+                @include themify($themes) {
+                    background: themed('DefaultInputBtnHoverBg');
+                }
+            }
+        }
+    }
+    &:hover {
+        input[type='number'] {
+            @include themify($themes) {
+                border-color: themed('DefaultInputHoverBorder');
+            }
+        }
+    }
+}
+
+.sc-fontsetting {
+    .cq-text-icon {
+        margin-right: 5px;
+    }
+}
+
+.cq-text-icon {
+    justify-content: space-around;
+    align-items: center;
+    vertical-align: middle;
+    display: inline-flex;
+    font-family: serif;
+    font-size: 1.5em;
+}
+
+.sc-changefontsize {
+    width: 56px;
+    margin-right: 5px;
+}
+
+.sc-changefontfamily {
+    width: 138px;
+}
+
+.sc-toggle {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sc-toggle > .ic-icon,
+.sc-chart-controls .ic-icon-with-sub {
+    width: 24px;
+    height: 24px;
+}
