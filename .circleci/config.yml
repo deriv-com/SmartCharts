@@ -195,5 +195,3 @@ workflows:
               only: /^production.*/
           context: binary-frontend-artifact-upload
 
-
-
