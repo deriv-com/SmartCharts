@@ -174,7 +174,7 @@ workflows:
       - test:
           filters:
              branches:
-              ignore: /^master$/
+               ignore: /^master$/
   release:
     jobs:
       - release_beta:
