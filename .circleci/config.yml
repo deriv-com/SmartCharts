@@ -172,6 +172,9 @@ workflows:
   test:
     jobs:
       - test:
+          filters:
+            branches:
+              ignore: /^master$/
   release:
     jobs:
       - release_beta:
