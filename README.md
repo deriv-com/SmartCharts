@@ -2,6 +2,7 @@
 # trigger ci 
 # 2
 # 3
+# 4
 [![npm (scoped)](https://img.shields.io/npm/v/@binary-com/smartcharts.svg)](https://www.npmjs.com/package/@binary-com/smartcharts) [![Build Status](https://travis-ci.org/binary-com/SmartCharts.svg?branch=dev)](https://travis-ci.org/binary-com/SmartCharts)
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library. You can install the library to your project via:
