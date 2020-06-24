@@ -30,20 +30,20 @@ commands:
           key: source-v1-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
-  npm_install:
+  yarn_install:
     description: "Install node modules"
     steps:
       - restore_cache:
           name: Restoring node_modules
           keys:
-            - source-v1-modules-{{ checksum "package-lock.json" }}
+            - source-v1-modules-{{ checksum "package.json" }}
             - source-v1-modules
       - run:
           name: npm ci
           command: npm ci
       - save_cache:
           name: Save node_module
-          key: source-v1-modules-{{ checksum "package-lock.json" }}
+          key: source-v1-modules-{{ checksum "package.json" }}
           paths:
             - "node_modules"
   test:
@@ -51,14 +51,14 @@ commands:
     steps:
       - run:
           name: Testing App
-          command: npm run test
+          command: yarn test
   build:
     description: Build App
     steps:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: npm run build-travis
+          command: yarn build-travis
   deploy:
     description: "Deploy"
     parameters:
@@ -133,14 +133,14 @@ jobs:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - test
   release_beta:
     docker:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - test
       - build
       - deploy:
@@ -150,7 +150,7 @@ jobs:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - test
       - build
       - deploy:
@@ -160,7 +160,7 @@ jobs:
       - image: circleci/node:12.13.0-stretch
     steps:
       - git_checkout_from_cache
-      - npm_install
+      - yarn_install
       - test
       - build
       - docker_build_push:
