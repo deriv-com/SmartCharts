@@ -44,7 +44,7 @@ export const overideMeasure = (option) => {
                 if (option.drawToolsStore) {
                     const drawingItem = option.drawToolsStore.findComputedDrawing(this);
                     if (drawingItem) {
-                        title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${drawingItem.text}`;
+                        title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(drawingItem.text, { num: (drawingItem.num || ' ') })}`;
                     }
                 }
 

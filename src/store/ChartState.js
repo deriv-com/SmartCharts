@@ -28,6 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
+    @observable yAxisMargin = { top: 106, bottom: 16 };
     chartControlsWidgets;
     enabledChartFooter;
 
@@ -86,6 +87,7 @@ class ChartState {
         zoom,
         maxTick,
         crosshairTooltipLeftAllow,
+        yAxisMargin,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -211,6 +213,13 @@ class ChartState {
         if (maxTick && this.maxTick !== maxTick && this.stxx) {
             this.maxTick = maxTick;
             this.setMaxtTick();
+        }
+
+        if (yAxisMargin && typeof yAxisMargin === 'object') {
+            this.yAxisMargin = {
+                ...this.yAxisMargin,
+                ...yAxisMargin,
+            };
         }
 
         if (this.stxx) {
