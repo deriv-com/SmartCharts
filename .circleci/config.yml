@@ -39,8 +39,8 @@ commands:
             - source-v1-modules-{{ checksum "package-lock.json" }}
             - source-v1-modules
       - run:
-          name: npm install
-          command: npm install
+          name: npm ci
+          command: npm ci
       - save_cache:
           name: Save node_module
           key: source-v1-modules-{{ checksum "package-lock.json" }}
