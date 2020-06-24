@@ -2,6 +2,7 @@ import { action, reaction } from 'mobx';
 
 export default class ToolbarWidgetStore {
     get crosshairStore() { return this.mainStore.crosshair; }
+    get chartStore() { return this.mainStore.chart; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -28,6 +29,12 @@ export default class ToolbarWidgetStore {
 
     @action.bound onMouseEnter() {
         this.crosshairStore.updateVisibility(false);
+
+        // Hide the indicator tooltip
+        const chartNode = this.chartStore.chartNode;
+        if (chartNode) {
+            chartNode.querySelector('.stx_sticky').style.display = 'none';
+        }
     }
 
     @action.bound onMouseLeave() {
