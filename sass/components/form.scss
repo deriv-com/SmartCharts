@@ -106,6 +106,10 @@
         }
         #{ $self }__input-group--result:last-child {
             height: 280px;
+
+            .form__group:last-child {
+                margin-bottom: 30px;
+            }
         }
     }
     &--fractal-chaos-bands {

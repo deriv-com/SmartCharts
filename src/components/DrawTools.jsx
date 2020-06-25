@@ -30,11 +30,7 @@ const Info = ({ Icon, text, num, bars }) => (
 );
 
 const DrawToolsList = ({ items, onClick }) => (
-    <Scroll
-        autoHide
-        height={360}
-        className="sc-dtools__list"
-    >
+    <div className="sc-dtools__list">
         {items.map(Item => (
             <div
                 key={Item.id}
@@ -47,7 +43,7 @@ const DrawToolsList = ({ items, onClick }) => (
                 />
             </div>
         ))}
-    </Scroll>
+    </div>
 );
 
 const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }) => (

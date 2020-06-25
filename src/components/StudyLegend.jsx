@@ -152,17 +152,12 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
         {categories.map(Category => (
             <TabPanel key={`panel--${Category.id}`}>
                 <div className="sc-studies__panel">
-                    <Scroll
-                        autoHide
-                        height={360}
-                    >
-                        <IndicatorList
-                            onSelectItem={onSelectItem}
-                            onInfoItem={onInfoItem}
-                            items={Category.items}
-                            disableAll={activeItems.length === 5}
-                        />
-                    </Scroll>
+                    <IndicatorList
+                        onSelectItem={onSelectItem}
+                        onInfoItem={onInfoItem}
+                        items={Category.items}
+                        disableAll={activeItems.length === 5}
+                    />
                 </div>
             </TabPanel>
         ))}

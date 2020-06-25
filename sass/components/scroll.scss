@@ -5,25 +5,20 @@
     overflow-x: hidden;
     position: relative;
     margin-right: 4px;
-    /* Firefox only */
+    z-index: 999;
     scrollbar-width: thin;
     @include themify($themes) {
-        scrollbar-color: rthemed('ScrollbarBg') rgba(themed('ScrollbarBg'), 0.32);
+        scrollbar-color: themed('ScrollbarBg') transparent;
     }
 
-    /* Let's get this party started */
     &::-webkit-scrollbar {
         width: 4px;
     }
-
-    /* Track */
     &::-webkit-scrollbar-track {
         -webkit-box-shadow: transparent;
         -webkit-border-radius: 2px;
         border-radius: 2px;
     }
-
-    /* Handle */
     &::-webkit-scrollbar-thumb {
         -webkit-border-radius: 2px;
         border-radius: 2px;
@@ -33,11 +28,17 @@
         }
     }
     &--auto-hide {
+        scrollbar-color: transparent transparent !important;
+
         &::-webkit-scrollbar-thumb {
             display: none;
         }
     }
     &--hover {
+        @include themify($themes) {
+            scrollbar-color: themed('ScrollbarBg') transparent !important;
+        }
+
         &::-webkit-scrollbar-thumb {
             display: inherit !important;
         }
