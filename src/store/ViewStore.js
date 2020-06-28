@@ -116,7 +116,10 @@ export default class ViewStore {
             const finishImportLayout = () => {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
-                if (this.loader) { this.loader.hide(); }
+                if (this.loader) {
+                    this.loader.hide();
+                    this.mainStore.paginationLoader.updateOnPagination(false);
+                }
                 this.mainStore.state.setChartIsReady(true);
             };
             stx.importLayout(ViewStore.views[idx].layout, {

@@ -28,7 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
-    @observable yAxisMargin = { top: 106, bottom: 16 };
+    @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
 
@@ -420,6 +420,7 @@ class ChartState {
                 this.restoreDrawings();
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.mainStore.paginationLoader.updateOnPagination(false);
                     this.setChartIsReady(true);
                     this.stxx.home();
                 }
