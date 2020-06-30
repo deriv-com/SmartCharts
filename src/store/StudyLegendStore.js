@@ -311,7 +311,9 @@ export default class StudyLegendStore {
 
                 // Regarding the ChartIQ.js, codes under Line 34217, edit function
                 // not mapped, this is a force to map edit function for indicators
-                if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
+                if (sd.editFunction && panelObj && !panelObj.editFunction) {
+                    this.stx.setPanelEdit(panelObj, sd.editFunction);
+                }
             }
 
             if (index === 1 || isSolo) {

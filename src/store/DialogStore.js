@@ -19,7 +19,7 @@ export default class DialogStore {
     onClose = () => this.setOpen(false);
     setOpen = debounce((val) => {
         this.openDialog(val);
-    }, 300, { leading: true, trailing: false });
+    }, 10, { leading: true, trailing: false });
 
     @action.bound openDialog(val) {
         if (this.open !== val) {
