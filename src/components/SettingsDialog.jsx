@@ -129,6 +129,7 @@ const SettingsPanelGroup = ({
                         />
                     )
             ))}
+            <FormGroup type="end" />
         </div>
     );
 };

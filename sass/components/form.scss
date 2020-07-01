@@ -63,6 +63,10 @@
             width: auto;
         }
     }
+    &__group--end {
+        height: 20px;
+        margin-bottom: 0px;
+    }
     &__input-group {
         padding: 16px 24px;
         @include themify($themes) {
@@ -107,10 +111,6 @@
         }
         #{ $self }__input-group--result:last-child {
             height: 280px;
-
-            .form__group:last-child {
-                margin-bottom: 30px;
-            }
         }
     }
     &--fractal-chaos-bands {
