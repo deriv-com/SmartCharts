@@ -7,14 +7,6 @@
     .ciq-num-input > input[type=number] {
         width: 5.5em;
     }
-    > .sc-scrollbar {
-        > div {
-            overflow-x: hidden !important;
-        }
-        > div:nth-child(2) {
-            display: none !important;
-        }
-    }
     .titlebar {
         height: 40px;
         display: flex;
@@ -132,6 +124,7 @@
         margin-right: 5px;
         padding-left: 6px;
         border-radius: 3px;
+        font-size: 14px;
     }
 }
 
