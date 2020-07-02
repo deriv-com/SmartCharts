@@ -1,7 +1,7 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
-
-import React from 'react';
-import debounce from 'lodash.debounce';
+import React        from 'react';
+import debounce     from 'lodash.debounce';
+import Scroll       from './Scroll.jsx';
 import {
     ArrowIcon,
     InputNumberPlusIcon,
@@ -135,7 +135,11 @@ export class DropDown extends React.Component {
                     <span className="text">{value}</span>
                     <ArrowIcon />
                 </div>
-                <div className={`dropdown ${open ? 'active' : ''}`}>
+                <Scroll
+                    autoHide
+                    height={`${open ? '200px' : '1px'}`}
+                    className={`dropdown ${open ? 'active' : ''}`}
+                >
                     {rows.map((row, idx) => (
                         <div
                             key={idx} // eslint-disable-line react/no-array-index-key
@@ -145,7 +149,7 @@ export class DropDown extends React.Component {
                             {children(row)}
                         </div>
                     ))}
-                </div>
+                </Scroll>
             </div>
         );
     }

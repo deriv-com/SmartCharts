@@ -98,6 +98,7 @@ export default class DrawToolsStore {
         this.settingsDialog.title = title;
         this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.formTitle = t.translate('Result');
+        this.settingsDialog.formClassname = 'form--drawing-tool';
         this.settingsDialog.setOpen(true);
     }
 
