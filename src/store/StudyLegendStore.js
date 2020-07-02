@@ -215,6 +215,7 @@ export default class StudyLegendStore {
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = study.sd.libraryEntry.name;
         this.settingsDialog.formTitle = t.translate('Result');
+        this.settingsDialog.formClassname = `form--${study.sd.type.toLowerCase().replace(/ /g, '-')}`;
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");

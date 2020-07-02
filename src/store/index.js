@@ -26,6 +26,7 @@ import NavigationWidgetStore from './NavigationWidgetStore';
 import HighestLowestStore from './HighestLowestStore';
 import PaginationLoaderStore from './PaginationLoaderStore';
 import ToolbarWidgetStore from './ToolbarWidgetStore';
+import ScrollStore from './ScrollStore';
 
 export default class MainStore {
     notifier = new Notifier();
@@ -56,4 +57,5 @@ export default class MainStore {
     highestLowest = new HighestLowestStore(this);
     paginationLoader = new PaginationLoaderStore(this);
     toolbarWidget = new ToolbarWidgetStore(this);
+    scroll = new ScrollStore(this);
 }

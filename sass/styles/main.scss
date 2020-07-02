@@ -266,25 +266,6 @@
     }
 }
 
-.sc-scrollbar {
-    > div:nth-child(3) {
-        opacity: 1 !important;
-
-        > div {
-            opacity: 0.16;
-            width: 4px !important;
-            @include themify($themes) {
-                background-color: themed('ScrollbarBg') !important;
-            }
-        }
-    }
-    &--freeze {
-        > div {
-            overflow: hidden !important;
-        }
-    }
-}
-
 .sc-notification-badge {
     width: 16px;
     height: 16px;

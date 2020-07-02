@@ -1,7 +1,7 @@
-import React from 'react';
+import React        from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import Scrollbars from 'tt-react-custom-scrollbars';
+import Scroll       from './Scroll.jsx';
 import {
     FormGroup,
     Switch,
@@ -129,9 +129,26 @@ const SettingsPanelGroup = ({
                         />
                     )
             ))}
+            <FormGroup type="end" />
         </div>
     );
 };
+
+const Footer = ({ onDelete, onReset, onDone }) => (
+    <div className="buttons">
+        {onDelete && (
+            <DeleteIcon
+                className="sc-btn--delete"
+                onClick={onDelete}
+            />
+        )}
+        <div>
+            <ResetButton onClick={onReset} />
+            <DoneButton onClick={onDone} />
+        </div>
+    </div>
+);
+
 
 const SettingsPanel = ({
     itemGroups,
@@ -139,26 +156,30 @@ const SettingsPanel = ({
     onItemChange,
     setScrollPanel,
     freezeScroll,
+    formClassname,
 }) => (
-    <Scrollbars
-        className={`sc-scrollbar ${freezeScroll ? 'sc-scrollbar--freeze' : ''} form form--indicator-setting`}
-        ref={setScrollPanel}
-        autoHide
-    >
-        {itemGroups.map(group => (
-            (group.fields.length > 0)
-            && (
-                <SettingsPanelGroup
-                    key={group.key}
-                    group={group.key}
-                    title={group.key}
-                    items={group.fields}
-                    theme={theme}
-                    onItemChange={onItemChange}
-                />
-            )
-        ))}
-    </Scrollbars>
+    <div className={`form form--indicator-setting ${formClassname}`}>
+        <Scroll
+            setPanel={setScrollPanel}
+            freeze={freezeScroll}
+            autoHide
+            height="280px"
+        >
+            {itemGroups.map(group => (
+                (group.fields.length > 0)
+                && (
+                    <SettingsPanelGroup
+                        key={group.key}
+                        group={group.key}
+                        title={group.key}
+                        items={group.fields}
+                        theme={theme}
+                        onItemChange={onItemChange}
+                    />
+                )
+            ))}
+        </Scroll>
+    </div>
 );
 
 const ResetButton = ({ onClick }) => (
@@ -182,6 +203,7 @@ const DoneButton = ({ onClick }) => (
 const SettingsDialog = ({
     itemGroups,
     title,
+    formClassname,
     description,
     showTabs,
     onResetClick,
@@ -221,10 +243,10 @@ const SettingsDialog = ({
                                     setScrollPanel={setScrollPanel}
                                     freezeScroll={freezeScroll}
                                 />
-                                <div className="buttons">
-                                    <ResetButton onClick={onResetClick} />
-                                    <DoneButton onClick={close} />
-                                </div>
+                                <Footer
+                                    onReset={onResetClick}
+                                    onDone={close}
+                                />
                             </TabPanel>
                             <TabPanel>
                                 {description}
@@ -238,17 +260,13 @@ const SettingsDialog = ({
                                 onItemChange={onItemChange}
                                 setScrollPanel={setScrollPanel}
                                 freezeScroll={freezeScroll}
+                                formClassname={formClassname}
                             />
-                            <div className="buttons">
-                                <DeleteIcon
-                                    className="sc-btn--delete"
-                                    onClick={onItemDelete}
-                                />
-                                <div>
-                                    <ResetButton onClick={onResetClick} />
-                                    <DoneButton onClick={close} />
-                                </div>
-                            </div>
+                            <Footer
+                                onDelete={onItemDelete}
+                                onReset={onResetClick}
+                                onDone={close}
+                            />
                         </>
                     )}
             </div>

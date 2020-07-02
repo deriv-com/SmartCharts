@@ -3,19 +3,15 @@ import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 
 class SearchInput extends Component {
-    clearFilterText = () => {
-        this.props.onChange('');
-    };
+    clearFilterText = () => this.props.onChange('');
 
-    onChange = (e) => {
-        this.props.onChange(e.target.value);
-    };
+    onChange = e => this.props.onChange(e.target.value);
 
     render() {
         const { placeholder, value, searchInput, searchInputClassName } = this.props;
 
         return (
-            <div className={`cq-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
+            <div className={`sc-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
                 <input
                     className={searchInputClassName}
                     value={value}
