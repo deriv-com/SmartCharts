@@ -13,7 +13,7 @@ const Icon = React.memo(({ id }) => {
 const ItemLeft = React.memo(({ item: { itemId, display } }) => (
     <div className="left">
         <Icon id={itemId} />
-        <span className="ciq-item-display">{display}</span>
+        <span className="sc-item-display">{display}</span>
     </div>
 ));
 
@@ -42,7 +42,7 @@ const ActiveOption = ({ opt, item }) => {
 
 const ActiveOptions = ({ activeOptions, item }) => (
     activeOptions && (
-        <span className="cq-active-options">
+        <span className="sc-active-options">
             {activeOptions.map(opt => (
                 <ActiveOption key={opt.id} opt={opt} item={item} />
             ))}
@@ -55,7 +55,7 @@ export const NormalItem = React.memo(({ onSelectItem, item, disableAll, favorite
 
     return (
         <div
-            className={`cq-item ${item.selected ? 'selected ' : ''} ${itemClass}`}
+            className={`sc-item ${item.selected ? 'selected ' : ''} ${itemClass}`}
             onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
             disabled={!item.enabled || disableAll}
         >
@@ -67,7 +67,7 @@ export const NormalItem = React.memo(({ onSelectItem, item, disableAll, favorite
 
 export const ActiveItem = ({ item, favoritesId, activeOptions }) => (
     <div
-        className="cq-active-item"
+        className="sc-active-item"
     >
         <ItemLeft item={item} />
         <div className="right">

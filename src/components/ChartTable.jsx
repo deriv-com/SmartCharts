@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Scrollbars } from 'tt-react-custom-scrollbars';
+import Scroll               from './Scroll.jsx';
 import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
@@ -144,10 +144,10 @@ const ChartTable = ({
                         </thead>
                     </table>
                 )}
-                <Scrollbars
+                <Scroll
                     className="ciq-chart-table__panel"
                     onScroll={updateScrollSpy}
-                    ref={setScrollPanel}
+                    setPanell={setScrollPanel}
                 >
                     {tableData.map(item => (
                         <ChartTableGroup
@@ -160,7 +160,7 @@ const ChartTable = ({
                             setDateElement={setDateElement}
                         />
                     ))}
-                </Scrollbars>
+                </Scroll>
             </>
             </Dialog>
         </div>
