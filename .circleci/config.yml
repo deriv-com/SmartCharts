@@ -36,14 +36,14 @@ commands:
       - restore_cache:
           name: Restoring node_modules
           keys:
-            - source-v2-modules-{{ checksum "yarn.lock" }}
+            - source-v2-modules-{{ checksum "package-lock.json" }}
             - source-v2-modules
       - run:
-          name: yarn install
-          command: yarn install
+          name: npm run install
+          command: npm run install
       - save_cache:
           name: Save node_module
-          key: source-v2-modules-{{ checksum "yarn.lock" }}
+          key: source-v2-modules-{{ checksum "package-lock.json" }}
           paths:
             - "node_modules"
   test:
@@ -51,14 +51,14 @@ commands:
     steps:
       - run:
           name: Testing App
-          command: yarn test
+          command: npm run test
   build:
     description: Build App
     steps:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: yarn build-travis
+          command: npm run build-travis
   deploy:
     description: "Deploy"
     parameters:
