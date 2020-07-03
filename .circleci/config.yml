@@ -10,7 +10,6 @@ commands:
           keys:
             - source-v3-{{ .Branch }}-{{ .Revision }}
             - source-v3-{{ .Branch }}-
-            - source-v3-
       - run: 
           name: Fetch git tags 
           command: |
