@@ -90,7 +90,7 @@ export default class StudyLegendStore {
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
-    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
+    get indicatorRatio() { return this.mainStore.chart; }
 
     get items() {
         return [...IndicatorsTree].map((indicator) => {
@@ -132,14 +132,26 @@ export default class StudyLegendStore {
 
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
-        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
-            // As we want to keep all added item bellow the floating toolbar
-            CIQ.Studies.studyLibrary[item].panelHeight = this.indicatorRatio.heightOnAdd;
+        const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
+        if (this.stx.layout && addedIndicator < 5) {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
+            this.updateIndicatorHeight();
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
         }
+    }
+
+    @action.bound updateIndicatorHeight() {
+        const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
+        const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
+        Object.keys(this.stx.panels).forEach((id, index) => {
+            if (index === 0) { return; }
+            const panelObj = this.stx.panels[id];
+            panelObj.height = heightRatio.height;
+            panelObj.percent = heightRatio.percent;
+        });
+        this.stx.draw();
     }
 
     // Temporary prevent user from adding more than 5 indicators
@@ -232,6 +244,7 @@ export default class StudyLegendStore {
             setTimeout(() => {
                 CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
+                this.updateIndicatorHeight();
             }, 0);
         }
     }
@@ -389,6 +402,7 @@ export default class StudyLegendStore {
             Object.keys(stx.layout.studies || []).forEach((id) => {
                 this.deleteStudy(stx.layout.studies[id]);
             });
+            this.updateIndicatorHeight();
         }
     }
 

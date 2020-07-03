@@ -39,7 +39,7 @@ class ChartState {
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
     get drawTools() { return this.mainStore.drawTools; }
-    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
+    get indicatorRatio() { return this.mainStore.chart; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -405,10 +405,11 @@ class ChartState {
         }
 
         // Update Indictor panel height
+        const indicatorCount = Object.keys(layoutData.panels).filter(item => item !== 'chart').length;
         Object.keys(layoutData.panels).forEach((id) => {
             if (id === 'chart') { return; }
             const panel = layoutData.panels[id];
-            panel.percent = this.indicatorRatio.percent;
+            panel.percent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
         });
 
         this.stxx.importLayout(layoutData, {
