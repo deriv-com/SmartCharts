@@ -39,6 +39,10 @@ class PaginationLoaderStore {
         }
     }
 
+    @action.bound updateOnPagination(state) {
+        this.isOnPagination = state;
+    }
+
     @action.bound setOnPagination = ({ end }) => {
         this.isOnPagination     = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
