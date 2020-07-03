@@ -820,6 +820,7 @@ class ChartStore {
             this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
+            this.mainStore.paginationLoader.updateOnPagination(false);
             this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */

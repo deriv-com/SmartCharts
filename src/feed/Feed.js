@@ -17,6 +17,7 @@ class Feed {
     get context() { return this._mainStore.chart.context; }
     get loader() { return this._mainStore.loader; }
     get margin() { return this._mainStore.state.margin; }
+    get paginationLoader() { return this._mainStore.paginationLoader; }
     _activeStreams = {};
     _isConnectionOpened = true;
 
@@ -103,6 +104,7 @@ class Feed {
 
     async fetchInitialData(symbol, suggestedStartDate, suggestedEndDate, params, callback) {
         this.setHasReachedEndOfData(false);
+        this.paginationLoader.updateOnPagination(true);
         const { period, interval, symbolObject } = params;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
@@ -262,6 +264,7 @@ class Feed {
                 if (response.error) {
                     const { message: text } = response.error;
                     this.loader.hide();
+                    this.paginationLoader.updateOnPagination(false);
                     this._mainStore.notifier.notify({
                         text,
                         type: 'error',
@@ -306,6 +309,7 @@ class Feed {
     }
 
     setHasReachedEndOfData(hasReachedEndOfData) {
+        this.paginationLoader.updateOnPagination(false);
         if (this._mainStore.state.hasReachedEndOfData !== hasReachedEndOfData) {
             this._mainStore.state.hasReachedEndOfData = hasReachedEndOfData;
         }
