@@ -78,7 +78,6 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
-
         // to remove studies if user has already more than 5
         // and remove studies which are excluded
         this.removeExtraStudies();
@@ -352,6 +351,11 @@ export default class StudyLegendStore {
         // All traces can be removed after new design for studies
         this.updateStyle();
     };
+
+    @action.bound setReachedLimit() {
+        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        this.hasReachedLimits = hasReachedLimit;
+    }
 
     @action.bound updateActiveStudies() {
         const stx = this.stx;
