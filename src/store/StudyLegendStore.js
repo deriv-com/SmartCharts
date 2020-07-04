@@ -84,7 +84,7 @@ export default class StudyLegendStore {
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', this.handleDrawPanels);
-        this.stx.append('panelClose', this.updateActiveStudies);
+        this.stx.append('panelClose', this.onStudyRemoved);
         this.renderLegend();
     };
 
@@ -137,19 +137,23 @@ export default class StudyLegendStore {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
-            this.updateIndicatorHeight();
+            setTimeout(this.updateIndicatorHeight, 20);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
         }
     }
 
     @action.bound updateIndicatorHeight() {
-        const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
+        const addedIndicator = Object.keys(this.stx.layout.studies || [])
+            .filter(key => this.stx.layout.studies[key].panel !== 'chart').length;
+
         const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
         Object.keys(this.stx.panels).forEach((id, index) => {
             if (index === 0) { return; }
             const panelObj = this.stx.panels[id];
-            panelObj.height = heightRatio.height;
-            panelObj.percent = heightRatio.percent;
+            if (panelObj.panel === 'chart') {
+                panelObj.height = heightRatio.height;
+                panelObj.percent = heightRatio.percent;
+            }
         });
         this.stx.draw();
     }
@@ -244,8 +248,8 @@ export default class StudyLegendStore {
             setTimeout(() => {
                 CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
-                this.updateIndicatorHeight();
             }, 0);
+            setTimeout(this.updateIndicatorHeight, 20);
         }
     }
 
@@ -402,7 +406,7 @@ export default class StudyLegendStore {
             Object.keys(stx.layout.studies || []).forEach((id) => {
                 this.deleteStudy(stx.layout.studies[id]);
             });
-            this.updateIndicatorHeight();
+            setTimeout(this.updateIndicatorHeight, 20);
         }
     }
 
@@ -410,6 +414,11 @@ export default class StudyLegendStore {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
+    }
+
+    @action.bound onStudyRemoved() {
+        this.updateActiveStudies();
+        setTimeout(this.updateIndicatorHeight, 20);
     }
 
     @action.bound onSelectTab(tabIndex) {
