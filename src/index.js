@@ -2,6 +2,7 @@
 import Barrier from './components/Barrier.jsx';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
+import ChartMode from './components/ChartMode.jsx';
 import StudyLegend from './components/StudyLegend.jsx';
 import Comparison from './components/Comparison.jsx';
 import Views from './components/Views.jsx';
@@ -17,6 +18,7 @@ import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
+import ToolbarWidget from './components/ToolbarWidget.jsx';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
 
@@ -33,6 +35,7 @@ export {
     ChartSize,
     ChartTitle,
     ChartTypes,
+    ChartMode,
     Comparison,
     ComparisonList,
     createObjectFromLocalStorage,
@@ -46,6 +49,7 @@ export {
     StudyLegend,
     Timeperiod,
     Views,
+    ToolbarWidget,
     logEvent,
     LogCategories,
     LogActions,
@@ -58,6 +62,7 @@ export default {
     ChartSize,
     ChartTitle,
     ChartTypes,
+    ChartMode,
     Comparison,
     ComparisonList,
     createObjectFromLocalStorage,
@@ -73,6 +78,7 @@ export default {
     StudyLegend,
     Timeperiod,
     Views,
+    ToolbarWidget,
     logEvent,
     LogCategories,
     LogActions,

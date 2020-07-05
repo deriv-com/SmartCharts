@@ -1,5 +1,9 @@
-import React from 'react';
+import React        from 'react';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+import Scroll       from './Scroll.jsx';
 import {
+    FormGroup,
     Switch,
     NumericInput,
     ColorPicker,
@@ -10,11 +14,28 @@ import {
     FontSetting,
 } from './Form.jsx';
 import { DeleteIcon } from './Icons.jsx';
-import Favorite from './Favorite.jsx';
-import '../../sass/components/_ciq-settings-dialog.scss';
+import '../../sass/components/settings-dialog.scss';
 
-const SettingsPanel = ({
-    items,
+const SettingsPanelItem = ({ group, title, type, Field }) => (
+    <FormGroup
+        title={
+            (type === 'select'
+                     || type === 'pattern'
+                     || type === 'colorpicker'
+                     || type === 'numbercolorpicker'
+                     || group === 'OverBought'
+                     || group === 'OverSold'
+            ) ? null : title
+        }
+        type={type}
+    >
+        {Field}
+    </FormGroup>
+);
+
+const SettingsPanelGroup = ({
+    title,
+    items, // [{ id, title, value, defaultValue, type }]
     theme,
     onItemChange,
 }) => {
@@ -29,6 +50,7 @@ const SettingsPanel = ({
             <ColorPicker
                 theme={theme}
                 color={item.value}
+                subtitle={item.subtitle || item.title}
                 setColor={value => onItemChange(item.id, value)}
             />
         ),
@@ -38,6 +60,7 @@ const SettingsPanel = ({
                 <Pattern
                     pattern={item.value}
                     lineWidth={lineWidth}
+                    subtitle={item.title}
                     onChange={(v) => {
                         onItemChange('pattern', v.pattern);
                         onItemChange('lineWidth', v.width);
@@ -48,7 +71,8 @@ const SettingsPanel = ({
         select: item => (
             <DropDown
                 rows={Object.keys(item.options)}
-                title={item.value}
+                value={item.value}
+                subtitle={item.subtitle || item.title}
                 onRowClick={value => onItemChange(item.id, value)}
             >
                 {row => row}
@@ -77,6 +101,7 @@ const SettingsPanel = ({
         numbercolorpicker: item => (
             <NumberColorPicker
                 value={item.value}
+                theme={theme}
                 onChange={val => onItemChange(item.id, val)}
             />
         ),
@@ -88,132 +113,164 @@ const SettingsPanel = ({
         ),
     };
 
+    const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
+
     return (
-        <div className="items">
-            {items
-                .map(item => (renderMap[item.type]
-                        && (
-                            <div key={item.id} className="item">
-                                <div className="title">
-                                    <span>{item.title}</span>
-                                    {renderMap[item.type](item)}
-                                </div>
-                            </div>
-                        )
-                ))
-            }
+        <div className={`form__input-group ${input_group_name}`}>
+            {title === 'Show Zones' ? '' : (<h4>{title}</h4>)}
+            {items.map(item => (renderMap[item.type]
+                    && (
+                        <SettingsPanelItem
+                            key={item.id}
+                            type={item.type}
+                            active={item.active}
+                            title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
+                            Field={renderMap[item.type](item)}
+                        />
+                    )
+            ))}
+            <FormGroup type="end" />
         </div>
     );
 };
 
-const ResetButton = ({
-    onResetClick,
-}) => (
-    <div
-        className="reset"
-        onClick={onResetClick}
-    >{t.translate('RESET')}
+const Footer = ({ onDelete, onReset, onDone }) => (
+    <div className="buttons">
+        {onDelete && (
+            <DeleteIcon
+                className="sc-btn--delete"
+                onClick={onDelete}
+            />
+        )}
+        <div>
+            <ResetButton onClick={onReset} />
+            <DoneButton onClick={onDone} />
+        </div>
     </div>
 );
 
-const DoneButton = ({
-    setOpen,
+
+const SettingsPanel = ({
+    itemGroups,
+    theme,
+    onItemChange,
+    setScrollPanel,
+    freezeScroll,
+    formClassname,
 }) => (
-    <div
-        className="done"
-        onClick={() => setOpen(false)}
-    >{t.translate('DONE')}
+    <div className={`form form--indicator-setting ${formClassname}`}>
+        <Scroll
+            setPanel={setScrollPanel}
+            freeze={freezeScroll}
+            autoHide
+            height="280px"
+        >
+            {itemGroups.map(group => (
+                (group.fields.length > 0)
+                && (
+                    <SettingsPanelGroup
+                        key={group.key}
+                        group={group.key}
+                        title={group.key}
+                        items={group.fields}
+                        theme={theme}
+                        onItemChange={onItemChange}
+                    />
+                )
+            ))}
+        </Scroll>
     </div>
 );
 
-const Tabs = ({
-    onTabClick,
-    activeTab,
-}) => (
-    <div className="tabs">
-        <div
-            onClick={() => onTabClick('settings')}
-            className={activeTab === 'settings' ? 'active' : ''}
-        > Settings
-        </div>
-        <div
-            onClick={() => onTabClick('description')}
-            className={activeTab === 'description' ? 'active' : ''}
-        > Description
-        </div>
-        <div className={`active-border ${activeTab === 'settings' ? 'first' : 'second'}`} />
-    </div>
+const ResetButton = ({ onClick }) => (
+    <button
+        type="button"
+        className="sc-btn sc-btn--outline-secondary sc-btn--reset"
+        onClick={onClick}
+    >{t.translate('Reset')}
+    </button>
+);
+
+const DoneButton = ({ onClick }) => (
+    <button
+        type="button"
+        className="sc-btn sc-btn--primary sc-btn--save"
+        onClick={() => onClick()}
+    >{t.translate('Done')}
+    </button>
 );
 
 const SettingsDialog = ({
-    id,
-    items, // [{ id, title, value, defaultValue, type }]
+    itemGroups,
     title,
+    formClassname,
     description,
-    activeTab,
-    setOpen,
     showTabs,
-    onTabClick,
-    onDeleteClick,
-    favoritesId,
     onResetClick,
     onItemChange,
-    Dialog,
-    open,
+    onItemDelete,
+    SettingDialogMenu,
     theme,
+    close,
+    setScrollPanel,
+    dialogPortalNodeId,
+    freezeScroll,
 }) => (
-    <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`}>
-        <Dialog className="cq-dialog cq-settings-dialog">
-            <>
-                <div className={`titlebar ${!showTabs ? 'no-tabs' : ''}`}>
-                    <div className="title">{title}</div>
-                    <div className="icons">
-                        { onDeleteClick && (
-                            <DeleteIcon
-                                onClick={onDeleteClick}
-                                className="margin"
-                            />
-                        )}
-                        { favoritesId
-                    && (
-                        <Favorite
-                            id={id}
-                            category={favoritesId}
-                        />
-                    )}
-                    </div>
-                </div>
-
-                { showTabs && (
-                    <Tabs
-                        activeTab={activeTab}
-                        onTabClick={onTabClick}
-                    />
-                )}
-
-                { activeTab === 'settings'
+    <SettingDialogMenu
+        className="cq-modal--settings"
+        title={title}
+        newStyle
+        enableTabular={showTabs}
+        emptyMenu
+        enableOverlay // this temprary, we remove it when all menus convert to modal
+        portalNodeId={dialogPortalNodeId}
+    >
+        <SettingDialogMenu.Title />
+        <SettingDialogMenu.Body>
+            <div className="cq-chart-settings">
+                {showTabs
                     ? (
+                        <Tabs className="tabs--vertical">
+                            <TabList>
+                                <Tab>Settings</Tab>
+                                <Tab>Description</Tab>
+                            </TabList>
+                            <TabPanel>
+                                <SettingsPanel
+                                    itemGroups={itemGroups}
+                                    theme={theme}
+                                    onItemChange={onItemChange}
+                                    setScrollPanel={setScrollPanel}
+                                    freezeScroll={freezeScroll}
+                                />
+                                <Footer
+                                    onReset={onResetClick}
+                                    onDone={close}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                {description}
+                            </TabPanel>
+                        </Tabs>
+                    ) : (
                         <>
                             <SettingsPanel
-                                items={items}
+                                itemGroups={itemGroups}
                                 theme={theme}
                                 onItemChange={onItemChange}
+                                setScrollPanel={setScrollPanel}
+                                freezeScroll={freezeScroll}
+                                formClassname={formClassname}
                             />
-                            <div className="buttons">
-                                <ResetButton onResetClick={onResetClick} />
-                                <DoneButton setOpen={setOpen} />
-                            </div>
+                            <Footer
+                                onDelete={onItemDelete}
+                                onReset={onResetClick}
+                                onDone={close}
+                            />
                         </>
-                    )
-                    :                    (
-                        <div className="description">
-                            {description}
-                        </div>
-                    )
-                }
-            </>
-        </Dialog>
-    </div>
+                    )}
+            </div>
+        </SettingDialogMenu.Body>
+    </SettingDialogMenu>
 );
-
 export default SettingsDialog;

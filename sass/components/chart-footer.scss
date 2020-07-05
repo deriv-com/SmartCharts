@@ -1,0 +1,85 @@
+
+.sc-chart-footer {
+    display: flex;
+    height: 31px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    justify-content: flex-end;
+    z-index: 9;
+    @include themify($themes) {
+        color: themed('FooterText');
+        background: themed('FooterBg');
+        border-top: 1px solid themed('FooterBorder');
+    }
+
+    .ciq-menu {
+        .cq-menu-btn {
+            padding: 8px;
+            cursor: pointer;
+
+            .ic-icon {
+                width: 16px;
+                height: 16px;
+                line-height: 8px;
+
+                svg {
+                    @include themify($themes) {
+                        fill: themed('FooterText');
+                    }
+                }
+            }
+            .ic-subtitle {
+                display: none;
+            }
+            .ic-icon-with-sub {
+                line-height: 8px;
+            }
+        }
+        .sc-tooltip__inner {
+            display: none;
+        }
+        &:hover {
+            @include themify($themes) {
+                background: themed('FooterItemHoverBg');
+            }
+        }
+    }
+    &__item {
+        padding: 8px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: normal;
+        text-align: right;
+        position: relative;
+
+        &--status {
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right: 16px;
+        }
+        &--time {
+            padding-right: 0px;
+            padding-left: 0px;
+            margin-right: 8px;
+
+            span {
+                padding-right: 16px;
+                padding-left: 16px;
+                @include themify($themes) {
+                    border-right: 1px solid themed('FooterBorder');
+                    border-left: 1px solid themed('FooterBorder');
+                }
+            }
+        }
+        .sc-tooltip__inner {
+            top: 9px;
+        }
+        .sc-tooltip__inner:before {
+            display: none;
+        }
+    }
+}

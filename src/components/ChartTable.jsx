@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Scrollbars } from 'tt-react-custom-scrollbars';
+import Scroll               from './Scroll.jsx';
 import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
@@ -107,7 +107,6 @@ const ChartTable = ({
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
             <Dialog className="cq-dialog ciq-chart-dialog">
-            <>
                 {isMobile && (
                     <div className="cq-titlebar">
                         {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
@@ -144,57 +143,23 @@ const ChartTable = ({
                         </thead>
                     </table>
                 )}
-                <Scrollbars
+                <Scroll
                     className="ciq-chart-table__panel"
                     onScroll={updateScrollSpy}
-                    ref={setScrollPanel}
+                    setPanell={setScrollPanel}
                 >
-                    {isMobile
-                        ? (
-                            <table className="ciq-chart-table">
-                                <tbody>
-                                    {tableData.map(item => (
-                                        <tr
-                                            key={`chartTable-${item.date}`} // eslint-disable-line react/no-array-index-key
-                                        >
-                                            <td>
-                                                <div>
-                                                    <div className="ciq-table-date">{item.Date}</div>
-                                                    <div className={`${item.Status ? item.Status : 'up'}`}>{item.Change}</div>
-                                                    <div className={`cq-change ${item.Status}`} />
-                                                </div>
-                                                <div>
-                                                    {isTick && <div><span>{t.translate('Close')}</span>{item.Close}</div>}
-                                                    {!isTick
-                                                    && [
-                                                        <div key="item-open"><span>{t.translate('O')}</span>{item.Open}</div>,
-                                                        <div key="item-high"><span>{t.translate('H')}</span>{item.High}</div>,
-                                                        <div key="item-low"><span>{t.translate('L')}</span>{item.Low}</div>,
-                                                        <div key="item-close"><span>{t.translate('C')}</span>{item.Close}</div>,
-                                                    ]}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        )
-                        : (
-                            tableData.map(item => (
-                                <ChartTableGroup
-                                    key={item.key}
-                                    item={item}
-                                    isTick={isTick}
-                                    ele={dateElements[item.key]}
-                                    scrollTop={scrollTop}
-                                    scrollPanel={scrollPanel}
-                                    setDateElement={setDateElement}
-                                />
-                            ))
-                        )
-                    }
-                </Scrollbars>
-            </>
+                    {tableData.map(item => (
+                        <ChartTableGroup
+                            key={item.key}
+                            item={item}
+                            isTick={isTick}
+                            ele={dateElements[item.key]}
+                            scrollTop={scrollTop}
+                            scrollPanel={scrollPanel}
+                            setDateElement={setDateElement}
+                        />
+                    ))}
+                </Scroll>
             </Dialog>
         </div>
     );

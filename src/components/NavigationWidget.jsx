@@ -1,45 +1,51 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import '../../sass/components/_ciq-navigation-widget.scss';
+import CrosshairToggle from './CrosshairToggle.jsx';
+import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
 
-import { ZoominIcon, ZoomoutIcon, HomeIcon, ScaleIcon } from './Icons.jsx';
+import '../../sass/components/navigation-widget.scss';
 
 const NavigationWidget = ({
+    context,
     zoomIn,
     zoomOut,
-    home,
     onScale,
-    isHomeEnabled,
+    enableScale,
     onMouseEnter,
     onMouseLeave,
-}) => (
-    <div
-        className="ciq-navigation-widget"
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-    >
-        <div
-            className={`ciq-navigation-widget__item ${!isHomeEnabled ? 'ciq-navigation-widget__item--hidden' : ''}`}
-            onClick={home}
-        >
-            <HomeIcon />
-        </div>
-        <div className="ciq-navigation-widget__item" onClick={onScale}>
-            <ScaleIcon />
-        </div>
-        <div className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom">
-            <ZoominIcon onClick={zoomIn} />
-            <ZoomoutIcon onClick={zoomOut} />
-        </div>
-    </div>
-);
+    onCrosshairChange,
+}) => {
+    if (!context) return '';
 
-export default connect(({ chartSize, navigationWidget }) => ({
+    return (
+        <div
+            className="sc-navigation-widget"
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
+            <div
+                className={`sc-navigation-widget__item sc-navigation-widget__item--scale ${!enableScale ? 'sc-navigation-widget__item--hidden' : ''}`}
+                onClick={onScale}
+            >
+                <ScaleIcon />
+            </div>
+            <div
+                className="sc-navigation-widget__item sc-navigation-widget__item--zoom"
+            >
+                <ZoominIcon onClick={zoomIn} />
+                <CrosshairToggle onChange={onCrosshairChange} />
+                <ZoomoutIcon onClick={zoomOut} />
+            </div>
+        </div>
+    );
+};
+
+export default connect(({ chart, chartSize, navigationWidget }) => ({
+    context: chart.context,
     zoomIn: chartSize.zoomIn,
     zoomOut: chartSize.zoomOut,
-    home: navigationWidget.onHome,
     onScale: navigationWidget.onScale,
-    isHomeEnabled: navigationWidget.isHomeEnabled,
+    enableScale: navigationWidget.enableScale,
     onMouseEnter: navigationWidget.onMouseEnter,
     onMouseLeave: navigationWidget.onMouseLeave,
 }))(NavigationWidget);

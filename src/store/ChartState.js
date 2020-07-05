@@ -25,7 +25,12 @@ class ChartState {
     @observable hasReachedEndOfData = false;
     @observable prevChartType;
     @observable isChartScrollingToEpoch = false;
+    @observable crosshairState = 1;
+    @observable crosshairTooltipLeftAllow = null;
+    @observable maxTick;
+    @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
+    enabledChartFooter;
 
     get comparisonStore() { return this.mainStore.comparison; }
     get stxx() { return this.chartStore.stxx; }
@@ -33,6 +38,8 @@ class ChartState {
     get chartTypeStore() { return this.mainStore.chartType; }
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
+    get drawTools() { return this.mainStore.drawTools; }
+    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -45,6 +52,8 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
+        this.stxx.append('zoomOut', this.enableScroll.bind(this));
+        this.stxx.append('zoomIn', this.enableScroll.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -52,7 +61,9 @@ class ChartState {
     };
 
     @action.bound updateProps({
+        networkStatus,
         chartControlsWidgets,
+        enabledChartFooter,
         chartStatusListener,
         chartType,
         clearChart,
@@ -72,6 +83,11 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
+        crosshair,
+        zoom,
+        maxTick,
+        crosshairTooltipLeftAllow,
+        yAxisMargin,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -86,8 +102,20 @@ class ChartState {
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
 
+        if (networkStatus && (
+            !this.mainStore.chart.networkStatus
+                || networkStatus.class !== this.mainStore.chart.networkStatus.class
+        )) {
+            this.mainStore.chart.networkStatus = networkStatus;
+        }
+
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
+        }
+
+        if (enabledChartFooter !== this.enabledChartFooter) {
+            this.enabledChartFooter = enabledChartFooter;
             if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
@@ -104,7 +132,6 @@ class ChartState {
             this.onExportLayout = onExportLayout;
             this.exportLayout();
         }
-
 
         if (chartType !== this.chartType && this.context) {
             if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
@@ -163,12 +190,49 @@ class ChartState {
             this.comparisonStore.removeAll();
         }
 
+        if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {
+            this.mainStore.crosshair.setCrosshairState(crosshair);
+            this.crosshairState = crosshair;
+        }
+
+        if (crosshairTooltipLeftAllow !== undefined
+            && this.crosshairTooltipLeftAllow !== crosshairTooltipLeftAllow) {
+            this.crosshairTooltipLeftAllow = crosshairTooltipLeftAllow;
+        }
+
+        if (zoom) {
+            if (zoom === 1) {
+                this.mainStore.chartSize.zoomIn();
+            } else {
+                this.mainStore.chartSize.zoomOut();
+            }
+        }
+
         this.mainStore.chartSetting.setSettings(this.settings);
+
+        if (maxTick && this.maxTick !== maxTick && this.stxx) {
+            this.maxTick = maxTick;
+            this.setMaxtTick();
+        }
+
+        if (yAxisMargin && typeof yAxisMargin === 'object') {
+            this.yAxisMargin = {
+                ...this.yAxisMargin,
+                ...yAxisMargin,
+            };
+        }
 
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
+            this.stxx.draw();
+        }
+    }
+
+    @action.bound setMaxtTick() {
+        if (this.stxx && this.maxTick) {
+            this.stxx.setMaxTicks(this.maxTick);
             this.stxx.draw();
         }
     }
@@ -281,8 +345,12 @@ class ChartState {
         this.shouldMinimiseLastDigits = status;
     }
 
+    enableScroll() {
+        this.stxx.allowScroll = true;
+    }
+
     saveLayout() {
-        if (!this.chartId) return;
+        if (!this.chartId || !this.stxx) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
         CIQ.localStorageSetItem(`layout-${this.chartId}`, json);
@@ -336,6 +404,13 @@ class ChartState {
             layoutData.chartType = this.chartType;
         }
 
+        // Update Indictor panel height
+        Object.keys(layoutData.panels).forEach((id) => {
+            if (id === 'chart') { return; }
+            const panel = layoutData.panels[id];
+            panel.percent = this.indicatorRatio.percent;
+        });
+
         this.stxx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
@@ -345,6 +420,7 @@ class ChartState {
                 this.restoreDrawings();
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.mainStore.paginationLoader.updateOnPagination(false);
                     this.setChartIsReady(true);
                     this.stxx.home();
                 }
@@ -375,6 +451,10 @@ class ChartState {
             if (drawings) {
                 this.stxx.importDrawings(drawings);
                 this.stxx.draw();
+
+                if (this.drawTools) {
+                    this.drawTools.computeActiveDrawTools();
+                }
             }
         }
     }
@@ -421,6 +501,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+                this.stxx.allowScroll = false;
             }
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
@@ -450,7 +531,7 @@ class ChartState {
         this.stxx.clearDrawings();
 
         // TODO: use constant
-        this.mainStore.crosshair.setCrosshairState(2);
+        this.mainStore.crosshair.onChange(2);
     }
 
     exportLayout() {
