@@ -159,57 +159,11 @@ class ChartStore {
         // Add custom injections to the CIQ
         inject({
             drawToolsStore: this.mainStore.drawTools,
+            prepareIndicatorName,
         });
 
-        /**
-         * only home button click part modified to avoid calling
-         * newChart() on home function while historical enable
-         */
-        CIQ.ChartEngine.prototype.registerHTMLElements = function () {
-            const c = this.chart.container;
-            for (const control in CIQ.ChartEngine.htmlControls) {
-                if (typeof this.chart[control] === 'undefined' && typeof this.controls[control] === 'undefined') {
-                    if (!this.allowZoom && control === 'chartControls') continue;
-                    let el = this.container.querySelector(`.${control}`, c);
-                    if (el) {
-                        this.chart[control] = el;
-                        this.controls[control] = el;
-                    } else {
-                        const rawHTML = CIQ.ChartEngine.htmlControls[control];
-                        if (!rawHTML) continue;
-                        const div = document.createElement('DIV');
-                        div.innerHTML = rawHTML;
-                        el = div.firstChild;
-                        c.appendChild(el);
-                        this.chart[control] = el;
-                        this.controls[control] = el;
-                        CIQ.appendClassName(el, control);
-                    }
-                }
-            }
-            const chartControls = this.controls.chartControls, home = this.controls.home;
-            if (chartControls) {
-                const zoomIn = this.container.querySelector('.stx-zoom-in', chartControls);
-                const zoomOut = this.container.querySelector('.stx-zoom-out', chartControls);
-
-                CIQ.safeClickTouch(zoomIn, (function (self) { return function (e) { self.zoomIn(e); e.stopPropagation(); }; }(this)));
-                CIQ.safeClickTouch(zoomOut, (function (self) { return function (e) { self.zoomOut(e); e.stopPropagation(); }; }(this)));
-                if (!CIQ.touchDevice) {
-                    this.makeModal(zoomIn);
-                    this.makeModal(zoomOut);
-                }
-            }
-            if (home) {
-                CIQ.safeClickTouch(home, (function (self) {
-                    return function (e) {
-                        e.stopPropagation();
-                        self.home({ animate: true });
-                    };
-                }(this)));
-                if (!CIQ.touchDevice) {
-                    this.makeModal(home);
-                }
-            }
+        CIQ.ChartEngine.prototype.isHistoricalMode = function () {
+            return !!_self.stateStore.endEpoch;
         };
         CIQ.ChartEngine.prototype.home = function (params) {
             this.swipe.amplitude = 0;
@@ -286,183 +240,12 @@ class ChartStore {
             }
             this.draw();
         };
-        CIQ.ChartEngine.prototype.isHistoricalMode = function () {
-            return !!_self.stateStore.endEpoch;
-        };
 
         this.rootNode = rootNode;
         this.chartNode = this.rootNode.querySelector('.ciq-chart-area');
         this.chartControlsNode = this.rootNode.querySelector('.cq-chart-controls');
 
         CIQ.Plotter.prototype.getYAxisWidth = () => this.yAxiswidth;
-
-        // monkey patching to handle radius and height for `current price label`
-        CIQ.ChartEngine.prototype.createYAxisLabel = function (panel, txt, y, backgroundColor, color, ctx, yAxis) {
-            if (panel.yAxis.drawPriceLabels === false || panel.yAxis.noDraw) return;
-            const yax = yAxis || panel.yAxis;
-            if (yax.noDraw || !yax.width) return;
-            const context = ctx || this.chart.context;
-            // SmartChart Team: this prop modified
-            const margin = 9;
-            let height = 24;
-            let radius;
-
-            if (this.labelType === 'currentSpot') {
-                this.canvasFont('stx_current_hr_up', context);
-            } else {
-                this.canvasFont('stx_price_label', context);
-            }
-            const tickWidth = this.drawBorders ? 3 : 0; // pixel width of tick off edge of border
-            const textWidth = context.measureText(txt).width;
-            let width;
-            try {
-                if (textWidth + margin > yax.width) {
-                    width = textWidth + tickWidth + margin * 2;
-                } else {
-                    width = yax.width + margin;
-                }
-            } catch (e) { width = yax.width; } // Firefox doesn't like this in hidden iframe
-
-            // some y-axis label has style of `roundRectArrow` and some has `rect`, we reduce
-            // 14px which is about the `roundRectArrow` style arrow to make the label all fit
-            width -= 14;
-            if (this.chart.yAxis.width < width) {
-                this.chart.yAxis.width = width;
-                this.calculateYAxisPositions();
-            } else  {
-                width = this.chart.yAxis.width;
-            }
-
-            let x = this.width - this.chart.yAxis.width;
-            let left = ((width - textWidth) / 2);
-
-            if (yax.width < 0) x += (yax.width - width);
-            const position = (yax.position === null ? panel.chart.yAxis.position : yax.position);
-            if (position === 'left') {
-                width *= -1;
-                if (yax.width < 0) x -= (yax.width + width);
-                radius = -3;
-                context.textAlign = 'right';
-            }
-            if (y + (height / 2) > yax.bottom) y = yax.bottom - (height / 2);
-            if (y - (height / 2) < yax.top) y = yax.top + (height / 2);
-
-            if (typeof (CIQ[this.yaxisLabelStyle]) === 'undefined') {
-                this.yaxisLabelStyle = 'roundRectArrow';  // in case of user error, set a default.
-            }
-            let yaxisLabelStyle = this.yaxisLabelStyle;
-            if (yax.yaxisLabelStyle) yaxisLabelStyle = yax.yaxisLabelStyle;
-
-            // as crosshair and countdown style is `rect`, so due to previous rule we should
-            // increase there x position to fit the y-axis
-            x += 1;
-            if (this.labelType === 'currentSpot') {
-                x += 13;
-                left  -= 8;
-                radius = 0;
-            } else if (this.labelType === 'crosshair') {
-                height = 30;
-            }
-
-            const params = {
-                ctx:context,
-                x,
-                y,
-                top: y - (height / 2),
-                width,
-                height,
-                radius,
-                backgroundColor,
-                fill: true,
-                stroke: false,
-                margin:{ left, top: 1 },
-                txt,
-                color,
-            };
-            CIQ[yaxisLabelStyle](params);
-        };
-        CIQ.ChartEngine.prototype.displaySticky = function (params) {
-            const m = this.controls.mSticky;
-            if (!m) return;
-            const mi = m.querySelector('.mStickyInterior');
-            if (!mi) return;
-            const overlayTrashCan = m.querySelector('.overlayTrashCan');
-            const overlayEdit = m.querySelector('.overlayEdit');
-            const mouseDeleteInstructions = m.querySelector('.mouseDeleteInstructions');
-            const longPressText = m.querySelector('.stickyLongPressText');
-            CIQ.unappendClassName(mouseDeleteInstructions, 'no_edit');
-            // backwards compatibility:
-            if (!params || typeof (params) !== 'object') {
-                params = {
-                    message: arguments[0], // eslint-disable-line prefer-rest-params
-                    backgroundColor: arguments[1], // eslint-disable-line prefer-rest-params
-                    forceShow: arguments[2], // eslint-disable-line prefer-rest-params
-                    noDelete: arguments[3], // eslint-disable-line prefer-rest-params
-                    type: arguments[4], // eslint-disable-line prefer-rest-params
-                };
-            }
-
-            let message = params.message, backgroundColor = params.backgroundColor;
-            const type = params.type,
-                noEdit = params.noEdit,
-                forceShow = params.forceShow,
-                noDelete = params.noDelete;
-            if (!forceShow && !message) {
-                mi.innerHTML = '';
-                m.style.display = 'none';
-                if (overlayTrashCan) overlayTrashCan.style.display = 'none';
-                if (overlayEdit) overlayEdit.style.display = 'none';
-                if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'none';
-                if (longPressText) longPressText.style.display = 'none';
-            } else {
-                if (!message) message = '';
-                if (backgroundColor === 'auto') backgroundColor = this.defaultColor;
-                if (forceShow && !message) {
-                    mi.style.backgroundColor = '';
-                    mi.style.color = '';
-                    mi.style.display = 'none';
-                } else if (backgroundColor) {
-                    mi.style.backgroundColor = backgroundColor;
-                    mi.style.color = CIQ.chooseForegroundColor(backgroundColor);
-                    mi.style.display = 'inline-block';
-                } else {
-                    mi.style.backgroundColor = '';
-                    mi.style.color = '';
-                    mi.style.display = 'inline-block';
-                }
-
-                // This line ony changed
-                const nameObj = prepareIndicatorName(message);
-                mi.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
-
-                const rtClick = m.querySelector('.mStickyRightClick');
-                rtClick.className = 'mStickyRightClick';  // reset
-                if (type) CIQ.appendClassName(rtClick, `rightclick_${type}`);
-                rtClick.style.display = '';
-                m.style.display = 'inline-block';
-                if (noDelete || this.bypassRightClick === true || this.bypassRightClick[type]) {
-                    rtClick.style.display = 'none';
-                } else if (this.highlightViaTap || this.touches.length) {
-                    if (overlayTrashCan) overlayTrashCan.style.display = 'inline-block';
-                    if (overlayEdit && !noEdit) overlayEdit.style.display = 'inline-block';
-                    if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'none';
-                    if (longPressText) longPressText.style.display = 'none';
-                    CIQ[`${message === '' ? '' : 'un'}appendClassName`](m, 'hide');
-                } else {
-                    if (noEdit) CIQ.appendClassName(mouseDeleteInstructions, 'no_edit');
-                    if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'block';
-                    if (longPressText) {
-                        longPressText.style.display = 'none';
-                        const drag = this.preferences.dragging;
-                        if (drag && params.panel && !params.panel.noDrag) {
-                            if ((drag === true || drag.study) && type === 'study') longPressText.style.display = 'block';
-                            else if ((drag === true || drag.series) && type === 'series') longPressText.style.display = 'block';
-                        }
-                    }
-                }
-                this.positionSticky(m);
-            }
-        };
 
         const {
             symbol,
@@ -782,33 +565,37 @@ class ChartStore {
         }
     }
 
-    @action.bound calculateYaxisWidth = (price) => {
+    @action.bound setYaxisWidth = (width) => {
+        this.yAxiswidth = width || this.yAxiswidth;
+        this.stxx.chart.yAxis.width = width || this.yAxiswidth;
+        this.stxx.calculateYAxisPositions();
+        this.stxx.draw();
+    }
+
+    @action.bound updateYaxisWithPrice = (price) => {
         if (!price) return;
         const { context } = this.context.stx.chart;
 
         const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
         if (priceWidth > this.yAxiswidth) {
-            this.yAxiswidth = priceWidth;
-
-            this.stxx.chart.yAxis.width = priceWidth;
-            this.stxx.calculateYAxisPositions();
-            this.stxx.draw();
+            this.setYaxisWidth(priceWidth);
         }
     }
 
-    @action.bound updateYaxisWidth = () => {
+    @action.bound updateYaxisWithQouteData = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
             const currentQuote = this.context.stx.currentQuote();
             if (currentQuote && currentQuote.Close) {
-                this.calculateYaxisWidth(currentQuote.Close);
+                this.updateYaxisWithPrice(currentQuote.Close);
             } else {
                 const lastDataWithClose = this.stxx.masterData.find(x => x.Close);
                 if (lastDataWithClose) {
-                    this.calculateYaxisWidth(lastDataWithClose.Close);
+                    this.updateYaxisWithPrice(lastDataWithClose.Close);
                 }
             }
         }
     }
+
 
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {

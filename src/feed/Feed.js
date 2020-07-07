@@ -213,7 +213,7 @@ class Feed {
         quotes = this._trimQuotes(quotes);
         callback({ quotes });
 
-        this._mainStore.chart.updateYaxisWidth();
+        this._mainStore.chart.updateYaxisWithQouteData();
         this.scaleChart();
 
         this._emitDataUpdate(quotes, comparisonChartSymbol, true);

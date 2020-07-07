@@ -139,6 +139,7 @@ export default class StudyLegendStore {
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.mainStore.chart.setYaxisWidth();
         }
     }
 

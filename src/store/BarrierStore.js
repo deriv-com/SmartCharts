@@ -137,7 +137,7 @@ export default class BarrierStore {
         this._high_barrier.priceConstrainer = (newPrice) => {
             const nextPrice = (this._low_barrier.visible && (newPrice < this._low_barrier.realPrice))
                 ? this._high_barrier.realPrice : newPrice;
-            this.mainStore.chart.calculateYaxisWidth(nextPrice);
+            this.mainStore.chart.updateYaxisWithPrice(nextPrice);
 
             return nextPrice;
         };
@@ -146,7 +146,7 @@ export default class BarrierStore {
         this._low_barrier.priceConstrainer = (newPrice) => {
             const nextPrice = (newPrice > this._high_barrier.realPrice) ? this._low_barrier.realPrice : newPrice;
 
-            this.mainStore.chart.calculateYaxisWidth(nextPrice);
+            this.mainStore.chart.updateYaxisWithPrice(nextPrice);
             return nextPrice;
         };
     }
