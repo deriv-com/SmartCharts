@@ -111,7 +111,6 @@ class ChartStore {
             this.containerWidth = 480;
         }
 
-
         this.updateHeight();
         this.updateCanvas();
         // Height updates are not immediate, so we must resize the canvas with
@@ -123,9 +122,8 @@ class ChartStore {
     indicatorHeightRatio = (num) => {
         const chartHeight = this.chartNode.offsetHeight;
         const isSmallScreen = chartHeight < 780;
-        const denominator = num >= 4 ? num : (num + 1);
-        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 380 : 360)) / denominator);
-
+        const denominator = num >= 5 ? num : (num + 1);
+        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 360 : 340)) / denominator);
         return {
             height: indicatorsHeight,
             percent: (indicatorsHeight / chartHeight),

@@ -406,10 +406,11 @@ class ChartState {
 
         // Update Indictor panel height
         const indicatorCount = Object.keys(layoutData.panels).filter(item => item !== 'chart').length;
+        const indiactorHeightPercent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
         Object.keys(layoutData.panels).forEach((id) => {
             if (id === 'chart') { return; }
             const panel = layoutData.panels[id];
-            panel.percent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
+            panel.percent = indiactorHeightPercent;
         });
 
         this.stxx.importLayout(layoutData, {

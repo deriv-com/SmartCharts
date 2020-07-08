@@ -150,10 +150,7 @@ export default class StudyLegendStore {
         Object.keys(this.stx.panels).forEach((id, index) => {
             if (index === 0) { return; }
             const panelObj = this.stx.panels[id];
-            if (panelObj.panel === 'chart') {
-                panelObj.height = heightRatio.height;
-                panelObj.percent = heightRatio.percent;
-            }
+            panelObj.percent = heightRatio.percent;
         });
         this.stx.draw();
     }
