@@ -224,7 +224,6 @@ class ChartState {
 
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
-            this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
             this.stxx.draw();
         }

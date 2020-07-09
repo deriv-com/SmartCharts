@@ -1,5 +1,4 @@
 import { createXAxis }            from './createXAxis';
-import { drawCurrentPriceLine }   from './currentHR';
 import { maintainHeadsUpHR }      from './headsUpHR';
 // import { manageMasterDataLength } from './manageMasterDataLength';
 import { maintainSpanSize }       from './resizing';
@@ -11,7 +10,6 @@ import { stickyInterior }         from './stickyInterior';
 
 const inject = (option) => {
     createXAxis();
-    drawCurrentPriceLine();
     maintainHeadsUpHR();
     maintainSpanSize();
     // manageMasterDataLength();

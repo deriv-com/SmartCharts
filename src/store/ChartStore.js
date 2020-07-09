@@ -282,7 +282,7 @@ class ChartStore {
             controls: { chartControls: null }, // hide the default zoom buttons
             yaxisLabelStyle: 'roundRect',
             preferences: {
-                currentPriceLine: true,
+                currentPriceLine: false,
                 whitespace: isMobile ? 50 : 150,
             },
             chart: {
@@ -317,6 +317,38 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+
+        this.stxx.prepend('drawCurrentHR', () => {
+            this.stxx.labelType = 'currentSpot';
+            this.stxx.yaxisLabelStyle = 'roundRectArrow';
+        });
+        this.stxx.append('drawCurrentHR', () => {
+            this.stxx.yaxisLabelStyle = 'roundRect';
+            this.stxx.labelType = undefined;
+
+            if (!this.stateStore.endEpoch && this.stxx.isHome()) {
+                const { chart } = this.stxx;
+                const { dataSegment, panel } = chart;
+                const dataSegmentClose = [...dataSegment].filter(item => (item && item.Close));
+                const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+                const tick = currentQuote.Close ? currentQuote.tick : currentQuote.tick - 1;
+                const x = this.stxx.pixelFromTick(tick, chart) + (chart.lastTickOffset || 0);
+                const endOfLine = panel.right;
+                const backgroundColor = this.stxx.canvasStyle('stx_current_hr_down').backgroundColor;
+                const y = this.stxx.pixelFromTransformedValue(currentQuote.Close, panel);
+
+                // Keep current price label position for later when we want to show countdown
+                chart.currentPriceLabelY = y;
+
+                panel.chart.context.globalCompositeOperation = 'destination-over';
+                this.stxx.plotLine(x, endOfLine, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
+                    pattern: 'dashed',
+                    lineWidth: 1,
+                    opacity: 0.8,
+                });
+                panel.chart.context.globalCompositeOperation = 'source-over';
+            }
+        });
 
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
