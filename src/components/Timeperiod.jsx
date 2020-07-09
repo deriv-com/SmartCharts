@@ -88,7 +88,7 @@ const Timeperiod = ({
     }
 
     // TODO
-    // should remove this after first integerated release with deriv.app
+    // should remove this after first integerated release with deriv-app
     return (
         <TimePeriodMenu
             className="ciq-period"
