@@ -5,7 +5,7 @@
     overflow-x: hidden;
     position: relative;
     margin-right: 4px;
-    z-index: 999;
+    z-index: 1;
     scrollbar-width: thin;
     @include themify($themes) {
         scrollbar-color: themed('ScrollbarBg') transparent;
