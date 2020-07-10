@@ -324,7 +324,7 @@ export default class CategoricalDisplayStore {
             this.isUserScrolling = false;
             if (this.chart.isMobile) {
                 this.scrollPanel.scroll({
-                    top: el.offsetTop - 40,
+                    top: el.offsetTop - 95,
                     left: 0,
                     behavior: 'smooth',
                 });
@@ -376,5 +376,6 @@ export default class CategoricalDisplayStore {
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
         height: this.height,
+        isMobile: this.chart.isMobile,
     }))
 }
