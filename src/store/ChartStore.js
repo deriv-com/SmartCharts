@@ -326,27 +326,29 @@ class ChartStore {
             this.stxx.yaxisLabelStyle = 'roundRect';
             this.stxx.labelType = undefined;
 
-            if (!this.stateStore.endEpoch && this.stxx.isHome()) {
-                const { chart } = this.stxx;
-                const { dataSegment, panel } = chart;
+            const { chart } = this.stxx;
+            const { dataSegment, panel } = chart;
+            if (!this.stateStore.endEpoch && this.stxx.isHome() && dataSegment && dataSegment.length) {
                 const dataSegmentClose = [...dataSegment].filter(item => (item && item.Close));
-                const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
-                const tick = currentQuote.Close ? currentQuote.tick : currentQuote.tick - 1;
-                const x = this.stxx.pixelFromTick(tick, chart) + (chart.lastTickOffset || 0);
-                const endOfLine = panel.right;
-                const backgroundColor = this.stxx.canvasStyle('stx_current_hr_down').backgroundColor;
-                const y = this.stxx.pixelFromTransformedValue(currentQuote.Close, panel);
+                if (dataSegmentClose && dataSegmentClose.length) {
+                    const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+                    const tick = currentQuote.Close ? currentQuote.tick : currentQuote.tick - 1;
+                    const x = this.stxx.pixelFromTick(tick, chart) + (chart.lastTickOffset || 0);
+                    const endOfLine = panel.right;
+                    const backgroundColor = this.stxx.canvasStyle('stx_current_hr_down').backgroundColor;
+                    const y = this.stxx.pixelFromTransformedValue(currentQuote.Close, panel);
 
-                // Keep current price label position for later when we want to show countdown
-                chart.currentPriceLabelY = y;
+                    // Keep current price label position for later when we want to show countdown
+                    chart.currentPriceLabelY = y;
 
-                panel.chart.context.globalCompositeOperation = 'destination-over';
-                this.stxx.plotLine(x, endOfLine, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
-                    pattern: 'dashed',
-                    lineWidth: 1,
-                    opacity: 0.8,
-                });
-                panel.chart.context.globalCompositeOperation = 'source-over';
+                    panel.chart.context.globalCompositeOperation = 'destination-over';
+                    this.stxx.plotLine(x, endOfLine, y, y, backgroundColor, 'segment', panel.chart.context, panel, {
+                        pattern: 'dashed',
+                        lineWidth: 1,
+                        opacity: 0.8,
+                    });
+                    panel.chart.context.globalCompositeOperation = 'source-over';
+                }
             }
         });
 
