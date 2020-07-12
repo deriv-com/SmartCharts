@@ -143,15 +143,15 @@ export default class StudyLegendStore {
     }
 
     @action.bound updateIndicatorHeight() {
-        const addedIndicator = Object.keys(this.stx.layout.studies || [])
-            .filter(key => this.stx.layout.studies[key].panel !== 'chart').length;
-
+        const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
         const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
         Object.keys(this.stx.panels).forEach((id, index) => {
             if (index === 0) { return; }
             const panelObj = this.stx.panels[id];
             panelObj.percent = heightRatio.percent;
         });
+        this.stx.draw();
+        this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
         this.stx.draw();
     }
 
