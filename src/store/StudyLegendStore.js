@@ -134,6 +134,8 @@ export default class StudyLegendStore {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
         if (this.stx.layout && addedIndicator < 5) {
+            const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
+            CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
