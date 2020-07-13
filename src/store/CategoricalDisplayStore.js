@@ -42,7 +42,8 @@ export default class CategoricalDisplayStore {
                     this.scrollPanel.scrollTop = el.offsetTop;
 
                     if (el_active_sub_category) {
-                        this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - 40);
+                        const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
+                        this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - topOffset);
                     }
                 }
                 setTimeout(() => { this.pauseScrollSpy = false; }, 20);
