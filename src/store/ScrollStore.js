@@ -20,6 +20,6 @@ export default class ScrollStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel =  element;
+        if (!this.scrollPanel) this.scrollPanel = element;
     }
 }

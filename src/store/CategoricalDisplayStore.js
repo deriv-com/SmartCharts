@@ -42,7 +42,8 @@ export default class CategoricalDisplayStore {
                     this.scrollPanel.scrollTop = el.offsetTop;
 
                     if (el_active_sub_category) {
-                        this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - 40);
+                        const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
+                        this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - topOffset);
                     }
                 }
                 setTimeout(() => { this.pauseScrollSpy = false; }, 20);
@@ -324,7 +325,7 @@ export default class CategoricalDisplayStore {
             this.isUserScrolling = false;
             if (this.chart.isMobile) {
                 this.scrollPanel.scroll({
-                    top: el.offsetTop - 40,
+                    top: el.offsetTop - 95,
                     left: 0,
                     behavior: 'smooth',
                 });
@@ -376,5 +377,6 @@ export default class CategoricalDisplayStore {
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
         height: this.height,
+        isMobile: this.chart.isMobile,
     }))
 }

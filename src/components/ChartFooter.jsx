@@ -5,19 +5,22 @@ import Tooltip from './Tooltip.jsx';
 import ChartSetting from './ChartSetting.jsx';
 import '../../sass/components/chart-footer.scss';
 
+const ChartFooterNetwork = React.memo(({ networkStatus }) => (
+    <Tooltip
+        className="sc-chart-footer__item sc-chart-footer__item--status"
+        content={`${t.translate('Network status')}: ${networkStatus ? (t.translate(networkStatus.tooltip)) : ''}`}
+        enabled
+    >
+        <div className={`sc-chart__status sc-chart__status--${networkStatus ? networkStatus.class : 'offline'}`} />
+    </Tooltip>
+));
 
 const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => {
     if (!context) return null;
 
     return (
         <div className="sc-chart-footer">
-            <Tooltip
-                className="sc-chart-footer__item sc-chart-footer__item--status"
-                content={`${t.translate('Network status')}: ${networkStatus ? (t.translate(networkStatus.tooltip)) : ''}`}
-                enabled
-            >
-                <div className={`sc-chart__status sc-chart__status--${networkStatus ? networkStatus.class : 'offline'}`} />
-            </Tooltip>
+            <ChartFooterNetwork networkStatus={networkStatus} />
             <div className="sc-chart-footer__item sc-chart-footer__item--time">
                 <span>{serverTime}</span>
             </div>
