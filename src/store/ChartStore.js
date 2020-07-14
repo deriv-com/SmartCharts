@@ -809,6 +809,13 @@ class ChartStore {
         }
     }
 
+    @action.bound setYaxisWidth = (width) => {
+        this.yAxiswidth = width || this.yAxiswidth;
+        this.stxx.chart.yAxis.width = width || this.yAxiswidth;
+        this.stxx.calculateYAxisPositions();
+        this.stxx.draw();
+    }
+
     // Calling newChart with symbolObj as undefined refreshes the chart
     @action.bound newChart(symbolObj = this.currentActiveSymbol, params) {
         if (!symbolObj) return;

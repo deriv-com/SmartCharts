@@ -71,12 +71,15 @@ export default class TimeperiodStore {
                 return;
             }
 
-            const dataSet = stx.chart.dataSet;
-            if (dataSet && dataSet.length !== 0) {
-                const now = this._serverTime.getUTCDate();
-                const diff = now - dataSet[dataSet.length - 1].DT;
-                this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
-                stx.draw();
+            if (stx.chart.dataSegment && stx.chart.dataSegment.length) {
+                const dataSegmentClose = [...stx.chart.dataSegment].filter(item => (item && item.Close));
+                if (dataSegmentClose && dataSegmentClose.length) {
+                    const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+                    const now = this._serverTime.getUTCDate();
+                    const diff = now - currentQuote.DT;
+                    this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
+                    stx.draw();
+                }
             }
         };
 
