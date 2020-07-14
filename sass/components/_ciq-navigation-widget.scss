@@ -1,0 +1,39 @@
+
+.ciq-navigation-widget {
+    width: 32px;
+    position: absolute;
+    bottom: 2.5em;
+    left: 2.5em;
+    z-index: 30;
+
+    &__item {
+        margin-bottom: 8px;
+
+        &--zoom {
+            .ic-icon:first-child {
+                margin-bottom: 2px;
+            }
+        }
+        &--hidden {
+            display: none;
+        }
+        .ic-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: auto;
+            line-height: 41px;
+            transition: none;
+            @include themify($themes) {
+                background-color: themed('NavigationWidgetBg');
+            }
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('NavigationWidgetColor');
+                }
+            }
+        }
+    }
+}

@@ -16870,13 +16870,13 @@ if(!yAxis.priceFormatter) yAxis.priceFormatter=function(stx, panel, price){
 	 * ```
 	 * {
 	 *	DT: stxx.masterData[i].DT,
- 	 *	Value: 148
+ 	 *	Value: 148
 	 *	}
 	 * ```
 	 * ```
 	 * {
 	 *	Date: '12/31/2011',
- 	 *	Value: 148
+ 	 *	Value: 148
 	 * }
 	 * ```
 	 * <br><hr><br>
