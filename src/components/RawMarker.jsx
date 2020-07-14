@@ -9,11 +9,15 @@ class RawMarker extends React.Component {
     ctx = null;
     stx = null;
     injectionId = null;
+    hasUnmountedBeforeInjection = false;
+    shouldRedraw = false;
+    canvas_height = 0;
 
     componentDidMount() {
         const { contextPromise } = this.props;
-
         contextPromise.then((ctx) => {
+            if (this.hasUnmountedBeforeInjection) { return; }
+
             this.ctx = ctx;
             this.stx = this.ctx.stx;
 
@@ -22,12 +26,30 @@ class RawMarker extends React.Component {
         });
     }
 
+    componentDidUpdate() {
+        const { shouldRedraw, contextPromise } = this.props;
+
+        if (shouldRedraw) {
+            contextPromise.then((ctx) => {
+                if (this.hasUnmountedBeforeInjection) { return; }
+
+                this.ctx = ctx;
+                this.stx = this.ctx.stx;
+
+                this.injectionId = this.stx.append('draw', this.draw);
+                this.draw();
+            });
+        }
+    }
+
     componentWillUnmount() {
         if (this.injectionId) {
             // remove the injection on unmount
             this.stx.removeInjection(this.injectionId);
             this.ctx = null;
             this.stx = null;
+        } else {
+            this.hasUnmountedBeforeInjection = true;
         }
     }
 
@@ -119,8 +141,14 @@ class RawMarker extends React.Component {
             });
             const prices = price_array
                 .map(price => stx.pixelFromPrice(price * 1, chart.panel));
+            const canvas = stx.chart.context.canvas;
+            if (canvas.style.height.indexOf(canvas.height) < 0) {
+                this.canvas_height = canvas.height;
+            }
+
             draw_callback({
                 ctx: stx.chart.context,
+                canvas_height: this.canvas_height,
                 points,
                 prices,
             });

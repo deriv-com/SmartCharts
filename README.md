@@ -4,21 +4,36 @@
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library. You can install the library to your project via:
 
+
     yarn add @binary-com/smartcharts      # Release
     yarn add @binary-com/smartcharts@beta # Beta
+
+## Installing
+
+Using npm:
+
+```bash
+$ npm install @binary-com/smartcharts
+```
+
+Using yarn:
+
+```bash
+$ yarn add @binary-com/smartcharts
+```
 
 **Important Note:** the license for the library is tied to the `binary.com` domain name; it will not work in github pages.
 
 ## Commands:
-- use `yarn install` to install dependencies
-- use `yarn start` to launch webpack dev server
-- use `yarn build` to build the library
-- use `yarn build:app` to build the [charts.binary.com](https://charts.binary.com/) app
-- use `yarn analyze` to run webpack-bundle-analyzer
-- use `yarn test` to run unit tests
-- use `yarn coverage` to see test coverage
+- use `npm install` to install dependencies
+- use `npm start` to launch webpack dev server
+- use `npm run build` to build the library
+- use `npm run build:app` to build the [charts.binary.com](https://charts.binary.com/) app
+- use `npm run analyze` to run webpack-bundle-analyzer
+- use `npm run test` to run unit tests
+- use `npm run coverage` to see test coverage
 
-> Note: eventhough both `yarn build` and `yarn build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
+> Note: eventhough both `npm run build` and `npm run build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
 ## Usage
 
@@ -26,8 +41,8 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 
 In the `app` folder, we provide a working webpack project that uses the smartcharts library. Simply `cd` to that directory and run:
 
-    yarn install
-    yarn start
+    npm install
+    npm start
 
 The sample app should be running in http://localhost:8080.
 
@@ -89,6 +104,7 @@ requestAPI* | SmartCharts will make single API calls by passing the request inpu
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
 id | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.
+activeSymbols | Set/Order the active symbols category as array of symbol.Allowed values are `forex`, `indices`, `stocks`, `commodities`, `synthetic_index`. Defaults to `undefined`
 symbol | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.
 granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.
 chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
@@ -97,6 +113,7 @@ endEpoch | Set the end epoch of the chart
 chartControlsWidgets | Render function for chart control widgets. Set to `null` if you want to hide chart controls. Refer to [Customising Components](#customising-components).
 topWidgets | Render function for top widgets. Refer to [Customising Components](#customising-components).
 bottomWidgets | Render function for bottom widgets. Refer to [Customising Components](#customising-components).
+toolbarWidget | Render function for floating toolbar widgets. Refer to [Customising Components](#customising-components).
 isMobile | Switch between mobile or desktop view. Defaults to `false`.
 onSettingsChange | Callback that will be fired each time a setting is changed.
 chartStatusListener | Callback that will be fired each time the loading state of the chart is changed, It will be called with `true` when the chart is loaded completely.
@@ -109,11 +126,16 @@ isAnimationEnabled | Determine whether chart animation is enabled or disabled. I
 showLastDigitStats | Shows last digits stats. Defaults to `false`.
 scrollToEpoch | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.
 scrollToEpochOffset | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.
-zoom | Zoom in and Zoom out the chart. the value should be in percentage. If the value is positive the chart will be zoomed in otherwise it will be zoomed out.
 clearChart | Clear the chart.
 onExportLayout | Export the layout and send it back using this callback.
 importedLayout | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;
 shouldFetchTradingTimes | Determine whether an API call for fetching trading times is necessary for the new chart or not. Defaults to `true`
+maxTick | Set the max number of first points/candles in the visible chart area. The value should be number greater than zero. Defaults to `undefined`
+crosshair | Set state of Crosshair Component. Allowed values are undefined, 0,1,2. Defaults to `undefined`
+crosshairTooltipLeftAllow | Set max left position which chart allow to render left side tooltip of crosshair, if mouse position before this size, the crosshair tooltip move to right side of mouse, if set `null` then chart specify `315px` as default value. Defaults to `null` 
+zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
+yAxisMargin | Set the margins of chart yAxis. It's an object that takes two parameters, `bottom` for margin bottom of chart, and `top` for the top margin of chart. 
+
 ### Chart Settings
 
 | Attribute | Description |
@@ -148,11 +170,18 @@ Attributes marked with `*` are **mandatory**:
 shadeColor | Barrier shade color. Defaults to `green`.
 color | Price line color. Defaults to `#000`.
 shade | Shade type; choose between `NONE_SINGLE`, `NONE_DOUBLE`, `ABOVE`, `BELOW`, `OUTSIDE` or `BETWEEN`. Defaults to `NONE_SINGLE`.
+hideBarrierLine | hide/show the barrier line. Can be used to show only the title. Defaults to `false`.
+hideOffscreenLine | hide/show the barrier line when it is offscreen. Defaults to `false`.
+hideOffscreenBarrier | hide/show the barrier line & title when it is offscreen. Defaults to `false`.
 hidePriceLines | hide/show the price lines. Defaults to `false`.
 lineStyle | Sets the style of the price lines; choose between `dotted`, `dashed`, or `solid`. Defaults to `dashed`.
 onChange | When price of high or low barrier changes (including when switched toggling `relative` or setting `high\|low`), `onChange` will pass the high and low barriers as `{ high, low }`.
 relative | Toggle between relative and absolute barriers. Defaults to `false`.
 draggable | Toggles whether users can drag the price lines and change the barrier directly from the chart. Defaults to `true`.
+title | Title text of the barrier
+isSingleBarrier | Shows only High barrier, stops low barrier & shades from rendering when the flag is true. Defaults to `false`.
+showOffscreenArrows | hide/show arrows with direction when the barrier is offscreen. Defaults to `false`.
+opacityOnOverlap | Sets the opacity of the barrier when it is overlapping with other barrier.
 high* | Sets the price of the high barrier.
 low* | Sets the price of the low barrier.
 
@@ -237,7 +266,7 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ComparisonList } from '@binary-com/smartcharts';
+import { ComparisonList, ToolbarWidget } from '@binary-com/smartcharts';
 
 const renderTopWidgets = () => (
     <React.Fragment>
@@ -251,10 +280,21 @@ const renderBottomWidgets = () => (
         <div>Hi, I am a bottom widget!</div>
     </React.Fragment>
 );
+
+const renderToolbarWidgets = () => (
+    <ToolbarWidget
+      position="top"
+    >
+        <div>Hi I just replaced the top widgets!</div>
+        <ComparisonList />
+    </ToolbarWidget>
+);
+
 const App = () => (
     <SmartChart
         bottomWidgets={renderBottomWidgets}
         topWidgets={renderTopWidgets}
+        toolbarWidget={renderToolbarWidgets}
         chartControlsWidgets={()=>{}}
     >
     </SmartChart>
@@ -277,7 +317,9 @@ Here are the following components you can import:
     - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
     - `<ChartSize />`
     - `<ChartSetting />`
-
+  -  Toolbar Widget
+      -  `<ChartMode />`
+ 
  ### Props vs UI
 
 Certain chart parameters can be set either by props or from the chart UI:
@@ -296,11 +338,24 @@ Certain chart parameters can be set either by props or from the chart UI:
 
  See available components and their props in [Customising Components](#customising-components).
 
+ 
+#### ChartTitle
+| Attribute | Description |
+--------|--------------
+onChange | When symbol/market changes, this method call. `(symbol) => { }`
+isNestedList | Change the theme of Dropdown, if set to `true` it shows a dropdown nested style. Default is `false`
+
+#### ToolbarWidget
+| Attribute | Description |
+--------|--------------
+position | determine the position of toolbar, which can be `top, bottom`. Default is `top`
+
+
 ## Contribute
 
 To contribute to SmartCharts, fork this project and checkout the `dev` branch. When adding features or performing bug fixes, it is recommended you make a separate branch off `dev`. Prior to sending pull requests, make sure all unit tests passed:
 
-    yarn test
+    npm run test
 
 Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/).
 
@@ -327,7 +382,7 @@ We organise the development in Trello. Here is the standard workflow of how a fe
 
 Some issues only show up for library users, so it is helpful to test the NPM package before deploying it to library users. You can do this by building the library directly into the node_modules directory of an app that uses the SmartCharts library. For example to test the library build on binary-static you can execute:
 
-    yarn watch --output-path '../binary-static/node_modules/@binary-com/smartcharts/dist'
+    npm run watch '../binary-static/node_modules/@binary-com/smartcharts/dist'
 
 Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder.
 
@@ -351,7 +406,7 @@ t.setLanguage('fr'); // components need to be rerendered for changes to take aff
 
 Each time a new translation string is added to the code, you need to update the `messages.pot` via:
 
-    yarn translations
+    npm run translations
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
@@ -483,11 +538,11 @@ Note that **for independent components, the `mapperFunction` is applied to the s
 
 To publish to production:
 
-    yarn build && yarn publish
+    npm run build && npm publish
 
 To publish to beta:
 
-    yarn build && yarn publish --tag beta
+    npm run build && npm publish --tag beta
 
 ### Deploy to [charts.binary.com](https://charts.binary.com/)
 
@@ -495,8 +550,8 @@ To publish to beta:
 
 The following commands will build and deploy to charts.binary.com (*Make sure you are in the right branch!*); you will need push access to this repository for the commands to work:
 
-    yarn deploy:beta        # charts.binary.com/beta
-    yarn deploy:production  # charts.binary.com
+    npm run deploy:beta        # charts.binary.com/beta
+    npm run deploy:production  # charts.binary.com
 
 ### Deploy to Github Pages
 
@@ -517,14 +572,14 @@ For each feature/fix you want to add we recommend you deploy an instance of Smar
 
 Here on, to deploy a folder (e.g. `folder_name`):
 
-    yarn build-travis && yarn gh-pages:folder myfoldername
+    npm run build-travis && npm run gh-pages:folder 'myfoldername'
 
 Now you should be able to see your SmartCharts app on `brucebinary.binary.sx/myfoldername`.
 
 Alternatively you can deploy directly to the domain itself (note that this **erases all folders**; could be useful for cleanup). In our example, the following command will deploy to `brucebinary.binary.sx`:
 
-    yarn build-travis && echo 'brucebinary.binary.sx' > CNAME && yarn gh-pages
+    npm run build-travis && echo 'brucebinary.binary.sx' > CNAME && npm run gh-pages
 
-> Note: `yarn build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
+> Note: `npm run build-travis` will add hashing inside `index.html`; **do not push those changes to git!**
 
 There may be occasions where you would want to deploy development versions of the webpack bundles. Quick way to do this is to change the [`--mode` parameter](https://webpack.js.org/concepts/mode/) in `build` npm command in `package.json` to from `production` to `development`.

@@ -4,28 +4,34 @@ import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons
 import { Toggle } from './Form.jsx';
 
 const CrosshairToggle = ({
-    toggleState,
     state,
+    setCrosshairState,
+    onChange,
+    updateProps,
+    isVisible = true,
 }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
+
+    const onCrosshairToggle = () => {
+        setCrosshairState((state + 1) % 3);
+    };
+
+    updateProps(onChange);
+
+    if (!isVisible) return null;
+
     return (
-        <div className="ciq-menu cq-crosshair-toggle">
-            <div className="cq-menu-btn">
-                <Toggle
-                    active={state !== 0}
-                    onChange={toggleState}
-                >
-                    <CrosshairIcon
-                        className="ic-icon-with-sub"
-                        tooltip-title={t.translate('Crosshair')}
-                    />
-                </Toggle>
-            </div>
-        </div>
+        <Toggle
+            active={state !== 0}
+            onChange={onCrosshairToggle}
+        >
+            <CrosshairIcon />
+        </Toggle>
     );
 };
 
 export default connect(({ crosshair }) => ({
-    toggleState: () => crosshair.toggleState(),
     state: (typeof crosshair.state !== 'number') ? 0 : crosshair.state,
+    setCrosshairState: crosshair.setCrosshairState,
+    updateProps: crosshair.updateProps,
 }))(CrosshairToggle);

@@ -1,0 +1,68 @@
+
+.sc-download-menu {
+    .sc-dialog {
+        width: 320px;
+    }
+}
+
+.sc-download {
+    padding: 24px;
+    display: flex;
+    @include themify($themes) {
+        background: themed('DownloadBg');
+        color: themed('DownloadText');
+    }
+
+    &__item {
+        width: 88px;
+        height: 88px;
+        padding: 16px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+        margin-right: 8px;
+
+        .ic-icon {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 4px;
+        }
+        &:hover {
+            @include themify($themes) {
+                background: themed('DownloadActiveBg');
+            }
+        }
+        &__label {
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            display: block;
+        }
+        &--loading {
+            > .sc-download__item__label,
+            > .ic-icon {
+                opacity: 0.32;
+            }
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .sc-download {
+        justify-content: space-around;
+
+        &__item {
+            margin: 0px;
+        }
+    }
+    .sc-download-menu {
+        .sc-dialog {
+            left: auto;
+            width: 300px;
+        }
+    }
+}

@@ -37,6 +37,7 @@ class CrosshairStore {
     showChange = false;
     showSeries = true;
     showStudies = true;
+    onCrosshairChanged = () => null;
 
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
@@ -70,16 +71,25 @@ class CrosshairStore {
     @action.bound toggleState() {
         const state = (this.state + 1) % 3;
         this.setCrosshairState(state);
-        this.mainStore.state.saveLayout();
     }
 
-    setCrosshairState(state) {
+    @action.bound updateProps(onChange) {
+        this.onCrosshairChanged = onChange || (() => null);
+    }
+
+    @action.bound setCrosshairState(state) {
+        if (!this.context) { return; }
+
         this.state = state;
         this.setFloatPriceLabelStyle();
         this.stx.layout.crosshair = state;
         this.stx.doDisplayCrosshairs();
-    }
 
+        this.mainStore.state.crosshairState = state;
+        this.mainStore.state.saveLayout();
+
+        this.onCrosshairChanged(this.state);
+    }
     renderCrosshairTooltip = () => {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
@@ -128,7 +138,7 @@ class CrosshairStore {
             }
         }
 
-        if (!(CIQ.ChartEngine.insideChart
+        if (!(stx.insideChart
             && stx.layout.crosshair
             && stx.displayCrosshairs
             && !stx.overXAxis
@@ -372,7 +382,8 @@ class CrosshairStore {
 
         crosshair.style.transform = `translate(${left}px, ${top}px)`;
 
-        const arrow = left <= MAX_TOOLTIP_WIDTH ? 'arrow-left' : 'arrow-right';
+        const tooltipRightLimit = this.mainStore.state.crosshairTooltipLeftAllow || MAX_TOOLTIP_WIDTH;
+        const arrow = (left <= tooltipRightLimit) ? 'arrow-left' : 'arrow-right';
         if (arrow !== this.prev_arrow) {
             crosshair.classList.remove(this.prev_arrow);
             crosshair.classList.add(arrow);

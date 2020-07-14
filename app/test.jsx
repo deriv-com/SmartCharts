@@ -1,11 +1,10 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    ChartTypes,
+    ChartMode,
     StudyLegend,
     Comparison,
     Views,
     CrosshairToggle,
-    Timeperiod,
     ChartSize,
     DrawTools,
     ChartSetting,
@@ -13,12 +12,11 @@ import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unre
     setSmartChartsPublicPath,
     Share,
     ChartTitle,
-    AssetInformation,
-    ComparisonList,
     logEvent,
     LogCategories,
     LogActions,
     Marker,
+    ToolbarWidget,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -32,6 +30,7 @@ import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
+import NetworkMonitor from './connection/NetworkMonitor';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -123,7 +122,11 @@ class App extends Component {
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
+        let activeSymbols = new URLSearchParams(window.location.search).get('activeSymbols') || 'null';
 
+        if (activeSymbols !== 'null') {
+            activeSymbols = activeSymbols.split(',');
+        }
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
@@ -160,6 +163,9 @@ class App extends Component {
             () => this.setState({ isConnectionOpened: true }),
         );
 
+        const networkMonitor = NetworkMonitor.getInstance();
+        networkMonitor.init(requestAPI, this.handleNetworkStatus);
+
         this.state = {
             settings,
             endEpoch,
@@ -168,10 +174,13 @@ class App extends Component {
             granularity,
             activeLanguage,
             isConnectionOpened: true,
+            enabledFooter: true,
             highLow: {},
             barrierType: '',
             draggable: true,
             markers: [],
+            crosshairState: 1,
+            activeSymbols,
         };
     }
 
@@ -192,6 +201,8 @@ class App extends Component {
             console.log(e);
         }
     }
+
+    handleNetworkStatus = status => this.setState({ networkStatus: status });
 
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
@@ -234,30 +245,32 @@ class App extends Component {
     };
 
     renderTopWidgets = () => (
-        <>
+        <React.Fragment>
             <ChartTitle onChange={this.symbolChange} />
-            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <AssetInformation />
-            <ComparisonList />
+            {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} /> }
             <Notification
                 notifier={this.notifier}
             />
-        </>
+        </React.Fragment>
     );
 
     renderControls = () => (
-        <>
-            {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes
-                onChange={(chartType, isChartTypeCandle) => {
+        <React.Fragment>
+            {isMobile ? '' : (
+                <CrosshairToggle
+                    isVisible={false}
+                    onChange={crosshair => this.setState({ crosshairState: crosshair })}
+                />
+            )}
+            <ChartMode
+                portalNodeId="portal-node"
+                onChartType={(chartType, isChartTypeCandle) => {
                     this.setState({
                         chartType,
                         isChartTypeCandle,
                     });
                 }}
-            />
-            <Timeperiod
-                onChange={(timePeriod) => {
+                onGranularity={(timePeriod) => {
                     this.setState({
                         granularity: timePeriod,
                     });
@@ -275,35 +288,60 @@ class App extends Component {
                     }
                 }}
             />
-            <StudyLegend />
+            <StudyLegend portalNodeId="portal-node" />
             {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
+            <DrawTools portalNodeId="portal-node" />
             <Views />
-            <Share />
+            <Share portalNodeId="portal-node" />
             {isMobile ? '' : <ChartSize />}
             <ChartSetting />
-        </>
+        </React.Fragment>
     );
 
-    onMessage = (e) => {
-        this.notifier.notify(e);
-    }
+    renderToolbarWidget = () => (
+        <ToolbarWidget>
+            <ChartMode
+                portalNodeId="portal-node"
+                onChartType={(chartType, isChartTypeCandle) => {
+                    this.setState({
+                        chartType,
+                        isChartTypeCandle,
+                    });
+                }}
+                onGranularity={(timePeriod) => {
+                    this.setState({
+                        granularity: timePeriod,
+                    });
+                    const isCandle = this.state.isChartTypeCandle;
+                    if (isCandle && timePeriod === 0) {
+                        this.setState({
+                            chartType: 'mountain',
+                            isChartTypeCandle: false,
+                        });
+                    } else if (!isCandle && timePeriod !== 0) {
+                        this.setState({
+                            chartType: 'candle',
+                            isChartTypeCandle: true,
+                        });
+                    }
+                }}
+            />
+            <StudyLegend portalNodeId="portal-node" />
+            <Views portalNodeId="portal-node" />
+            <DrawTools portalNodeId="portal-node" />
+            <Share portalNodeId="portal-node" />
+        </ToolbarWidget>
+    );
 
-    onPriceLineDisableChange = (evt) => {
-        this.setState({ hidePriceLines: evt.target.checked });
-    };
+    onMessage = e => this.notifier.notify(e);
 
-    onShadeColorChange = (evt) => {
-        this.setState({ shadeColor: evt.target.value });
-    }
+    onPriceLineDisableChange = evt => this.setState({ hidePriceLines: evt.target.checked });
 
-    onColorChange = (evt) => {
-        this.setState({ color: evt.target.value });
-    }
+    onShadeColorChange = evt => this.setState({ shadeColor: evt.target.value });
 
-    onFGColorChange = (evt) => {
-        this.setState({ foregroundColor: evt.target.value });
-    }
+    onColorChange = evt => this.setState({ color: evt.target.value });
+
+    onFGColorChange = evt => this.setState({ foregroundColor: evt.target.value });
 
     onHighLowChange = (evt) => {
         const { highLow } = this.state;
@@ -313,17 +351,11 @@ class App extends Component {
         });
     };
 
-    onRelativeChange = (evt) => {
-        this.setState({ relative: evt.target.checked });
-    };
+    onRelativeChange = evt => this.setState({ relative: evt.target.checked });
 
-    onDraggableChange = (evt) => {
-        this.setState({ draggable: evt.target.checked });
-    };
+    onDraggableChange = evt => this.setState({ draggable: evt.target.checked });
 
-    handleBarrierChange = (evt) => {
-        this.setState({ highLow: evt });
-    };
+    handleBarrierChange = evt => this.setState({ highLow: evt });
 
     onBarrierTypeChange = (evt) => {
         const { value: barrierType } = evt.target;
@@ -364,9 +396,9 @@ class App extends Component {
         this.setState({ markers });
     }
 
-    onWidget = () => {
-        this.setState(prevState => ({ enabledNavigationWidget: !prevState.enabledNavigationWidget }));
-    }
+    onWidget = () => this.setState(prevState => ({ enabledNavigationWidget: !prevState.enabledNavigationWidget }));
+
+    onFooter = () => this.setState(prevState => ({ enabledFooter: !prevState.enabledFooter }));
 
     toggleStartEpoch = () => {
         if (this.state.scrollToEpoch) {
@@ -402,12 +434,44 @@ class App extends Component {
         window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${settings.activeLanguages ? 'true' : 'false'}`;
     }
 
+    onCrosshair = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            crosshairState: value === 'null' ? null : parseInt(value, 10),
+        });
+    }
+
+    onActiveSymbol = (evt) => {
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${baseUrl}?activeSymbols=${evt.target.value}`;
+    }
+
+    onChartSize = (state) => {
+        this.setState({
+            zoom: state,
+        });
+
+        setTimeout(() => {
+            this.setState({
+                zoom: 0,
+            });
+        }, 300);
+    }
+
+    onMaxTick = (evt) => {
+        const value = evt.target.value;
+        this.setState({
+            maxTick: value === 'null' ? null : parseInt(value, 10),
+        });
+    }
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
-            enabledNavigationWidget, activeLanguage } = this.state;
+            enabledNavigationWidget, activeLanguage,
+            crosshairState, zoom, maxTick } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -424,20 +488,24 @@ class App extends Component {
 
         return (
             <div className="test-container" style={{ diplay: 'block' }}>
+                <div id="portal-node" className="portal-node" />
                 <div className="chart-section">
                     <SmartChart
                         id={chartId}
                         symbol={symbol}
+                        activeSymbols={this.state.activeSymbols || null}
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
+                        chartControlsWidgets={null}
                         enabledNavigationWidget={enabledNavigationWidget}
+                        enabledChartFooter={this.state.enabledFooter}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
-                        chartControlsWidgets={this.renderControls}
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
+                        toolbarWidget={this.renderToolbarWidget}
                         settings={settings}
                         endEpoch={endEpoch}
                         chartType={this.state.chartType}
@@ -447,6 +515,10 @@ class App extends Component {
                         barriers={barriers}
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
+                        crosshairState={crosshairState}
+                        zoom={zoom}
+                        maxTick={maxTick}
+                        networkStatus={this.state.networkStatus}
                     >
                         {endEpoch ? (
                             <Marker
@@ -470,12 +542,42 @@ class App extends Component {
                 </div>
                 <div className="action-section">
                     <div className="form-row">
-                        Navigation Widget <br />
-                        <button type="button" onClick={this.onWidget}>Toggle</button>
+                        <strong>Toggle</strong>
                     </div>
                     <div className="form-row">
-                        Active Language:
-                        <button type="button" onClick={this.onActiveLanguage}>{activeLanguage ? 'ON' : 'OFF'}</button>
+                        <button type="button" onClick={this.onWidget}>Navigate Widget</button>
+                        <button type="button" onClick={this.onFooter}>Footer</button>
+                        <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
+                    </div>
+                    <div className="form-row">
+                        <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
+                        <button type="button" onClick={() => this.onChartSize(-1)}>Zoom out</button>
+                    </div>
+                    <div className="form-row">
+                        <select onChange={this.onActiveSymbol}>
+                            <option value=""> -- Set Active Symbols -- </option>
+                            <option value="null">Default</option>
+                            <option value="synthetic_index,forex,indices,stocks,commodities">synthetic_index,forex,indices,stocks,commodities</option>
+                            <option value="synthetic_index,indices,stocks,commodities,forex">synthetic_index,indices,stocks,commodities,forex</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        Crosshair State <br />
+                        <select onChange={this.onCrosshair}>
+                            <option value="null">not set</option>
+                            <option value="0">state 0</option>
+                            <option value="1">state 1</option>
+                            <option value="2">state 2</option>
+                        </select>
+                    </div>
+                    <div className="form-row">
+                        Max Tick <br />
+                        <select onChange={this.onMaxTick}>
+                            <option value="null">not set</option>
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                        </select>
                     </div>
                     <div className="form-row">
                         Language <br />

@@ -128,7 +128,7 @@ export function calculateTimeUnitInterval(granularity) {
 
     if (granularity === 86400) {
         timeUnit = 'day';
-    } else if (granularity > 0) {
+    } else if (granularity > 59) {
         interval = granularity / 60;
         timeUnit = 'minute';
     }
@@ -237,3 +237,51 @@ export function patchPixelFromChart(stx) {
             * stx.layout.candleWidth + mp;
     };
 }
+
+export const ARROW_HEIGHT = 39;
+
+export const ARROW_COLORS = Object.freeze({
+    GREEN: '#4bb4b3',
+    ORANGE: '#ff6444',
+});
+
+export const DIRECTIONS = Object.freeze({
+    UP: 'UP',
+    DOWN: 'DOWN',
+});
+
+export const formatCamelCase = (s) => {
+    const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
+    return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+};
+
+export const prepareIndicatorName = (name) => {
+    const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
+    const getStudyBars = str => (str.match(StudyNameRegex) || []).pop();
+    // const capitalizeFirstLetter = (string) => {
+    //     const str = string.replace(StudyNameRegex, '');
+    //     return str.charAt(0).toUpperCase() + str.slice(1);
+    // };
+    const bars = getStudyBars(name);
+    return {
+        name: formatCamelCase(name.replace(`(${bars})`, '').replace('-', ' ')).trim(),
+        bars,
+    };
+};
+
+export const renderSVGString = (icon) =>  {
+    const vb = icon.viewBox.split(' ').slice(2);
+    // eslint-disable-next-line no-undef
+    return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+};
+export const wrapText = (str, letter_count) => {
+    if (str.length > letter_count) {
+        let wrappedStr = str;
+        const count = Math.floor(str.length / letter_count);
+        for (let i = 1; i <= count; i++) {
+            wrappedStr = `${wrappedStr.slice(0, letter_count * i)} ${wrappedStr.slice(letter_count * i, wrappedStr.length)}`;
+        }
+        return wrappedStr;
+    }
+    return str;
+};

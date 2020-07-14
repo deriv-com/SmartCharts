@@ -1,24 +1,19 @@
 import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
-    ChartTypes,
     StudyLegend,
-    Comparison,
     Views,
-    CrosshairToggle,
-    Timeperiod,
-    ChartSize,
+    ChartMode,
     DrawTools,
     ChartSetting,
     createObjectFromLocalStorage,
     setSmartChartsPublicPath,
     Share,
     ChartTitle,
-    AssetInformation,
-    ComparisonList,
     logEvent,
     LogCategories,
     LogActions,
     Marker,
+    ToolbarWidget,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
@@ -31,6 +26,7 @@ import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
+import NetworkMonitor from './connection/NetworkMonitor';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -94,6 +90,7 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
+const ActiveMarkets = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
 const IntervalEnum = {
     second: 1,
     minute: 60,
@@ -101,16 +98,15 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguages = ['EN', 'ID', 'RU', 'ES', 'FR', 'IT',
-    'PT', 'PL', 'DE', 'ZH_CN', 'VI', 'ZH_TW',
-    'TH'];
-
+const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
+    'IT', 'PL', 'PT', 'RU', 'TH',
+    'VI', 'ZH_CN', 'ZH_TW',
+];
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
-
 
 class App extends Component {
     startingLanguage = 'en';
@@ -158,6 +154,7 @@ class App extends Component {
             ConnectionManager.EVENT_CONNECTION_REOPEN,
             () => this.setState({ isConnectionOpened: true }),
         );
+
         this.state = {
             settings,
             endEpoch,
@@ -165,6 +162,11 @@ class App extends Component {
             granularity,
             isConnectionOpened: true,
         };
+    }
+
+    componentDidMount() {
+        const networkMonitor = NetworkMonitor.getInstance();
+        networkMonitor.init(requestAPI, this.handleNetworkStatus);
     }
 
     /*
@@ -184,6 +186,8 @@ class App extends Component {
             console.log(e);
         }
     }
+
+    handleNetworkStatus = status => this.setState({ networkStatus: status });
 
     symbolChange = (symbol) => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
@@ -227,10 +231,8 @@ class App extends Component {
 
     renderTopWidgets = () => (
         <>
-            <ChartTitle onChange={this.symbolChange} />
+            <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <AssetInformation />
-            <ComparisonList />
             <Notification
                 notifier={this.notifier}
             />
@@ -239,17 +241,21 @@ class App extends Component {
 
     renderControls = () => (
         <>
-            {isMobile ? '' : <CrosshairToggle />}
-            <ChartTypes onChange={this.changeChartType} />
-            <Timeperiod onChange={this.changeGranularity} />
-            <StudyLegend />
-            {this.state.settings.historical ? '' : <Comparison />}
-            <DrawTools />
-            <Views />
-            <Share />
-            {isMobile ? '' : <ChartSize />}
             <ChartSetting />
         </>
+    );
+
+    renderToolbarWidget = () => (
+        <ToolbarWidget>
+            <ChartMode
+                onChartType={this.changeChartType}
+                onGranularity={this.changeGranularity}
+            />
+            <StudyLegend />
+            <Views />
+            <DrawTools />
+            <Share />
+        </ToolbarWidget>
     );
 
     onMessage = (e) => {
@@ -267,7 +273,7 @@ class App extends Component {
     };
 
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch } = this.state;
+        const { settings, isConnectionOpened, symbol, endEpoch, networkStatus } = this.state;
 
         return (
             <SmartChart
@@ -276,9 +282,11 @@ class App extends Component {
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
+                activeSymbols={ActiveMarkets}
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
+                toolbarWidget={this.renderToolbarWidget}
                 chartControlsWidgets={this.renderControls}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
@@ -287,9 +295,13 @@ class App extends Component {
                 endEpoch={endEpoch}
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}
+                crosshair={isMobile ? 0 : null}
+                crosshairTooltipLeftAllow={660}
                 onSettingsChange={this.saveSettings}
                 isConnectionOpened={isConnectionOpened}
+                networkStatus={networkStatus}
                 shouldFetchTradingTimes
+                enabledChartFooter
             >
                 {endEpoch ? (
                     <Marker
