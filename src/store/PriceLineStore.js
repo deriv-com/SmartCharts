@@ -140,8 +140,7 @@ export default class PriceLineStore {
         let newPrice = this._priceFromLocation(newCenter);
 
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
-        if (this.relative) { newPrice -= this.stx.currentQuote().Close; }
-
+        if (this.relative) { newPrice -= this.mainStore.chart.currentCloseQuote.Close; }
         this.price = newPrice;
     }
 
@@ -215,7 +214,7 @@ export default class PriceLineStore {
     // We don't pay for react reconciler and mobx observable tracking in animation frames.
     set top(v) {
         this.__top = v;
-        this._line.style.transform = `translateY(${this.top}px)`;
+        this._line.style.transform = `translateY(${this.top - 13}px)`;
     }
     get top() { return this.__top; }
 
