@@ -38,7 +38,6 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
                 const pquote = chart[whichSet][l - 1];
                 if (pquote) prevClose = pquote[field];
             }
-
             if (currentClose < prevClose) {
                 backgroundColor = this.canvasStyle('stx_current_hr_down').backgroundColor;
                 color = this.canvasStyle('stx_current_hr_down').color;
