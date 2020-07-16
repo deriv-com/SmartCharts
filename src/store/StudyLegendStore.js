@@ -139,7 +139,6 @@ export default class StudyLegendStore {
             this.changeStudyPanelTitle(sd);
             setTimeout(this.updateIndicatorHeight, 20);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-            this.mainStore.chart.setYaxisWidth();
         }
     }
 

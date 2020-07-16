@@ -39,15 +39,6 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
                 if (pquote) prevClose = pquote[field];
             }
 
-            let currentQuote = this.currentQuote();
-            if (!currentClose) {
-                const dataSegmentClose = [...chart.dataSegment].filter(item => (item && item.Close));
-                if (dataSegmentClose && dataSegmentClose.length) {
-                    currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
-                    currentClose = currentQuote[field];
-                }
-            }
-
             if (currentClose < prevClose) {
                 backgroundColor = this.canvasStyle('stx_current_hr_down').backgroundColor;
                 color = this.canvasStyle('stx_current_hr_down').color;
@@ -75,6 +66,7 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
 
             let x = panel.left;
             let endOfLine = panel.right;
+            const currentQuote = this.currentQuote();
             if (currentQuote) {
                 const tick = currentQuote.Close ? currentQuote.tick : currentQuote.tick - 1;
                 // Change the panel position to current spot position for drawing current price line
