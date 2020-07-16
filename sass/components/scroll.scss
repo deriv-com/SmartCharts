@@ -1,6 +1,5 @@
 
 .sc-scrollbar {
-    $self: &;
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
@@ -34,7 +33,10 @@
             display: none;
         }
     }
-    &--hover {
+    &--freeze {
+        overflow: hidden !important;
+    }
+    &:hover {
         @include themify($themes) {
             scrollbar-color: themed('ScrollbarBg') transparent !important;
         }
@@ -42,9 +44,6 @@
         &::-webkit-scrollbar-thumb {
             display: inherit !important;
         }
-    }
-    &--freeze {
-        overflow: hidden !important;
     }
 }
 
