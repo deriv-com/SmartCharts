@@ -1,15 +1,11 @@
 import { observable, action, when, reaction } from 'mobx';
-import MenuStore from './MenuStore';
 import { getTimeUnit } from '../utils';
-import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route:'time-period' });
-        this.TimePeriodMenu = this.menu.connect(Menu);
     }
 
     get context() { return this.mainStore.chart.context; }
