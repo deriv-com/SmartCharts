@@ -78,19 +78,18 @@ export default class StudyLegendStore {
     onContextReady = () => {
         this.stx.callbacks.studyOverlayEdit = this.editStudy;
         this.stx.callbacks.studyPanelEdit = this.editStudy;
-
         // to remove studies if user has already more than 5
         // and remove studies which are excluded
         this.removeExtraStudies();
         this.stx.append('createDataSet', this.renderLegend);
         this.stx.append('drawPanels', this.handleDrawPanels);
-        this.stx.append('panelClose', this.updateActiveStudies);
+        this.stx.append('panelClose', this.onStudyRemoved);
         this.renderLegend();
     };
 
     get context() { return this.mainStore.chart.context; }
     get stx() { return this.context.stx; }
-    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
+    get indicatorRatio() { return this.mainStore.chart; }
 
     get items() {
         return [...IndicatorsTree].map((indicator) => {
@@ -132,14 +131,27 @@ export default class StudyLegendStore {
 
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
-        if (this.stx.layout && Object.keys(this.stx.layout.studies || []).length < 5) {
-            // As we want to keep all added item bellow the floating toolbar
-            CIQ.Studies.studyLibrary[item].panelHeight = this.indicatorRatio.heightOnAdd;
+        const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
+        if (this.stx.layout && addedIndicator < 5) {
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
+            setTimeout(this.updateIndicatorHeight, 20);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
         }
+    }
+
+    @action.bound updateIndicatorHeight() {
+        const addedIndicator = Object.keys(this.stx.layout.studies || [])
+            .filter(key => this.stx.layout.studies[key].panel !== 'chart').length;
+
+        const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
+        Object.keys(this.stx.panels).forEach((id, index) => {
+            if (index === 0) { return; }
+            const panelObj = this.stx.panels[id];
+            panelObj.percent = heightRatio.percent;
+        });
+        this.stx.draw();
     }
 
     // Temporary prevent user from adding more than 5 indicators
@@ -233,6 +245,7 @@ export default class StudyLegendStore {
                 CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
             }, 0);
+            setTimeout(this.updateIndicatorHeight, 20);
         }
     }
 
@@ -312,7 +325,9 @@ export default class StudyLegendStore {
 
                 // Regarding the ChartIQ.js, codes under Line 34217, edit function
                 // not mapped, this is a force to map edit function for indicators
-                if (sd.editFunction) { this.stx.setPanelEdit(panelObj, sd.editFunction); }
+                if (sd.editFunction && panelObj && !panelObj.editFunction) {
+                    this.stx.setPanelEdit(panelObj, sd.editFunction);
+                }
             }
 
             if (index === 1 || isSolo) {
@@ -353,6 +368,11 @@ export default class StudyLegendStore {
         this.updateStyle();
     };
 
+    @action.bound setReachedLimit() {
+        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        this.hasReachedLimits = hasReachedLimit;
+    }
+
     @action.bound updateActiveStudies() {
         const stx = this.stx;
         const activeItems = [];
@@ -389,6 +409,7 @@ export default class StudyLegendStore {
             Object.keys(stx.layout.studies || []).forEach((id) => {
                 this.deleteStudy(stx.layout.studies[id]);
             });
+            setTimeout(this.updateIndicatorHeight, 20);
         }
     }
 
@@ -396,6 +417,11 @@ export default class StudyLegendStore {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
+    }
+
+    @action.bound onStudyRemoved() {
+        this.updateActiveStudies();
+        setTimeout(this.updateIndicatorHeight, 20);
     }
 
     @action.bound onSelectTab(tabIndex) {

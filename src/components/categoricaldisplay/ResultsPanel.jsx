@@ -14,13 +14,11 @@ function getItemCount(category) {
     return count;
 }
 
-const EmptyCategory = ({ category }) => (
-    getItemCount(category) === 0 && category.emptyDescription && (
-        <div className="category-content">
-            <div className="empty-category">{t.translate(category.emptyDescription)}</div>
-        </div>
-    )
-);
+const EmptyCategory = React.memo(({ category }) => (
+    <div className="category-content">
+        <div className="empty-category">{t.translate(category.emptyDescription)}</div>
+    </div>
+));
 
 const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle, active) => {
     let TitleClassName = '';
@@ -31,21 +29,25 @@ const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, catego
     return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''} ${active ? 'active' : ''}`;
 };
 
-const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffset, isNestedList, handleTitleClick }) => {
+const CategoryTitleLeft = React.memo(({ isNestedList, category }) => {
     const CategoryIcon = CategoryIconMap[category.categoryId];
-
     return (
-        <div
-            className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle, category.active)}
-            style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
-            onClick={() => handleTitleClick(category.categoryId)}
-        >
-            <span className="category-title-left">
-                {isNestedList ? (CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />) : ''}
-                {t.translate(category.categoryName)}
-            </span>
-            {
-                ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
+        <span className="category-title-left">
+            {isNestedList ? (CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />) : ''}
+            {t.translate(category.categoryName)}
+        </span>
+    );
+});
+
+const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffset, isNestedList, handleTitleClick }) => (
+    <div
+        className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle, category.active)}
+        style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
+        onClick={() => handleTitleClick(category.categoryId)}
+    >
+        <CategoryTitleLeft isNestedList={isNestedList} category={category} />
+        {
+            ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
                     || !category.categoryNamePostfixShowIfActive)
                 && category.categoryNamePostfix
                 && (
@@ -53,20 +55,19 @@ const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffse
                         {category.categoryNamePostfix}
                     </span>
                 )
-            }
-            {
-                category.categorySubtitle && (
-                    <div className="category-subtitle">
-                        {t.translate(category.categorySubtitle)}
-                    </div>
-                )
-            }
-            { isNestedList ? (<ArrowIcon />) : ''}
-        </div>
-    );
-};
+        }
+        {
+            category.categorySubtitle && (
+                <div className="category-subtitle">
+                    {t.translate(category.categorySubtitle)}
+                </div>
+            )
+        }
+        { isNestedList ? (<ArrowIcon />) : ''}
+    </div>
+);
 
-const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
+const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
     <div
         className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''} ${category.active ? 'active' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
@@ -108,26 +109,31 @@ const Category = ({ category, Item, setCategoryElement, onSelectItem, activeHead
                     ))}
                 </div>
             )}
-        <EmptyCategory category={category} />
+        {(categoryItemCount === 0 && category.emptyDescription)
+            && <EmptyCategory category={category} />}
     </div>
 );
 
 export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
     <div className="results-panel">
-        { filteredItems.map(category => (getItemCount(category) > 0 || category.emptyDescription) && (
-            <Category
-                key={category.categoryId}
-                Item={getItemType(category.categoryId)}
-                category={category}
-                setCategoryElement={setCategoryElement}
-                onSelectItem={onSelectItem}
-                activeHeadKey={activeHeadKey}
-                activeHeadTop={activeHeadTop}
-                activeHeadOffset={activeHeadOffset}
-                disableAll={disableAll}
-                isNestedList={isNestedList}
-                handleTitleClick={handleTitleClick}
-            />
-        )) }
+        { filteredItems.map((category) => {
+            const categoryItemCount = getItemCount(category);
+            return (categoryItemCount > 0 || category.emptyDescription) && (
+                <Category
+                    key={category.categoryId}
+                    Item={getItemType(category.categoryId)}
+                    category={category}
+                    categoryItemCount={categoryItemCount}
+                    setCategoryElement={setCategoryElement}
+                    onSelectItem={onSelectItem}
+                    activeHeadKey={activeHeadKey}
+                    activeHeadTop={activeHeadTop}
+                    activeHeadOffset={activeHeadOffset}
+                    disableAll={disableAll}
+                    isNestedList={isNestedList}
+                    handleTitleClick={handleTitleClick}
+                />
+            );
+        }) }
     </div>
 ));

@@ -28,7 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
-    @observable yAxisMargin = { top: 106, bottom: 16 };
+    @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
 
@@ -39,7 +39,7 @@ class ChartState {
     get timeperiodStore() { return this.mainStore.timeperiod; }
     get loader() { return this.mainStore.loader; }
     get drawTools() { return this.mainStore.drawTools; }
-    get indicatorRatio() { return this.mainStore.chart.indicatorHeightRatio; }
+    get indicatorRatio() { return this.mainStore.chart; }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -221,7 +221,6 @@ class ChartState {
                 ...yAxisMargin,
             };
         }
-
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -405,10 +404,12 @@ class ChartState {
         }
 
         // Update Indictor panel height
+        const indicatorCount = Object.keys(layoutData.panels).filter(item => item !== 'chart').length;
+        const indiactorHeightPercent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
         Object.keys(layoutData.panels).forEach((id) => {
             if (id === 'chart') { return; }
             const panel = layoutData.panels[id];
-            panel.percent = this.indicatorRatio.percent;
+            panel.percent = indiactorHeightPercent;
         });
 
         this.stxx.importLayout(layoutData, {
@@ -420,6 +421,7 @@ class ChartState {
                 this.restoreDrawings();
                 if (this.chartStore.loader) {
                     this.chartStore.loader.hide();
+                    this.mainStore.paginationLoader.updateOnPagination(false);
                     this.setChartIsReady(true);
                     this.stxx.home();
                 }
@@ -450,8 +452,6 @@ class ChartState {
             if (drawings) {
                 this.stxx.importDrawings(drawings);
                 this.stxx.draw();
-
-
                 if (this.drawTools) {
                     this.drawTools.computeActiveDrawTools();
                 }

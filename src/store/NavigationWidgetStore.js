@@ -33,7 +33,6 @@ export default class NavigationWidgetStore {
 
     @action.bound onScale() {
         let point = null;
-
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
 

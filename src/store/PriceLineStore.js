@@ -21,7 +21,6 @@ export default class PriceLineStore {
     @observable isOverlapping;
     @observable offScreenDirection;
 
-
     set zIndex(value) {
         if (this._line) {
             this._line.style.zIndex = value;

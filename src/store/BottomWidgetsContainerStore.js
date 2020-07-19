@@ -40,7 +40,7 @@ export default class BottomWidgetsContainerStore {
     updateChartMargin = (hasBottomWidget) => {
         if (this.context && this.stx) {
             const marginTop = this.state.yAxisMargin.top || 106;
-            let marginBottom = this.state.yAxisMargin.bottom || 16;
+            let marginBottom = this.state.yAxisMargin.bottom || 64;
 
             if (hasBottomWidget) {
                 marginBottom += 64;
