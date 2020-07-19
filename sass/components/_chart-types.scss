@@ -1,0 +1,39 @@
+.ciq-chart-types {
+    .cq-menu-dropdown {
+        width: 200px;
+        box-sizing: border-box;
+
+        .body {
+            padding: 0 7px 0 16px;
+        }
+    }
+    .ciq-list {
+        padding-right: 9px;
+
+        .ciq-list-item {
+            padding: 0;
+            justify-content: space-between;
+
+            > .left {
+                display: inline-flex;
+                align-items: center;
+            }
+            > .ciq-aggregate-setting {
+                margin-right: 5px;
+            }
+            :last-child {
+                .ic-icon > svg {
+                    stroke: none;
+                }
+            }
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .ciq-chart-types {
+        .ciq-toggle-asset-information {
+            margin: 15px 15px 0;
+        }
+    }
+}

@@ -121,6 +121,7 @@ export default class ViewStore {
                     this.mainStore.paginationLoader.updateOnPagination(false);
                 }
                 this.mainStore.state.setChartIsReady(true);
+                this.mainStore.state.setChartGranularity(granularity);
             };
             stx.importLayout(ViewStore.views[idx].layout, {
                 managePeriodicity: true,
