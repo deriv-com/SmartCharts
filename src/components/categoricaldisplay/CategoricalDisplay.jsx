@@ -14,6 +14,7 @@ const CategoricalDisplay = React.memo(({
     searchInputClassName,
     disableAll,
     isNestedList,
+    isMobile,
 }) => {
     const innerPanel = (
         <ResultsPanel
@@ -33,13 +34,27 @@ const CategoricalDisplay = React.memo(({
                 <SearchInput searchInputClassName={searchInputClassName} />
                 {!isNestedList && <FilterPanel /> }
             </div>
-            <Scroll
-                autoHide
-                onScroll={updateScrollSpy}
-                setPanel={setScrollPanel}
-            >
-                {innerPanel}
-            </Scroll>
+            {
+                isMobile
+                    ? (
+                        <div
+                            className="sc-categorical-display__scrollbar"
+                            onScroll={updateScrollSpy}
+                            ref={setScrollPanel}
+                        >
+                            {innerPanel}
+                        </div>
+                    )
+                    : (
+                        <Scroll
+                            autoHide
+                            onScroll={updateScrollSpy}
+                            setPanel={setScrollPanel}
+                        >
+                            {innerPanel}
+                        </Scroll>
+                    )
+            }
         </div>
     );
 });

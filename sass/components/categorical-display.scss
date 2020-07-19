@@ -430,6 +430,9 @@
             background-color: themed('CatDisplayCatContentBg');
         }
     }
+    &__scrollbar {
+        overflow-y: auto;
+    }
 }
 
 /* Active Symbol Icons */

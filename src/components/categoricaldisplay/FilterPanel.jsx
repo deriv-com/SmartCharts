@@ -3,15 +3,19 @@ import {
     CategoryIconMap,
 } from '../Icons.jsx';
 
+const FilterCategoryIcon = React.memo(({ categoryId }) => {
+    const CategoryIcon = CategoryIconMap[categoryId];
+    return (CategoryIcon && <CategoryIcon className={`ic-${categoryId}`} />);
+});
+
 const Filter = React.memo(({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category }) => {
-    const CategoryIcon = CategoryIconMap[category.categoryId];
     const isActive = focusedCategoryKey && focusedCategoryKey.length ? focusedCategoryKey === category.categoryId : activeCategoryKey === category.categoryId;
     return (
         <div
             className={`sc-filter ${isActive ? 'sc-active-filter' : ''}`}
             onClick={e => handleFilterClick(category.categoryId, e)}
         >
-            {CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} />}
+            <FilterCategoryIcon categoryId={category.categoryId} />
             <span className="sc-filter-text">{t.translate(category.categoryName)}</span>
         </div>
     );
