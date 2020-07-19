@@ -90,7 +90,6 @@ class CrosshairStore {
 
         this.onCrosshairChanged(this.state);
     }
-
     renderCrosshairTooltip = () => {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;

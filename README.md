@@ -35,7 +35,7 @@ $ yarn add @binary-com/smartcharts
 
 > Note: eventhough both `npm run build` and `npm run build:app` outputs `smartcharts.js` and `smartcharts.css`, **they are not the same files**. One outputs a library and the the other outputs an app.
 
-## Usage 
+## Usage
 
 ### Quick Start
 
@@ -44,7 +44,7 @@ In the `app` folder, we provide a working webpack project that uses the smartcha
     npm install
     npm start
 
-The sample app should be running in http://localhost:8080. 
+The sample app should be running in http://localhost:8080.
 
 Refer to library usage inside `app/index.jsx`:
 
@@ -72,18 +72,18 @@ The job of loading the active symbols or trading times or stream data from cache
 
 Some important notes on your webpack.config.js (refer to `app/webpack.config.js`):
 
- - smartcharts CSS file will need to be copied from the npm library (remember to include in your `index.html`). 
+ - smartcharts CSS file will need to be copied from the npm library (remember to include in your `index.html`).
  - smartcharts consist of a few chunks (which has filenames `*.smartcharts.*`), which it downloads asynchronously during runtime. Therefore, it needs to know where the library user places its chunks via the `setSmartChartsPublicPath` function:
- 
+
  ```js
 import { setSmartChartsPublicPath } from '@binary-com/smartcharts';
 
 // SmartCharts chunk are deployed to https://mysite.com/dist/*
 setSmartChartsPublicPath('/dist/');
 ```
- 
+
  We can use the `copy-webpack-plugin` webpack plugin to copy over SmartCharts chunks:
- 
+
  ```js
 new CopyWebpackPlugin([
     { from: './node_modules/@binary-com/smartcharts/dist/*.smartcharts.*' },
@@ -321,21 +321,21 @@ Here are the following components you can import:
       -  `<ChartMode />`
  
  ### Props vs UI
- 
+
 Certain chart parameters can be set either by props or from the chart UI:
-  
+
    - `symbol` - set by `<ChartTitle />`
    - `granularity` - set by `<TimePeriod >`
    - `chartType` - set by `<ChartTypes />`
-  
+
   This creates conflicts in deciding which is the single source of truth. To circumvent this, if these props are set (not `undefined`), selecting options in its corresponding components will not have any affect on the chart; the prop values take precedence. To have control over both the UI and the props, we provide library users the option to _override_ component behaviour via `onChange` prop. For example, to retrieve the symbol a client chooses:
- 
+
  ```jsx
 <ChartTitle
     onChange={(symbol) => { /* ...Pass to symbol prop in <SmartCharts /> */ }}
 />
 ```
- 
+
  See available components and their props in [Customising Components](#customising-components).
 
  
@@ -357,7 +357,7 @@ To contribute to SmartCharts, fork this project and checkout the `dev` branch. W
 
     npm run test
 
-Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/). 
+Once your changes have been merged to `dev`, it will immediately deployed to [charts.binary.com/beta](https://charts.binary.com/beta/).
 
 ## Developer Notes
 
@@ -374,7 +374,7 @@ We organise the development in Trello. Here is the standard workflow of how a fe
      - **Test Link**: Link to github pages that has the changes; this is for QA to verify. Refer to [this section](#deploy-to-github-pages) for instructions on how to deploy.
  6. If reviewer requests changes, he will place the card back to the `In Development` list. This back and forth continues until the reviewer passes the PR by marking it as `approved` in Github.
  7. Reviewer places the reviewed card into `QA` list.
- 8. If the card fails QA check, QA can comment on the card on what failed, and place the card back to `In Development` list. If QA passes the changes, QA will place the card from `QA` to `Ready`; this card is now ready to be merged to `dev`. 
+ 8. If the card fails QA check, QA can comment on the card on what failed, and place the card back to `In Development` list. If QA passes the changes, QA will place the card from `QA` to `Ready`; this card is now ready to be merged to `dev`.
  9. Once the card is merged to `dev`, it is placed in `Deployed to BETA` list.
  10. When it is time to take all changes in `beta` and deploy in production, manager will merge `dev` into `master`, and place all cards in `Deployed to BETA` to `Released`.
 
@@ -384,7 +384,7 @@ Some issues only show up for library users, so it is helpful to test the NPM pac
 
     npm run watch '../binary-static/node_modules/@binary-com/smartcharts/dist'
 
-Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder. 
+Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder.
 
 ### Separation of App and Library
 
@@ -397,7 +397,7 @@ Webpack determines whether to build an app or library depending on whether an en
 All strings that need to be translated must be inside `t.translate()`:
 
 ```js
-t.translate('[currency] [amount] payout if the last tick.', { 
+t.translate('[currency] [amount] payout if the last tick.', {
     currency: 'USD',
     amount: 43.12
 });
@@ -410,19 +410,19 @@ Each time a new translation string is added to the code, you need to update the 
 
 Once the new `messages.pot` is merged into the `dev` branch, it will automatically be updated in [CrowdIn](https://crowdin.com/project/smartcharts/settings#files). You should expect to see a PR with the title **New Crowdin translations**
  in a few minutes; this PR will update the `*.po` files.
- 
+
  ### Dealing With SVGs
- 
+
  SmartCharts has 2 ways of utilizing SVG files: as CSS background image and as external SVG.
- 
+
 ##### CSS Background Image SVG
 
 These SVG are added inline into the CSS via [postcss-inline-svg](https://github.com/TrySound/postcss-inline-svg). Currently the only place where this is used is the loader, because if the external SVG is not loaded yet we would at least want a loading screen to be present.
- 
+
  ##### External SVG
- 
+
  The SVG files included in the `js` and `jsx` files are automatically put together into a sprite sheet. Manipulating external SVG can be tricky - developers can only control stroke and fill color of the whole SVG file via CSS:
- 
+
  ```scss
 .ic-icon.active {
     svg {
@@ -431,24 +431,24 @@ These SVG are added inline into the CSS via [postcss-inline-svg](https://github.
     }
 }
 ```
- 
- **Important Note:** These stroke and fill colors will not be affected by CSS if the corresponding attributes are declared in the SVG file. Therefore, it is not uncommon SmartCharts developers would need to tweak the SVG files by hand to be able to manipulate its color. 
- 
+
+ **Important Note:** These stroke and fill colors will not be affected by CSS if the corresponding attributes are declared in the SVG file. Therefore, it is not uncommon SmartCharts developers would need to tweak the SVG files by hand to be able to manipulate its color.
+
  This has much less freedom compared to [inline SVG](https://github.com/MoOx/react-svg-inline) where a developer can control individual parts of the SVG, but having external SVG results in a much smaller library, and allows parts of the code not rendered by React to use them. External SVG is also cached by the browser (using shadow DOM), so though the same SVG may be used multiple times, only one copy exists in the DOM.
 
- 
+
  ### State Management and the `connect` Method
- 
+
  SmartCharts uses a variation of [Mobdux](https://medium.com/@cameronfletcher92/mobdux-combining-the-good-parts-of-mobx-and-redux-61bac90ee448) to assist with state management using Mobx.
- 
+
  Each component consists of 2 parts: a **template** (`*.jsx` file), and a **store** (`*Store.js` file). There are 3 scenarios in which the [`connect`](https://github.com/binary-com/SmartCharts/blob/dev/src/store/Connect.js) method is used:
- 
+
 #####  1. Main Components: The component is tied directly to the main store.
 
 Examples: `<ChartTitle />`, `<TimePeriod />`, `<Views />`...
 
 Each component here is mapped to a corresponding store in the main store. **Only one copy of this component may exist per `<SmartChart />` instance**, and its state is managed by the main store tree (defined as `mainStore` in SmartCharts). Here you pass a `mapperFunction` that would be applied directly to the main store:
-  
+
 ```jsx
 
 function mapperFunction(mainStore) {
@@ -559,9 +559,9 @@ As ChartIQ license is tied to the `binary.com` domain name, we provide developer
 
 For each feature/fix you want to add we recommend you deploy an instance of SmartCharts for it (e.g. `brucebinary.binary.sx/featureA`, `brucebinary.binary.sx/featureB`). To deploy SmartCharts to your github pages, you first need to setup your `gh-pages` branch:
 
- 1. Make sure you have a `binary.sx` subdomain pointed to your `github.io` page first (e.g. `brucebinary.binary.sx -> brucebinary.github.io`). 
+ 1. Make sure you have a `binary.sx` subdomain pointed to your `github.io` page first (e.g. `brucebinary.binary.sx -> brucebinary.github.io`).
  2. In your `gh-pages` branch, add a `CNAME` in your project root folder, and push that file to your branch, for example:
- 
+
  ```bash
  git checkout -b gh-pages origin/gh-pages # if you already checkout from remote execute: git checkout gh-pages
  echo 'brucebinary.binary.sx' > CNAME # substitute with your domain
@@ -569,8 +569,8 @@ For each feature/fix you want to add we recommend you deploy an instance of Smar
  git commit -m 'add CNAME'
  git push origin gh-pages
  ```
- 
-Here on, to deploy a folder (e.g. `myfoldername`):
+
+Here on, to deploy a folder (e.g. `folder_name`):
 
     npm run build-travis && npm run gh-pages:folder 'myfoldername'
 

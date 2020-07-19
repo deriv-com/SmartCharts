@@ -221,7 +221,6 @@ class ChartState {
                 ...yAxisMargin,
             };
         }
-
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -453,8 +452,6 @@ class ChartState {
             if (drawings) {
                 this.stxx.importDrawings(drawings);
                 this.stxx.draw();
-
-
                 if (this.drawTools) {
                     this.drawTools.computeActiveDrawTools();
                 }
