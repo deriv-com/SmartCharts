@@ -103,7 +103,6 @@ const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
     'VI', 'ZH_CN', 'ZH_TW',
 ];
 
-
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
