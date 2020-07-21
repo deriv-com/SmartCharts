@@ -44,7 +44,7 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
         <div className="sc-views--overwrite__content">
             <OverwriteStateIcon />
             <p>
-                {templateName + t.translate(' already exists.')}<br />
+                {`${templateName} ${t.translate('already exists.')}`}<br />
                 {t.translate('Would you like to overwrite it?')}
             </p>
         </div>
