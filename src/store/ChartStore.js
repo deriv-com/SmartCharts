@@ -77,6 +77,18 @@ class ChartStore {
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
+    @computed get currentCloseQuote() {
+        let currentQuote = this.stxx.currentQuote();
+
+        if (!currentQuote.Close) {
+            const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
+            if (dataSegmentClose && dataSegmentClose.length) {
+                currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+            }
+        }
+        return currentQuote;
+    }
+
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;

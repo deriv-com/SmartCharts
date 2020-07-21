@@ -1,7 +1,9 @@
 @charset "UTF-8";
 
+.barrier-area {
+    padding: 13px 0;
+}
 /* Drag Lines and Prices */
-
 .chart-line {
     position: absolute;
     z-index: 35;
