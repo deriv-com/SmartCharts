@@ -66,7 +66,8 @@
 
 /*hover*/
 
-.hide-pricelines > .chart-line.horizontal {
+.hide-pricelines > .chart-line.horizontal,
+.hide-pricelines > .barrier-area {
     display: none;
 }
 
