@@ -37,18 +37,23 @@ class PriceLine extends Component {
         return (
             showBarrier && (
                 <div
-                    className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
-                    style={{ top: 0, color: foregroundColor, backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00` }}
+                    className="barrier-area"
+                    style={{ top: 0 }}
                     ref={setDragLine}
                     hidden={!visible}
                 >
-                    { showBarrierDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
-                    <div className="draggable-area" />
-                    <div className="drag-price" style={{ backgroundColor: color, width, opacity }}>
-                        <div className="price">{priceDisplay}</div>
-                        { offScreen && offScreenDirection && <PriceLineArrow offScreenDirection={offScreenDirection} color={color} /> }
+                    <div
+                        className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
+                        style={{ color: foregroundColor, backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00` }}
+                    >
+                        { showBarrierDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
+                        <div className="draggable-area" />
+                        <div className="drag-price" style={{ backgroundColor: color, width, opacity }}>
+                            <div className="price">{priceDisplay}</div>
+                            { offScreen && offScreenDirection && <PriceLineArrow offScreenDirection={offScreenDirection} color={color} /> }
+                        </div>
+                        { title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} /> }
                     </div>
-                    { title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} /> }
                 </div>
             )
         );

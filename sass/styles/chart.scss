@@ -231,6 +231,9 @@ html, body {
         position: relative;
         left: 8px;
         top: 8px;
+        @include themify($themes) {
+            fill: themed('NavigationWidgetColor');
+        }
     }
 }
 
