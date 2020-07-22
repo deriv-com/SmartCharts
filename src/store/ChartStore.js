@@ -19,9 +19,11 @@ import {
     getUTCDate,
     cloneCategories,
     prepareIndicatorName,
+    displayMilliseconds,
+    getIntervalInSeconds,
     renderSVGString }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
-
+import ServerTime              from '../utils/ServerTime';
 import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
 import EditIcon        from '../../sass/icons/edit/ic-edit.svg';
 import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
@@ -38,6 +40,7 @@ class ChartStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
+        this._serverTime = ServerTime.getInstance();
     }
 
     RANGE_PADDING_PX = 125;
@@ -70,6 +73,8 @@ class ChartStore {
     @observable yAxiswidth = 0;
     @observable serverTime;
     @observable networkStatus;
+    @observable lastCountDownSecond;
+    @observable countDownLabel;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() { return this.mainStore.routing; }
@@ -547,6 +552,10 @@ class ChartStore {
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
 
+        this.stxx.append('drawCurrentHR', () => {
+            this.updateChartCountDown();
+        });
+
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
         // if (stxx.chart.maxTicks - 10 > 50) {
@@ -847,6 +856,58 @@ class ChartStore {
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
         this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
+    }
+
+
+    remainLabelY = () => {
+        const stx = this.context.stx;
+        const topPos = 36;
+        const labelHeight = 24;
+        const bottomPos = 66;
+        let y = stx.chart.currentPriceLabelY + labelHeight;
+        if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
+            y =  stx.chart.panel.bottom - bottomPos;
+            y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
+        } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
+            y = topPos;
+        }
+        return y;
+    }
+
+    updateChartCountDown = () => {
+        if (!(this.mainStore.chartSetting.countdown
+            && !this.isTick
+            && !this.mainStore.chartType.isAggregateChart
+        )) { return; }
+
+        const now = this._serverTime.getUTCDate();
+        const newCountDownSecond = moment(now).format('HH:mm:ss');
+        if (this.lastCountDownSecond !== newCountDownSecond) {
+            this.lastCountDownSecond = newCountDownSecond;
+            if (this.stxx.chart.dataSegment && this.stxx.chart.dataSegment.length) {
+                const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
+                if (dataSegmentClose && dataSegmentClose.length) {
+                    const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+                    const diff = now - currentQuote.DT;
+                    this.countDownLabel = displayMilliseconds((getIntervalInSeconds(this.stxx.layout) * 1000) - diff);
+                }
+            }
+        }
+
+        if (this.countDownLabel) {
+            this.stxx.yaxisLabelStyle = 'rect';
+            this.stxx.labelType = 'countdown';
+            this.stxx.createYAxisLabel(this.stxx.chart.panel, this.countDownLabel, this.remainLabelY(), '#15212d', '#FFFFFF');
+            this.stxx.labelType = undefined;
+            this.stxx.yaxisLabelStyle = 'roundRect';
+        }
+    };
+
+    @action.bound setYaxisWidth = (width) => {
+        this.yAxiswidth = width || this.yAxiswidth;
+        this.stxx.chart.yAxis.width = width || this.yAxiswidth;
+        this.stxx.calculateYAxisPositions();
+        this.stxx.draw();
     }
 
     getRangeSpan() {
