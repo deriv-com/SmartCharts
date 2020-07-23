@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect } from 'react';
-import { connect } from '../store/Connect';
-import Tooltip from './Tooltip.jsx';
+import { connect }      from '../store/Connect';
+import Tooltip          from './Tooltip.jsx';
 import { InlineLoader } from './Loader.jsx';
+import { Intervals }    from '../Constant';
 import '../../sass/components/timeperiod.scss';
-import { Intervals } from '../Constant';
 
 const Timeperiod = ({
     chartId,

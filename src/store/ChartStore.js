@@ -19,11 +19,9 @@ import {
     getUTCDate,
     cloneCategories,
     prepareIndicatorName,
-    displayMilliseconds,
-    getIntervalInSeconds,
     renderSVGString }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
-import ServerTime              from '../utils/ServerTime';
+
 import ResizeIcon      from '../../sass/icons/chart/resize-icon.svg';
 import EditIcon        from '../../sass/icons/edit/ic-edit.svg';
 import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
@@ -40,7 +38,6 @@ class ChartStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this._serverTime = ServerTime.getInstance();
     }
 
     RANGE_PADDING_PX = 125;
@@ -551,11 +548,6 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
-
-        this.stxx.append('drawCurrentHR', () => {
-            this.updateChartCountDown();
-        });
-
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
         // if (stxx.chart.maxTicks - 10 > 50) {
@@ -873,36 +865,6 @@ class ChartStore {
         }
         return y;
     }
-
-    updateChartCountDown = () => {
-        if (!(this.mainStore.chartSetting.countdown
-            && !this.mainStore.timeperiod.isTick
-            && !this.mainStore.chartType.isAggregateChart
-        )) { return; }
-
-        const now = this._serverTime.getUTCDate();
-        const newCountDownSecond = moment(now).format('HH:mm:ss');
-        if (this.lastCountDownSecond !== newCountDownSecond) {
-            this.lastCountDownSecond = newCountDownSecond;
-            if (this.stxx.chart.dataSegment && this.stxx.chart.dataSegment.length) {
-                const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
-                if (dataSegmentClose && dataSegmentClose.length) {
-                    const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
-                    const diff = now - currentQuote.DT;
-                    const milliseconds = (getIntervalInSeconds(this.stxx.layout) * 1000) - diff;
-                    this.countDownLabel = displayMilliseconds(Math.abs(milliseconds));
-                }
-            }
-        }
-
-        if (!this.countDownLabel) { return; }
-
-        this.stxx.yaxisLabelStyle = 'rect';
-        this.stxx.labelType = 'countdown';
-        this.stxx.createYAxisLabel(this.stxx.chart.panel, this.countDownLabel, this.remainLabelY(), '#15212d', '#FFFFFF');
-        this.stxx.labelType = undefined;
-        this.stxx.yaxisLabelStyle = 'roundRect';
-    };
 
     @action.bound setYaxisWidth = (width) => {
         this.yAxiswidth = width || this.yAxiswidth;
