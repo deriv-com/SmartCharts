@@ -876,7 +876,7 @@ class ChartStore {
 
     updateChartCountDown = () => {
         if (!(this.mainStore.chartSetting.countdown
-            && !this.isTick
+            && !this.mainStore.timeperiod.isTick
             && !this.mainStore.chartType.isAggregateChart
         )) { return; }
 
@@ -889,18 +889,19 @@ class ChartStore {
                 if (dataSegmentClose && dataSegmentClose.length) {
                     const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
                     const diff = now - currentQuote.DT;
-                    this.countDownLabel = displayMilliseconds((getIntervalInSeconds(this.stxx.layout) * 1000) - diff);
+                    const milliseconds = (getIntervalInSeconds(this.stxx.layout) * 1000) - diff;
+                    this.countDownLabel = displayMilliseconds(Math.abs(milliseconds));
                 }
             }
         }
 
-        if (this.countDownLabel) {
-            this.stxx.yaxisLabelStyle = 'rect';
-            this.stxx.labelType = 'countdown';
-            this.stxx.createYAxisLabel(this.stxx.chart.panel, this.countDownLabel, this.remainLabelY(), '#15212d', '#FFFFFF');
-            this.stxx.labelType = undefined;
-            this.stxx.yaxisLabelStyle = 'roundRect';
-        }
+        if (!this.countDownLabel) { return; }
+
+        this.stxx.yaxisLabelStyle = 'rect';
+        this.stxx.labelType = 'countdown';
+        this.stxx.createYAxisLabel(this.stxx.chart.panel, this.countDownLabel, this.remainLabelY(), '#15212d', '#FFFFFF');
+        this.stxx.labelType = undefined;
+        this.stxx.yaxisLabelStyle = 'roundRect';
     };
 
     @action.bound setYaxisWidth = (width) => {

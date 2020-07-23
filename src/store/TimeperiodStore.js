@@ -9,6 +9,7 @@ export default class TimeperiodStore {
     }
 
     get context() { return this.mainStore.chart.context; }
+    get isTick() { return this.timeUnit === 'tick'; }
     @observable timeUnit = null;
     @observable interval = null;
     @observable preparingInterval = null;
