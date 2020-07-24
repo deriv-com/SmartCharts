@@ -22,7 +22,7 @@ export default class ChartTitleStore {
             favoritesId: 'chartTitle&Comparison',
             mainStore,
             id: 'market_dropdown',
-            getCurrentActiveCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite'),
+            getCurrentActiveCategory: () => this.currentActiveCategory,
             getCurrentActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
             searchInputClassName: () => this.searchInputClassName,
         });
@@ -51,6 +51,7 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
+    @observable activeCategory = null;
     searchInputClassName;
 
     get chart() { return this.mainStore.chart; }
@@ -72,6 +73,10 @@ export default class ChartTitleStore {
 
         return { openTime };
     }
+    @computed get currentActiveCategory() {
+        if (this.activeCategory) { return this.activeCategory; }
+        return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
+    }
 
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
@@ -85,10 +90,6 @@ export default class ChartTitleStore {
             }
         }));
     };
-
-    @action.bound updateProps(searchInputClassName) {
-        this.searchInputClassName = searchInputClassName;
-    }
 
     @action.bound setSymbol(symbolObj) {
         if (this.mainStore.state.symbol !== undefined) {
@@ -120,4 +121,13 @@ export default class ChartTitleStore {
 
     onMouseEnter = () => this.crosshairStore.updateVisibility(false);
     onMouseLeave = () => this.crosshairStore.updateVisibility(true);
+
+    @action.bound updateProps({ active_category, open }) {
+        if (active_category) {
+            this.activeCategory = active_category;
+        }
+        if (open) {
+            this.menu.setOpen(true);
+        }
+    }
 }
