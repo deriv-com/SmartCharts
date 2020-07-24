@@ -544,20 +544,21 @@ To publish to beta:
 
     npm run build && npm publish --tag beta
 
-## Staging / Production deployment
+### Staging / Production deployment
 
-1) Staging deployment:
+#### 1) Staging deployment:
+- Any pull request merged to `master` branch will be automatically deployed to charts.binary.com/beta.
 
-Any pull request merged to `master` branch will be automatically deployed to charts.binary.com/beta.
+#### 2) Production deployment:
+- Production deployment is handled with tagging, ideally, we will create the tag with the prefix `production_v{{version_number}}` from `master` branch and push the tag to initiate the production release pipeline.
 
-2) Production deployment:
-
-Production deployment is handled with tagging, ideally, we will create the tag with the prefix `production_v{{version_number}}` from `master` branch and push the tag to initiate the production release pipeline.
 NOTE: *Write access is required for this action*
 
 Example:
-i) git tag production_v20180901 -m 'release production'
-ii) git push origin production_v20180901
+
+i) `git tag production_v20180901 -m 'release production'`
+
+ii) `git push origin production_v20180901`
 
 ### Deploy to Github Pages
 
