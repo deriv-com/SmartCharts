@@ -534,7 +534,7 @@ Note that **for independent components, the `mapperFunction` is applied to the s
 
 ## Manual Deployment
 
-### Deploy to NPM
+### Library deployment to NPM
 
 To publish to production:
 
@@ -544,11 +544,22 @@ To publish to beta:
 
     npm run build && npm publish --tag beta
 
-### Deploy to [charts.binary.com](https://charts.binary.com/)
+### Release / Deployment Process
 
-> Note: This is usually not required, since Travis will automatically deploy to [charts.binary.com](https://charts.binary.com/) and [charts.binary.com/beta](https://charts.binary.com/beta/) when `master` and `dev` is updated.
+1) Staging deployment:
 
-The following commands will build and deploy to charts.binary.com (*Make sure you are in the right branch!*); you will need push access to this repository for the commands to work:
+Any pull request merged to `master` branch will be automatically deployed to charts.binary.com/beta.
+
+2) Production deployment:
+
+Production deployment is handled with tagging, ideally, we will create the tag with the prefix `production_v{{version_number}}` from `master` branch and push the tag to initiate the production release pipeline.
+NOTE: *Write access is required for this action*
+
+Example:
+i) git tag production_v20180901 -m 'release production'
+ii) git push origin production_v20180901
+
+Create a 
 
     npm run deploy:beta        # charts.binary.com/beta
     npm run deploy:production  # charts.binary.com
