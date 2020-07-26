@@ -84,6 +84,11 @@ class ChartStore {
             const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
             if (dataSegmentClose && dataSegmentClose.length) {
                 currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+            } else {
+                const dataSetClose = [...this.stxx.chart.dataSet].filter(item => (item && item.Close));
+                if (dataSetClose && dataSetClose.length) {
+                    currentQuote = dataSetClose[dataSetClose.length - 1];
+                }
             }
         }
         return currentQuote;
