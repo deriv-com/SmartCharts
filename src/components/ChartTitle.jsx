@@ -7,8 +7,10 @@ class ChartTitle extends Component {
     componentDidUpdate(prevProps) {
         const { updateProps, ...props } = this.props;
         const { updateProps: prevUpdateProps, ...previousProps } = prevProps;
-
-        if (previousProps !== props) {
+        if (
+            (previousProps.active_category !== props.active_category)
+            || (previousProps.open !== props.open)
+        ) {
             updateProps(props);
         }
     }
