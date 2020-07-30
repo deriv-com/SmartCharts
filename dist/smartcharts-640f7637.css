@@ -409,7 +409,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .chart-line.horizontal.draggable>.draggable-area{height:20px;top:-8px;position:absolute;width:100%}
 .chart-line.horizontal.draggable>.draggable-area:hover{background:rgba(0,0,0,0.05)}
 .chart-line.horizontal .drag-line{height:1px;float:left;width:100%;margin-left:-10px;position:relative;border-top-width:0}
-.chart-line.horizontal .title-wrapper{position:absolute;height:24px;background-image:linear-gradient(transparent 30%, var(--general-main-1) 50%, transparent 75%);top:-11px;display:flex;align-items:center;justify-content:center;font-size:11px;padding:3px 10px;font-weight:bold}
+.chart-line.horizontal .title-wrapper{position:absolute;height:24px;background-image:linear-gradient(rgba(255,255,255,0.001) 30%, var(--general-main-1) 50%, rgba(255,255,255,0.001) 75%);top:-11px;display:flex;align-items:center;justify-content:center;font-size:11px;padding:3px 10px;font-weight:bold}
 .chart-line.horizontal .title-wrapper .title{white-space:pre-wrap}
 .draggable.chart-line:hover.horizontal{cursor:ns-resize}
 .draggable.chart-line:hover.vertical{cursor:ew-resize}
