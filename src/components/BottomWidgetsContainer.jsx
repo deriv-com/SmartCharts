@@ -1,9 +1,7 @@
 import React       from 'react';
 import PropTypes   from 'prop-types';
 import { connect } from '../store/Connect';
-
-import '../../sass/components/_bottom-widget-container.scss';
-
+import '../../sass/components/bottom-widget-container.scss';
 
 class BottomWidgetsContainer extends React.Component {
     shouldComponentUpdate({ nextChildren }) {

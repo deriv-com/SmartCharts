@@ -1,0 +1,31 @@
+.sc-chart-size {
+    display: flex !important;
+    height: auto;
+    width: auto !important;
+
+    &:after {
+        display: none;
+    }
+    > span {
+        opacity: 1;
+        position: relative;
+        cursor: pointer;
+        transition: scale 0.25s;
+    }
+    .cq-menu-btn {
+        cursor: pointer;
+        padding: 5px 0px;
+
+        &:hover {
+            @include themify($themes) {
+                background: themed('MenuHoverBg');
+            }
+        }
+    }
+    .interval-title {
+        white-space: nowrap;
+        width: auto;
+        line-height: 25px;
+        display: none; /* TODO */
+    }
+}

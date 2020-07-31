@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import '../../sass/components/_last-digits.scss';
+import '../../sass/components/last-digits.scss';
 
 const Bar = ({ x, bar }) => (
     <div

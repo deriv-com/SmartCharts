@@ -1,16 +1,16 @@
 import React from 'react';
+import { connect } from '../store/Connect';
 import {
     ZoomInIcon,
     ZoomOutIcon,
 } from './Icons.jsx';
-import '../../sass/components/_chart-size.scss';
-import { connect } from '../store/Connect';
+import '../../sass/components/chart-size.scss';
 
 const ChartSize = ({
     zoomIn,
     zoomOut,
 }) => (
-    <div className="ciq-menu cq-chart-size">
+    <div className="ciq-menu sc-chart-size">
         <div className="cq-menu-btn">
             <ZoomOutIcon className="ic-icon-with-sub cq-zoom-out" tooltip-title={t.translate('Zoom out')} onClick={zoomOut} />
         </div>
