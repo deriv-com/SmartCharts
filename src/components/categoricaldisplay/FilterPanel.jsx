@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-    CategoryIconMap,
-} from '../Icons.jsx';
+import { CategoryIconMap } from '../Icons.jsx';
 
 const FilterCategoryIcon = React.memo(({ categoryId }) => {
     const CategoryIcon = CategoryIconMap[categoryId];
@@ -12,17 +10,17 @@ const Filter = React.memo(({ focusedCategoryKey, activeCategoryKey, handleFilter
     const isActive = focusedCategoryKey && focusedCategoryKey.length ? focusedCategoryKey === category.categoryId : activeCategoryKey === category.categoryId;
     return (
         <div
-            className={`sc-filter ${isActive ? 'sc-active-filter' : ''}`}
+            className={`sc-mcd__filter__item ${isActive ? 'sc-mcd__filter__item--selected' : ''}`}
             onClick={e => handleFilterClick(category.categoryId, e)}
         >
             <FilterCategoryIcon categoryId={category.categoryId} />
-            <span className="sc-filter-text">{t.translate(category.categoryName)}</span>
+            {t.translate(category.categoryName)}
         </div>
     );
 });
 
 export const FilterPanel = ({ filteredItems, handleFilterClick, focusedCategoryKey, activeCategoryKey }) => (
-    <div className="sc-filter-panel">
+    <div className="sc-mcd__filter">
         {filteredItems.map(category => (
             <Filter
                 key={category.categoryId}

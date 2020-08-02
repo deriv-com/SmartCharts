@@ -15,48 +15,44 @@ const CategoricalDisplay = React.memo(({
     disableAll,
     isNestedList,
     isMobile,
-}) => {
-    const innerPanel = (
-        <ResultsPanel
-            onSelectItem={onSelectItem}
-            id={id}
-            disableAll={disableAll}
-            isNestedList={isNestedList}
-        />
-    );
-    return (
-        <div
-            className={`sc-categorical-display ${isNestedList ? 'sc-categorical-display--nested' : ''}`}
-            style={{ height }}
-            id={id}
-        >
-            <div className="sc-lookup-filters">
-                <SearchInput searchInputClassName={searchInputClassName} />
-                {!isNestedList && <FilterPanel /> }
+}) => (
+    <div
+        className={`sc-mcd ${isNestedList ? 'sc-mcd--nested' : ''}`}
+        style={{ height }}
+        id={id}
+    >
+        {!isMobile && (
+            <div className="sc-mcd__tabs">
+                <div className="sc-mcd__tabs__head">
+                    {t.translate('Assets')}
+                </div>
+                <div className="sc-mcd__tabs__body">
+                    {!isNestedList && <FilterPanel /> }
+                </div>
             </div>
-            {
-                isMobile
-                    ? (
-                        <div
-                            className="sc-categorical-display__scrollbar"
-                            onScroll={updateScrollSpy}
-                            ref={setScrollPanel}
-                        >
-                            {innerPanel}
-                        </div>
-                    )
-                    : (
-                        <Scroll
-                            autoHide
-                            onScroll={updateScrollSpy}
-                            setPanel={setScrollPanel}
-                        >
-                            {innerPanel}
-                        </Scroll>
-                    )
-            }
+        )}
+        <div className="sc-mcd__content">
+            <div className="sc-mcd__content__head">
+                <SearchInput searchInputClassName={searchInputClassName} />
+            </div>
+            <div className="sc-mcd__content__body">
+                <Scroll
+                    autoHide
+                    onScroll={updateScrollSpy}
+                    setPanel={setScrollPanel}
+                    isBypassed={isMobile}
+                    className={isMobile ? 'sc-mcd__content__body_scroll' : ''}
+                >
+                    <ResultsPanel
+                        onSelectItem={onSelectItem}
+                        id={id}
+                        disableAll={disableAll}
+                        isNestedList={isNestedList}
+                    />
+                </Scroll>
+            </div>
         </div>
-    );
-});
+    </div>
+));
 
 export default CategoricalDisplay;

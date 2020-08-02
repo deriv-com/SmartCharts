@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
+import '../../sass/components/_search.scss';
 
 class SearchInput extends Component {
     clearFilterText = () => this.props.onChange('');
@@ -11,7 +12,7 @@ class SearchInput extends Component {
         const { placeholder, value, searchInput, searchInputClassName } = this.props;
 
         return (
-            <div className={`sc-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
+            <div className={`sc-search-input ${value.trim() !== '' ? 'active' : ''}`}>
                 <input
                     className={searchInputClassName}
                     value={value}

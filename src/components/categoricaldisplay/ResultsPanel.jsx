@@ -15,7 +15,7 @@ function getItemCount(category) {
 }
 
 const EmptyCategory = React.memo(({ category }) => (
-    <div className="category-content">
+    <div className="sc-mcd__category__content">
         <div className="empty-category">{t.translate(category.emptyDescription)}</div>
     </div>
 ));
@@ -26,7 +26,7 @@ const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, catego
         TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
     }
 
-    return `category-title ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''} ${active ? 'active' : ''}`;
+    return `sc-mcd__category__head ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''} ${active ? 'active' : ''}`;
 };
 
 const CategoryTitleLeft = React.memo(({ isNestedList, category }) => {
@@ -63,13 +63,13 @@ const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffse
                 </div>
             )
         }
-        { isNestedList ? (<ArrowIcon />) : ''}
+        { isNestedList ? (<ArrowIcon className="arrow" />) : ''}
     </div>
 );
 
 const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
     <div
-        className={`category category-${category.categoryId} ${category.categorySubtitle ? 'category-has-subtitle' : ''} ${category.active ? 'active' : ''}`}
+        className={`sc-mcd__category sc-mcd__category--${category.categoryId} ${category.categorySubtitle ? 'sc-mcd__category--has-subtitle' : ''} ${category.active ? 'sc-mcd__category--active' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
         <CategoryTitle
@@ -83,7 +83,7 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
-                    className="category-content has-subcategory"
+                    className="sc-mcd__category__content sc-mcd__category__content--has-subcategory"
                     key={subcategory.subcategoryName}
                 >
                     <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>
@@ -98,7 +98,7 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
                 </div>
             ))
             : category.data.length > 0 && (
-                <div className="category-content">
+                <div className="sc-mcd__category__content">
                     {category.data.map((item, idx) => (
                         <Item
                             key={`${item.display}-${idx}`}// eslint-disable-line react/no-array-index-key
@@ -115,25 +115,23 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
 );
 
 export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
-    <div className="results-panel">
-        { filteredItems.map((category) => {
-            const categoryItemCount = getItemCount(category);
-            return (categoryItemCount > 0 || category.emptyDescription) && (
-                <Category
-                    key={category.categoryId}
-                    Item={getItemType(category.categoryId)}
-                    category={category}
-                    categoryItemCount={categoryItemCount}
-                    setCategoryElement={setCategoryElement}
-                    onSelectItem={onSelectItem}
-                    activeHeadKey={activeHeadKey}
-                    activeHeadTop={activeHeadTop}
-                    activeHeadOffset={activeHeadOffset}
-                    disableAll={disableAll}
-                    isNestedList={isNestedList}
-                    handleTitleClick={handleTitleClick}
-                />
-            );
-        }) }
-    </div>
+    filteredItems.map((category) => {
+        const categoryItemCount = getItemCount(category);
+        return (categoryItemCount > 0 || category.emptyDescription) && (
+            <Category
+                key={category.categoryId}
+                Item={getItemType(category.categoryId)}
+                category={category}
+                categoryItemCount={categoryItemCount}
+                setCategoryElement={setCategoryElement}
+                onSelectItem={onSelectItem}
+                activeHeadKey={activeHeadKey}
+                activeHeadTop={activeHeadTop}
+                activeHeadOffset={activeHeadOffset}
+                disableAll={disableAll}
+                isNestedList={isNestedList}
+                handleTitleClick={handleTitleClick}
+            />
+        );
+    })
 ));

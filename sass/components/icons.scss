@@ -58,7 +58,9 @@
 .ciq-chart-dialog,
 .cq-menu-dropdown .title, // Close icon right of dropdown title in mobile mode
 .ciq-chart-types .ciq-list-item,
-.category-title .category-title-left {
+.sc-mcd__filter,
+.sc-mcd__category__head .category-title-left,
+.sc-mcd__category__head {
     .ic-icon > svg {
         @include themify($themes) {
             fill: themed('MenuIcon');
