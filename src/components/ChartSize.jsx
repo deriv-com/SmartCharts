@@ -4,7 +4,7 @@ import {
     ZoomInIcon,
     ZoomOutIcon,
 } from './Icons.jsx';
-import '../../sass/components/chart-size.scss';
+import '../../sass/components/_chart-size.scss';
 
 const ChartSize = ({
     zoomIn,

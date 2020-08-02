@@ -1,7 +1,7 @@
 import React       from 'react';
 import FastMarker from './FastMarker.jsx';
 import { connect } from '../store/Connect';
-import '../../sass/components/pagination-loader.scss';
+import '../../sass/components/_pagination-loader.scss';
 
 const PaginationLoader = ({ isOnPagination, setRef }) => (
     isOnPagination

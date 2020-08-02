@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import MarkerStore from '../store/MarkerStore';
-import '../../sass/components/markers.scss';
+import '../../sass/components/_markers.scss';
 
 const Marker = ({
     display,
