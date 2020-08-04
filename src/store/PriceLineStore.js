@@ -109,6 +109,10 @@ export default class PriceLineStore {
         return this.mainStore.chart.yAxiswidth;
     }
 
+    get yAxiswidth() {
+        return this.mainStore.chart.yAxiswidth;
+    }
+
     @action.bound setDragLine(el) {
         this._line = el;
         if (this._line) { this._draw(); }
