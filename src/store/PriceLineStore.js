@@ -102,7 +102,11 @@ export default class PriceLineStore {
     }
 
     get realPrice() {
-        return this.relative ? this.stx.currentQuote().Close + this._price : this._price;
+        return this.relative ? this.mainStore.chart.currentCloseQuote.Close + this._price : this._price;
+    }
+
+    get yAxiswidth() {
+        return this.mainStore.chart.yAxiswidth;
     }
 
     get yAxiswidth() {
@@ -139,7 +143,7 @@ export default class PriceLineStore {
         let newPrice = this._priceFromLocation(newCenter);
 
         if (this._priceConstrainer) { newPrice = this._priceConstrainer(newPrice); }
-        if (this.relative) { newPrice -= this.stx.currentQuote().Close; }
+        if (this.relative) { newPrice -= this.mainStore.chart.currentCloseQuote.Close; }
 
         this.price = newPrice;
     }
@@ -214,7 +218,7 @@ export default class PriceLineStore {
     // We don't pay for react reconciler and mobx observable tracking in animation frames.
     set top(v) {
         this.__top = v;
-        this._line.style.transform = `translateY(${this.top}px)`;
+        this._line.style.transform = `translateY(${this.top - 13}px)`;
     }
     get top() { return this.__top; }
 

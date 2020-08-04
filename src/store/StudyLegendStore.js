@@ -133,17 +133,19 @@ export default class StudyLegendStore {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
         if (this.stx.layout && addedIndicator < 5) {
+            const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
+            CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
             const sd = CIQ.Studies.addStudy(this.stx, item);
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
             setTimeout(this.updateIndicatorHeight, 20);
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
+            this.mainStore.chart.setYaxisWidth();
         }
     }
 
     @action.bound updateIndicatorHeight() {
-        const addedIndicator = Object.keys(this.stx.layout.studies || [])
-            .filter(key => this.stx.layout.studies[key].panel !== 'chart').length;
+        const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
 
         const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
         Object.keys(this.stx.panels).forEach((id, index) => {
@@ -151,6 +153,8 @@ export default class StudyLegendStore {
             const panelObj = this.stx.panels[id];
             panelObj.percent = heightRatio.percent;
         });
+        this.stx.draw();
+        this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
         this.stx.draw();
     }
 
