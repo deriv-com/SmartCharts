@@ -70,12 +70,31 @@ class ChartStore {
     @observable yAxiswidth = 0;
     @observable serverTime;
     @observable networkStatus;
+    @observable lastCountDownSecond;
+    @observable countDownLabel;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() { return this.mainStore.routing; }
     get stateStore() { return this.mainStore.state; }
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
+
+    @computed get currentCloseQuote() {
+        let currentQuote = this.stxx.currentQuote();
+
+        if (!currentQuote.Close) {
+            const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
+            if (dataSegmentClose && dataSegmentClose.length) {
+                currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+            } else {
+                const dataSetClose = [...this.stxx.chart.dataSet].filter(item => (item && item.Close));
+                if (dataSetClose && dataSetClose.length) {
+                    currentQuote = dataSetClose[dataSetClose.length - 1];
+                }
+            }
+        }
+        return currentQuote;
+    }
 
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -124,7 +143,7 @@ class ChartStore {
         const chartHeight = this.chartNode.offsetHeight;
         const isSmallScreen = chartHeight < 780;
         const denominator = num >= 5 ? num : (num + 1);
-        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 360 : 340)) / denominator);
+        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 340 : 320)) / denominator);
         return {
             height: indicatorsHeight,
             percent: (indicatorsHeight / chartHeight),
@@ -534,7 +553,6 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
-
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
         // if (stxx.chart.maxTicks - 10 > 50) {
@@ -835,6 +853,29 @@ class ChartStore {
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
         this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
+    }
+
+
+    remainLabelY = () => {
+        const stx = this.context.stx;
+        const topPos = 36;
+        const labelHeight = 24;
+        const bottomPos = 66;
+        let y = stx.chart.currentPriceLabelY + labelHeight;
+        if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
+            y =  stx.chart.panel.bottom - bottomPos;
+            y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
+        } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
+            y = topPos;
+        }
+        return y;
+    }
+
+    @action.bound setYaxisWidth = (width) => {
+        this.yAxiswidth = width || this.yAxiswidth;
+        this.stxx.chart.yAxis.width = width || this.yAxiswidth;
+        this.stxx.calculateYAxisPositions();
+        this.stxx.draw();
     }
 
     getRangeSpan() {

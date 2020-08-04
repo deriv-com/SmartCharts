@@ -1,22 +1,19 @@
-import { observable, action, computed, when, reaction } from 'mobx';
-import MenuStore from './MenuStore';
+import { observable, action, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
-import Menu from '../components/Menu.jsx';
 import ServerTime from '../utils/ServerTime';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route:'time-period' });
-        this.TimePeriodMenu = this.menu.connect(Menu);
         this._serverTime = ServerTime.getInstance();
+        when(() => this.context, this.onContextReady);
     }
 
     get context() { return this.mainStore.chart.context; }
     get loader() { return this.mainStore.loader; }
     get isTick() { return this.timeUnit === 'tick'; }
+    get isSymbolOpen() { return this.mainStore.chartTitle.isSymbolOpen; }
     @observable timeUnit = null;
     @observable interval = null;
     @observable preparingInterval = null;
@@ -36,6 +33,8 @@ export default class TimeperiodStore {
             this.interval,
             this.mainStore.chartSetting.countdown,
             this.mainStore.chartType.type,
+            this.loader.currentState,
+            this.isSymbolOpen,
         ], this.updateCountdown.bind(this));
 
         this.context.stx.addEventListener('newChart', this.updateDisplay);
@@ -50,14 +49,12 @@ export default class TimeperiodStore {
             clearInterval(this.countdownInterval);
         }
 
-        if (this._injectionId)  {
+        if (this._injectionId && this.context)  {
             this.context.stx.removeInjection(this._injectionId);
         }
 
         this._injectionId = undefined;
         this.countdownInterval = undefined;
-
-        this.context.stx.draw();
     }
 
     updateCountdown() {
@@ -66,17 +63,26 @@ export default class TimeperiodStore {
         this.clearCountdown();
 
         const setRemain = () => {
-            if (stx.isDestroyed || this.isTick) {
+            if (stx.isDestroyed || this.isTick || !this.isSymbolOpen) {
                 this.clearCountdown();
                 return;
             }
 
-            const dataSet = stx.chart.dataSet;
-            if (dataSet && dataSet.length !== 0) {
-                const now = this._serverTime.getUTCDate();
-                const diff = now - dataSet[dataSet.length - 1].DT;
-                this.remain = displayMilliseconds((getIntervalInSeconds(stx.layout) * 1000) - diff);
-                stx.draw();
+            const { dataSegment } = stx.chart;
+            if (dataSegment && dataSegment.length) {
+                const dataSegmentClose = [...dataSegment].filter(item => (item && item.Close));
+                if (dataSegmentClose && dataSegmentClose.length) {
+                    const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+                    const now = this._serverTime.getUTCDate();
+                    const diff = now - currentQuote.DT;
+                    const chartInterval = (getIntervalInSeconds(stx.layout) * 1000);
+                    const coefficient = (diff > chartInterval) ? (parseInt(diff / chartInterval, 10) + 1) : 1;
+
+                    if (this.context.stx) {
+                        this.remain = displayMilliseconds((coefficient * chartInterval) - diff);
+                        stx.draw();
+                    }
+                }
             }
         };
 
@@ -94,7 +100,7 @@ export default class TimeperiodStore {
                     if (this.remain && stx.currentQuote() !== null) {
                         stx.yaxisLabelStyle = 'rect';
                         stx.labelType = 'countdown';
-                        stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY, '#15212d', '#FFFFFF');
+                        stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY(), '#15212d', '#FFFFFF');
                         stx.labelType = undefined;
                         stx.yaxisLabelStyle = 'roundRect';
                     }
@@ -134,7 +140,7 @@ export default class TimeperiodStore {
         this.interval = stx.layout.interval;
     }
 
-    @computed get remainLabelY() {
+    remainLabelY = () => {
         const stx = this.context.stx;
         const topPos = 36;
         const labelHeight = 24;
@@ -147,23 +153,5 @@ export default class TimeperiodStore {
             y = topPos;
         }
         return y;
-    }
-
-    @computed get timeUnit_display() {
-        if (!this.timeUnit) { return; }
-        // Convert to camel case:
-        return t.translate(this.timeUnit.replace(/(\w)/, str => str.toUpperCase()));
-    }
-
-    @computed get interval_display() {
-        if (this.interval % 60 === 0) {
-            return this.interval / 60;
-        }
-        return +this.interval ? this.interval : 1;
-    }
-
-    @computed get display() {
-        const t = this.timeUnit ? this.timeUnit[0] : '';
-        return this.interval_display + t; // 1d, 1t, 5m, 2h
     }
 }
