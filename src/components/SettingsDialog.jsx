@@ -219,7 +219,7 @@ const SettingsDialog = ({
     <SettingDialogMenu
         className="cq-modal--settings"
         title={title}
-        newStyle
+        modalMode
         enableTabular={showTabs}
         emptyMenu
         enableOverlay // this temprary, we remove it when all menus convert to modal

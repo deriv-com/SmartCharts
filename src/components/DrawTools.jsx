@@ -127,7 +127,7 @@ const DrawTools = ({
             className="sc-dtools"
             title={t.translate('Drawing tools')}
             tooltip={t.translate('Drawing tools')}
-            newStyle
+            modalMode
             enableTabular
             portalNodeId={portalNodeId}
         >
