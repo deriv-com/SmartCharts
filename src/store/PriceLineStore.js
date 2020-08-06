@@ -102,7 +102,7 @@ export default class PriceLineStore {
     }
 
     get realPrice() {
-        return this.relative ? this.stx.currentQuote().Close + this._price : this._price;
+        return this.relative ? this.mainStore.chart.currentCloseQuote.Close + this._price : this._price;
     }
 
     get yAxiswidth() {
