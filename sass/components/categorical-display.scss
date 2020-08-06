@@ -27,8 +27,6 @@
             line-height: 1.5;
             letter-spacing: normal;
         }
-        // &__body {
-        // }
     }
     &__content {
         width: 320px;
@@ -118,7 +116,6 @@
         width: 100%;
     }
     &__category {
-        padding-top: 3em;
         padding-bottom: 12px;
         position: relative;
         @include themify($themes) {
@@ -133,11 +130,7 @@
                 background-color: themed('CatDisplayCatContentBg');
             }
         }
-        &:first-child {
-            padding-top: 4.5em;
-        }
         &:last-child {
-            padding-bottom: 2.5em;
             margin-bottom: 10px !important;
             border-bottom: none;
         }
@@ -153,11 +146,11 @@
             display: block;
             font-size: 1.4em;
             font-weight: bold;
-            padding: 0 16px;
+            padding: 0 20px;
             line-height: 40px;
-            position: absolute;
+            position: relative;
             top: 0;
-            width: 100%;
+            // width: 100%;
             transform: translate3d(0, 0, 0);
             @include themify($themes) {
                 color: themed('CatDisplayCatTitleText');
@@ -217,15 +210,15 @@
                 }
             }
             .subcategory {
-                padding: 0;
+                padding: 0 20px;
                 font-size: 1.4em;
                 border-radius: 4px 4px 0 0;
                 display: flex;
                 height: 40px;
-                font-weight: normal;
+                font-weight: bold;
                 align-items: center;
                 @include themify($themes) {
-                    color: themed('CatDisplayCatContentTitleText');
+                    color: themed('CatDisplayCatTitleText');
                     background-color: themed('CatDisplayCatContentBg');
                 }
             }
@@ -372,6 +365,14 @@
                     transition: transform 0.3s ease-in-out;
                     @include themify($themes) {
                         fill: themed('CatDisplayText');
+                    }
+                }
+            }
+            &__content {
+                .subcategory {
+                    font-weight: normal;
+                    @include themify($themes) {
+                        color: themed('CatDisplayCatContentTitleText');
                     }
                 }
             }

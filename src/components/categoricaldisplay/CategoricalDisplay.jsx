@@ -24,7 +24,7 @@ const CategoricalDisplay = React.memo(({
         {!isMobile && (
             <div className="sc-mcd__tabs">
                 <div className="sc-mcd__tabs__head">
-                    {t.translate('Assets')}
+                    {t.translate('Markets')}
                 </div>
                 <div className="sc-mcd__tabs__body">
                     {!isNestedList && <FilterPanel /> }

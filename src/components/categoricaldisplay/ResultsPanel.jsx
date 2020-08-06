@@ -20,15 +20,6 @@ const EmptyCategory = React.memo(({ category }) => (
     </div>
 ));
 
-const CategoryTitleClassName = (categoryId, activeHeadKey, activeHeadTop, categorySubtitle, active) => {
-    let TitleClassName = '';
-    if (activeHeadKey === categoryId) {
-        TitleClassName = activeHeadTop < 0 ? 'sticky-bottom' : 'sticky-top';
-    }
-
-    return `sc-mcd__category__head ${TitleClassName} ${categorySubtitle ? 'has-subtitle' : ''} ${active ? 'active' : ''}`;
-};
-
 const CategoryTitleLeft = React.memo(({ isNestedList, category }) => {
     const CategoryIcon = CategoryIconMap[category.categoryId];
     return (
@@ -39,10 +30,9 @@ const CategoryTitleLeft = React.memo(({ isNestedList, category }) => {
     );
 });
 
-const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffset, isNestedList, handleTitleClick }) => (
+const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick }) => (
     <div
-        className={CategoryTitleClassName(category.categoryId, activeHeadKey, activeHeadTop, category.categorySubtitle, category.active)}
-        style={{ top: (activeHeadKey === category.categoryId) ? activeHeadOffset : null }}
+        className={`sc-mcd__category__head ${category.categorySubtitle ? 'has-subtitle' : ''} ${category.active ? 'active' : ''}`}
         onClick={() => handleTitleClick(category.categoryId)}
     >
         <CategoryTitleLeft isNestedList={isNestedList} category={category} />
@@ -67,19 +57,19 @@ const CategoryTitle = ({ category, activeHeadKey, activeHeadTop, activeHeadOffse
     </div>
 );
 
-const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSelectItem, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
+const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSelectItem, activeHeadKey, disableAll, isNestedList, handleTitleClick }) => (
     <div
         className={`sc-mcd__category sc-mcd__category--${category.categoryId} ${category.categorySubtitle ? 'sc-mcd__category--has-subtitle' : ''} ${category.active ? 'sc-mcd__category--active' : ''}`}
         ref={el => setCategoryElement(el, category.categoryId)}
     >
-        <CategoryTitle
-            category={category}
-            activeHeadKey={activeHeadKey}
-            activeHeadTop={activeHeadTop}
-            activeHeadOffset={activeHeadOffset}
-            isNestedList={isNestedList}
-            handleTitleClick={handleTitleClick}
-        />
+        {(isNestedList || !category.hasSubcategory) && (
+            <CategoryTitle
+                category={category}
+                activeHeadKey={activeHeadKey}
+                isNestedList={isNestedList}
+                handleTitleClick={handleTitleClick}
+            />
+        )}
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
@@ -114,7 +104,7 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
     </div>
 );
 
-export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, activeHeadTop, activeHeadOffset, disableAll, isNestedList, handleTitleClick }) => (
+export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, disableAll, isNestedList, handleTitleClick }) => (
     filteredItems.map((category) => {
         const categoryItemCount = getItemCount(category);
         return (categoryItemCount > 0 || category.emptyDescription) && (
@@ -126,8 +116,6 @@ export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemTy
                 setCategoryElement={setCategoryElement}
                 onSelectItem={onSelectItem}
                 activeHeadKey={activeHeadKey}
-                activeHeadTop={activeHeadTop}
-                activeHeadOffset={activeHeadOffset}
                 disableAll={disableAll}
                 isNestedList={isNestedList}
                 handleTitleClick={handleTitleClick}

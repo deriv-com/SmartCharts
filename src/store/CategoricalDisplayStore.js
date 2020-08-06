@@ -30,7 +30,6 @@ export default class CategoricalDisplayStore {
                 const activeSubCategoryClassName = this.id ? `.category-${this.activeCategoryKey} .${this.id}-subcategory-item-${this.activeSubCategory}` : `.category-${this.activeCategoryKey}  .subcategory-item-${this.activeSubCategory}`;
                 const el_active_sub_category = this.scrollPanel.querySelector(activeSubCategoryClassName);
                 this.activeHeadKey = this.activeCategoryKey || null;
-                this.activeHeadTop = 0;
                 this.pauseScrollSpy = true;
                 this.isUserScrolling = false;
 
@@ -53,6 +52,13 @@ export default class CategoricalDisplayStore {
                     setTimeout(() => {
                         this.searchInput.current.focus();
                     }, 0);
+                }
+
+                if (!mainStore.chart.isMobile) {
+                    const categories = Object.keys(this.categoryElements);
+                    const last_category = categories.pop();
+                    const last_category_bottom_gap = this.height - (64 + (categories.length * 40)); // to make the last category height reach it's filter tab
+                    this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
                 }
             } else if (!getIsShown()) {
                 this.scrollPanel = null;
@@ -95,9 +101,7 @@ export default class CategoricalDisplayStore {
             filteredItems: this.filteredItems,
             setCategoryElement: this.setCategoryElement,
             getItemType,
-            activeHeadTop: this.activeHeadTop,
             activeHeadKey: this.activeHeadKey,
-            activeHeadOffset: this.activeHeadOffset,
             handleTitleClick: this.handleTitleClick,
         }))(ResultsPanel);
 
@@ -124,10 +128,8 @@ export default class CategoricalDisplayStore {
     @observable activeCategoryKey = '';
     @observable focusedCategoryKey = null;
     @observable isScrollingDown = false;
-    scrollTop = undefined;
     @observable activeHeadKey = undefined;
-    @observable activeHeadTop = 0;
-    @observable activeHeadOffset = undefined;
+    scrollTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
     activeCategories = [];
@@ -144,23 +146,17 @@ export default class CategoricalDisplayStore {
         if (this.pauseScrollSpy || !this.scrollPanel) { return; }
         if (this.filteredItems.length === 0) { return; }
 
-        // hits: 40px for title hight + 4px for content bottom border
-        const categoryTitleHeight = 44;
         const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
-        let activeHeadTop = 0;
         let activeMenuId = null;
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
-
             if (!el) { return; }
-
+            const gap_top = Object.keys(this.categoryElements).indexOf(category.categoryId) * 40;
             const r = el.getBoundingClientRect();
-            const top = r.top - scrollPanelTop;
+            const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
                 activeMenuId = category.categoryId;
-                const categorySwitchPoint = r.height + top - categoryTitleHeight;
-                activeHeadTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
             }
         }
 
@@ -171,11 +167,8 @@ export default class CategoricalDisplayStore {
             this.scrollDown();
         }
 
-        const offsetTop = this.scrollPanel.getBoundingClientRect().top - window.scrollY;
-        this.activeHeadOffset = (this.chart.isMobile ? offsetTop : 0);
         this.scrollTop = scrollTop;
         this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
-        this.activeHeadTop = activeHeadTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
@@ -318,6 +311,7 @@ export default class CategoricalDisplayStore {
 
     @action.bound handleFilterClick(categoryId) {
         const el = this.categoryElements[categoryId];
+        const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
         if (el) {
             // TODO: Scroll animation
@@ -330,7 +324,7 @@ export default class CategoricalDisplayStore {
                     behavior: 'smooth',
                 });
             } else {
-                this.scrollPanel.scrollTop = el.offsetTop;
+                this.scrollPanel.scrollTop = el.offsetTop - gap_top;
             }
             this.focusedCategoryKey = categoryId;
             this.activeHeadKey = null;
@@ -360,7 +354,6 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        this.activeHeadTop = null;
         setTimeout(() => this.updateScrollSpy(), 0);
     }
 
