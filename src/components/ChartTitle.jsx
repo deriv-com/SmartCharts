@@ -1,68 +1,83 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { connect } from '../store/Connect';
+import React, { Component } from 'react';
+import ReactDOM             from 'react-dom';
+import { connect }          from '../store/Connect';
 import '../../sass/components/chart-title.scss';
 
-const ChartTitle = ({
-    chartId,
-    ChartTitleMenu,
-    containerId,
-    currentSymbol,
-    enabled,
-    isMobile,
-    MarketSelector,
-    portalNodeId,
-    onChange,
-    SymbolSelectButton,
-    setMenuOpen,
-    searchInputClassName,
-    theme,
-    onMouseEnter,
-    onMouseLeave,
-    isNestedList,
-}) => {
-    if (!currentSymbol) { return null; }
-
-    const ChartTitleContainer = (
-        <ChartTitleMenu
-            enabled={enabled}
-            className="cq-chart-title stx-show cq-symbols-display"
-            isFullscreen
-            portalNodeId={portalNodeId}
-            title={isMobile ? t.translate('Underlying Assets') : ''}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-        >
-            <ChartTitleMenu.Title>
-                <SymbolSelectButton />
-            </ChartTitleMenu.Title>
-            <ChartTitleMenu.Body>
-                <MarketSelector
-                    portalNodeId={portalNodeId}
-                    isNestedList={isNestedList}
-                    searchInputClassName={searchInputClassName}
-                    onSelectItem={(x) => {
-                        if (x.symbol !== currentSymbol.symbol) {
-                            onChange(x.symbol, chartId);
-                        }
-                        setMenuOpen(false);
-                    }}
-                />
-            </ChartTitleMenu.Body>
-        </ChartTitleMenu>
-    );
-
-    if (containerId) {
-        return ReactDOM.createPortal(
-            <div className={`smartcharts-${theme}`}>
-                {ChartTitleContainer}
-            </div>,
-            document.getElementById(containerId),
-        );
+class ChartTitle extends Component {
+    componentDidUpdate(prevProps) {
+        const { updateProps, ...props } = this.props;
+        const { updateProps: prevUpdateProps, ...previousProps } = prevProps;
+        if (
+            (previousProps.active_category !== props.active_category)
+            || (previousProps.open !== props.open)
+        ) {
+            updateProps(props);
+        }
     }
 
-    return ChartTitleContainer;
-};
+    render() {
+        const {
+            chartId,
+            ChartTitleMenu,
+            containerId,
+            currentSymbol,
+            enabled,
+            isMobile,
+            MarketSelector,
+            portalNodeId,
+            onChange,
+            SymbolSelectButton,
+            setMenuOpen,
+            searchInputClassName,
+            theme,
+            onMouseEnter,
+            onMouseLeave,
+            isNestedList,
+        } = this.props;
+
+        if (!currentSymbol) { return null; }
+
+        const ChartTitleContainer = (
+            <ChartTitleMenu
+                enabled={enabled}
+                className="cq-chart-title stx-show cq-symbols-display"
+                isFullscreen
+                portalNodeId={portalNodeId}
+                title={isMobile ? t.translate('Underlying Assets') : ''}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+            >
+                <ChartTitleMenu.Title>
+                    <SymbolSelectButton />
+                </ChartTitleMenu.Title>
+                <ChartTitleMenu.Body>
+                    <MarketSelector
+                        portalNodeId={portalNodeId}
+                        isNestedList={isNestedList}
+                        searchInputClassName={searchInputClassName}
+                        onSelectItem={(x) => {
+                            if (x.symbol !== currentSymbol.symbol) {
+                                onChange(x.symbol, chartId);
+                            }
+                            setMenuOpen(false);
+                        }}
+                    />
+                </ChartTitleMenu.Body>
+            </ChartTitleMenu>
+        );
+
+        if (containerId) {
+            return ReactDOM.createPortal(
+                <div className={`smartcharts-${theme}`}>
+                    {ChartTitleContainer}
+                </div>,
+                document.getElementById(containerId),
+            );
+        }
+
+        return ChartTitleContainer;
+    }
+}
 
 export default connect(({ chartTitle: c, chart, state, chartSetting }) => ({
     chartId           : state.chartId,
@@ -75,5 +90,6 @@ export default connect(({ chartTitle: c, chart, state, chartSetting }) => ({
     SymbolSelectButton: c.SymbolSelectButton,
     onMouseEnter      : c.onMouseEnter,
     onMouseLeave      : c.onMouseLeave,
+    updateProps       : c.updateProps,
     theme             : chartSetting.theme,
 }))(ChartTitle);
