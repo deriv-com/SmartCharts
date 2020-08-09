@@ -65,6 +65,7 @@ class ChartStore {
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
+    @observable isScaledOneOne = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
