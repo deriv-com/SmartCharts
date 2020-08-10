@@ -118,7 +118,7 @@ class App extends Component {
             layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
         let chartType;
         let isChartTypeCandle;
-        let granularity = 0;
+        let granularity = 60;
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
@@ -181,6 +181,7 @@ class App extends Component {
             markers: [],
             crosshairState: 1,
             activeSymbols,
+            activeCategory: '',
         };
     }
 
@@ -246,7 +247,11 @@ class App extends Component {
 
     renderTopWidgets = () => (
         <React.Fragment>
-            <ChartTitle onChange={this.symbolChange} />
+            <ChartTitle
+                onChange={this.symbolChange}
+                active_category={this.state.activeCategory}
+                open={!!this.state.activeCategory}
+            />
             {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} /> }
             <Notification
                 notifier={this.notifier}
@@ -446,6 +451,12 @@ class App extends Component {
         window.location.href = `${baseUrl}?activeSymbols=${evt.target.value}`;
     }
 
+    onActiveCategory = () => {
+        this.setState(prevState => ({
+            activeCategory: prevState.activeCategory ? null : 'synthetic_index',
+        }));
+    }
+
     onChartSize = (state) => {
         this.setState({
             zoom: state,
@@ -548,6 +559,9 @@ class App extends Component {
                         <button type="button" onClick={this.onWidget}>Navigate Widget</button>
                         <button type="button" onClick={this.onFooter}>Footer</button>
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
+
+                        <button type="button" onClick={this.onActiveCategory}>Active Category</button>
+
                     </div>
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
