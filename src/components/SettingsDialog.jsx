@@ -163,7 +163,7 @@ const SettingsPanel = ({
             setPanel={setScrollPanel}
             freeze={freezeScroll}
             autoHide
-            height="280px"
+            height="282px"
         >
             {itemGroups.map(group => (
                 (group.fields.length > 0)

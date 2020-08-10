@@ -46,8 +46,10 @@
             transform: translateZ(0);
             position: relative;
 
-            &_scroll {
-                overflow: auto;
+            &__scroll {
+                overflow-y: auto;
+                position: relative;
+                height: 100%;
             }
         }
     }
@@ -234,6 +236,7 @@
         justify-content: space-between;
         line-height: initial;
         font-size: 1.4em;
+        cursor: pointer;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayBg');
             background-color: themed('CatDisplayCatContentBg');
@@ -310,7 +313,6 @@
                     svg {
                         @include themify($themes) {
                             fill: themed('CatDisplayCatActiveContentIcon');
-                            stroke: themed('CatDisplayCatActiveContentIcon') !important;
                         }
                     }
                 }

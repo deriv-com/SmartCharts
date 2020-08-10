@@ -104,7 +104,7 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
     </div>
 );
 
-export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, disableAll, isNestedList, handleTitleClick }) => (
+export const ResultsPanel = ({ filteredItems, onSelectItem, getItemType, setCategoryElement, activeHeadKey, disableAll, isNestedList, handleTitleClick }) => (
     filteredItems.map((category) => {
         const categoryItemCount = getItemCount(category);
         return (categoryItemCount > 0 || category.emptyDescription) && (
@@ -122,4 +122,4 @@ export const ResultsPanel = React.memo(({ filteredItems, onSelectItem, getItemTy
             />
         );
     })
-));
+);
