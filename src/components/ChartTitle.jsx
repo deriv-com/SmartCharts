@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM             from 'react-dom';
 import { connect }          from '../store/Connect';
-import '../../sass/components/chart-title.scss';
+import '../../sass/components/_chart-title.scss';
 
 class ChartTitle extends Component {
     componentDidUpdate(prevProps) {

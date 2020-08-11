@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect }  from '../store/Connect';
-import '../../sass/components/scroll.scss';
+import '../../sass/components/_scroll.scss';
 
 const Scroll = ({
     children,
