@@ -3,6 +3,19 @@ import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils
 import ServerTime from '../utils/ServerTime';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
 
+const UnitMap = {
+    tick: 'T',
+    minute: 'M',
+    hour: 'H',
+    day: 'D',
+};
+
+const TimeMap = {
+    tick: 1,
+    minute: 1,
+    hour: 60,
+};
+
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -14,6 +27,9 @@ export default class TimeperiodStore {
     get loader() { return this.mainStore.loader; }
     get isTick() { return this.timeUnit === 'tick'; }
     get isSymbolOpen() { return this.mainStore.chartTitle.isSymbolOpen; }
+    get display() {
+        return `${this.interval === 'day' ? 1 : (this.interval / TimeMap[this.timeUnit])} ${UnitMap[this.timeUnit]}`;
+    }
     @observable timeUnit = null;
     @observable interval = null;
     @observable preparingInterval = null;
