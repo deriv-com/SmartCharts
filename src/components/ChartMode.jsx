@@ -11,19 +11,6 @@ import {
 } from './Icons.jsx';
 import '../../sass/components/_chart-mode.scss';
 
-const UnitMap = {
-    tick: 'T',
-    minute: 'M',
-    hour: 'H',
-    day: 'D',
-};
-
-const TimeMap = {
-    tick: 1,
-    minute: 1,
-    hour: 60,
-};
-
 const TypeMap = {
     mountain: TypeAreaGrayscaleIcon,
     candle: TypeCandleGrayscaleIcon,
@@ -37,8 +24,7 @@ const ChartMode = ({
     onChartType,
     onGranularity,
     Type,
-    interval,
-    timeUnit,
+    displayInterval,
     portalNodeId,
 }) => {
     const TypeIcon = TypeMap[Type.id];
@@ -54,7 +40,7 @@ const ChartMode = ({
             <ChartTypeMenu.Title>
                 <div className={`sc-chart-mode__menu ${menuOpen ? 'sc-chart-mode__menu--active' : ''}`}>
                     <span className="sc-chart-mode__menu__timeperiod">
-                        {interval === 'day' ? 1 : (interval / TimeMap[timeUnit])} {UnitMap[timeUnit]}
+                        {displayInterval}
                     </span>
                     <TypeIcon tooltip-title={t.translate(Type.text)} />
                 </div>
@@ -77,6 +63,5 @@ export default connect(({ chartMode, chartType, timeperiod }) => ({
     ChartTypeMenu   : chartMode.ChartTypeMenu,
     menuOpen        : chartMode.menu.open,
     Type            : chartType.type,
-    timeUnit        : timeperiod.timeUnit,
-    interval        : timeperiod.interval,
+    displayInterval : timeperiod.display,
 }))(ChartMode);
