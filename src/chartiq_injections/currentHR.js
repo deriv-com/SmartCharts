@@ -39,13 +39,9 @@ CIQ.ChartEngine.prototype.drawCurrentHR = function () {
                 if (pquote) prevClose = pquote[field];
             }
 
-            let currentQuote = this.currentQuote();
+            let currentQuote = this.getNearestCloseQuote();
             if (!currentClose) {
-                const dataSegmentClose = [...chart.dataSegment].filter(item => (item && item.Close));
-                if (dataSegmentClose && dataSegmentClose.length) {
-                    currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
-                    currentClose = currentQuote[field];
-                }
+                currentClose = currentQuote[field];
             }
 
             if (currentClose < prevClose) {

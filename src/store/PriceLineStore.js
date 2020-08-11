@@ -85,7 +85,7 @@ export default class PriceLineStore {
 
         this._relative = value;
         // convert between relative and absolute
-        const currentQuote = this.stx.currentQuote();
+        const currentQuote = this.mainStore.chart.currentCloseQuote;
         let currentPrice =  currentQuote ? currentQuote.Close : 0;
         if (this._relative) { currentPrice = -currentPrice; }
         this.price = this._price + currentPrice;

@@ -1,4 +1,4 @@
-.cq-chart-size {
+.sc-chart-size {
     display: flex !important;
     height: auto;
     width: auto !important;
@@ -27,58 +27,5 @@
         width: auto;
         line-height: 25px;
         display: none; /* TODO */
-    }
-}
-
-.cq-chart-control-left {
-    .cq-chart-size {
-        // width: 100px !important;
-        min-height: 114px;
-        flex-flow: column;
-    }
-}
-
-.smartcharts-480 {
-    .smartcharts-desktop {
-        .cq-chart-control-bottom {
-            .cq-chart-controls {
-                .cq-chart-size {
-                    .cq-menu-btn {
-                        width: 47px;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.smartcharts-900 {
-    .smartcharts-desktop {
-        .cq-chart-control-bottom {
-            .cq-chart-controls {
-                .cq-chart-size {
-                    .cq-menu-btn {
-                        width: auto;
-                        min-width: 45px;
-                    }
-                }
-            }
-        }
-    }
-}
-
-.smartcharts-1280 {
-    .smartcharts-desktop {
-        .cq-chart-control-bottom {
-            .cq-chart-controls {
-                .cq-chart-size {
-                    .cq-menu-btn {
-                        width: 50px;
-                        padding-right: 0px !important;
-                        padding-left: 0px !important;
-                    }
-                }
-            }
-        }
     }
 }

@@ -9,7 +9,7 @@ import {
     TypeHollowGrayscaleIcon,
     TypeOhlcGrayscaleIcon,
 } from './Icons.jsx';
-import '../../sass/components/chart-mode.scss';
+import '../../sass/components/_chart-mode.scss';
 
 const TypeMap = {
     mountain: TypeAreaGrayscaleIcon,
