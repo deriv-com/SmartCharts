@@ -18,6 +18,10 @@
         &--hidden {
             display: none;
         }
+        &--disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
         .ic-icon {
             width: 32px;
             height: 32px;
