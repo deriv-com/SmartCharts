@@ -35,8 +35,7 @@ class Menu extends Component {
             ready,
             customHead,
             emptyMenu,
-            newStyle, // this props will remove after we apply new design
-            // to all of components
+            newStyle,
         } = this.props;
 
         if (!ready) return '';
@@ -45,15 +44,14 @@ class Menu extends Component {
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
         if (newStyle) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
-            const modalDropdown = (
-                <div className={`cq-modal-dropdown ${className || ''} ${open && 'stxMenuActive'}`}>
-                    <div
-                        className="cq-modal__overlay"
-                        onClick={this.onOverlayClick}
-                    >
-                        {
-                            (shouldRenderDialogs
-                            && (
+            const newDialog = ReactDOM.createPortal(
+                <div className={`smartcharts-${theme}`}>
+                    <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
+                        <div className={`cq-modal-dropdown ${className || ''} ${open && 'stxMenuActive'}`}>
+                            <div
+                                className="cq-modal__overlay"
+                                onClick={this.onOverlayClick}
+                            >
                                 <CSSTransition
                                     appear
                                     in={dialogStatus}
@@ -72,15 +70,8 @@ class Menu extends Component {
                                         {rest}
                                     </DropdownDialog>
                                 </CSSTransition>
-                            ))
-                        }
-                    </div>
-                </div>
-            );
-            const newDialog = ReactDOM.createPortal(
-                <div className={`smartcharts-${theme}`}>
-                    <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
-                        {modalDropdown}
+                            </div>
+                        </div>
                     </div>
                 </div>,
                 portalNode,
@@ -91,69 +82,45 @@ class Menu extends Component {
             }
 
             return (
-                enabled && (
-                    <Tooltip
-                        className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}
-                        content={tooltip}
-                        enabled={tooltip}
-                        position="right"
+                <Tooltip
+                    className={`ciq-menu ${enabled ? 'ciq-enabled' : 'ciq-disabled'} ${className || ''} ${(enabled && open) ? 'stxMenuActive' : ''}`}
+                    content={tooltip}
+                    enabled={tooltip}
+                    position="right"
+                >
+                    <div
+                        className="cq-menu-btn"
+                        onMouseEnter={onMouseEnter}
+                        onMouseLeave={onMouseLeave}
+                        onClick={enabled ? onTitleClick : () => null}
                     >
-                        <div
-                            className="cq-menu-btn"
-                            onMouseEnter={onMouseEnter}
-                            onMouseLeave={onMouseLeave}
-                            onClick={onTitleClick}
-                        >
-                            {first}
-                        </div>
-                        {open && newDialog}
-                    </Tooltip>
-                ) || (
-                    <Tooltip
-                        className={`ciq-menu ciq-disabled ${className || ''}`}
-                        content={tooltip}
-                        enabled={tooltip}
-                        position="right"
-                    >
-                        <div
-                            className="cq-menu-btn"
-                            onMouseEnter={onMouseEnter}
-                            onMouseLeave={onMouseLeave}
-                        >
-                            {first}
-                        </div>
-                    </Tooltip>
-                )
+                        {first}
+                    </div>
+                    {(enabled && open) && newDialog}
+                </Tooltip>
             );
         }
 
         const oldDropdown = (shouldRenderDialogs
             && (
-                <CSSTransition
-                    in={open}
-                    timeout={150}
-                    classNames="cq-menu-dropdown"
-                    unmountOnExit
+                <DropdownDialog
+                    className={`cq-menu-dropdown ${dialogStatus ? 'cq-menu-dropdown-enter-done' : ''}`}
+                    isMobile={isMobile}
+                    isFullscreen={isFullscreen}
                 >
-                    <DropdownDialog
-                        className="cq-menu-dropdown"
-                        isMobile={isMobile}
-                        isFullscreen={isFullscreen}
-                    >
-                        {title
-                    && (
-                        <div className="title">
-                            <div className="title-text">{title}</div>
-                            <CloseIcon
-                                className="icon-close-menu"
-                                onClick={onTitleClick}
-                            />
-                        </div>
-                    )
-                        }
-                        {rest}
-                    </DropdownDialog>
-                </CSSTransition>
+                    {title
+                && (
+                    <div className="title">
+                        <div className="title-text">{title}</div>
+                        <CloseIcon
+                            className="icon-close-menu"
+                            onClick={onTitleClick}
+                        />
+                    </div>
+                )
+                    }
+                    {rest}
+                </DropdownDialog>
             ));
 
         return (
