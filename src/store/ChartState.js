@@ -491,6 +491,7 @@ class ChartState {
                 this.stxx.chart.lockScroll = true;
             });
         } else if (scrollToEpoch && this.startEpoch || force) {
+            // scale 1:1 happen
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
@@ -503,6 +504,7 @@ class ChartState {
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
                 this.stxx.allowScroll = false;
             }
+            this.mainStore.chart.isScaledOneOne = true;
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         } else {

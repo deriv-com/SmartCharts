@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import CrosshairToggle from './CrosshairToggle.jsx';
-import '../../sass/components/navigation-widget.scss';
+import '../../sass/components/_navigation-widget.scss';
 
 import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
 
@@ -13,6 +13,7 @@ const NavigationWidget = ({
     enableScale,
     onMouseEnter,
     onMouseLeave,
+    isScaledOneOne,
     onCrosshairChange,
 }) => {
     if (!context) return '';
@@ -24,7 +25,7 @@ const NavigationWidget = ({
             onMouseLeave={onMouseLeave}
         >
             <div
-                className={`sc-navigation-widget__item sc-navigation-widget__item--scale ${!enableScale ? 'sc-navigation-widget__item--hidden' : ''}`}
+                className={`sc-navigation-widget__item sc-navigation-widget__item--scale ${!enableScale ? 'sc-navigation-widget__item--hidden' : ''} ${isScaledOneOne ? 'sc-navigation-widget__item--disabled' : ''}`}
                 onClick={onScale}
             >
                 <ScaleIcon />
@@ -42,6 +43,7 @@ const NavigationWidget = ({
 
 export default connect(({ chart, chartSize, navigationWidget }) => ({
     context: chart.context,
+    isScaledOneOne: chart.isScaledOneOne,
     zoomIn: chartSize.zoomIn,
     zoomOut: chartSize.zoomOut,
     onScale: navigationWidget.onScale,

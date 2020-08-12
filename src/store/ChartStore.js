@@ -65,6 +65,7 @@ class ChartStore {
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
+    @observable isScaledOneOne = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
@@ -307,6 +308,9 @@ class ChartStore {
         };
         CIQ.ChartEngine.prototype.isHistoricalMode = function () {
             return !!_self.stateStore.endEpoch;
+        };
+        CIQ.ChartEngine.prototype.getNearestCloseQuote = function () {
+            return _self.currentCloseQuote;
         };
 
         this.rootNode = rootNode;
@@ -816,14 +820,8 @@ class ChartStore {
 
     @action.bound updateYaxisWidth = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
-            const currentQuote = this.context.stx.currentQuote();
-            if (currentQuote && currentQuote.Close) {
-                this.calculateYaxisWidth(currentQuote.Close);
-            } else {
-                const lastDataWithClose = this.stxx.masterData.find(x => x.Close);
-                if (lastDataWithClose) {
-                    this.calculateYaxisWidth(lastDataWithClose.Close);
-                }
+            if (this.currentCloseQuote && this.currentCloseQuote.Close) {
+                this.calculateYaxisWidth(this.currentCloseQuote.Close);
             }
         }
     }

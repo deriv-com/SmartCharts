@@ -11,11 +11,16 @@ export default class ChartSizeStore {
 
     onContextReady = () => { this.stx = this.mainStore.chart.context.stx; };
 
+    @action.bound updateChartState() {
+        this.stx.chart.lockScroll = false;
+        this.stx.chart.lockAutoScroll = false;
+        this.mainStore.chart.isScaledOneOne = false;
+    }
+
     @action.bound zoomIn() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
         if (this.stx) {
-            this.stx.chart.lockScroll = false;
-            this.stx.chart.lockAutoScroll = false;
+            this.updateChartState();
             this.stx.zoomIn();
         }
     }
@@ -23,8 +28,7 @@ export default class ChartSizeStore {
     @action.bound zoomOut() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
         if (this.stx) {
-            this.stx.chart.lockScroll = false;
-            this.stx.chart.lockAutoScroll = false;
+            this.updateChartState();
             this.stx.zoomOut();
         }
     }
