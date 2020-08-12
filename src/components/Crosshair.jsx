@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../sass/components/crosshair.scss';
+import '../../sass/components/_crosshair.scss';
 
 const Crosshair = () => (
     <div className="cq-crosshair">

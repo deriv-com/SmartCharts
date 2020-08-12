@@ -1,6 +1,6 @@
 import React    from 'react';
 import Scroll   from '../Scroll.jsx';
-import '../../../sass/components/categorical-display.scss';
+import '../../../sass/components/_categorical-display.scss';
 
 const CategoricalDisplay = React.memo(({
     onSelectItem,
