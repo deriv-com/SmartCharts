@@ -6,7 +6,7 @@ import {
     CsvIcon,
 } from './Icons.jsx';
 import { InlineLoader } from './Loader.jsx';
-import '../../sass/components/download.scss';
+import '../../sass/components/_download.scss';
 
 
 const Share = ({

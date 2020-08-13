@@ -18,7 +18,7 @@ export default class ShareStore {
     @computed get timeUnit() { return this.mainStore.timeperiod.timeUnit; }
     @computed get timeperiodDisplay() { return this.mainStore.timeperiod.display; }
     @computed get marketDisplayName() {
-        return this.mainStore.chart.currentActiveSymbol.market_display_name;
+        return this.mainStore.chart.currentActiveSymbol.name;
     }
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;

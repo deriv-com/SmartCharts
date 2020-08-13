@@ -4,7 +4,7 @@ import { connect }      from '../store/Connect';
 import Tooltip          from './Tooltip.jsx';
 import { InlineLoader } from './Loader.jsx';
 import { Intervals }    from '../Constant';
-import '../../sass/components/timeperiod.scss';
+import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
     chartId,

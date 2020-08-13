@@ -14,7 +14,7 @@ import {
     SettingHistoricalMap,
     SettingHighestLowestMap,
 } from './Icons.jsx';
-import '../../sass/components/chart-setting.scss';
+import '../../sass/components/_chart-setting.scss';
 
 const ChartSettingItem = ({
     title,

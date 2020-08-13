@@ -112,6 +112,7 @@ export default class CategoricalDisplayStore {
             handleFilterClick: this.handleFilterClick,
             activeCategoryKey: this.activeCategoryKey,
             focusedCategoryKey: this.focusedCategoryKey,
+            isSearching: this.filterText !== '',
         }))(FilterPanel);
 
         this.SearchInput = connect(() => ({

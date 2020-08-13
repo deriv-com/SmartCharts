@@ -10,7 +10,7 @@ import {
     EmptyStateIcon,
     OverwriteStateIcon,
 } from './Icons.jsx';
-import '../../sass/components/view.scss';
+import '../../sass/components/_view.scss';
 
 const ViewItem = ({
     view,

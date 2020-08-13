@@ -23,10 +23,19 @@ class CurrentSpotStore {
         if (this.state.endEpoch) { return; }
         const stx = this.stx;
         const chart = stx.chart;
-        const len = chart.dataSet.length;
+        let len = chart.dataSet.length;
         if (!len) { return; }
-        const bar = chart.dataSet[len - 1];
-        const prevBar = chart.dataSet[len - 2];
+        let bar = chart.dataSet[len - 1];
+        let prevBar = chart.dataSet[len - 2];
+
+        if (!bar || !prevBar || !bar.Close || !prevBar.Close) {
+            const dataSetClose = [...chart.dataSet].filter(item => (item && item.Close));
+            len = dataSetClose.length;
+            if (!len) { return; }
+            bar = dataSetClose[len - 1];
+            prevBar = dataSetClose[len - 2];
+        }
+
         if (!bar || !prevBar || !bar.Close || !prevBar.Close) { return; }
         let x = stx.pixelFromTick(len - 1, chart);
         const deltaX = bar.chartJustAdvanced ? x - stx.pixelFromTick(len - 2, chart) : 0;
