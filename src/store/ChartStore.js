@@ -255,7 +255,7 @@ class ChartStore {
                     self.draw();
                 };
             }
-            if (typeof params.maintainWhitespace === 'undefined') params.maintainWhitespace = true;  // maintain the whitespace unless set to false
+            if (typeof params.maintainWhitespace === 'undefined') params.maintainWhitespace = true; // maintain the whitespace unless set to false
 
             this.cancelTouchSingleClick = true;
             if (!this.chart.dataSet || !this.chart.dataSet.length) {
@@ -277,9 +277,10 @@ class ChartStore {
 
                 let exactScroll = Math.min(barsDisplayedOnScreen, chart.dataSet.length); // the scroll must be the number of bars you want to see.
                 if (this.chart.allowScrollPast) exactScroll = barsDisplayedOnScreen; // If whitespace allowed on left of screen
-                this.micropixels = this.chart.width - (exactScroll * layout.candleWidth) - whitespace;
+                this.micropixels =                    this.chart.width - exactScroll * layout.candleWidth - whitespace;
                 this.preferences.whitespace = whitespace;
-                while (this.micropixels > layout.candleWidth) { // If micropixels is larger than a candle then scroll back further
+                while (this.micropixels > layout.candleWidth) {
+                    // If micropixels is larger than a candle then scroll back further
                     exactScroll++;
                     this.micropixels -= layout.candleWidth;
                 }
@@ -289,7 +290,7 @@ class ChartStore {
                 }
                 this.micropixels -= layout.candleWidth;
                 exactScroll++;
-                if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
+                if (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
                     exactScroll = parseInt(exactScroll * 0.8, 10); // eslint-disable-line
@@ -299,7 +300,11 @@ class ChartStore {
 
                 if (params.animate) {
                     const self = this;
-                    this.scrollTo(chart, exactScroll, scrollToCallback(self, chart, exactScroll));
+                    this.scrollTo(
+                        chart,
+                        exactScroll,
+                        scrollToCallback(self, chart, exactScroll),
+                    );
                 } else {
                     chart.scroll = exactScroll;
                     resetPanelZooms(this);
@@ -849,7 +854,13 @@ class ChartStore {
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
-        this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+        const parameters = {
+            masterData: null,
+            chart: null,
+        };
+        CIQ.extend(parameters, { ...params, ...rangeSpan }, true);
+
+        this.stxx.loadChart(symbolObj, parameters, onChartLoad);
         this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
     }
 
