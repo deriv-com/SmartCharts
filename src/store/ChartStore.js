@@ -77,6 +77,7 @@ class ChartStore {
     get loader() { return this.mainStore.loader; }
     get routingStore() { return this.mainStore.routing; }
     get stateStore() { return this.mainStore.state; }
+    get studiesStore() { return this.mainStore.studies; }
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
@@ -203,7 +204,7 @@ class ChartStore {
                         c.appendChild(el);
                         this.chart[control] = el;
                         this.controls[control] = el;
-                        CIQ.appendClassName(el, control);
+                        el.classList.add(control);
                     }
                 }
             }
@@ -413,7 +414,7 @@ class ChartStore {
             const overlayEdit = m.querySelector('.overlayEdit');
             const mouseDeleteInstructions = m.querySelector('.mouseDeleteInstructions');
             const longPressText = m.querySelector('.stickyLongPressText');
-            CIQ.unappendClassName(mouseDeleteInstructions, 'no_edit');
+            mouseDeleteInstructions.classList.remove('no_edit');
             // backwards compatibility:
             if (!params || typeof (params) !== 'object') {
                 params = {
@@ -460,7 +461,7 @@ class ChartStore {
 
                 const rtClick = m.querySelector('.mStickyRightClick');
                 rtClick.className = 'mStickyRightClick';  // reset
-                if (type) CIQ.appendClassName(rtClick, `rightclick_${type}`);
+                if (type) rtClick.classList.add(`rightclick_${type}`);
                 rtClick.style.display = '';
                 m.style.display = 'inline-block';
                 if (noDelete || this.bypassRightClick === true || this.bypassRightClick[type]) {
@@ -472,7 +473,7 @@ class ChartStore {
                     if (longPressText) longPressText.style.display = 'none';
                     CIQ[`${message === '' ? '' : 'un'}appendClassName`](m, 'hide');
                 } else {
-                    if (noEdit) CIQ.appendClassName(mouseDeleteInstructions, 'no_edit');
+                    if (noEdit) mouseDeleteInstructions.classList.add('no_edit');
                     if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'block';
                     if (longPressText) {
                         longPressText.style.display = 'none';
@@ -613,9 +614,8 @@ class ChartStore {
 
         // TODO: excluded studies
 
-        const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
-        stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
+        stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
+        stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
 
         this.loader.setState('market-symbol');
         this.activeSymbols.retrieveActiveSymbols().then(() => {

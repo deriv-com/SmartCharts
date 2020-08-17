@@ -76,8 +76,9 @@ export default class StudyLegendStore {
     @observable portalNodeIdChanged;
 
     onContextReady = () => {
-        this.stx.callbacks.studyOverlayEdit = this.editStudy;
-        this.stx.callbacks.studyPanelEdit = this.editStudy;
+        this.stx.addEventListener('studyOverlayEdit', this.editStudy);
+        this.stx.addEventListener('studyPanelEdit', this.editStudy);
+
         // to remove studies if user has already more than 5
         // and remove studies which are excluded
         this.removeExtraStudies();
