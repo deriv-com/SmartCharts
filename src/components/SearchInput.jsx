@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames   from 'classnames';
 import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 
@@ -11,7 +12,7 @@ class SearchInput extends Component {
         const { placeholder, value, searchInput, searchInputClassName } = this.props;
 
         return (
-            <div className={`sc-lookup-input ${value.trim() !== '' ? 'active' : ''}`}>
+            <div className={classNames('sc-lookup-input', { active: (value.trim() !== '') })}>
                 <input
                     className={searchInputClassName}
                     value={value}

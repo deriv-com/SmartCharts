@@ -6,8 +6,7 @@ export const overideMeasure = (option) => {
             if (!this.anyHighlighted && this.currentVectorParameters.vectorType === '') this.clearMeasure();
         } else {
             if (price2 !== false) {
-                let distance =                    Math.round(Math.abs(price1 - price2) * this.chart.roundit)
-                    / this.chart.roundit;
+                let distance = Math.round(Math.abs(price1 - price2) * this.chart.roundit) / this.chart.roundit;
                 distance = distance.toFixed(this.chart.yAxis.printDecimalPlaces);
                 if (this.internationalizer) {
                     message += this.internationalizer.numbers.format(distance);

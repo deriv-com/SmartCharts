@@ -842,6 +842,7 @@ class ChartStore {
 
             this.loader.hide();
             this.mainStore.paginationLoader.updateOnPagination(false);
+            this.mainStore.drawTools.computeActiveDrawTools();
             this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */

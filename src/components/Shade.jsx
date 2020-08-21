@@ -1,4 +1,5 @@
-import React from 'react';
+import React        from 'react';
+import classNames   from 'classnames';
 
 const Shade = ({
     // top,
@@ -9,7 +10,7 @@ const Shade = ({
     setShadeRef,
 }) => (
     <div
-        className={`shade ${className || ''} ${visible ? '' : 'hidden'}`}
+        className={classNames('shade', className || '', { hidden: !visible })}
         ref={setShadeRef}
         style={{ top: -120 }}
     />

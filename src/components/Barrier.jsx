@@ -1,5 +1,6 @@
-import React from 'react';
-import { connect } from '../store/Connect';
+import React        from 'react';
+import classNames   from 'classnames';
+import { connect }  from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 
 const Barrier = React.memo(({
@@ -19,7 +20,7 @@ const Barrier = React.memo(({
     ...props
 }) => (isInitialized && (
     <div
-        className={`barrier ${hidePriceLines ? 'hide-pricelines' : ''}`}
+        className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
         style={{ '--shade-color': shadeColor }}
     >
         <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />

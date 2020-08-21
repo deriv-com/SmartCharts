@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classNames           from 'classnames';
 import PriceLineArrow       from './PriceLineArrow.jsx';
 import PriceLineTitle       from './PriceLineTitle.jsx';
 
@@ -43,7 +44,10 @@ class PriceLine extends Component {
                     hidden={!visible}
                 >
                     <div
-                        className={`chart-line horizontal ${draggable ? 'draggable' : ''} ${isDragging ? 'dragging' : ''} ${className || ''}`}
+                        className={classNames('chart-line', 'horizontal', className || '', {
+                            draggable,
+                            dragging: isDragging,
+                        })}
                         style={{ color: foregroundColor, backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00` }}
                     >
                         { showBarrierDragLine && <div className="drag-line" style={{ borderTopStyle: lineStyle }} /> }
