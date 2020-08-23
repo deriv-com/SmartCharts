@@ -81,7 +81,7 @@ class ChartStore {
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
-    @computed get currentCloseQuote() {
+    currentCloseQuote = () => {
         let currentQuote = this.stxx.currentQuote();
 
         if (!currentQuote.Close) {
@@ -316,7 +316,7 @@ class ChartStore {
             return !!_self.stateStore.endEpoch;
         };
         CIQ.ChartEngine.prototype.getNearestCloseQuote = function () {
-            return _self.currentCloseQuote;
+            return _self.currentCloseQuote();
         };
 
         this.rootNode = rootNode;
@@ -825,8 +825,8 @@ class ChartStore {
 
     @action.bound updateYaxisWidth = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
-            if (this.currentCloseQuote && this.currentCloseQuote.Close) {
-                this.calculateYaxisWidth(this.currentCloseQuote.Close);
+            if (this.currentCloseQuote() && this.currentCloseQuote().Close) {
+                this.calculateYaxisWidth(this.currentCloseQuote().Close);
             }
         }
     }
