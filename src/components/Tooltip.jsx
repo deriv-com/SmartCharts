@@ -12,9 +12,9 @@ const Tooltip = ({
     <div
         className={classNames(
             'sc-tooltip',
-            `sc-tooltip--${position}`,
             className,
             {
+                [`sc-tooltip--${position}`]: !!position,
                 'sc-tooltip--enable': enabled,
             },
         )}

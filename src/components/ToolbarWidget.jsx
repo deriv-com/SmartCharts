@@ -15,7 +15,9 @@ const ToolbarWidget = ({
 
     return (
         <div
-            className={classNames('sc-toolbar-widget', `sc-toolbar-widget--${position}`)}
+            className={classNames('sc-toolbar-widget', {
+                [`sc-toolbar-widget--${position}`]: !!position,
+            })}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

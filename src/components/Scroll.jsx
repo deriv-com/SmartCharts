@@ -23,7 +23,7 @@ const Scroll = ({
     return (
         <div
             ref={handleRef}
-            className={classNames('sc-scrollbar', className || '', {
+            className={classNames('sc-scrollbar', className, {
                 'sc-scrollbar--freeze': freeze,
                 'sc-scrollbar--auto-hide': autoHide,
                 'sc-scrollbar--hover': isHover,

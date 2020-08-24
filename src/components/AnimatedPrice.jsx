@@ -11,7 +11,7 @@ const AnimatedPrice = ({
         <div
             className={classNames(
                 'cq-animated-price',
-                className || '',
+                className,
                 {
                     'cq-up': isIncrease,
                     'cq-down': !isIncrease,

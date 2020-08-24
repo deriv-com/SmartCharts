@@ -10,7 +10,7 @@ const Shade = ({
     setShadeRef,
 }) => (
     <div
-        className={classNames('shade', className || '', { hidden: !visible })}
+        className={classNames('shade', className, { hidden: !visible })}
         ref={setShadeRef}
         style={{ top: -120 }}
     />
