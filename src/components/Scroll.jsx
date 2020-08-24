@@ -13,16 +13,20 @@ const Scroll = ({
     freeze = false,
     onScroll = () => null,
     setPanel,
+    isBypassed,
 }) => {
     const handleRef = (_ref) => {
         setScrollPanel(_ref);
         if (setPanel) setPanel(_ref);
     };
+    const _classname = isBypassed
+        ? ''
+        : `sc-scrollbar ${autoHide ? 'sc-scrollbar--auto-hide' : ''} ${isHover ? 'sc-scrollbar--hover' : ''} ${freeze ? 'sc-scrollbar--freeze' : ''}`;
 
     return (
         <div
             ref={handleRef}
-            className={`sc-scrollbar ${freeze ? 'sc-scrollbar--freeze' : ''} ${className || ''} ${autoHide ? 'sc-scrollbar--auto-hide' : ''} ${isHover ? 'sc-scrollbar--hover' : ''}`}
+            className={`${_classname} ${className || ''}`}
             onScroll={onScroll}
             style={{
                 maxHeight: height || '100%',

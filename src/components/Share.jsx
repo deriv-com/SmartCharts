@@ -21,7 +21,7 @@ const Share = ({
         className="sc-download-menu"
         title={t.translate('Download')}
         tooltip={t.translate('Download')}
-        newStyle
+        modalMode
         isFullscreen
         portalNodeId={portalNodeId}
     >

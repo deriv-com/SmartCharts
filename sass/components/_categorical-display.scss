@@ -1,304 +1,233 @@
-
-.sc-categorical-display {
-    width: 512px;
-    padding: 0 !important;
+// sc-market-categorical-display
+.sc-mcd {
+    $self: &;
+    width: 560px;
     display: flex;
     height: 100%;
-    text-align: left;
-    overflow: hidden;
-    border-radius: 4px;
     @include themify($themes) {
         color: themed('CatDisplayText');
         background: themed('CatDisplayBg');
         box-shadow: 0 2px 8px 0 themed('CatDisplayShadow');
     }
 
-    .sc-lookup-filters {
-        width: 200px;
-        min-width: 200px;
+    &__tabs {
+        width: 240px;
+        box-sizing: border-box;
         @include themify($themes) {
             background: themed('CatDisplayFilterBg');
         }
-    }
-    .sc-filter-panel {
-        @include themify($themes) {
-            background: themed('CatDisplayFilterBg');
-        }
-    }
-    .sc-lookup-input {
-        margin: 16px 8px;
-        position: relative;
 
-        &:hover {
-            input {
-                @include themify($themes) {
-                    border-color: themed('CatDisplayHoverSearchBorder');
-                }
-            }
-            > .ic-icon {
-                svg {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayHoverSearchIcon');
-                        stroke: themed('CatDisplayHoverSearchIcon');
-                    }
-                }
-            }
-        }
-        &:focus {
-            input {
-                @include themify($themes) {
-                    color: themed('CatDisplayActiveSearchText');
-                    border-color: themed('CatDisplayActiveSearchBorder');
-                }
-            }
-            > .ic-icon {
-                svg {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayActiveSearchIcon');
-                        stroke: themed('CatDisplayActiveSearchIcon');
-                    }
-                }
-            }
-            > .icon-reset {
-                opacity: 1;
-            }
-        }
-        &.active {
-            input {
-                @include themify($themes) {
-                    color: themed('CatDisplayActiveSearchText');
-                    border-color: themed('CatDisplayHoverSearchBorder');
-                }
-            }
-            > .ic-icon {
-                svg {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayHoverSearchIcon');
-                        stroke: themed('CatDisplayHoverSearchIcon');
-                    }
-                }
-            }
-            > .icon-reset {
-                opacity: 1;
-            }
-        }
-        > input {
-            padding-left: 34px;
-            line-height: 2em;
-            font-size: 1.4em;
-            border: none;
-            outline: 0;
-            background-color: transparent;
-            border-radius: 4px;
-            width: 100%;
+        &__head {
+            height: 56px;
+            padding: 16px 24px;
             box-sizing: border-box;
-            appearance: none;
-            -webkit-appearance: none;
+            font-size: 16px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+        }
+    }
+    &__content {
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+
+        &__head {
+            height: 56px;
+            padding: 12px 16px 10px;
+            box-sizing: border-box;
             @include themify($themes) {
-                background: themed('CatDisplaySearchBg');
-                border: 1px solid themed('CatDisplaySearchBorder');
-                color: themed('CatDisplaySearchText');
+                border-bottom: 2px solid themed('CatDisplayFilterBg');
             }
-            @include placeholder {
-                @include themify($themes) {
-                    color: themed('CatDisplaySearchText');
-                }
+        }
+        &__body {
+            height: calc(100% - 56px);
+            transform: translateZ(0);
+            position: relative;
+
+            &__scroll {
+                overflow-y: auto;
+                position: relative;
+                height: 100%;
+            }
+        }
+    }
+    &__filter {
+        margin: 0px;
+        width: 240px;
+        min-width: 240px;
+        border-radius: 0 0 0 5px;
+        border-bottom: none;
+        padding: 0;
+
+        &__item {
+            width: 100%;
+            display: flex;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border-radius: 0px;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            align-items: center;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            @include themify($themes) {
+                border-left: 4px solid themed('CatDisplayFilterBorder');
             }
 
-            &:focus {
+            .ic-icon {
+                display: inline-flex;
+                vertical-align: middle;
+                width: $small-icon-size;
+                height: $small-icon-size;
+                margin-right: 1.3em;
+                position: relative;
+                top: 2px;
+            }
+            &:hover {
                 @include themify($themes) {
-                    border-color: themed('CatDisplayActiveSearchBorder');
-                    color: themed('CatDisplayActiveSearchText');
+                    background-color: themed('CatDisplayHoverFilterBg');
+                    border-left-color: themed('CatDisplayHoverFilterBg');
+                }
+            }
+            &--selected {
+                font-weight: 800;
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveFilterText');
+                    background-color: themed('CatDisplayActiveFilterBg') !important;
+                    border-left-color: themed('CatDisplayActiveFilterBorder') !important;
                 }
 
-                & + .ic-icon {
+                .ic-icon {
                     svg {
                         @include themify($themes) {
-                            fill: themed('CatDisplayActiveSearchIcon');
-                            stroke: themed('CatDisplayActiveSearchIcon');
+                            fill: themed('CatDisplayActiveFilterIcon');
+                            stroke: themed('CatDisplayActiveFilterIcon');
                         }
                     }
                 }
             }
-
-        }
-        > .ic-icon {
-            position: absolute;
-            top: 6px;
-            left: 4px;
-
-            svg {
-                @include themify($themes) {
-                    fill: themed('CatDisplaySearchIcon');
-                    stroke: themed('CatDisplaySearchIcon');
-                }
-            }
-        }
-        > .icon-reset {
-            position: absolute;
-            opacity: 0;
-            left: auto;
-            height: 20px;
-            width: 20px;
-            line-height: 28px;
-            font-size: 0.9em;
-            right: 8px;
-            top: 7px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: right, opacity 0.2s ease-in-out;
-
-            svg {
-                stroke: transparent !important;
-                @include themify($themes) {
-                    fill: themed('CatDisplayActiveSearchIconClose');
-                }
-            }
         }
     }
-    .category {
-        padding-top: 3em;
+    &__list {
+        width: 100%;
+    }
+    &__category {
         padding-bottom: 12px;
         position: relative;
         @include themify($themes) {
             border-bottom: 4px solid themed('CatDisplayFilterBg');
         }
 
-        &:first-child {
-            padding-top: 4.5em;
+        .empty-category {
+            padding: 0.9em 1.2em;
+            border-radius: 4px;
+            font-size: 14px;
+            @include themify($themes) {
+                background-color: themed('CatDisplayCatContentBg');
+            }
         }
         &:last-child {
-            padding-bottom: 2.5em;
+            margin-bottom: 10px !important;
+            border-bottom: none;
         }
-        &.category-has-subtitle {
+        &--has-subtitle {
             padding-top: 6.5em;
         }
-    }
-    .category-content {
-        margin: 0 7px 4px 8px;
-        border-radius: 4px;
-        @include themify($themes) {
-            border: 1px solid themed('CatDisplayCatContentBorder');
-        }
-
-        &.has-subcategory {
-            > div:nth-child(2) {
-                border-radius: 4px 4px 0 0;
+        &--favorite {
+            .sc-mcd__category__content {
+                margin: 0 3px 4px 8px;
             }
         }
-        &:last-child {
-            margin-bottom: 0px;
-        }
-    }
-    .subcategory {
-        padding: 0;
-        font-size: 1.4em;
-        border-radius: 4px 4px 0 0;
-        display: flex;
-        height: 40px;
-        font-weight: normal;
-        align-items: center;
-        @include themify($themes) {
-            color: themed('CatDisplayCatContentTitleText');
-            background-color: themed('CatDisplayCatContentBg');
-        }
-    }
-    .category-title {
-        display: block;
-        font-size: 1.4em;
-        font-weight: bold;
-        padding: 0 16px;
-        line-height: 40px;
-        position: absolute;
-        top: 0;
-        width: 100%;
-        transform: translate3d(0, 0, 0);
-        @include themify($themes) {
-            color: themed('CatDisplayCatTitleText');
-        }
-
-        &.sticky-top,
-        &.sticky-bottom {
-            z-index: 8;
-            padding-top: 0px;
-            height: 40px;
+        &__head {
+            display: block;
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0 20px;
+            line-height: 40px;
+            position: relative;
+            top: 0;
+            // width: 100%;
+            transform: translate3d(0, 0, 0);
             @include themify($themes) {
-                background-color: themed('CatDisplayBg');
-                border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+                color: themed('CatDisplayCatTitleText');
             }
 
-            &.has-subtitle {
-                height: 60px;
-            }
-        }
-        &.sticky-bottom {
-            position: absolute;
-            top: auto !important;
-            bottom: 0px !important;
-        }
-        &.sticky-top {
-            position: fixed;
-            top: 0px;
-            z-index: 9;
-            padding-right: 25px;
-        }
-        .category-name-postfix {
-            margin-left: 5px;
-        }
-        .category-subtitle {
-            font-weight: normal;
-            line-height: normal;
-            @include themify($themes) {
-                color: themed('CatDisplayCatSubTitleText');
-            }
-        }
-    }
-    .sc-filter {
-        text-align: left;
-        cursor: pointer;
-        box-sizing: border-box;
-        font-size: 1.4em;
-        padding: 12px 16px;
-        display: flex;
-        @include themify($themes) {
-            border-left: 4px solid themed('CatDisplayFilterBorder');
-        }
+            &.sticky-top,
+            &.sticky-bottom {
+                z-index: 8;
+                padding-top: 0px;
+                height: 40px;
+                @include themify($themes) {
+                    background-color: themed('CatDisplayBg');
+                    border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+                }
 
-        &:hover {
-            @include themify($themes) {
-                border-left-color: themed('CatDisplayHoverFilterBg');
-                background-color: themed('CatDisplayHoverFilterBg');
+                &.has-subtitle {
+                    height: 60px;
+                }
             }
-        }
-        &.sc-active-filter {
-            font-weight: 800;
-            @include themify($themes) {
-                color: themed('CatDisplayActiveFilterText');
-                background-color: themed('CatDisplayActiveFilterBg');
-                border-left-color: themed('CatDisplayActiveFilterBorder');
+            &.sticky-bottom {
+                position: absolute;
+                top: auto !important;
+                bottom: 0px !important;
             }
-
-            .ic-icon {
-                svg {
-                    @include themify($themes) {
-                        fill: themed('CatDisplayActiveFilterIcon');
-                        stroke: themed('CatDisplayActiveFilterIcon');
-                    }
+            &.sticky-top {
+                position: fixed;
+                top: 0px;
+                z-index: 9;
+                padding-right: 25px;
+            }
+            .category-name-postfix {
+                margin-left: 5px;
+            }
+            .category-subtitle {
+                font-weight: normal;
+                line-height: normal;
+                @include themify($themes) {
+                    color: themed('CatDisplayCatSubTitleText');
                 }
             }
         }
-        .ic-icon {
-            display: inline-flex;
-            vertical-align: middle;
-            width: $small-icon-size;
-            height: $small-icon-size;
-            margin-right: 1.3em;
-            position: relative;
-            top: 2px;
+        &__content {
+            &--has-subcategory {
+                margin: 0 3px 4px 8px;
+                border-radius: 4px;
+                @include themify($themes) {
+                    border: 1px solid themed('CatDisplayCatContentBorder');
+                }
+
+                &.has-subcategory {
+                    > div:nth-child(2) {
+                        border-radius: 4px 4px 0 0;
+                    }
+                }
+                &:last-child {
+                    margin-bottom: 0px;
+                }
+            }
+            .subcategory {
+                padding: 0 20px;
+                font-size: 1.4em;
+                border-radius: 4px 4px 0 0;
+                display: flex;
+                height: 40px;
+                font-weight: bold;
+                align-items: center;
+                @include themify($themes) {
+                    color: themed('CatDisplayCatTitleText');
+                    background-color: themed('CatDisplayCatContentBg');
+                }
+            }
         }
     }
-    .sc-item,
-    .sc-active-item {
+    &__item {
+        $item: &;
         padding-left: 20px;
         padding-right: 20px;
         display: flex;
@@ -307,6 +236,7 @@
         justify-content: space-between;
         line-height: initial;
         font-size: 1.4em;
+        cursor: pointer;
         @include themify($themes) {
             border-bottom: 1px solid themed('CatDisplayBg');
             background-color: themed('CatDisplayCatContentBg');
@@ -324,11 +254,18 @@
         &:not(:first-child):not(:last-child) {
             border-radius: 4px;
         }
-        .left, .right {
+        &__name {
             display: flex;
             align-items: center;
+
+            > span {
+                margin-right: 16px;
+            }
         }
-        .right {
+        &__detail {
+            display: flex;
+            align-items: center;
+
             .ic-icon {
                 svg {
                     @include themify($themes) {
@@ -351,7 +288,7 @@
                 background: themed('CatDisplayCatHoverContentBg');
             }
 
-            .right {
+            #{ $item }__detail {
                 .ic-icon {
                     svg {
                         @include themify($themes) {
@@ -362,165 +299,28 @@
                 }
             }
         }
-        &.selected {
+        &--selected {
             @include themify($themes) {
-                color: themed('CatDisplayCatActiveContentText');
-                background: themed('CatDisplayCatActiveContentBg');
+                color: themed('CatDisplayCatActiveContentText') !important;
+                background: themed('CatDisplayCatActiveContentBg') !important;
             }
 
-            .sc-item-display {
+            #{ $item }__name {
                 font-weight: bold;
             }
-            .right {
+            #{ $item }__detail {
                 .ic-icon {
                     svg {
                         @include themify($themes) {
                             fill: themed('CatDisplayCatActiveContentIcon');
-                            stroke: themed('CatDisplayCatActiveContentIcon');
                         }
                     }
                 }
             }
         }
     }
-    .sc-active-item {
-        @include themify($themes) {
-            color: themed('CatDisplayActiveText');
-        }
-
-        &:hover {
-            @include themify($themes) {
-                color: themed('CatDisplayActiveText');
-            }
-        }
-    }
-    .sc-item {
-        cursor: pointer;
-    }
-    .sc-item[disabled] {
-        cursor: default;
-
-        &:not(.selected) {
-            @include themify($themes) {
-                color: themed('CatDisplayCatContentDisabled');
-            }
-        }
-        &.selected {
-            background-color: #f2f3f8;
-        }
-    }
-    .sc-scrollbar {
-        position: relative;
-        min-height: 320px;
-        width: 100%;
-
-        .category:last-child {
-            padding-bottom: 3em;
-        }
-    }
-    .sc-item-display {
-        display: inline-block;
-        vertical-align: top;
-    }
-    .empty-category {
-        padding: 0.9em 1.2em;
-        border-radius: 4px;
-        font-size: 14px;
-        @include themify($themes) {
-            background-color: themed('CatDisplayCatContentBg');
-        }
-    }
-    &__scrollbar {
-        overflow-y: auto;
-    }
-}
-
-/* Active Symbol Icons */
-.sc-categorical-display .results-panel {
-    width: 308px;
-
-    .sc-active-options {
-        float: right;
-        display: inline-flex;
-
-        > span, .ic-icon {
-            height: $normal-icon-size;
-            width: $normal-icon-size;
-        }
-        .ic-delete, .ic-edit {
-            cursor: pointer;
-        }
-        .ic-cmp-color > span {
-            display: inline-block;
-            width: 13px;
-            height: 2px;
-            vertical-align: bottom;
-            left: 6px;
-            position: relative;
-            border-radius: 15px;
-        }
-    }
-    .sc-favorite {
-        float: right;
-
-        > .ic-icon {
-            margin-right: 0;
-            width: $normal-icon-size;
-            min-width: $normal-icon-size;
-            height: $normal-icon-size;
-        }
-    }
-    .left {
-        > .ic-icon, > .ic-frx {
-            height: $large-icon-size;
-            width: $large-icon-size;
-            min-width: $large-icon-size;
-        }
-        > .ic-icon {
-            display: inline-block;
-
-            > svg {
-                vertical-align: sub;
-            }
-        }
-        > .sc-item-display {
-            margin-left: 15px;
-        }
-    }
-}
-
-.sc-categorical-display--nested {
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    box-shadow: none !important;
-
-    .sc-lookup-filters {
-        width: 100%;
-        border-right: none;
-        position: relative;
-        z-index: 9;
-        transition: max-height 0.2s ease-in;
-        margin-bottom: -2px;
-        background: transparent !important;
-        border: none !important;
-    }
-    .sc-lookup-input {
-        margin: 16px 8px;
-    }
-    .sc-item, .sc-active-item {
-        height: 40px;
-    }
-    .sc-filter-panel {
-        display: none;
-    }
-    .sc-scrollbar {
-        width: calc(100% - 4px) !important;
-    }
-    .results-panel {
-        width: 100% !important;
-
-        .category {
+    &--nested {
+        #{ $self }__category {
             width: 100%;
             padding: 0px;
             max-height: 40px;
@@ -528,7 +328,7 @@
             border-bottom: none;
             transition: max-height 0.5s ease-in-out;
 
-            .category-title {
+            &__head {
                 display: flex;
                 justify-content: space-between;
                 box-sizing: border-box;
@@ -545,14 +345,14 @@
                 .category-title-left {
                     display: flex;
                     align-items: center;
-                    @include themify($themes) {
-                        color: themed('CatDisplayText');
-                    }
 
                     .ic-icon {
                         margin-right: 16px;
                         position: relative;
                         top: -1px;
+                        @include themify($themes) {
+                            color: themed('CatDisplayText');
+                        }
 
                         svg {
                             width: 24px;
@@ -563,28 +363,26 @@
                         }
                     }
                 }
-                > .ic-icon {
+                .ic-icon.arrow {
                     transition: transform 0.3s ease-in-out;
                     @include themify($themes) {
                         fill: themed('CatDisplayText');
                     }
                 }
             }
-            .subcategory {
-                font-weight: bold;
+            &__content {
+                .subcategory {
+                    font-weight: normal;
+                    @include themify($themes) {
+                        color: themed('CatDisplayCatContentTitleText');
+                    }
+                }
             }
-            .sc-item {
-                padding-left: 8px;
-                padding-right: 7px;
-            }
-            &:last-child {
-                padding-bottom: 8px !important;
-            }
-            &.active {
+            &--active {
                 max-height: 1500px;
 
-                .category-title {
-                    > .ic-icon {
+                .sc-mcd__category__head {
+                    > .ic-icon.arrow {
                         transform: rotate(180deg);
                     }
                 }
@@ -594,48 +392,34 @@
 }
 
 .smartcharts-mobile {
-    .sc-categorical-display {
+    .sc-mcd {
         flex-direction: column;
         width: 100%;
         height: 100%;
+        box-shadow: none;
 
-        .sc-lookup-filters {
+        &__content {
             width: 100%;
-            border-right: none;
-            position: relative;
-            z-index: 9;
-            transition: max-height 0.2s ease-in;
-            margin-bottom: -2px;
-            @include themify($themes) {
-                border-bottom: 1px solid themed('CatDisplaySearchBorder');
+            height: 100%;
+
+            &__head {
+                border-bottom: none;
             }
         }
-        .sc-lookup-input {
-            margin: 16px 8px;
-        }
-        .sc-item, .sc-active-item {
-            height: 40px;
-        }
-        .sc-filter-panel {
-            display: flex;
-            justify-content: space-around;
-
-            .sc-filter {
-                border-right: none;
-                background: transparent;
-                padding: 7px 20px;
-                line-height: 3em;
-
-                &.sc-active-filter {
-                    border-bottom: 2px solid;
-                }
-                > .ic-icon {
-                    margin: 0px;
-                }
-                .sc-filter-text {
-                    display: none;
+        &__category {
+            &--favorite {
+                .sc-mcd__category__content {
+                    margin: 0 8px 4px;
                 }
             }
+            &__content {
+                &--has-subcategory {
+                    margin: 0 8px 4px;
+                }
+            }
+        }
+        &--nested {
+            min-height: calc(100% - 38px);
         }
     }
 }

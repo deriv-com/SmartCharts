@@ -364,6 +364,10 @@ html, body {
     }
 }
 
+.stx_draw_ok {
+    display: none !important;
+}
+
 .vectorTrashCan, .overlayEdit {
     position: absolute;
     z-index: 40;

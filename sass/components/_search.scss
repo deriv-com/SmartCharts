@@ -1,0 +1,85 @@
+.sc-search-input {
+    width: 100%;
+    padding: 0px;
+    box-sizing: border-box;
+    position: relative;
+
+    > input {
+        padding-left: 32px;
+        line-height: 2;
+        font-size: 1.4rem;
+        border: none;
+        outline: 0;
+        background-color: transparent;
+        border-radius: 4px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.2s ease-in-out;
+        @include placeholder {
+            @include themify($themes) {
+                color: themed('IndicatorSearchText');
+            }
+        }
+        @include themify($themes) {
+            color: themed('IndicatorSearchActiveText');
+            border: 1px solid themed('IndicatorSearchBorder');
+            background: themed('IndicatorSearchBg');
+        }
+
+        &:hover {
+            @include themify($themes) {
+                border-color: themed('IndicatorSearchHoverBorder');
+            }
+        }
+        &:focus {
+            @include themify($themes) {
+                border-color: themed('IndicatorSearchActiveBorder');
+            }
+        }
+    }
+    .ic-icon {
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        width: 16px;
+        height: 16px;
+
+        svg {
+            width: 16px;
+            height: 16px;
+            top: -1px;
+            @include themify($themes) {
+                fill: themed('IndicatorSearchIcon');
+            }
+        }
+        &.icon-reset {
+            left: auto;
+            right: 8px;
+            opacity: 0;
+            top: 5px;
+            pointer-events: none;
+            cursor: pointer;
+
+            svg {
+                stroke: none;
+                @include themify($themes) {
+                    fill: themed('IndicatorSearchIconReset');
+                }
+            }
+        }
+    }
+    &.active {
+        > input {
+            @include themify($themes) {
+                color: themed('IndicatorSearchActiveText') !important;
+                border-color: themed('IndicatorSearchActiveBorder') !important;
+            }
+        }
+        .ic-icon {
+            &.icon-reset {
+                opacity: 1;
+                pointer-events: initial;
+            }
+        }
+    }
+}
