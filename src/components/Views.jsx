@@ -120,7 +120,7 @@ const Views = ({
             className="sc-views-menu"
             title={t.translate('Templates')}
             tooltip={t.translate('Templates')}
-            newStyle
+            modalMode
             portalNodeId={portalNodeId}
         >
             <ViewsMenu.Title>

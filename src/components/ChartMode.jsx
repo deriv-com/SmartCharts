@@ -34,7 +34,7 @@ const ChartMode = ({
             className="ciq-display sc-chart-mode"
             title={t.translate('Chart types')}
             tooltip={t.translate('Chart types')}
-            newStyle
+            modalMode
             isFullscreen
             portalNodeId={portalNodeId}
         >

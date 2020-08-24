@@ -197,7 +197,7 @@ const StudyLegend = ({
             isMobile={isMobile}
             title={t.translate('Indicators')}
             tooltip={t.translate('Indicators')}
-            newStyle
+            modalMode
             enableTabular
             portalNodeId={portalNodeId}
             customHead={

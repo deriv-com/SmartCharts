@@ -36,14 +36,14 @@ class Menu extends Component {
             ready,
             customHead,
             emptyMenu,
-            newStyle,
+            modalMode,
         } = this.props;
 
         if (!ready) return '';
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
         const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
-        if (newStyle) {
+        if (modalMode) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const newDialog = ReactDOM.createPortal(
                 <div className={`smartcharts-${theme}`}>
