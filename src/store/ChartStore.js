@@ -924,6 +924,10 @@ class ChartStore {
         }
     }
 
+    @action.bound updateScaledOneOne(state) {
+        this.isScaledOneOne = state;
+    }
+
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
