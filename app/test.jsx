@@ -458,11 +458,9 @@ class App extends Component {
         }));
     }
 
-    onEnableScroll = () => {
-        this.setState(prevState => ({
-            enableScroll: !prevState.enableScroll,
-        }));
-    }
+    onEnableScroll = () => this.setState(prevState => ({
+        enableScroll: !prevState.enableScroll,
+    }));
 
     onChartSize = (state) => {
         this.setState({

@@ -353,11 +353,12 @@ class ChartState {
     }
 
     setEnableScroll() {
-        if (!this.enableScroll) { return; }
+        if (!this.enableScroll || !this.stxx) { return; }
         this.stxx.allowScroll = true;
     }
 
     setDisableScroll() {
+        if (!this.stxx) { return; }
         this.stxx.allowScroll = false;
     }
 
