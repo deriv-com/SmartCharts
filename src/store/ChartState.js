@@ -28,6 +28,7 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
+    @observable enableScroll;
     @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
@@ -52,8 +53,8 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
-        this.stxx.append('zoomOut', this.enableScroll.bind(this));
-        this.stxx.append('zoomIn', this.enableScroll.bind(this));
+        this.stxx.append('zoomOut', this.setEnableScroll.bind(this));
+        this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -88,6 +89,7 @@ class ChartState {
         maxTick,
         crosshairTooltipLeftAllow,
         yAxisMargin,
+        enableScroll = true,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -221,6 +223,12 @@ class ChartState {
                 ...yAxisMargin,
             };
         }
+
+        if (this.stxx && this.enableScroll !== enableScroll) {
+            this.enableScroll = enableScroll;
+            this.stxx.allowScroll = enableScroll;
+        }
+
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -344,8 +352,13 @@ class ChartState {
         this.shouldMinimiseLastDigits = status;
     }
 
-    enableScroll() {
+    setEnableScroll() {
+        if (!this.enableScroll) { return; }
         this.stxx.allowScroll = true;
+    }
+
+    setDisableScroll() {
+        this.stxx.allowScroll = false;
     }
 
     saveLayout() {
@@ -502,7 +515,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
-                this.stxx.allowScroll = false;
+                this.setDisableScroll();
             }
             this.mainStore.chart.isScaledOneOne = true;
             this.stxx.draw();
