@@ -106,7 +106,6 @@ export default class ChartTitleStore {
         this.isVisible = quote || !this.isShowChartPrice;
         if (!this.isVisible) { return; }
 
-
         let currentPrice = quote.Close;
         if (currentPrice) {
             currentPrice = currentPrice.toFixed(this.decimalPlaces);

@@ -390,6 +390,7 @@ export default class CategoricalDisplayStore {
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
+        setFilterText: this.setFilterText,
         height: this.height,
         isMobile: this.chart.isMobile,
     }))
