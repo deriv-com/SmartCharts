@@ -176,6 +176,7 @@ class App extends Component {
             isConnectionOpened: true,
             enabledFooter: true,
             enableScroll: true,
+            enableZoom: true,
             highLow: {},
             barrierType: '',
             draggable: true,
@@ -450,16 +451,20 @@ class App extends Component {
     onActiveSymbol = (evt) => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         window.location.href = `${baseUrl}?activeSymbols=${evt.target.value}`;
-    }
+    };
 
     onActiveCategory = () => {
         this.setState(prevState => ({
             activeCategory: prevState.activeCategory ? null : 'synthetic_index',
         }));
-    }
+    };
 
-    onEnableScroll = () => this.setState(prevState => ({
+    handleScroll = () => this.setState(prevState => ({
         enableScroll: !prevState.enableScroll,
+    }));
+
+    handleZoom = () => this.setState(prevState => ({
+        enableZoom: !prevState.enableZoom,
     }));
 
     onChartSize = (state) => {
@@ -514,6 +519,7 @@ class App extends Component {
                         onMessage={this.onMessage}
                         enableRouting
                         enableScroll={this.state.enableScroll}
+                        enableZoom={this.state.enableZoom}
                         chartControlsWidgets={null}
                         enabledNavigationWidget={enabledNavigationWidget}
                         enabledChartFooter={this.state.enabledFooter}
@@ -567,7 +573,8 @@ class App extends Component {
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
 
                         <button type="button" onClick={this.onActiveCategory}>Active Category</button>
-                        <button type="button" onClick={this.onEnableScroll}>Enable Scroll</button>
+                        <button type="button" onClick={this.handleScroll}>Enable/Disable Scroll</button>
+                        <button type="button" onClick={this.handleZoom}>Enable/Disable Zoom</button>
                     </div>
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>

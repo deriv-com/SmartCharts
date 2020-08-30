@@ -136,6 +136,7 @@ crosshairTooltipLeftAllow | Set max left position which chart allow to render le
 zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
 yAxisMargin | Set the margins of chart yAxis. It's an object that takes two parameters, `bottom` for margin bottom of chart, and `top` for the top margin of chart. 
 enableScroll |  Enable/disable scroll feature in chart. Scroll gets disable on chart scale `1:1` and enable whenever user zoom in/out. This property override that feature . Defaults to `true`
+enableZoom |  Enable/disable zoom feature in chart. Defaults to `true`
 
 
 ### Chart Settings

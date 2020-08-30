@@ -29,6 +29,7 @@ class ChartState {
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
     @observable enableScroll;
+    @observable enableZoom;
     @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
@@ -90,6 +91,7 @@ class ChartState {
         crosshairTooltipLeftAllow,
         yAxisMargin,
         enableScroll = true,
+        enableZoom = true,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -227,6 +229,11 @@ class ChartState {
         if (this.stxx && this.enableScroll !== enableScroll) {
             this.enableScroll = enableScroll;
             this.stxx.allowScroll = enableScroll;
+        }
+
+        if (this.stxx && this.enableZoom !== enableZoom) {
+            this.enableZoom = enableZoom;
+            this.stxx.allowZoom = enableZoom;
         }
 
         if (this.stxx) {
