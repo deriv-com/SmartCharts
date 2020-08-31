@@ -221,7 +221,7 @@ html, body {
     padding: 0px;
     margin-bottom: 17px;
     border-radius: 4px;
-    z-index: 12;
+    z-index: 15;
     cursor: pointer;
     @include themify($themes) {
         background: themed('NavigationWidgetBg');
