@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   k8s: circleci/kubernetes@0.7.0
+  slack: circleci/slack@3.4.2
 commands:
   git_checkout_from_cache:
     description: "Git checkout and save cache"
@@ -8,9 +9,8 @@ commands:
       - restore_cache:
           name: Git restore cache
           keys:
-            - source-v1-{{ .Branch }}-{{ .Revision }}
-            - source-v1-{{ .Branch }}-
-            - source-v1-
+            - source-v3-{{ .Branch }}-{{ .Revision }}
+            - source-v3-{{ .Branch }}-
       - run: 
           name: Fetch git tags 
           command: |
@@ -27,7 +27,7 @@ commands:
           command: git gc
       - save_cache:
           name: Git save cache
-          key: source-v1-{{ .Branch }}-{{ .Revision }}
+          key: source-v3-{{ .Branch }}-{{ .Revision }}
           paths:
             - ".git"
   yarn_install:
@@ -36,14 +36,14 @@ commands:
       - restore_cache:
           name: Restoring node_modules
           keys:
-            - source-v1-modules-{{ checksum "yarn.lock" }}
-            - source-v1-modules
+            - source-v3-modules-{{ checksum "yarn.lock" }}
+            - source-v3-modules
       - run:
           name: yarn install
           command: yarn install
       - save_cache:
           name: Save node_module
-          key: source-v1-modules-{{ checksum "yarn.lock" }}
+          key: source-v3-modules-{{ checksum "yarn.lock" }}
           paths:
             - "node_modules"
   test:
@@ -70,7 +70,7 @@ commands:
           at: dist
       - run:
           name: Tag build
-          command: echo "<< parameters.target_branch >> $(date)" > version
+          command: echo "<< parameters.target_branch >> $(date -u +'%Y-%m-%dT%H:%M:%SZ')" > version
       - run:
           name: Install and configure dependencies
           command: |
@@ -126,7 +126,14 @@ commands:
                 kubectl --server=${KUBE_SERVER} --certificate-authority=ca.crt --token=$SERVICEACCOUNT_TOKEN set image deployment/<< parameters.k8s_svc_name >> << parameters.k8s_svc_name >>=${DOCKHUB_ORGANISATION}/binary-static-charts:${CIRCLE_TAG}
               fi
             done
-
+  notify_slack:
+    description: "Notify slack"
+    steps:
+      - slack/status:
+          include_project_field: false
+          failure_message: "Release failed for Smartchart with version *$(cat version)*"
+          success_message: "Release succeeded for Smartchart with version *$(cat version)*"
+          webhook: ${SLACK_WEBHOOK}
 jobs:
   test:
     docker:
@@ -145,6 +152,7 @@ jobs:
       - build
       - deploy:
           target_branch: "staging"
+      - notify_slack
   release_production:
     docker:
       - image: circleci/node:12.13.0-stretch
@@ -155,6 +163,7 @@ jobs:
       - build
       - deploy:
           target_branch: "production"
+      - notify_slack
   release_aws_production:
     docker:
       - image: circleci/node:12.13.0-stretch

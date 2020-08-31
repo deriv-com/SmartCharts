@@ -1,7 +1,7 @@
 import React        from 'react';
-import Scrollbars   from 'tt-react-custom-scrollbars';
 import { connect }  from '../store/Connect';
 import Tooltip      from './Tooltip.jsx';
+import Scroll       from './Scroll.jsx';
 import { wrapText } from '../utils';
 import {
     TemplateIcon,
@@ -44,7 +44,7 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }) =>  (
         <div className="sc-views--overwrite__content">
             <OverwriteStateIcon />
             <p>
-                {templateName + t.translate(' already exists.')}<br />
+                {`${templateName} ${t.translate('already exists.')}`}<br />
                 {t.translate('Would you like to overwrite it?')}
             </p>
         </div>
@@ -119,7 +119,7 @@ const Views = ({
             className="sc-views-menu"
             title={t.translate('Templates')}
             tooltip={t.translate('Templates')}
-            newStyle
+            modalMode
             portalNodeId={portalNodeId}
         >
             <ViewsMenu.Title>
@@ -142,8 +142,8 @@ const Views = ({
                                         />
                                     )
                                 }
-                                <Scrollbars
-                                    className="sc-scrollbar"
+                                <Scroll
+                                    autoHide
                                 >
                                     <div className="form form--sc-views">
                                         <div className="form__input-group">
@@ -183,7 +183,7 @@ const Views = ({
                                         applyLayout={applyLayout}
                                         remove={remove}
                                     />
-                                </Scrollbars>
+                                </Scroll>
                             </React.Fragment>
                         )
                     }

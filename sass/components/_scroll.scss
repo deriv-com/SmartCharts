@@ -1,0 +1,58 @@
+
+.sc-scrollbar {
+    overflow-y: auto;
+    overflow-x: hidden;
+    position: relative;
+    margin-right: 4px;
+    z-index: 1;
+    scrollbar-width: thin;
+    @include themify($themes) {
+        scrollbar-color: themed('ScrollbarBg') transparent;
+    }
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: transparent;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+    }
+    &::-webkit-scrollbar-thumb {
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        -webkit-box-shadow: transparent;
+        @include themify($themes) {
+            background: themed('ScrollbarBg');
+        }
+    }
+    &--auto-hide {
+        scrollbar-color: transparent transparent !important;
+
+        &::-webkit-scrollbar-thumb {
+            display: none;
+        }
+    }
+    &--freeze {
+        overflow: hidden !important;
+    }
+    &:hover {
+        @include themify($themes) {
+            scrollbar-color: themed('ScrollbarBg') transparent !important;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            display: inherit !important;
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .sc-scrollbar {
+        &--auto-hide {
+            &::-webkit-scrollbar-thumb {
+                display: inherit !important;
+            }
+        }
+    }
+}

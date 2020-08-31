@@ -14,7 +14,7 @@ import {
     SettingHistoricalMap,
     SettingHighestLowestMap,
 } from './Icons.jsx';
-import '../../sass/components/chart-setting.scss';
+import '../../sass/components/_chart-setting.scss';
 
 const ChartSettingItem = ({
     title,
@@ -59,7 +59,7 @@ const ChartSetting = ({
         className="sc-chart-setting"
         title={t.translate('Platform settings')}
         enableTabular
-        newStyle
+        modalMode
     >
         <ChartSettingMenu.Title>
             <SettingIcon

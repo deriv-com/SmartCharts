@@ -130,6 +130,8 @@
 			if (params !== undefined){
 				if(params.animationEntry || params.secondarySeries) return;
 			}
+			
+			if(!chart.dataSegment) return;
 
 			function completeLastBar(record){
 				if(!chart.masterData) return;
@@ -790,7 +792,7 @@ new CIQ.ContinuousZoom({
 		// This injection shades the after hours portion of the chart for each yaxis.
 		// Only the panel to which the yaxis belongs will get shading.
 		// This means yaxes of overlays will bypass the shading block.
-		this.stx.append("createYAxis", function(panel, parameters){
+		this.stx.append("drawYAxis", function(panel, parameters){
 			if(!this.layout.extended) return;
 			if(panel.yAxis!=parameters.yAxis || panel.shareChartXAxis===false || panel.hidden) return;
 			var chart=panel.chart;
@@ -832,15 +834,27 @@ new CIQ.ContinuousZoom({
 				if(range.start || range.start===0) ranges.push({start:range.start,end:range.end,color:range.color});
 				var noDashes=CIQ.isTransparent(styles.divider.backgroundColor);
 				var dividerLineWidth=styles.divider.width.replace(/px/g, '');
-				var dividerStyle={pattern: "dashed", lineWidth: dividerLineWidth};
+				var dividerStyle={
+					y0: panel.bottom,
+					y1: panel.top,
+					color: styles.divider.backgroundColor,
+					type: "line", 
+					context: chart.context,
+					confineToPanel: panel,
+					pattern: "dashed",
+					lineWidth: dividerLineWidth,
+					deferStroke: true
+				};
 				this.startClip(panel.name);
+				chart.context.beginPath();
 				if(stx.highlightedDraggable) chart.context.globalAlpha*=0.3;
 				for(i=0;i<ranges.length;i++){
 					chart.context.fillStyle=ranges[i].color;
-					if(!noDashes && ranges[i].start>chart.left) this.plotLine(ranges[i].start, ranges[i].start, panel.bottom, panel.top, styles.divider.backgroundColor, "line", chart.context, panel, dividerStyle);
+					if(!noDashes && ranges[i].start>chart.left) this.plotLine(CIQ.extend({x0: ranges[i].start, x1: ranges[i].start}, dividerStyle));
 					chart.context.fillRect(ranges[i].start,panel.top,ranges[i].end-ranges[i].start,panel.bottom-panel.top);
-					if(!noDashes && ranges[i].end<chart.right) this.plotLine(ranges[i].end, ranges[i].end, panel.bottom, panel.top, styles.divider.backgroundColor, "line", chart.context, panel, dividerStyle);
+					if(!noDashes && ranges[i].end<chart.right) this.plotLine(CIQ.extend({x0: ranges[i].end, x1: ranges[i].end}, dividerStyle));
 				}
+				chart.context.stroke();
 				this.endClip();
 			}
 		});
@@ -850,11 +864,13 @@ new CIQ.ContinuousZoom({
 
 
 	/**
-	 * Creates the add-on that sets the chart UI to full-screen mode. In full-screen mode, a class `full-screen` is added
+	 * Creates an add-on that sets the chart UI to full-screen mode. In full-screen mode, a class `full-screen` is added
 	 * to the context element used for styling. In addition, elements with the class `full-screen-hide` are hidden.
 	 * Elements with the class `full-screen-show` that are normally hidden are shown.
 	 *
 	 * Requires `addOns.js`.
+	 *
+	 * ![Full-screen display](./img-Full-Screen-Chart.png)
 	 *
 	 * @param {object} params Configuration parameters
 	 * @param {CIQ.ChartEngine} [params.stx] The chart object
@@ -1012,50 +1028,603 @@ new CIQ.ContinuousZoom({
 
 
 
+	/**
+	 * Creates the outliers add-on which scales the y-axis to the main trend, hiding outlier
+	 * values. Markers are placed at the location of the outlier values enabling the user to
+	 * restore the full extent of the y-axis by selecting the markers.
+	 *
+	 * Requires *js/addOns.js*.
+	 *
+	 * ![Chart with hidden outliers](./img-Chart-with-Hidden-Outliers.png "Chart with hidden outliers")
+	 *
+	 * @param {Object} params Configuration parameters.
+	 * @param {CIQ.ChartEngine} [params.stx] A reference to the chart object.
+	 * @param {Number} [params.multiplier=3] Sets the threshold for outliers by multiplying the
+	 * 		normal data range. The default value hides only extreme outliers.
+	 *
+	 * @constructor
+	 * @name CIQ.Outliers
+	 * @example
+	 * new CIQ.Outliers({stx:stxx});
+	 * @since 7.5.0
+	 */
+	CIQ.Outliers=function(params){
+		if(!params) params={};
+		if(!params.stx){ console.warn("The Outliers addon requires an stx parameter"); return; }
+		this.stx=params.stx;
+		this.stx.outliers=this;
+
+		this.multiplier = params.multiplier || 3; // Default to 3 for extreme outliers
+
+		this.displayState = 'none';
+		this.flippedAxis = this.stx.layout.flipped;
+		this.markers = {};
+		this.markerAxisHigh = null;
+		this.markerAxisLow = null;
+
+		this.initMinMax = function(){
+			// The minimum and maximum threshold values to be considered an outlier.
+			this.minValue = null;
+			this.maxValue = null;
+			// min/max values of available data that are not considered outliers. Will be the least and greatest values in the available data if no outliers are found.
+			this.trendMin = null;
+			this.trendMax = null;
+			// min/max values of available data that are considered outliers. Will remain null if no outlier is found.
+			this.outlierMin = null;
+			this.outlierMax = null;
+		};
+		this.initMinMax();
+
+		// Listen for a layout changed event and reset the markers
+		this.stx.addEventListener("layout", function(event){
+    	if(event.stx.layout.flipped != event.stx.outliers.flippedAxis){
+				event.stx.outliers.flippedAxis = event.stx.layout.flipped;
+				event.stx.outliers.removeAllMarkers();
+			}
+		});
+
+
+		/**
+		 * Finds the outliers of a data set, which is an array of quotes and associated values.
+		 *
+		 * @param {Array} dataSet An array of objects of the form `{value: Number, quote: Object}`.
+		 * 		Each object contains a value and its associated quote. The value is checked to
+		 * 		determine whether it is an outlier of the data set. When checking more than one
+		 * 		value for a quote (such as an OHLC quote), each value is included in a separate
+		 * 		object; for example, `[{value: open, quote: quote}, {value: high, quote: quote},
+		 * 		{value: low, quote: quote}, {value: close, quote: quote}...]`.
+		 *
+		 * @alias find
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.find=function(dataSet){
+
+			if(!dataSet.length || dataSet.length <= 0) return;
+
+			this.initMinMax();
+
+			var setMarker = function(data, position){
+				var quoteTime = data.quote.DT.getTime().toString();
+				// Add a marker if there isn't one already
+				if(!this.markers[quoteTime]) this.markers[quoteTime] = {
+					isFresh: true,
+					marker: this.markOutlier(data, position)
+				};
+				// Always refresh the status of the marker
+				this.markers[quoteTime].isFresh = true;
+			}.bind(this);
+
+			var dataSorted = dataSet.slice();
+			dataSorted.sort( function(a, b) {
+				return a.value - b.value;
+			});
+			var dataLength = dataSorted.length;
+
+			// Outlier threshold values are defined as more than the interquartile range above the third quartile
+			// or below the first quartile, of the sorted dataSet, multiplied by the value of the
+			// stxx.outlierMultiplier property.
+			var q1 = dataSorted[Math.floor((dataLength / 4))].value;
+			var q3 = dataSorted[Math.floor((dataLength * (3 / 4)))].value;
+			var iqr = q3 - q1;
+
+			this.minValue = q1 - iqr*this.multiplier;
+			this.maxValue = q3 + iqr*this.multiplier;
+
+			this.deprecateMarkers(); // If a marker isn't refreshed below, it will be deleted in the next call
+
+			// Loop through the sorted data and find the outliers as well as the trend min/max
+			for( var idx=0; idx<dataLength; idx++ ){
+				// Attack the array from both ends
+				var dataLow = dataSorted[idx];
+				var dataHigh = dataSorted[dataLength-(idx+1)];
+
+				// Find and mark outliers. Existing merkers will be refreshed in setMarker.
+				if(dataLow.value <= this.minValue) setMarker(dataLow, 'low');
+				if(dataHigh.value >= this.maxValue) setMarker(dataHigh, 'high');
+
+				// Find the first low value that's less than or equal to outlier threshold min
+				if(this.outlierMin === null && dataLow.value <= this.minValue) this.outlierMin = dataLow.value;
+				// Find the first high value that's greater than or equal to outlier threshold max
+				if(this.outlierMax === null && dataHigh.value >= this.maxValue) this.outlierMax = dataHigh.value;
+
+				// Find the first low value that's greater than the outlier threshold min
+				if(this.trendMin === null && dataLow.value > this.minValue) this.trendMin = dataLow.value;
+				// Find the first high value that's less than the outlier threshold max
+				if(this.trendMax === null && dataHigh.value < this.maxValue) this.trendMax = dataHigh.value;
+
+				// No need to loop through the entire array. Once the trend min/max are found we're done.
+				if(this.trendMin !== null && this.trendMax !== null) break;
+			}
+			this.markAxis();
+			this.updateMarkerVisibility();
+		};
+
+		/**
+		 * Sets the outlier display state, which determines whether to display outlier markers.
+		 *
+		 * @param {String} newState The intended display state; should be one of:
+		 * <ul>
+		 *		<li>"high" &mdash; Show high outliers; hide high outlier markers.</li>
+		 *		<li>"low" &mdash; Show low outliers; hide low outlier markers.</li>
+		 *		<li>"all" &mdash; Show high and low outliers; hide high and low outlier markers.</li>
+		 *		<li>"none" &mdash; Hide high and low outliers; show high and low outlier markers.</li>
+		 * </ul>
+		 *
+		 * If none of the above is provided, "none" is assumed.
+		 *
+		 * @alias setDisplayState
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.setDisplayState=function(newState){
+			if( (newState != 'high') && (newState != 'low') && (newState != 'all') ) newState = 'none';
+
+			var displayState = newState;
+			// Set the value of displayState to show the intended state, based on its existing state. This
+			// allows the markers to toggle between states without concern for what is currently displayed.
+			// For example: if the current display state is showing low outlier only, and the intent is to
+			// now display high outliers as well, then the display state will change to 'all'.
+			// This will toggle the high/low state off as well.
+			if( this.displayState == 'all' && newState == 'high' ) displayState = 'low';
+			else if( this.displayState == 'all' && newState == 'low' ) displayState = 'high';
+			else if( this.displayState == 'high' && newState == 'low' ) displayState = 'all';
+			else if( this.displayState == 'low' && newState == 'high' ) displayState = 'all';
+			else if( this.displayState == newState ) displayState = 'none';
+
+			this.displayState = displayState;
+
+			this.updateMarkerVisibility();
+			this.stx.draw();
+
+		};
+
+		/**
+		 * Removes all markers that have an `isFresh` value of false. Sets the `isFresh` value of all
+		 * remaining outlier markers to false.
+		 *
+		 * @alias deprecateMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.deprecateMarkers=function(){
+
+			var removeMarker = function(marker){
+				if(marker.marker && !marker.isFresh){
+					if(marker.marker.remove) marker.marker.remove();
+					marker.marker = null;
+				}else{
+					marker.isFresh = false;
+				}
+			};
+
+			// Handle the outlier markers
+			Object.keys(this.markers).forEach(function(key){
+				removeMarker(this.markers[key]);
+				// Remove the marker property if its marker has been removed
+				if(!this.markers[key].marker){
+					delete this.markers[key];
+				}
+			}.bind(this));
+
+			// Handle the Axis markers
+			if(this.markerAxisHigh){
+				removeMarker(this.markerAxisHigh);
+				// Reset the high axis marker to null if its marker has been removed
+				if(!this.markerAxisHigh.marker) this.markerAxisHigh = null;
+			}
+			if(this.markerAxisLow){
+				removeMarker(this.markerAxisLow);
+				// Reset the low axis marker to null if its marker has been removed
+				if(!this.markerAxisLow.marker) this.markerAxisLow = null;
+			}
+		};
+
+		/**
+		 * Removes all outlier markers.
+		 *
+		 * @alias removeAllMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.removeAllMarkers=function(){
+
+			var removeMarker = function(marker){
+				if(marker.marker){
+					if(marker.marker.remove) marker.marker.remove();
+					marker.marker = null;
+				}
+			};
+
+			// Handle the outlier markers
+			Object.keys(this.markers).forEach(function(key){
+				removeMarker(this.markers[key]);
+				// Remove the marker property if its marker has been removed
+				if(!this.markers[key].marker){
+					delete this.markers[key];
+				}
+			}.bind(this));
+
+			// Handle the Axis markers
+			if(this.markerAxisHigh){
+				removeMarker(this.markerAxisHigh);
+				// Reset the high axis marker to null if its marker has been removed
+				if(!this.markerAxisHigh.marker) this.markerAxisHigh = null;
+			}
+			if(this.markerAxisLow){
+				removeMarker(this.markerAxisLow);
+				// Reset the low axis marker to null if its marker has been removed
+				if(!this.markerAxisLow.marker) this.markerAxisLow = null;
+			}
+		};
+
+		/**
+		 * Shows or hides outlier markers based on the display state.
+		 *
+		 * See [setDisplayState]{@link CIQ.Outliers#setDisplayState}.
+		 *
+		 * @alias updateMarkerVisibility
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.updateMarkerVisibility=function(){
+			Object.keys(this.markers).forEach(function(key){
+				if( this.displayState == 'all' || this.markers[key].marker.node.classList.contains(this.displayState) )
+					this.markers[key].marker.node.style.display = 'none';
+				else
+					this.markers[key].marker.node.style.display = 'block';
+			}.bind(this));
+		};
+
+		/**
+		 * Updates the position of the y-axis outlier marker passed as an argument.
+		 *
+		 * @param {HTMLElement} node The y-axis marker to position.
+		 *
+		 * @alias refreshAxisMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.refreshAxisMarkers=function(node){
+
+			var isHigh = false;
+			var positionClass = 'low';
+			if( node.classList.contains('high') ){
+				isHigh = true;
+				positionClass = 'high';
+			}
+			var posTop = this.stx.chart.yAxis.top;
+			// Set the low marker of reverse the value if the axis is flipped
+			if(	(!this.flippedAxis && !isHigh) ||
+					(this.flippedAxis && isHigh)
+			){
+				posTop = (this.stx.chart.yAxis.bottom-50);
+			}
+
+			if(this.flippedAxis){
+				node.classList.add('flipped');
+			}else{
+				node.classList.remove('flipped');
+			}
+
+			var xFormLeft = Math.floor(this.stx.chart.yAxis.left).toString() + 'px';
+			var xFormTop = Math.floor(posTop).toString() + 'px';
+			var labelPrice = (isHigh)?this.outlierMax:this.outlierMin;
+
+			// Set marker positioning relative to the y-axis
+			node.style.transform = 'translate(' + xFormLeft + ', ' + xFormTop + ')';
+			node.querySelector('.outlier-value').innerText = this.stx.formatYAxisPrice(labelPrice);
+			// Apply .right class when axis is on the left to right position child elements
+			if(xFormLeft === '0px') node.classList.add('right');
+			else node.classList.remove('right');
+			// Toggle compress style where applicable
+			if( this.displayState == 'all' || this.displayState === positionClass ) node.classList.add('compress');
+			else node.classList.remove('compress');
+		};
+
+		/**
+		 * Places markers on the y-axis when high or low outliers exist.
+		 *
+		 * @alias markAxis
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.markAxis=function(){
+
+			// Create a marker positioned on the Y axis and return it.
+			var createAxisMarker = function(position){
+
+				var axisMarker = document.createElement('div');
+				axisMarker.classList.add('outlier-sticker', 'axis', position);
+				axisMarker.innerHTML = '<div class="expansion"><div class="tick"></div><span class="outlier-value"></div><div class="compression"></div></span>';
+
+				this.matchYAxisStyle(axisMarker);
+
+				axisMarker.addEventListener('click', function(position){
+						this.setDisplayState(position);
+					}.bind(this, position));
+
+				return {
+					marker: new CIQ.Marker({
+						stx: this.stx,
+						xPositioner:"none",
+						yPositioner:"none",
+						label: "expand",
+						permanent: true,
+						chartContainer: true,
+						node: axisMarker
+					})
+				};
+			};
+
+			if(this.outlierMax !== null){
+				// Add the high axis marker if there isn't one
+				if(!this.markerAxisHigh) this.markerAxisHigh = createAxisMarker.call(this, (!this.flippedAxis)?'high':'low');
+				// Always update the status and position of the marker
+				this.markerAxisHigh.isFresh = true;
+				this.refreshAxisMarkers(this.markerAxisHigh.marker.node);
+			}
+			if(this.outlierMin !== null){
+				// Add the low axis marker if there isn't one
+				if(!this.markerAxisLow) this.markerAxisLow = createAxisMarker.call(this, (!this.flippedAxis)?'low':'high');
+				// Always update the status and position of the marker
+				this.markerAxisLow.isFresh = true;
+				this.refreshAxisMarkers(this.markerAxisLow.marker.node);
+			}
+		};
+
+		/**
+		 * Adds an outlier marker to a tick. Accepts a quote object which is marked as an outlier.
+		 *
+		 * @param {Object} data An object containing the outlier value and its associated quote;
+		 * 		for example, `{value: Number, quote: Object}`.
+		 * @param {String} position The position of the marker; either "high" or "low". If the
+		 * 		position is "high", the marker is placed at the top of the chart; if "low", at the
+		 * 		bottom of the chart.
+		 * @return {CIQ.Marker} The outlier marker added to the display.
+		 *
+		 * @alias markOutlier
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.markOutlier=function(data, position){
+
+			if(!data) return;
+			position = position || 'high';
+
+			var markerYPos = 'top';
+			// Set the low marker of reverse the properties if the axis is flipped
+			if(	(!this.flippedAxis && position == 'low') ||
+					(this.flippedAxis && position == 'high')
+			){
+				markerYPos = 'bottom';
+			}
+
+			// Create a marker
+			var outlierMarker = document.createElement('div');
+			outlierMarker.classList.add('outlier-sticker', 'quote', position);
+			// Add flipped class if axis is flipped
+			if(this.flippedAxis){
+				outlierMarker.classList.add('flipped');
+			}
+			outlierMarker.innerHTML = '<span class="outlier-value">'+this.stx.formatYAxisPrice(data.value, this.stx.panels.chart)+'</span>';
+
+			this.matchYAxisStyle(outlierMarker);
+
+			outlierMarker.addEventListener('click', function(position){
+					this.setDisplayState(position);
+				}.bind(this, position));
+
+			return new CIQ.Marker({
+				stx: this.stx,
+				xPositioner: "date",
+				yPositioner: markerYPos,
+				x: data.quote.DT,
+				node: outlierMarker
+			});
+
+		};
+
+		/**
+		 * Sets the CSS style properties of the y-axis outlier marker to match the CSS styling of
+		 * the y-axis itself.
+		 *
+		 * @param {HTMLElement} node The y-axis marker to style.
+		 *
+		 * @alias matchYAxisStyle
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.matchYAxisStyle=function(node){
+			// Apply styles from the yAxis
+			if(this.stx.styles.stx_yaxis){
+				var styles = this.stx.styles.stx_yaxis;
+				node.style.fontSize = styles.fontSize;
+				node.style.fontFamily = styles.fontFamily;
+				node.style.color = styles.color;
+				node.style.borderColor = styles.color;
+			}
+		};
+
+		/**
+		 * Overrides the default {@link CIQ.ChartEngine#determineMinMax} function when the
+		 * Outliers add-on is active.
+		 *
+		 * @param {Array} quotes The array of quotes to evaluate for min and max (typically
+		 * 		`CIQ.ChartEngine.chart.dataSegment`).
+		 * @param {Array} fields A list of fields to compare.
+		 * @param {Boolean} [sum] If true, then compute maximum sum rather than the maximum single
+		 * 		value.
+		 * @param {Boolean} [bypassTransform] If true, bypass any transformations.
+		 * @param {Number} [length] Specifies many elements of the quotes array to process.
+		 * @param {Boolean} [checkArray] If true, the type of the value used to determine the
+		 * 		min/max is checked to ascertain whether it is an array; if so, the first element
+		 * 		of the array is retrieved for use in the min/max determination.
+		 * @return {Array} A tuple: min and max values.
+		 *
+		 * @memberOf CIQ.ChartEngine
+		 * @since 7.5.0
+		 */
+		CIQ.ChartEngine.prototype.determineMinMax=function(quotes, fields, sum, bypassTransform, length, checkArray, panelName){
+			var highValue=Number.MAX_VALUE*-1;
+			var lowValue=Number.MAX_VALUE;
+			var isTransform=false;
+			var l=quotes.length;
+			if(length) l=length;
+
+			var outlierData = [];
+			// Default to outlier detection off unless explecitly set
+			var hideOutliers = false;
+			if( (panelName && panelName == 'chart') && this.layout.outliers){
+				hideOutliers = true;
+			}else if(this.outliers){
+				// Reset the min/max and markers in the event showOutliers is toggled at runtime
+				this.outliers.initMinMax();
+				this.outliers.deprecateMarkers();
+			}
+
+			for(var i=0;i<=l+1;i++){
+				var quote;
+				// Here only the first field in the fields array is checked.  A different approach might be to check all the fields.
+				if(fields.length){
+					if(i==l) {
+						quote=this.getPreviousBar(this.chart, fields[0], 0);
+					}
+					else if(i==l+1) {
+						quote=this.getNextBar(this.chart, fields[0], l-1);
+					}
+					else quote=quotes[i];
+				}
+				if(!quote) continue;
+				if(!bypassTransform){
+					if(quote.transform) {
+						isTransform=true;
+						quote=quote.transform;
+					}else if(isTransform) continue;	 //don't include points without transforms if we have been including points with transforms
+				}
+				var acc=0;
+				for(var j=0;j<fields.length;j++){
+					var tuple=CIQ.existsInObjectChain(quote,fields[j]);
+					if(!tuple) continue;
+					var f=tuple.obj[tuple.member];
+					if(typeof(f)=="number") f=[f];
+					for(var v=0;v<f.length;v++){
+						var val=f[v];
+						if(checkArray && val instanceof Array) val=val[0];
+						if(val || val===0){
+							if(sum){
+								acc+=val;
+								if(acc>highValue) highValue=acc;
+								if(acc<lowValue) lowValue=acc;
+							}else{
+								if(val>highValue) highValue=val;
+								if(val<lowValue) lowValue=val;
+								if(hideOutliers) outlierData.push({value: val, quote: quote});
+							}
+						}
+					}
+				}
+				if( sum && hideOutliers) outlierData.push({value: acc, quote: quote});
+			}
+
+			if(hideOutliers){
+				if( outlierData.length > 0 ) this.outliers.find(outlierData);
+				// Change the upper limit only if the trendMax has been set in outliers.find() and we're hiding high outliers
+				if(this.outliers.trendMax && (this.outliers.displayState === 'low' || this.outliers.displayState === 'none')) highValue = this.outliers.trendMax;
+				// Change the lower limit only if the trendMin has been set in outliers.find() and we're hiding high outliers
+				if(this.outliers.trendMin && (this.outliers.displayState === 'high' || this.outliers.displayState === 'none')) lowValue = this.outliers.trendMin;
+			}
+
+			if(highValue==Number.MAX_VALUE*-1) highValue=0;
+			if(lowValue==Number.MAX_VALUE) lowValue=0;
+			return [lowValue, highValue];
+		};
+
+};
+
+
+
+
 
 	/**
-	 * Add-On that allows a series to complement another series.
+	 * Creates an add-on that enables a series to complement another series.
 	 *
-	 * The complementary series is a permanent fixture of the series which it complements.
-	 * It moves in tandem with the series, and gets removed with the series.
-	 * In all other respects, though, it behaves like its own series. It shows separately in the panel legend and plots using its own renderer.
-	 * The addon instance is attached to the chart engine as a member of the `stxx.plotComplementers` array.
+	 * ![Plot Complementer](./img-Data-Forecasting.png)
 	 *
-	 * **Note:** The series created by this add-on is not exported with the layout, since it is created in tandem with the series it complements.
-	 * Currently this feature works only with non-comparison series (parameters.isComparison!==true)
+	 * The complementary series is a permanent fixture of the series which it complements. It moves in tandem with the series,
+	 * and gets removed with the series. In all other respects, though, it behaves like its own series. It shows separately in
+	 * the panel legend and plots using its own renderer.
+	 *
+	 * Charts can have multiple `PlotComplementer` instances. Each instance is attached to the chart engine as a member of a
+	 * `PlotComplementer` collection.
+	 *
+	 * Multiple `PlotComplementer` instances can be associated with a time series. To link a `PlotComplementer` to a series,
+	 * specify the series instrument in the `params.filter` function. See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
+	 *
+	 * **Note:** The series created by this add-on is not exported with the layout, since it is created in tandem with the series
+	 * it complements. Currently, this feature works only with non-comparison series.
 	 *
 	 * @param {object} params Configuration parameters.
 	 * @param {CIQ.ChartEngine} params.stx The chart object.
 	 * @param {string} [params.id] Unique key used by the add-on to identify itself. If not supplied, a random key is chosen.
-	 * @param {object} [params.quoteFeed] If provided, attaches the quote feed to the quote driver to satisfy any quote requests for any series created by the add-on.
-	 * @param {object} [params.behavior] If provided, used as the behavior for the quote feed supplied in this parameter list.
-	 * @param {object} [params.filter] If provided, used as the filter for the quote feed supplied in this parameter list.
-	 * @param {object} [params.decorator] Object on which a modifier for the symbol and/or display can be set.
-	 * @param {string} [params.decorator.symbol] If provided, adds this string onto the ID when creating the complementary series. Otherwise, a unique ID is used.
-	 * @param {string} [params.decorator.display] If provided, customizes the display value of the series.
-	 * @param {object} [params.renderingParameters] This is a collection of parameters that override the default rendering parameters.
-	 * 					The default parameters determine how the forecast renderer is created. These are a line of width 1 px and 0.5 opacity.
-	 * 					One can always change the rendering on the fly by setting this instance's `renderingParameters` property to a different object.
-	 * 					The default parameters can be restored by calling `this.resetRenderingParameters()` where `this` is the add-on instance.
-	 * 					Here are a few examples of rendering parameters:
+	 * @param {object} [params.quoteFeed] Attaches the quote feed to the quote driver to satisfy any quote requests for any
+	 * 					series created by the add-on.
+	 * @param {object} [params.behavior] Used as the behavior for the quote feed supplied in this parameter list.
+	 * @param {function} [params.filter] Used as the filter for the quote feed supplied in this parameter list.
+	 * 					See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
+	 * @param {object} [params.decorator] Container object for the `symbol` and `display` properties. The `decorator` provides the
+	 * 					label (`symbol`) for the complementary series and a short description (`display`) that is appended to
+	 * 					the label; for example:
 	 * ```javascript
-	 * {chartType:"scatterplot", opacity:0.5, field:"Certainty"}
-	 * {chartType:"histogram", border_color:"transparent", opacity:0.3}
-	 * {chartType:"channel", opacity:0.5, pattern:"dotted"}
-	 * {chartType:"candle", opacity:0.5, color:"blue", border_color:"blue"}
+	 * decorator: {symbol:"_fcst", display:" Forecast"}
+	 * ```
+	 * @param {string} [params.decorator.symbol] Adds this string onto the ID when creating the complementary series.
+	 * 					Otherwise, a unique ID is used.
+	 * @param {string} [params.decorator.display] Customizes the display value of the series.
+	 * @param {object} [params.renderingParameters={chartType:"line", width:1, opacity:0.5}] A collection of parameters
+	 * 					that override the default rendering parameters. The `renderingParameters` object can be set or changed
+	 * 					at any time. The default parameters can be restored by calling
+	 * 					{@link CIQ.PlotComplementer#resetRenderingParameters}.
+	 * 					<p>Here are a few examples of rendering parameters:</p>
+	 * ```javascript
+	 * //Assuming a PlotComplementer declared as "forecaster":
+	 * forecaster.renderingParameters = {chartType:"scatterplot", opacity:0.5, field:"Certainty"}
+	 * forecaster.renderingParameters = {chartType:"histogram", border_color:"transparent", opacity:0.3}
+	 * forecaster.renderingParameters = {chartType:"channel", opacity:0.5, pattern:"dotted"}
+	 * forecaster.renderingParameters = {chartType:"candle", opacity:0.5, color:"blue", border_color:"blue"}
 	 * ```
 	 * @constructor
 	 * @name CIQ.PlotComplementer
 	 * @since 7.3.0
 	 * @example <caption>Use for Forecasting</caption>
-		new CIQ.PlotComplementer({
-			stx:stxx,
-			id:"forecast",
-			quoteFeed: fcstFeed.quoteFeedForecastSimulator,
-			behavior: {refreshInterval:60},
-			decorator: {symbol:"_fcst",display:" Forecast"},
-			renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
-		});
+		var forecaster = new CIQ.PlotComplementer({
+							 stx:stxx,
+							 id:"forecast",
+							 quoteFeed: fcstFeed.quoteFeedForecastSimulator,
+							 behavior: {refreshInterval:60},
+							 decorator: {symbol:"_fcst", display:" Forecast"},
+							 renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
+						 });
 	 */
 	CIQ.PlotComplementer=function(params){
 		var stx=params.stx;
@@ -1139,13 +1708,16 @@ new CIQ.ContinuousZoom({
 		stx.addEventListener("symbolImport", symbolChange);
 
 		/**
-		 * Resets rendering parameters back to the default settings.
-		 * These are the settings used when creating a `PlotComplementer`.
-		 * If not provided when creating a `PlotComplementer`, will use the following default: `{ chartType:"line", width:1, opacity:0.5 }`.
-		 * The rendering parameters may be set at any time after creating `PlotComplementer` to set an ad-hoc rendering right
-		 * before adding a series.
+		 * Resets the `PlotComplementer` rendering values to the default settings.
 		 *
-		 * @memberof CIQ.PlotComplementer
+		 * Default settings can be provided in the parameters passed to the `PlotComplementer` constructor. If no settings are
+		 * provided to the constructor, `PlotComplementer` uses the following defaults: `{ chartType:"line", width:1, opacity:0.5 }`.
+		 *
+		 * The rendering parameters may be set anytime after creating `PlotComplementer`; for example, to set an ad-hoc rendering
+		 * right before adding a series.
+		 *
+		 * @alias resetRenderingParameters
+		 * @memberof CIQ.PlotComplementer.prototype
 		 * @since 7.3.0
 		 */
 		this.resetRenderingParameters=function(){
@@ -1154,12 +1726,24 @@ new CIQ.ContinuousZoom({
 
 		/**
 		 * Sets a quote feed for the `PlotComplementer`.
-		 * Automatically called when a quote feed is provided in the constructor argument object.
 		 *
-		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy any quote requests for any series created by the add-on.
-		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter list.
-		 * @param {object} [params.filter] If provided, used as the filter for the quote feed supplied in this parameter list.
-		 * @memberof CIQ.PlotComplementer
+		 * Automatically called when a quote feed is provided in the constructor argument. If a quote feed or `behavior` object is not
+		 * specified in `params`, this function returns without doing anything.
+		 *
+		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy any quote requests for any series created
+		 * 					by the add-on. This quote feed is like any time series quote feed object. See the
+		 * 					[Data Integration Overview]{@tutorial DataIntegrationOverview}.
+		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter list. This object is like any `behavior`
+		 * 					object associated with a quote feed. See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on
+		 * 					`behavior` objects.
+		 * @param {function} [params.filter] Filters the quote feed supplied in this parameter list. The filter function takes as an
+		 * 					argument an object typically containing `symbolObject`, `symbol`, and `interval` properties. The properties
+		 * 					associate the `PlotComplementer` with an instrument. If the `filter` function returns true, the
+		 * 					`PlotComplementer` quote feed is used for the instrument.
+		 * 					<p>This `filter` function is like the `filter` in basic quote feeds.
+		 * 					See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on quote feed `filter` functions.</p>
+		 * @alias setQuoteFeed
+		 * @memberof CIQ.PlotComplementer.prototype
 		 * @since 7.3.0
 		 */
 		this.setQuoteFeed=function(params){
@@ -1252,7 +1836,7 @@ Not this:
 	 * @since 4.0.0
 	 * @since 6.1.0 added yAxis parameter
 	 * @example <caption> Declare a range slider and enable by default using the loadChart callback</caption>
-	 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer")}); 
+	 * var stxx=new CIQ.ChartEngine({container:document.querySelector(".chartContainer")}); 
 	 * 
 	 * stxx.attachQuoteFeed(quoteFeedSimulator,{refreshInterval:1,bufferSize:200});
 	 * 
@@ -1267,7 +1851,7 @@ Not this:
 	 * 		}
 	 * });	 
 	 * @example <caption> Declare a range slider and enable/disable using commands to be triggered from a menu</caption>
-	 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer")}); 
+	 * var stxx=new CIQ.ChartEngine({container:document.querySelector(".chartContainer")}); 
 	 * 
 	 * // instantiate a range slider
 	 * new CIQ.RangeSlider({stx:stxx});
@@ -1475,7 +2059,6 @@ Not this:
 				if(this!==chartContainer[0] && $(this).is(":visible")) totalHeightOfContainers-=$(this).parent().outerHeight(true);
 			});
 			ciqChart.height(totalHeightOfContainers);
-			chartContainer.height(ciqChart.height()-heightOffset);
 			if(this.layout.rangeSlider){
 				ciqSlider.show();
 				self.resizeChart();
@@ -1628,7 +2211,7 @@ Not this:
 	 * @example <caption>Adding a hover tool tip to a chart:</caption>
 	 *
 	 * //First declare your chart engine
-	 * var stxx=new CIQ.ChartEngine({container:$$$(".chartContainer")[0]});
+	 * var stxx=new CIQ.ChartEngine({container:document.querySelector(".chartContainer")[0]});
 	 *
 	 * //Then link the tooltip to that chart.
 	 * //Note how we've enabled OHL, Volume, Series and Studies.
@@ -1710,7 +2293,7 @@ Not this:
 			CIQ.Marker.call(this, params);
 		};
 
-		CIQ.Marker.Tooltip.ciqInheritsFrom(CIQ.Marker,false);
+		CIQ.inheritsFrom(CIQ.Marker.Tooltip,CIQ.Marker,false);
 
 		CIQ.Marker.Tooltip.sameBar=function(bar1, bar2){
 			if(!bar1 || !bar2) return false;

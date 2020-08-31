@@ -28,6 +28,7 @@ import DeleteIcon      from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import HomeIcon        from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
+// import '../utils/raf';
 
 class ChartStore {
     static keystrokeHub;
@@ -64,17 +65,37 @@ class ChartStore {
     @observable chartHeight;
     @observable chartContainerHeight;
     @observable isMobile = false;
+    @observable isScaledOneOne = false;
     @observable cursorInChart = false;
     @observable shouldRenderDialogs = false;
     @observable yAxiswidth = 0;
     @observable serverTime;
     @observable networkStatus;
+    @observable lastCountDownSecond;
+    @observable countDownLabel;
 
     get loader() { return this.mainStore.loader; }
     get routingStore() { return this.mainStore.routing; }
     get stateStore() { return this.mainStore.state; }
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
+
+    @computed get currentCloseQuote() {
+        let currentQuote = this.stxx.currentQuote();
+
+        if (!currentQuote.Close) {
+            const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
+            if (dataSegmentClose && dataSegmentClose.length) {
+                currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+            } else {
+                const dataSetClose = [...this.stxx.chart.dataSet].filter(item => (item && item.Close));
+                if (dataSetClose && dataSetClose.length) {
+                    currentQuote = dataSetClose[dataSetClose.length - 1];
+                }
+            }
+        }
+        return currentQuote;
+    }
 
     updateHeight(position) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -111,7 +132,6 @@ class ChartStore {
             this.containerWidth = 480;
         }
 
-
         this.updateHeight();
         this.updateCanvas();
         // Height updates are not immediate, so we must resize the canvas with
@@ -120,14 +140,13 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
-    @computed get indicatorHeightRatio() {
+    indicatorHeightRatio = (num) => {
         const chartHeight = this.chartNode.offsetHeight;
         const isSmallScreen = chartHeight < 780;
-        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 360 : 340)) / 5);
-
+        const denominator = num >= 5 ? num : (num + 1);
+        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 340 : 320)) / denominator);
         return {
             height: indicatorsHeight,
-            heightOnAdd: indicatorsHeight + (isSmallScreen ? 17 : 27),
             percent: (indicatorsHeight / chartHeight),
         };
     }
@@ -288,6 +307,9 @@ class ChartStore {
         };
         CIQ.ChartEngine.prototype.isHistoricalMode = function () {
             return !!_self.stateStore.endEpoch;
+        };
+        CIQ.ChartEngine.prototype.getNearestCloseQuote = function () {
+            return _self.currentCloseQuote;
         };
 
         this.rootNode = rootNode;
@@ -534,6 +556,25 @@ class ChartStore {
         engineParams.layout = chartLayout;
 
         const stxx = this.stxx = new CIQ.ChartEngine(engineParams);
+        // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
+        // let defaultMinimumBars = this.defaultMinimumBars;
+        // if (stxx.chart.maxTicks - 10 > 50) {
+        //     defaultMinimumBars = 50;
+        // }
+        // stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
+
+        // macos trackpad is so sensitive that it'll break our zoom animation.
+        // unfortunately there is no way to detect a trackpad from javascript,
+        // here we drop 'wheel' events shorter that 40ms
+        // TODO: email chartiq support to fix this.
+        const org_run = stxx.animations.zoom.run.bind(stxx.animations.zoom);
+        let wheelInMotion = false;
+        stxx.animations.zoom.run = (fc, startValues, endValues) => {
+            if (wheelInMotion) return;
+            wheelInMotion = true;
+            setTimeout(() => { wheelInMotion = false; }, 40);
+            return org_run(fc, startValues, endValues);
+        };
 
         // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
         // let defaultMinimumBars = this.defaultMinimumBars;
@@ -798,14 +839,8 @@ class ChartStore {
 
     @action.bound updateYaxisWidth = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
-            const currentQuote = this.context.stx.currentQuote();
-            if (currentQuote && currentQuote.Close) {
-                this.calculateYaxisWidth(currentQuote.Close);
-            } else {
-                const lastDataWithClose = this.stxx.masterData.find(x => x.Close);
-                if (lastDataWithClose) {
-                    this.calculateYaxisWidth(lastDataWithClose.Close);
-                }
+            if (this.currentCloseQuote && this.currentCloseQuote.Close) {
+                this.calculateYaxisWidth(this.currentCloseQuote.Close);
             }
         }
     }
@@ -820,6 +855,7 @@ class ChartStore {
             this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
+            this.mainStore.paginationLoader.updateOnPagination(false);
             this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */
@@ -834,6 +870,29 @@ class ChartStore {
         const rangeSpan = this.getRangeSpan();
         this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
         this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
+    }
+
+
+    remainLabelY = () => {
+        const stx = this.context.stx;
+        const topPos = 36;
+        const labelHeight = 24;
+        const bottomPos = 66;
+        let y = stx.chart.currentPriceLabelY + labelHeight;
+        if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
+            y =  stx.chart.panel.bottom - bottomPos;
+            y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
+        } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
+            y = topPos;
+        }
+        return y;
+    }
+
+    @action.bound setYaxisWidth = (width) => {
+        this.yAxiswidth = width || this.yAxiswidth;
+        this.stxx.chart.yAxis.width = width || this.yAxiswidth;
+        this.stxx.calculateYAxisPositions();
+        this.stxx.draw();
     }
 
     getRangeSpan() {

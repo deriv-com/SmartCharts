@@ -59,7 +59,7 @@ html, body {
         .cq-symbol-select-btn .ic-icon,
         .cq-menu-dropdown,
         .sc-toolbar-widget,
-        .ciq-navigation-widget,
+        .sc-navigation-widget,
         .stx_jump_today.home,
         .stx-panel-control .stx-btn-panel {
             /*
@@ -231,6 +231,9 @@ html, body {
         position: relative;
         left: 8px;
         top: 8px;
+        @include themify($themes) {
+            fill: themed('NavigationWidgetColor');
+        }
     }
 }
 
@@ -359,6 +362,10 @@ html, body {
     .mStickyRightClick {
         position: relative;
     }
+}
+
+.stx_draw_ok {
+    display: none !important;
 }
 
 .vectorTrashCan, .overlayEdit {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '../store/Connect';
 import CrosshairToggle from './CrosshairToggle.jsx';
-import '../../sass/components/navigation-widget.scss';
+import '../../sass/components/_navigation-widget.scss';
 
 import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
 
@@ -13,24 +13,25 @@ const NavigationWidget = ({
     enableScale,
     onMouseEnter,
     onMouseLeave,
+    isScaledOneOne,
     onCrosshairChange,
 }) => {
     if (!context) return '';
 
     return (
         <div
-            className="ciq-navigation-widget"
+            className="sc-navigation-widget"
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
             <div
-                className={`ciq-navigation-widget__item ciq-navigation-widget__item--scale ${!enableScale ? 'ciq-navigation-widget__item--hidden' : ''}`}
+                className={`sc-navigation-widget__item sc-navigation-widget__item--scale ${!enableScale ? 'sc-navigation-widget__item--hidden' : ''} ${isScaledOneOne ? 'sc-navigation-widget__item--disabled' : ''}`}
                 onClick={onScale}
             >
                 <ScaleIcon />
             </div>
             <div
-                className="ciq-navigation-widget__item ciq-navigation-widget__item--zoom"
+                className="sc-navigation-widget__item sc-navigation-widget__item--zoom"
             >
                 <ZoominIcon onClick={zoomIn} />
                 <CrosshairToggle onChange={onCrosshairChange} />
@@ -42,6 +43,7 @@ const NavigationWidget = ({
 
 export default connect(({ chart, chartSize, navigationWidget }) => ({
     context: chart.context,
+    isScaledOneOne: chart.isScaledOneOne,
     zoomIn: chartSize.zoomIn,
     zoomOut: chartSize.zoomOut,
     onScale: navigationWidget.onScale,

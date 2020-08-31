@@ -14,12 +14,15 @@ export default class NavigationWidgetStore {
     }
 
     onContextReady = () => {
-        this.stxx.prepend('mouseWheel', () => {
-            this.stxx.chart.lockScroll = false;
-        });
+        this.stxx.prepend('mouseWheel', this.onMouseWheel);
     };
 
     @computed get enableScale() { return this.stateStore.startEpoch; }
+
+    @action.bound onMouseWheel() {
+        this.stxx.chart.lockScroll = false;
+        this.mainStore.chart.isScaledOneOne = false;
+    }
 
     @action.bound onMouseEnter() {
         this.mouse_in = true;
@@ -33,7 +36,6 @@ export default class NavigationWidgetStore {
 
     @action.bound onScale() {
         let point = null;
-
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
 

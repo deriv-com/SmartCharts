@@ -1,9 +1,9 @@
-import React from 'react';
+import React            from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import { connect } from './Connect';
-import { cloneCategories, cloneCategory } from '../utils';
-import SearchInput from '../components/SearchInput.jsx';
+import { connect }      from './Connect';
+import SearchInput      from '../components/SearchInput.jsx';
 import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
+import { cloneCategories, cloneCategory } from '../utils';
 
 const scrollTo = (element, offset) => {
     if (element.container) {
@@ -35,41 +35,12 @@ export default class CategoricalDisplayStore {
         getCurrentActiveSubCategory,
         searchInputClassName,
     }) {
-        reaction(() => (this.scrollPanel && getIsShown), () => {
-            if (getIsShown()) {
-                const rootEl = this.scrollPanel.container || this.scrollPanel;
-                const activeItemCount = getActiveCategory ? getActiveCategory().data.length : 0;
-                this.focusedCategoryKey = null;
-                this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
-                this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
-                const el = this.categoryElements[this.activeCategoryKey];
-                const activeSubCategoryClassName = this.id ? `.category-${this.activeCategoryKey} .${this.id}-subcategory-item-${this.activeSubCategory}` : `.category-${this.activeCategoryKey}  .subcategory-item-${this.activeSubCategory}`;
-                const el_active_sub_category = rootEl.querySelector(activeSubCategoryClassName);
-                this.activeHeadKey = this.activeCategoryKey || null;
-                this.activeHeadTop = 0;
-                this.pauseScrollSpy = true;
-                this.isUserScrolling = false;
-
-                if (activeItemCount) {
-                    this.activeCategoryKey = 'active';
-                    this.activeHeadKey = null;
-                    scrollTo(this.scrollPanel, 0);
-                } else if (el) {
-                    scrollTo(this.scrollPanel, el.offsetTop);
-
-                    if (el_active_sub_category) {
-                        scrollTo(this.scrollPanel, (el.offsetTop + el_active_sub_category.offsetTop - 40));
-                    }
-                }
-                setTimeout(() => { this.pauseScrollSpy = false; }, 20);
-
-                if (!this.isInit) { this.init(); }
-                if (!mainStore.chart.isMobile) {
-                    setTimeout(() => {
-                        this.searchInput.current.focus();
-                    }, 0);
-                }
+        reaction(() => (getIsShown && getIsShown() && this.scrollPanel), () => {
+            if (getIsShown() && this.scrollPanel) {
+                this.scrollToActiveSymbol();
             }
+        }, {
+            delay: 200,
         });
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
@@ -118,6 +89,7 @@ export default class CategoricalDisplayStore {
             handleFilterClick: this.handleFilterClick,
             activeCategoryKey: this.activeCategoryKey,
             focusedCategoryKey: this.focusedCategoryKey,
+            isSearching: this.filterText !== '',
         }))(FilterPanel);
 
         this.SearchInput = connect(() => ({
@@ -135,10 +107,10 @@ export default class CategoricalDisplayStore {
     @observable activeCategoryKey = '';
     @observable focusedCategoryKey = null;
     @observable isScrollingDown = false;
-    scrollTop = undefined;
     @observable activeHeadKey = undefined;
     @observable activeHeadTop = 0;
     @observable activeHeadOffset = undefined;
+    scrollTop = undefined;
     isUserScrolling = true;
     lastFilteredItems = [];
     activeCategories = [];
@@ -149,57 +121,6 @@ export default class CategoricalDisplayStore {
 
     get height() {
         return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
-    }
-
-    @action.bound updateScrollSpy() {
-        if (this.pauseScrollSpy || !this.scrollPanel) { return; }
-        if (this.filteredItems.length === 0) { return; }
-
-        // hits: 40px for title hight + 4px for content bottom border
-        const categoryTitleHeight = 44;
-        const scrollPanelTop = elementTop(this.scrollPanel);
-        let activeHeadTop = 0;
-        let activeMenuId = null;
-
-        for (const category of this.filteredItems) {
-            const el = this.categoryElements[category.categoryId];
-
-            if (!el) { return; }
-            const r = el.getBoundingClientRect();
-            const top = r.top - scrollPanelTop;
-            if (top < 0) {
-                activeMenuId = category.categoryId;
-
-                const categorySwitchPoint = r.height + top - categoryTitleHeight;
-                activeHeadTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
-            }
-        }
-
-        const scrollTop = elementTop(this.scrollPanel);
-
-        if (this.scrollTop > scrollTop) {
-            this.scrollUp();
-        } else {
-            this.scrollDown();
-        }
-
-        const offsetTop = elementOffsetTop(this.scrollPanel);
-
-        this.activeHeadOffset = (this.chart.isMobile ? offsetTop : 0);
-        this.scrollTop = scrollTop;
-        this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
-        this.activeHeadTop = activeHeadTop;
-        this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
-    }
-
-    @action.bound scrollUp() {
-        this.isScrollingDown = false;
-    }
-
-    @action.bound scrollDown() {
-        // This only affects when scrolling by mouse not by code
-        this.isScrollingDown = this.isUserScrolling;
-        this.isUserScrolling = true;
     }
 
     @action.bound init() {
@@ -317,6 +238,57 @@ export default class CategoricalDisplayStore {
         return filteredItems;
     }
 
+
+    @action.bound updateScrollSpy() {
+        if (this.pauseScrollSpy || !this.scrollPanel) { return; }
+        if (this.filteredItems.length === 0) { return; }
+
+        // hits: 40px for title hight + 4px for content bottom border
+        const categoryTitleHeight = 44;
+        const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
+        let activeHeadTop = 0;
+        let activeMenuId = null;
+
+        for (const category of this.filteredItems) {
+            const el = this.categoryElements[category.categoryId];
+
+            if (!el) { return; }
+            const gap_top = Object.keys(this.categoryElements).indexOf(category.categoryId) * 40;
+
+            const r = el.getBoundingClientRect();
+            const top = r.top - scrollPanelTop - gap_top;
+            if (top < 0) {
+                activeMenuId = category.categoryId;
+                const categorySwitchPoint = r.height + top - categoryTitleHeight;
+                activeHeadTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
+            }
+        }
+
+        const scrollTop = this.scrollPanel.getBoundingClientRect().top;
+        if (this.scrollTop > scrollTop) {
+            this.scrollUp();
+        } else {
+            this.scrollDown();
+        }
+
+        const offsetTop = this.scrollPanel.getBoundingClientRect().top - window.scrollY;
+        this.activeHeadOffset = (this.chart.isMobile ? offsetTop : 0);
+        this.scrollTop = scrollTop;
+        this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
+        this.activeHeadTop = activeHeadTop;
+        this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
+    }
+
+    @action.bound scrollUp() {
+        this.isScrollingDown = false;
+    }
+
+    @action.bound scrollDown() {
+        // This only affects when scrolling by mouse not by code
+        this.isScrollingDown = this.isUserScrolling;
+        this.isUserScrolling = true;
+    }
+
     @action.bound setCategoryElement(element, id) {
         this.categoryElements[id] = element;
     }
@@ -324,20 +296,30 @@ export default class CategoricalDisplayStore {
     @action.bound setFilterText(filterText) {
         this.filterText = filterText;
         this.isUserScrolling = false;
-        setTimeout(() => {
-            this.updateScrollSpy();
-        }, 0);
+        this.updateScrollSpy();
+        if (filterText === '') {
+            setTimeout(() => this.scrollToActiveSymbol(), 1);
+        }
     }
 
-    @action.bound handleFilterClick(category) {
-        const el = this.categoryElements[category.categoryId];
+    @action.bound handleFilterClick(categoryId) {
+        const el = this.categoryElements[categoryId];
+        const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
         if (el) {
             // TODO: Scroll animation
             this.pauseScrollSpy = true;
             this.isUserScrolling = false;
-            this.scrollPanel.scrollTop(el.offsetTop);
-            this.focusedCategoryKey = category.categoryId;
+            if (this.chart.isMobile) {
+                this.scrollPanel.scroll({
+                    top: el.offsetTop - 95,
+                    left: 0,
+                    behavior: 'smooth',
+                });
+            } else {
+                this.scrollPanel.scrollTop = el.offsetTop - gap_top;
+            }
+            this.focusedCategoryKey = categoryId;
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
@@ -346,7 +328,69 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel =  element;
+        this.scrollPanel = element;
+    }
+
+    @action.bound handleTitleClick(categoryId) {
+        this.activeCategories = [];
+        for (const item of this.filteredItems) {
+            if (item.categoryId === categoryId) {
+                item.active = !item.active;
+
+                if (item.active) {
+                    setTimeout(() => this.handleFilterClick(categoryId), 250);
+                }
+            }
+
+            if (item.active && item.categoryId !== 'favorite') {
+                this.activeCategories.push(item.categoryId);
+            }
+        }
+
+        this.activeHeadTop = null;
+        setTimeout(() => this.updateScrollSpy(), 0);
+    }
+
+    @action.bound scrollToActiveSymbol() {
+        const activeItemCount = this.getActiveCategory ? this.getActiveCategory().data.length : 0;
+        this.focusedCategoryKey = null;
+        this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
+        this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
+        const el = this.categoryElements[this.activeCategoryKey];
+        const activeSubCategoryClassName = this.id ? `.category-${this.activeCategoryKey} .${this.id}-subcategory-item-${this.activeSubCategory}` : `.category-${this.activeCategoryKey}  .subcategory-item-${this.activeSubCategory}`;
+        const el_active_sub_category = this.scrollPanel.querySelector(activeSubCategoryClassName);
+        this.activeHeadKey = this.activeCategoryKey || null;
+        this.activeHeadTop = 0;
+        this.pauseScrollSpy = true;
+        this.isUserScrolling = false;
+
+        if (activeItemCount) {
+            this.activeCategoryKey = 'active';
+            this.activeHeadKey = null;
+            this.scrollPanel.scrollTop = 0;
+        } else if (el) {
+            this.scrollPanel.scrollTop = el.offsetTop;
+
+            if (el_active_sub_category) {
+                const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
+                this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - topOffset);
+            }
+        }
+        setTimeout(() => { this.pauseScrollSpy = false; }, 20);
+
+        if (!this.isInit) { this.init(); }
+        if (!this.mainStore.chart.isMobile) {
+            setTimeout(() => this.searchInput.current.focus(), 0);
+        }
+
+        if (!this.mainStore.chart.isMobile) {
+            const categories = Object.keys(this.categoryElements);
+            const last_category = categories.pop();
+            const last_category_bottom_gap = this.height - (64 + (categories.length * 40)); // to make the last category height reach it's filter tab
+            if (this.categoryElements[last_category]) {
+                this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
+            }
+        }
     }
 
     @action.bound handleTitleClick(categoryId) {
@@ -379,7 +423,7 @@ export default class CategoricalDisplayStore {
         ResultsPanel: this.ResultsPanel,
         FilterPanel: this.FilterPanel,
         SearchInput: this.SearchInput,
-        isMobile: this.chart.isMobile,
         height: this.height,
+        isMobile: this.chart.isMobile,
     }))
 }

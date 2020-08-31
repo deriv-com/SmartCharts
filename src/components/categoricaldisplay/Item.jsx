@@ -10,15 +10,15 @@ const Icon = React.memo(({ id }) => {
     return <ItemIcon className={`ic-${id}`} />;
 });
 
-const ItemLeft = React.memo(({ item: { itemId, display } }) => (
-    <div className="left">
+const ItemName = React.memo(({ item: { itemId, display } }) => (
+    <div className="sc-mcd__item__name">
         <Icon id={itemId} />
-        <span className="ciq-item-display">{display}</span>
+        {display}
     </div>
 ));
 
-const ItemRight = React.memo(({ favoritesId, item: { dataObject, itemId } }) => (
-    <div className="right">
+const ItemDetail = React.memo(({ favoritesId, item: { dataObject, itemId } }) => (
+    <div className="sc-mcd__item__detail">
         {(dataObject && (dataObject.exchange_is_open === undefined || dataObject.exchange_is_open)) ? '' : <span className="closed-market">{t.translate('CLOSED')}</span>}
         <Favorite
             category={favoritesId}
@@ -42,7 +42,7 @@ const ActiveOption = ({ opt, item }) => {
 
 const ActiveOptions = ({ activeOptions, item }) => (
     activeOptions && (
-        <span className="cq-active-options">
+        <span className="sc-active-options">
             {activeOptions.map(opt => (
                 <ActiveOption key={opt.id} opt={opt} item={item} />
             ))}
@@ -55,22 +55,20 @@ export const NormalItem = React.memo(({ onSelectItem, item, disableAll, favorite
 
     return (
         <div
-            className={`cq-item ${item.selected ? 'selected ' : ''} ${itemClass}`}
+            className={`sc-mcd__item ${item.selected ? 'sc-mcd__item--selected ' : ''} ${itemClass}`}
             onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
             disabled={!item.enabled || disableAll}
         >
-            <ItemLeft item={item} />
-            <ItemRight item={item} favoritesId={favoritesId} />
+            <ItemName item={item} />
+            <ItemDetail item={item} favoritesId={favoritesId} />
         </div>
     );
 });
 
 export const ActiveItem = ({ item, favoritesId, activeOptions }) => (
-    <div
-        className="cq-active-item"
-    >
-        <ItemLeft item={item} />
-        <div className="right">
+    <div className="sc-active-item">
+        <ItemName item={item} />
+        <div className="sc-mcd__item__detail">
             <ActiveOptions activeOptions={activeOptions} item={item} />
             <Favorite
                 category={favoritesId}
