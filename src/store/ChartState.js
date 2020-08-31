@@ -270,32 +270,32 @@ class ChartState {
             this.stxx.setStyle('stx_line_down', 'color', Theme[`${theme}_chart_default_border_closed`]);
             this.stxx.setStyle('stx_line_even', 'color', Theme[`${theme}_chart_default_border_closed`]);
             // bar chart
-            this.stxx.setStyle('stx_bar_up', 'color', Theme[`${theme}_chart_default_border_closed`]);
-            this.stxx.setStyle('stx_bar_down', 'color', Theme[`${theme}_chart_default_border_closed`]);
+            this.stxx.setStyle('stx_bar_up', 'color', Theme.chart_rise_up);
+            this.stxx.setStyle('stx_bar_down', 'color', Theme.chart_fall_down);
             this.stxx.setStyle('stx_bar_even', 'color', Theme[`${theme}_chart_default_border_closed`]);
             // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', Theme.chart_baseline_up);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme.chart_baseline_down);
+            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
             this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // candle wick
-            this.stxx.setStyle('stx_candle_shadow_up', 'color', Theme.chart_baseline_up);
-            this.stxx.setStyle('stx_candle_shadow_down', 'color', Theme.chart_baseline_down);
+            this.stxx.setStyle('stx_candle_shadow_up', 'color', Theme.chart_rise_up);
+            this.stxx.setStyle('stx_candle_shadow_down', 'color', Theme.chart_fall_down);
             // this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
             // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme.chart_baseline_up);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme.chart_baseline_down);
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
             this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
             // baseline chart
-            this.stxx.setStyle('stx_baseline_up', 'color', Theme.chart_baseline_up);
-            this.stxx.setStyle('stx_baseline_down', 'color', Theme.chart_baseline_down);
+            this.stxx.setStyle('stx_baseline_up', 'color', Theme.chart_rise_up);
+            this.stxx.setStyle('stx_baseline_down', 'color', Theme.chart_fall_down);
             // this.stxx.setStyle('stx_baseline_even', 'color', closedChartColor);
             // kagi
-            this.stxx.setStyle('stx_kagi_up', 'color', Theme.chart_baseline_up);
-            this.stxx.setStyle('stx_kagi_down', 'color', Theme.chart_baseline_down);
+            this.stxx.setStyle('stx_kagi_up', 'color', Theme.chart_rise_up);
+            this.stxx.setStyle('stx_kagi_down', 'color', Theme.chart_fall_down);
             // this.stxx.setStyle('stx_kagi_even', 'color', closedChartColor);
             // pandf
-            this.stxx.setStyle('stx_pandf_up', 'color', Theme.chart_baseline_up);
-            this.stxx.setStyle('stx_pandf_down', 'color', Theme.chart_baseline_down);
+            this.stxx.setStyle('stx_pandf_up', 'color', Theme.chart_rise_up);
+            this.stxx.setStyle('stx_pandf_down', 'color', Theme.chart_fall_down);
             // current price text color
             this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}_candle_text_closed`]);
             this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}_candle_text_closed`]);

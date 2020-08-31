@@ -106,8 +106,8 @@ $COLOR_CORAL_RED  : #ff444f;
 $COLOR_SKY_BLUE   : #2196f3;
 $COLOR_WHITE      : #ffffff;
 $COLOR_BLUE       : #1c5ae3;
-$CHART_BASELINE_DOWN: rgba(249, 84, 84, 0.32);
-$CHART_BASELINE_UP: rgba(76, 175, 80, 0.32);
+$COLOR_CHART_RISE_UP: rgba(249, 84, 84, 0.32);
+$COLOR_CHART_FALL_DOWN: rgba(76, 175, 80, 0.32);
 // Light theme
 $COLOR_LIGHT_BLACK_1        : rgba(0, 0, 0, 0.8);
 $COLOR_LIGHT_BLACK_2        : rgba(0, 0, 0, 0.4);
@@ -814,8 +814,8 @@ $themes: (
 
 :export {
     red: $color-red;
-    chart_baseline_up: $CHART_BASELINE_UP;
-    chart_baseline_down: $CHART_BASELINE_DOWN;
+    chart_rise_up: $COLOR_CHART_FALL_DOWN;
+    chart_fall_down: $COLOR_CHART_RISE_UP;
     light_chart_text: map-get(map-get($themes, 'light'), 'ChartText');
     dark_chart_text: map-get(map-get($themes, 'dark'), 'ChartText');
     light_chart_grid: map-get(map-get($themes, 'light'), 'ChartGrid');
