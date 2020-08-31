@@ -106,6 +106,8 @@ $COLOR_CORAL_RED  : #ff444f;
 $COLOR_SKY_BLUE   : #2196f3;
 $COLOR_WHITE      : #ffffff;
 $COLOR_BLUE       : #1c5ae3;
+$COLOR_CHART_RISE_UP: rgba(249, 84, 84, 0.32);
+$COLOR_CHART_FALL_DOWN: rgba(76, 175, 80, 0.32);
 // Light theme
 $COLOR_LIGHT_BLACK_1        : rgba(0, 0, 0, 0.8);
 $COLOR_LIGHT_BLACK_2        : rgba(0, 0, 0, 0.4);
@@ -165,6 +167,7 @@ $themes: (
         NotificationBadgeBg: $color-red-1,
         NotificationBadgeText: $color-white,
         DefaultBorder: $COLOR_LIGHT_GRAY,
+        DefaultBorderClosed: rgba($COLOR_LIGHT_GRAY, 0.32),
         TooltipBg: $color-grey-5,
         TooltipText: $color-black-1,
         TooltipTextBg: transparent,
@@ -177,17 +180,17 @@ $themes: (
         ChartPanelBg: $color-grey-2,
         ChartPanelActiveBg: $color-grey-4,
         ChartPanelText: $color-black-1,
-        ChartCandleBg: $color-red,
-        ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        ChartCandleBg: rgba($color-red, 0.32),
         ChartCandleText: $color-white,
         ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
         ChartGrid: $color-grey-2,
         ChartIndicateText: $color-grey-3,
         ChartIndicateDivide: $color-grey-5,
         ChartMountainBorder: $color-green,
+        ChartMountainBorderClosed: rgba($color-green, 0.32),
         ChartMountainBg: rgba($color-green, 0.16),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
-        ChartClosedCandleColor: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        ChartClosedCandleColor: rgba($COLOR_LIGHT_BLACK_3_SOLID_1, 0.32),
         ChartStickyBg: $color-grey-2,
         ChartStickyText: $color-black-1,
         ChartStickyInnerBg: $color-grey-5,
@@ -369,11 +372,11 @@ $themes: (
         CatDisplayCatContentBorder: $COLOR_WHITE,
         CatDisplayCatContentTitleBg: $COLOR_WHITE,
         CatDisplayCatContentTitleText: $color-grey-1,
-        CatDisplayCatContentIcon: $color-black-1,
+        CatDisplayCatContentIcon: $color-grey-1,
         CatDisplayCatContentDisabled: $COLOR_LIGHT_BLACK_3_SOLID_1,
         CatDisplayCatActiveContentBg: $color-grey-5,
         CatDisplayCatActiveContentText: $color-black-1,
-        CatDisplayCatActiveContentIcon: $color-black-1,
+        CatDisplayCatActiveContentIcon: $COLOR_WHITE,
         CatDisplayActiveText: $COLOR_LIGHT_BLACK_1,
         CatDisplayCatHoverContentBg: $color-grey-4,
         CatDisplayCatHoverContentText: $color-black-1,
@@ -469,6 +472,7 @@ $themes: (
         DefaultBg:              $color-black,
         DefaultText:            $COLOR_WHITE,
         DefaultBorder:          $COLOR_WHITE,
+        DefaultBorderClosed: rgba($COLOR_WHITE, 0.32),
         TooltipBg:  $color-black-8,
         TooltipText: $color-white,
         TooltipShadow: transparent,
@@ -500,17 +504,17 @@ $themes: (
         ChartPanelBg: $color-black-3,
         ChartPanelActiveBg: $color-black-5,
         ChartPanelText: $color-grey,
-        ChartCandleBg: $color-red,
-        ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
+        ChartCandleBg: rgba($color-red, 0.32),
         ChartCandleText: $color-white,
         ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
         ChartGrid: $color-black-4,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $color-black-8,
         ChartMountainBorder: rgba($COLOR_WHITE, 1),
+        ChartMountainBorderClosed: rgba($COLOR_WHITE, 0.32),
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
-        ChartClosedCandleColor: $COLOR_DARK_GRAY_2,
+        ChartClosedCandleColor: rgba($COLOR_DARK_GRAY_2, 0.32),
         ChartStickyBg: $color-black-3,
         ChartStickyText: $color-grey,
         ChartStickyInnerBg: $color-black-8,
@@ -810,22 +814,26 @@ $themes: (
 
 :export {
     red: $color-red;
+    chart_rise_up: $COLOR_CHART_FALL_DOWN;
+    chart_fall_down: $COLOR_CHART_RISE_UP;
     light_chart_text: map-get(map-get($themes, 'light'), 'ChartText');
     dark_chart_text: map-get(map-get($themes, 'dark'), 'ChartText');
     light_chart_grid: map-get(map-get($themes, 'light'), 'ChartGrid');
     dark_chart_grid: map-get(map-get($themes, 'dark'), 'ChartGrid');
+    light_chart_default_border_closed: map-get(map-get($themes, 'light'), 'DefaultBorderClosed');
+    dark_chart_default_border_closed: map-get(map-get($themes, 'dark'), 'DefaultBorderClosed');
     light_chart_mountain_border: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
     dark_chart_mountain_border: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
+    light_chart_mountain_border_closed: map-get(map-get($themes, 'light'), 'ChartMountainBorderClosed');
+    dark_chart_mountain_border_closed: map-get(map-get($themes, 'dark'), 'ChartMountainBorderClosed');
     light_chart_mountain_bg: map-get(map-get($themes, 'light'), 'ChartMountainBg');
     dark_chart_mountain_bg: map-get(map-get($themes, 'dark'), 'ChartMountainBg');
     light_chart_mountain_bg_shade: map-get(map-get($themes, 'light'), 'ChartMountainBgShade');
     dark_chart_mountain_bg_shade: map-get(map-get($themes, 'dark'), 'ChartMountainBgShade');
     light_candle_text_closed: map-get(map-get($themes, 'light'), 'ChartCandleTextClosed');
     dark_candle_text_closed: map-get(map-get($themes, 'dark'), 'ChartCandleTextClosed');
-    light_candle_bg_closed: map-get(map-get($themes, 'light'), 'ChartCandleBgClosed');
-    dark_candle_bg_closed: map-get(map-get($themes, 'dark'), 'ChartCandleBgClosed');
-    light_chart_closed_candle: map-get(map-get($themes, 'light'), 'ChartClosedCandleColor');
-    dark_chart_closed_candle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
+    light_chart_closed_candle: map-get(map-get($themes, 'light'), 'ChartCandleBg');
+    dark_chart_closed_candle: map-get(map-get($themes, 'dark'), 'ChartCandleBg');
     light_chart_bg: map-get(map-get($themes, 'light'), 'ChartBg');
     dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
     light_float_labels_bg: map-get(map-get($themes, 'light'), 'CrosshairLabelBg');
