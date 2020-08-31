@@ -150,7 +150,7 @@ const Views = ({
                                         <div className="form__input-group">
                                             <div className="form__group">
                                                 <div className="form__control">
-                                                    <div className={`form--sc-views__input ${isActive ? 'form--sc-views__input--active' : ''}`}>
+                                                    <div className={classNames('form--sc-views__input', { 'form--sc-views__input--active': isActive })}>
                                                         <div className="subtitle">
                                                             <span>{t.translate('Add new templates')}</span>
                                                         </div>
@@ -169,7 +169,7 @@ const Views = ({
                                                         <button
                                                             type="button"
                                                             onClick={saveViews}
-                                                            className={classNames('sc-btn', 'sc-btn--primary', { 'sc-btn--primary--disabled': isActive })}
+                                                            className={classNames('sc-btn', 'sc-btn--primary', { 'sc-btn--primary--disabled': !isActive })}
                                                         >
                                                             <AddIcon />
                                                         </button>
