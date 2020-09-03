@@ -261,3 +261,40 @@
         }
     }
 }
+
+.smartcharts-mobile {
+    .sc-dialog {
+        &--tabular {
+            .sc-dialog__head {
+                @include themify($themes) {
+                    background: themed('DialogTabularHeadBg');
+                    border-color: themed('DialogTabularHeadBorder');
+                }
+
+                .sc-dialog__head--title {
+                    width: 150px;
+                    min-width: 150px;
+                    padding: 16px 8px;
+                    @include themify($themes) {
+                        border-left: 50px solid themed('DialogTabularHeadTitleBg');
+                        background: transparent;
+                    }
+                }
+                .sc-dialog__head--info {
+                    position: absolute;
+                    left: 50px;
+                    width: calc( 100% - 114px );
+                    @include themify($themes) {
+                        background: themed('DialogTabularHeadBg');
+                    }
+                }
+            }
+        }
+    }
+    .cq-modal--settings {
+        .sc-dialog {
+            width: 320px;
+            left: calc(50% - 160px);
+        }
+    }
+}
