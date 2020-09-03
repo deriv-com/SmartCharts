@@ -51,8 +51,8 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
-    @observable enableShowPrice = false;
     @observable activeCategory = null;
+    enableShowPrice = false;
     searchInputClassName;
 
     get chart() { return this.mainStore.chart; }
