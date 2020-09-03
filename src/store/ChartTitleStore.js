@@ -51,6 +51,7 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
+    @observable enableShowPrice = false;
     @observable activeCategory = null;
     searchInputClassName;
 
@@ -103,8 +104,8 @@ export default class ChartTitleStore {
     @action.bound update(quote) {
         if (!this.currentSymbol) { return; }
 
-        this.isVisible = quote || !this.isShowChartPrice;
-        if (!this.isVisible) { return; }
+        const isVisible = quote || !this.isShowChartPrice;
+        if (!isVisible) { return; }
 
         let currentPrice = quote.Close;
         if (currentPrice) {
@@ -116,10 +117,28 @@ export default class ChartTitleStore {
                 this.todayChangePercent = ((this.todayChange / oldPrice) * 100).toFixed(2);
             }
         }
+
+        // `todayChange` and `todayChangePercent` has problem on
+        // changing symbol, if two symbol have great difference
+        // in their values, it has a jumb in showing the correct
+        // values, with this code, we simply ignore the first update
+        // of these tow value and show the second data and it fix the
+        // above issue
+        if (!this.isVisible && isVisible && !this.enableShowPrice) {
+            this.enableShowPrice = true;
+            return;
+        }
+
+        this.isVisible = isVisible;
     }
 
     onMouseEnter = () => this.crosshairStore.updateVisibility(false);
     onMouseLeave = () => this.crosshairStore.updateVisibility(true);
+
+    @action.bound hidePrice() {
+        this.isVisible = false;
+        this.enableShowPrice = false;
+    }
 
     @action.bound updateProps({ active_category, open }) {
         if (active_category) {
