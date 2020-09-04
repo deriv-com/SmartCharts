@@ -144,7 +144,8 @@ class ChartStore {
         const chartHeight = this.chartNode.offsetHeight;
         const isSmallScreen = chartHeight < 780;
         const denominator = num >= 5 ? num : (num + 1);
-        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 340 : 320)) / denominator);
+        const reservedHeight = this.isMobile ? 160 : 320;
+        const indicatorsHeight = Math.round((chartHeight - (reservedHeight + (isSmallScreen ? 20 : 0))) / denominator);
         return {
             height: indicatorsHeight,
             percent: (indicatorsHeight / chartHeight),

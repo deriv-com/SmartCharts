@@ -323,6 +323,20 @@ export default class StudyLegendStore {
             if (index === 0) { return; }
 
             const panelObj = this.stx.panels[id];
+            if (this.mainStore.chart.isMobile) {
+                if (panelObj.up.className.indexOf('show') !== -1) {
+                    panelObj.up.className = 'stx-btn-panel';
+                }
+                if (panelObj.down.className.indexOf('show') !== -1) {
+                    panelObj.down.className = 'stx-btn-panel';
+                }
+                if (panelObj.solo.className.indexOf('show') !== -1) {
+                    panelObj.solo.className = 'stx-btn-panel';
+                }
+                if (panelObj.close.className.indexOf('show') !== -1) {
+                    panelObj.close.className = 'stx-btn-panel';
+                }
+            }
             const sd = this.stx.layout.studies[id];
             const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
             if (sd) {
