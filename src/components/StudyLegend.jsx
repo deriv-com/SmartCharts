@@ -74,10 +74,13 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disab
     </Scroll>
 );
 
-const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }) => (
+const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll, isMobile }) => (
     <React.Fragment>
         <div className="sc-studies__panel__head">
-            <p>{t.translate('Up to 5 active indicators allowed.')}</p>
+            <p>{isMobile
+                ? t.translate('Up to 2 active indicators allowed.')
+                : t.translate('Up to 5 active indicators allowed.')}
+            </p>
             <button
                 type="button"
                 className="sc-btn sc-btn--sm sc-btn--outline-secondary"
@@ -97,7 +100,7 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll }
 );
 
 
-const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategories, onSelectItem, onDeleteItem, onEditItem, onInfoItem, activeItems, clearAll, searchQuery }) => (
+const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategories, onSelectItem, onDeleteItem, onEditItem, onInfoItem, activeItems, clearAll, searchQuery, isMobile, maxAllowedItem }) => (
     <Tabs
         className="tabs--vertical"
         selectedIndex={selectedTab}
@@ -143,6 +146,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                                 items={activeItems}
                                 onDeleteItem={onDeleteItem}
                                 onEditItem={onEditItem}
+                                isMobile={isMobile}
                             />
                         )
                         : (<EmptyView />)
@@ -156,7 +160,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
                         items={Category.items}
-                        disableAll={activeItems.length === 5}
+                        disableAll={activeItems.length === maxAllowedItem}
                     />
                 </div>
             </TabPanel>
@@ -187,6 +191,7 @@ const StudyLegend = ({
     infoItem,
     portalNodeId,
     updatePortalNode,
+    maxAllowedItem,
 }) => {
     updatePortalNode(portalNodeId);
     return (
@@ -248,6 +253,8 @@ const StudyLegend = ({
                     activeItems={activeItems}
                     clearAll={deleteAll}
                     searchQuery={searchQuery}
+                    isMobile={isMobile}
+                    maxAllowedItem={maxAllowedItem}
                 />
             </StudyMenu.Body>
         </StudyMenu>
@@ -275,4 +282,5 @@ export default connect(({ studies: st, chart }) => ({
     onInfoItem: st.onInfoItem,
     infoItem: st.infoItem,
     updatePortalNode: st.updatePortalNode,
+    maxAllowedItem: st.maxAllowedItem,
 }))(StudyLegend);

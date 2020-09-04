@@ -115,11 +115,15 @@ export default class StudyLegendStore {
         return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
     }
 
+    get maxAllowedItem() {
+        return this.mainStore.chart.isMobile ? 2 : 5;
+    }
+
     @action.bound removeExtraStudies() {
         if (this.stx.layout && this.stx.layout.studies) {
             Object.keys(this.stx.layout.studies).forEach((study, idx) => {
                 const type = this.stx.layout.studies[study].type;
-                if (idx >= 5 || this.excludedStudies[type]) {
+                if (idx >= this.maxAllowedItem || this.excludedStudies[type]) {
                     setTimeout(() => {
                         CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
                         this.renderLegend();
@@ -132,7 +136,7 @@ export default class StudyLegendStore {
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
-        if (this.stx.layout && addedIndicator < 5) {
+        if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
             const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
             CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
             const sd = CIQ.Studies.addStudy(this.stx, item);
