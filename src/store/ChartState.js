@@ -123,6 +123,7 @@ class ChartState {
             this.symbol = symbol;
             isSymbolChanged = true;
 
+            this.mainStore.chartTitle.hidePrice();
             if (this.mainStore.chart && this.mainStore.chart.feed && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
