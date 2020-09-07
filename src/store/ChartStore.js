@@ -81,6 +81,7 @@ class ChartStore {
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
     @computed get currentCloseQuote() {
+        if (!this.stxx) { return; }
         let currentQuote = this.stxx.currentQuote();
 
         if (!currentQuote.Close) {
