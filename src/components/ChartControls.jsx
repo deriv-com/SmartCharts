@@ -1,13 +1,14 @@
-import React from 'react';
-import { connect } from '../store/Connect';
-import ChartTypes from './ChartTypes.jsx';
-import StudyLegend from './StudyLegend.jsx';
-import Views from './Views.jsx';
+import React        from 'react';
+import classNames   from 'classnames';
+import { connect }  from '../store/Connect';
+import ChartTypes   from './ChartTypes.jsx';
+import StudyLegend  from './StudyLegend.jsx';
+import Views        from './Views.jsx';
 import CrosshairToggle from './CrosshairToggle.jsx';
-import Timeperiod from './Timeperiod.jsx';
-import ChartSize from './ChartSize.jsx';
-import DrawTools from './DrawTools.jsx';
-import Share from './Share.jsx';
+import Timeperiod   from './Timeperiod.jsx';
+import ChartSize    from './ChartSize.jsx';
+import DrawTools    from './DrawTools.jsx';
+import Share        from './Share.jsx';
 import '../../sass/components/_chart-controls.scss';
 
 
@@ -33,7 +34,7 @@ const ChartControls = ({
     const Controls =  widgets || RenderDefaultControls;
 
     return (
-        <div className={`cq-chart-controls ${hasOpenMenu ? ' active' : ''}`}>
+        <div className={classNames('cq-chart-controls', { active: hasOpenMenu })}>
             { context ? <Controls isMobile={isMobile} /> : null }
         </div>
     );

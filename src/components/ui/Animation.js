@@ -277,7 +277,7 @@ export default function animateChart(stx, animationParameters) {
             else if (interval == 'month' || timeUnit == 'month') chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
             else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
 
-            const linearChart = (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[this.layout.chartType];
+            const linearChart = (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.chart.standaloneBars;
 
             let beginningOffset = 0;
             if (chartJustAdvanced) {

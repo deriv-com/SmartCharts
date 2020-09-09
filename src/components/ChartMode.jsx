@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { connect } from '../store/Connect';
-import ChartTypes from './ChartTypes.jsx';
-import Timeperiod from './Timeperiod.jsx';
+import React        from 'react';
+import classNames   from 'classnames';
+import { connect }  from '../store/Connect';
+import ChartTypes   from './ChartTypes.jsx';
+import Timeperiod   from './Timeperiod.jsx';
 import {
     TypeAreaGrayscaleIcon,
     TypeCandleGrayscaleIcon,
@@ -38,7 +39,7 @@ const ChartMode = ({
             portalNodeId={portalNodeId}
         >
             <ChartTypeMenu.Title>
-                <div className={`sc-chart-mode__menu ${menuOpen ? 'sc-chart-mode__menu--active' : ''}`}>
+                <div className={classNames('sc-chart-mode__menu', { 'sc-chart-mode__menu--active': menuOpen })}>
                     <span className="sc-chart-mode__menu__timeperiod">
                         {displayInterval}
                     </span>

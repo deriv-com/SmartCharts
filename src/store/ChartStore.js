@@ -77,10 +77,12 @@ class ChartStore {
     get loader() { return this.mainStore.loader; }
     get routingStore() { return this.mainStore.routing; }
     get stateStore() { return this.mainStore.state; }
+    get studiesStore() { return this.mainStore.studies; }
 
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
-    @computed get currentCloseQuote() {
+    currentCloseQuote = () => {
+        if (!this.stxx) { return; }
         let currentQuote = this.stxx.currentQuote();
 
         if (!currentQuote.Close) {
@@ -203,7 +205,7 @@ class ChartStore {
                         c.appendChild(el);
                         this.chart[control] = el;
                         this.controls[control] = el;
-                        CIQ.appendClassName(el, control);
+                        el.classList.add(control);
                     }
                 }
             }
@@ -254,7 +256,7 @@ class ChartStore {
                     self.draw();
                 };
             }
-            if (typeof params.maintainWhitespace === 'undefined') params.maintainWhitespace = true;  // maintain the whitespace unless set to false
+            if (typeof params.maintainWhitespace === 'undefined') params.maintainWhitespace = true; // maintain the whitespace unless set to false
 
             this.cancelTouchSingleClick = true;
             if (!this.chart.dataSet || !this.chart.dataSet.length) {
@@ -276,9 +278,10 @@ class ChartStore {
 
                 let exactScroll = Math.min(barsDisplayedOnScreen, chart.dataSet.length); // the scroll must be the number of bars you want to see.
                 if (this.chart.allowScrollPast) exactScroll = barsDisplayedOnScreen; // If whitespace allowed on left of screen
-                this.micropixels = this.chart.width - (exactScroll * layout.candleWidth) - whitespace;
+                this.micropixels =                    this.chart.width - exactScroll * layout.candleWidth - whitespace;
                 this.preferences.whitespace = whitespace;
-                while (this.micropixels > layout.candleWidth) { // If micropixels is larger than a candle then scroll back further
+                while (this.micropixels > layout.candleWidth) {
+                    // If micropixels is larger than a candle then scroll back further
                     exactScroll++;
                     this.micropixels -= layout.candleWidth;
                 }
@@ -288,7 +291,7 @@ class ChartStore {
                 }
                 this.micropixels -= layout.candleWidth;
                 exactScroll++;
-                if ((!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.standaloneBars[layout.chartType]) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
+                if (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
                     exactScroll = parseInt(exactScroll * 0.8, 10); // eslint-disable-line
@@ -298,7 +301,11 @@ class ChartStore {
 
                 if (params.animate) {
                     const self = this;
-                    this.scrollTo(chart, exactScroll, scrollToCallback(self, chart, exactScroll));
+                    this.scrollTo(
+                        chart,
+                        exactScroll,
+                        scrollToCallback(self, chart, exactScroll),
+                    );
                 } else {
                     chart.scroll = exactScroll;
                     resetPanelZooms(this);
@@ -310,7 +317,7 @@ class ChartStore {
             return !!_self.stateStore.endEpoch;
         };
         CIQ.ChartEngine.prototype.getNearestCloseQuote = function () {
-            return _self.currentCloseQuote;
+            return _self.currentCloseQuote();
         };
 
         this.rootNode = rootNode;
@@ -413,7 +420,7 @@ class ChartStore {
             const overlayEdit = m.querySelector('.overlayEdit');
             const mouseDeleteInstructions = m.querySelector('.mouseDeleteInstructions');
             const longPressText = m.querySelector('.stickyLongPressText');
-            CIQ.unappendClassName(mouseDeleteInstructions, 'no_edit');
+            mouseDeleteInstructions.classList.remove('no_edit');
             // backwards compatibility:
             if (!params || typeof (params) !== 'object') {
                 params = {
@@ -460,7 +467,7 @@ class ChartStore {
 
                 const rtClick = m.querySelector('.mStickyRightClick');
                 rtClick.className = 'mStickyRightClick';  // reset
-                if (type) CIQ.appendClassName(rtClick, `rightclick_${type}`);
+                if (type) rtClick.classList.add(`rightclick_${type}`);
                 rtClick.style.display = '';
                 m.style.display = 'inline-block';
                 if (noDelete || this.bypassRightClick === true || this.bypassRightClick[type]) {
@@ -472,7 +479,7 @@ class ChartStore {
                     if (longPressText) longPressText.style.display = 'none';
                     CIQ[`${message === '' ? '' : 'un'}appendClassName`](m, 'hide');
                 } else {
-                    if (noEdit) CIQ.appendClassName(mouseDeleteInstructions, 'no_edit');
+                    if (noEdit) mouseDeleteInstructions.classList.add('no_edit');
                     if (mouseDeleteInstructions) mouseDeleteInstructions.style.display = 'block';
                     if (longPressText) {
                         longPressText.style.display = 'none';
@@ -613,9 +620,8 @@ class ChartStore {
 
         // TODO: excluded studies
 
-        const studiesStore = this.mainStore.studies;
-        stxx.callbacks.studyOverlayEdit = studiesStore.editStudy;
-        stxx.callbacks.studyPanelEdit = studiesStore.editStudy;
+        stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
+        stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
 
         this.loader.setState('market-symbol');
         this.activeSymbols.retrieveActiveSymbols().then(() => {
@@ -820,8 +826,8 @@ class ChartStore {
 
     @action.bound updateYaxisWidth = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
-            if (this.currentCloseQuote && this.currentCloseQuote.Close) {
-                this.calculateYaxisWidth(this.currentCloseQuote.Close);
+            if (this.currentCloseQuote() && this.currentCloseQuote().Close) {
+                this.calculateYaxisWidth(this.currentCloseQuote().Close);
             }
         }
     }
@@ -837,6 +843,7 @@ class ChartStore {
 
             this.loader.hide();
             this.mainStore.paginationLoader.updateOnPagination(false);
+            this.mainStore.drawTools.computeActiveDrawTools();
             this.mainStore.state.setChartIsReady(true);
             if (err) {
                 /* TODO, symbol not found error */
@@ -849,7 +856,13 @@ class ChartStore {
         };
         this.yAxiswidth = 0;
         const rangeSpan = this.getRangeSpan();
-        this.stxx.newChart(symbolObj, null, null, onChartLoad, { ...params, ...rangeSpan });
+        const parameters = {
+            masterData: null,
+            chart: null,
+        };
+        CIQ.extend(parameters, { ...params, ...rangeSpan }, true);
+
+        this.stxx.loadChart(symbolObj, parameters, onChartLoad);
         this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
     }
 
@@ -912,6 +925,10 @@ class ChartStore {
         }
     }
 
+    @action.bound updateScaledOneOne(state) {
+        this.isScaledOneOne = state;
+    }
+
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
     @action.bound refreshChart() {
@@ -933,7 +950,7 @@ class ChartStore {
             this.feed.unsubscribeAll();
             this.feed = null;
         }
-        if (ChartStore.keystrokeHub.context === this.context) {
+        if (ChartStore.keystrokeHub && ChartStore.keystrokeHub.context === this.context) {
             ChartStore.keystrokeHub.setActiveContext(null);
         }
         if (this.stxx) {
