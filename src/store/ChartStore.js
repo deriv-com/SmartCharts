@@ -82,6 +82,7 @@ class ChartStore {
     @computed get pip() { return this.currentActiveSymbol.decimal_places; }
 
     currentCloseQuote = () => {
+        if (!this.stxx) { return; }
         let currentQuote = this.stxx.currentQuote();
 
         if (!currentQuote.Close) {
@@ -949,7 +950,7 @@ class ChartStore {
             this.feed.unsubscribeAll();
             this.feed = null;
         }
-        if (ChartStore.keystrokeHub.context === this.context) {
+        if (ChartStore.keystrokeHub && ChartStore.keystrokeHub.context === this.context) {
             ChartStore.keystrokeHub.setActiveContext(null);
         }
         if (this.stxx) {
