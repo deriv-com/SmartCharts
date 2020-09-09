@@ -934,7 +934,7 @@ class ChartStore {
             this.feed.unsubscribeAll();
             this.feed = null;
         }
-        if (ChartStore.keystrokeHub.context === this.context) {
+        if (ChartStore.keystrokeHub && ChartStore.keystrokeHub.context === this.context) {
             ChartStore.keystrokeHub.setActiveContext(null);
         }
         if (this.stxx) {
