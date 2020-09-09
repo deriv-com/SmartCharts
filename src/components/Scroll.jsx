@@ -1,4 +1,5 @@
-import React from 'react';
+import React        from 'react';
+import classNames   from 'classnames';
 import { connect }  from '../store/Connect';
 import '../../sass/components/_scroll.scss';
 
@@ -13,20 +14,20 @@ const Scroll = ({
     freeze = false,
     onScroll = () => null,
     setPanel,
-    isBypassed,
 }) => {
     const handleRef = (_ref) => {
         setScrollPanel(_ref);
         if (setPanel) setPanel(_ref);
     };
-    const _classname = isBypassed
-        ? ''
-        : `sc-scrollbar ${autoHide ? 'sc-scrollbar--auto-hide' : ''} ${isHover ? 'sc-scrollbar--hover' : ''} ${freeze ? 'sc-scrollbar--freeze' : ''}`;
 
     return (
         <div
             ref={handleRef}
-            className={`${_classname} ${className || ''}`}
+            className={classNames('sc-scrollbar', className, {
+                'sc-scrollbar--freeze': freeze,
+                'sc-scrollbar--auto-hide': autoHide,
+                'sc-scrollbar--hover': isHover,
+            })}
             onScroll={onScroll}
             style={{
                 maxHeight: height || '100%',

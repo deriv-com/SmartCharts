@@ -1,6 +1,5 @@
 import React from 'react';
 import { toJS } from 'mobx';
-
 import { connect } from '../store/Connect';
 import LastDigitStats from './LastDigitStats.jsx';
 

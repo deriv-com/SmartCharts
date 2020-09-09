@@ -28,7 +28,7 @@ const config = {
     resolve: {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
-            chartiq: path.resolve(__dirname, 'chartiq/chartiq.js'),
+            chartiq: path.resolve(__dirname, 'chartiq/index.js'),
         },
     },
     devServer: {

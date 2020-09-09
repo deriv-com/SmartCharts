@@ -505,7 +505,7 @@ class ChartState {
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
                 this.stxx.allowScroll = false;
             }
-            this.mainStore.chart.isScaledOneOne = true;
+            this.mainStore.chart.updateScaledOneOne(true);
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         } else {
