@@ -496,6 +496,7 @@ class ChartState {
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+            this.stxx.home();
 
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
@@ -553,21 +554,6 @@ class ChartState {
     scrollListener({ grab }) {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
-        }
-        if (this.stxx && this.stxx.chart && !this.stxx.chart.lockScroll) {
-            const dataSegment = this.stxx.chart.dataSegment;
-            const whiteSpace = this.chartStore.isMobile ? 50 : 150;
-            if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
-                this.stxx.minimumLeftBars = this.stxx.chart.maxTicks - whiteSpace;
-            } else if (dataSegment) {
-                const hasReachedRight = this.stxx.chart.scroll <= this.stxx.chart.maxTicks - 1;
-                const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
-                let defaultMinimumBars = this.mainStore.chart.defaultMinimumBars;
-                if (this.stxx.chart.maxTicks - 10 > 50) {
-                    defaultMinimumBars = 50;
-                }
-                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : Math.min(this.stxx.chart.maxTicks, defaultMinimumBars);
-            }
         }
     }
 }
