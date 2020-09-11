@@ -39,7 +39,11 @@ export default class NavigationWidgetStore {
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
 
-        this.stateStore.scrollChartToLeft(point, true);
+        this.stxx.home();
+
+        setTimeout(() => {
+            this.stateStore.scrollChartToLeft(point, true);
+        }, 10);
     }
 
     @action.bound onCrosshairChange() {
