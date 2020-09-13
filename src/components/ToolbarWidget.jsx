@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { connect } from '../store/Connect';
+import React        from 'react';
+import classNames   from 'classnames';
+import { connect }  from '../store/Connect';
 import '../../sass/components/_toolbar-widget.scss';
 
 const ToolbarWidget = ({
@@ -14,7 +15,9 @@ const ToolbarWidget = ({
 
     return (
         <div
-            className={`sc-toolbar-widget sc-toolbar-widget--${position}`}
+            className={classNames('sc-toolbar-widget', {
+                [`sc-toolbar-widget--${position}`]: !!position,
+            })}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >

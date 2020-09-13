@@ -1,4 +1,5 @@
 import React        from 'react';
+import classNames   from 'classnames';
 import { connect }  from '../store/Connect';
 import Tooltip      from './Tooltip.jsx';
 import Scroll       from './Scroll.jsx';
@@ -21,7 +22,7 @@ const ViewItem = ({
         className="sc-views__views__list__item"
         onClick={onClick}
         enabled={view.name.length > 27}
-        content={wrapText(view.name, 42)}
+        content={wrapText(view.name, 26)}
     >
         <div className="text">{view.name}</div>
         <DeleteIcon onClick={remove} />
@@ -123,7 +124,7 @@ const Views = ({
             portalNodeId={portalNodeId}
         >
             <ViewsMenu.Title>
-                <div className={`sc-views__menu ${menuOpen ? 'sc-views__menu--active' : ''}`}>
+                <div className={classNames('sc-views__menu', { 'sc-views__menu--active': menuOpen })}>
                     <TemplateIcon />
                 </div>
             </ViewsMenu.Title>
@@ -149,13 +150,13 @@ const Views = ({
                                         <div className="form__input-group">
                                             <div className="form__group">
                                                 <div className="form__control">
-                                                    <div className={`form--sc-views__input ${isActive ? 'form--sc-views__input--active' : ''}`}>
+                                                    <div className={classNames('form--sc-views__input', { 'form--sc-views__input--active': isActive })}>
                                                         <div className="subtitle">
                                                             <span>{t.translate('Add new templates')}</span>
                                                         </div>
                                                         <input
                                                             type="text"
-                                                            className={`sc-input ${isActive ? 'sc-input--active' : ''}`}
+                                                            className={classNames('sc-input', { 'sc-input--active': isActive })}
                                                             placeholder={isActive ? '' : t.translate('Add new templates')}
                                                             ref={inputRef}
                                                             value={templateName}
@@ -168,7 +169,7 @@ const Views = ({
                                                         <button
                                                             type="button"
                                                             onClick={saveViews}
-                                                            className={`sc-btn sc-btn--primary ${isActive ? '' : 'sc-btn--primary--disabled'}`}
+                                                            className={classNames('sc-btn', 'sc-btn--primary', { 'sc-btn--primary--disabled': !isActive })}
                                                         >
                                                             <AddIcon />
                                                         </button>

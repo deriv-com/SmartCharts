@@ -127,6 +127,7 @@ class ChartState {
             this.symbol = symbol;
             isSymbolChanged = true;
 
+            this.mainStore.chartTitle.hidePrice();
             if (this.mainStore.chart && this.mainStore.chart.feed && scrollToEpoch) {
                 this.mainStore.chart.feed.onMasterDataReinitialize(this.scrollChartToLeft);
             }
@@ -525,7 +526,7 @@ class ChartState {
                 this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
                 this.setDisableScroll();
             }
-            this.mainStore.chart.isScaledOneOne = true;
+            this.mainStore.chart.updateScaledOneOne(true);
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         } else {

@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 const Tooltip = ({
     children,
@@ -9,7 +10,14 @@ const Tooltip = ({
     ...props
 }) => (
     <div
-        className={`sc-tooltip sc-tooltip--${position} ${enabled ? 'sc-tooltip--enable' : ''} ${className}`}
+        className={classNames(
+            'sc-tooltip',
+            className,
+            {
+                [`sc-tooltip--${position}`]: !!position,
+                'sc-tooltip--enable': enabled,
+            },
+        )}
         {...props}
     >
         {children}

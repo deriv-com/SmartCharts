@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import RenderInsideChart from './RenderInsideChart.jsx';
+import classNames           from 'classnames';
+import RenderInsideChart    from './RenderInsideChart.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
@@ -47,11 +48,7 @@ class Chart extends Component {
         this.props.destroy();
     }
 
-    defaultTopWidgets = () => (
-        <>
-            <ChartTitle />
-        </>
-    );
+    defaultTopWidgets = () => (<ChartTitle />);
 
     render() {
         const {
@@ -81,22 +78,30 @@ class Chart extends Component {
         } = this.props;
 
         const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
-        const contextWidth =  !isMobile ? `smartcharts-${containerWidth}` : '';
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         // if there are any markers, then increase the subholder z-index
-        const HasMarkers = children && children.length ? 'smartcharts--has-markers' : '';
         const ToolbarWidget = toolbarWidget;
 
         return (
-            <div className={`smartcharts smartcharts-${theme} ${enabledNavigationWidget ? 'smartcharts--navigation-widget' : ''} ${isLoading ? 'smartcharts--loading' : ''} ${HasMarkers} ${contextWidth}`}>
-                <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
+            <div className={classNames('smartcharts', `smartcharts-${theme}`, {
+                'smartcharts--navigation-widget': enabledNavigationWidget,
+                'smartcharts--loading': isLoading,
+                'smartcharts--has-markers': (children && children.length),
+                [`smartcharts-${containerWidth}`]: !isMobile,
+            })}
+            >
+                <div className={classNames({
+                    'smartcharts-mobile': isMobile,
+                    'smartcharts-desktop': !isMobile,
+                })}
+                >
                     <div
                         className="cq-context"
                         ref={this.root}
                     >
-                        <div className={`${currentPosition}`}>
+                        <div className={currentPosition}>
                             <div className="ciq-chart-area">
-                                <div className={`ciq-chart ${isChartClosed ? 'closed-chart' : ''}`}>
+                                <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
                                     <RenderInsideChart at="holder">
                                         {barriers.map((barr, idx) => (
                                             <Barrier

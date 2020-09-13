@@ -21,7 +21,7 @@ export default class NavigationWidgetStore {
 
     @action.bound onMouseWheel() {
         this.stxx.chart.lockScroll = false;
-        this.mainStore.chart.isScaledOneOne = false;
+        this.mainStore.chart.updateScaledOneOne(false);
     }
 
     @action.bound onMouseEnter() {

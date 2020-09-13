@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
-import { CSSTransition } from 'react-transition-group';
-import MenuMobile from './MenuMobile.jsx';
-import Tooltip from './Tooltip.jsx';
-import { CloseIcon } from './Icons.jsx';
+import ReactDOM             from 'react-dom';
+import { CSSTransition }    from 'react-transition-group';
+import classNames           from 'classnames';
+import MenuMobile           from './MenuMobile.jsx';
+import Tooltip              from './Tooltip.jsx';
+import { CloseIcon }        from './Icons.jsx';
 
 class Menu extends Component {
     onOverlayClick = (e) => {
@@ -83,7 +84,11 @@ class Menu extends Component {
 
             return (
                 <Tooltip
-                    className={`ciq-menu ${enabled ? 'ciq-enabled' : 'ciq-disabled'} ${className || ''} ${(enabled && open) ? 'stxMenuActive' : ''}`}
+                    className={classNames('ciq-menu', className || '', {
+                        stxMenuActive : (enabled && open),
+                        'ciq-enabled': enabled,
+                        'ciq-disabled': !enabled,
+                    })}
                     content={tooltip}
                     enabled={tooltip}
                     position="right"
@@ -104,7 +109,9 @@ class Menu extends Component {
         const oldDropdown = (shouldRenderDialogs
             && (
                 <DropdownDialog
-                    className={`cq-menu-dropdown ${dialogStatus ? 'cq-menu-dropdown-enter-done' : ''}`}
+                    className={classNames('cq-menu-dropdown', {
+                        'cq-menu-dropdown-enter-done': dialogStatus,
+                    })}
                     isMobile={isMobile}
                     isFullscreen={isFullscreen}
                 >
