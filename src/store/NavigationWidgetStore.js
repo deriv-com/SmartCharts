@@ -40,7 +40,6 @@ export default class NavigationWidgetStore {
         if (dataSet && dataSet.length) point = dataSet[0];
 
         this.stxx.home();
-
         setTimeout(() => {
             this.stateStore.scrollChartToLeft(point, true);
         }, 10);
