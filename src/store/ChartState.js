@@ -501,8 +501,8 @@ class ChartState {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
-                this.stxx.setMaxTicks(scrollToTarget + (Math.floor(scrollToTarget / 5) || 2));
-                this.stxx.chart.scroll = scrollToTarget + (Math.floor(scrollToTarget / 10) || 1);
+                this.stxx.setMaxTicks(Math.floor(scrollToTarget * 6 / 5) || 2);
+                this.stxx.chart.scroll = Math.floor(scrollToTarget * 17 / 15) || 1;
                 this.stxx.allowScroll = false;
             }
             this.mainStore.chart.updateScaledOneOne(true);
@@ -553,21 +553,6 @@ class ChartState {
     scrollListener({ grab }) {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
-        }
-        if (this.stxx && this.stxx.chart && !this.stxx.chart.lockScroll) {
-            const dataSegment = this.stxx.chart.dataSegment;
-            const whiteSpace = this.chartStore.isMobile ? 50 : 150;
-            if (this.stxx.masterData.length < this.stxx.chart.maxTicks - whiteSpace) {
-                this.stxx.minimumLeftBars = this.stxx.chart.maxTicks - whiteSpace;
-            } else if (dataSegment) {
-                const hasReachedRight = this.stxx.chart.scroll <= this.stxx.chart.maxTicks - 1;
-                const noMoreScroll = this.hasReachedEndOfData || (this.stxx.masterData.length === this.stxx.maxMasterDataSize);
-                let defaultMinimumBars = this.mainStore.chart.defaultMinimumBars;
-                if (this.stxx.chart.maxTicks - 10 > 50) {
-                    defaultMinimumBars = 50;
-                }
-                this.stxx.minimumLeftBars = noMoreScroll && !hasReachedRight ? this.stxx.chart.maxTicks : Math.min(this.stxx.chart.maxTicks, defaultMinimumBars);
-            }
         }
     }
 }
