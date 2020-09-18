@@ -175,8 +175,8 @@ class App extends Component {
             activeLanguage,
             isConnectionOpened: true,
             enabledFooter: true,
-            enableScroll: true,
-            enableZoom: true,
+            enableScroll: null,
+            enableZoom: null,
             highLow: {},
             barrierType: '',
             draggable: true,
@@ -487,7 +487,7 @@ class App extends Component {
     }
 
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch,
+        const { settings, isConnectionOpened, symbol, endEpoch, startEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
@@ -531,6 +531,7 @@ class App extends Component {
                         toolbarWidget={this.renderToolbarWidget}
                         settings={settings}
                         endEpoch={endEpoch}
+                        startEpoch={startEpoch}
                         chartType={this.state.chartType}
                         granularity={this.state.granularity}
                         onSettingsChange={this.saveSettings}

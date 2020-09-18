@@ -90,8 +90,8 @@ class ChartState {
         maxTick,
         crosshairTooltipLeftAllow,
         yAxisMargin,
-        enableScroll = true,
-        enableZoom = true,
+        enableScroll = null,
+        enableZoom = null,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -227,12 +227,12 @@ class ChartState {
             };
         }
 
-        if (this.stxx && this.enableScroll !== enableScroll) {
+        if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
             this.enableScroll = enableScroll;
             this.stxx.allowScroll = enableScroll;
         }
 
-        if (this.stxx && this.enableZoom !== enableZoom) {
+        if (this.stxx && enableZoom !== null && this.enableZoom !== enableZoom) {
             this.enableZoom = enableZoom;
             this.stxx.allowZoom = enableZoom;
         }
