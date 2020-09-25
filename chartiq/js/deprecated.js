@@ -1,11 +1,11 @@
 /**
  *	8.0.0
- *	Generation date: 2020-08-13T16:06:53.665Z
+ *	Generation date: 2020-09-15T12:41:24.944Z
  *	Client name: binary ltd
  *	Package Type: Technical Analysis
  *	License type: annual
  *	Expiration date: "2021/04/01"
- *	Domain lock: ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot","deriv.com","deriv.bot","deriv.app"]
+ *	Domain lock: ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot","deriv.com","derivcrypto.com"]
  *	iFrame lock: true
  */
 
