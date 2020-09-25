@@ -20,7 +20,6 @@ export default class ChartSizeStore {
     @action.bound zoomIn() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
         if (this.stx) {
-            if (this.stx.minimumZoomTicks > this.stx.chart.maxTicks) { return; }
             this.updateChartState();
             this.stx.zoomIn();
         }
