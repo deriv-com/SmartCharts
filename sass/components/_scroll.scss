@@ -26,6 +26,10 @@
             background: themed('ScrollbarBg');
         }
     }
+    &::-webkit-scrollbar-button,
+    &::-webkit-scrollbar-corner {
+        display: none;
+    }
     &--auto-hide {
         scrollbar-color: transparent transparent !important;
 

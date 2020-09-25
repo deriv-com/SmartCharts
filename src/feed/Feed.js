@@ -75,9 +75,19 @@ class Feed {
                 this._stx.chart.lockScroll = false;
             }
 
+
             this._stx.setMaxTicks(this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2));
             this._stx.chart.scroll = this._stx.chart.dataSet.length;
             this._stx.chart.isScrollLocationChanged = true;
+
+            /**
+            * for tick condition with few points, in that case, if your try to zoom in
+            * as the maxTicks is less than minimumZoomTicks, chart zoom out beside of
+            * zoom in, as a result, we try to override the minimumZoomTicks to prevent that
+            */
+            if (this._stx.chart.maxTicks < this._stx.minimumZoomTicks) {
+                this._stx.minimumZoomTicks = this._stx.chart.maxTicks - 1;
+            }
             this._stx.draw();
         }
     }
