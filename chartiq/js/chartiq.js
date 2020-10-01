@@ -21,6 +21,65 @@
 /* eslint-disable no-extra-parens */
 
 
+/***************************************************************************/
+/* Please note that manually changing the domain list or expiration dates  */
+/*                                                                         */
+/* >>>>>>>>>>>>>>>>>>>>>>>>>>>>>> WILL NOT <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< */
+/*                                                                         */
+/*   modify the library locking mechanism. Any changes must be requested   */
+/*                          directly from chartIQ.                         */
+/***************************************************************************/
+
+(function() {
+	/* eslint-disable no-undef-init */
+	var trialExpiration = undefined;
+	var licenseExpiration = "2021/04/01";
+	var domains = ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot","deriv.com","derivcrypto.com"];
+	var filesystem = false;
+	var expiration;
+
+	if (trialExpiration) expiration = new Date(trialExpiration).getTime();
+	else if (licenseExpiration) expiration = new Date(licenseExpiration).getTime();
+
+	if (expiration) {
+		var now = new Date().getTime();
+
+		if (expiration <= now) {
+			if (trialExpiration) alert("This license has expired!");
+			console.error("This license has expired!");
+		} else if (trialExpiration) {
+			var diffDays = Math.round((expiration - now) / (1000 * 60 * 60 * 24));
+
+			if (diffDays < 3) {
+				alert("This trial license expires in " + diffDays + " days!");
+				console.log("WARNING: This trial license expires in " + diffDays + " days!");
+			}
+		}
+	}
+	if(typeof document!=='undefined'){
+		if (filesystem === true && document.location.protocol == 'file:') {
+			return; // valid environment, skip domain check
+		}
+		if (domains && domains.length > 0) {
+			var href = document.location.href;
+			var found = false;
+
+			for (var i = 0; i < domains.length; i++) {
+				if (href.indexOf(domains[i]) > -1) {
+					found = true;
+					break;
+				}
+			}
+
+			if (!found) {
+				alert("ERROR: Not licensed for domain " + href);
+				console.error("ERROR: Not licensed for domain " + href);
+			}
+		}
+	}
+})();
+
+
 
 let __js_core__init_ = (_exports) => {
 
