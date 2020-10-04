@@ -528,6 +528,7 @@ class ChartStore {
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             yaxisLabelStyle: 'roundRect',
+            useBackingStore: false,
             preferences: {
                 currentPriceLine: true,
                 whitespace: isMobile ? 50 : 150,
