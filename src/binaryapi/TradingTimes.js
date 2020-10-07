@@ -109,8 +109,28 @@ class TradingTimes {
             for (const submarket of submarkets) {
                 const { symbols } = submarket;
                 for (const symbolObj of symbols) {
-                    const { times, symbol, feed_license, delay_amount } = symbolObj;
+                    const { events, times, symbol, feed_license, delay_amount } = symbolObj;
                     const { open, close } = times;
+                    const holidays = [];
+                    const early_closed = [];
+                    events
+                        .map(event => (event.dates.includes(',')
+                            ? event.dates.split(',').map(date => ({ date: date.trim(), description: event.descrip }))
+                            : [{ date: event.dates, description: event.descrip }]))
+                        .reduce((ary, item) => ary.concat(item), [])
+                        .forEach((event) => {
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(event.date) && !event.description.toLowerCase().includes('closes early')) {
+                                holidays.push(event.date);
+                            } else {
+                                const close_hour = `${event.description.toLowerCase().replace('closes early (at ', '').replace(')', '')}:00`;
+                                early_closed.push({
+                                    date: event.date,
+                                    open: new Date(`${event.date}T${open[0]}Z`),
+                                    close: new Date(`${event.date}T${close_hour}Z`),
+                                });
+                            }
+                        });
+
                     let _times;
                     const isOpenAllDay = open.length === 1
                         && open[0] === '00:00:00'
@@ -124,8 +144,11 @@ class TradingTimes {
                             close: getUTCDate(close[idx]),
                         }));
                     }
+
                     this._tradingTimesMap[symbol] = {
                         feed_license,
+                        holidays,
+                        early_closed,
                         delay_amount: delay_amount || 0,
                         times: _times,
                         isOpenAllDay,
@@ -160,13 +183,23 @@ class TradingTimes {
 
     _calcIsMarketOpened(symbol) {
         const now = this._serverTime.getLocalDate();
+        const dateStr = now.toISOString().substring(0, 10);
         const {
             times, feed_license,
             isOpenAllDay, isClosedAllDay,
+            holidays, early_closed,
         } = this._tradingTimesMap[symbol];
         if (isClosedAllDay
             || feed_license === TradingTimes.FEED_UNAVAILABLE) return false;
+        if (holidays.includes(dateStr)) return false;
         if (isOpenAllDay) return true;
+
+        const early_close_date = early_closed.find(event => event.date === dateStr);
+        if (early_close_date) {
+            const { open, close } = early_close_date;
+            return !!((now >= open && now < close));
+        }
+
         for (const session of times) {
             const { open, close } = session;
             if (now >= open && now < close) {
