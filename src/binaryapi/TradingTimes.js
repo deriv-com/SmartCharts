@@ -111,6 +111,7 @@ class TradingTimes {
                 for (const symbolObj of symbols) {
                     const { events, times, symbol, feed_license, delay_amount } = symbolObj;
                     const { open, close } = times;
+                    let isClosedToday = false;
                     const holidays = [];
                     const early_closed = [];
                     events
@@ -121,6 +122,8 @@ class TradingTimes {
                         .forEach((event) => {
                             if (/^\d{4}-\d{2}-\d{2}$/.test(event.date) && !event.description.toLowerCase().includes('closes early')) {
                                 holidays.push(event.date);
+                            } else if (event.date === 'today') {
+                                isClosedToday = true;
                             } else {
                                 const close_hour = `${event.description.toLowerCase().replace('closes early (at ', '').replace(')', '')}:00`;
                                 early_closed.push({
@@ -147,6 +150,7 @@ class TradingTimes {
 
                     this._tradingTimesMap[symbol] = {
                         feed_license,
+                        isClosedToday,
                         holidays,
                         early_closed,
                         delay_amount: delay_amount || 0,
@@ -188,10 +192,16 @@ class TradingTimes {
             times, feed_license,
             isOpenAllDay, isClosedAllDay,
             holidays, early_closed,
+            isClosedToday,
         } = this._tradingTimesMap[symbol];
-        if (isClosedAllDay
-            || feed_license === TradingTimes.FEED_UNAVAILABLE) return false;
-        if (holidays.includes(dateStr)) return false;
+        if (
+            (isClosedAllDay || feed_license === TradingTimes.FEED_UNAVAILABLE)
+            || isClosedToday
+            || holidays.includes(dateStr)
+        ) {
+            return false;
+        }
+
         if (isOpenAllDay) return true;
 
         const early_close_date = early_closed.find(event => event.date === dateStr);
