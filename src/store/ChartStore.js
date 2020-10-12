@@ -85,7 +85,7 @@ class ChartStore {
         if (!this.stxx) { return; }
         let currentQuote = this.stxx.currentQuote();
 
-        if (!currentQuote.Close) {
+        if (currentQuote && !currentQuote.Close) {
             const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => (item && item.Close));
             if (dataSegmentClose && dataSegmentClose.length) {
                 currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
@@ -528,6 +528,7 @@ class ChartStore {
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             yaxisLabelStyle: 'roundRect',
+            useBackingStore: false,
             preferences: {
                 currentPriceLine: true,
                 whitespace: isMobile ? 50 : 150,
