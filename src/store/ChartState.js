@@ -28,8 +28,8 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
-    @observable enableScroll;
-    @observable enableZoom;
+    @observable enableScroll = true;
+    @observable enableZoom = true;
     @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
