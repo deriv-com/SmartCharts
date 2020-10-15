@@ -33,11 +33,11 @@ commands:
   npm_install:
     description: "Install node modules"
     steps:
-      # - restore_cache:
-      #     name: Restoring node_modules
-      #     keys:
-      #       - source-v3-modules-{{ checksum "package-lock.json" }} CircleCI retention cache for 15 days
-      #       - source-v3-modules
+      - restore_cache:
+          name: Restoring node_modules
+          keys:
+            - source-v3-modules-{{ checksum "package-lock.json" }}
+            - source-v3-modules
       - run:
           name: npm install
           command: npm install
