@@ -28,6 +28,8 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
+    @observable enableScroll = true;
+    @observable enableZoom = true;
     @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
@@ -52,8 +54,8 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
-        this.stxx.append('zoomOut', this.enableScroll.bind(this));
-        this.stxx.append('zoomIn', this.enableScroll.bind(this));
+        this.stxx.append('zoomOut', this.setEnableScroll.bind(this));
+        this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -88,6 +90,8 @@ class ChartState {
         maxTick,
         crosshairTooltipLeftAllow,
         yAxisMargin,
+        enableScroll = null,
+        enableZoom = null,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -222,6 +226,17 @@ class ChartState {
                 ...yAxisMargin,
             };
         }
+
+        if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
+            this.enableScroll = enableScroll;
+            this.stxx.allowScroll = enableScroll;
+        }
+
+        if (this.stxx && enableZoom !== null && this.enableZoom !== enableZoom) {
+            this.enableZoom = enableZoom;
+            this.stxx.allowZoom = enableZoom;
+        }
+
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -345,8 +360,14 @@ class ChartState {
         this.shouldMinimiseLastDigits = status;
     }
 
-    enableScroll() {
+    setEnableScroll() {
+        if (!this.enableScroll || !this.stxx) { return; }
         this.stxx.allowScroll = true;
+    }
+
+    setDisableScroll() {
+        if (!this.stxx) { return; }
+        this.stxx.allowScroll = false;
     }
 
     saveLayout() {
@@ -503,7 +524,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(Math.floor(scrollToTarget * 6 / 5) || 2);
                 this.stxx.chart.scroll = Math.floor(scrollToTarget * 17 / 15) || 1;
-                this.stxx.allowScroll = false;
+                this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
             this.stxx.draw();

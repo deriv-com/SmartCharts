@@ -40,7 +40,13 @@ export default class MenuStore {
             stx.modalBegin();
         }
 
-        stx.allowScroll = stx.allowZoom = !this.open;
+        stx.allowZoom = !this.open;
+
+        if (!this.open) {
+            this.mainStore.state.setEnableScroll();
+        } else {
+            this.mainStore.state.setDisableScroll();
+        }
     }
 
     @action.bound onTitleClick(e) {
