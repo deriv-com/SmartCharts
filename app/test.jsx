@@ -122,11 +122,7 @@ class App extends Component {
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
-        let activeSymbols = new URLSearchParams(window.location.search).get('activeSymbols') || 'null';
 
-        if (activeSymbols !== 'null') {
-            activeSymbols = activeSymbols.split(',');
-        }
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
@@ -180,7 +176,6 @@ class App extends Component {
             draggable: true,
             markers: [],
             crosshairState: 1,
-            activeSymbols,
             activeCategory: '',
         };
     }
@@ -446,11 +441,6 @@ class App extends Component {
         });
     }
 
-    onActiveSymbol = (evt) => {
-        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?activeSymbols=${evt.target.value}`;
-    }
-
     onActiveCategory = () => {
         this.setState(prevState => ({
             activeCategory: prevState.activeCategory ? null : 'synthetic_index',
@@ -504,7 +494,6 @@ class App extends Component {
                     <SmartChart
                         id={chartId}
                         symbol={symbol}
-                        activeSymbols={this.state.activeSymbols || null}
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
@@ -566,14 +555,6 @@ class App extends Component {
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
                         <button type="button" onClick={() => this.onChartSize(-1)}>Zoom out</button>
-                    </div>
-                    <div className="form-row">
-                        <select onChange={this.onActiveSymbol}>
-                            <option value=""> -- Set Active Symbols -- </option>
-                            <option value="null">Default</option>
-                            <option value="synthetic_index,forex,indices,stocks,commodities">synthetic_index,forex,indices,stocks,commodities</option>
-                            <option value="synthetic_index,indices,stocks,commodities,forex">synthetic_index,indices,stocks,commodities,forex</option>
-                        </select>
                     </div>
                     <div className="form-row">
                         Crosshair State <br />
