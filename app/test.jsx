@@ -171,6 +171,8 @@ class App extends Component {
             activeLanguage,
             isConnectionOpened: true,
             enabledFooter: true,
+            enableScroll: null,
+            enableZoom: null,
             highLow: {},
             barrierType: '',
             draggable: true,
@@ -445,7 +447,15 @@ class App extends Component {
         this.setState(prevState => ({
             activeCategory: prevState.activeCategory ? null : 'synthetic_index',
         }));
-    }
+    };
+
+    handleScroll = () => this.setState(prevState => ({
+        enableScroll: !prevState.enableScroll,
+    }));
+
+    handleZoom = () => this.setState(prevState => ({
+        enableZoom: !prevState.enableZoom,
+    }));
 
     onChartSize = (state) => {
         this.setState({
@@ -467,7 +477,7 @@ class App extends Component {
     }
 
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch,
+        const { settings, isConnectionOpened, symbol, endEpoch, startEpoch,
             barrierType, highLow : { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
@@ -497,6 +507,8 @@ class App extends Component {
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
+                        enableScroll={this.state.enableScroll}
+                        enableZoom={this.state.enableZoom}
                         chartControlsWidgets={null}
                         enabledNavigationWidget={enabledNavigationWidget}
                         enabledChartFooter={this.state.enabledFooter}
@@ -508,6 +520,7 @@ class App extends Component {
                         toolbarWidget={this.renderToolbarWidget}
                         settings={settings}
                         endEpoch={endEpoch}
+                        startEpoch={startEpoch}
                         chartType={this.state.chartType}
                         granularity={this.state.granularity}
                         onSettingsChange={this.saveSettings}
@@ -550,7 +563,8 @@ class App extends Component {
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
 
                         <button type="button" onClick={this.onActiveCategory}>Active Category</button>
-
+                        <button type="button" onClick={this.handleScroll}>Enable/Disable Scroll</button>
+                        <button type="button" onClick={this.handleZoom}>Enable/Disable Zoom</button>
                     </div>
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
