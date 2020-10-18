@@ -427,3 +427,9 @@ export const Languages = [
         icon: <FlagIcons.Spanish />,
     },
 ];
+
+export const STATE = {
+    INITIAL: 'INITIAL',
+    READY: 'READY',
+    SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
+};

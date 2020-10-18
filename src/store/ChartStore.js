@@ -29,6 +29,7 @@ import DownIcon        from '../../sass/icons/chart/ic-down.svg';
 import HomeIcon        from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
+import { STATE }        from '../Constant';
 
 class ChartStore {
     static keystrokeHub;
@@ -652,6 +653,9 @@ class ChartStore {
 
         stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
         stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
+
+
+        this.stateStore.stateChange(STATE.INITIAL);
 
         this.loader.setState('market-symbol');
         this.activeSymbols.retrieveActiveSymbols().then(() => {

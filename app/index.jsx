@@ -229,6 +229,8 @@ class App extends Component {
     changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
     changeChartType = chartType => this.setState({ chartType });
 
+    handleStateChange = (tag, option) => console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`)
+
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
@@ -279,6 +281,7 @@ class App extends Component {
             <SmartChart
                 id={chartId}
                 chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
+                stateChangeListener={handleStateChange}
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
