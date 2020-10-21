@@ -162,6 +162,9 @@ class App extends Component {
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, this.handleNetworkStatus);
 
+        const marketsOrder = new URLSearchParams(window.location.search).get('marketsOrder') || 'null';
+        const getMarketsOrder = marketsOrder !== '' && marketsOrder !== 'null' ? () => marketsOrder.split(',') : undefined;
+
         this.state = {
             settings,
             endEpoch,
@@ -179,6 +182,7 @@ class App extends Component {
             markers: [],
             crosshairState: 1,
             activeCategory: '',
+            getMarketsOrder,
         };
     }
 
@@ -443,6 +447,11 @@ class App extends Component {
         });
     }
 
+    onActiveSymbol = (evt) => {
+        const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
+        window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
+    };
+
     onActiveCategory = () => {
         this.setState(prevState => ({
             activeCategory: prevState.activeCategory ? null : 'synthetic_index',
@@ -529,6 +538,7 @@ class App extends Component {
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
                         crosshairState={crosshairState}
+                        getMarketsOrder={this.state.getMarketsOrder}
                         zoom={zoom}
                         maxTick={maxTick}
                         networkStatus={this.state.networkStatus}
@@ -569,6 +579,14 @@ class App extends Component {
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
                         <button type="button" onClick={() => this.onChartSize(-1)}>Zoom out</button>
+                    </div>
+                    <div className="form-row">
+                        <select onChange={this.onActiveSymbol}>
+                            <option value=""> -- Set Active Symbols -- </option>
+                            <option value="null">Default</option>
+                            <option value="synthetic_index,forex,indices,stocks,commodities">synthetic_index,forex,indices,stocks,commodities</option>
+                            <option value="synthetic_index,indices,stocks,commodities,forex">synthetic_index,indices,stocks,commodities,forex</option>
+                        </select>
                     </div>
                     <div className="form-row">
                         Crosshair State <br />

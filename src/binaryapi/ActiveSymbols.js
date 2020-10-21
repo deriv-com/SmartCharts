@@ -2,6 +2,8 @@ import { observable, action, computed, runInAction } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
+const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
+
 export default class ActiveSymbols {
     @observable changes = {};
     @observable categorizedSymbols = [];
@@ -9,9 +11,10 @@ export default class ActiveSymbols {
     symbolsPromise = new PendingPromise();
     isRetrievingSymbols = false;
 
-    constructor(api, tradingTimes) {
+    constructor(api, tradingTimes, getMarketsOrder) {
         this._api = api;
         this._tradingTimes = tradingTimes;
+        this.getMarketsOrder = getMarketsOrder;
     }
 
     @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
@@ -57,23 +60,6 @@ export default class ActiveSymbols {
         return this.symbolMap[symbol];
     }
 
-    getOrderedMarkets(symbols) {
-        const syntheticIndex = 'synthetic_index';
-
-        const hasSyntheticIndex = !!symbols.find(s => s.market === syntheticIndex);
-        return symbols
-            .slice()
-            .sort((a, b) => (a.display_name < b.display_name ? -1 : 1))
-            .map(s => s.market)
-            .reduce(
-                (arr, market) => {
-                    if (arr.indexOf(market) === -1) arr.push(market);
-                    return arr;
-                },
-                hasSyntheticIndex ? [syntheticIndex] : [],
-            );
-    }
-
     _processSymbols(symbols) {
         const processedSymbols = [];
 
@@ -95,7 +81,7 @@ export default class ActiveSymbols {
 
         // Categorize symbols in order defined by another array; there's probably a more
         // efficient algo for this, but for just ~100 items it's not worth the effort
-        const orderedMarkets = this.getOrderedMarkets(symbols);
+        const orderedMarkets = typeof this.getMarketsOrder === 'function' ? this.getMarketsOrder(symbols) : DefaultSymbols;
         const orderedSymbols = [];
         for (const o of orderedMarkets) {
             for (const p of processedSymbols) {

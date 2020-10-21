@@ -536,11 +536,12 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
+            getMarketsOrder,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
