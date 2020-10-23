@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ReactDOM             from 'react-dom';
-import { connect }          from '../store/Connect';
+import ReactDOM from 'react-dom';
+import { connect } from '../store/Connect';
 import '../../sass/components/_chart-title.scss';
 
 class ChartTitle extends Component {
@@ -9,6 +9,7 @@ class ChartTitle extends Component {
         const { updateProps: prevUpdateProps, ...previousProps } = prevProps;
         if (
             (previousProps.active_category !== props.active_category)
+            || (previousProps.active_market !== props.active_market)
             || (previousProps.open !== props.open)
         ) {
             updateProps(props);
@@ -80,16 +81,16 @@ class ChartTitle extends Component {
 }
 
 export default connect(({ chartTitle: c, chart, state, chartSetting }) => ({
-    chartId           : state.chartId,
-    ChartTitleMenu    : c.ChartTitleMenu,
-    currentSymbol     : c.currentSymbol,
-    isMobile          : chart.isMobile,
-    MarketSelector    : c.MarketSelector,
-    onChange          : c.setSymbol,
-    setMenuOpen       : c.menu.setOpen,
+    chartId: state.chartId,
+    ChartTitleMenu: c.ChartTitleMenu,
+    currentSymbol: c.currentSymbol,
+    isMobile: chart.isMobile,
+    MarketSelector: c.MarketSelector,
+    onChange: c.setSymbol,
+    setMenuOpen: c.menu.setOpen,
     SymbolSelectButton: c.SymbolSelectButton,
-    onMouseEnter      : c.onMouseEnter,
-    onMouseLeave      : c.onMouseLeave,
-    updateProps       : c.updateProps,
-    theme             : chartSetting.theme,
+    onMouseEnter: c.onMouseEnter,
+    onMouseLeave: c.onMouseLeave,
+    updateProps: c.updateProps,
+    theme: chartSetting.theme,
 }))(ChartTitle);

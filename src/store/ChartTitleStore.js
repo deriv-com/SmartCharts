@@ -23,7 +23,8 @@ export default class ChartTitleStore {
             mainStore,
             id: 'market_dropdown',
             getCurrentActiveCategory: () => this.currentActiveCategory,
-            getCurrentActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
+            getCurrentActiveSubCategory: () => this.currentActiveSubCategory,
+            getCurrentActiveMarket: () => this.currentActiveMarket,
             searchInputClassName: () => this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
@@ -51,7 +52,7 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
-    @observable activeCategory = null;
+    @observable activeMarket = {};
     enableShowPrice = false;
     searchInputClassName;
 
@@ -75,8 +76,18 @@ export default class ChartTitleStore {
         return { openTime };
     }
     @computed get currentActiveCategory() {
-        if (this.activeCategory) { return this.activeCategory; }
+        if (this.activeMarket.category) { return this.activeMarket.category; }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
+    }
+
+    @computed get currentActiveSubCategory() {
+        if (this.activeMarket.subcategory) { return this.activeMarket.subcategory; }
+        return (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '');
+    }
+
+    @computed get currentActiveMarket() {
+        if (this.activeMarket.market) { return this.activeMarket.market; }
+        return null;
     }
 
     onContextReady = () => {
@@ -140,9 +151,9 @@ export default class ChartTitleStore {
         this.enableShowPrice = false;
     }
 
-    @action.bound updateProps({ active_category, open }) {
-        if (active_category) {
-            this.activeCategory = active_category;
+    @action.bound updateProps({ active_market, open }) {
+        if (active_market) {
+            this.activeMarket = active_market;
         }
         if (open) {
             this.menu.setOpen(true);

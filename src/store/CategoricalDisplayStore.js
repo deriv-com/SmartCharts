@@ -18,6 +18,7 @@ export default class CategoricalDisplayStore {
         id,
         getCurrentActiveCategory,
         getCurrentActiveSubCategory,
+        getCurrentActiveMarket,
         searchInputClassName,
     }) {
         reaction(() => (getIsShown && getIsShown() && this.scrollPanel), () => {
@@ -36,13 +37,13 @@ export default class CategoricalDisplayStore {
         this.mainStore = mainStore;
         this.getCurrentActiveCategory = getCurrentActiveCategory;
         this.getCurrentActiveSubCategory = getCurrentActiveSubCategory;
+        this.getCurrentActiveMarket = getCurrentActiveMarket;
         this.isInit = false;
         this.searchInput = React.createRef();
         this.searchInputClassName = searchInputClassName;
 
         const normalItem = connect(() => ({
             favoritesId,
-            id,
         }))(NormalItem);
 
         const activeItem = connect(() => ({
@@ -341,9 +342,14 @@ export default class CategoricalDisplayStore {
         this.focusedCategoryKey = null;
         this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
         this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
+        this.activeMarket =  this.getCurrentActiveMarket ? this.getCurrentActiveMarket() : '';
         const el = this.categoryElements[this.activeCategoryKey];
-        const activeSubCategoryClassName = this.id ? `.category-${this.activeCategoryKey} .${this.id}-subcategory-item-${this.activeSubCategory}` : `.category-${this.activeCategoryKey}  .subcategory-item-${this.activeSubCategory}`;
+        const activeSubCategoryClassName = `.sc-mcd__category--${this.activeCategoryKey}  .sc-mcd__category__content--${this.activeSubCategory}`;
         const el_active_sub_category = this.scrollPanel.querySelector(activeSubCategoryClassName);
+
+        const activeMarketClassName = `${activeSubCategoryClassName} .sc-mcd__item--${this.activeMarket}`;
+        const el_active_market = this.scrollPanel.querySelector(activeMarketClassName);
+
         this.activeHeadKey = this.activeCategoryKey || null;
         this.activeHeadTop = 0;
         this.pauseScrollSpy = true;
@@ -355,9 +361,11 @@ export default class CategoricalDisplayStore {
             this.scrollPanel.scrollTop = 0;
         } else if (el) {
             this.scrollPanel.scrollTop = el.offsetTop;
-
-            if (el_active_sub_category) {
+            if (el_active_market) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
+                this.scrollPanel.scrollTop = (el.offsetTop + el_active_market.offsetTop - topOffset);
+            } else if (el_active_sub_category) {
+                const topOffset = this.mainStore.chart.isMobile ? 100 : 0;
                 this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - topOffset);
             }
         }

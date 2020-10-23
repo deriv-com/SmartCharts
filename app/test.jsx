@@ -25,7 +25,7 @@ import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
 import './test.scss';
-import whyDidYouRender  from '@welldone-software/why-did-you-render';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -85,7 +85,7 @@ function getServerUrl() {
 }
 
 const chartId = '1';
-const appId  = localStorage.getItem('config.app_id') || 12812;
+const appId = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
 const today = moment().format('YYYY/MM/DD 00:00');
@@ -181,7 +181,7 @@ class App extends Component {
             draggable: true,
             markers: [],
             crosshairState: 1,
-            activeCategory: '',
+            activeMarket: {},
             getMarketsOrder,
         };
     }
@@ -251,9 +251,10 @@ class App extends Component {
             <ChartTitle
                 onChange={this.symbolChange}
                 active_category={this.state.activeCategory}
-                open={!!this.state.activeCategory}
+                active_market={this.state.activeMarket}
+                open={!!this.state.activeMarket.category}
             />
-            {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} /> }
+            {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} />}
             <Notification
                 notifier={this.notifier}
             />
@@ -365,7 +366,7 @@ class App extends Component {
 
     onBarrierTypeChange = (evt) => {
         const { value: barrierType } = evt.target;
-        const nextState = (barrierType === '') ? { highLow : {} } : {};
+        const nextState = (barrierType === '') ? { highLow: {} } : {};
         this.setState({ ...nextState, barrierType });
     };
 
@@ -452,10 +453,20 @@ class App extends Component {
         window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
     };
 
-    onActiveCategory = () => {
-        this.setState(prevState => ({
-            activeCategory: prevState.activeCategory ? null : 'synthetic_index',
-        }));
+    onActiveMarket = () => {
+        this.setState({
+            activeMarket: {
+                category: 'indices',
+                subcategory: 'europe',
+                market: 'OTC_FCHI',
+            },
+        });
+
+        setTimeout(() => {
+            this.setState({
+                activeMarket: {},
+            });
+        }, 500);
     };
 
     handleScroll = () => this.setState(prevState => ({
@@ -487,7 +498,7 @@ class App extends Component {
 
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch, startEpoch,
-            barrierType, highLow : { high, low }, hidePriceLines,
+            barrierType, highLow: { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
             leftOffset, color, foregroundColor, markers,
             enabledNavigationWidget, activeLanguage,
@@ -571,8 +582,7 @@ class App extends Component {
                         <button type="button" onClick={this.onWidget}>Navigate Widget</button>
                         <button type="button" onClick={this.onFooter}>Footer</button>
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
-
-                        <button type="button" onClick={this.onActiveCategory}>Active Category</button>
+                        <button type="button" onClick={this.onActiveMarket}>Active Market</button>
                         <button type="button" onClick={this.handleScroll}>Enable/Disable Scroll</button>
                         <button type="button" onClick={this.handleZoom}>Enable/Disable Zoom</button>
                     </div>
