@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { ArrowIcon, CategoryIconMap } from '../Icons.jsx';
+import { stringToSlug } from '../../utils';
 
 function getItemCount(category) {
     let count = 0;
@@ -94,7 +95,7 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
                     className={
                         classNames(
                             'sc-mcd__category__content',
-                            `sc-mcd__category__content--${subcategory.subcategoryName.toLowerCase().replace('/', '')}`,
+                            `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
                             'sc-mcd__category__content--has-subcategory',
                         )
                     }

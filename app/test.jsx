@@ -453,12 +453,15 @@ class App extends Component {
         window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
     };
 
-    onActiveMarket = () => {
+    onActiveMarket = (evt) => {
+        const marketAray = evt.target.value.split(',');
+        if (marketAray.length < 3) return;
+
         this.setState({
             activeMarket: {
-                category: 'indices',
-                subcategory: 'europe',
-                market: 'OTC_FCHI',
+                category: marketAray[0],
+                subcategory: marketAray[1],
+                market: marketAray[2],
             },
         });
 
@@ -582,7 +585,6 @@ class App extends Component {
                         <button type="button" onClick={this.onWidget}>Navigate Widget</button>
                         <button type="button" onClick={this.onFooter}>Footer</button>
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
-                        <button type="button" onClick={this.onActiveMarket}>Active Market</button>
                         <button type="button" onClick={this.handleScroll}>Enable/Disable Scroll</button>
                         <button type="button" onClick={this.handleZoom}>Enable/Disable Zoom</button>
                     </div>
@@ -598,6 +600,15 @@ class App extends Component {
                             <option value="synthetic_index,indices,stocks,commodities,forex">synthetic_index,indices,stocks,commodities,forex</option>
                         </select>
                     </div>
+
+                    <div className="form-row">
+                        <select onChange={this.onActiveMarket}>
+                            <option value=""> -- Open Active Market -- </option>
+                            <option value="indices,europe,OTC_FCHI">indices - europe - OTC_FCHI</option>
+                            <option value="synthetic_index,continuous-indices,1HZ10V">Synthetic Index - Continuous Indices - 1HZ10V</option>
+                        </select>
+                    </div>
+
                     <div className="form-row">
                         Crosshair State <br />
                         <select onChange={this.onCrosshair}>
