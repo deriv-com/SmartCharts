@@ -52,7 +52,7 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
-    @observable activeMarket = {};
+    @observable openMarket = {};
     enableShowPrice = false;
     searchInputClassName;
 
@@ -76,17 +76,17 @@ export default class ChartTitleStore {
         return { openTime };
     }
     @computed get currentActiveCategory() {
-        if (this.activeMarket.category) { return this.activeMarket.category; }
+        if (this.openMarket.category) { return this.openMarket.category; }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
     }
 
     @computed get currentActiveSubCategory() {
-        if (this.activeMarket.subcategory) { return this.activeMarket.subcategory; }
+        if (this.openMarket.subcategory) { return this.openMarket.subcategory; }
         return (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '');
     }
 
     @computed get currentActiveMarket() {
-        if (this.activeMarket.market) { return this.activeMarket.market; }
+        if (this.openMarket.market) { return this.openMarket.market; }
         return null;
     }
 
@@ -151,9 +151,9 @@ export default class ChartTitleStore {
         this.enableShowPrice = false;
     }
 
-    @action.bound updateProps({ active_market, open }) {
-        if (active_market) {
-            this.activeMarket = active_market;
+    @action.bound updateProps({ open_market, open }) {
+        if (open_market) {
+            this.openMarket = open_market;
         }
         if (open) {
             this.menu.setOpen(true);

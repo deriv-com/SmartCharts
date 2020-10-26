@@ -181,7 +181,7 @@ class App extends Component {
             draggable: true,
             markers: [],
             crosshairState: 1,
-            activeMarket: {},
+            openMarket: {},
             getMarketsOrder,
         };
     }
@@ -250,8 +250,8 @@ class App extends Component {
         <React.Fragment>
             <ChartTitle
                 onChange={this.symbolChange}
-                active_market={this.state.activeMarket}
-                open={!!this.state.activeMarket.category}
+                open_market={this.state.openMarket}
+                open={!!this.state.openMarket.category}
             />
             {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} />}
             <Notification
@@ -452,21 +452,21 @@ class App extends Component {
         window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
     };
 
-    onActiveMarket = (evt) => {
+    onOpenMarket = (evt) => {
         const marketArray = evt.target.value.split(',');
-        if (marketArray.length < 3) return;
+        if (marketArray.length === 0) return;
 
         this.setState({
-            activeMarket: {
+            openMarket: {
                 category: marketArray[0],
-                subcategory: marketArray[1],
-                market: marketArray[2],
+                subcategory: marketArray[1] || null,
+                market: marketArray[2] || null,
             },
         });
 
         setTimeout(() => {
             this.setState({
-                activeMarket: {},
+                openMarket: {},
             });
         }, 500);
     };
@@ -601,10 +601,11 @@ class App extends Component {
                     </div>
 
                     <div className="form-row">
-                        <select onChange={this.onActiveMarket}>
-                            <option value=""> -- Open Active Market -- </option>
+                        <select onChange={this.onOpenMarket}>
+                            <option value=""> -- Open Market -- </option>
                             <option value="indices,europe,OTC_FCHI">indices - europe - OTC_FCHI</option>
                             <option value="synthetic_index,continuous-indices,1HZ10V">Synthetic Index - Continuous Indices - 1HZ10V</option>
+                            <option value="forex,minor-pairs">Forex - minor-pairs </option>
                         </select>
                     </div>
 
