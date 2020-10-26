@@ -8,8 +8,7 @@ class ChartTitle extends Component {
         const { updateProps, ...props } = this.props;
         const { updateProps: prevUpdateProps, ...previousProps } = prevProps;
         if (
-            (previousProps.active_category !== props.active_category)
-            || (previousProps.active_market !== props.active_market)
+            (previousProps.active_market !== props.active_market)
             || (previousProps.open !== props.open)
         ) {
             updateProps(props);

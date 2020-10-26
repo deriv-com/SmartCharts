@@ -250,7 +250,6 @@ class App extends Component {
         <React.Fragment>
             <ChartTitle
                 onChange={this.symbolChange}
-                active_category={this.state.activeCategory}
                 active_market={this.state.activeMarket}
                 open={!!this.state.activeMarket.category}
             />
@@ -454,14 +453,14 @@ class App extends Component {
     };
 
     onActiveMarket = (evt) => {
-        const marketAray = evt.target.value.split(',');
-        if (marketAray.length < 3) return;
+        const marketArray = evt.target.value.split(',');
+        if (marketArray.length < 3) return;
 
         this.setState({
             activeMarket: {
-                category: marketAray[0],
-                subcategory: marketAray[1],
-                market: marketAray[2],
+                category: marketArray[0],
+                subcategory: marketArray[1],
+                market: marketArray[2],
             },
         });
 
