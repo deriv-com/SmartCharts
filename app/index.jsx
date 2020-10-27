@@ -90,7 +90,6 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
-const ActiveMarkets = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
 const IntervalEnum = {
     second: 1,
     minute: 60,
@@ -282,7 +281,6 @@ class App extends Component {
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
-                activeSymbols={ActiveMarkets}
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}

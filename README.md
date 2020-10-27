@@ -104,7 +104,7 @@ requestAPI* | SmartCharts will make single API calls by passing the request inpu
 requestSubscribe* | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`).
 requestForget* | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.
 id | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.
-activeSymbols | Set/Order the active symbols category as array of symbol.Allowed values are `forex`, `indices`, `stocks`, `commodities`, `synthetic_index`. Defaults to `undefined`
+getMarketsOrder | Callback function to set/order the active symbols category. `active_symbols` is passed to the callback and an array of markets is expected in return. Allowed values are `forex`, `indices`, `stocks`, `commodities`, `synthetic_index`. Defaults to `undefined`
 symbol | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.
 granularity | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.
 chartType | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot),  `spline`,  `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.
@@ -135,6 +135,9 @@ crosshair | Set state of Crosshair Component. Allowed values are undefined, 0,1,
 crosshairTooltipLeftAllow | Set max left position which chart allow to render left side tooltip of crosshair, if mouse position before this size, the crosshair tooltip move to right side of mouse, if set `null` then chart specify `315px` as default value. Defaults to `null` 
 zoom | Zoom in and Zoom out the chart. the value should be `1` or `-1`. If the value is `1` the chart will be zoomed in, and if the value is `-1` it zoomed out.
 yAxisMargin | Set the margins of chart yAxis. It's an object that takes two parameters, `bottom` for margin bottom of chart, and `top` for the top margin of chart. 
+enableScroll |  Enable/disable scroll feature in chart. Scroll gets disable on chart scale `1:1` and enable whenever user zoom in/out. This property override that feature . Defaults to `true`
+enableZoom |  Enable/disable zoom feature in chart. Defaults to `true`
+
 
 ### Chart Settings
 

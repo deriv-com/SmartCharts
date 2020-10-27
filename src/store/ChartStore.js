@@ -183,6 +183,35 @@ class ChartStore {
             drawToolsStore: this.mainStore.drawTools,
         });
 
+        CIQ.extend(CIQ.Studies.studyLibrary.Detrended, {
+            calculateFN(stx, sd) {
+                const quotes = sd.chart.scrubbed;
+                if (quotes.length < sd.days + 1) {
+                    sd.error = true;
+                    return;
+                }
+                let field = sd.inputs.Field;
+                if (!field || field === 'field') field = 'Close';
+                const offset = Math.floor(sd.days / 2 + 1);
+                CIQ.Studies.MA(
+                    sd.inputs['Moving Average Type'],
+                    sd.days,
+                    field,
+                    -offset,
+                    'MA',
+                    stx,
+                    sd,
+                );
+                let days = Math.max(sd.days - offset - 1, sd.startFrom - offset);
+                if (days < 0) days = 0;
+                for (let i = days; i < quotes.length - offset; i++) {
+                    let val = quotes[i][field];
+                    if (val && typeof val === 'object') val = val[sd.subField];
+                    const maVal = quotes[i][`MA ${sd.name}`];
+                    if ((val || val === 0) && (maVal || maVal === 0)) quotes[i][`Result ${sd.name}`] = val - maVal;
+                }
+            },
+        });
         /**
          * only home button click part modified to avoid calling
          * newChart() on home function while historical enable
@@ -507,12 +536,12 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
-            activeSymbols,
+            getMarketsOrder,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, activeSymbols));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
