@@ -50,20 +50,16 @@ const ActiveOptions = ({ activeOptions, item }) => (
     )
 );
 
-export const NormalItem = React.memo(({ onSelectItem, item, disableAll, favoritesId, id }) => {
-    const itemClass = id ? `${id}-subcategory-item-${item.itemId}` : `subcategory-item-${item.itemId}`;
-
-    return (
-        <div
-            className={`sc-mcd__item ${item.selected ? 'sc-mcd__item--selected ' : ''} ${itemClass}`}
-            onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
-            disabled={!item.enabled || disableAll}
-        >
-            <ItemName item={item} />
-            <ItemDetail item={item} favoritesId={favoritesId} />
-        </div>
-    );
-});
+export const NormalItem = React.memo(({ onSelectItem, item, disableAll, favoritesId }) => (
+    <div
+        className={`sc-mcd__item sc-mcd__item--${item.itemId} ${item.selected ? 'sc-mcd__item--selected ' : ''}`}
+        onClick={e => item.enabled && onSelectItem(item.dataObject, e)}
+        disabled={!item.enabled || disableAll}
+    >
+        <ItemName item={item} />
+        <ItemDetail item={item} favoritesId={favoritesId} />
+    </div>
+));
 
 export const ActiveItem = ({ item, favoritesId, activeOptions }) => (
     <div className="sc-active-item">

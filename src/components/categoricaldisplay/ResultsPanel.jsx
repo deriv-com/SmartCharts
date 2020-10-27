@@ -1,5 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 import { ArrowIcon, CategoryIconMap } from '../Icons.jsx';
+import { stringToSlug } from '../../utils';
 
 function getItemCount(category) {
     let count = 0;
@@ -32,19 +34,27 @@ const CategoryTitleLeft = React.memo(({ isNestedList, category }) => {
 
 const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick }) => (
     <div
-        className={`sc-mcd__category__head ${category.categorySubtitle ? 'has-subtitle' : ''} ${category.active ? 'active' : ''}`}
+        className={
+            classNames(
+                'sc-mcd__category__head',
+                {
+                    'has-subtitle': category.categorySubtitle,
+                    active: category.active,
+                },
+            )
+        }
         onClick={() => handleTitleClick(category.categoryId)}
     >
         <CategoryTitleLeft isNestedList={isNestedList} category={category} />
         {
             ((category.categoryNamePostfixShowIfActive && activeHeadKey === category.categoryId)
-                    || !category.categoryNamePostfixShowIfActive)
-                && category.categoryNamePostfix
-                && (
-                    <span className="category-name-postfix">
-                        {category.categoryNamePostfix}
-                    </span>
-                )
+                || !category.categoryNamePostfixShowIfActive)
+            && category.categoryNamePostfix
+            && (
+                <span className="category-name-postfix">
+                    {category.categoryNamePostfix}
+                </span>
+            )
         }
         {
             category.categorySubtitle && (
@@ -59,7 +69,16 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
 
 const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSelectItem, activeHeadKey, disableAll, isNestedList, handleTitleClick }) => (
     <div
-        className={`sc-mcd__category sc-mcd__category--${category.categoryId} ${category.categorySubtitle ? 'sc-mcd__category--has-subtitle' : ''} ${category.active ? 'sc-mcd__category--active' : ''}`}
+        className={
+            classNames(
+                'sc-mcd__category',
+                `sc-mcd__category--${category.categoryId}`,
+                {
+                    'sc-mcd__category--has-subtitle': category.categorySubtitle,
+                    'sc-mcd__category--active': category.active,
+                },
+            )
+        }
         ref={el => setCategoryElement(el, category.categoryId)}
     >
         {(isNestedList || !category.hasSubcategory) && (
@@ -73,7 +92,13 @@ const Category = ({ category, categoryItemCount, Item, setCategoryElement, onSel
         { category.hasSubcategory
             ? category.data.map(subcategory => getItemCount(subcategory) > 0 && (
                 <div
-                    className="sc-mcd__category__content sc-mcd__category__content--has-subcategory"
+                    className={
+                        classNames(
+                            'sc-mcd__category__content',
+                            `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
+                            'sc-mcd__category__content--has-subcategory',
+                        )
+                    }
                     key={subcategory.subcategoryName}
                 >
                     <div className="subcategory">{t.translate(subcategory.subcategoryName)}</div>

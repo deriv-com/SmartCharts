@@ -537,12 +537,12 @@ class ChartStore {
             onMessage,
             settings,
             onSettingsChange,
-            activeSymbols,
+            getMarketsOrder,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, activeSymbols));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -558,7 +558,6 @@ class ChartStore {
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
             yaxisLabelStyle: 'roundRect',
-            useBackingStore: false,
             preferences: {
                 currentPriceLine: true,
                 whitespace: isMobile ? 50 : 150,
