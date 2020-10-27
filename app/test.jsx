@@ -122,11 +122,7 @@ class App extends Component {
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
-        let activeSymbols = new URLSearchParams(window.location.search).get('activeSymbols') || 'null';
 
-        if (activeSymbols !== 'null') {
-            activeSymbols = activeSymbols.split(',');
-        }
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
@@ -166,6 +162,9 @@ class App extends Component {
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, this.handleNetworkStatus);
 
+        const marketsOrder = new URLSearchParams(window.location.search).get('marketsOrder') || 'null';
+        const getMarketsOrder = marketsOrder !== '' && marketsOrder !== 'null' ? () => marketsOrder.split(',') : undefined;
+
         this.state = {
             settings,
             endEpoch,
@@ -183,7 +182,7 @@ class App extends Component {
             markers: [],
             crosshairState: 1,
             openMarket: {},
-            activeSymbols,
+            getMarketsOrder,
         };
     }
 
@@ -375,30 +374,30 @@ class App extends Component {
         markers = [];
 
         switch (evt.target.value) {
-        case 'LINE':
-            for (let i = 0; i < 5; i++) {
-                markers.push({
-                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                        .unix(),
-                    className: 'chart-marker-line',
-                    xPositioner: 'epoch',
-                    yPositioner: 'top',
-                });
-            }
-            break;
-        case 'CIRCLE':
-            for (let i = 0; i < 15; i++) {
-                markers.push({
-                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                        .unix(),
-                    className: 'chart-marker-circle',
-                    xPositioner: 'epoch',
-                    yPositioner: 'value',
-                });
-            }
-            break;
-        default:
-            markers = [];
+            case 'LINE':
+                for (let i = 0; i < 5; i++) {
+                    markers.push({
+                        ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                            .unix(),
+                        className: 'chart-marker-line',
+                        xPositioner: 'epoch',
+                        yPositioner: 'top',
+                    });
+                }
+                break;
+            case 'CIRCLE':
+                for (let i = 0; i < 15; i++) {
+                    markers.push({
+                        ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                            .unix(),
+                        className: 'chart-marker-circle',
+                        xPositioner: 'epoch',
+                        yPositioner: 'value',
+                    });
+                }
+                break;
+            default:
+                markers = [];
         }
         this.setState({ markers });
     }
@@ -450,7 +449,7 @@ class App extends Component {
 
     onActiveSymbol = (evt) => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?activeSymbols=${evt.target.value}`;
+        window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
     };
 
     onOpenMarket = (evt) => {
@@ -527,7 +526,6 @@ class App extends Component {
                     <SmartChart
                         id={chartId}
                         symbol={symbol}
-                        activeSymbols={this.state.activeSymbols || null}
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
@@ -553,6 +551,7 @@ class App extends Component {
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
                         crosshairState={crosshairState}
+                        getMarketsOrder={this.state.getMarketsOrder}
                         zoom={zoom}
                         maxTick={maxTick}
                         networkStatus={this.state.networkStatus}
