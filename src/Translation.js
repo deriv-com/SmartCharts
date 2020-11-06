@@ -33,13 +33,23 @@ export class Translation {
     translate(...args) {
         const curr_lang = lang_map[this.lang];
         const key = args[0].trim();
-        let translated = curr_lang ? (curr_lang[key] || key) : key;
+        const key_with_qoutation = key.replace(/"/gi, '\\\"'); /* eslint-disable-line */
+        let translated = key;
+        let has_qoutation = false;
+
+        if (curr_lang && curr_lang[key]) {
+            translated = curr_lang[key];
+        } else if (curr_lang && curr_lang[key_with_qoutation]) {
+            translated = curr_lang[key_with_qoutation];
+            has_qoutation = true;
+        }
+
         if (args[1]) {
             Object.keys(args[1]).forEach((prop) => {
                 translated = translated.replace(`[${prop}]`, args[1][prop]);
             });
         }
-        return translated;
+        return has_qoutation ? translated.replace(/\\\"/gi, '"') : translated; /* eslint-disable-line */
     }
 }
 
