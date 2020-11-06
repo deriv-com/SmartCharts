@@ -56,7 +56,7 @@ export const drawTools = {
     vertical:   { id: 'vertical',    text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
 };
 
-export const IndicatorsTree = () => [
+export const indicatorsTree = () => [
     {
         id: 'momentum',
         name: 'Momentum',

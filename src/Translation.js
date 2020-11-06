@@ -35,13 +35,13 @@ export class Translation {
         const key = args[0].trim();
         const key_with_qoutation = key.replace(/"/gi, '\\\"'); /* eslint-disable-line */
         let translated = key;
-        let has_qoutation = false;
+        let has_quotation = false;
 
         if (curr_lang && curr_lang[key]) {
             translated = curr_lang[key];
         } else if (curr_lang && curr_lang[key_with_qoutation]) {
             translated = curr_lang[key_with_qoutation];
-            has_qoutation = true;
+            has_quotation = true;
         }
 
         if (args[1]) {
@@ -49,7 +49,7 @@ export class Translation {
                 translated = translated.replace(`[${prop}]`, args[1][prop]);
             });
         }
-        return has_qoutation ? translated.replace(/\\\"/gi, '"') : translated; /* eslint-disable-line */
+        return has_quotation ? translated.replace(/\\\"/gi, '"') : translated; /* eslint-disable-line */
     }
 }
 

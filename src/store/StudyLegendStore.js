@@ -7,7 +7,7 @@ import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
 import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from  '../utils/ga';
-import { IndicatorsTree, ExcludedStudies } from '../Constant';
+import { indicatorsTree, ExcludedStudies } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
 import {
     IndicatorCatTrendLightIcon,
@@ -93,7 +93,7 @@ export default class StudyLegendStore {
     get indicatorRatio() { return this.mainStore.chart; }
 
     get items() {
-        return [...IndicatorsTree()].map((indicator) => {
+        return [...indicatorsTree()].map((indicator) => {
             // the only icon which is different on light/dark is trend
             if (indicator.id === 'trend') {
                 indicator.icon = this.mainStore.chartSetting.theme === 'light' ? IndicatorCatTrendLightIcon : IndicatorCatTrendDarkIcon;
@@ -104,7 +104,7 @@ export default class StudyLegendStore {
     }
 
     get searchedItems() {
-        return [...IndicatorsTree()]
+        return [...indicatorsTree()]
             .map((category) => {
                 category.foundItems = category.items.filter(item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1);
                 return category;
@@ -385,7 +385,7 @@ export default class StudyLegendStore {
         Object.keys(stx.layout.studies || []).forEach((id) => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) { return; }
-            const studyObjCategory = IndicatorsTree().find(category => category.items.find(item => item.id === sd.type));
+            const studyObjCategory = indicatorsTree().find(category => category.items.find(item => item.id === sd.type));
             const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
             if (studyObj) {
                 const nameObj = prepareIndicatorName(sd.name);
