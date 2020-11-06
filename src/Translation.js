@@ -33,14 +33,14 @@ export class Translation {
     translate(...args) {
         const curr_lang = lang_map[this.lang];
         const key = args[0].trim();
-        const key_with_qoutation = key.replace(/"/gi, '\\\"'); /* eslint-disable-line */
+        const key_with_quotation = key.replace(/"/gi, '\\\"'); /* eslint-disable-line */
         let translated = key;
         let has_quotation = false;
 
         if (curr_lang && curr_lang[key]) {
             translated = curr_lang[key];
-        } else if (curr_lang && curr_lang[key_with_qoutation]) {
-            translated = curr_lang[key_with_qoutation];
+        } else if (curr_lang && curr_lang[key_with_quotation]) {
+            translated = curr_lang[key_with_quotation];
             has_quotation = true;
         }
 
