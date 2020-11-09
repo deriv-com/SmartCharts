@@ -2,6 +2,7 @@
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
 import Theme from '../../sass/_themes.scss';
+import { STATE } from '../Constant';
 
 class ChartState {
     @observable granularity;
@@ -12,6 +13,7 @@ class ChartState {
     @observable isConnectionOpened;
     @observable isChartReady = false;
     @observable chartStatusListener;
+    @observable stateChangeListener;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -67,6 +69,7 @@ class ChartState {
         chartControlsWidgets,
         enabledChartFooter,
         chartStatusListener,
+        stateChangeListener,
         chartType,
         clearChart,
         endEpoch,
@@ -98,6 +101,7 @@ class ChartState {
 
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
+        this.stateChangeListener = stateChangeListener;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
@@ -188,6 +192,7 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.setIsChartScrollingToEpoch(true);
                 this.scrollChartToLeft();
+                this.stateChange(STATE.SCROLL_TO_LEFT);
             }
         }
 
@@ -303,9 +308,16 @@ class ChartState {
         this.stxx.draw();
     }
 
+    @action.bound stateChange(tag, option) {
+        if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
+            this.stateChangeListener(tag, option);
+        }
+    }
+
     @action.bound setChartIsReady(isChartReady) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
+            this.stateChange(STATE.READY);
             if (this.chartStatusListener && typeof this.chartStatusListener === 'function') {
                 this.chartStatusListener(isChartReady);
             }

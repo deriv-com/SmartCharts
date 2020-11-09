@@ -5,6 +5,7 @@ import { maintainHeadsUpHR }      from './headsUpHR';
 import { maintainSpanSize }       from './resizing';
 import { plotterDrawText }        from './plotterDrawText';
 import { overideMeasure }         from './setMeasure';
+import { BackingStore }           from './backingStore';
 
 const inject = (option) => {
     createXAxis();
@@ -14,6 +15,7 @@ const inject = (option) => {
     // manageMasterDataLength();
     plotterDrawText();
     overideMeasure(option);
+    BackingStore();
 };
 
 export default inject;
