@@ -27,6 +27,7 @@ import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
 import NetworkMonitor from './connection/NetworkMonitor';
+import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -281,6 +282,11 @@ class App extends Component {
                 stateChangeListener={this.handleStateChange}
                 symbol={symbol}
                 isMobile={isMobile}
+                initialData={{
+                    masterData: masterData(),
+                    activeSymbols: MockActiveSymbol,
+                    tradingTimes: MockTradingTime,
+                }}
                 onMessage={this.onMessage}
                 enableRouting
                 removeAllComparisons={settings.historical}

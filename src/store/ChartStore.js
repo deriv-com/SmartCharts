@@ -538,11 +538,12 @@ class ChartStore {
             settings,
             onSettingsChange,
             getMarketsOrder,
+            initialData,
         } = props;
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
-        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder));
+        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes, initialData.tradingTimes));
+        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder, initialData.activeSymbols));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -653,7 +654,6 @@ class ChartStore {
         stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
         stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
 
-
         this.stateStore.stateChange(STATE.INITIAL);
 
         this.loader.setState('market-symbol');
@@ -665,6 +665,21 @@ class ChartStore {
                 if (stxx.isDestroyed) { return; }
 
                 const isRestoreSuccess = this.state.restoreLayout();
+
+                if (initialData.masterData) {
+                    stxx.loadChart(symbol || '1HZ10V', {
+                        masterData: initialData.masterData,
+                        periodicity: {
+                            period: 1,
+                            interval: 1,
+                            timeUnit: 'minute',
+                        },
+                    },  () => {
+                        // Use the loadChart callback to start streaming your data
+                        // once the chart is loaded with the historical data.
+                        this.loader.hide();
+                    });
+                }
 
                 if (!isRestoreSuccess) {
                     this.changeSymbol(

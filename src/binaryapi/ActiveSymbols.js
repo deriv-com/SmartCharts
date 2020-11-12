@@ -11,10 +11,11 @@ export default class ActiveSymbols {
     symbolsPromise = new PendingPromise();
     isRetrievingSymbols = false;
 
-    constructor(api, tradingTimes, getMarketsOrder) {
+    constructor(api, tradingTimes, getMarketsOrder, initialData) {
         this._api = api;
         this._tradingTimes = tradingTimes;
         this.getMarketsOrder = getMarketsOrder;
+        this._initialData = initialData;
     }
 
     @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
@@ -24,7 +25,13 @@ export default class ActiveSymbols {
         }
 
         this.isRetrievingSymbols = true;
-        const { active_symbols } = await this._api.getActiveSymbols();
+
+        let active_symbols = this._initialData;
+        if (!active_symbols) {
+            const response = await this._api.getActiveSymbols();
+            active_symbols = response.active_symbols;
+        }
+
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
