@@ -221,12 +221,12 @@ class Feed {
         }
 
         quotes = this._trimQuotes(quotes);
-        // callback({ quotes });
+        callback({ quotes });
 
         this._mainStore.chart.updateYaxisWidth();
         this.scaleChart();
 
-        this._emitDataUpdate([], comparisonChartSymbol, true);
+        this._emitDataUpdate(quotes, comparisonChartSymbol, true);
         this._mainStore.state.setMaxtTick();
     }
 
@@ -297,7 +297,7 @@ class Feed {
                     await this._getPaginationData(symbol, granularity, newStart, end, callback);
                     return;
                 }
-                result.quotes = []; // TickHistoryFormatter.formatHistory(response);
+                result.quotes = TickHistoryFormatter.formatHistory(response);
 
                 if (firstEpoch <= startLimit) {
                     callback({ moreAvailable: false, quotes: [] });
