@@ -9,7 +9,7 @@ class TradingTimes {
     tradingTimesPromise = new PendingPromise();
     timeUpdateCallback;
 
-    constructor(api, shouldFetchTradingTimes = true, initialData) {
+    constructor(api, shouldFetchTradingTimes = true, initialData = null) {
         this._shouldFetchTradingTimes = shouldFetchTradingTimes;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
@@ -91,9 +91,9 @@ class TradingTimes {
     }
 
     async _updateTradeTimes() {
-        const response = this._tradingTimesMap
-            ? await this._api.getTradingTimes(this.lastUpdateDate)
-            : this._initalData;
+        const response = (!this._tradingTimesMap && this._initalData)
+            ? this._initalData
+            : await this._api.getTradingTimes(this.lastUpdateDate);
 
         if (response.error) {
             const { error } = response;
