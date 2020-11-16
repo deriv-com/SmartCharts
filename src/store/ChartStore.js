@@ -19,6 +19,7 @@ import {
     getUTCDate,
     cloneCategories,
     prepareIndicatorName,
+    createObjectFromLocalStorage,
     renderSVGString }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
 
@@ -41,6 +42,7 @@ class ChartStore {
         this.mainStore = mainStore;
     }
 
+    feedCall;
     RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
     rootNode = null;
@@ -539,11 +541,25 @@ class ChartStore {
             onSettingsChange,
             getMarketsOrder,
             initialData,
+            feedCall,
         } = props;
+
+        this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
-        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes, initialData.tradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder, initialData.activeSymbols));
+        this.tradingTimes = ChartStore.tradingTimes
+                || (ChartStore.tradingTimes = new TradingTimes(this.api, {
+                    enable: this.feedCall.tradingTimes,
+                    shouldFetchTradingTimes: this.mainStore.state.shouldFetchTradingTimes,
+                    initialData: initialData?.tradingTimes,
+                }));
+
+        this.activeSymbols = ChartStore.activeSymbols
+                || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, {
+                    enable: this.feedCall.activeSymbols,
+                    getMarketsOrder,
+                    initialData: initialData?.activeSymbols,
+                }));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -665,21 +681,7 @@ class ChartStore {
                 if (stxx.isDestroyed) { return; }
 
                 const isRestoreSuccess = this.state.restoreLayout();
-
-                if (initialData.masterData) {
-                    stxx.loadChart(symbol || '1HZ10V', {
-                        masterData: initialData.masterData,
-                        periodicity: {
-                            period: 1,
-                            interval: 1,
-                            timeUnit: 'minute',
-                        },
-                    },  () => {
-                        // Use the loadChart callback to start streaming your data
-                        // once the chart is loaded with the historical data.
-                        this.loader.hide();
-                    });
-                }
+                this.loadChartWithInitalData(symbol, initialData?.masterData);
 
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
@@ -914,6 +916,32 @@ class ChartStore {
         this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
     }
 
+    /**
+     * load the chart with given data
+     *
+     * by this methos, beside of waiting for Feed@fetchInitialData to provide first data
+     * the chart are initiled by give masterData
+     *
+     * @param {string} symbol the symbol used to load the chart
+     * @param {array} masterData array of ticks regards of desire tick
+     */
+    loadChartWithInitalData(symbol, masterData) {
+        if (!masterData) return;
+
+        const layoutData = createObjectFromLocalStorage(`layout-${this.stateStore.chartId}`);
+        if (!layoutData || !layoutData.symbols.length) return;
+
+        this.stxx.loadChart(symbol || '1HZ10V', {
+            masterData,
+            periodicity: {
+                period: layoutData.periodicity,
+                interval: layoutData.interval,
+                timeUnit: layoutData.timeUnit,
+            },
+        },  () => {
+            this.loader.hide();
+        });
+    }
 
     remainLabelY = () => {
         const stx = this.context.stx;

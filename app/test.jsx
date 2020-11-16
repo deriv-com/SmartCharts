@@ -36,7 +36,7 @@ setSmartChartsPublicPath('./dist/');
 
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
     whyDidYouRender(React, {
         collapseGroups: true,
         include: [/.*/],
@@ -183,6 +183,7 @@ class App extends Component {
             crosshairState: 1,
             openMarket: {},
             getMarketsOrder,
+            refreshActiveSymbols: false,
         };
     }
 
@@ -374,30 +375,30 @@ class App extends Component {
         markers = [];
 
         switch (evt.target.value) {
-            case 'LINE':
-                for (let i = 0; i < 5; i++) {
-                    markers.push({
-                        ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                            .unix(),
-                        className: 'chart-marker-line',
-                        xPositioner: 'epoch',
-                        yPositioner: 'top',
-                    });
-                }
-                break;
-            case 'CIRCLE':
-                for (let i = 0; i < 15; i++) {
-                    markers.push({
-                        ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                            .unix(),
-                        className: 'chart-marker-circle',
-                        xPositioner: 'epoch',
-                        yPositioner: 'value',
-                    });
-                }
-                break;
-            default:
-                markers = [];
+        case 'LINE':
+            for (let i = 0; i < 5; i++) {
+                markers.push({
+                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                        .unix(),
+                    className: 'chart-marker-line',
+                    xPositioner: 'epoch',
+                    yPositioner: 'top',
+                });
+            }
+            break;
+        case 'CIRCLE':
+            for (let i = 0; i < 15; i++) {
+                markers.push({
+                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                        .unix(),
+                    className: 'chart-marker-circle',
+                    xPositioner: 'epoch',
+                    yPositioner: 'value',
+                });
+            }
+            break;
+        default:
+            markers = [];
         }
         this.setState({ markers });
     }
@@ -479,6 +480,16 @@ class App extends Component {
         enableZoom: !prevState.enableZoom,
     }));
 
+    handleRefreshActiveSymbols = () => {
+        this.setState({
+            refreshActiveSymbols: true,
+        }, () => {
+            this.setState({
+                refreshActiveSymbols: false,
+            });
+        });
+    }
+
     onChartSize = (state) => {
         this.setState({
             zoom: state,
@@ -555,6 +566,7 @@ class App extends Component {
                         zoom={zoom}
                         maxTick={maxTick}
                         networkStatus={this.state.networkStatus}
+                        refreshActiveSymbols={this.state.refreshActiveSymbols}
                     >
                         {endEpoch ? (
                             <Marker
@@ -586,6 +598,7 @@ class App extends Component {
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
                         <button type="button" onClick={this.handleScroll}>Enable/Disable Scroll</button>
                         <button type="button" onClick={this.handleZoom}>Enable/Disable Zoom</button>
+                        <button type="button" onClick={this.handleRefreshActiveSymbols}>Refresh ActiveSymbol</button>
                     </div>
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>

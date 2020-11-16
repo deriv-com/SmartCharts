@@ -280,12 +280,17 @@ class App extends Component {
                 id={chartId}
                 chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
                 stateChangeListener={this.handleStateChange}
-                symbol={symbol}
                 isMobile={isMobile}
+                symbol={symbol}
+                settings={settings}
                 initialData={{
                     masterData: masterData(),
                     activeSymbols: MockActiveSymbol,
                     tradingTimes: MockTradingTime,
+                }}
+                feedCall={{
+                    activeSymbols: false,
+                    tradingTimes: false,
                 }}
                 onMessage={this.onMessage}
                 enableRouting
@@ -296,7 +301,6 @@ class App extends Component {
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
-                settings={settings}
                 endEpoch={endEpoch}
                 chartType={this.state.chartType}
                 granularity={this.state.granularity}

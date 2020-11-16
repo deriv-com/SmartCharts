@@ -9,12 +9,12 @@ class TradingTimes {
     tradingTimesPromise = new PendingPromise();
     timeUpdateCallback;
 
-    constructor(api, shouldFetchTradingTimes = true, initialData = null) {
-        this._shouldFetchTradingTimes = shouldFetchTradingTimes;
+    constructor(api, params) {
+        this._params = params;
+        this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || null;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
         this._emitter = new EventEmitter({ emitDelay: 0 });
-        this._initalData = initialData;
     }
 
     destructor() {
@@ -91,9 +91,14 @@ class TradingTimes {
     }
 
     async _updateTradeTimes() {
-        const response = (!this._tradingTimesMap && this._initalData)
-            ? this._initalData
-            : await this._api.getTradingTimes(this.lastUpdateDate);
+        let response = {};
+
+        if (!this._tradingTimesMap && this._params.initialData) response = this._params.initialData;
+        else if (this._params.enable !== false) response = await this._api.getTradingTimes(this.lastUpdateDate);
+        else {
+            console.error('TradingTimes feed is not enable nor has initial data!');
+            return;
+        }
 
         if (response.error) {
             const { error } = response;
@@ -101,11 +106,12 @@ class TradingTimes {
             return;
         }
 
+        this._tradingTimesMap = {};
+
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
         const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
-        this._tradingTimesMap = {};
         const { markets } = response.trading_times;
         for (const market of markets) {
             const { submarkets } = market;
