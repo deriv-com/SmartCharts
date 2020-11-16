@@ -1,6 +1,6 @@
 /**
- *	8.0.0
- *	Generation date: 2020-09-15T12:41:24.944Z
+ *	8.1.0
+ *	Generation date: 2020-11-03T13:22:07.088Z
  *	Client name: binary ltd
  *	Package Type: Technical Analysis
  *	License type: annual
@@ -24,6 +24,7 @@
 import {CIQ} from "../js/chartiq.js";
 
 let __js_addons_animation_ = (_exports) => {
+
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -58,7 +59,6 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  *   var image = document.getElementById('beacon'); // include a hidden image on your HTML
  *   context.drawImage(image, x-10, y-10, 20, 20); // add the image on the canvas. Offset the x and y values by the radius of the beacon.
  *   ```
-
  *
  * Animation Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
  *
@@ -68,19 +68,19 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * ```
  * Keep in mind that changing to a different chart type, may once again enable animation. You can override this by [adding an event listener]{@link CIQ.ChartEngine#addEventListener} on [layout changes]{@link layoutEventListener}.
  *
- * @param {object} params The constructor parameters
- * @param {CIQ.ChartEngine} params.stx The chart object
- * @param {object} [params.animationParameters] Configuration parameters
- * @param {boolean} [params.animationParameters.stayPut=false] Set to true for last tick to stay in position it was scrolled and have rest of the chart move backwards as new ticks are added instead of having new ticks advance forward and leave the rest of the chart in place.
- * @param {number} [params.animationParameters.ticksFromEdgeOfScreen=5] Number of ticks from the right edge the chart should stop moving forward so the last tick never goes off screen (only applicable if stayPut=false)
- * @param {number} [params.animationParameters.granularity=1000000] Set to a value that will give enough granularity for the animation.  The larger the number the smaller the price jump between frames, which is good for charts that need a very slow smooth animation either because the price jumps between ticks are very small, or because the animation was set up to run over a large number of frames when instantiating the CIQ.EaseMachine.
- * @param {number} [params.animationParameters.tension=null] Splining tension for smooth curves around data points (range 0-1).
- * @param {CIQ.EaseMachine} params.easeMachine Override the default easeMachine.  Default is `new CIQ.EaseMachine(Math.easeOutCubic, 1000);`
+ * @param {object} config The constructor parameters
+ * @param {CIQ.ChartEngine} config.stx The chart object
+ * @param {object} [config.animationParameters] Configuration parameters
+ * @param {boolean} [config.animationParameters.stayPut=false] Set to true for last tick to stay in position it was scrolled and have rest of the chart move backwards as new ticks are added instead of having new ticks advance forward and leave the rest of the chart in place.
+ * @param {number} [config.animationParameters.ticksFromEdgeOfScreen=5] Number of ticks from the right edge the chart should stop moving forward so the last tick never goes off screen (only applicable if stayPut=false)
+ * @param {number} [config.animationParameters.granularity=1000000] Set to a value that will give enough granularity for the animation.  The larger the number the smaller the price jump between frames, which is good for charts that need a very slow smooth animation either because the price jumps between ticks are very small, or because the animation was set up to run over a large number of frames when instantiating the CIQ.EaseMachine.
+ * @param {number} [config.animationParameters.tension=null] Splining tension for smooth curves around data points (range 0-1).
+ * @param {CIQ.EaseMachine} config.easeMachine Override the default easeMachine.  Default is `new CIQ.EaseMachine(Math.easeOutCubic, 1000);`
  * @constructor
  * @name  CIQ.Animation
  * @since
- * - 3.0.0 Now part of addOns.js. Previously provided as a standalone animation.js file.
- * - 4.0.0 Beacon only flashes for line charts. On Candles or bars it is suppressed as it produces an unnatural effect.
+ * - 3.0.0 Now part of *addOns.js*. Previously provided as a standalone *animation.js* file.
+ * - 4.0.0 Beacon only flashes for line charts. On candles or bars, it is suppressed as it produces an unnatural effect.
  * - 7.0.2 Now takes one configuration object as its constructor. Must have a reference to a chart engine.
  * @example
  * 	new CIQ.Animation({stx: stxx, animationParameters: {tension:0.3}});  //Default animation with splining tension of 0.3
@@ -507,9 +507,16 @@ CIQ.Animation =
 		});
 	};
 
+/**
+ * CIQ.EaseMachine interface placeholder to be augmented in *standard.js* with properties.
+ *
+ * @tsinterface CIQ~EaseMachine
+ */
+
 };
 
 let __js_addons_continuousZoom_ = (_exports) => {
+
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -611,7 +618,7 @@ CIQ.ContinuousZoom =
 				this.stx.registerChartControl &&
 				this.stx.registerChartControl(
 					"stx-smart-zoom",
-					"SmartZoom",
+					"SmartZoom (Alt + 0)",
 					(function (self) {
 						return function (e) {
 							self.smartZoomToggle(e);
@@ -748,6 +755,7 @@ CIQ.ContinuousZoom.prototype.execute = function (zoomOut) {
 
 let __js_addons_extendedHours_ = (_exports) => {
 
+
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -770,7 +778,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * rather than calling {@link CIQ.ChartEngine#loadChart} to reload the data from the server every time you enable or disable this feature.
  * So you must always return all requested sessions on your fetch responses if this flag is set.
  *
- *CSS info:
+ * CSS info:
  * - The styles for the shading of each session is determined by the corresponding CSS class in the form of "stx_market_session."+session_name (Example: `stx_market_session.pre`)
  * - The divider line is determined by the CSS class "stx_market_session.divider".
  *
@@ -798,21 +806,21 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * @example
  * // Call this only once to initialize the market sessions display manager.
  * new CIQ.ExtendedHours({stx:stxx, filter:true});
-
+ *
  * // By default all sessions are disabled unless explicitly enabled.
  * // This forces the extended hours sessions ["pre","post"] to be enabled when the chart is initially loaded.
  * stxx.extendedHours.prepare(true);
-
+ *
  * // Now display your chart.
  * stxx.loadChart(stxx.chart.symbol, {}, function() {});
-
+ *
  * @example
  * // Once your chart is displayed, you can call this from any UI interface to turn on extended hours.
  * stx.extendedHours.set(true);
-
+ *
  * // Or call this from any UI interface to turn off extended hours.
  * stx.extendedHours.set(false);
-
+ *
  * @example
  * // CSS entries for a session divider and sessions named "pre" and "post".
  * .stx_market_session.divider {
@@ -1049,6 +1057,7 @@ CIQ.ExtendedHours =
 
 let __js_addons_fullScreen_ = (_exports) => {
 
+
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -1135,8 +1144,7 @@ CIQ.FullScreen =
 		// Append/remove full-screen class to context or body and update button state
 		this.fullScreenRender = function () {
 			var containerElement = null;
-			containerElement = CIQ.findClosestParent(
-				this.stx.container,
+			containerElement = this.stx.container.closest(
 				"*[cq-context], cq-context, body"
 			);
 			if (containerElement) {
@@ -1202,6 +1210,7 @@ CIQ.FullScreen =
 
 let __js_addons_inactivityTimer_ = (_exports) => {
 
+
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -1264,21 +1273,29 @@ CIQ.InactivityTimer =
 			}
 			if (this.sleepCB) this.sleepCB();
 		};
-		$(document).on(
-			"mousemove mousedown touchstart touchmove pointerdown pointermove keydown wheel",
-			$("body"),
-			(function (self) {
-				return function (e) {
-					self.wakeChart();
-				};
-			})(this)
-		);
+
+		var self = this;
+		[
+			"mousemove",
+			"mousedown",
+			"touchstart",
+			"touchmove",
+			"pointerdown",
+			"pointermove",
+			"keydown",
+			"wheel"
+		].forEach(function (ev) {
+			document.body.addEventListener(ev, function (e) {
+				self.wakeChart();
+			});
+		});
 		this.wakeChart();
 	};
 
 };
 
 let __js_addons_outliers_ = (_exports) => {
+
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -2154,9 +2171,16 @@ CIQ.Outliers =
 		};
 	};
 
+/**
+ * CIQ.Marker interface placeholder to be augmented in *standard.js* with properties.
+ *
+ * @tsinterface CIQ~Marker
+ */
+
 };
 
 let __js_addons_plotComplementer_ = (_exports) => {
+
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -2337,21 +2361,27 @@ CIQ.PlotComplementer =
 		/**
 		 * Sets a quote feed for the `PlotComplementer`.
 		 *
-		 * Automatically called when a quote feed is provided in the constructor argument. If a quote feed or `behavior` object is not
-		 * specified in `params`, this function returns without doing anything.
+		 * Automatically called when a quote feed is provided in the constructor argument. If a
+		 * quote feed or `behavior` object is not specified in `params`, this function returns
+		 * without doing anything.
 		 *
-		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy any quote requests for any series created
-		 * 					by the add-on. This quote feed is like any time series quote feed object. See the
-		 * 					[Data Integration Overview]{@tutorial DataIntegrationOverview}.
-		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter list. This object is like any `behavior`
-		 * 					object associated with a quote feed. See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on
-		 * 					`behavior` objects.
-		 * @param {function} [params.filter] Filters the quote feed supplied in this parameter list. The filter function takes as an
-		 * 					argument an object typically containing `symbolObject`, `symbol`, and `interval` properties. The properties
-		 * 					associate the `PlotComplementer` with an instrument. If the `filter` function returns true, the
-		 * 					`PlotComplementer` quote feed is used for the instrument.
-		 * 					<p>This `filter` function is like the `filter` in basic quote feeds.
-		 * 					See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on quote feed `filter` functions.</p>
+		 * @param {object} params Configuration parameters.
+		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy
+		 * 		any quote requests for any series created by the add-on. This quote feed is like
+		 * 		any time series quote feed object. See the
+		 * 		[Data Integration Overview]{@tutorial DataIntegrationOverview}.
+		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter
+		 * 		list. This object is like any `behavior` object associated with a quote feed.
+		 * 		See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on `behavior`
+		 * 		objects.
+		 * @param {function} [params.filter] Filters the quote feed supplied in this parameter
+		 * 		list. The filter function takes as an argument an object typically containing
+		 * 		`symbolObject`, `symbol`, and `interval` properties. The properties associate the
+		 * 		`PlotComplementer` with an instrument. If the `filter` function returns true, the
+		 * 		`PlotComplementer` quote feed is used for the instrument.
+		 * 		<p>This `filter` function is like the `filter` in basic quote feeds.
+		 * 		See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on quote feed
+		 * 		`filter` functions.</p>
 		 * @alias setQuoteFeed
 		 * @memberof CIQ.PlotComplementer.prototype
 		 * @since 7.3.0
@@ -2377,6 +2407,7 @@ CIQ.PlotComplementer =
 
 let __js_addons_rangeSlider_ = (_exports) => {
 
+
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
@@ -2386,7 +2417,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  *
  * This allows the `dataSegment` to be selectable as a portion of the dataset.
  *
- * Requires *js/addOns.js* and jQuery.
+ * Requires *js/addOns.js*.
  *
  * It also requires additional CSS.
  *
@@ -2447,7 +2478,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * @param {CIQ.ChartEngine} [params.stx] The chart object.
  * @param {number} [params.height=95] Height of range slider panel.
  * @param {object} [params.yAxis] Optional yAxis parameters.
- * @param {number} [params.chartContainer=stxx.container] jQuery handle to the main chart
+ * @param {number} [params.chartContainer=stxx.container] Handle to the main chart
  * 		container.
  * @param {string} [params.menuContextClass] A CSS class name used to query the menu DOM element
  * 		that contains the UI control for the range slider add-on. In a multi-chart document, the
@@ -2498,22 +2529,29 @@ CIQ.RangeSlider =
 	function (params) {
 		var stx = params.stx;
 		stx.slider = this;
-		var sliderHeight = params.height ? params.height : 95;
+		var sliderHeight = params.height ? params.height : "95px";
 		var chartContainer = params.chartContainer
-			? $(params.chartContainer)
-			: $(params.stx.container);
+			? params.chartContainer
+			: params.stx.container;
 
-		var ciqSlider = $('<div class="ciq-chart"></div>');
-		var sliderContainer = $('<div class="chartContainer"></div>');
-		ciqSlider.insertAfter(chartContainer.parent()).append(sliderContainer);
-		ciqSlider
-			.css("height", sliderHeight + "px")
-			.css("padding-top", "5px")
-			.hide();
-		sliderContainer.css("height", "100%");
-		sliderContainer.prop("dimensionlessCanvas", true);
+		var ciqSlider = document.createElement("div");
+		ciqSlider.className = "ciq-chart";
+		var sliderContainer = document.createElement("div");
+		sliderContainer.className = "chartContainer";
+		ciqSlider.appendChild(sliderContainer);
+		chartContainer.parentElement.parentElement.insertBefore(
+			ciqSlider,
+			chartContainer.parentElement.nextSibling
+		);
+		Object.assign(ciqSlider.style, {
+			height: sliderHeight,
+			paddingTop: "5px",
+			display: "none"
+		});
+		sliderContainer.style.height = "100%";
+		sliderContainer.dimensionlessCanvas = true;
 		var self = (this.slider = new CIQ.ChartEngine({
-			container: sliderContainer[0],
+			container: sliderContainer,
 			preferences: { labels: false, whitespace: 0 }
 		}));
 		self.xaxisHeight = 30;
@@ -2592,9 +2630,9 @@ CIQ.RangeSlider =
 				stx.changeOccurred("layout");
 				return;
 			}
-			ciqSlider[on ? "show" : "hide"]();
+			ciqSlider.style.display = on ? "" : "none";
 			stx.resizeChart();
-			$(window).resize();
+			window.dispatchEvent(new Event("resize"));
 			if (!on) return;
 			self.resizeChart();
 			self.initializeChart();
@@ -2637,7 +2675,7 @@ CIQ.RangeSlider =
 					doDraw = true;
 				}
 			});
-			if (!ciqSlider.is(":visible")) return;
+			if (!CIQ.UI.trulyVisible(ciqSlider)) return;
 			if (doDraw) {
 				self.setMainSeriesRenderer();
 				self.draw();
@@ -2696,7 +2734,7 @@ CIQ.RangeSlider =
 				self.calculateYAxisPositions();
 		};
 		this.drawSlider = function () {
-			if (!ciqSlider.is(":visible")) return;
+			if (!CIQ.UI.trulyVisible(ciqSlider)) return;
 			if (!stx.chart.dataSet || !stx.chart.dataSet.length) return;
 			var style = this.style;
 			if (!style)
@@ -2791,7 +2829,7 @@ CIQ.RangeSlider =
 			this.slider.copyData(this.chart);
 		});
 		stx.append("draw", function () {
-			if (!ciqSlider.is(":visible")) return;
+			if (!CIQ.UI.trulyVisible(ciqSlider)) return;
 			if (!self.chart.dataSet) return;
 			this.slider.adjustRange(this.chart);
 			this.slider.calculateYAxisPosition();
@@ -2799,96 +2837,120 @@ CIQ.RangeSlider =
 			this.slider.drawSlider();
 		});
 		stx.prepend("resizeChart", function () {
-			var ciqChart = chartContainer.parent(),
-				chartArea = ciqChart.parent();
-			var heightOffset = ciqChart.height() - chartContainer.height();
-			var totalHeightOfContainers = chartArea.height();
-			chartArea.find(".chartContainer").each(function () {
-				if (this !== chartContainer[0] && $(this).is(":visible"))
-					totalHeightOfContainers -= $(this).parent().outerHeight(true);
+			var ciqChart = chartContainer.parentElement,
+				chartArea = ciqChart.parentElement;
+			var heightOffset =
+				parseFloat(getComputedStyle(ciqChart).height) -
+				parseFloat(getComputedStyle(chartContainer).height);
+			var totalHeightOfContainers = CIQ.elementDimensions(chartArea).height;
+			var chartContainers = chartArea.querySelectorAll(".chartContainer");
+			Array.from(chartContainers).forEach(function (container) {
+				if (container !== chartContainer && CIQ.UI.trulyVisible(container)) {
+					totalHeightOfContainers -= CIQ.elementDimensions(container, {
+						border: 1,
+						padding: 1,
+						margin: 1
+					}).height;
+				}
 			});
-			ciqChart.height(totalHeightOfContainers);
+			ciqChart.style.height = totalHeightOfContainers + "px";
 			if (this.layout.rangeSlider) {
-				ciqSlider.show();
+				ciqSlider.style.display = "";
 				self.resizeChart();
 				self.initializeChart();
 				self.draw();
 				this.slider.drawSlider();
 			} else {
-				ciqSlider.hide();
+				ciqSlider.style.display = "none";
 			}
 		});
-		$(subholder).on("mousedown touchstart pointerdown", function (e) {
-			var start = e.offsetX;
-			if (!start && start !== 0) start = e.originalEvent.layerX;
-			if (!start && start !== 0) return; // wrong event
-			var s = $(self);
-			s.prop("startDrag", start)
-				.prop("startPixelLeft", self.pixelLeft)
-				.prop("startPixelRight", self.pixelRight);
-			var style = stx.slider.style;
-			if (!style)
-				style = stx.slider.style = stx.canvasStyle("stx_range_slider shading");
-			var bw = parseInt(style.borderLeftWidth, 10);
-			start += this.offsetLeft;
-			if (start < self.pixelRight - bw) s.prop("needsLeft", true);
-			if (start > self.pixelLeft + bw) s.prop("needsRight", true);
-			if (CIQ.touchDevice) return;
-			e.target.classList.add("stx-drag-chart");
+		["mousedown", "touchstart", "pointerdown"].forEach(function (ev) {
+			subholder.addEventListener(
+				ev,
+				function (e) {
+					var start = e.offsetX;
+					if (!start && start !== 0) return; // wrong event
+					self.startDrag = start;
+					self.startPixelLeft = self.pixelLeft;
+					self.startPixelRight = self.pixelRight;
+					var style = stx.slider.style;
+					if (!style)
+						style = stx.slider.style = stx.canvasStyle(
+							"stx_range_slider shading"
+						);
+					var bw = parseInt(style.borderLeftWidth, 10);
+					start += this.offsetLeft;
+					if (start < self.pixelRight - bw) self.needsLeft = true;
+					if (start > self.pixelLeft + bw) self.needsRight = true;
+					if (CIQ.touchDevice) return;
+					e.target.classList.add("stx-drag-chart");
+				},
+				{ passive: false }
+			);
 		});
-		$(subholder).on("mouseup mouseout touchend pointerup", function (e) {
-			e.target.classList.remove("stx-drag-chart");
-			var s = $(self);
-			self.container.style.cursor = "ew-resize";
-			s.prop("startDrag", null)
-				.prop("needsLeft", false)
-				.prop("needsRight", false);
+		["mouseup", "mouseout", "touchend", "pointerup"].forEach(function (ev) {
+			subholder.addEventListener(ev, function (e) {
+				e.target.classList.remove("stx-drag-chart");
+				self.container.style.cursor = "ew-resize";
+				self.startDrag = null;
+				self.needsLeft = false;
+				self.needsRight = false;
+			});
 		});
-		$(subholder).on("mousemove touchmove pointermove", function (e) {
-			var s = $(self);
-			var startDrag = s.prop("startDrag");
-			if (!startDrag && startDrag !== 0) return;
-			var touches = e.originalEvent.touches;
-			var movement =
-				touches && touches.length
-					? self.backOutX(touches[0].pageX) - e.target.offsetLeft
-					: e.offsetX;
-			if (!movement && movement !== 0) return; // wrong event
-			self.container.style.cursor = "grab";
-			movement -= startDrag;
-			var tickLeft = self.tickLeft,
-				tickRight = self.tickRight;
-			var startPixelLeft = s.prop("startPixelLeft"),
-				startPixelRight = s.prop("startPixelRight");
-			var needsLeft = s.prop("needsLeft"),
-				needsRight = s.prop("needsRight");
-			if (needsLeft) {
-				if (startPixelLeft + movement < self.chart.left)
-					movement = self.chart.left - startPixelLeft;
-				if (needsRight && startPixelRight + movement >= self.chart.right) {
-					movement = self.chart.right - startPixelRight;
-					if (!self.isHome()) movement += self.layout.candleWidth / 2; // force a right scroll
-				}
-				tickLeft = self.tickFromPixel(startPixelLeft + movement);
-				if (needsRight) tickRight = tickLeft + self.tickRight - self.tickLeft;
-			} else if (needsRight) {
-				tickRight = Math.min(
-					self.tickFromPixel(startPixelRight + movement),
-					stx.chart.dataSet.length - 1
-				);
-			} else return;
+		["mousemove", "touchmove", "pointermove"].forEach(function (ev) {
+			subholder.addEventListener(
+				ev,
+				function (e) {
+					var startDrag = self.startDrag;
+					if (!startDrag && startDrag !== 0) return;
+					var touches = e.originalEvent && e.originalEvent.touches;
+					var movement =
+						touches && touches.length
+							? self.backOutX(touches[0].pageX) - e.target.offsetLeft
+							: e.offsetX;
+					if (!movement && movement !== 0) return; // wrong event
+					self.container.style.cursor = "grab";
+					movement -= startDrag;
+					var tickLeft = self.tickLeft,
+						tickRight = self.tickRight;
+					var startPixelLeft = self.startPixelLeft,
+						startPixelRight = self.startPixelRight;
+					var needsLeft = self.needsLeft,
+						needsRight = self.needsRight;
+					if (needsLeft) {
+						if (startPixelLeft + movement < self.chart.left)
+							movement = self.chart.left - startPixelLeft;
+						if (needsRight && startPixelRight + movement >= self.chart.right) {
+							movement = self.chart.right - startPixelRight;
+							if (!self.isHome()) movement += self.layout.candleWidth / 2; // force a right scroll
+						}
+						tickLeft = self.tickFromPixel(startPixelLeft + movement);
+						if (needsRight)
+							tickRight = tickLeft + self.tickRight - self.tickLeft;
+					} else if (needsRight) {
+						tickRight = Math.min(
+							self.tickFromPixel(startPixelRight + movement),
+							stx.chart.dataSet.length - 1
+						);
+					} else return;
 
-			var newCandleWidth = stx.chart.width / (tickRight - tickLeft + 1);
-			if (tickRight >= tickLeft && newCandleWidth >= stx.minimumCandleWidth) {
-				self.tickLeft = tickLeft;
-				self.tickRight = tickRight;
-				stx.chart.scroll = stx.chart.dataSet.length - tickLeft;
-				if (!needsLeft || !needsRight) {
-					stx.setCandleWidth(newCandleWidth);
-				}
-				stx.micropixels = 0;
-				stx.draw();
-			}
+					var newCandleWidth = stx.chart.width / (tickRight - tickLeft + 1);
+					if (
+						tickRight >= tickLeft &&
+						newCandleWidth >= stx.minimumCandleWidth
+					) {
+						self.tickLeft = tickLeft;
+						self.tickRight = tickRight;
+						stx.chart.scroll = stx.chart.dataSet.length - tickLeft;
+						if (!needsLeft || !needsRight) {
+							stx.setCandleWidth(newCandleWidth);
+						}
+						stx.micropixels = 0;
+						stx.draw();
+					}
+				},
+				{ passive: false }
+			);
 		});
 		this.adjustRange(stx.chart);
 		this.copyData(stx.chart);
@@ -2896,7 +2958,966 @@ CIQ.RangeSlider =
 
 };
 
+let __js_addons_tableView_ = (_exports) => {
+
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Creates an overlay that displays the visible chart data segment as a table.
+ *
+ * The overlay includes controls that enable users to copy the table data to the clipboard or
+ * download the data as a character-separated values (CSV) file. See
+ * {@link TableViewBuilder.dataToCsv} for the default separator character.
+ *
+ * The table view can be opened using the Alt+K keystroke combination and closed using the Escape
+ * key (see the `tableView` action in `hotkeyConfig.hotkeys` in *js/defaultConfiguration.js*).
+ *
+ * @param {object} params Configuration parameters.
+ * @param {CIQ.ChartEngine} params.stx A reference to the chart engine that contains the chart for
+ * 		which the table view is created.
+ * @param {string} [params.minColumnWidth="84px"] The minimum width (including units) of the
+ * 		table columns. **Note:** The units can be any CSS unit acceptable by the CSS `calc`
+ * 		function.
+ * @param {number} [params.coverUIMaxWidth=400] The chart width (in pixels) below which the table
+ * 		view covers the entire chart, including user interface elements (symbol input field,
+ * 		menus, etc.). For example, if the value of this parameter is 1000, the table view covers
+ * 		the entire chart area if the chart width is <= 999 pixels.
+ * @param {string} [params.coverContainer] A CSS selector used to obtain the DOM element that
+ * 		ultimately contains the table view; for example, ".chartContainer".
+ * @param {boolean} [params.usePreviousCloseForChange=true] Indicates whether the closing price of
+ * 		the previous data point should be used instead of the opening price of the current data
+ * 		point to determine the amount of change for the current data point; that is,
+ * 		(current close - previous close) or (current close - current open).
+ *
+ * @constructor
+ * @name CIQ.TableView
+ * @since 8.1.0
+ *
+ * @example
+ * new CIQ.TableView({stx:stxx});
+ */
+CIQ.TableView =
+	CIQ.TableView ||
+	function ({
+		stx,
+		minColumnWidth = "84px",
+		coverUIMaxWidth = 400,
+		coverContainer,
+		usePreviousCloseForChange = true
+	} = {}) {
+		if (!stx) {
+			console.warn("The TableView addon requires an stx parameter");
+			return;
+		}
+
+		/**
+		 * The chart engine instance that contains the chart for which the table view is created.
+		 *
+		 * @type CIQ.ChartEngine
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.stx = stx;
+		/**
+		 * Toggle to display and hide additional table view columns, such as % Change and Volume.
+		 *
+		 * **Note:** Data in the additional columns might not be present in the chart view because
+		 * the data is calculated (for example, % Change) or is not part of the standard chart
+		 * display (for example, Volume &mdash; which can be displayed with the
+		 * [Volume Chart]{@link CIQ.Studies.createVolumeChart} study).
+		 *
+		 * @type boolean
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.viewAdditionalColumns = false;
+		/**
+		 * Minimum width of the table view columns, including units. The units can be any CSS
+		 * unit acceptable by the CSS `calc` function.
+		 *
+		 * @type string
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.minColumnWidth = minColumnWidth;
+		/**
+		 * The chart width in pixels below which the table view covers the entire chart, including
+		 * user interface elements, such as the menus and footer.
+		 *
+		 * @type number
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.coverUIMaxWidth = coverUIMaxWidth;
+		/**
+		 * A CSS selector used to obtain the DOM element that hosts the table view.
+		 *
+		 * @type string
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.coverContainer = coverContainer;
+		/**
+		 * If true, the closing price of the previous data point is used instead of the opening
+		 * price of the current data point to determine the amount of change for the current data
+		 * point.
+		 *
+		 * @type boolean
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.usePreviousCloseForChange = usePreviousCloseForChange;
+		/**
+		 * A reference to the {@link TableViewBuilder} namespace for access to the namespace
+		 * static methods.
+		 *
+		 * @type TableViewBuilder
+		 * @memberof CIQ.TableView
+		 * @since 8.1.0
+		 */
+		this.builder = TableViewBuilder;
+
+		this.listeners = [];
+
+		stx.tableView = this;
+
+		if (CIQ.UI) {
+			CIQ.UI.observeProperty("uiContext", stx, ({ value: uiContext }) => {
+				if (!uiContext) return;
+
+				setTimeout(() => {
+					this.subscribeToChanges(uiContext);
+
+					// Updated hotkey alias if available to action
+					const tableViewKeyEntry = CIQ.getFromNS(
+						uiContext.config,
+						"hotkeyConfig.hotkeys",
+						[]
+					).find(({ action }) => action === "tableView");
+					if (tableViewKeyEntry) {
+						tableViewKeyEntry.action = () => {
+							const { tableView } = document.body.keystrokeHub.context.stx;
+							if (tableView) {
+								tableView.toggle();
+								return true;
+							}
+						};
+					}
+				});
+			});
+		}
+	};
+
+/**
+ * Displays the table view.
+ *
+ * @param {object} [params] Configuration parameters.
+ * @param {object} [params.config] Table column information.
+ * @param {function} [params.onClose] Callback function to execute on closing the table view. The
+ * 		callback enables synchronization of state in the application when the table view is
+ * 		closed.
+ *
+ * @memberof CIQ.TableView
+ * @since 8.1.0
+ */
+CIQ.TableView.prototype.open = function (params) {
+	if (params) {
+		this.params = params;
+	}
+	const { config = {}, onClose } = this.params || {};
+	if (this.view) {
+		this.close(false);
+	}
+	config.minColumnWidth = this.minColumnWidth;
+	config.coverUIMaxWidth = this.coverUIMaxWidth;
+	config.coverContainer = this.coverContainer;
+	this.onClose = onClose;
+	this.view = this.builder.createTable(this.stx, config);
+	if (!this.view) return;
+	if (CIQ.I18N) CIQ.I18N.translateUI(null, this.view);
+	const { stx } = this;
+	const close = this.close.bind(this);
+
+	setTimeout(() => (this.removeCloseListener = getCloseListener(this)));
+
+	const scrollbarStyling = CIQ.getFromNS(
+		stx,
+		"uiContext.config.scrollbarStyling"
+	);
+	if (scrollbarStyling) {
+		scrollbarStyling.refresh(this.view.querySelector("tbody"));
+		scrollbarStyling.refresh(
+			this.view.querySelector(".ciq-data-table-wrapper"),
+			{ suppressScrollY: true }
+		);
+	}
+
+	function getCloseListener(self) {
+		const contextNode = stx.uiContext.topNode;
+		const withinTable = (el) => el.closest(".ciq-data-table-container");
+
+		const closeHandler = ({ target }) => !withinTable(target) && close();
+		contextNode.addEventListener("click", closeHandler);
+		const handleKeydown = (e) => {
+			if (e.code === "Escape") {
+				const { tableView } = document.body.keystrokeHub.context.stx;
+				if (tableView) {
+					tableView.close();
+					e.preventDefault();
+				}
+			}
+		};
+		document.body.addEventListener("keydown", handleKeydown);
+
+		// Use modal functionality available in menu
+		const uiManager = CIQ.getFn("UI.getUIManager")();
+		if (uiManager) {
+			// Menu item requires show and hide providing no-op functions
+			self.view.show = self.view.hide = function () {};
+			uiManager.openMenu(self.view, {});
+		}
+		return () => {
+			contextNode.removeEventListener("click", closeHandler);
+			document.body.removeEventListener("keydown", handleKeydown);
+			if (uiManager) uiManager.closeMenu(self.view);
+		};
+	}
+};
+
+/**
+ * Closes the table view.
+ *
+ * @param {boolean} [notify=true] Indicates whether the `onClose` callback function is set (see
+ * 		[open]{@link CIQ.TableView#open}).
+ *
+ * @memberof CIQ.TableView
+ * @since 8.1.0
+ */
+CIQ.TableView.prototype.close = function (notify = true) {
+	if (this.view) {
+		this.view.remove();
+		this.view = null;
+	}
+	if (notify && this.onClose) {
+		this.onClose();
+	}
+
+	if (this.removeCloseListener) {
+		this.removeCloseListener();
+		this.removeCloseListener = null;
+	}
+};
+
+/**
+ * Opens the table view if it is closed. Closes the table view if it is open.
+ *
+ * @memberof CIQ.TableView
+ * @since 8.1.0
+ */
+CIQ.TableView.prototype.toggle = function () {
+	this[this.view ? "close" : "open"]();
+};
+
+/**
+ * Subscribes to changes in the table view component communication channel, which enables other
+ * components to open and close the table view.
+ *
+ * @param {CIQ.UI.Context} uiContext The user interface context of the table view. Provides the
+ * 		communication channel path that identifies the table view channel.
+ * @param {string} [channelPath] Specifies the channel path if the path is not available in the
+ * 		context configuration provided by `uiContext`.
+ *
+ * @memberof CIQ.TableView
+ * @since 8.1.0
+ */
+CIQ.TableView.prototype.subscribeToChanges = function (
+	uiContext,
+	channelPath = "channels.tableView"
+) {
+	const { channelSubscribe, channelWrite } = CIQ.UI.BaseComponent.prototype;
+	const { channels: { tableView = channelPath } = {} } = uiContext.config || {};
+	const { stx } = this;
+
+	channelSubscribe(
+		tableView,
+		(value) => {
+			if (value) {
+				stx.tableView.open({
+					onClose: () => {
+						channelWrite(tableView, false, stx);
+					}
+				});
+			} else {
+				stx.tableView.close();
+			}
+		},
+		stx
+	);
+};
+
+/**
+ * Namespace for {@link CIQ.TableView} creation&ndash;related properties and functions.
+ *
+ * @namespace
+ * @name TableViewBuilder
+ * @since 8.1.0
+ */
+function TableViewBuilder() {}
+
+/**
+ * The column header configuration for the table view.
+ *
+ * Can be used for rearranging the column order, removing columns, and updating labels.
+ *
+ * **Note:** Adding new columns has no effect.
+ *
+ * @type Object.<string, {label: string, cls: string|undefined}>
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.colHeaders = {
+	date: { label: "Date" },
+	open: { label: "Open" },
+	high: { label: "High" },
+	low: { label: "Low" },
+	close: { label: "Close" },
+	pctChange: { label: "% Change", cls: "ciq-extra" },
+	pctChangeVsAvg: { label: "% Change vs Average", cls: "ciq-extra" },
+	volume: { label: "Volume", cls: "ciq-extra" }
+};
+
+/**
+ * Number of decimal places to display for percent formatted columns
+ *
+ * @type number
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.percentDecimalPlaces = 2;
+
+/**
+ * Creates a table view as an HTMLElement overlay over a chart container. The table view displays
+ * a snapshot of the visible chart data segment.
+ *
+ * The overlay contains buttons for copying and saving the table data and for displaying
+ * additional table columns.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart for which
+ * 		the table view is created.
+ * @param {object} [config] Configuration parameters.
+ * @param {function} [config.dateFormatter] Formats table date fields.
+ * @param {function} [config.valueFormatter] Formats table values.
+ * @param {function} [config.volumeFormatter] Formats the table volume field.
+ * @param {function} [config.fileNameFormatter] Formats the name of the file that contains the
+ * 		downloaded table data.
+ * @param {string} [config.minColumnWidth="84px"] The minimum width (including units) of the
+ * 		table columns. **Note:** The units can be any CSS unit acceptable by the CSS `calc`
+ * 		function.
+ * @return {HTMLElement}
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.createTable = function (stx, config = {}) {
+	if (!stx.chart || !stx.chart.dataSegment) return;
+
+	const { builder } = stx.tableView;
+	const {
+		getChartData,
+		dataToHtml,
+		dataToCsv,
+		downloadCsv,
+		getDateFormatter,
+		getValueFormatter,
+		getVolumeFormatter,
+		getFilenameFormatter,
+		getSeriesDataNames,
+		getStudyDataNames,
+		getChartCover
+	} = builder;
+
+	const colHeaders = Object.assign({}, this.colHeaders);
+
+	if (!stx.chart.highLowBars) {
+		delete colHeaders.open;
+		delete colHeaders.high;
+		delete colHeaders.low;
+	}
+
+	if (!stx.tableView.viewAdditionalColumns) {
+		for (let key in colHeaders) {
+			if (colHeaders[key].cls) {
+				delete colHeaders[key];
+			}
+		}
+	}
+
+	const labels = Object.values(colHeaders).map((item) => item.label);
+
+	const seriesNames = getSeriesDataNames(stx);
+	seriesNames.forEach((item) => (colHeaders[item] = { label: item }));
+
+	const studyNames = getStudyDataNames(stx);
+	studyNames.forEach((item) => {
+		if (!labels.includes(item)) colHeaders[item] = { label: item };
+	});
+
+	const additionalDataFields = seriesNames.concat(studyNames);
+
+	const {
+		dateFormatter = getDateFormatter(stx),
+		valueFormatter = getValueFormatter(stx),
+		percentFormatter = getValueFormatter(stx, this.percentDecimalPlaces),
+		volumeFormatter = getVolumeFormatter(stx),
+		fileNameFormatter = getFilenameFormatter(stx),
+		minColumnWidth = "84px"
+	} = config;
+
+	const arr = getChartData(stx, {
+		dateFormatter,
+		valueFormatter,
+		percentFormatter,
+		volumeFormatter,
+		additionalDataFields
+	});
+
+	const cover = getChartCover(stx, config);
+	const { symbolDisplay, symbol } = stx.chart;
+
+	const toolbar = builder.getCoverToolbar({
+		symbol: symbolDisplay || symbol,
+		viewAdditionalColumns: stx.tableView.viewAdditionalColumns,
+		copyFn,
+		downloadFn,
+		toggleAdditionalColumnsFn: () => {
+			const { tableView } = stx;
+			tableView.viewAdditionalColumns = !tableView.viewAdditionalColumns;
+			tableView.open();
+		},
+		closeFn: () => stx.tableView.close()
+	});
+	cover.appendChild(toolbar);
+	const htmlTable = dataToHtml(arr, { colHeaders, minColumnWidth });
+	cover.appendChild(htmlTable);
+
+	return cover;
+
+	function copyFn() {
+		const contentEl = document.createElement("textArea");
+		document.body.appendChild(contentEl);
+		contentEl.textContent = dataToCsv(arr, { colHeaders });
+		contentEl.select();
+		document.execCommand("copy");
+		contentEl.remove();
+	}
+
+	function downloadFn() {
+		const csvData = dataToCsv(arr, { colHeaders });
+		const fileName = fileNameFormatter(csvData);
+		downloadCsv(csvData, fileName);
+	}
+};
+
+/**
+ * Creates an HTML table containing the chart data and column headers (see
+ * {@link TableViewBuilder.colHeaders}).
+ *
+ * @param {object[]} data The chart data.
+ * @param {object} params Configuration parameters.
+ * @param {Object.<string, {label: string, cls: string|undefined}>} params.colHeaders The column
+ * 		headers as defined in {@link TableViewBuilder.colHeaders}.
+ * @param {string} [params.minColumnWidth] The minimum width of the table columns, including units.
+ * 		**Note:** The units can be any CSS unit acceptable by the CSS `calc` function.
+ * @return {HTMLElement} A table containing the chart data and column headers.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.dataToHtml = function (data, { colHeaders, minColumnWidth }) {
+	const keyLength = Object.keys(colHeaders).length;
+	const colWidth = `calc((100% - ${10 + keyLength * 4}px ) / ${keyLength})`;
+	const tableHeader = Object.entries(colHeaders).map(([, { label }], index) => {
+		return `<th
+			scope="col"
+			style="width: ${colWidth};"
+			>${label.replace("(", "  (")}</th>`;
+	});
+
+	const tableRows = data.map((row) => {
+		const htmlRow = Object.keys(colHeaders)
+			.map((key, index) => {
+				const value = row[key];
+				return index === 0
+					? `<th scope="row"
+								style="width: ${colWidth}"
+								>${value}</th>`
+					: `<td style="width: ${colWidth}">${value}</td>`;
+			})
+			.join("");
+		return `<tr>${htmlRow}</tr>`;
+	});
+
+	const tableWrapper = document.createElement("div");
+	tableWrapper.classList.add("ciq-data-table-wrapper");
+	const minWidth = minColumnWidth
+		? `calc(${keyLength} * ${minColumnWidth})`
+		: "";
+	tableWrapper.innerHTML = `
+		<table class="header-fixed"	${minWidth ? `style="min-width: ${minWidth}"` : ""}>
+		<thead>${tableHeader.join("")}</thead>
+		<tbody>${tableRows.join("")}</tbody>
+		</table>`;
+	return tableWrapper;
+};
+
+/**
+ * Tranforms the chart data into a character-separated values (CSV) file, including column headers.
+ *
+ * @param {object[]} data The chart data.
+ * @param {object} params Configuration parameters.
+ * @param {Object.<string, {label: string, cls: string|undefined}>} params.colHeaders The column
+ * 		headers as defined in {@link TableViewBuilder.colHeaders}.
+ * @param {string} params.colSeparator="\t" The column separator for the CSV format.
+ * @return {string} The column headers and chart data as a CSV file.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.dataToCsv = function (
+	data,
+	{ colHeaders, colSeparator = "\t" }
+) {
+	const tableHeader = Object.entries(colHeaders)
+		.map(([, { label }]) => `"${label}"`)
+		.join(colSeparator);
+
+	const tableRows = data.map((row) => {
+		return Object.keys(colHeaders)
+			.map((key) => `"${row[key]}"`)
+			.join(colSeparator);
+	});
+
+	return `${tableHeader}\n${tableRows.join("\n")}`;
+};
+
+/**
+ * Downloads the table view as a character-separated values (CSV) file.
+ *
+ * @param {string} csvString The table view in the form of character-separated data.
+ * @param {string} filename The name given to the download file.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.downloadCsv = function (csvString, filename = "filename") {
+	const blob = new Blob([csvString], { type: "text/csv;charset=utf-8;" });
+
+	const a = document.createElement("a");
+	a.href = window.URL.createObjectURL(blob, { type: "text/plain" });
+	a.download = `${filename}.csv`;
+	a.style.display = "none";
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+};
+
+/**
+ * Extracts OHLC (open, high, low, close) data from the chart.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart from which
+ * 		the data is extracted.
+ * @param {object} params Configuration parameters.
+ * @param {function} [params.dateFormatter] Formats date fields.
+ * @param {function} [params.valueFormatter] Formats OHLC and other values.
+ * @param {function} [params.percentFormatter] Formats percent fields.
+ * @param {function} [params.volumeFormatter] Formats the volume field.
+ * @param {string[]} [params.additionalDataFields] An array of additional data field names for
+ * 		comparison series and study data.
+ * @return {object[]} The formatted chart data.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getChartData = function (
+	stx,
+	{
+		dateFormatter,
+		valueFormatter,
+		percentFormatter,
+		volumeFormatter,
+		additionalDataFields
+	}
+) {
+	const data = stx.chart.dataSegment;
+	const { usePreviousCloseForChange } = stx.tableView;
+	let out = [];
+	let length = 0;
+	const avgPctChange =
+		data.reduce((acc, { Close, iqPrevClose, Open }) => {
+			const Base = usePreviousCloseForChange ? iqPrevClose : Open;
+			if (
+				typeof Close === "undefined" ||
+				Number.isNaN(Close) ||
+				typeof Base === "undefined" ||
+				Number.isNaN(Base)
+			) {
+				return acc;
+			}
+			length++;
+			return acc + (Close - Base) / Base;
+		}, 0) / length;
+	data.forEach((item, index) => {
+		const {
+			DT,
+			displayDate,
+			High,
+			Low,
+			Open,
+			Close,
+			iqPrevClose,
+			Volume
+		} = item;
+		const Base = usePreviousCloseForChange ? iqPrevClose : Open;
+		const pctChange = (Close - Base) / Base;
+		const date =
+			displayDate ||
+			(stx.displayZone
+				? CIQ.convertTimeZone(DT, stx.dataZone, stx.displayZone)
+				: DT);
+		const obj = {
+			DT,
+			date: dateFormatter(date),
+			open: valueFormatter(Open),
+			close: valueFormatter(Close),
+			change: valueFormatter(Close - Base),
+			pctChange: percentFormatter(pctChange * 100),
+			pctChangeVsAvg: percentFormatter((pctChange - avgPctChange) * 100),
+			high: valueFormatter(High),
+			low: valueFormatter(Low),
+			volume: volumeFormatter(Volume)
+		};
+		additionalDataFields.forEach((fieldName) => {
+			let value = item[fieldName];
+			if (value == null) {
+				obj[fieldName] = "";
+				return;
+			}
+			if (typeof value === "object") {
+				value = value.Close;
+			}
+			obj[fieldName] = valueFormatter(value);
+		});
+
+		out.push(obj);
+	});
+	out.sort((a, b) => b.DT - a.DT);
+	return out;
+};
+
+/**
+ * Creates a function that formats table view date fields.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart for which
+ * 		the date fields are formatted.
+ * @return {function} A date formatter.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getDateFormatter = function (stx) {
+	return (dt, panel) => {
+		if (!dt) return "";
+
+		return CIQ.displayableDate(stx, stx.chart, dt);
+	};
+};
+
+/**
+ * Creates a function that formats table view value fields.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart for which
+ * 		the value fields are formatted.
+ * @param {number} [decimalPlaces] Number of decimal places to use, overrides any auto-detection of decimal places in data.
+ * @return {function} A value formatter.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getValueFormatter = function (stx, decimalPlaces) {
+	const {
+		chart: { panel, yAxis },
+		layout: { chartScale }
+	} = stx;
+	let formatValue;
+
+	if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) {
+		formatValue = (value) =>
+			yAxis.originalPriceFormatter.func(stx, panel, value, decimalPlaces);
+	} else if (
+		yAxis.priceFormatter &&
+		chartScale != "percent" &&
+		chartScale != "relative"
+	) {
+		formatValue = (value) =>
+			yAxis.priceFormatter(stx, panel, value, decimalPlaces);
+	} else {
+		formatValue = (value) => stx.formatYAxisPrice(value, panel, decimalPlaces);
+	}
+
+	return (value) => formatValue(value).replace(/^-*0\.0*$/, "0"); // display 0.00 as 0
+};
+
+/**
+ * Creates a function that formats the table view volume field.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart for which
+ * 		the volume field is formatted.
+ * @return {function} A volume field formatter.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getVolumeFormatter = function (stx) {
+	return (num) => {
+		if (num == null) return "";
+
+		if (stx.internationalizer) {
+			return stx.internationalizer.priceFormatters[0].format(num);
+		}
+
+		const num_parts = num.toString().split(".");
+		num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return num_parts[0];
+	};
+};
+
+/**
+ * Creates a function that creates and formats a file name from the chart symbol and table view
+ * data.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart whose
+ * 		symbol and data is included in the file name.
+ * @return {function} A function that creates and formats a file name.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getFilenameFormatter = function (stx) {
+	return (csvData) => {
+		const symbol = stx.chart.symbolDisplay || stx.chart.symbol;
+		let firstDate, lastDate;
+		if (csvData) {
+			const rows = csvData.split("\n");
+			if (rows.length > 1) {
+				[, firstDate = ""] = rows[1].match(/^"([^"]*)"/) || [];
+				[, lastDate = ""] = rows[rows.length - 1].match(/^"([^"]*)"/) || [];
+				firstDate = firstDate.replace(/:/g, ".").replace(/\//g, "-");
+				lastDate = lastDate.replace(/:/g, ".").replace(/\//g, "-");
+			}
+		}
+		return `${symbol}${firstDate ? ` (${firstDate} _ ${lastDate})` : ""}`;
+	};
+};
+
+/**
+ * Creates and attaches an HTML container element to the DOM. The element covers the chart and
+ * contains the table view.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart over which
+ * 		the cover is placed.
+ * @param {object} params Configuration parameters.
+ * @param {number} [params.coverUIMaxWidth] The width of the chart (in pixels) below which the
+ * 		cover element overlays the entire chart, including user interface elements.
+ * @param {string} [params.coverContainer] A CSS selector used to obtain the DOM element that
+ * 		serves as the parent element of the cover element; for example, ".chartContainer".
+ * @return {HTMLElement} The cover element.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getChartCover = function (
+	stx,
+	{ coverUIMaxWidth, coverContainer }
+) {
+	const parentElement =
+		(coverContainer && document.querySelector(coverContainer)) ||
+		(stx.uiContext && stx.container.offsetWidth < coverUIMaxWidth
+			? stx.uiContext.topNode
+			: stx.container.parentElement.parentElement);
+
+	const cover = document.createElement("div");
+	Object.assign(cover.style, { top: 0, left: 0, right: 0, bottom: 0 });
+
+	cover.classList.add("ciq-data-table-container");
+	parentElement.appendChild(cover);
+	return cover;
+};
+
+/**
+ * Creates a toolbar containing the table title and controls used to copy and download the table
+ * data and add additional table columns.
+ *
+ * @param {object} params Function parameters.
+ * @param {string} params.symbol An instrument symbol, which is used as the table title in the
+ * 		toolbar. Should be the symbol of the chart main series.
+ * @param {boolean} params.viewAdditionalColumns Toggle that specifies whether the label for the
+ * 		additional columns button should indicate that additional columns will be shown or hidden.
+ * 		If this parameter is true, the label indicates additional table columns will be shown; if
+ * 		false, hidden.
+ * @param {function} [params.copyFn] Event handler for selection of the copy control.
+ * @param {function} [params.downloadFn] Event handler for selection of the download control.
+ * @param {function} [params.toggleAdditionalColumnsFn] Event handler for selection of the
+ * 		additional column control.
+ * @param {function} [params.closeFn] Event handler for selection of the table view close (X)
+ * 		control.
+ * @return {HTMLElement} The toolbar, containing title and controls.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getCoverToolbar = function ({
+	symbol,
+	viewAdditionalColumns,
+	copyFn,
+	downloadFn,
+	toggleAdditionalColumnsFn,
+	closeFn
+}) {
+	const toolBar = document.createElement("div");
+	toolBar.classList.add("ciq-data-table-toolbar");
+	toolBar.innerHTML = `
+		<div class="ciq-data-table-title"></div>
+		<button class="ciq-data-table-copy">${this.copyLabel}</button>
+		<button class="ciq-data-table-download">${this.downloadLabel}</button>
+		<button class="ciq-data-table-additionalColumns">${this.getAdditionalColumnLabel(
+			viewAdditionalColumns
+		)}</button>
+		<cq-close />
+	`;
+	const titleEl = toolBar.querySelector(".ciq-data-table-title");
+	titleEl.textContent = symbol;
+
+	const btnCopy = toolBar.querySelector(".ciq-data-table-copy");
+	if (copyFn) {
+		btnCopy.addEventListener("click", copyFn);
+	} else {
+		btnCopy.style.display = "none";
+	}
+
+	const btnDownload = toolBar.querySelector(".ciq-data-table-download");
+	if (downloadFn) {
+		btnDownload.addEventListener("click", downloadFn);
+	} else {
+		btnDownload.style.display = "none";
+	}
+
+	const btnAdditionalColumns = toolBar.querySelector(
+		".ciq-data-table-additionalColumns"
+	);
+	if (toggleAdditionalColumnsFn) {
+		btnAdditionalColumns.addEventListener("click", toggleAdditionalColumnsFn);
+	} else {
+		btnAdditionalColumns.style.display = "none";
+	}
+
+	toolBar.close = closeFn;
+
+	return toolBar;
+};
+
+/**
+ * Label for the copy button on the table view toolbar.
+ *
+ * @type string
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.copyLabel = "Copy";
+
+/**
+ * Label for the download button on the table view toolbar.
+ *
+ * @type string
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.downloadLabel = "Download";
+
+/**
+ * Gets the label of the additional columns button on the table view toolbar.
+ *
+ * @param {boolean} viewingAdditionalColumns If this parameter is true, the label should indicate
+ * 		additional table columns will be shown; if false, hidden.
+ * @return {string} The button label.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getAdditionalColumnLabel = function (
+	viewingAdditionalColumns
+) {
+	return `<span>${
+		viewingAdditionalColumns ? "- " : "+ "
+	}</span>Additional columns`;
+};
+
+/**
+ * Obtains the names of all studies that have data in the chart's visible data segment.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the chart studies.
+ * @return {string[]} The names of all studies that are in the visible portion of the chart.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getStudyDataNames = function (stx) {
+	return Object.values(stx.layout.studies || {})
+		.map(getDataNames)
+		.reduce((acc, item) => acc.concat(item), []);
+
+	function getDataNames(study) {
+		return Object.keys(study.outputMap).filter(hasData);
+	}
+
+	function hasData(name) {
+		return stx.chart.dataSegment.some((data) => data[name]);
+	}
+};
+
+/**
+ * Obtains the symbols of all comparison series that have data in the chart's visible data
+ * segment.
+ *
+ * @param {CIQ.ChartEngine} stx A reference to the chart engine that contains the comparison
+ * 		series.
+ * @return {string[]} The names (symbols) of all comparison series that are in the visible
+ * 		portion of the chart.
+ *
+ * @memberof TableViewBuilder
+ * @since 8.1.0
+ */
+TableViewBuilder.getSeriesDataNames = function (stx) {
+	return Object.values(stx.chart.seriesRenderers || {})
+		.filter((item) => item.params.name !== "_main_series")
+		.map((item) => {
+			return item.seriesParams.map(({ symbol }) => symbol);
+		})
+		.reduce((acc, item) => acc.concat(item), []);
+};
+
+/**
+ * CIQ.UI.Context interface placeholder to be augmented in *componentUI.js* with properties.
+ *
+ * @tsinterface CIQ.UI~Context
+ */
+
+};
+
 let __js_addons_tooltip_ = (_exports) => {
+
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -2915,7 +3936,7 @@ if (!CIQ.Marker) {
 	 *
 	 * To toggle cross-hairs use <a href="CIQ.ChartEngine.html#layout%5B%60crosshair%60%5D">CIQ.ChartEngine.layout.crosshair</a>. Set to `true` or `false` as needed.
 	 *
-	 * Requires `jquery` and `addOns.js`; as well as `markers.js` or the bundle `standard.js`.
+	 * Requires `addOns.js`; as well as `markers.js` or the bundle `standard.js`.
 	 *
 	 * There can be only one CIQ.Tooltip per chart.
 	 *
@@ -2954,10 +3975,9 @@ if (!CIQ.Marker) {
 	 * To do this, copy the entire CIQ.Tooltip code (found in addOns.js) and make the changes to your custom version. Load your custom version instead.
 	 * Specifically, look for the following code in renderFunction() that pushes out the text for each study field:
 	 * ```
-	 * $("<stx-hu-tooltip-field auto></stx-hu-tooltip-field>")
-	 * .append($("<stx-hu-tooltip-field-name>"+this.translateIf(fieldName)+"</stx-hu-tooltip-field-name>"))
-	 * .append($("<stx-hu-tooltip-field-value>"+fieldValue+"</stx-hu-tooltip-field-value>"))
-	 * .appendTo(node);
+	 * var newFieldName = document.createElement("stx-hu-tooltip-field-name");
+	 * newFieldName.innerHTML=this.translateIf(fieldName);
+	 * newField.appendChild(newFieldName);
 	 * ```
 	 * Replace `fieldName` with anything you want to use as the field title and push that instead.
 	 *
@@ -3060,11 +4080,10 @@ if (!CIQ.Marker) {
 			var showInterpolation = tooltipParams.interpolation;
 			var useDataZone = tooltipParams.useDataZone;
 
-			var node = $(stx.chart.container).find("stx-hu-tooltip")[0];
+			var node = stx.chart.container.querySelector("stx-hu-tooltip");
 			if (!node) {
-				node = $("<stx-hu-tooltip></stx-hu-tooltip>").appendTo(
-					$(stx.chart.container)
-				)[0];
+				node = document.createElement("stx-hu-tooltip");
+				stx.chart.container.appendChild(node);
 			}
 			CIQ.Marker.Tooltip = function (params) {
 				if (!this.className) this.className = "CIQ.Marker.Tooltip";
@@ -3197,9 +4216,17 @@ if (!CIQ.Marker) {
 					bar != this.chart.dataSegment.length - 1
 				)
 					return;
-				var node = $(this.huTooltip.node);
-				node.find("[auto]").remove();
-				node.find("stx-hu-tooltip-field-value").html();
+				var node = this.huTooltip.node;
+				Array.from(node.parentElement.querySelectorAll("[auto]")).forEach(
+					function (i) {
+						i.remove();
+					}
+				);
+				Array.from(
+					node.parentElement.querySelectorAll("stx-hu-tooltip-field-value")
+				).forEach(function (i) {
+					i.innerHTML = "";
+				});
 
 				var panel = this.chart.panel;
 				var yAxis = panel.yAxis;
@@ -3453,44 +4480,45 @@ if (!CIQ.Marker) {
 						} else {
 							fieldValue = dsField;
 						}
-						var dedicatedField = node.find(
+						var dedicatedField = node.querySelector(
 							'stx-hu-tooltip-field[field="' + fieldName + '"]'
 						);
-						if (dedicatedField.length) {
-							dedicatedField
-								.find("stx-hu-tooltip-field-value")
-								.html(fieldValue);
-							var fieldNameField = dedicatedField.find(
+
+						if (dedicatedField) {
+							dedicatedField.querySelector(
+								"stx-hu-tooltip-field-value"
+							).innerHTML = fieldValue;
+							var fieldNameField = dedicatedField.querySelector(
 								"stx-hu-tooltip-field-name"
 							);
-							if (fieldNameField.html() === "")
-								fieldNameField.html(this.translateIf(fieldName));
+							if (fieldNameField.innerHTML === "")
+								fieldNameField.innerHTML = this.translateIf(fieldName);
 						} else {
-							$("<stx-hu-tooltip-field auto></stx-hu-tooltip-field>")
-								.append(
-									$(
-										"<stx-hu-tooltip-field-name>" +
-											this.translateIf(fieldName) +
-											"</stx-hu-tooltip-field-name>"
-									)
-								)
-								.append(
-									$(
-										"<stx-hu-tooltip-field-value>" +
-											fieldValue +
-											"</stx-hu-tooltip-field-value>"
-									)
-								)
-								.appendTo(node);
+							var newField = document.createElement("stx-hu-tooltip-field");
+							newField.setAttribute("auto", true);
+							var newFieldName = document.createElement(
+								"stx-hu-tooltip-field-name"
+							);
+							newFieldName.innerHTML = this.translateIf(fieldName);
+							newField.appendChild(newFieldName);
+							var newFieldValue = document.createElement(
+								"stx-hu-tooltip-field-value"
+							);
+							newFieldValue.innerHTML = fieldValue;
+							newField.appendChild(newFieldValue);
+							node.appendChild(newField);
 						}
 					} else {
-						var naField = node.find(
+						var naField = node.querySelector(
 							'stx-hu-tooltip-field[field="' + fieldName + '"]'
 						);
-						if (naField.length) {
-							var naFieldNameField = naField.find("stx-hu-tooltip-field-name");
-							if (naFieldNameField.html() !== "")
-								naField.find("stx-hu-tooltip-field-value").html("n/a");
+						if (naField) {
+							var naFieldNameField = naField.querySelector(
+								"stx-hu-tooltip-field-name"
+							);
+							if (naFieldNameField.innerHTML !== "")
+								naField.querySelector("stx-hu-tooltip-field-value").innerHTML =
+									"n/a";
 						}
 					}
 				}
@@ -3500,10 +4528,10 @@ if (!CIQ.Marker) {
 			CIQ.ChartEngine.prototype.append("undisplayCrosshairs", function () {
 				var tt = this.huTooltip;
 				if (tt && tt.node) {
-					var node = $(tt.node);
-					if (node && node[0]) {
-						node[0].style.left = "-50000px";
-						node[0].style.right = "auto";
+					var node = tt.node;
+					if (node) {
+						node.style.left = "-50000px";
+						node.style.right = "auto";
 						tt.lastBar = {};
 					}
 				}
@@ -3535,6 +4563,7 @@ export {__js_addons_inactivityTimer_ as inactivityTimer};
 export {__js_addons_outliers_ as outliers};
 export {__js_addons_plotComplementer_ as plotComplementer};
 export {__js_addons_rangeSlider_ as rangeSlider};
+export {__js_addons_tableView_ as tableView};
 export {__js_addons_tooltip_ as tooltip};
 
 export {CIQ};
@@ -3550,6 +4579,7 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__js_addons_outliers_,
 		__js_addons_plotComplementer_,
 		__js_addons_rangeSlider_,
+		__js_addons_tableView_,
 		__js_addons_tooltip_,
 		null
 	);

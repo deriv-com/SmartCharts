@@ -285,3 +285,5 @@ export const wrapText = (str, letter_count) => {
     }
     return str;
 };
+
+export const stringToSlug = str => str.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');

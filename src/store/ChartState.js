@@ -2,6 +2,7 @@
 import { action, observable, when } from 'mobx';
 import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
 import Theme from '../../sass/_themes.scss';
+import { STATE } from '../Constant';
 
 class ChartState {
     @observable granularity;
@@ -12,6 +13,7 @@ class ChartState {
     @observable isConnectionOpened;
     @observable isChartReady = false;
     @observable chartStatusListener;
+    @observable stateChangeListener;
     @observable settings;
     @observable showLastDigitStats;
     @observable scrollToEpoch;
@@ -28,6 +30,8 @@ class ChartState {
     @observable crosshairState = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick;
+    @observable enableScroll = true;
+    @observable enableZoom = true;
     @observable yAxisMargin = { top: 106, bottom: 64 };
     chartControlsWidgets;
     enabledChartFooter;
@@ -52,8 +56,8 @@ class ChartState {
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
         this.stxx.addEventListener('move', this.scrollListener.bind(this));
-        this.stxx.append('zoomOut', this.enableScroll.bind(this));
-        this.stxx.append('zoomIn', this.enableScroll.bind(this));
+        this.stxx.append('zoomOut', this.setEnableScroll.bind(this));
+        this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
         this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
@@ -65,6 +69,7 @@ class ChartState {
         chartControlsWidgets,
         enabledChartFooter,
         chartStatusListener,
+        stateChangeListener,
         chartType,
         clearChart,
         endEpoch,
@@ -88,12 +93,15 @@ class ChartState {
         maxTick,
         crosshairTooltipLeftAllow,
         yAxisMargin,
+        enableScroll = null,
+        enableZoom = null,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
         this.chartId = id;
         this.chartStatusListener = chartStatusListener;
+        this.stateChangeListener = stateChangeListener;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
@@ -184,6 +192,7 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.setIsChartScrollingToEpoch(true);
                 this.scrollChartToLeft();
+                this.stateChange(STATE.SCROLL_TO_LEFT);
             }
         }
 
@@ -222,6 +231,17 @@ class ChartState {
                 ...yAxisMargin,
             };
         }
+
+        if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
+            this.enableScroll = enableScroll;
+            this.stxx.allowScroll = enableScroll;
+        }
+
+        if (this.stxx && enableZoom !== null && this.enableZoom !== enableZoom) {
+            this.enableZoom = enableZoom;
+            this.stxx.allowZoom = enableZoom;
+        }
+
         if (this.stxx) {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
@@ -261,62 +281,43 @@ class ChartState {
         this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
-            const closedChartColor = 'rgba(129, 133, 152, 0.35)';
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
-            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);
 
-            // line chart
-            this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
-            this.stxx.setStyle('stx_line_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_line_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_line_even', 'color', closedChartColor);
-            // bar chart
-            this.stxx.setStyle('stx_bar_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
-            // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
-            // candle wick
-            this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
-            // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
-            // baseline chart
-            this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_baseline_even', 'color', closedChartColor);
-            // kagi
-            this.stxx.setStyle('stx_kagi_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_kagi_down', 'color', closedChartColor);
-            // this.stxx.setStyle('stx_kagi_even', 'color', closedChartColor);
-            // pandf
-            this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
-            // current price text color
-            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}_candle_text_closed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}_candle_text_closed`]);
+            // Candle type
+            this.stxx.setStyle('stx_candle_up', 'color', Theme.chart_closed_candle_up);
+            this.stxx.setStyle('stx_candle_shadow_up', 'color', Theme.chart_closed_candle_border);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme.chart_closed_candle_down);
+            this.stxx.setStyle('stx_candle_shadow_down', 'color', Theme.chart_closed_candle_border);
+
+            // Hollow type
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme.chart_closed_candle_up);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme.chart_closed_candle_down);
+
+            // OHLC type
+            this.stxx.setStyle('stx_bar_up', 'color', Theme.chart_closed_candle_up);
+            this.stxx.setStyle('stx_bar_down', 'color', Theme.chart_closed_candle_down);
+
             // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}_candle_bg_closed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}_candle_bg_closed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_closed_current_hr);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_closed_current_hr);
         } else {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
             this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
             this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
-
-            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}_chart_mountain_border`]);
         }
         this.stxx.draw();
+    }
+
+    @action.bound stateChange(tag, option) {
+        if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
+            this.stateChangeListener(tag, option);
+        }
     }
 
     @action.bound setChartIsReady(isChartReady) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
+            this.stateChange(STATE.READY);
             if (this.chartStatusListener && typeof this.chartStatusListener === 'function') {
                 this.chartStatusListener(isChartReady);
             }
@@ -345,8 +346,14 @@ class ChartState {
         this.shouldMinimiseLastDigits = status;
     }
 
-    enableScroll() {
+    setEnableScroll() {
+        if (!this.enableScroll || !this.stxx) { return; }
         this.stxx.allowScroll = true;
+    }
+
+    setDisableScroll() {
+        if (!this.stxx) { return; }
+        this.stxx.allowScroll = false;
     }
 
     saveLayout() {
@@ -503,7 +510,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(Math.floor(scrollToTarget * 6 / 5) || 2);
                 this.stxx.chart.scroll = Math.floor(scrollToTarget * 17 / 15) || 1;
-                this.stxx.allowScroll = false;
+                this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
             this.stxx.draw();
