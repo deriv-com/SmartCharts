@@ -281,55 +281,29 @@ class ChartState {
         this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
-            const closedChartColor = 'rgba(129, 133, 152, 0.35)';
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', closedChartColor);
-            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);
 
-            // line chart
-            this.stxx.setStyle('stx_line_chart', 'color', closedChartColor);
-            this.stxx.setStyle('stx_line_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_line_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_line_even', 'color', closedChartColor);
-            // bar chart
-            this.stxx.setStyle('stx_bar_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_bar_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_bar_even', 'color', closedChartColor);
-            // candle chart
-            this.stxx.setStyle('stx_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
-            // candle wick
-            this.stxx.setStyle('stx_candle_shadow_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_candle_shadow_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_candle_shadow_even', 'color', closedChartColor);
-            // hollow candle
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme[`${theme}_chart_closed_candle`]);
-            this.stxx.setStyle('stx_hollow_candle_even', 'color', Theme[`${theme}_chart_closed_candle`]);
-            // baseline chart
-            this.stxx.setStyle('stx_baseline_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_baseline_down', 'color', closedChartColor);
-            this.stxx.setStyle('stx_baseline_even', 'color', closedChartColor);
-            // kagi
-            this.stxx.setStyle('stx_kagi_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_kagi_down', 'color', closedChartColor);
-            // this.stxx.setStyle('stx_kagi_even', 'color', closedChartColor);
-            // pandf
-            this.stxx.setStyle('stx_pandf_up', 'color', closedChartColor);
-            this.stxx.setStyle('stx_pandf_down', 'color', closedChartColor);
-            // current price text color
-            this.stxx.setStyle('stx_current_hr_down', 'color', Theme[`${theme}_candle_text_closed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'color', Theme[`${theme}_candle_text_closed`]);
+            // Candle type
+            this.stxx.setStyle('stx_candle_up', 'color', Theme.chart_closed_candle_up);
+            this.stxx.setStyle('stx_candle_shadow_up', 'color', Theme.chart_closed_candle_border);
+            this.stxx.setStyle('stx_candle_down', 'color', Theme.chart_closed_candle_down);
+            this.stxx.setStyle('stx_candle_shadow_down', 'color', Theme.chart_closed_candle_border);
+
+            // Hollow type
+            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme.chart_closed_candle_up);
+            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme.chart_closed_candle_down);
+
+            // OHLC type
+            this.stxx.setStyle('stx_bar_up', 'color', Theme.chart_closed_candle_up);
+            this.stxx.setStyle('stx_bar_down', 'color', Theme.chart_closed_candle_down);
+
             // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme[`${theme}_candle_bg_closed`]);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme[`${theme}_candle_bg_closed`]);
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_closed_current_hr);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_closed_current_hr);
         } else {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
             this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
             this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
-
-            this.stxx.setStyle('stx_line_chart', 'color', Theme[`${theme}_chart_mountain_border`]);
         }
         this.stxx.draw();
     }
