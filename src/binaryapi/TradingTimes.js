@@ -10,8 +10,8 @@ class TradingTimes {
     timeUpdateCallback;
 
     constructor(api, params) {
-        this._params = params;
-        this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || null;
+        this._params = params || {};
+        this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || true;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
         this._emitter = new EventEmitter({ emitDelay: 0 });
