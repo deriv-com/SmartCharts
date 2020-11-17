@@ -31,6 +31,7 @@ import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
 import NetworkMonitor from './connection/NetworkMonitor';
+import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -84,6 +85,39 @@ function getServerUrl() {
     return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
 }
 
+const parseQueryString = (query) => {
+    const vars = query.split('&');
+    const query_string = {};
+    for (let i = 0; i < vars.length; i++) {
+        const pair = vars[i].split('=');
+        const key = decodeURIComponent(pair[0]);
+        const value = decodeURIComponent(pair[1]);
+        // If first entry with this name
+        if (typeof query_string[key] === 'undefined') {
+            query_string[key] = decodeURIComponent(value);
+            // If second entry with this name
+        } else if (typeof query_string[key] === 'string') {
+            const arr = [query_string[key], decodeURIComponent(value)];
+            query_string[key] = arr;
+            // If third or later entry with this name
+        } else {
+            query_string[key].push(decodeURIComponent(value));
+        }
+    }
+    return query_string;
+};
+const generateURL = (new_params) => {
+    const { origin, search } = window.location;
+    const cleanSearch = search.replace('?', '').trim();
+    console.log('cleanSearch', cleanSearch);
+    const params = {
+        ...(cleanSearch !== '' ? parseQueryString(cleanSearch) : {}),
+        ...new_params,
+    };
+
+    window.location.href = `${origin}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+};
+
 const chartId = '1';
 const appId = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
@@ -122,6 +156,8 @@ class App extends Component {
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
+        const feedCall = {};
+        const initialData = {};
 
         if (settings) {
             settings.language = language;
@@ -162,8 +198,15 @@ class App extends Component {
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, this.handleNetworkStatus);
 
-        const marketsOrder = new URLSearchParams(window.location.search).get('marketsOrder') || 'null';
+        const urlParams = parseQueryString(window.location.search.replace('?', ''));
+        const marketsOrder = urlParams.marketsOrder || 'null';
         const getMarketsOrder = marketsOrder !== '' && marketsOrder !== 'null' ? () => marketsOrder.split(',') : undefined;
+
+        if (urlParams.feedcall_tradingTimes === 'false') feedCall.tradingTimes = false;
+        if (urlParams.feedcall_activeSymbols === 'false') feedCall.activeSymbols = false;
+        if (urlParams.initialdata_masterData === 'true') initialData.masterData = masterData();
+        if (urlParams.initialdata_tradingTimes === 'true') initialData.tradingTimes = MockTradingTime;
+        if (urlParams.initialdata_activeSymbols === 'true') initialData.activeSymbols = MockActiveSymbol;
 
         this.state = {
             settings,
@@ -184,6 +227,8 @@ class App extends Component {
             openMarket: {},
             getMarketsOrder,
             refreshActiveSymbols: false,
+            initialData,
+            feedCall,
         };
     }
 
@@ -509,13 +554,22 @@ class App extends Component {
         });
     }
 
+    /**
+     * Initial Data
+     */
+    onInitalDataTradingTime = evt => generateURL({ initialdata_tradingTimes: evt.currentTarget.checked });
+    onInitalDataActiveSymbols = evt => generateURL({ initialdata_activeSymbols: evt.currentTarget.checked });
+    onInitalDataMasterData = evt => generateURL({ initialdata_masterData: evt.currentTarget.checked });
+    onFeedCallTradingTime = evt => generateURL({ feedcall_tradingTimes: evt.currentTarget.checked });
+    onFeedCallActiveSymbols = evt => generateURL({ feedcall_activeSymbols: evt.currentTarget.checked })
+
     render() {
         const { settings, isConnectionOpened, symbol, endEpoch, startEpoch,
             barrierType, highLow: { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers,
+            leftOffset, color, foregroundColor, markers, feedCall,
             enabledNavigationWidget, activeLanguage,
-            crosshairState, zoom, maxTick } = this.state;
+            crosshairState, zoom, maxTick, initialData } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -547,11 +601,13 @@ class App extends Component {
                         enabledChartFooter={this.state.enabledFooter}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
+                        settings={settings}
+                        initialData={initialData}
+                        feedCall={feedCall}
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         toolbarWidget={this.renderToolbarWidget}
-                        settings={settings}
                         endEpoch={endEpoch}
                         startEpoch={startEpoch}
                         chartType={this.state.chartType}
@@ -724,6 +780,31 @@ class App extends Component {
                     <div className="form-row">
                         Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button> <br />
                         LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
+                    </div>
+                    <div className="card">
+                        <h3>InitialData</h3>
+                        <div className="card-body">
+                            <div className="form-row">
+                                tradingTime: <input type="checkbox" checked={!!initialData.tradingTimes} onChange={this.onInitalDataTradingTime} />
+                            </div>
+                            <div className="form-row">
+                                activeSymbols: <input type="checkbox" checked={!!initialData.activeSymbols} onChange={this.onInitalDataActiveSymbols} />
+                            </div>
+                            <div className="form-row">
+                                masterData: <input type="checkbox" checked={!!initialData.masterData} onChange={this.onInitalDataMasterData} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <h3>FeedCall</h3>
+                        <div className="card-body">
+                            <div className="form-row">
+                                tradingTime: <input type="checkbox" checked={feedCall.tradingTimes !== false} onChange={this.onFeedCallTradingTime} />
+                            </div>
+                            <div className="form-row">
+                                activeSymbols: <input type="checkbox" checked={feedCall.activeSymbols !== false} onChange={this.onFeedCallActiveSymbols} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
