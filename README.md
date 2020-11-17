@@ -153,7 +153,7 @@ Props marked with `*` are **mandatory**:
 
 #### InitialData
 
-Initial data property designed to pass prepared data chart in case you don't want to use Feed or you want to make chart boost for initial. It get below properties and all of them are optional, so if you pass data to them, it cause the chart to use that data, and if you pass `null` it cause the chart to use the Feed call and get api.
+Initial data property designed to pass prepared chart data in case you don't want to wait for Feed data or if you simply want to make the chart render quicker on its initial load. It gets the properties below and all of them are optional, so if you pass the data, the chart will use that data, but if you pass `null` instead, the chart will default to the Feed call and get the data from API.
 **notice:** these data are only use for initialing sequence and after that, chart request on Feed to get data.
 | Attribute | Description | Sample Data |
 | --- | --- | --- |
