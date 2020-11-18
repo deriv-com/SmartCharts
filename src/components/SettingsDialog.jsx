@@ -14,7 +14,7 @@ import {
     FontSetting,
 } from './Form.jsx';
 import { DeleteIcon } from './Icons.jsx';
-import '../../sass/components/settings-dialog.scss';
+import '../../sass/components/_settings-dialog.scss';
 
 const SettingsPanelItem = ({ group, title, type, Field }) => (
     <FormGroup
@@ -163,7 +163,7 @@ const SettingsPanel = ({
             setPanel={setScrollPanel}
             freeze={freezeScroll}
             autoHide
-            height="280px"
+            height="282px"
         >
             {itemGroups.map(group => (
                 (group.fields.length > 0)
@@ -219,7 +219,7 @@ const SettingsDialog = ({
     <SettingDialogMenu
         className="cq-modal--settings"
         title={title}
-        newStyle
+        modalMode
         enableTabular={showTabs}
         emptyMenu
         enableOverlay // this temprary, we remove it when all menus convert to modal

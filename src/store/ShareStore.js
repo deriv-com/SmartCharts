@@ -18,7 +18,7 @@ export default class ShareStore {
     @computed get timeUnit() { return this.mainStore.timeperiod.timeUnit; }
     @computed get timeperiodDisplay() { return this.mainStore.timeperiod.display; }
     @computed get marketDisplayName() {
-        return this.mainStore.chart.currentActiveSymbol.market_display_name;
+        return this.mainStore.chart.currentActiveSymbol.name;
     }
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
@@ -38,7 +38,7 @@ export default class ShareStore {
             .then((html2canvas) => {
                 // since react rerenders is not immediate, we use CIQ.appendClassName to
                 // immediately append/unappend class name before taking screenshot.
-                CIQ.appendClassName(this.screenshotArea, 'ciq-chart--screenshot');
+                this.screenshotArea.classList.add('ciq-chart--screenshot');
                 setTimeout(() => {
                     html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
                 }, 0);
@@ -56,7 +56,7 @@ export default class ShareStore {
             newTab,
         );
         this.isLoadingPNG = false;
-        CIQ.unappendClassName(this.screenshotArea, 'ciq-chart--screenshot');
+        this.screenshotArea.classList.remove('ciq-chart--screenshot');
     }
 
     @action.bound downloadCSV() {

@@ -63,7 +63,7 @@ export default class BarrierStore {
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
-        if (this.context && this.stx.currentQuote()) { this.init(); }
+        if (this.context && mainStore.chart.currentCloseQuote()) { this.init(); }
 
         this.HighPriceLine = this._high_barrier.connect(PriceLine);
         this.LowPriceLine = this._low_barrier.connect(PriceLine);
@@ -81,7 +81,7 @@ export default class BarrierStore {
     }
 
     setDefaultBarrier() {
-        const price = this.relative ? 0 : this.stx.currentQuote().Close;
+        const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote().Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
         this._low_barrier.price = price - distance;

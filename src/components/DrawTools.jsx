@@ -10,7 +10,7 @@ import {
     SettingIcon,
     EmptyStateIcon,
 } from './Icons.jsx';
-import '../../sass/components/draw_tools.scss';
+import '../../sass/components/_draw_tools.scss';
 
 const ActivePanelView = ({ enabled, children }) =>  (enabled ? (
     <div className="sc-dtools--empty">
@@ -127,7 +127,7 @@ const DrawTools = ({
             className="sc-dtools"
             title={t.translate('Drawing tools')}
             tooltip={t.translate('Drawing tools')}
-            newStyle
+            modalMode
             enableTabular
             portalNodeId={portalNodeId}
         >

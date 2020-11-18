@@ -1,28 +1,16 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { connect } from '../store/Connect';
-import ChartTypes from './ChartTypes.jsx';
-import Timeperiod from './Timeperiod.jsx';
+import React        from 'react';
+import classNames   from 'classnames';
+import { connect }  from '../store/Connect';
+import ChartTypes   from './ChartTypes.jsx';
+import Timeperiod   from './Timeperiod.jsx';
 import {
     TypeAreaGrayscaleIcon,
     TypeCandleGrayscaleIcon,
     TypeHollowGrayscaleIcon,
     TypeOhlcGrayscaleIcon,
 } from './Icons.jsx';
-import '../../sass/components/chart-mode.scss';
-
-const UnitMap = {
-    tick: 'T',
-    minute: 'M',
-    hour: 'H',
-    day: 'D',
-};
-
-const TimeMap = {
-    tick: 1,
-    minute: 1,
-    hour: 60,
-};
+import '../../sass/components/_chart-mode.scss';
 
 const TypeMap = {
     mountain: TypeAreaGrayscaleIcon,
@@ -37,8 +25,7 @@ const ChartMode = ({
     onChartType,
     onGranularity,
     Type,
-    interval,
-    timeUnit,
+    displayInterval,
     portalNodeId,
 }) => {
     const TypeIcon = TypeMap[Type.id];
@@ -47,14 +34,14 @@ const ChartMode = ({
             className="ciq-display sc-chart-mode"
             title={t.translate('Chart types')}
             tooltip={t.translate('Chart types')}
-            newStyle
+            modalMode
             isFullscreen
             portalNodeId={portalNodeId}
         >
             <ChartTypeMenu.Title>
-                <div className={`sc-chart-mode__menu ${menuOpen ? 'sc-chart-mode__menu--active' : ''}`}>
+                <div className={classNames('sc-chart-mode__menu', { 'sc-chart-mode__menu--active': menuOpen })}>
                     <span className="sc-chart-mode__menu__timeperiod">
-                        {interval === 'day' ? 1 : (interval / TimeMap[timeUnit])} {UnitMap[timeUnit]}
+                        {displayInterval}
                     </span>
                     <TypeIcon tooltip-title={t.translate(Type.text)} />
                 </div>
@@ -77,6 +64,5 @@ export default connect(({ chartMode, chartType, timeperiod }) => ({
     ChartTypeMenu   : chartMode.ChartTypeMenu,
     menuOpen        : chartMode.menu.open,
     Type            : chartType.type,
-    timeUnit        : timeperiod.timeUnit,
-    interval        : timeperiod.interval,
+    displayInterval : timeperiod.display,
 }))(ChartMode);

@@ -1,0 +1,425 @@
+// sc-market-categorical-display
+.sc-mcd {
+    $self: &;
+    width: 560px;
+    display: flex;
+    height: 100%;
+    @include themify($themes) {
+        color: themed('CatDisplayText');
+        background: themed('CatDisplayBg');
+        box-shadow: 0 2px 8px 0 themed('CatDisplayShadow');
+    }
+
+    &__tabs {
+        width: 240px;
+        box-sizing: border-box;
+        @include themify($themes) {
+            background: themed('CatDisplayFilterBg');
+        }
+
+        &__head {
+            height: 56px;
+            padding: 16px 24px;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-weight: bold;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+        }
+    }
+    &__content {
+        width: 320px;
+        display: flex;
+        flex-direction: column;
+
+        &__head {
+            height: 56px;
+            padding: 12px 16px 10px;
+            box-sizing: border-box;
+            @include themify($themes) {
+                border-bottom: 2px solid themed('CatDisplayFilterBg');
+            }
+        }
+        &__body {
+            height: calc(100% - 56px);
+            transform: translateZ(0);
+            position: relative;
+
+            &__scroll {
+                overflow-y: auto;
+                position: relative;
+                height: 100%;
+            }
+        }
+    }
+    &__filter {
+        margin: 0px;
+        width: 240px;
+        min-width: 240px;
+        border-radius: 0 0 0 5px;
+        border-bottom: none;
+        padding: 0;
+
+        &__item {
+            width: 100%;
+            display: flex;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border-radius: 0px;
+            font-size: 14px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.43;
+            letter-spacing: normal;
+            align-items: center;
+            outline: none !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            @include themify($themes) {
+                border-left: 4px solid themed('CatDisplayFilterBorder');
+            }
+
+            .ic-icon {
+                display: inline-flex;
+                vertical-align: middle;
+                width: $small-icon-size;
+                height: $small-icon-size;
+                margin-right: 1.3em;
+                position: relative;
+                top: 2px;
+            }
+            &:hover {
+                @include themify($themes) {
+                    background-color: themed('CatDisplayHoverFilterBg');
+                    border-left-color: themed('CatDisplayHoverFilterBg');
+                }
+            }
+            &--selected {
+                font-weight: 800;
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveFilterText');
+                    background-color: themed('CatDisplayActiveFilterBg') !important;
+                    border-left-color: themed('CatDisplayActiveFilterBorder') !important;
+                }
+
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayActiveFilterIcon');
+                            stroke: themed('CatDisplayActiveFilterIcon');
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &__list {
+        width: 100%;
+    }
+    &__category {
+        padding-bottom: 12px;
+        position: relative;
+        @include themify($themes) {
+            border-bottom: 4px solid themed('CatDisplayFilterBg');
+        }
+
+        .empty-category {
+            padding: 0.9em 1.2em;
+            border-radius: 4px;
+            font-size: 14px;
+            @include themify($themes) {
+                background-color: themed('CatDisplayCatContentBg');
+            }
+        }
+        &:last-child {
+            margin-bottom: 10px !important;
+            border-bottom: none;
+        }
+        &--has-subtitle {
+            padding-top: 6.5em;
+        }
+        &--favorite {
+            .sc-mcd__category__content {
+                margin: 0 3px 4px 8px;
+            }
+        }
+        &__head {
+            display: block;
+            font-size: 1.4em;
+            font-weight: bold;
+            padding: 0 20px;
+            line-height: 40px;
+            position: relative;
+            top: 0;
+            // width: 100%;
+            transform: translate3d(0, 0, 0);
+            @include themify($themes) {
+                color: themed('CatDisplayCatTitleText');
+            }
+
+            &.sticky-top,
+            &.sticky-bottom {
+                z-index: 8;
+                padding-top: 0px;
+                height: 40px;
+                @include themify($themes) {
+                    background-color: themed('CatDisplayBg');
+                    border-bottom: 1px solid themed('CatDisplayCatContentBorder');
+                }
+
+                &.has-subtitle {
+                    height: 60px;
+                }
+            }
+            &.sticky-bottom {
+                position: absolute;
+                top: auto !important;
+                bottom: 0px !important;
+            }
+            &.sticky-top {
+                position: fixed;
+                top: 0px;
+                z-index: 9;
+                padding-right: 25px;
+            }
+            .category-name-postfix {
+                margin-left: 5px;
+            }
+            .category-subtitle {
+                font-weight: normal;
+                line-height: normal;
+                @include themify($themes) {
+                    color: themed('CatDisplayCatSubTitleText');
+                }
+            }
+        }
+        &__content {
+            &--has-subcategory {
+                margin: 0 3px 4px 8px;
+                border-radius: 4px;
+                @include themify($themes) {
+                    border: 1px solid themed('CatDisplayCatContentBorder');
+                }
+
+                &.has-subcategory {
+                    > div:nth-child(2) {
+                        border-radius: 4px 4px 0 0;
+                    }
+                }
+                &:last-child {
+                    margin-bottom: 0px;
+                }
+            }
+            .subcategory {
+                padding: 0 20px;
+                font-size: 1.4em;
+                border-radius: 4px 4px 0 0;
+                display: flex;
+                height: 40px;
+                font-weight: bold;
+                align-items: center;
+                @include themify($themes) {
+                    color: themed('CatDisplayCatTitleText');
+                    background-color: themed('CatDisplayCatContentBg');
+                }
+            }
+        }
+    }
+    &__item {
+        $item: &;
+        padding-left: 20px;
+        padding-right: 20px;
+        display: flex;
+        height: 40px;
+        align-items: center;
+        justify-content: space-between;
+        line-height: initial;
+        font-size: 1.4em;
+        cursor: pointer;
+        @include themify($themes) {
+            border-bottom: 1px solid themed('CatDisplayBg');
+            background-color: themed('CatDisplayCatContentBg');
+        }
+
+        &:first-child {
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+        &:last-child {
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-bottom: none;
+        }
+        &:not(:first-child):not(:last-child) {
+            border-radius: 4px;
+        }
+        &__name {
+            display: flex;
+            align-items: center;
+
+            > span {
+                margin-right: 16px;
+            }
+        }
+        &__detail {
+            display: flex;
+            align-items: center;
+
+            .ic-icon {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('CatDisplayCatContentIcon');
+                        stroke: themed('CatDisplayCatContentIcon');
+                    }
+                }
+            }
+        }
+        .closed-market {
+            border: 1px solid #f44336;
+            color: #f44336;
+            padding: 3px 6px;
+            font-size: 0.64em;
+            border-radius: 4px;
+        }
+        &:hover {
+            @include themify($themes) {
+                color: themed('CatDisplayCatHoverContentText');
+                background: themed('CatDisplayCatHoverContentBg');
+            }
+
+            #{ $item }__detail {
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayCatHoverContentIcon');
+                            stroke: themed('CatDisplayCatHoverContentIcon');
+                        }
+                    }
+                }
+            }
+        }
+        &--selected {
+            @include themify($themes) {
+                color: themed('CatDisplayCatActiveContentText') !important;
+                background: themed('CatDisplayCatActiveContentBg') !important;
+            }
+
+            #{ $item }__name {
+                font-weight: bold;
+            }
+            #{ $item }__detail {
+                .ic-icon {
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayCatActiveContentIcon');
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &--nested {
+        #{ $self }__category {
+            width: 100%;
+            padding: 0px;
+            max-height: 40px;
+            overflow-y: hidden;
+            border-bottom: none;
+            transition: max-height 0.5s ease-in-out;
+
+            &__head {
+                display: flex;
+                justify-content: space-between;
+                box-sizing: border-box;
+                align-items: center;
+                position: relative;
+                padding-left: 17px;
+                padding-right: 20px;
+                cursor: pointer;
+
+                &.sticky-top {
+                    position: relative;
+                    top: 0px !important;
+                }
+                .category-title-left {
+                    display: flex;
+                    align-items: center;
+
+                    .ic-icon {
+                        margin-right: 16px;
+                        position: relative;
+                        top: -1px;
+                        @include themify($themes) {
+                            color: themed('CatDisplayText');
+                        }
+
+                        svg {
+                            width: 24px;
+                            height: 24px;
+                            @include themify($themes) {
+                                fill: themed('CatDisplayText');
+                            }
+                        }
+                    }
+                }
+                .ic-icon.arrow {
+                    transition: transform 0.3s ease-in-out;
+                    @include themify($themes) {
+                        fill: themed('CatDisplayText');
+                    }
+                }
+            }
+            &__content {
+                .subcategory {
+                    font-weight: normal;
+                    @include themify($themes) {
+                        color: themed('CatDisplayCatContentTitleText');
+                    }
+                }
+            }
+            &--active {
+                max-height: 1500px;
+
+                .sc-mcd__category__head {
+                    > .ic-icon.arrow {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .sc-mcd {
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        box-shadow: none;
+
+        &__content {
+            width: 100%;
+            height: 100%;
+
+            &__head {
+                border-bottom: none;
+            }
+        }
+        &__category {
+            &--favorite {
+                .sc-mcd__category__content {
+                    margin: 0 8px 4px;
+                }
+            }
+            &__content {
+                &--has-subcategory {
+                    margin: 0 8px 4px;
+                }
+            }
+        }
+        &--nested {
+            min-height: calc(100% - 38px);
+        }
+    }
+}

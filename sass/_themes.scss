@@ -184,10 +184,15 @@ $themes: (
         ChartGrid: $color-grey-2,
         ChartIndicateText: $color-grey-3,
         ChartIndicateDivide: $color-grey-5,
+        ChartCurrentHRBg: $color-red,
+        ChartCloseCurrentHRBg: rgba($color-red, 0.32),
         ChartMountainBorder: $color-green,
         ChartMountainBg: rgba($color-green, 0.16),
         ChartMountainBgShade: rgba(255, 255, 255, 0),
-        ChartClosedCandleColor: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        ChartMountainClosedBorder: rgba($color-green, 0.32),
+        ChartClosedCandleBgUp: rgba($color-green, 0.32),
+        ChartClosedCandleBgDown: rgba($color-red, 0.32),
+        ChartClosedCandleBorder: rgba($color-black-1, 0.32),
         ChartStickyBg: $color-grey-2,
         ChartStickyText: $color-black-1,
         ChartStickyInnerBg: $color-grey-5,
@@ -369,11 +374,11 @@ $themes: (
         CatDisplayCatContentBorder: $COLOR_WHITE,
         CatDisplayCatContentTitleBg: $COLOR_WHITE,
         CatDisplayCatContentTitleText: $color-grey-1,
-        CatDisplayCatContentIcon: $color-grey-1,
+        CatDisplayCatContentIcon: $color-black-1,
         CatDisplayCatContentDisabled: $COLOR_LIGHT_BLACK_3_SOLID_1,
         CatDisplayCatActiveContentBg: $color-grey-5,
         CatDisplayCatActiveContentText: $color-black-1,
-        CatDisplayCatActiveContentIcon: $COLOR_WHITE,
+        CatDisplayCatActiveContentIcon: $color-black-1,
         CatDisplayActiveText: $COLOR_LIGHT_BLACK_1,
         CatDisplayCatHoverContentBg: $color-grey-4,
         CatDisplayCatHoverContentText: $color-black-1,
@@ -446,7 +451,7 @@ $themes: (
         IndicatorListItemHoverBg: $color-grey-4,
         IndicatorAddedBorder: $color-grey-6,
         IndicatorSearchBg: $color-white,
-        IndicatorSearchBorder: $color-white,
+        IndicatorSearchBorder: $color-grey-5,
         IndicatorSearchText: $COLOR_LIGHT_BLACK_3_SOLID_1,
         IndicatorSearchIcon: $color-black-1,
         IndicatorSearchIconReset: $color-grey-1,
@@ -510,7 +515,7 @@ $themes: (
         ChartMountainBorder: rgba($COLOR_WHITE, 1),
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
-        ChartClosedCandleColor: $COLOR_DARK_GRAY_2,
+        ChartMountainClosedBorder: rgba($COLOR_WHITE, 0.32),
         ChartStickyBg: $color-black-3,
         ChartStickyText: $color-grey,
         ChartStickyInnerBg: $color-black-8,
@@ -697,7 +702,7 @@ $themes: (
         CatDisplayCatContentDisabled: $COLOR_LIGHT_GRAY_30,
         CatDisplayCatActiveContentBg: $color-black-8,
         CatDisplayCatActiveContentText: $color-white,
-        CatDisplayCatActiveContentIcon: $COLOR_WHITE,
+        CatDisplayCatActiveContentIcon: $color-grey-1,
         CatDisplayActiveText: $color-white,
         CatDisplayCatHoverContentBg: $color-black-5,
         CatDisplayCatHoverContentText: $color-white,
@@ -770,7 +775,7 @@ $themes: (
         IndicatorListItemHoverBg: $color-black-5,
         IndicatorAddedBorder: $color-black-6,
         IndicatorSearchBg: $color-black,
-        IndicatorSearchBorder: $color-black,
+        IndicatorSearchBorder: $color-black-8,
         IndicatorSearchText: $color-black-6,
         IndicatorSearchIcon: $color-grey,
         IndicatorSearchIconReset: $color-black-1,
@@ -815,17 +820,19 @@ $themes: (
     light_chart_grid: map-get(map-get($themes, 'light'), 'ChartGrid');
     dark_chart_grid: map-get(map-get($themes, 'dark'), 'ChartGrid');
     light_chart_mountain_border: map-get(map-get($themes, 'light'), 'ChartMountainBorder');
-    dark_chart_mountain_border: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
     light_chart_mountain_bg: map-get(map-get($themes, 'light'), 'ChartMountainBg');
-    dark_chart_mountain_bg: map-get(map-get($themes, 'dark'), 'ChartMountainBg');
     light_chart_mountain_bg_shade: map-get(map-get($themes, 'light'), 'ChartMountainBgShade');
+    light_chart_closed_mountain_border: map-get(map-get($themes, 'light'), 'ChartMountainClosedBorder');
+    dark_chart_mountain_border: map-get(map-get($themes, 'dark'), 'ChartMountainBorder');
+    dark_chart_mountain_bg: map-get(map-get($themes, 'dark'), 'ChartMountainBg');
     dark_chart_mountain_bg_shade: map-get(map-get($themes, 'dark'), 'ChartMountainBgShade');
-    light_candle_text_closed: map-get(map-get($themes, 'light'), 'ChartCandleTextClosed');
-    dark_candle_text_closed: map-get(map-get($themes, 'dark'), 'ChartCandleTextClosed');
-    light_candle_bg_closed: map-get(map-get($themes, 'light'), 'ChartCandleBgClosed');
-    dark_candle_bg_closed: map-get(map-get($themes, 'dark'), 'ChartCandleBgClosed');
-    light_chart_closed_candle: map-get(map-get($themes, 'light'), 'ChartClosedCandleColor');
-    dark_chart_closed_candle: map-get(map-get($themes, 'dark'), 'ChartClosedCandleColor');
+    dark_chart_closed_mountain_border: map-get(map-get($themes, 'dark'), 'ChartMountainClosedBorder');
+    // we don't have difference color for chart_closed_candle_up, chart_closed_candle_down, chart_closed_current_hr
+    // in light and dark them
+    chart_closed_candle_up: map-get(map-get($themes, 'light'), 'ChartClosedCandleBgUp');
+    chart_closed_candle_down: map-get(map-get($themes, 'light'), 'ChartClosedCandleBgDown');
+    chart_closed_candle_border: map-get(map-get($themes, 'light'), 'ChartClosedCandleBorder');
+    chart_closed_current_hr: map-get(map-get($themes, 'light'), 'ChartCloseCurrentHRBg');
     light_chart_bg: map-get(map-get($themes, 'light'), 'ChartBg');
     dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
     light_float_labels_bg: map-get(map-get($themes, 'light'), 'CrosshairLabelBg');

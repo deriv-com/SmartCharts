@@ -118,7 +118,6 @@ class CrosshairStore {
         let highPx,
             lowPx;
 
-
         if (data !== undefined && data && data.DT) {
             goodBar = true;
             if (data.High) {
@@ -127,7 +126,7 @@ class CrosshairStore {
             if (data.Low) {
                 lowPx = stx.pixelFromPrice(data.Low);
             }
-            if (!stx.highLowBars[stx.layout.chartType]) {
+            if (!stx.chart.highLowBars) {
                 if (data.Close) {
                     highPx = stx.pixelFromPrice(data.Close) - 15;
                     lowPx = stx.pixelFromPrice(data.Close) + 15;

@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useEffect } from 'react';
+import classNames       from 'classnames';
 import { connect }      from '../store/Connect';
 import Tooltip          from './Tooltip.jsx';
 import { InlineLoader } from './Loader.jsx';
 import { Intervals }    from '../Constant';
-import '../../sass/components/timeperiod.scss';
+import '../../sass/components/_timeperiod.scss';
 
 const Timeperiod = ({
     chartId,
@@ -63,7 +64,7 @@ const Timeperiod = ({
                                 <Tooltip
                                     key={item.interval}
                                     onClick={() => onIntervalClick(chartType.id, category.key, item.interval)}
-                                    className={`${ItemClassName(category.key, item.num)} ${enableLoader(item.interval) ? 'pre-loading' : ''}`}
+                                    className={classNames(ItemClassName(category.key, item.num), { 'pre-loading': enableLoader(item.interval) })}
                                     enabled={enableTooltip(category.key)}
                                     content={t.translate('Available only for "Area" chart type.')}
                                 >

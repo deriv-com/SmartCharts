@@ -21,7 +21,7 @@ import moment from 'moment';
 import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
-import whyDidYouRender  from '@welldone-software/why-did-you-render';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
@@ -81,7 +81,7 @@ function getServerUrl() {
 }
 
 const chartId = '1';
-const appId  = localStorage.getItem('config.app_id') || 12812;
+const appId = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
 const today = moment().format('YYYY/MM/DD 00:00');
@@ -90,7 +90,6 @@ const connectionManager = new ConnectionManager({
     language,
     endpoint: serverUrl,
 });
-const ActiveMarkets = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
 const IntervalEnum = {
     second: 1,
     minute: 60,
@@ -228,7 +227,7 @@ class App extends Component {
     };
     changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
     changeChartType = chartType => this.setState({ chartType });
-
+    handleStateChange = (tag, option) => console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`)
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
@@ -279,10 +278,10 @@ class App extends Component {
             <SmartChart
                 id={chartId}
                 chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
+                stateChangeListener={this.handleStateChange}
                 symbol={symbol}
                 isMobile={isMobile}
                 onMessage={this.onMessage}
-                activeSymbols={ActiveMarkets}
                 enableRouting
                 removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}

@@ -1,6 +1,6 @@
 import React, { useEffect }  from 'react';
 import { CloseIcon } from './Icons.jsx';
-import '../../sass/components/dialog.scss';
+import '../../sass/components/_dialog.scss';
 
 const Dialog = ({
     children,

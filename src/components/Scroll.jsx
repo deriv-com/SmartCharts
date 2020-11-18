@@ -1,6 +1,7 @@
-import React from 'react';
+import React        from 'react';
+import classNames   from 'classnames';
 import { connect }  from '../store/Connect';
-import '../../sass/components/scroll.scss';
+import '../../sass/components/_scroll.scss';
 
 const Scroll = ({
     children,
@@ -22,7 +23,11 @@ const Scroll = ({
     return (
         <div
             ref={handleRef}
-            className={`sc-scrollbar ${freeze ? 'sc-scrollbar--freeze' : ''} ${className || ''} ${autoHide ? 'sc-scrollbar--auto-hide' : ''} ${isHover ? 'sc-scrollbar--hover' : ''}`}
+            className={classNames('sc-scrollbar', className, {
+                'sc-scrollbar--freeze': freeze,
+                'sc-scrollbar--auto-hide': autoHide,
+                'sc-scrollbar--hover': isHover,
+            })}
             onScroll={onScroll}
             style={{
                 maxHeight: height || '100%',

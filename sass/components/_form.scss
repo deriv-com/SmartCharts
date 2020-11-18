@@ -1,3 +1,13 @@
+@mixin form_subtitle_text {
+    padding-left: 4px;
+    padding-right: 4px;
+    z-index: 1;
+    font-size: 10px;
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1.4;
+    letter-spacing: normal;
+}
 
 .form {
     $self: &;
@@ -111,6 +121,9 @@
         }
         #{ $self }__input-group--result:last-child {
             height: 280px;
+        }
+        .sc-scrollbar {
+            height: 282px;
         }
     }
     &--fractal-chaos-bands {
@@ -230,9 +243,7 @@
         top: -6px;
 
         span {
-            padding-left: 4px;
-            padding-right: 4px;
-            z-index: 1;
+            @include form_subtitle_text;
             @include themify($themes) {
                 background: themed('DropdownSubtitleBg');
                 color: themed('DropdownSubtitleText');
@@ -321,7 +332,6 @@
 
         &.active {
             opacity: 1;
-            overflow: hidden;
             max-height: 200px;
             pointer-events: all;
             transform: translateY(8px);
@@ -425,9 +435,7 @@
         user-select: none;
 
         span {
-            padding-left: 4px;
-            padding-right: 4px;
-            z-index: 1;
+            @include form_subtitle_text;
             @include themify($themes) {
                 background: themed('ColorPickerSubtitleBg');
                 color: themed('ColorPickerSubtitleText');
@@ -673,9 +681,7 @@
         user-select: none;
 
         span {
-            padding-left: 4px;
-            padding-right: 4px;
-            z-index: 1;
+            @include form_subtitle_text;
             @include themify($themes) {
                 color: themed('ColorPickerSubtitleText');
                 background: themed('DialogSettingBodyBg');

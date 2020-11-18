@@ -1,100 +1,231 @@
-.ciq-views {
-    .cq-menu-dropdown {
-        width: 260px;
-        height: 196px;
+.sc-views-menu {
+    .sc-dialog {
+        width: 320px;
+    }
+}
 
-        .template-name {
-            display: flex;
-            align-items: center;
-            height: 32px;
-            padding: 0 4px 0 16px;
-            box-sizing: border-box;
-            font-size: 12px;
-            border-radius: 4px 4px 0 0;
-            @include themify($themes) {
-                border: 1px solid themed('ListLiBorder');
-                background: themed('ListLiBg');
-            }
+.form--sc-views {
+    overflow-y: hidden !important;
 
-            .icon {
-                display: flex;
-                justify-content: flex-end;
+    &__input {
+        height: 40px;
+        position: relative;
+        display: flex;
 
-                &.hide {
-                    display: none;
-                }
-            }
-            .add {
-                display: flex;
-                flex-grow: 8;
-            }
-            .add-new {
-                flex: 8 0 0;
-                cursor: pointer;
-            }
-            .view-input {
-                font-size: 1.2em;
-                font-weight: normal;
-                width: 100%;
-                padding: 0 30px 0 5px;
-                border: none;
-                outline: none;
+        .sc-input {
+            width: calc(100% - 40px);
+            border-radius: 4px 0 0 4px;
+            height: 40px;
+            text-align: left;
+        }
+        .subtitle {
+            position: absolute;
+            top: -6px;
+            left: 10px;
+            z-index: 1;
+            opacity: 0;
+            font-size: 10px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.4;
+            letter-spacing: normal;
+
+            span {
+                padding: 0 4px;
                 @include themify($themes) {
-                    color: themed('TemplateInputText');
-                    background-color: themed('DefaultMain');
+                    background: themed('TemplateBg');
                 }
             }
         }
-        .content {
-            display: block;
-            height: 140px;
-            padding: 16px 16px 0;
+        button {
+            width: 40px;
+            height: 40px;
+            border-radius: 0 4px 4px 0;
+            padding: 8px 7px;
+            border: none !important;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('TemplateFormBtnText');
+                }
+            }
+        }
+        &--active {
+            .subtitle {
+                opacity: 1;
+                @include themify($themes) {
+                    color: themed('TemplateFormInputActiveBorder');
+                }
+            }
+            input {
+                @include themify($themes) {
+                    border-color: themed('TemplateFormInputActiveBorder');
+                    color: themed('TemplateFormInputActiveText');
+                }
+            }
+            button {
+                @include themify($themes) {
+                    background: themed('TemplateFormActiveBtnBg');
+                }
+            }
+        }
+    }
+}
+
+.sc-views {
+    height: 304px;
+    position: relative;
+    border-radius: 0 0 4px 4px;
+    @include themify($themes) {
+        background: themed('TemplateBg');
+    }
+
+    &__menu {
+        position: relative;
+
+        .ic-icon {
+            margin: auto;
+            width: 16px;
+            height: 16px;
+            top: -4px;
             position: relative;
 
-            .ciq-list {
-                max-height: 107px !important;
-                width: 100%;
-                display: block;
+            svg {
+                stroke: none !important;
+                width: 16px !important;
+                height: 16px !important;
+                @include themify($themes) {
+                    fill: themed('ChartModeText') !important;
+                }
+            }
+        }
+    }
+    &--empty {
+        display: flex;
+        flex-direction: column;
+        padding: 24px;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
 
-                .ciq-list-item {
-                    align-items: center;
-                    justify-content: flex-start;
-                    display: flex;
+        > .ic-icon {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 24px;
+        }
+        p {
+            font-size: 12px;
+            font-weight: normal;
+            font-style: normal;
+            line-height: 1.5;
+            letter-spacing: normal;
+            text-align: center;
+            margin: 0 0 46px;
+            @include themify($themes) {
+                color: themed('TemplateEmptyText');
+            }
+        }
+        button {
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            outline: none;
+            padding: 10px 16px;
 
-                    &:hover {
-                        @include themify($themes) {
-                            color: themed('TemplateActiveIcon');
-                        }
+            > .ic-icon {
+                width: 16px;
+                height: 16px;
+                line-height: 16px;
+                margin-right: 6px;
+                @include themify($themes) {
+                    fill: themed('TemplateEmptyBtnText');
+                }
+            }
+        }
+    }
+    &__views {
+        padding: 16px 8px 0;
+        @include themify($themes) {
+            border-top: 1px solid themed('TemplateListBorder');
+        }
 
-                        .ic-icon {
-                            opacity: 1;
-                            @include themify($themes) {
-                                color: themed('TemplateActiveIcon');
-                            }
-                        }
+        &__head {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 16px;
+
+            h5 {
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                margin: 0px;
+                @include themify($themes) {
+                    color: themed('TemplateListHeadText');
+                }
+            }
+            button {
+                height: 24px;
+                border-radius: 4px;
+                cursor: pointer;
+                background: transparent;
+                outline: none !important;
+                font-weight: bold;
+                @include themify($themes) {
+                    border: 1px solid themed('TemplateListHeadBtnBorder');
+                    color: themed('TemplateListHeadBtnText');
+                }
+            }
+        }
+        &__list {
+            &__item {
+                height: 40px;
+                border-radius: 4px;
+                display: flex;
+                padding: 10px 16px;
+                justify-content: space-between;
+                box-sizing: border-box;
+                align-items: center;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                cursor: pointer;
+                position: relative;
+                @include themify($themes) {
+                    color: themed('TemplateListItemText');
+                }
+
+                .text {
+                    max-width: 240px;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+                .ic-icon {
+                    @include themify($themes) {
+                        fill: themed('TemplateListItemText');
                     }
-                    .ciq-list-item-text {
-                        width: calc(100% - 40px);
-                    }
-                    .ic-icon {
-                        justify-content: flex-end;
-                        width: 40px;
-                        opacity: 0;
-                        transition: opacity 0.15s 0.2s;
-                    }
-                    &:first-child {
-                        border-top: none;
-                        margin-top: 0px !important;
-                        border-radius: 0px;
-                    }
-                    &:last-child {
-                        margin-bottom: 0px !important;
+                }
+                .sc-tooltip__inner {
+                    max-width: 304px;
+                    height: auto;
+                    white-space: break-spaces;
+                    text-align: center;
+                }
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('TemplateListItemHoverBg');
                     }
                 }
             }
         }
     }
-    .ovrwrit-alrt {
+    &--overwrite {
         position: absolute;
         top: 0px;
         left: 0px;
@@ -102,61 +233,53 @@
         height: 100%;
         z-index: 40;
         @include themify($themes) {
-            background-color: themed('DialogBodyBg');
+            background: themed('TemplateBg');
         }
 
-        .ovrwrit-alrt-title {
+        &__content {
+            height: 230px;
+            padding: 24px 16px 16px;
+            box-sizing: border-box;
             text-align: center;
 
             .ic-icon {
-                width: 100%;
-                margin-bottom: 10px;
-
-                > svg {
-                    width: 24px;
-                    height: 24px;
-                }
+                margin: auto;
+                width: 128px;
+                height: 128px;
             }
-            > span {
-                display: block;
+            p {
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
                 text-align: center;
-                height: 20px;
+                @include themify($themes) {
+                    color: themed('TemplateText');
+                }
             }
         }
-        .ovrwrit-alrt-buttons {
-            display: flex;
-            justify-content: flex-end;
-            position: absolute;
-            bottom: 16px;
-            right: 30px;
-            font-weight: bold;
+        &__footer {
+            height: 72px;
+            padding: 16px 24px;
+            text-align: right;
+            box-sizing: border-box;
+            @include themify($themes) {
+                border-top: 2px solid themed('TemplateListBorder');
+            }
 
-            > div {
-                width: 90px;
-                text-align: center;
-                cursor: pointer;
-                @include themify($themes) {
-                    color: themed('TemplateBtn');
-                }
+            button {
+                margin-left: 8px;
             }
         }
     }
 }
 
 .smartcharts-mobile {
-    .cq-menu-dropdown {
-        .dropdown-title {
-            .icon {
-                flex: none;
-            }
-        }
-        .content .ciq-list {
-            .ciq-list-inner {
-                width: 100%;
-            }
-            .ciq-list-item .ic-icon {
-                opacity: 1;
-            }
+    .sc-views-menu {
+        .sc-dialog {
+            left: auto;
+            width: 300px;
         }
     }
 }

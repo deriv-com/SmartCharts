@@ -6,7 +6,7 @@ import {
     CsvIcon,
 } from './Icons.jsx';
 import { InlineLoader } from './Loader.jsx';
-import '../../sass/components/download.scss';
+import '../../sass/components/_download.scss';
 
 
 const Share = ({
@@ -21,7 +21,7 @@ const Share = ({
         className="sc-download-menu"
         title={t.translate('Download')}
         tooltip={t.translate('Download')}
-        newStyle
+        modalMode
         isFullscreen
         portalNodeId={portalNodeId}
     >
