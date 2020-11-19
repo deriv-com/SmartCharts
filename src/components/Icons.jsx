@@ -130,8 +130,13 @@ import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light
 import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
 import Vol1S75 from '../../sass/icons/active-symbols/volatility/1s75 index/light-75(1s) index.svg';
 import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
+import Crash500 from '../../sass/icons/active-symbols/volatility/crash500 index/crash500 index.svg';
+import Crash1000 from '../../sass/icons/active-symbols/volatility/crash1000 index/crash1000 index.svg';
+import Boom500 from '../../sass/icons/active-symbols/volatility/boom500 index/boom500 index.svg';
+import Boom1000 from '../../sass/icons/active-symbols/volatility/boom1000 index/boom1000 index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
+import Step from '../../sass/icons/active-symbols/volatility/step index/step index.svg';
 
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
@@ -477,8 +482,13 @@ export const ItemIconMap = {
     '1HZ50V': Wrapper(Vol1S50),
     '1HZ75V': Wrapper(Vol1S75),
     '1HZ100V': Wrapper(Vol1S100),
+    BOOM500: Wrapper(Boom500),
+    BOOM1000: Wrapper(Boom1000),
+    CRASH500: Wrapper(Crash500),
+    CRASH1000: Wrapper(Crash1000),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
+    stpRNG: Wrapper(Step),
 };
 
 function createCompositeIcon(A, B, icId) {
