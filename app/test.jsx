@@ -107,15 +107,14 @@ const parseQueryString = (query) => {
     return query_string;
 };
 const generateURL = (new_params) => {
-    const { origin, search } = window.location;
+    const { origin, pathname, search } = window.location;
     const cleanSearch = search.replace('?', '').trim();
-    console.log('cleanSearch', cleanSearch);
     const params = {
         ...(cleanSearch !== '' ? parseQueryString(cleanSearch) : {}),
         ...new_params,
     };
 
-    window.location.href = `${origin}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+    window.location.href = `${origin}${pathname}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
 };
 
 const chartId = '1';
