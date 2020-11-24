@@ -8,6 +8,7 @@
 .sc-download {
     padding: 24px;
     display: flex;
+    border-radius: 4px;
     @include themify($themes) {
         background: themed('DownloadBg');
         color: themed('DownloadText');
