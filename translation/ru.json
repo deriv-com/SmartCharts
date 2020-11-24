@@ -1,7 +1,7 @@
 {
   "[symbol] feed is delayed by [delay] minutes": "Данные для [symbol] запаздывают на [delay] мин.",
   "[symbol] market is now opened.": "Рынок [symbol] открыт.",
-  "[symbol] market is presently closed.": "Рынок [symbol] закрыт в данный момент.",
+  "[symbol] market is presently closed.": "Рынок [symbol] в настоящее время закрыт.",
   "A technical momentum indicator that compares a security's closing price to its price range over a given time period. The oscillator's sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result.": "Технический индикатор темпа, который сравнивает цену закрытия ценной бумаги с диапазоном её цен на протяжении заданного периода времени. Уменьшить чувствительность осциллятора к рыночным движениям можно путём регулирования временного периода или воспользовавшись скользящей средней.",
   "Active": "Активные",
   "Add": "Добавить",
@@ -62,7 +62,7 @@
   "Line Break": "Линейный прорыв",
   "LOW": "МИН.",
   "MACD is a trading indicator used in technical analysis of stock prices. It is supposed to reveal changes in the strength, direction, momentum, and duration of a trend in a stock's price.": "MACD – это индикатор, использующийся для технического анализа цены акций. Он выявляет изменение силы, направления, темпа и продолжительности тренда, отмечающегося на цене акции.",
-  "Markets": "",
+  "Markets": "Рынки",
   "minute": "мин.",
   "minutes": "мин.",
   "Network status": "Статус сети",
