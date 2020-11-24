@@ -671,6 +671,7 @@ class ChartStore {
         stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
 
         this.stateStore.stateChange(STATE.INITIAL);
+        this.loadChartWithInitalData(symbol, initialData?.masterData);
 
         this.loader.setState('market-symbol');
         this.activeSymbols.retrieveActiveSymbols().then(() => {
@@ -681,8 +682,6 @@ class ChartStore {
                 if (stxx.isDestroyed) { return; }
 
                 const isRestoreSuccess = this.state.restoreLayout();
-                this.loadChartWithInitalData(symbol, initialData?.masterData);
-
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
                         // default to first available symbol
