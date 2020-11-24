@@ -875,6 +875,7 @@ class ChartStore {
             this.setMainSeriesDisplay(symbolObj.name);
 
             this.loader.hide();
+            this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
             this.mainStore.paginationLoader.updateOnPagination(false);
             this.mainStore.drawTools.computeActiveDrawTools();
             this.mainStore.state.setChartIsReady(true);
@@ -896,7 +897,6 @@ class ChartStore {
         CIQ.extend(parameters, { ...params, ...rangeSpan }, true);
 
         this.stxx.loadChart(symbolObj, parameters, onChartLoad);
-        this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
     }
 
 
