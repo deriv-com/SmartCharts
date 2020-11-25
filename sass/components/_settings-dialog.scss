@@ -80,7 +80,7 @@
         display: flex;
         justify-content: space-between;
         padding: 16px 24px 24px;
-        border-radius: 0 0 4px 4px;
+        border-radius: 0 0 $border-radius $border-radius;
         height: 72px;
         box-sizing: border-box;
         @include themify($themes) {
@@ -93,7 +93,7 @@
             padding: 5px;
             width: 32px;
             height: 32px;
-            border-radius: 4px;
+            border-radius: $border-radius;
 
             svg {
                 @include themify($themes) {

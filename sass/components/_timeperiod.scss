@@ -21,7 +21,7 @@
 
             .ic-priod {
                 font-size: 1.2em;
-                border-radius: 4px;
+                border-radius: $border-radius;
                 padding: 3px 5px;
             }
         }
@@ -113,7 +113,7 @@
             align-items: center;
             margin: 0 4px 8px 0px;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: $border-radius;
             border: 1px solid transparent;
             box-sizing: border-box;
             position: relative;
