@@ -35,7 +35,6 @@
     }
     &__section {
         border-radius: $border-radius;
-        
         @include themify($themes) {
             background: themed('ChartModeBg');
         }
