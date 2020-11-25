@@ -374,30 +374,30 @@ class App extends Component {
         markers = [];
 
         switch (evt.target.value) {
-            case 'LINE':
-                for (let i = 0; i < 5; i++) {
-                    markers.push({
-                        ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                            .unix(),
-                        className: 'chart-marker-line',
-                        xPositioner: 'epoch',
-                        yPositioner: 'top',
-                    });
-                }
-                break;
-            case 'CIRCLE':
-                for (let i = 0; i < 15; i++) {
-                    markers.push({
-                        ts: moment().utc().second(0).subtract(i + 3, 'minutes')
-                            .unix(),
-                        className: 'chart-marker-circle',
-                        xPositioner: 'epoch',
-                        yPositioner: 'value',
-                    });
-                }
-                break;
-            default:
-                markers = [];
+        case 'LINE':
+            for (let i = 0; i < 5; i++) {
+                markers.push({
+                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                        .unix(),
+                    className: 'chart-marker-line',
+                    xPositioner: 'epoch',
+                    yPositioner: 'top',
+                });
+            }
+            break;
+        case 'CIRCLE':
+            for (let i = 0; i < 15; i++) {
+                markers.push({
+                    ts: moment().utc().second(0).subtract(i + 3, 'minutes')
+                        .unix(),
+                    className: 'chart-marker-circle',
+                    xPositioner: 'epoch',
+                    yPositioner: 'value',
+                });
+            }
+            break;
+        default:
+            markers = [];
         }
         this.setState({ markers });
     }
