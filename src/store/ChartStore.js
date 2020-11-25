@@ -671,7 +671,6 @@ class ChartStore {
         stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
 
         this.stateStore.stateChange(STATE.INITIAL);
-        this.loadChartWithInitalData(symbol, initialData?.masterData);
 
         this.loader.setState('market-symbol');
         this.activeSymbols.retrieveActiveSymbols().then(() => {
@@ -682,6 +681,8 @@ class ChartStore {
                 if (stxx.isDestroyed) { return; }
 
                 const isRestoreSuccess = this.state.restoreLayout();
+                this.loadChartWithInitalData(symbol, initialData?.masterData);
+
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
                         // default to first available symbol
@@ -919,7 +920,9 @@ class ChartStore {
      * load the chart with given data
      *
      * by this methos, beside of waiting for Feed@fetchInitialData to provide first data
-     * the chart are initiled by give masterData
+     * the chart are initiled by give masterData. Chart need a symbol to be able to get
+     * loaded, so if the passed symbol didn't fill, it try to get the symbol from `layout-*`
+     * storage
      *
      * @param {string} symbol the symbol used to load the chart
      * @param {array} masterData array of ticks regards of desire tick
@@ -929,8 +932,9 @@ class ChartStore {
 
         const layoutData = createObjectFromLocalStorage(`layout-${this.stateStore.chartId}`);
         if (!layoutData || !layoutData.symbols.length) return;
+        const layout_symbol = layoutData.symbols[0].symbol;
 
-        this.stxx.loadChart(symbol || '1HZ10V', {
+        this.stxx.loadChart(symbol || layout_symbol || '1HZ10V', {
             masterData,
             periodicity: {
                 period: layoutData.periodicity,
