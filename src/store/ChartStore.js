@@ -934,7 +934,12 @@ class ChartStore {
         if (!layoutData || !layoutData.symbols.length) return;
         const layout_symbol = layoutData.symbols[0].symbol;
 
-        this.stxx.loadChart(symbol || layout_symbol || '1HZ10V', {
+        if (!(symbol || layout_symbol)) {
+            console.error('symbol is not specificed, without it, chart is unable to be loaded!');
+            return;
+        }
+
+        this.stxx.loadChart(symbol || layout_symbol, {
             masterData,
             periodicity: {
                 period: layoutData.periodicity,
