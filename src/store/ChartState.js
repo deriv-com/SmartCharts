@@ -304,6 +304,9 @@ class ChartState {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
             this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
             this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+            // current price bg color
+            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_current_hr);
+            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_current_hr);
         }
         this.stxx.draw();
     }

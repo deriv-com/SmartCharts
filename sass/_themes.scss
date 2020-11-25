@@ -832,6 +832,7 @@ $themes: (
     chart_closed_candle_up: map-get(map-get($themes, 'light'), 'ChartClosedCandleBgUp');
     chart_closed_candle_down: map-get(map-get($themes, 'light'), 'ChartClosedCandleBgDown');
     chart_closed_candle_border: map-get(map-get($themes, 'light'), 'ChartClosedCandleBorder');
+    chart_current_hr: map-get(map-get($themes, 'light'), 'ChartCurrentHRBg');
     chart_closed_current_hr: map-get(map-get($themes, 'light'), 'ChartCloseCurrentHRBg');
     light_chart_bg: map-get(map-get($themes, 'light'), 'ChartBg');
     dark_chart_bg: map-get(map-get($themes, 'dark'), 'ChartBg');
