@@ -14,7 +14,7 @@
 
         .sc-input {
             width: calc(100% - 40px);
-            border-radius: 4px 0 0 4px;
+            border-radius: $border-radius 0 0 $border-radius;
             height: 40px;
             text-align: left;
         }
@@ -40,7 +40,7 @@
         button {
             width: 40px;
             height: 40px;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0 $border-radius $border-radius 0;
             padding: 8px 7px;
             border: none !important;
 
@@ -75,7 +75,7 @@
 .sc-views {
     height: 304px;
     position: relative;
-    border-radius: 0 0 4px 4px;
+    border-radius: 0 0 $border-radius $border-radius;
     @include themify($themes) {
         background: themed('TemplateBg');
     }
@@ -169,7 +169,7 @@
             }
             button {
                 height: 24px;
-                border-radius: 4px;
+                border-radius: $border-radius;
                 cursor: pointer;
                 background: transparent;
                 outline: none !important;
@@ -183,7 +183,7 @@
         &__list {
             &__item {
                 height: 40px;
-                border-radius: 4px;
+                border-radius: $border-radius;
                 display: flex;
                 padding: 10px 16px;
                 justify-content: space-between;

@@ -202,7 +202,7 @@
         position: absolute;
         top: 0px;
         left: 50%;
-        border-radius: 4px;
+        border-radius: $border-radius;
         height: 34px;
         width: auto;
         white-space: nowrap;
@@ -293,7 +293,7 @@
     line-height: 1.43;
     letter-spacing: normal;
     text-align: center;
-    border-radius: 4px;
+    border-radius: $border-radius;
     outline: none !important;
     border: 1px solid;
     @include themify($themes) {
@@ -363,7 +363,7 @@
 .sc-chart__status {
     width: 8px;
     height: 8px;
-    border-radius: 4px;
+    border-radius: $border-radius;
     margin: 4px 0;
     opacity: 1;
     @include themify($themes) {
@@ -389,7 +389,7 @@
 }
 
 .sc-input {
-    border-radius: 4px 0 0 4px;
+    border-radius: $border-radius 0 0 $border-radius;
     height: 40px;
     box-sizing: border-box;
     border-right: none !important;
