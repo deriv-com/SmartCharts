@@ -512,6 +512,7 @@ class ChartState {
             } else {
                 this.stxx.setMaxTicks(Math.floor(scrollToTarget * 3 / 2) || 2);
                 this.stxx.chart.scroll = Math.floor(scrollToTarget * 5 / 4) || 1;
+                this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
             this.stxx.draw();
