@@ -35,13 +35,13 @@
 
         &:first-child {
             margin-top: 18px;
-            border-radius: 4px 4px 0 0;
+            border-radius: $border-radius $border-radius 0 0;
             @include themify($themes) {
                 border-top: 1px solid themed('ListLiBorder');
             }
         }
         &:last-child {
-            border-radius: 0 0 4px 4px;
+            border-radius: 0 0 $border-radius $border-radius;
             margin-bottom: 18px;
         }
         &:hover {
