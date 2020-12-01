@@ -19,6 +19,7 @@ import {
     getUTCDate,
     cloneCategories,
     prepareIndicatorName,
+    createObjectFromLocalStorage,
     renderSVGString }          from '../utils';
 import PendingPromise          from '../utils/PendingPromise';
 
@@ -41,6 +42,7 @@ class ChartStore {
         this.mainStore = mainStore;
     }
 
+    feedCall;
     RANGE_PADDING_PX = 125;
     contextPromise = new PendingPromise();
     rootNode = null;
@@ -538,11 +540,26 @@ class ChartStore {
             settings,
             onSettingsChange,
             getMarketsOrder,
+            initialData,
+            feedCall,
         } = props;
+
+        this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
-        this.tradingTimes = ChartStore.tradingTimes || (ChartStore.tradingTimes = new TradingTimes(this.api, this.mainStore.state.shouldFetchTradingTimes));
-        this.activeSymbols = ChartStore.activeSymbols || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, getMarketsOrder));
+        this.tradingTimes = ChartStore.tradingTimes
+                || (ChartStore.tradingTimes = new TradingTimes(this.api, {
+                    enable: this.feedCall.tradingTimes,
+                    shouldFetchTradingTimes: this.mainStore.state.shouldFetchTradingTimes,
+                    initialData: initialData?.tradingTimes,
+                }));
+
+        this.activeSymbols = ChartStore.activeSymbols
+                || (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, {
+                    enable: this.feedCall.activeSymbols,
+                    getMarketsOrder,
+                    initialData: initialData?.activeSymbols,
+                }));
 
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -653,7 +670,6 @@ class ChartStore {
         stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
         stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
 
-
         this.stateStore.stateChange(STATE.INITIAL);
 
         this.loader.setState('market-symbol');
@@ -665,6 +681,7 @@ class ChartStore {
                 if (stxx.isDestroyed) { return; }
 
                 const isRestoreSuccess = this.state.restoreLayout();
+                this.loadChartWithInitalData(symbol, initialData?.masterData);
 
                 if (!isRestoreSuccess) {
                     this.changeSymbol(
@@ -899,6 +916,40 @@ class ChartStore {
         this.stxx.loadChart(symbolObj, parameters, onChartLoad);
     }
 
+    /**
+     * load the chart with given data
+     *
+     * by this methos, beside of waiting for Feed@fetchInitialData to provide first data
+     * the chart are initiled by give masterData. Chart need a symbol to be able to get
+     * loaded, so if the passed symbol didn't fill, it try to get the symbol from `layout-*`
+     * storage
+     *
+     * @param {string} symbol the symbol used to load the chart
+     * @param {array} masterData array of ticks regards of desire tick
+     */
+    loadChartWithInitalData(symbol, masterData) {
+        if (!masterData) return;
+
+        const layoutData = createObjectFromLocalStorage(`layout-${this.stateStore.chartId}`);
+        if (!layoutData || !layoutData.symbols.length) return;
+        const layout_symbol = layoutData.symbols[0].symbol;
+
+        if (!(symbol || layout_symbol)) {
+            console.error('symbol is not specificed, without it, chart is unable to be loaded!');
+            return;
+        }
+
+        this.stxx.loadChart(symbol || layout_symbol, {
+            masterData,
+            periodicity: {
+                period: layoutData.periodicity,
+                interval: layoutData.interval,
+                timeUnit: layoutData.timeUnit,
+            },
+        },  () => {
+            this.loader.hide();
+        });
+    }
 
     remainLabelY = () => {
         const stx = this.context.stx;

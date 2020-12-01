@@ -11,10 +11,10 @@ export default class ActiveSymbols {
     symbolsPromise = new PendingPromise();
     isRetrievingSymbols = false;
 
-    constructor(api, tradingTimes, getMarketsOrder) {
+    constructor(api, tradingTimes, params) {
         this._api = api;
         this._tradingTimes = tradingTimes;
-        this.getMarketsOrder = getMarketsOrder;
+        this._params = params;
     }
 
     @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
@@ -24,7 +24,18 @@ export default class ActiveSymbols {
         }
 
         this.isRetrievingSymbols = true;
-        const { active_symbols } = await this._api.getActiveSymbols();
+
+        let active_symbols = [];
+        if (this._params.initialData && !this.processedSymbols) {
+            active_symbols = this._params.initialData;
+        } else if (this._params.enable !== false) {
+            const response = await this._api.getActiveSymbols();
+            active_symbols = response.active_symbols;
+        } else {
+            console.error('ActiveSymbols feed is not enable nor has initial data!');
+            return;
+        }
+
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
@@ -81,7 +92,7 @@ export default class ActiveSymbols {
 
         // Categorize symbols in order defined by another array; there's probably a more
         // efficient algo for this, but for just ~100 items it's not worth the effort
-        const orderedMarkets = typeof this.getMarketsOrder === 'function' ? this.getMarketsOrder(symbols) : DefaultSymbols;
+        const orderedMarkets = typeof this._params.getMarketsOrder === 'function' ? this._params.getMarketsOrder(symbols) : DefaultSymbols;
         const orderedSymbols = [];
         for (const o of orderedMarkets) {
             for (const p of processedSymbols) {
