@@ -220,7 +220,7 @@ html, body {
     width: 32px;
     padding: 0px;
     margin-bottom: 17px;
-    border-radius: 4px;
+    border-radius: $border-radius;
     z-index: 15;
     cursor: pointer;
     @include themify($themes) {
@@ -269,7 +269,7 @@ html, body {
     overflow: hidden;
     z-index: 30;
     display: none;
-    border-radius: 4px;
+    border-radius: $border-radius;
     height: 24px;
     @include themify($themes) {
         background: themed('ChartPanelBg');
@@ -329,7 +329,7 @@ html, body {
     display: none;
     z-index: 44;
     white-space: nowrap;
-    border-radius: 4px;
+    border-radius: $border-radius;
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
@@ -345,7 +345,7 @@ html, body {
         padding: 8px;
         position: relative;
         width: 100%;
-        border-radius: 4px 4px 0px 0px;
+        border-radius: $border-radius $border-radius 0px 0px;
         border: none;
         box-sizing: border-box;
         font-size: 12px;
@@ -481,7 +481,7 @@ html, body {
 
 .stx-float-price,
 .stx-float-date {
-    border-radius: 4px;
+    border-radius: $border-radius;
     font-weight: normal;
     @include themify($themes) {
         background-color: themed('CrosshairLabelBg');
@@ -1020,7 +1020,7 @@ $spot-color: #0298d3;
         .cq-endpoint-label {
             width: 145px;
             padding: 1px 9px;
-            border-radius: 4px;
+            border-radius: $border-radius;
             position: absolute;
             top: calc(100% - 22px);
             transform: translateX(-50%);

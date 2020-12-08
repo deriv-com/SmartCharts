@@ -1,5 +1,3 @@
-/* Used for app only. Do not deploy with library! */
-
 .test-container {
     position: relative;
     height: calc(100vh - 30px);
@@ -16,13 +14,15 @@
     .action-section {
         height: 100%;
         width: 150px;
+        overflow-y: scroll;
 
         .form-row {
             padding: 0 10px;
             display: block;
             margin-bottom: 6px;
         }
-        input, select {
+        input,
+        select {
             width: 100%;
             box-sizing: content-box;
         }
@@ -30,11 +30,32 @@
             width: auto;
         }
         button {
-            border-radius: 4px;
+            border-radius: $border-radius;
             background: #dedede;
             border: 1px solid #aaa;
             padding: 5px;
             font-size: 10px;
+        }
+        .card {
+            padding: 5px 10px 10px;
+            display: block;
+            background-color: #ddd;
+            margin-bottom: 15px;
+            border-radius: 5px;
+
+            h3 {
+                margin: 5px 0;
+                text-align: center;
+            }
+            .card-body {
+                background-color: #fff;
+                border-radius: 5px;
+                padding: 5px;
+
+                .form-row {
+                    pad: 0px;
+                }
+            }
         }
     }
 }

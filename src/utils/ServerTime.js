@@ -22,7 +22,17 @@ class ServerTime {
 
     async requestTime() {
         this.clientTimeAtRequest = getUTCEpoch(new Date());
-        await this._api.getServerTime().then(this._timeResponse);
+        if (this.serverTimeAtResponse) {
+            // it is not the first time
+            await this._api.getServerTime().then(this._timeResponse);
+        } else {
+            // it is the first time
+            // to boot up the speed, at the beginig
+            // we use the user time
+            this._timeResponse({
+                time: parseInt((new Date()).getTime() / 1000, 10),
+            });
+        }
         this.clockStartedPromise.resolve();
     }
 
