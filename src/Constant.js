@@ -56,7 +56,7 @@ export const drawTools = {
     vertical:   { id: 'vertical',    text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
 };
 
-export const IndicatorsTree = [
+export const getIndicatorsTree = () => [
     {
         id: 'momentum',
         name: 'Momentum',
@@ -427,3 +427,9 @@ export const Languages = [
         icon: <FlagIcons.Spanish />,
     },
 ];
+
+export const STATE = {
+    INITIAL: 'INITIAL',
+    READY: 'READY',
+    SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
+};

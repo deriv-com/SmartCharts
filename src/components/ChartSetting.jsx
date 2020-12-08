@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import { connect } from '../store/Connect';
 import { FormGroup, SwitchIcon } from './Form.jsx';
 import {
@@ -63,7 +64,7 @@ const ChartSetting = ({
     >
         <ChartSettingMenu.Title>
             <SettingIcon
-                className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
+                className={classNames('ic-icon-with-sub', { active: menuOpen })}
                 tooltip-title={t.translate('Settings')}
             />
         </ChartSettingMenu.Title>
@@ -81,14 +82,14 @@ const ChartSetting = ({
                             type="theme"
                         >
                             <div
-                                className={`form__group__item ${theme === 'dark' ? 'form__group__item--active' : ''}`}
+                                className={classNames('form__group__item', { 'form__group__item--active': (theme === 'dark') })}
                                 onClick={() => setTheme('dark')}
                             >
                                 <ThemeDarkIcon />
                                 <div className="text">{t.translate('Dark')}</div>
                             </div>
                             <div
-                                className={`form__group__item ${theme === 'light' ? 'form__group__item--active' : ''}`}
+                                className={classNames('form__group__item', { 'form__group__item--active': (theme === 'light') })}
                                 onClick={() => setTheme('light')}
                             >
                                 <ThemeLightIcon />
@@ -105,9 +106,11 @@ const ChartSetting = ({
                         >
                             {languages.map(language => (
                                 <div
-                                    className={`form__group__item ${(selectedLanguage.key === language.key) ? 'form__group__item--active' : ''}`}
                                     key={language.key}
                                     onClick={() => setLanguage(language.key)}
+                                    className={classNames('form__group__item', {
+                                        'form__group__item--active': (selectedLanguage.key === language.key),
+                                    })}
                                 >
                                     {language.icon}
                                     <span className="text">{language.name}</span>

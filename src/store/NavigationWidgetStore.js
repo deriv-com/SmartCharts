@@ -21,7 +21,7 @@ export default class NavigationWidgetStore {
 
     @action.bound onMouseWheel() {
         this.stxx.chart.lockScroll = false;
-        this.mainStore.chart.isScaledOneOne = false;
+        this.mainStore.chart.updateScaledOneOne(false);
     }
 
     @action.bound onMouseEnter() {
@@ -39,7 +39,10 @@ export default class NavigationWidgetStore {
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
 
-        this.stateStore.scrollChartToLeft(point, true);
+        this.stxx.home();
+        setTimeout(() => {
+            this.stateStore.scrollChartToLeft(point, true);
+        }, 10);
     }
 
     @action.bound onCrosshairChange() {

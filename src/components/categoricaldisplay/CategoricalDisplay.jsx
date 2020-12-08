@@ -4,6 +4,7 @@ import '../../../sass/components/_categorical-display.scss';
 
 const CategoricalDisplay = ({
     onSelectItem,
+    setFilterText,
     updateScrollSpy,
     setScrollPanel,
     ResultsPanel,
@@ -18,7 +19,10 @@ const CategoricalDisplay = ({
 }) => {
     const innerPanel = (
         <ResultsPanel
-            onSelectItem={onSelectItem}
+            onSelectItem={(item) => {
+                onSelectItem(item);
+                setFilterText('');
+            }}
             id={id}
             disableAll={disableAll}
             isNestedList={isNestedList}

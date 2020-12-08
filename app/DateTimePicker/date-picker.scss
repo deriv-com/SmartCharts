@@ -11,7 +11,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     font-size: 1.4em;
     box-sizing: border-box;
     width: 280px;
-    border-radius: 4px;
+    border-radius: $border-radius;
     @include themify($themes) {
         background: themed('ChartHistoryPickerBg');
         border: 1px solid themed('ChartHistoryPickerBorder');
@@ -261,7 +261,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         transition: border 0.25s;
         background: transparent;
         border: none;
-        border-radius: 4px;
+        border-radius: $border-radius;
         @include themify($themes) {
             color: themed('ChartHistoryPickerColor');
         }
@@ -291,7 +291,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         }
     }
     .datepicker-display-wrapper {
-        border-radius: 4px;
+        border-radius: $border-radius;
         @include themify($themes) {
             background: themed('ChartHistoryPickerBg');
             border: 1px solid themed('ChartHistoryPickerBorder');

@@ -11,15 +11,18 @@ export default class ChartSizeStore {
 
     onContextReady = () => { this.stx = this.mainStore.chart.context.stx; };
 
+    get state() { return this.mainStore.state; }
+
     @action.bound updateChartState() {
         this.stx.chart.lockScroll = false;
         this.stx.chart.lockAutoScroll = false;
-        this.mainStore.chart.isScaledOneOne = false;
+        this.mainStore.chart.updateScaledOneOne(false);
     }
 
     @action.bound zoomIn() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
-        if (this.stx) {
+        if (this.stx && this.state.enableZoom) {
+            if (this.stx.minimumZoomTicks > this.stx.chart.maxTicks) { return; }
             this.updateChartState();
             this.stx.zoomIn();
         }
@@ -27,7 +30,7 @@ export default class ChartSizeStore {
 
     @action.bound zoomOut() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
-        if (this.stx) {
+        if (this.stx && this.state.enableZoom) {
             this.updateChartState();
             this.stx.zoomOut();
         }

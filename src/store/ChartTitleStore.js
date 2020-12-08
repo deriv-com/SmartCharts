@@ -23,7 +23,8 @@ export default class ChartTitleStore {
             mainStore,
             id: 'market_dropdown',
             getCurrentActiveCategory: () => this.currentActiveCategory,
-            getCurrentActiveSubCategory: () => (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : ''),
+            getCurrentActiveSubCategory: () => this.currentActiveSubCategory,
+            getCurrentActiveMarket: () => this.currentActiveMarket,
             searchInputClassName: () => this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
@@ -51,7 +52,8 @@ export default class ChartTitleStore {
     @observable todayChange = null;
     @observable todayChangePercent = null;
     @observable isVisible = false;
-    @observable activeCategory = null;
+    @observable openMarket = {};
+    enableShowPrice = false;
     searchInputClassName;
 
     get chart() { return this.mainStore.chart; }
@@ -74,8 +76,18 @@ export default class ChartTitleStore {
         return { openTime };
     }
     @computed get currentActiveCategory() {
-        if (this.activeCategory) { return this.activeCategory; }
+        if (this.openMarket.category) { return this.openMarket.category; }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
+    }
+
+    @computed get currentActiveSubCategory() {
+        if (this.openMarket.subcategory) { return this.openMarket.subcategory; }
+        return (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '');
+    }
+
+    @computed get currentActiveMarket() {
+        if (this.openMarket.market) { return this.openMarket.market; }
+        return null;
     }
 
     onContextReady = () => {
@@ -103,9 +115,8 @@ export default class ChartTitleStore {
     @action.bound update(quote) {
         if (!this.currentSymbol) { return; }
 
-        this.isVisible = quote || !this.isShowChartPrice;
-        if (!this.isVisible) { return; }
-
+        const isVisible = quote || !this.isShowChartPrice;
+        if (!isVisible) { return; }
 
         let currentPrice = quote.Close;
         if (currentPrice) {
@@ -117,14 +128,32 @@ export default class ChartTitleStore {
                 this.todayChangePercent = ((this.todayChange / oldPrice) * 100).toFixed(2);
             }
         }
+
+        // `todayChange` and `todayChangePercent` has problem on
+        // changing symbol, if two symbol have great difference
+        // in their values, it has a jumb in showing the correct
+        // values, with this code, we simply ignore the first update
+        // of these tow value and show the second data and it fix the
+        // above issue
+        if (!this.isVisible && isVisible && !this.enableShowPrice) {
+            this.enableShowPrice = true;
+            return;
+        }
+
+        this.isVisible = isVisible;
     }
 
     onMouseEnter = () => this.crosshairStore.updateVisibility(false);
     onMouseLeave = () => this.crosshairStore.updateVisibility(true);
 
-    @action.bound updateProps({ active_category, open }) {
-        if (active_category) {
-            this.activeCategory = active_category;
+    @action.bound hidePrice() {
+        this.isVisible = false;
+        this.enableShowPrice = false;
+    }
+
+    @action.bound updateProps({ open_market, open }) {
+        if (open_market) {
+            this.openMarket = open_market;
         }
         if (open) {
             this.menu.setOpen(true);

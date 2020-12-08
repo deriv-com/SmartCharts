@@ -25,18 +25,19 @@ import 'url-search-params-polyfill';
 import { configure } from 'mobx';
 import './app.scss';
 import './test.scss';
-import whyDidYouRender  from '@welldone-software/why-did-you-render';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
 import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
 import NetworkMonitor from './connection/NetworkMonitor';
+import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
 
 setSmartChartsPublicPath('./dist/');
 
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'production') {
     whyDidYouRender(React, {
         collapseGroups: true,
         include: [/.*/],
@@ -84,8 +85,40 @@ function getServerUrl() {
     return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
 }
 
+const parseQueryString = (query) => {
+    const vars = query.split('&');
+    const query_string = {};
+    for (let i = 0; i < vars.length; i++) {
+        const pair = vars[i].split('=');
+        const key = decodeURIComponent(pair[0]);
+        const value = decodeURIComponent(pair[1]);
+        // If first entry with this name
+        if (typeof query_string[key] === 'undefined') {
+            query_string[key] = decodeURIComponent(value);
+            // If second entry with this name
+        } else if (typeof query_string[key] === 'string') {
+            const arr = [query_string[key], decodeURIComponent(value)];
+            query_string[key] = arr;
+            // If third or later entry with this name
+        } else {
+            query_string[key].push(decodeURIComponent(value));
+        }
+    }
+    return query_string;
+};
+const generateURL = (new_params) => {
+    const { origin, pathname, search } = window.location;
+    const cleanSearch = search.replace('?', '').trim();
+    const params = {
+        ...(cleanSearch !== '' ? parseQueryString(cleanSearch) : {}),
+        ...new_params,
+    };
+
+    window.location.href = `${origin}${pathname}?${Object.keys(params).map(key => `${key}=${params[key]}`).join('&')}`;
+};
+
 const chartId = '1';
-const appId  = localStorage.getItem('config.app_id') || 12812;
+const appId = localStorage.getItem('config.app_id') || 12812;
 const serverUrl = getServerUrl();
 const language = new URLSearchParams(window.location.search).get('l') || getLanguageStorage();
 const today = moment().format('YYYY/MM/DD 00:00');
@@ -122,11 +155,9 @@ class App extends Component {
         let endEpoch;
         let settings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
-        let activeSymbols = new URLSearchParams(window.location.search).get('activeSymbols') || 'null';
+        const feedCall = {};
+        const initialData = {};
 
-        if (activeSymbols !== 'null') {
-            activeSymbols = activeSymbols.split(',');
-        }
         if (settings) {
             settings.language = language;
             this.startingLanguage = settings.language;
@@ -166,6 +197,16 @@ class App extends Component {
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, this.handleNetworkStatus);
 
+        const urlParams = parseQueryString(window.location.search.replace('?', ''));
+        const marketsOrder = urlParams.marketsOrder || 'null';
+        const getMarketsOrder = marketsOrder !== '' && marketsOrder !== 'null' ? () => marketsOrder.split(',') : undefined;
+
+        if (urlParams.feedcall_tradingTimes === 'false') feedCall.tradingTimes = false;
+        if (urlParams.feedcall_activeSymbols === 'false') feedCall.activeSymbols = false;
+        if (urlParams.initialdata_masterData === 'true') initialData.masterData = masterData();
+        if (urlParams.initialdata_tradingTimes === 'true') initialData.tradingTimes = MockTradingTime;
+        if (urlParams.initialdata_activeSymbols === 'true') initialData.activeSymbols = MockActiveSymbol;
+
         this.state = {
             settings,
             endEpoch,
@@ -175,13 +216,18 @@ class App extends Component {
             activeLanguage,
             isConnectionOpened: true,
             enabledFooter: true,
+            enableScroll: null,
+            enableZoom: null,
             highLow: {},
             barrierType: '',
             draggable: true,
             markers: [],
             crosshairState: 1,
-            activeSymbols,
-            activeCategory: '',
+            openMarket: {},
+            getMarketsOrder,
+            refreshActiveSymbols: false,
+            initialData,
+            feedCall,
         };
     }
 
@@ -249,10 +295,10 @@ class App extends Component {
         <React.Fragment>
             <ChartTitle
                 onChange={this.symbolChange}
-                active_category={this.state.activeCategory}
-                open={!!this.state.activeCategory}
+                open_market={this.state.openMarket}
+                open={!!this.state.openMarket.category}
             />
-            {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} /> }
+            {!!this.state.settings.historical && <ChartHistory onChange={this.handleDateChange} />}
             <Notification
                 notifier={this.notifier}
             />
@@ -364,7 +410,7 @@ class App extends Component {
 
     onBarrierTypeChange = (evt) => {
         const { value: barrierType } = evt.target;
-        const nextState = (barrierType === '') ? { highLow : {} } : {};
+        const nextState = (barrierType === '') ? { highLow: {} } : {};
         this.setState({ ...nextState, barrierType });
     };
 
@@ -448,13 +494,44 @@ class App extends Component {
 
     onActiveSymbol = (evt) => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
-        window.location.href = `${baseUrl}?activeSymbols=${evt.target.value}`;
-    }
+        window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
+    };
 
-    onActiveCategory = () => {
-        this.setState(prevState => ({
-            activeCategory: prevState.activeCategory ? null : 'synthetic_index',
-        }));
+    onOpenMarket = (evt) => {
+        const marketArray = evt.target.value.split(',');
+        if (marketArray.length === 0) return;
+
+        this.setState({
+            openMarket: {
+                category: marketArray[0],
+                subcategory: marketArray[1] || null,
+                market: marketArray[2] || null,
+            },
+        });
+
+        setTimeout(() => {
+            this.setState({
+                openMarket: {},
+            });
+        }, 500);
+    };
+
+    handleScroll = () => this.setState(prevState => ({
+        enableScroll: !prevState.enableScroll,
+    }));
+
+    handleZoom = () => this.setState(prevState => ({
+        enableZoom: !prevState.enableZoom,
+    }));
+
+    handleRefreshActiveSymbols = () => {
+        this.setState({
+            refreshActiveSymbols: true,
+        }, () => {
+            this.setState({
+                refreshActiveSymbols: false,
+            });
+        });
     }
 
     onChartSize = (state) => {
@@ -476,13 +553,22 @@ class App extends Component {
         });
     }
 
+    /**
+     * Initial Data
+     */
+    onInitalDataTradingTime = evt => generateURL({ initialdata_tradingTimes: evt.currentTarget.checked });
+    onInitalDataActiveSymbols = evt => generateURL({ initialdata_activeSymbols: evt.currentTarget.checked });
+    onInitalDataMasterData = evt => generateURL({ initialdata_masterData: evt.currentTarget.checked });
+    onFeedCallTradingTime = evt => generateURL({ feedcall_tradingTimes: evt.currentTarget.checked });
+    onFeedCallActiveSymbols = evt => generateURL({ feedcall_activeSymbols: evt.currentTarget.checked })
+
     render() {
-        const { settings, isConnectionOpened, symbol, endEpoch,
-            barrierType, highLow : { high, low }, hidePriceLines,
+        const { settings, isConnectionOpened, symbol, endEpoch, startEpoch,
+            barrierType, highLow: { high, low }, hidePriceLines,
             draggable, relative, shadeColor, scrollToEpoch,
-            leftOffset, color, foregroundColor, markers,
+            leftOffset, color, foregroundColor, markers, feedCall,
             enabledNavigationWidget, activeLanguage,
-            crosshairState, zoom, maxTick } = this.state;
+            crosshairState, zoom, maxTick, initialData } = this.state;
         const barriers = barrierType ? [{
             shade: barrierType,
             shadeColor,
@@ -504,21 +590,25 @@ class App extends Component {
                     <SmartChart
                         id={chartId}
                         symbol={symbol}
-                        activeSymbols={this.state.activeSymbols || null}
                         isMobile={isMobile}
                         onMessage={this.onMessage}
                         enableRouting
+                        enableScroll={this.state.enableScroll}
+                        enableZoom={this.state.enableZoom}
                         chartControlsWidgets={null}
                         enabledNavigationWidget={enabledNavigationWidget}
                         enabledChartFooter={this.state.enabledFooter}
                         removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
+                        settings={settings}
+                        initialData={initialData}
+                        feedCall={feedCall}
                         requestAPI={requestAPI}
                         requestSubscribe={requestSubscribe}
                         requestForget={requestForget}
                         toolbarWidget={this.renderToolbarWidget}
-                        settings={settings}
                         endEpoch={endEpoch}
+                        startEpoch={startEpoch}
                         chartType={this.state.chartType}
                         granularity={this.state.granularity}
                         onSettingsChange={this.saveSettings}
@@ -527,9 +617,11 @@ class App extends Component {
                         scrollToEpoch={scrollToEpoch}
                         scrollToEpochOffset={leftOffset}
                         crosshairState={crosshairState}
+                        getMarketsOrder={this.state.getMarketsOrder}
                         zoom={zoom}
                         maxTick={maxTick}
                         networkStatus={this.state.networkStatus}
+                        refreshActiveSymbols={this.state.refreshActiveSymbols}
                     >
                         {endEpoch ? (
                             <Marker
@@ -559,9 +651,9 @@ class App extends Component {
                         <button type="button" onClick={this.onWidget}>Navigate Widget</button>
                         <button type="button" onClick={this.onFooter}>Footer</button>
                         <button type="button" onClick={this.onActiveLanguage}>Active Lang: {activeLanguage ? 'ON' : 'OFF'}</button>
-
-                        <button type="button" onClick={this.onActiveCategory}>Active Category</button>
-
+                        <button type="button" onClick={this.handleScroll}>Enable/Disable Scroll</button>
+                        <button type="button" onClick={this.handleZoom}>Enable/Disable Zoom</button>
+                        <button type="button" onClick={this.handleRefreshActiveSymbols}>Refresh ActiveSymbol</button>
                     </div>
                     <div className="form-row">
                         <button type="button" onClick={() => this.onChartSize(1)}>Zoom in</button>
@@ -575,6 +667,16 @@ class App extends Component {
                             <option value="synthetic_index,indices,stocks,commodities,forex">synthetic_index,indices,stocks,commodities,forex</option>
                         </select>
                     </div>
+
+                    <div className="form-row">
+                        <select onChange={this.onOpenMarket}>
+                            <option value=""> -- Open Market -- </option>
+                            <option value="indices,europe,OTC_FCHI">indices - europe - OTC_FCHI</option>
+                            <option value="synthetic_index,continuous-indices,1HZ10V">Synthetic Index - Continuous Indices - 1HZ10V</option>
+                            <option value="forex,minor-pairs">Forex - minor-pairs </option>
+                        </select>
+                    </div>
+
                     <div className="form-row">
                         Crosshair State <br />
                         <select onChange={this.onCrosshair}>
@@ -677,6 +779,31 @@ class App extends Component {
                     <div className="form-row">
                         Toggle StartEpoch: <button type="button" onClick={this.toggleStartEpoch}>Toggle</button> <br />
                         LeftOffset(bars): <input type="number" value={leftOffset || 0} onChange={this.onLeftOffset} />
+                    </div>
+                    <div className="card">
+                        <h3>InitialData</h3>
+                        <div className="card-body">
+                            <div className="form-row">
+                                tradingTime: <input type="checkbox" checked={!!initialData.tradingTimes} onChange={this.onInitalDataTradingTime} />
+                            </div>
+                            <div className="form-row">
+                                activeSymbols: <input type="checkbox" checked={!!initialData.activeSymbols} onChange={this.onInitalDataActiveSymbols} />
+                            </div>
+                            <div className="form-row">
+                                masterData: <input type="checkbox" checked={!!initialData.masterData} onChange={this.onInitalDataMasterData} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card">
+                        <h3>FeedCall</h3>
+                        <div className="card-body">
+                            <div className="form-row">
+                                tradingTime: <input type="checkbox" checked={feedCall.tradingTimes !== false} onChange={this.onFeedCallTradingTime} />
+                            </div>
+                            <div className="form-row">
+                                activeSymbols: <input type="checkbox" checked={feedCall.activeSymbols !== false} onChange={this.onFeedCallActiveSymbols} />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
