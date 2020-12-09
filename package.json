@@ -36,7 +36,9 @@
     "gh-pages:folder": "f () { gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME,Dockerfile,.dockerignore,default.conf,.circleci/**}' --dest $1 ;}; f",
     "translations": "npm run build && node scripts/extract-translations.js ./dist/smartcharts.js",
     "deploy:production": "npm run build-travis && echo 'charts.binary.com' > CNAME  && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
-    "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'"
+    "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'",
+    "prettify": "./node_modules/.bin/prettier --config ./.prettierrc --write \"./packages/*/{app,loaders,src}/**/*.{js,jsx,scss}\"",
+    "precommit": "lint-staged --allow-empty"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",
@@ -80,7 +82,9 @@
     "fs": "^0.0.1-security",
     "gettext-loader2": "^0.3.0",
     "gh-pages": "^2.1.1",
+    "husky": "^4.2.5",
     "json-loader": "^0.5.7",
+    "lint-staged": "^10.4.0",
     "md5-file": "^4.0.0",
     "mini-css-extract-plugin": "^0.8.0",
     "mkdirp": "^0.5.1",
@@ -142,5 +146,10 @@
   "resolutions": {
     "js-yaml": "^3.13.1",
     "@babel/parser": "7.7.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run precommit"
+    }
   }
 }
