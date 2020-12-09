@@ -7,10 +7,7 @@ class ChartTitle extends Component {
     componentDidUpdate(prevProps) {
         const { updateProps, ...props } = this.props;
         const { updateProps: prevUpdateProps, ...previousProps } = prevProps;
-        if (
-            (previousProps.open_market !== props.open_market)
-            || (previousProps.open !== props.open)
-        ) {
+        if (previousProps.open_market !== props.open_market || previousProps.open !== props.open) {
             updateProps(props);
         }
     }
@@ -35,12 +32,14 @@ class ChartTitle extends Component {
             isNestedList,
         } = this.props;
 
-        if (!currentSymbol) { return null; }
+        if (!currentSymbol) {
+            return null;
+        }
 
         const ChartTitleContainer = (
             <ChartTitleMenu
                 enabled={enabled}
-                className="cq-chart-title stx-show cq-symbols-display"
+                className='cq-chart-title stx-show cq-symbols-display'
                 isFullscreen
                 portalNodeId={portalNodeId}
                 title={isMobile ? t.translate('Underlying Assets') : ''}
@@ -55,7 +54,7 @@ class ChartTitle extends Component {
                         portalNodeId={portalNodeId}
                         isNestedList={isNestedList}
                         searchInputClassName={searchInputClassName}
-                        onSelectItem={(x) => {
+                        onSelectItem={x => {
                             if (x.symbol !== currentSymbol.symbol) {
                                 onChange(x.symbol, chartId);
                             }
@@ -68,10 +67,8 @@ class ChartTitle extends Component {
 
         if (containerId) {
             return ReactDOM.createPortal(
-                <div className={`smartcharts-${theme}`}>
-                    {ChartTitleContainer}
-                </div>,
-                document.getElementById(containerId),
+                <div className={`smartcharts-${theme}`}>{ChartTitleContainer}</div>,
+                document.getElementById(containerId)
             );
         }
 

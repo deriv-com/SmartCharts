@@ -84,15 +84,14 @@ export default function animateChart(stx, animationParameters) {
 
         chart = chart || this.chart;
         if (chart.lockScroll) {
-            const lastAppendQuote     = appendQuotes[appendQuotes.length - 1];
+            const lastAppendQuote = appendQuotes[appendQuotes.length - 1];
             const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
 
             if (!lastAppendQuote || !lastDataSegmentItem) {
                 return;
             }
 
-            if (lastAppendQuote.DT > lastDataSegmentItem.DT
-                    && chart.scroll <= chart.dataSegment.length) {
+            if (lastAppendQuote.DT > lastDataSegmentItem.DT && chart.scroll <= chart.dataSegment.length) {
                 chart.scroll++;
             }
         }
@@ -110,15 +109,22 @@ export default function animateChart(stx, animationParameters) {
         }
 
         function completeLastBar(record) {
-            if (!chart.masterData) { return; }
+            if (!chart.masterData) {
+                return;
+            }
             for (let md = chart.masterData.length - 1; md >= 0; md--) {
                 const bar = chart.masterData[md];
                 if (bar.Close || bar.Close === 0) {
                     bar.Close = record.Close;
                     if (record.LastSize) bar.LastSize = record.LastSize;
                     if (record.LastTime) bar.LastTime = record.LastTime;
-                    self.updateCurrentMarketData({ Close:bar.Close, DT:bar.DT, LastSize:bar.LastSize, LastTime:bar.LastTime });
-                    self.createDataSet(null, null, { appending:true });
+                    self.updateCurrentMarketData({
+                        Close: bar.Close,
+                        DT: bar.DT,
+                        LastSize: bar.LastSize,
+                        LastTime: bar.LastTime,
+                    });
+                    self.createDataSet(null, null, { appending: true });
                     return;
                 }
             }
@@ -126,13 +132,13 @@ export default function animateChart(stx, animationParameters) {
         function unanimateScroll() {
             if (chart.animatingHorizontalScroll) {
                 chart.animatingHorizontalScroll = false;
-                self.micropixels = self.nextMicroPixels = self.previousMicroPixels;  // <-- Reset self.nextMicroPixels here
+                self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
                 chart.lastTickOffset = 0;
             }
             if (chart.closePendingAnimation !== null) {
                 const close = chart.closePendingAnimation;
                 chart.closePendingAnimation = null;
-                completeLastBar({ Close:close });
+                completeLastBar({ Close: close });
             }
         }
         const tickAnimator = self.tickAnimator;
@@ -140,7 +146,9 @@ export default function animateChart(stx, animationParameters) {
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         if (supportedChartType) {
             if (!tickAnimator) {
-                console.warn('Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js');
+                console.warn(
+                    'Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js'
+                );
                 return;
             }
 
@@ -171,7 +179,13 @@ export default function animateChart(stx, animationParameters) {
         function cb(quote, prevQuote, chartJustAdvanced) {
             return function (newData) {
                 const newClose = newData.Close;
-                if (!chart.dataSet.length || symbol != chart.symbol || period != self.layout.periodicity || interval != self.layout.interval || timeUnit != self.layout.timeUnit) {
+                if (
+                    !chart.dataSet.length ||
+                    symbol != chart.symbol ||
+                    period != self.layout.periodicity ||
+                    interval != self.layout.interval ||
+                    timeUnit != self.layout.timeUnit
+                ) {
                     // console.log ("---- STOP animating: Old",symbol,' New : ',chart.symbol, Date())
                     tickAnimator.stop();
                     unanimateScroll();
@@ -196,10 +210,10 @@ export default function animateChart(stx, animationParameters) {
                 // console.log("animating: Old",symbol,' New : ',chart.symbol);
 
                 const progress = tickAnimator.fc(
-                    (Date.now() - tickAnimator.startTime), // delta time
-                    0,                                     // start value
-                    1,                                     // end value
-                    tickAnimator.ms,                       // duration
+                    Date.now() - tickAnimator.startTime, // delta time
+                    0, // start value
+                    1, // end value
+                    tickAnimator.ms // duration
                 );
 
                 // the progress value will be used in "CurrentSpotStore.drawSpot" method.
@@ -219,9 +233,10 @@ export default function animateChart(stx, animationParameters) {
 
         if (supportedChartType) {
             const quote = appendQuotes[appendQuotes.length - 1];
-            this.prevQuote = this.currentQuote();  // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
+            this.prevQuote = this.currentQuote(); // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
             let chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
-            if (period == 1 && appendQuotes.length == 2) {  // Don't do this if consolidating
+            if (period == 1 && appendQuotes.length == 2) {
+                // Don't do this if consolidating
                 this.prevQuote = appendQuotes[0];
                 completeLastBar(this.prevQuote);
             }
@@ -259,7 +274,8 @@ export default function animateChart(stx, animationParameters) {
                     filterSession = !chart.market.isMarketDate(dtToFilter);
                 } else if (!nextBoundary || nextBoundary <= dtToFilter) {
                     const session = chart.market.getSession(dtToFilter);
-                    filterSession = (session !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[session]));
+                    filterSession =
+                        session !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[session]);
                     nextBoundary = chart.market[filterSession ? 'getNextOpen' : 'getNextClose'](dtToFilter);
                 }
                 if (filterSession) {
@@ -272,19 +288,24 @@ export default function animateChart(stx, animationParameters) {
             if (interval == 'second' || timeUnit == 'second') barSpan *= 1000;
             else if (interval == 'minute' || timeUnit == 'minute') barSpan *= 60000;
             if (!isNaN(interval)) barSpan *= interval;
-            if (interval == 'day' || timeUnit == 'day') chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
-            else if (interval == 'week' || timeUnit == 'week') chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
-            else if (interval == 'month' || timeUnit == 'month') chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
+            if (interval == 'day' || timeUnit == 'day')
+                chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
+            else if (interval == 'week' || timeUnit == 'week')
+                chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
+            else if (interval == 'month' || timeUnit == 'month')
+                chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
             else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
 
-            const linearChart = (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.chart.standaloneBars;
+            const linearChart =
+                (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.chart.standaloneBars;
 
             let beginningOffset = 0;
             if (chartJustAdvanced) {
                 if (this.animations.zoom.hasCompleted) {
                     const candleWidth = this.layout.candleWidth;
                     if (chart.scroll <= chart.maxTicks && !chart.lockScroll) {
-                        if (this.micropixels > 0) { // If micropixels is larger than a candle then scroll back further
+                        if (this.micropixels > 0) {
+                            // If micropixels is larger than a candle then scroll back further
                             const count = Math.ceil(this.micropixels / candleWidth);
                             this.scroll += count;
                             this.micropixels -= count * candleWidth;
@@ -295,9 +316,11 @@ export default function animateChart(stx, animationParameters) {
                         this.previousMicroPixels = this.micropixels;
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
-                        if (chart.dataSegment
-                            && chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen
-                            && !animationParameters.stayPut) {
+                        if (
+                            chart.dataSegment &&
+                            chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen &&
+                            !animationParameters.stayPut
+                        ) {
                             chart.scroll++;
                             this.nextMicroPixels = this.micropixels;
                         }
@@ -322,13 +345,17 @@ export default function animateChart(stx, animationParameters) {
                 }
             }
             chart.closePendingAnimation = quote.Close;
-            const start = (chartJustAdvanced && !linearChart) ? quote.Open : this.prevQuote.Close;
+            const start = chartJustAdvanced && !linearChart ? quote.Open : this.prevQuote.Close;
 
-            tickAnimator.run(cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced), {
-                Close: start,
-                micropixels: chart.lockScroll ? 0 : this.nextMicroPixels,
-                lineOffset: beginningOffset,
-            }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
+            tickAnimator.run(
+                cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced),
+                {
+                    Close: start,
+                    micropixels: chart.lockScroll ? 0 : this.nextMicroPixels,
+                    lineOffset: beginningOffset,
+                },
+                { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 }
+            );
 
             return true; // bypass default behavior if the animation is on
         }

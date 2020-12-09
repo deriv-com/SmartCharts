@@ -1,16 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React        from 'react';
-import classNames   from 'classnames';
-import { connect }  from '../store/Connect';
+import React from 'react';
+import classNames from 'classnames';
+import { connect } from '../store/Connect';
 import '../../sass/components/_toolbar-widget.scss';
 
-const ToolbarWidget = ({
-    position = 'top',
-    children,
-    context,
-    onMouseEnter,
-    onMouseLeave,
-}) => {
+const ToolbarWidget = ({ position = 'top', children, context, onMouseEnter, onMouseLeave }) => {
     if (!context) return '';
 
     return (

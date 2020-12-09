@@ -53,16 +53,20 @@ export function stableSort(arr, compare = (a, b) => a < b) {
 }
 
 export function sameBar(bar1, bar2) {
-    return !((!bar1 || !bar2)
-        || (+bar1.DT !== +bar2.DT)
-        || (bar1.Close !== bar2.Close)
-        || (bar1.Open !== bar2.Open)
-        || (bar1.Volume !== bar2.Volume));
+    return !(
+        !bar1 ||
+        !bar2 ||
+        +bar1.DT !== +bar2.DT ||
+        bar1.Close !== bar2.Close ||
+        bar1.Open !== bar2.Open ||
+        bar1.Volume !== bar2.Volume
+    );
 }
 
 export function downloadFileInBrowser(filename, content, type, newTab) {
     const blob = new Blob([content], { type });
-    if (navigator.msSaveBlob) { // IE 10+
+    if (navigator.msSaveBlob) {
+        // IE 10+
         navigator.msSaveBlob(blob, filename);
         return;
     }
@@ -80,7 +84,9 @@ export function downloadFileInBrowser(filename, content, type, newTab) {
     }
     if (newTab) {
         if (type === 'image/png;') {
-            newTab.document.write(`<iframe src="${url}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`);
+            newTab.document.write(
+                `<iframe src="${url}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`
+            );
         } else {
             const lines = content.split('\n');
             for (let i = 0; i < lines.length; i++) {
@@ -98,7 +104,7 @@ export function stxtap(el, func) {
 }
 
 export function getUTCEpoch(date) {
-    return (date.getTime() / 1000) - (date.getTimezoneOffset() * 60) | 0;
+    return (date.getTime() / 1000 - date.getTimezoneOffset() * 60) | 0;
 }
 
 export function getUTCDate(epoch) {
@@ -119,7 +125,9 @@ export function updatePropIfChanged(source, props, onChanged) {
         }
     }
 
-    if (isChanged && onChanged) { onChanged(); }
+    if (isChanged && onChanged) {
+        onChanged();
+    }
 }
 
 export function calculateTimeUnitInterval(granularity) {
@@ -148,9 +156,11 @@ export function calculateGranularity(period, interval) {
 
 export function displayMilliseconds(ms) {
     const totalSec = ms / 1000;
-    if (totalSec <= 0) { return null; }
-    const padNum = n => (`0${n}`).slice(-2);
-    const seconds = padNum(Math.trunc((totalSec) % 60));
+    if (totalSec <= 0) {
+        return null;
+    }
+    const padNum = n => `0${n}`.slice(-2);
+    const seconds = padNum(Math.trunc(totalSec % 60));
     const minutes = padNum(Math.trunc((totalSec / 60) % 60));
     let hours = Math.trunc((totalSec / 3600) % 24);
     hours = hours ? `${hours}:` : '';
@@ -198,7 +208,6 @@ export function cloneCategories(categories, transformItem = x => x) {
 //  -- points will be an array of [{left, top, epoch}] in pixels.
 //  -- ctx is the Context2dDrawingContext
 
-
 // Unfortunately chartiq.js does a Math.floor() on pixel values,
 // Which causes a jerky effect on the markers in auto-scroll,
 // However we need the pixel value down to the decimal points.
@@ -222,7 +231,8 @@ export function patchPixelFromChart(stx) {
             // return Math.floor(panel.left + quote.leftOffset + mp)
             return panel.left + quote.leftOffset + mp;
         }
-        let rightOffset = 0, dsTicks = 0;
+        let rightOffset = 0,
+            dsTicks = 0;
         quote = length ? dataSegment[length - 1] : null;
         if (segmentImage) quote = segmentImage[length - 1];
         if (quote && quote.leftOffset) {
@@ -232,9 +242,9 @@ export function patchPixelFromChart(stx) {
             }
         }
         // return Math.floor(/* ... */)
-        return rightOffset + panel.left
-            + (tick - dsTicks - dataSet.length + scroll + 0.5)
-            * stx.layout.candleWidth + mp;
+        return (
+            rightOffset + panel.left + (tick - dsTicks - dataSet.length + scroll + 0.5) * stx.layout.candleWidth + mp
+        );
     };
 }
 
@@ -250,12 +260,12 @@ export const DIRECTIONS = Object.freeze({
     DOWN: 'DOWN',
 });
 
-export const formatCamelCase = (s) => {
+export const formatCamelCase = s => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
-export const prepareIndicatorName = (name) => {
+export const prepareIndicatorName = name => {
     const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
     const getStudyBars = str => (str.match(StudyNameRegex) || []).pop();
     // const capitalizeFirstLetter = (string) => {
@@ -269,21 +279,30 @@ export const prepareIndicatorName = (name) => {
     };
 };
 
-export const renderSVGString = (icon) =>  {
+export const renderSVGString = icon => {
     const vb = icon.viewBox.split(' ').slice(2);
     // eslint-disable-next-line no-undef
-    return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${__webpack_public_path__ + icon.url}" /></svg>`;
+    return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${
+        __webpack_public_path__ + icon.url
+    }" /></svg>`;
 };
 export const wrapText = (str, letter_count) => {
     if (str.length > letter_count) {
         let wrappedStr = str;
         const count = Math.floor(str.length / letter_count);
         for (let i = 1; i <= count; i++) {
-            wrappedStr = `${wrappedStr.slice(0, letter_count * i)} ${wrappedStr.slice(letter_count * i, wrappedStr.length)}`;
+            wrappedStr = `${wrappedStr.slice(0, letter_count * i)} ${wrappedStr.slice(
+                letter_count * i,
+                wrappedStr.length
+            )}`;
         }
         return wrappedStr;
     }
     return str;
 };
 
-export const stringToSlug = str => str.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+export const stringToSlug = str =>
+    str
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');

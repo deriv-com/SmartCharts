@@ -1,8 +1,5 @@
-import {
-    reaction,
-    when }             from 'mobx';
+import { reaction, when } from 'mobx';
 import { getUTCEpoch } from '../utils';
-
 
 class HighestLowestStore {
     highest = null;
@@ -10,12 +7,22 @@ class HighestLowestStore {
 
     injectionId = null;
 
-    get feed()    { return this.mainStore.chart.feed; }
-    get context() { return this.mainStore.chart.context; }
-    get stx()     { return this.mainStore.chart.stxx; }
+    get feed() {
+        return this.mainStore.chart.feed;
+    }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.mainStore.chart.stxx;
+    }
 
-    get isHighestLowestMarkerEnabled() { return this.mainStore.chartSetting.isHighestLowestMarkerEnabled; }
-    get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places || 0; }
+    get isHighestLowestMarkerEnabled() {
+        return this.mainStore.chartSetting.isHighestLowestMarkerEnabled;
+    }
+    get decimalPlaces() {
+        return this.mainStore.chart.currentActiveSymbol.decimal_places || 0;
+    }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -31,7 +38,7 @@ class HighestLowestStore {
             this.stx.removeInjection(this.injectionId);
             this.injectionId = null;
         }
-    }
+    };
 
     enableMarker = () => {
         if (this.isHighestLowestMarkerEnabled) {
@@ -39,34 +46,37 @@ class HighestLowestStore {
         } else {
             this.clearInjection();
         }
-    }
+    };
 
-    setHighestRef = (ref) => {
+    setHighestRef = ref => {
         this.highestRef = ref;
         if (ref !== null) {
             this.highestRef.value = ref.div.querySelector('.spot__value');
         }
-    }
-    setLowestRef = (ref) => {
+    };
+    setLowestRef = ref => {
         this.lowestRef = ref;
 
         if (ref !== null) {
             this.lowestRef.value = ref.div.querySelector('.spot__value');
         }
-    }
-
+    };
 
     onContextReady = this.enableMarker;
 
     calculateHighestLowestByNewData = () => {
-        if (!this.highestRef || !this.lowestRef) { return; }
+        if (!this.highestRef || !this.lowestRef) {
+            return;
+        }
 
         if (this.stx.chart && this.stx.chart.dataSegment.length) {
             this.highest = null;
-            this.lowest  = null;
+            this.lowest = null;
 
-            this.stx.chart.dataSegment.forEach((tick) => {
-                if (!tick) { return; }
+            this.stx.chart.dataSegment.forEach(tick => {
+                if (!tick) {
+                    return;
+                }
 
                 if (!this.highest || this.highest.Close <= tick.Close) {
                     this.highest = tick;
@@ -103,6 +113,5 @@ class HighestLowestStore {
         }
     };
 }
-
 
 export default HighestLowestStore;

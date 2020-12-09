@@ -5,11 +5,16 @@ export default class ScrollStore {
     @observable scrollPanel;
 
     constructor() {
-        reaction(() => this.scrollPanel, () => {
-            if (!this.scrollPanel) { return; }
-            this.scrollPanel.addEventListener('mouseover', this.handleMouseOver);
-            this.scrollPanel.addEventListener('mouseout', this.handleMouseOut);
-        });
+        reaction(
+            () => this.scrollPanel,
+            () => {
+                if (!this.scrollPanel) {
+                    return;
+                }
+                this.scrollPanel.addEventListener('mouseover', this.handleMouseOver);
+                this.scrollPanel.addEventListener('mouseout', this.handleMouseOut);
+            }
+        );
     }
 
     @action.bound handleMouseOver() {

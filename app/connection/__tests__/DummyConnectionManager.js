@@ -8,8 +8,7 @@ export class DummyConnectionManager extends EventEmitter {
         this.send = sinon.fake(this.send.bind(this));
     }
 
-    onOpened() {
-    }
+    onOpened() {}
 
     onClosed(cb) {
         this.on('close', cb);

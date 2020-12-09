@@ -1,4 +1,4 @@
-export const overideMeasure = (option) => {
+export const overideMeasure = option => {
     CIQ.ChartEngine.prototype.append('setMeasure', function (price1, price2, tick1, tick2, hover) {
         let m = (this.drawingContainer || document).querySelector('.mMeasure');
         let message = '';
@@ -71,7 +71,10 @@ export const overideMeasure = (option) => {
                 if (option.drawToolsStore) {
                     const drawingItem = option.drawToolsStore.findComputedDrawing(this);
                     if (drawingItem) {
-                        title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(drawingItem.text, { num: (drawingItem.num || ' ') })}`;
+                        title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(
+                            drawingItem.text,
+                            { num: drawingItem.num || ' ' }
+                        )}`;
                     }
                 }
 

@@ -32,7 +32,7 @@ class Favorite extends Component {
         }
     };
 
-    onClick = (e) => {
+    onClick = e => {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
         const { category, id } = this.props;

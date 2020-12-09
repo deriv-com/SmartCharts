@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import classNames           from 'classnames';
-import RenderInsideChart    from './RenderInsideChart.jsx';
+import classNames from 'classnames';
+import RenderInsideChart from './RenderInsideChart.jsx';
 import ChartTitle from './ChartTitle.jsx';
 import Loader from './Loader.jsx';
 import Barrier from './Barrier.jsx';
@@ -48,7 +48,7 @@ class Chart extends Component {
         this.props.destroy();
     }
 
-    defaultTopWidgets = () => (<ChartTitle />);
+    defaultTopWidgets = () => <ChartTitle />;
 
     render() {
         const {
@@ -77,32 +77,33 @@ class Chart extends Component {
             isLoading,
         } = this.props;
 
-        const currentPosition = `cq-chart-control-${(chartControlsWidgets && position && !isMobile) ? position : 'bottom'}`;
+        const currentPosition = `cq-chart-control-${
+            chartControlsWidgets && position && !isMobile ? position : 'bottom'
+        }`;
         const TopWidgets = topWidgets || this.defaultTopWidgets;
         // if there are any markers, then increase the subholder z-index
         const ToolbarWidget = toolbarWidget;
 
         return (
-            <div className={classNames('smartcharts', `smartcharts-${theme}`, {
-                'smartcharts--navigation-widget': enabledNavigationWidget,
-                'smartcharts--loading': isLoading,
-                'smartcharts--has-markers': (children && children.length),
-                [`smartcharts-${containerWidth}`]: !isMobile,
-            })}
-            >
-                <div className={classNames({
-                    'smartcharts-mobile': isMobile,
-                    'smartcharts-desktop': !isMobile,
+            <div
+                className={classNames('smartcharts', `smartcharts-${theme}`, {
+                    'smartcharts--navigation-widget': enabledNavigationWidget,
+                    'smartcharts--loading': isLoading,
+                    'smartcharts--has-markers': children && children.length,
+                    [`smartcharts-${containerWidth}`]: !isMobile,
                 })}
+            >
+                <div
+                    className={classNames({
+                        'smartcharts-mobile': isMobile,
+                        'smartcharts-desktop': !isMobile,
+                    })}
                 >
-                    <div
-                        className="cq-context"
-                        ref={this.root}
-                    >
+                    <div className='cq-context' ref={this.root}>
                         <div className={currentPosition}>
-                            <div className="ciq-chart-area">
+                            <div className='ciq-chart-area'>
                                 <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
-                                    <RenderInsideChart at="holder">
+                                    <RenderInsideChart at='holder'>
                                         {barriers.map((barr, idx) => (
                                             <Barrier
                                                 key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
@@ -110,33 +111,29 @@ class Chart extends Component {
                                             />
                                         ))}
                                     </RenderInsideChart>
-                                    <RenderInsideChart at="subholder">
-                                        {
-                                            !isCandle && !isSpline && isHighestLowestMarkerEnabled
-                                                && <HighestLowestMarker />
-                                        }
+                                    <RenderInsideChart at='subholder'>
+                                        {!isCandle && !isSpline && isHighestLowestMarkerEnabled && (
+                                            <HighestLowestMarker />
+                                        )}
                                     </RenderInsideChart>
-                                    <RenderInsideChart at="subholder" hideInScrollToEpoch>
+                                    <RenderInsideChart at='subholder' hideInScrollToEpoch>
                                         {children}
                                     </RenderInsideChart>
-                                    <RenderInsideChart at="subholder">
+                                    <RenderInsideChart at='subholder'>
                                         <PaginationLoader />
                                     </RenderInsideChart>
-                                    <div className="cq-top-ui-widgets">
+                                    <div className='cq-top-ui-widgets'>
                                         <TopWidgets />
                                     </div>
-                                    <div className="chartContainer" style={{ height: chartContainerHeight }}>
+                                    <div className='chartContainer' style={{ height: chartContainerHeight }}>
                                         <Crosshair />
                                     </div>
-                                    {
-                                        enabledNavigationWidget
-                                            && <NavigationWidget onCrosshairChange={onCrosshairChange} />
-                                    }
-                                    { toolbarWidget
-                                        && <ToolbarWidget />
-                                    }
+                                    {enabledNavigationWidget && (
+                                        <NavigationWidget onCrosshairChange={onCrosshairChange} />
+                                    )}
+                                    {toolbarWidget && <ToolbarWidget />}
                                     {!isChartAvailable && (
-                                        <div className="cq-chart-unavailable">
+                                        <div className='cq-chart-unavailable'>
                                             {t.translate('Chart data is not available for this symbol.')}
                                         </div>
                                     )}
@@ -144,13 +141,10 @@ class Chart extends Component {
                                         <BottomWidget bottomWidgets={bottomWidgets} />
                                     </BottomWidgetsContainer>
                                 </div>
-                                { chartControlsWidgets !== null && !enabledChartFooter
-                                    && <ChartControls widgets={chartControlsWidgets} />
-                                }
-                                {
-                                    enabledChartFooter
-                                        && <ChartFooter />
-                                }
+                                {chartControlsWidgets !== null && !enabledChartFooter && (
+                                    <ChartControls widgets={chartControlsWidgets} />
+                                )}
+                                {enabledChartFooter && <ChartFooter />}
                                 <Loader />
                             </div>
                         </div>
@@ -158,27 +152,19 @@ class Chart extends Component {
                     <DrawToolsSettingsDialog />
                     <AggregateChartSettingsDialog />
                     <StudySettingsDialog />
-                    <div id="smartcharts_modal" className="ciq-modal" />
+                    <div id='smartcharts_modal' className='ciq-modal' />
                 </div>
             </div>
         );
     }
 }
 
-export default connect(({
-    chart,
-    drawTools,
-    studies,
-    chartSetting,
-    chartType,
-    state,
-    loader,
-}) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }) => ({
     init: chart.init,
     destroy: chart.destroy,
-    StudySettingsDialog : studies.StudySettingsDialog,
-    DrawToolsSettingsDialog : drawTools.DrawToolsSettingsDialog,
-    AggregateChartSettingsDialog : chartType.AggregateChartSettingsDialog,
+    StudySettingsDialog: studies.StudySettingsDialog,
+    DrawToolsSettingsDialog: drawTools.DrawToolsSettingsDialog,
+    AggregateChartSettingsDialog: chartType.AggregateChartSettingsDialog,
     isCandle: chartType.isCandle,
     isChartAvailable: chart.isChartAvailable,
     isSpline: chartType.isSpline,

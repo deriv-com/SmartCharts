@@ -12,12 +12,22 @@ export default class ChartTableStore {
         reaction(() => this.dialog.open, this.loadTableData);
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get state() { return this.mainStore.state; }
-    get chartTypeStore() { return this.mainStore.chartType; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get state() {
+        return this.mainStore.state;
+    }
+    get chartTypeStore() {
+        return this.mainStore.chartType;
+    }
 
-    @computed get open() { return this.dialog.open; }
+    @computed get open() {
+        return this.dialog.open;
+    }
     @action.bound setOpen(value) {
         return this.dialog.setOpen(value);
     }
@@ -40,15 +50,16 @@ export default class ChartTableStore {
     @action.bound loadTableData() {
         if (this.open) {
             const totalItemCount = this.stx.masterData.length;
-            const allowableItems = (totalItemCount <= 100)
-                ? this.stx.masterData
-                : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
+            const allowableItems =
+                totalItemCount <= 100
+                    ? this.stx.masterData
+                    : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
 
             allowableItems.forEach(row => this.updateTableData(row));
             this.mainStore.chart.feed.onMasterDataUpdate(this.updateTableData);
         } else {
             if (this.mainStore.chart.feed) this.mainStore.chart.feed.offMasterDataUpdate(this.updateTableData);
-            this.tableData =  [];
+            this.tableData = [];
             if (this.chartTypeStore.onChartTypeChanged && this.state.prevChartType) {
                 this.chartTypeStore.onChartTypeChanged(this.state.prevChartType);
             }
@@ -57,27 +68,29 @@ export default class ChartTableStore {
 
     @action.bound updateTableData({ DT, Open, High, Low, Close }) {
         this.isTick = this.mainStore.timeperiod.timeUnit === 'tick';
-        const lastTick =  this.lastTick || {};
+        const lastTick = this.lastTick || {};
         const change = Close - lastTick.Close || 0;
         let status = '';
-        if (Math.sign(change) !== 0) status = Math.sign(change) === 1 ? 'up' :  'down';
+        if (Math.sign(change) !== 0) status = Math.sign(change) === 1 ? 'up' : 'down';
         const dateTime = moment(DT.getTime()).format(`HH:mm${this.isTick ? ':ss' : ''}`);
         const dateKey = moment(DT.getTime()).format('YYYYMMDD');
         let dateGroup = this.tableData.find(x => x.key === dateKey);
-        const data = this.isTick ? {
-            Date: dateTime,
-            Close: `${Close.toFixed(this.decimalPlaces)}`,
-            Change: `${Math.abs(change).toFixed(this.decimalPlaces)}`,
-            Status: status,
-        } : {
-            Date: dateTime,
-            Open: `${Open.toFixed(this.decimalPlaces)}`,
-            High: `${High.toFixed(this.decimalPlaces)}`,
-            Low: `${Low.toFixed(this.decimalPlaces)}`,
-            Close: `${Close.toFixed(this.decimalPlaces)}`,
-            Change: `${Math.abs(change).toFixed(this.decimalPlaces)}`,
-            Status: status,
-        };
+        const data = this.isTick
+            ? {
+                  Date: dateTime,
+                  Close: `${Close.toFixed(this.decimalPlaces)}`,
+                  Change: `${Math.abs(change).toFixed(this.decimalPlaces)}`,
+                  Status: status,
+              }
+            : {
+                  Date: dateTime,
+                  Open: `${Open.toFixed(this.decimalPlaces)}`,
+                  High: `${High.toFixed(this.decimalPlaces)}`,
+                  Low: `${Low.toFixed(this.decimalPlaces)}`,
+                  Close: `${Close.toFixed(this.decimalPlaces)}`,
+                  Change: `${Math.abs(change).toFixed(this.decimalPlaces)}`,
+                  Status: status,
+              };
 
         if (!dateGroup) {
             dateGroup = {
@@ -95,14 +108,15 @@ export default class ChartTableStore {
                 if (this.tableData.length && this.tableData[0].datas.length > 1) {
                     previousClose = this.tableData[0].datas[1].Close;
 
-                // if not above, then let pick previous Close from last item in previous group
+                    // if not above, then let pick previous Close from last item in previous group
                 } else if (this.tableData.length && this.tableData.length > 1 && this.tableData[0].datas.length === 1) {
                     previousClose = this.tableData[1].datas[0].Close;
                 }
 
                 const firstItemChange = Close - previousClose;
                 let firstItemStatus = '';
-                if (Math.sign(firstItemChange) !== 0) firstItemStatus = (Math.sign(firstItemChange) === 1 ? 'up' : 'down');
+                if (Math.sign(firstItemChange) !== 0)
+                    firstItemStatus = Math.sign(firstItemChange) === 1 ? 'up' : 'down';
 
                 oldData.High = `${High.toFixed(this.decimalPlaces)}`;
                 oldData.Low = `${Low.toFixed(this.decimalPlaces)}`;
@@ -127,6 +141,6 @@ export default class ChartTableStore {
     }
 
     @action.bound setScrollPanel(element) {
-        this.scrollPanel =  element;
+        this.scrollPanel = element;
     }
 }

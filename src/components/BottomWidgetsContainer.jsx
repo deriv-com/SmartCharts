@@ -1,5 +1,5 @@
-import React       from 'react';
-import PropTypes   from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from '../store/Connect';
 import '../../sass/components/_bottom-widget-container.scss';
 
@@ -17,12 +17,7 @@ class BottomWidgetsContainer extends React.Component {
         this.props.updateChartMargin(!!(component && component.props.bottomWidgets));
     }
     render() {
-        const {
-            bottom,
-            isReadyToShow,
-            children,
-            top,
-        } =  this.props;
+        const { bottom, isReadyToShow, children, top } = this.props;
 
         if (!isReadyToShow) {
             return null;
@@ -34,33 +29,29 @@ class BottomWidgetsContainer extends React.Component {
         };
 
         return (
-            <div
-                className="cq-bottom-ui-widgets"
-                style={styles}
-            >
-                { children }
+            <div className='cq-bottom-ui-widgets' style={styles}>
+                {children}
             </div>
         );
     }
 }
 
 BottomWidgetsContainer.propTypes = {
-    bottom           : PropTypes.number,
-    isReadyToShow    : PropTypes.bool,
-    top              : PropTypes.number,
+    bottom: PropTypes.number,
+    isReadyToShow: PropTypes.bool,
+    top: PropTypes.number,
     updateChartMargin: PropTypes.func.isRequired,
 };
 
 BottomWidgetsContainer.defaultProps = {
-    bottom       : 0,
+    bottom: 0,
     isReadyToShow: false,
-    top          : 0,
+    top: 0,
 };
 
-
 export default connect(({ bottomWidgetsContainer: store }) => ({
-    bottom           : store.bottom,
-    isReadyToShow    : store.isReadyToShow,
-    top              : store.top,
+    bottom: store.bottom,
+    isReadyToShow: store.isReadyToShow,
+    top: store.top,
     updateChartMargin: store.updateChartMargin,
 }))(BottomWidgetsContainer);

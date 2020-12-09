@@ -1,5 +1,7 @@
 export default class BinaryAPI {
-    static get DEFAULT_COUNT() { return 1000; }
+    static get DEFAULT_COUNT() {
+        return 1000;
+    }
     streamRequests = {};
     tradingTimesCache = null;
     constructor(requestAPI, requestSubscribe, requestForget, requestForgetStream) {

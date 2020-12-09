@@ -17,19 +17,8 @@ import {
 } from './Icons.jsx';
 import '../../sass/components/_chart-setting.scss';
 
-const ChartSettingItem = ({
-    title,
-    id,
-    label,
-    value,
-    onChange,
-    noramIcon,
-    activeIcon,
-}) => (
-    <FormGroup
-        title={title}
-        type={id}
-    >
+const ChartSettingItem = ({ title, id, label, value, onChange, noramIcon, activeIcon }) => (
+    <FormGroup title={title} type={id}>
         <SwitchIcon
             id={id}
             label={label}
@@ -56,12 +45,7 @@ const ChartSetting = ({
     theme,
     toggleHighestLowestMarker,
 }) => (
-    <ChartSettingMenu
-        className="sc-chart-setting"
-        title={t.translate('Platform settings')}
-        enableTabular
-        modalMode
-    >
+    <ChartSettingMenu className='sc-chart-setting' title={t.translate('Platform settings')} enableTabular modalMode>
         <ChartSettingMenu.Title>
             <SettingIcon
                 className={classNames('ic-icon-with-sub', { active: menuOpen })}
@@ -69,61 +53,68 @@ const ChartSetting = ({
             />
         </ChartSettingMenu.Title>
         <ChartSettingMenu.Body>
-            <Tabs className="tabs--vertical">
+            <Tabs className='tabs--vertical'>
                 <TabList>
-                    <Tab key="theme"><ThemeIcon />{t.translate('Themes')}</Tab>
-                    <Tab key="language"><LanguageIcon />{t.translate('Language')}</Tab>
-                    <Tab key="platform"><ChartIcon />{t.translate('Charts')}</Tab>
+                    <Tab key='theme'>
+                        <ThemeIcon />
+                        {t.translate('Themes')}
+                    </Tab>
+                    <Tab key='language'>
+                        <LanguageIcon />
+                        {t.translate('Language')}
+                    </Tab>
+                    <Tab key='platform'>
+                        <ChartIcon />
+                        {t.translate('Charts')}
+                    </Tab>
                 </TabList>
                 <TabPanel>
-                    <div className="sc-chart-setting__panel">
-                        <FormGroup
-                            title={t.translate('Select theme')}
-                            type="theme"
-                        >
+                    <div className='sc-chart-setting__panel'>
+                        <FormGroup title={t.translate('Select theme')} type='theme'>
                             <div
-                                className={classNames('form__group__item', { 'form__group__item--active': (theme === 'dark') })}
+                                className={classNames('form__group__item', {
+                                    'form__group__item--active': theme === 'dark',
+                                })}
                                 onClick={() => setTheme('dark')}
                             >
                                 <ThemeDarkIcon />
-                                <div className="text">{t.translate('Dark')}</div>
+                                <div className='text'>{t.translate('Dark')}</div>
                             </div>
                             <div
-                                className={classNames('form__group__item', { 'form__group__item--active': (theme === 'light') })}
+                                className={classNames('form__group__item', {
+                                    'form__group__item--active': theme === 'light',
+                                })}
                                 onClick={() => setTheme('light')}
                             >
                                 <ThemeLightIcon />
-                                <div className="text">{t.translate('Light')}</div>
+                                <div className='text'>{t.translate('Light')}</div>
                             </div>
                         </FormGroup>
                     </div>
                 </TabPanel>
                 <TabPanel>
-                    <div className="sc-chart-setting__panel">
-                        <FormGroup
-                            title={t.translate('Select language')}
-                            type="language"
-                        >
+                    <div className='sc-chart-setting__panel'>
+                        <FormGroup title={t.translate('Select language')} type='language'>
                             {languages.map(language => (
                                 <div
                                     key={language.key}
                                     onClick={() => setLanguage(language.key)}
                                     className={classNames('form__group__item', {
-                                        'form__group__item--active': (selectedLanguage.key === language.key),
+                                        'form__group__item--active': selectedLanguage.key === language.key,
                                     })}
                                 >
                                     {language.icon}
-                                    <span className="text">{language.name}</span>
+                                    <span className='text'>{language.name}</span>
                                 </div>
                             ))}
                         </FormGroup>
                     </div>
                 </TabPanel>
                 <TabPanel>
-                    <div className="sc-chart-setting__panel">
+                    <div className='sc-chart-setting__panel'>
                         <ChartSettingItem
                             title={t.translate('Interval duration')}
-                            id="countdown"
+                            id='countdown'
                             label={t.translate('Display remaining time for each interval')}
                             value={countdown}
                             onChange={showCountdown}
@@ -133,7 +124,7 @@ const ChartSetting = ({
 
                         <ChartSettingItem
                             title={t.translate('Historical data mode')}
-                            id="historical"
+                            id='historical'
                             label={t.translate('Display data for a specific date and time')}
                             value={historical}
                             onChange={setHistorical}
@@ -141,12 +132,9 @@ const ChartSetting = ({
                             activeIcon={SettingHistoricalMap[theme].active}
                         />
 
-                        <FormGroup
-                            title={t.translate('Highest and lowest spot')}
-                            id="highestlowest"
-                        >
+                        <FormGroup title={t.translate('Highest and lowest spot')} id='highestlowest'>
                             <SwitchIcon
-                                id="highestlowest"
+                                id='highestlowest'
                                 label={t.translate('Display the highest and lowest spot price')}
                                 value={isHighestLowestMarkerEnabled}
                                 onChange={toggleHighestLowestMarker}
@@ -162,20 +150,20 @@ const ChartSetting = ({
 );
 
 export default connect(({ chartSetting: s }) => ({
-    ChartSettingMenu            : s.ChartSettingMenu,
-    closeMenu                   : s.menu.onTitleClick,
-    countdown                   : s.countdown,
-    historical                  : s.historical,
-    isAutoScale                 : s.isAutoScale,
+    ChartSettingMenu: s.ChartSettingMenu,
+    closeMenu: s.menu.onTitleClick,
+    countdown: s.countdown,
+    historical: s.historical,
+    isAutoScale: s.isAutoScale,
     isHighestLowestMarkerEnabled: s.isHighestLowestMarkerEnabled,
-    languages                   : s.languages,
-    menuOpen                    : s.menu.dialog.open,
-    selectedLanguage            : s.language,
-    setAutoScale                : s.setAutoScale,
-    setHistorical               : s.setHistorical,
-    setLanguage                 : s.setLanguage,
-    setTheme                    : s.setTheme,
-    showCountdown               : s.showCountdown,
-    theme                       : s.theme,
-    toggleHighestLowestMarker   : s.toggleHighestLowestMarker,
+    languages: s.languages,
+    menuOpen: s.menu.dialog.open,
+    selectedLanguage: s.language,
+    setAutoScale: s.setAutoScale,
+    setHistorical: s.setHistorical,
+    setLanguage: s.setLanguage,
+    setTheme: s.setTheme,
+    showCountdown: s.showCountdown,
+    theme: s.theme,
+    toggleHighestLowestMarker: s.toggleHighestLowestMarker,
 }))(ChartSetting);

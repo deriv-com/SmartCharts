@@ -70,7 +70,9 @@ describe('Test StreamManager (Tick)', function () {
         dcm.emitTick(dummyTickData[2]);
 
         await sm.subscribe(tickRequest, spy2);
-        const { history: { prices } } = spy2.getCall(0).args[0];
+        const {
+            history: { prices },
+        } = spy2.getCall(0).args[0];
         expect(prices.length).to.be.equal(16);
         expect(prices[prices.length - 1]).to.be.equal(dummyTickData[2].tick.quote);
         expect(spy2).to.have.callCount(1);
@@ -100,7 +102,6 @@ describe('Test StreamManager (Tick)', function () {
         expect(dcm.send).to.have.callCount(1);
     });
 
-
     it('Sending candle data of same open time will override the last candle cache', async function () {
         dcm.response = dummyOhlcData[0];
         const spy1 = sinon.spy();
@@ -117,7 +118,6 @@ describe('Test StreamManager (Tick)', function () {
         expect(candles.length).to.be.equal(29);
         expect(candles[candles.length - 1].close).to.be.equal(dummyOhlcData[4].ohlc.close);
     });
-
 
     it('Sending candle data of newer open time will add to candle cache', async function () {
         dcm.response = dummyOhlcData[0];

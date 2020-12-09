@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from '../store/Connect';
-import { getUTCDate } from  '../utils';
+import { getUTCDate } from '../utils';
 
 // Render given Components under stx-subholder.
 // This component is used to position a marker on the chart.
@@ -37,10 +37,12 @@ class FastMarker extends Component {
         this.price = +price || null;
         this.date = CIQ.strToDateTime(getUTCDate(epoch));
         this.updateCSS();
-    }
+    };
 
     updateCSS = () => {
-        if (!this.elem || !this.ctx) { return; }
+        if (!this.elem || !this.ctx) {
+            return;
+        }
         if (!this.date) {
             this.elem.style.visibility = 'hidden';
             return;
@@ -52,21 +54,17 @@ class FastMarker extends Component {
         const stx = this.stx;
         const chart = stx.chart;
 
-        let top = 0, left = 0, show = true;
+        let top = 0,
+            left = 0,
+            show = true;
 
         const threshold = +this.props.threshold || 0;
         show = !threshold || stx.layout.candleWidth >= threshold;
 
-        if (show
-            && chart.dataSet
-            && chart.dataSet.length
-            && stx.mainSeriesRenderer
-        ) {
+        if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
             let tickIdx = stx.tickFromDate(this.date, chart);
 
-            if (tickIdx > -1
-                && stx.chart.dataSet[tickIdx]
-                && stx.chart.dataSet[tickIdx].Close !== this.price) {
+            if (tickIdx > -1 && stx.chart.dataSet[tickIdx] && stx.chart.dataSet[tickIdx].Close !== this.price) {
                 delete stx.chart.tickCache[this.date.getTime()];
                 tickIdx = stx.tickFromDate(this.date, chart);
             }
@@ -81,18 +79,16 @@ class FastMarker extends Component {
                 const barPrev = tickIdx > 0 ? chart.dataSet[tickIdx - 1] : null;
                 if (barNext && barNext.Close && barNext.DT > this.date) {
                     const pixelToNextBar = stx.pixelFromTick(tickIdx + 1, chart) - x;
-                    x +=  (this.date - bar.DT) / (barNext.DT - bar.DT) * pixelToNextBar;
+                    x += ((this.date - bar.DT) / (barNext.DT - bar.DT)) * pixelToNextBar;
                 } else if (barPrev && barPrev.Close) {
                     const pixelFromPrevBar = x - stx.pixelFromTick(tickIdx - 1, chart);
-                    x +=  (this.date - bar.DT) / (bar.DT - barPrev.DT) * pixelFromPrevBar;
+                    x += ((this.date - bar.DT) / (bar.DT - barPrev.DT)) * pixelFromPrevBar;
                 }
             }
 
             const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;
 
-            if (chart.yAxis.left > x
-                && chart.yAxis.top <= y
-                && chart.yAxis.bottom >= y) {
+            if (chart.yAxis.left > x && chart.yAxis.top <= y && chart.yAxis.bottom >= y) {
                 top = +y;
                 left = Math.round(x);
             } else {
@@ -103,15 +99,17 @@ class FastMarker extends Component {
         // patch DOM without triggering recalculate layout.
         elem.style.transform = `translate(${left + offsetLeft}px, ${top + offsetTop}px)`;
         elem.style.visibility = show ? 'visible' : 'hidden';
-    }
+    };
 
-    setRef = (ref) => {
+    setRef = ref => {
         this.elem = ref;
 
-        const data = ref ? {
-            div: ref,
-            setPosition: this.setPosition,
-        } : null;
+        const data = ref
+            ? {
+                  div: ref,
+                  setPosition: this.setPosition,
+              }
+            : null;
 
         if (this.props.markerRef) {
             this.props.markerRef(data);
@@ -120,7 +118,7 @@ class FastMarker extends Component {
         if (ref !== null) {
             const { contextPromise } = this.props;
 
-            contextPromise.then((ctx) => {
+            contextPromise.then(ctx => {
                 this.ctx = ctx;
                 this.stx = this.ctx.stx;
 
@@ -133,16 +131,12 @@ class FastMarker extends Component {
             this.ctx = null;
             this.stx = null;
         }
-    }
+    };
 
     render() {
         const { className, children } = this.props;
         return (
-            <div
-                className={className}
-                ref={this.setRef}
-                style={{ position: 'absolute' }}
-            >
+            <div className={className} ref={this.setRef} style={{ position: 'absolute' }}>
                 {children}
             </div>
         );

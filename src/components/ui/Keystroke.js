@@ -53,7 +53,7 @@ class Keystroke {
     // before the input field is updated, we save any key that has been handled by these in this.key
     // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
     // will always have the right key (capitalized) and that input field value will be up to date.
-    keyup = (e) => {
+    keyup = e => {
         const key = e.which;
         if (this.implementAndroidWorkaround) {
             this.androidWorkaroundKeyup(e);
@@ -62,71 +62,109 @@ class Keystroke {
         }
 
         switch (key) {
-        case 16:
-            this.shift = false;
-            this.cb({ key, e, keystroke: this });
-            return;
-        case 17:
-        case 18:
-            this.ctrl = false;
-            this.cb({ key, e, keystroke: this });
-            return;
-        case 91:
-            this.cmd = false;
-            this.cb({ key, e, keystroke: this });
-            return;
-        default:
-            break;
+            case 16:
+                this.shift = false;
+                this.cb({ key, e, keystroke: this });
+                return;
+            case 17:
+            case 18:
+                this.ctrl = false;
+                this.cb({ key, e, keystroke: this });
+                return;
+            case 91:
+                this.cmd = false;
+                this.cb({ key, e, keystroke: this });
+                return;
+            default:
+                break;
         }
         // This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
         // The exception to this is the arrow keys, which are processed in keydown
-        if (this.key) { this.cb({ key: this.key, e, keystroke: this }); }
+        if (this.key) {
+            this.cb({ key: this.key, e, keystroke: this });
+        }
     };
 
-    keydown = (e) => {
+    keydown = e => {
         this.downValue = e.target.value;
-        if (this.noKeyCapture) { return; }
+        if (this.noKeyCapture) {
+            return;
+        }
         let key = e.which;
         if (key === 229 && CIQ.isAndroid) {
             this.implementAndroidWorkaround = true;
             return;
         }
-        if (!this.ctrl) { if ((key !== 91 && key >= 48 && key <= 222) || key === 32) { return; } } // handled by keypress
+        if (!this.ctrl) {
+            if ((key !== 91 && key >= 48 && key <= 222) || key === 32) {
+                return;
+            }
+        } // handled by keypress
 
-        switch (key) { // eslint-disable-line default-case
-        case 91:
-            this.cmd = true;
-            return;
-        case 16:
-            this.shift = true;
-            return;
-        case 17:
-        case 18:
-            this.ctrl = true;
-            return;
-        case 20:
-            this.capsLock = !this.capsLock;
-            return;
+        switch (
+            key // eslint-disable-line default-case
+        ) {
+            case 91:
+                this.cmd = true;
+                return;
+            case 16:
+                this.shift = true;
+                return;
+            case 17:
+            case 18:
+                this.ctrl = true;
+                return;
+            case 20:
+                this.capsLock = !this.capsLock;
+                return;
         }
-        if (key === 8) { key = 'backspace'; } // delete on mac
-        if (key === 9) { key = 'tab'; }
-        if (key === 13) { key = 'enter'; }
-        if (key === 27) { key = 'escape'; }
-        if (key === 33) { key = 'page up'; }
-        if (key === 34) { key = 'page down'; }
-        if (key === 35) { key = 'end'; }
-        if (key === 36) { key = 'home'; }
-        if (key === 45) { key = 'insert'; }
-        if (key === 46) { key = 'delete'; }
+        if (key === 8) {
+            key = 'backspace';
+        } // delete on mac
+        if (key === 9) {
+            key = 'tab';
+        }
+        if (key === 13) {
+            key = 'enter';
+        }
+        if (key === 27) {
+            key = 'escape';
+        }
+        if (key === 33) {
+            key = 'page up';
+        }
+        if (key === 34) {
+            key = 'page down';
+        }
+        if (key === 35) {
+            key = 'end';
+        }
+        if (key === 36) {
+            key = 'home';
+        }
+        if (key === 45) {
+            key = 'insert';
+        }
+        if (key === 46) {
+            key = 'delete';
+        }
         this.key = key;
 
         // If you hold a key down, then keydown will repeat. These are the keys
         // that we want to capture repeat action.
         if (key === 37 || key === 38 || key === 39 || key === 40) {
-            if (key === 37) { key = 'left'; }
-            if (key === 38) { key = 'up'; }
-            if (key === 39) { key = 'right'; }
-            if (key === 40) { key = 'down'; }
+            if (key === 37) {
+                key = 'left';
+            }
+            if (key === 38) {
+                key = 'up';
+            }
+            if (key === 39) {
+                key = 'right';
+            }
+            if (key === 40) {
+                key = 'down';
+            }
             this.key = null;
             this.cb({ key, e, keystroke: this });
         }
@@ -137,14 +175,18 @@ class Keystroke {
      * @memberof CIQ.UI.Keystroke
      * @param e
      */
-    keypress = (e) => {
-        if (this.noKeyCapture) { return; }
+    keypress = e => {
+        if (this.noKeyCapture) {
+            return;
+        }
         const key = e.which;
-        if (key < 32 || key > 222) { return; } // handled by keydown
+        if (key < 32 || key > 222) {
+            return;
+        } // handled by keydown
         this.key = key;
     };
 
-    onblur = (e) => {
+    onblur = e => {
         this.ctrl = false;
         this.cb({ key: 17, e, keystroke: this });
     };

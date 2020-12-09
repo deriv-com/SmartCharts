@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Scroll               from './Scroll.jsx';
+import Scroll from './Scroll.jsx';
 import { CloseBoldIcon, ItemIconMap, SymbolPlaceholderIcon } from './Icons.jsx';
 import { connect } from '../store/Connect';
 import '../../sass/components/_ciq-chart-table.scss';
@@ -14,18 +14,18 @@ const ChartTableGroupContent = ({ item, isTick }) => (
                     <td>{data.Date}</td>
                     {isTick && <td>{data.Close}</td>}
                     {!isTick && [
-                        <td key="td-open">{data.Open}</td>,
-                        <td key="td-high">{data.High}</td>,
-                        <td key="td-low">{data.Low}</td>,
-                        <td key="td-close">{data.Close}</td>,
+                        <td key='td-open'>{data.Open}</td>,
+                        <td key='td-high'>{data.High}</td>,
+                        <td key='td-low'>{data.Low}</td>,
+                        <td key='td-close'>{data.Close}</td>,
                     ]}
-                    <td className="before-last-child">
-                        <div className="cq-change-cell">
+                    <td className='before-last-child'>
+                        <div className='cq-change-cell'>
                             <div className={`${data.Status ? data.Status : 'up'}`}>{data.Change}</div>
                         </div>
                     </td>
                     <td>
-                        <div className="cq-change-cell">
+                        <div className='cq-change-cell'>
                             <div className={`cq-change ${data.Status}`} />
                         </div>
                     </td>
@@ -35,11 +35,11 @@ const ChartTableGroupContent = ({ item, isTick }) => (
     </table>
 );
 
-
 class ChartTableGroup extends Component {
     componentDidUpdate() {
         const { scrollPanel } = this.props;
-        if (scrollPanel && scrollPanel.container && !this.scrollPanelTop) this.scrollPanelTop = scrollPanel.container.getBoundingClientRect().top;
+        if (scrollPanel && scrollPanel.container && !this.scrollPanelTop)
+            this.scrollPanelTop = scrollPanel.container.getBoundingClientRect().top;
     }
 
     render() {
@@ -56,7 +56,7 @@ class ChartTableGroup extends Component {
 
             if (fromTop <= 0 && fromBottom >= 0) {
                 classname = 'sticky-top';
-            } else if (fromTop <= 0 && fromBottom <= 0  && fromBottom > (-1 * groupTitleHeight)) {
+            } else if (fromTop <= 0 && fromBottom <= 0 && fromBottom > -1 * groupTitleHeight) {
                 classname = 'sticky-bottom';
             }
         }
@@ -64,23 +64,17 @@ class ChartTableGroup extends Component {
         return (
             <div
                 key={`chartTable-group-${item.key}`}
-                className="ciq-chart-table__panel__group"
+                className='ciq-chart-table__panel__group'
                 ref={el => setDateElement(item.key, el)}
             >
-                <div className={`ciq-chart-table__panel__group--title ${classname}`}>
-                    {item.date}
-                </div>
-                <div className="ciq-chart-table__panel__group--content">
-                    <ChartTableGroupContent
-                        item={item}
-                        isTick={isTick}
-                    />
+                <div className={`ciq-chart-table__panel__group--title ${classname}`}>{item.date}</div>
+                <div className='ciq-chart-table__panel__group--content'>
+                    <ChartTableGroupContent item={item} isTick={isTick} />
                 </div>
             </div>
         );
     }
 }
-
 
 const ChartTable = ({
     isMobile,
@@ -106,68 +100,62 @@ const ChartTable = ({
 
     return (
         <div className={`cq-dialog-overlay ${open ? 'cq-dialog-active' : ''}`} style={{ '--table-width': width }}>
-            <Dialog className="cq-dialog ciq-chart-dialog">
-            <>
-                {isMobile && (
-                    <div className="cq-titlebar">
-                        {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
-                        <div className="cq-title">{`${symbol.name} ${t.translate('Chart Table')}`}</div>
-                        <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
-                    </div>
-                )
-                }
-                {isMobile ? '' : (
-                    <table className="ciq-chart-table">
-                        <thead>
-                            <tr>
-                                <th>{t.translate('Date')}</th>
-                                {isTick
-                                    ? <th>{t.translate('Tick')}</th>
-                                    : (
+            <Dialog className='cq-dialog ciq-chart-dialog'>
+                <>
+                    {isMobile && (
+                        <div className='cq-titlebar'>
+                            {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
+                            <div className='cq-title'>{`${symbol.name} ${t.translate('Chart Table')}`}</div>
+                            <CloseBoldIcon className='icon-close-menu' onClick={handleClose} />
+                        </div>
+                    )}
+                    {isMobile ? (
+                        ''
+                    ) : (
+                        <table className='ciq-chart-table'>
+                            <thead>
+                                <tr>
+                                    <th>{t.translate('Date')}</th>
+                                    {isTick ? (
+                                        <th>{t.translate('Tick')}</th>
+                                    ) : (
                                         <React.Fragment>
                                             <th>{t.translate('Open')}</th>
                                             <th>{t.translate('High')}</th>
                                             <th>{t.translate('Low')}</th>
                                             <th>{t.translate('Close')}</th>
                                         </React.Fragment>
-                                    )
-                                }
-                                <th className="before-last-child">
-                                    <div className="cq-change-cell">
-                                        {t.translate('Change')}
-                                    </div>
-                                </th>
-                                <th>
-                                    <CloseBoldIcon className="icon-close-menu" onClick={handleClose} />
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
-                )}
-                <Scroll
-                    className="ciq-chart-table__panel"
-                    onScroll={updateScrollSpy}
-                    setPanell={setScrollPanel}
-                >
-                    {tableData.map(item => (
-                        <ChartTableGroup
-                            key={item.key}
-                            item={item}
-                            isTick={isTick}
-                            ele={dateElements[item.key]}
-                            scrollTop={scrollTop}
-                            scrollPanel={scrollPanel}
-                            setDateElement={setDateElement}
-                        />
-                    ))}
-                </Scroll>
-            </>
+                                    )}
+                                    <th className='before-last-child'>
+                                        <div className='cq-change-cell'>{t.translate('Change')}</div>
+                                    </th>
+                                    <th>
+                                        <CloseBoldIcon className='icon-close-menu' onClick={handleClose} />
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    )}
+                    <Scroll className='ciq-chart-table__panel' onScroll={updateScrollSpy} setPanell={setScrollPanel}>
+                        {tableData.map(item => (
+                            <ChartTableGroup
+                                key={item.key}
+                                item={item}
+                                isTick={isTick}
+                                ele={dateElements[item.key]}
+                                scrollTop={scrollTop}
+                                scrollPanel={scrollPanel}
+                                setDateElement={setDateElement}
+                            />
+                        ))}
+                    </Scroll>
+                </>
             </Dialog>
         </div>
     );
 };
 
-export default connect(({  chart, chartTable }) => ({
+export default connect(({ chart, chartTable }) => ({
     isMobile: chart.isMobile,
     tableData: chartTable.tableData,
     Dialog: chartTable.Dialog,

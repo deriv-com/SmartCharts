@@ -12,8 +12,9 @@
     window.requestAnimationFrame = function (callback) {
         const currTime = new Date().getTime();
         const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-        const id = window.setTimeout(function () { callback(currTime + timeToCall); },
-            timeToCall);
+        const id = window.setTimeout(function () {
+            callback(currTime + timeToCall);
+        }, timeToCall);
         lastTime = currTime + timeToCall;
         return id;
     };
@@ -21,4 +22,4 @@
     window.cancelAnimationFrame = function (id) {
         clearTimeout(id);
     };
-}());
+})();
