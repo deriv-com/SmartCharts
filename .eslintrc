@@ -1,6 +1,8 @@
 {
     "parser": "babel-eslint",
     "extends": [
+        "prettier",
+        "prettier/react",
         "eslint:recommended",
         "plugin:import/errors",
         "plugin:import/warnings",
