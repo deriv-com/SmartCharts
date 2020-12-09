@@ -37,7 +37,7 @@
     "translations": "npm run build && node scripts/extract-translations.js ./dist/smartcharts.js",
     "deploy:production": "npm run build-travis && echo 'charts.binary.com' > CNAME  && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
     "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'",
-    "prettify": "./node_modules/.bin/prettier --config ./.prettierrc --write \"./packages/*/{app,loaders,src}/**/*.{js,jsx,scss}\"",
+    "prettify": "./node_modules/.bin/prettier --config ./.prettierrc --write \"./{app,loaders,src}/**/*.{js,jsx,scss}\"",
     "precommit": "lint-staged --allow-empty"
   },
   "devDependencies": {
