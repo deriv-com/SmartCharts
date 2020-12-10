@@ -101,9 +101,8 @@ class Keystroke {
             }
         } // handled by keypress
 
-        switch (
-            key // eslint-disable-line default-case
-        ) {
+        // eslint-disable-next-line default-case
+        switch (key) {
             case 91:
                 this.cmd = true;
                 return;

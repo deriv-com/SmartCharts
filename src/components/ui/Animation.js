@@ -288,13 +288,13 @@ export default function animateChart(stx, animationParameters) {
             if (interval == 'second' || timeUnit == 'second') barSpan *= 1000;
             else if (interval == 'minute' || timeUnit == 'minute') barSpan *= 60000;
             if (!isNaN(interval)) barSpan *= interval;
-            if (interval == 'day' || timeUnit == 'day')
+            if (interval == 'day' || timeUnit == 'day') {
                 chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
-            else if (interval == 'week' || timeUnit == 'week')
+            } else if (interval == 'week' || timeUnit == 'week') {
                 chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
-            else if (interval == 'month' || timeUnit == 'month')
+            } else if (interval == 'month' || timeUnit == 'month') {
                 chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
-            else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
+            } else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
 
             const linearChart =
                 (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.chart.standaloneBars;

@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable react/sort-comp,react/no-multi-comp */
 import React from 'react';
 import debounce from 'lodash.debounce';

@@ -347,8 +347,9 @@ class ChartStore {
                 if (params.chart && params.chart !== chart) continue;
 
                 let whitespace = 0;
-                if (params.maintainWhitespace && this.preferences.whitespace >= 0)
+                if (params.maintainWhitespace && this.preferences.whitespace >= 0) {
                     whitespace = this.preferences.whitespace;
+                }
                 if (params.whitespace || params.whitespace === 0) whitespace = params.whitespace;
                 const leftMargin = this.getLabelOffsetInPixels(chart, layout.chartType);
                 if (leftMargin > whitespace) whitespace = leftMargin;
@@ -368,8 +369,9 @@ class ChartStore {
                 }
                 this.micropixels -= layout.candleWidth;
                 exactScroll++;
-                if (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars)
-                    this.micropixels += layout.candleWidth / 2; // bar charts display at beginning of candle
+                if (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) {
+                    this.micropixels += layout.candleWidth / 2;
+                } // bar charts display at beginning of candle
 
                 if (this.isHistoricalMode() && _self.isMobile) {
                     exactScroll = parseInt(exactScroll * 0.8, 10); // eslint-disable-line
@@ -562,10 +564,11 @@ class ChartStore {
                         longPressText.style.display = 'none';
                         const drag = this.preferences.dragging;
                         if (drag && params.panel && !params.panel.noDrag) {
-                            if ((drag === true || drag.study) && type === 'study')
+                            if ((drag === true || drag.study) && type === 'study') {
                                 longPressText.style.display = 'block';
-                            else if ((drag === true || drag.series) && type === 'series')
+                            } else if ((drag === true || drag.series) && type === 'series') {
                                 longPressText.style.display = 'block';
+                            }
                         }
                     }
                 }

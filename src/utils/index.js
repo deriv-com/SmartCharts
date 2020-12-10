@@ -281,8 +281,8 @@ export const prepareIndicatorName = name => {
 
 export const renderSVGString = icon => {
     const vb = icon.viewBox.split(' ').slice(2);
-    // eslint-disable-next-line no-undef
     return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${
+        // eslint-disable-next-line no-undef
         __webpack_public_path__ + icon.url
     }" /></svg>`;
 };
