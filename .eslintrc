@@ -4,6 +4,7 @@
         "prettier",
         "prettier/react",
         "eslint:recommended",
+        "plugin:react-hooks/recommended",
         "plugin:import/errors",
         "plugin:import/warnings",
         "airbnb"
@@ -14,9 +15,7 @@
         "es6": true,
         "node": true
     },
-    "plugins": [
-        "react"
-    ],
+    "plugins": ["react", "prettier"],
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"
@@ -68,7 +67,7 @@
         "no-mixed-operators": 0,
         "max-len": 0,
         "prefer-const": 2,
-        "import/no-extraneous-dependencies": ["error", {"packageDir": "./"}],
+        "import/no-extraneous-dependencies": ["error", { "packageDir": "./" }],
         "no-underscore-dangle": 0,
         "prefer-destructuring": 0,
         "react/no-access-state-in-setstate": 2,
@@ -81,17 +80,17 @@
         "no-unused-expressions": 2,
         "semi": 2,
         "no-console": 0,
-        "no-restricted-syntax": [
-            "error",
-            "LabeledStatement",
-            "WithStatement"
-        ],
-        "jsx-a11y/label-has-for": [ 2, {
-            "components": [ "Label" ],
-            "required": {
-                "some": [ "nesting", "id" ]
-            },
-            "allowChildren": false,
-        }]
+        "jsx-quotes": ["error", "prefer-single"],
+        "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+        "jsx-a11y/label-has-for": [
+            2,
+            {
+                "components": ["Label"],
+                "required": {
+                    "some": ["nesting", "id"]
+                },
+                "allowChildren": false
+            }
+        ]
     }
 }
