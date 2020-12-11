@@ -1,6 +1,7 @@
 /* eslint-disable react/sort-comp,react/no-multi-comp */
-import React        from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect }        from 'react';
 import debounce     from 'lodash.debounce';
+import classNames   from 'classnames';
 import Scroll       from './Scroll.jsx';
 import {
     ArrowIcon,
@@ -50,113 +51,131 @@ export const Checkbox = ({
     </span>
 );
 
-export class Slider extends React.Component {
-    onChange = (val) => {
-        this.props.onChange(val.currentTarget.value);
-    };
-
-    shouldComponentUpdate(nextProps) {
-        return this.props.value !== nextProps.value;
-    }
-
-    render() {
-        const {
-            min = 1,
-            max = 10,
-            step = 1,
-            value,
-        } = this.props;
+export const Slider = ({
+    min = 1,
+    max = 10,
+    step = 1,
+    value,
+    onChange,
+}) => {
+    const getActiveWidth = useMemo(() => {
         const barWidth = 238;// css hardcode
-        let activeWidth = Math.round((barWidth * (value - min)) / (max - min));
-        activeWidth = activeWidth < 0 ? 0 : activeWidth;
+        const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
+        return activeWidth < 0 ? 0 : activeWidth;
+    }, [value]);
 
-        return (
-            <div className="sc-slider">
-                <div className="sc-slider-range">
-                    <div className="sc-slider-bar" />
-                    <div className="sc-slider-active-bar" style={{ width: activeWidth }} />
-                    <input
-                        type="range"
-                        min={min}
-                        max={max}
-                        step={step}
-                        onChange={this.onChange}
-                        value={value}
-                    />
-                </div>
-                <div className="value">{value}</div>
+    const handleChange = useCallback(
+        el => onChange(el.currentTarget.value),
+        [onChange],
+    );
+
+    return (
+        <div className="sc-slider">
+            <div className="sc-slider-range">
+                <div className="sc-slider-bar" />
+                <div className="sc-slider-active-bar" style={{ width: getActiveWidth }} />
+                <input
+                    type="range"
+                    min={min}
+                    max={max}
+                    step={step}
+                    onChange={handleChange}
+                    value={value}
+                />
             </div>
-        );
-    }
-}
+            <div className="value">{value}</div>
+        </div>
+    );
+};
 
-export class DropDown extends React.Component {
-    state = { open: false };
-    titleRef = null;
-    onClick = () => {
-        const bounding = this.ele.getBoundingClientRect();
-        this.setState(prevState => ({
-            open: !prevState.open,
-            left: !prevState.open ? bounding.left : null,
-            top: !prevState.open ? bounding.top : null,
-            width: bounding.width,
-        }));
-    };
-    close = (e) => {
-        if (e.target !== this.titleRef) {
-            this.setState({
-                open: false,
-                left: 0,
-                top: 0,
-            });
+export const DropDown = ({
+    subtitle,
+    rows,
+    children,
+    value,
+    onRowClick,
+    className,
+}) => {
+    const [open, setOpen] = useState(false);
+    const [top, setTop] = useState(0);
+    const [left, setLeft] = useState(0);
+    const [width, setWidth] = useState(null);
+    const innerRef = useRef();
+    const innerTitleRef = useRef();
+
+    const handleClick = useCallback(() => {
+        const bounding = innerRef.current.getBoundingClientRect();
+        setTop(!open ? bounding.top : null);
+        setLeft(!open ? bounding.left : null);
+        setWidth(bounding.width);
+        setOpen(prevState => !prevState);
+    }, [open, innerRef]);
+    const handleClose = useCallback((e) => {
+        if (e.target !== innerTitleRef.current) {
+            setOpen(false);
+            setTop(0);
+            setLeft(0);
         }
-    }
+    }, [innerTitleRef]);
 
-    componentDidMount() { document.addEventListener('click', this.close, false); }
-    componentWillUnmount() { document.removeEventListener('click', this.close); }
+    useEffect(() => {
+        document.addEventListener('click', handleClose, false);
+        return () => {
+            document.removeEventListener('click', handleClose);
+        };
+    }, []);
 
-    render() {
-        const {
-            subtitle, rows, children, value, onRowClick, className,
-        } = this.props;
-        const { open, left, top, width } = this.state;
-        return (
+    return (
+        <div
+            className={classNames(className, 'sc-dropdown', { active: open })}
+            ref={innerRef}
+            style={{ left, top, width }}
+        >
+            {
+                !!subtitle
+                && (
+                    <div className="subtitle">
+                        <span>
+                            {subtitle}
+                        </span>
+                    </div>
+                )
+            }
             <div
-                className={`${className || ''} sc-dropdown ${open ? 'active' : ''}`}
-                ref={(ele) => { this.ele = ele; }}
-                style={{ left, top, width }}
+                className={classNames('value', { active: open })}
+                onClick={handleClick}
+                ref={innerTitleRef}
             >
-                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
-                <div
-                    className={`value ${open ? 'active' : ''}`}
-                    onClick={this.onClick}
-                    ref={(ref) => { this.titleRef = ref; }}
-                >
-                    <span className="text">{value}</span>
-                    <ArrowIcon />
-                </div>
-                <Scroll
-                    autoHide
-                    height={`${open ? '200px' : '1px'}`}
-                    className={`dropdown ${open ? 'active' : ''}`}
-                >
-                    {rows.map((row, idx) => (
-                        <div
-                            key={idx} // eslint-disable-line react/no-array-index-key
-                            className={`row ${row === value ? 'row--selected' : ''}`}
-                            onClick={() => onRowClick && onRowClick(row)}
-                        >
-                            {children(row)}
-                        </div>
-                    ))}
-                </Scroll>
+                <span className="text">{value}</span>
+                <ArrowIcon />
             </div>
-        );
-    }
-}
+            <Scroll
+                autoHide
+                height={`${open ? '200px' : '1px'}`}
+                className={classNames('dropdown', { active: open })}
+            >
+                {rows.map((row, idx) => (
+                    <div
+                        key={idx} // eslint-disable-line react/no-array-index-key
+                        className={classNames('row', { 'row--selected': row === value })}
+                        onClick={() => onRowClick && onRowClick(row)}
+                    >
+                        {children(row)}
+                    </div>
+                ))}
+            </Scroll>
+        </div>
+    );
+};
 
-export class Pattern extends React.Component {
-    patterns = [
+export const Pattern = ({
+    pattern,
+    subtitle,
+    lineWidth,
+    onChange,
+    onActive,
+}) => {
+    const patterns = [
         { width: 1, pattern: 'solid' },
         { width: 3, pattern: 'solid' },
         { width: 5, pattern: 'solid' },
@@ -168,31 +187,33 @@ export class Pattern extends React.Component {
         { width: 5, pattern: 'dashed' },
         { width: 0, pattern: 'none' },
     ];
-    render() {
-        const { pattern, subtitle, lineWidth, onChange, onActive } = this.props;
-        const value = pattern !== 'none'
-            ? <span className={`option ${pattern}-${lineWidth}`} />
-            : <span className="none">None</span>;
+    const getValue = () => (pattern !== 'none'
+        ? <span className={`option ${pattern}-${lineWidth}`} />
+        : <span className="none">None</span>);
 
-        return (
-            <DropDown
-                rows={this.patterns}
-                value={value}
-                onActive={onActive}
-                onRowClick={onChange}
-                subtitle={subtitle}
-            >
-                {p => (p.pattern !== 'none'
-                    ? <span className={`option ${p.pattern}-${p.width}`} />
-                    : <span className="none">None</span>)
-                }
-            </DropDown>
-        );
-    }
-}
+    return (
+        <DropDown
+            rows={patterns}
+            value={getValue()}
+            onActive={onActive}
+            onRowClick={onChange}
+            subtitle={subtitle}
+        >
+            {p => (p.pattern !== 'none'
+                ? <span className={`option ${p.pattern}-${p.width}`} />
+                : <span className="none">None</span>)
+            }
+        </DropDown>
+    );
+};
 
-export class ColorPicker extends React.Component {
-    colorMap = [
+export const ColorPicker = ({
+    subtitle,
+    color,
+    theme,
+    setColor,
+}) => {
+    const colorMap = [
         ['#ffffff', '#e1e1e1', '#cccccc', '#b7b7b7', '#a0a0a5', '#898989', '#707070',
             '#626262', '#555555', '#464646', '#363636', '#262626', '#1d1d1d', '#000000'],
         ['#f4977c', '#f7ac84', '#fbc58d', '#fff69e', '#c4de9e', '#85c99e', '#7fcdc7',
@@ -206,78 +227,88 @@ export class ColorPicker extends React.Component {
         ['#770001', '#792e03', '#7b4906', '#817a0b', '#41661e', '#005827', '#005951',
             '#003b5c', '#001d40', '#000e35', '#04002c', '#19002b', '#2c002a', '#580028'],
     ];
-    state = { open: false };
-    titleRef = null;
-    onClick = () => {
-        const bounding = this.ele.getBoundingClientRect();
-        this.setState(prevState => ({
-            open: !prevState.open,
-            left: !prevState.open ? bounding.left : null,
-            top: !prevState.open ? bounding.top : null,
-            width: bounding.width,
-        }));
-    }
-    close = (e) => {
-        if (e.target !== this.titleRef && e.target.parentNode !== this.titleRef) {
-            this.setState({
-                open: false,
-                left: null,
-                top: null,
-            });
+    const [open, setOpen] = useState(false);
+    const [top, setTop] = useState(0);
+    const [left, setLeft] = useState(0);
+    const [width, setWidth] = useState(null);
+    const innerRef = useRef();
+    const innerTitleRef = useRef();
+
+    const backgroundColor = useMemo(
+        () => {
+            if (color !== 'auto') return color;
+            return (theme === 'light' ? '#000000' : '#ffffff');
+        },
+        [color, theme],
+    );
+
+    const handleClick = useCallback(() => {
+        const bounding = innerRef.current.getBoundingClientRect();
+        setTop(!open ? bounding.top : null);
+        setLeft(!open ? bounding.left : null);
+        setWidth(bounding.width);
+        setOpen(prevState => !prevState);
+    }, [open, innerRef]);
+    const handleClose = useCallback((e) => {
+        if (e.target !== innerTitleRef.current) {
+            setOpen(false);
+            setTop(0);
+            setLeft(0);
         }
-    };
+    }, [innerTitleRef]);
 
-    defaultColor = () => (this.props.theme === 'light' ? '#000000' : '#ffffff')
+    useEffect(() => {
+        document.addEventListener('click', handleClose, false);
+        return () => {
+            document.removeEventListener('click', handleClose);
+        };
+    }, []);
 
-    componentDidMount() { document.addEventListener('click', this.close, false); }
-    componentWillUnmount() { document.removeEventListener('click', this.close); }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return (this.state.open !== nextState.open)
-        || (this.props.color !== nextProps.color)
-        || (this.props.theme !== nextProps.theme);
-    }
-
-    render() {
-        const { subtitle, color, setColor } = this.props;
-        const backgroundColor = color === 'auto' ? this.defaultColor() : color;
-        const { open, left, top, width } = this.state;
-        return (
+    return (
+        <div
+            ref={innerRef}
+            className={classNames('sc-color-picker', { active: open })}
+            style={{ top, left, width }}
+        >
+            {
+                !!subtitle
+                && (
+                    <div className="subtitle">
+                        <span>
+                            {subtitle}
+                        </span>
+                    </div>
+                )
+            }
             <div
-                ref={(ele) => { this.ele = ele; }}
-                className={`sc-color-picker ${this.state.open ? 'active' : ''}`}
-                style={{ top, left, width }}
+                className="value"
+                onClick={handleClick}
+                ref={innerTitleRef}
             >
-                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
                 <div
-                    className="value"
-                    onClick={this.onClick}
-                    ref={(ref) => { this.titleRef = ref; }}
-                >
-                    <div
-                        className="sc-input-color"
-                        style={{ backgroundColor }}
-                    />
-                    <ArrowIcon />
-                </div>
-                <div className={`dropdown ${open ? 'open' : ''}`}>
-                    {this.colorMap.map((row, rowIdx) => (
-                        <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
-                            {row.map(tileColor => (
-                                <div
-                                    key={tileColor}
-                                    className="tile-color"
-                                    style={{ backgroundColor: tileColor }}
-                                    onClick={() => setColor(tileColor)}
-                                />
-                            ))}
-                        </div>
-                    ))}
-                </div>
+                    className="sc-input-color"
+                    style={{ backgroundColor }}
+                />
+                <ArrowIcon />
             </div>
-        );
-    }
-}
+            <div className={classNames('dropdown', { open })}>
+                {colorMap.map((row, rowIdx) => (
+                    <div key={rowIdx /* eslint-disable-line react/no-array-index-key */} className="row">
+                        {row.map(tileColor => (
+                            <div
+                                key={tileColor}
+                                className="tile-color"
+                                style={{ backgroundColor: tileColor }}
+                                onClick={() => setColor(tileColor)}
+                            />
+                        ))}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
 
 export const Switch = ({
     value,
@@ -317,94 +348,84 @@ export const SwitchIcon = ({
 };
 
 // NumericInput fires onChange on Enter or onBlur
-export class NumericInput extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            originalValue: '',
-            value: '',
-        };
+export const NumericInput = ({
+    subtitle,
+    onChange,
+    min,
+    max,
+    step,
+    value,
+}) => {
+    const [innerValue, setInnerValue] = useState(false);
 
-        this.onUpdateValue = this.onUpdateValue.bind(this);
-    }
-
-    componentDidMount() {
-        this.setState(() => ({
-            originalValue: this.props.value,
-            value: this.props.value,
-        }));
-    }
-
-    static getDerivedStateFromProps(props, state) {
-        const { value, min, max, onChange } = props;
-        let val = value;
-        if (value !== state.originalValue) {
-            if (max !== undefined && value > max) {
-                val = max;
-            } else if (min !== undefined && value < min) {
-                val = min;
-            }
+    const handleFireOnChange = debounce(() => {
+        const setAndChange = (val) => {
+            setInnerValue(val);
             onChange(val);
-            return {
-                originalValue: value,
-                value: val,
-            };
-        }
-        return null;
-    }
-
-    fireOnChange = debounce(() => {
-        const { min, max, onChange } = this.props;
-        const setAndChange = val => this.setState({ value: val }, () => onChange(this.state.value));
-        if (max !== undefined && this.state.value > max) {
+        };
+        if (max !== undefined && innerValue > max) {
             setAndChange(max);
-        } else if (min !== undefined && this.state.value < min) {
+        } else if (min !== undefined && innerValue < min) {
             setAndChange(min);
         } else {
-            onChange(this.state.value);
+            onChange(innerValue);
         }
     }, 300, { leading: true, trailing: false });
 
-    onUpdateValue = (e) => {
+    const handleUpdateValue = (e) => {
         e.persist();
-        this.setState(() => ({ value: e.target.value }));
+        setInnerValue(e.target.value);
     };
 
-    fireOnEnter = (e) => {
+    const handleFireOnEnter = (e) => {
         if (['e', '+', 'E'].includes(e.key)) {
             e.preventDefault();
         }
         if (e.key === 'Enter') {
-            this.fireOnChange();
+            handleFireOnChange();
         }
     };
 
-    onIncrease = () => this.setState(prevState => ({ value: prevState.value + 1 }), this.fireOnChange);
-    onDecrease = () => this.setState(prevState => ({ value: prevState.value - 1 }), this.fireOnChange);
+    const onIncrease = () => {
+        setInnerValue(prevState => prevState + 1);
+        handleFireOnChange();
+    };
+    const onDecrease = () => {
+        setInnerValue(prevState => prevState - 1);
+        handleFireOnChange();
+    };
 
-    render() {
-        const { subtitle, min, max, step } = this.props;
-        return (
-            <div className="sc-numeric-input">
-                <input
-                    type="number"
-                    value={this.state.value}
-                    onBlur={this.fireOnChange}
-                    onChange={this.onUpdateValue}
-                    onKeyPress={this.fireOnEnter}
-                    min={min}
-                    max={max}
-                    step={step}
-                />
-                {subtitle ? (<div className="subtitle"><span>{subtitle}</span></div>) : ''}
-                <div className="sc-numeric-input-buttons">
-                    <InputNumberPlusIcon onClick={this.onIncrease} />
-                    <InputNumberMinusIcon onClick={this.onDecrease} />
-                </div>
+    useEffect(() => {
+        setInnerValue(value);
+    }, []);
+
+    return (
+        <div className="sc-numeric-input">
+            <input
+                type="number"
+                value={innerValue}
+                onBlur={handleFireOnChange}
+                onChange={handleUpdateValue}
+                onKeyPress={handleFireOnEnter}
+                min={min}
+                max={max}
+                step={step}
+            />
+            {
+                !!subtitle
+                && (
+                    <div className="subtitle">
+                        <span>{subtitle}</span>
+                    </div>
+                )
+            }
+            <div className="sc-numeric-input-buttons">
+                <InputNumberPlusIcon onClick={onIncrease} />
+                <InputNumberMinusIcon onClick={onDecrease} />
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export const NumberColorPicker = ({
     value,
