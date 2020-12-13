@@ -1,56 +1,44 @@
-import React, { Component } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FavoriteIcon } from './Icons.jsx';
 import FavoriteStore from '../store/FavoriteStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
-class Favorite extends Component {
-    store = FavoriteStore.getInstance();
+const Favorite = ({ category, id }) => {
+    const [store, setStore] = useState(null);
+    const [is_favorate, setFavorite] = useState(false);
 
-    constructor(props) {
-        super(props);
-        this.store.onFavoriteUpdate(this.onFavoriteUpdate);
-        this.isFavorite = this.store.isFavorite;
-        this.toggleFavorite = this.store.toggleFavorite;
-        const { category, id } = this.props;
-        this.state = { isFavorite: this.isFavorite(category, id) };
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.isFavorite !== nextState.isFavorite;
-    }
-
-    componentWillUnmount() {
-        this.store.offFavoriteUpdate(this.onFavoriteUpdate);
-    }
-
-    onFavoriteUpdate = () => {
-        const { category, id } = this.props;
-        const isFavorite = this.isFavorite(category, id);
-        if (isFavorite !== this.state.isFavorite) {
-            this.setState({ isFavorite });
-            logEvent(LogCategories.CategoricalDisplay, LogActions.Favorite, `${isFavorite ? 'Add ' : 'Remove '} ${id}`);
-        }
-    };
-
-    onClick = (e) => {
+    const onClick = useCallback((e) => {
         e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true; // prevent close dialog
-        const { category, id } = this.props;
-        this.toggleFavorite(category, id);
-    };
+        store.toggleFavorite(category, id);
+    }, [store, category, id]);
+    const onFavoriteUpdate = useCallback(() => {
+        const isFavorite = store.isFavorite(category, id);
+        if (isFavorite !== is_favorate) {
+            setFavorite(isFavorite);
+            logEvent(LogCategories.CategoricalDisplay, LogActions.Favorite, `${isFavorite ? 'Add ' : 'Remove '} ${id}`);
+        }
+    }, [store, category, id]);
 
-    render() {
-        const { category, id } = this.props;
-        const { isFavorite } = this.state;
-        if (!category || !id) return null;
+    if (!category || !id) return null;
 
-        return (
-            <FavoriteIcon
-                onClick={this.onClick}
-                className={`ciq-favorite ${isFavorite ? 'ciq-active-favorite' : ''}`}
-            />
-        );
-    }
-}
+    useEffect(() => {
+        if (store && store.onFavoriteUpdate) {
+            store.onFavoriteUpdate(onFavoriteUpdate);
+            setFavorite(store.isFavorite(category, id));
+        }
+    }, [store, category, id]);
+    useEffect(() => {
+        const _store = FavoriteStore.getInstance();
+        setStore(_store);
+    }, [category, id]);
+
+    return (
+        <FavoriteIcon
+            onClick={onClick}
+            className={`ciq-favorite ${is_favorate ? 'ciq-active-favorite' : ''}`}
+        />
+    );
+};
 
 export default Favorite;
