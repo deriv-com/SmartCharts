@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/no-unused-state */
