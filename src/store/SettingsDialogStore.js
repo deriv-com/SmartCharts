@@ -11,7 +11,9 @@ export default class SettingsDialogStore {
     @observable description = '';
 
     @observable activeTab = 'settings'; // 'settings' | 'description'
-    @computed get showTabs() { return !!this.description; }
+    @computed get showTabs() {
+        return !!this.description;
+    }
     @observable scrollPanel;
     @observable dialogPortalNodeId = null;
     @observable freezeScroll = false;
@@ -21,38 +23,54 @@ export default class SettingsDialogStore {
         this.getContext = getContext;
         this.onChanged = onChanged;
         this.onDeleted = onDeleted;
-        this.menu = new MenuStore(mainStore, { route:'indicator-setting' });
+        this.menu = new MenuStore(mainStore, { route: 'indicator-setting' });
         this.SettingDialogMenu = this.menu.connect(Menu);
-        reaction(() => this.open, () => {
-            if (!this.scrollPanel || !this.open) { return; }
-            const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
-            this.scrollPanel.addEventListener('click', () => {
+        reaction(
+            () => this.open,
+            () => {
+                if (!this.scrollPanel || !this.open) {
+                    return;
+                }
+                const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
+                this.scrollPanel.addEventListener('click', () => {
+                    this.setFreezeScroll(false);
+                });
+                dropdowns.forEach(dropdown => {
+                    dropdown.addEventListener('click', () => setTimeout(() => this.checkDropdownOpen(), 50));
+                });
                 this.setFreezeScroll(false);
-            });
-            dropdowns.forEach((dropdown) => {
-                dropdown.addEventListener('click', () => setTimeout(() => this.checkDropdownOpen(), 50));
-            });
-            this.setFreezeScroll(false);
-        }, {
-            delay: 300,
-        });
+            },
+            {
+                delay: 300,
+            }
+        );
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get theme() { return this.mainStore.chartSetting.theme; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get theme() {
+        return this.mainStore.chartSetting.theme;
+    }
 
-    @computed get open() { return this.menu.open; }
+    @computed get open() {
+        return this.menu.open;
+    }
     checkDropdownOpen = () => {
         let freezeScroll = false;
-        if (!this.scrollPanel) { return; }
+        if (!this.scrollPanel) {
+            return;
+        }
         const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
-        dropdowns.forEach((dropdown) => {
+        dropdowns.forEach(dropdown => {
             if (dropdown.className.indexOf('active') !== -1) freezeScroll = true;
         });
 
         this.setFreezeScroll(freezeScroll);
-    }
+    };
     @action.bound setFreezeScroll(status) {
         this.freezeScroll = status;
     }
@@ -127,7 +145,7 @@ export default class SettingsDialogStore {
         return groups;
     }
     @action.bound setScrollPanel(element) {
-        this.scrollPanel =  element;
+        this.scrollPanel = element;
     }
 
     connect = connect(() => ({

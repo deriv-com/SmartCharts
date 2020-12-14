@@ -12,7 +12,7 @@ const Comparison = ({
     searchInputClassName,
 }) => (
     <ComparisonMenu
-        className="cq-comparison-new cq-symbols-display"
+        className='cq-comparison-new cq-symbols-display'
         isMobile={isMobile}
         title={isMobile ? t.translate('Comparison') : ''}
     >

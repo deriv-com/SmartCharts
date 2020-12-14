@@ -2,24 +2,27 @@ import { observable, action, reaction, computed } from 'mobx';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
-import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ViewStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         this.ViewsMenu = this.menu.connect(Menu);
-        reaction(() => this.menu.dialog.open, () => {
-            if (ViewStore.views.length === 0) {
-                this.updateRoute('new');
-            } else {
-                this.updateRoute('main');
-            }
+        reaction(
+            () => this.menu.dialog.open,
+            () => {
+                if (ViewStore.views.length === 0) {
+                    this.updateRoute('new');
+                } else {
+                    this.updateRoute('main');
+                }
 
-            if (this.menu.dialog.open) {
-                this.templateName = '';
+                if (this.menu.dialog.open) {
+                    this.templateName = '';
+                }
             }
-        });
+        );
     }
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
@@ -33,9 +36,15 @@ export default class ViewStore {
         overwrite: () => this.overwrite(),
     };
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get loader() { return this.mainStore.loader; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get loader() {
+        return this.mainStore.loader;
+    }
 
     @computed get sortedItems() {
         return [...ViewStore.views].sort((a, b) => (a.name < b.name ? -1 : 1));
@@ -46,7 +55,9 @@ export default class ViewStore {
     }
 
     @action.bound onChange(e) {
-        if (this.currentRoute === 'overwrite') { return; }
+        if (this.currentRoute === 'overwrite') {
+            return;
+        }
         this.templateName = e.target.value;
     }
 
@@ -103,7 +114,9 @@ export default class ViewStore {
     }
 
     @action.bound applyLayout(idx, e) {
-        if (e.nativeEvent.is_item_removed) { return; }
+        if (e.nativeEvent.is_item_removed) {
+            return;
+        }
         if (this.loader) {
             this.loader.show();
         }

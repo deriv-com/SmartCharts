@@ -2,10 +2,18 @@ import { action, when, computed, reaction, observable } from 'mobx';
 
 export default class NavigationWidgetStore {
     @observable mouse_in;
-    get chart() { return this.mainStore.chart; }
-    get stateStore() { return this.mainStore.state; }
-    get crosshairStore() { return this.mainStore.crosshair; }
-    get stxx() { return this.chart.stxx; }
+    get chart() {
+        return this.mainStore.chart;
+    }
+    get stateStore() {
+        return this.mainStore.state;
+    }
+    get crosshairStore() {
+        return this.mainStore.crosshair;
+    }
+    get stxx() {
+        return this.chart.stxx;
+    }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -17,7 +25,9 @@ export default class NavigationWidgetStore {
         this.stxx.prepend('mouseWheel', this.onMouseWheel);
     };
 
-    @computed get enableScale() { return this.stateStore.startEpoch; }
+    @computed get enableScale() {
+        return this.stateStore.startEpoch;
+    }
 
     @action.bound onMouseWheel() {
         this.stxx.chart.lockScroll = false;

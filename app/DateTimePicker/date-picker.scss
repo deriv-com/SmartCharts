@@ -73,7 +73,10 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             color: themed('ChartHistoryPickerHeaderColor');
         }
 
-        .calendar-select-month-btn, .calendar-select-year-btn, .calendar-select-decade-btn, .calendar-select-century-btn {
+        .calendar-select-month-btn,
+        .calendar-select-year-btn,
+        .calendar-select-decade-btn,
+        .calendar-select-century-btn {
             padding: 0 4px;
             cursor: pointer;
 
@@ -86,7 +89,10 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
                 cursor: default;
             }
         }
-        .calendar-prev-year-btn, .calendar-next-year-btn, .calendar-prev-month-btn, .calendar-next-month-btn {
+        .calendar-prev-year-btn,
+        .calendar-next-year-btn,
+        .calendar-prev-month-btn,
+        .calendar-next-month-btn {
             position: absolute;
             color: rgba(0, 0, 0, 0.45);
             padding: 0 5px;
@@ -127,7 +133,11 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             }
         }
     }
-    .calendar-date-panel, .calendar-month-panel, .calendar-year-panel, .calendar-decade-panel, .calendar-century-panel {
+    .calendar-date-panel,
+    .calendar-month-panel,
+    .calendar-year-panel,
+    .calendar-decade-panel,
+    .calendar-century-panel {
         display: grid;
         grid-gap: 2px;
         padding: 8px 12px;
@@ -136,10 +146,16 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         &.calendar-date-panel {
             grid-template-columns: repeat(7, 1fr);
         }
-        &.calendar-month-panel, &.calendar-year-panel, &.calendar-decade-panel, &.calendar-century-panel {
+        &.calendar-month-panel,
+        &.calendar-year-panel,
+        &.calendar-decade-panel,
+        &.calendar-century-panel {
             grid-template-columns: repeat(3, 1fr);
         }
-        .calendar-date, .calendar-month, .calendar-year, .calendar-decade {
+        .calendar-date,
+        .calendar-month,
+        .calendar-year,
+        .calendar-decade {
             justify-content: center;
             align-self: center;
             cursor: pointer;
@@ -162,7 +178,8 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
                     color: themed('ChartHistoryPickerBodyColor');
                 }
             }
-            &.calendar-month, &.calendar-year {
+            &.calendar-month,
+            &.calendar-year {
                 padding: 0 8px;
             }
             &.calendar-decade {
@@ -249,7 +266,8 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             fill: $COLOR_BLUE;
         }
     }
-    .datepicker-display, .datepicker-native-overlay {
+    .datepicker-display,
+    .datepicker-native-overlay {
         height: 28px;
         cursor: pointer;
         font-size: 1.4em;
@@ -312,7 +330,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     }
 
     // style native date picker
-    input[type=date] {
+    input[type='date'] {
         appearance: none;
 
         &:hover:not(:focus) {
@@ -322,7 +340,8 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             margin: 0;
         }
     }
-    .picker-calendar-icon, .close-circle-icon {
+    .picker-calendar-icon,
+    .close-circle-icon {
         position: absolute;
         right: 12px;
         top: 50%;

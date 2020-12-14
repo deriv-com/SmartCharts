@@ -11,7 +11,7 @@ class RenderInsideChart extends Component {
         super(props);
         const { at = 'holder', contextPromise } = props;
 
-        contextPromise.then((context) => {
+        contextPromise.then(context => {
             const nodeName = `${inChartPrefix}${at}`;
             // reuse existing node when possible:
             let elem = context.topNode.querySelector(`.${nodeName}`);
@@ -26,15 +26,12 @@ class RenderInsideChart extends Component {
     }
 
     render() {
-        if (!this.props.isChartReady) return (null);
-        if (this.props.hideInScrollToEpoch && this.props.isChartScrollingToEpoch) return (null);
+        if (!this.props.isChartReady) return null;
+        if (this.props.hideInScrollToEpoch && this.props.isChartScrollingToEpoch) return null;
         if (this.container) {
-            return ReactDOM.createPortal(
-                this.props.children,
-                this.container,
-            );
+            return ReactDOM.createPortal(this.props.children, this.container);
         }
-        return (null);
+        return null;
     }
 }
 

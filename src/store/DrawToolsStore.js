@@ -3,7 +3,7 @@ import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
-import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { formatCamelCase } from '../utils';
 import { drawTools } from '../Constant';
 
@@ -20,17 +20,28 @@ export default class DrawToolsStore {
         this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
 
         when(() => this.context, this.onContextReady);
-        reaction(() => this.menu.open, () => {
-            this.computeActiveDrawTools();
-            this.noTool();
-        });
+        reaction(
+            () => this.menu.open,
+            () => {
+                this.computeActiveDrawTools();
+                this.noTool();
+            }
+        );
     }
 
-    get context() { return this.mainStore.chart.context; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
 
-    get stx() { return this.context.stx; }
-    get stateStore() { return this.mainStore.state; }
-    get crosshairStore() { return this.mainStore.crosshair; }
+    get stx() {
+        return this.context.stx;
+    }
+    get stateStore() {
+        return this.mainStore.state;
+    }
+    get crosshairStore() {
+        return this.mainStore.crosshair;
+    }
 
     activeDrawing = null;
     isContinuous = false;
@@ -45,7 +56,7 @@ export default class DrawToolsStore {
         this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
     };
 
-    closeOnEscape = (e) => {
+    closeOnEscape = e => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.stx.changeVectorType('');
@@ -55,7 +66,9 @@ export default class DrawToolsStore {
 
     doubleClick = () => this.drawingFinished();
 
-    @computed get activeToolsNo() { return this.activeToolsGroup.reduce((a, b) => (a + b.items.length), 0); }
+    @computed get activeToolsNo() {
+        return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
+    }
 
     @action.bound onRightClickDrawing(drawing) {
         this.showDrawToolDialog(drawing);
@@ -76,9 +89,13 @@ export default class DrawToolsStore {
             lineWidth: 'none',
         };
         this.settingsDialog.items = Object.keys(parameters)
-            .filter(key => !( // Remove pattern option from Fibonacci tools
-                (drawing.name.startsWith('fib') || drawing.name === 'retracement')
-                && key === 'pattern'))
+            .filter(
+                key =>
+                    !(
+                        // Remove pattern option from Fibonacci tools
+                        ((drawing.name.startsWith('fib') || drawing.name === 'retracement') && key === 'pattern')
+                    )
+            )
             .map(key => ({
                 id: key,
                 title: formatCamelCase(key),
@@ -87,10 +104,11 @@ export default class DrawToolsStore {
                 type: typeMap[key],
             }));
 
-
         const drawingItem = this.findComputedDrawing(drawing);
         if (drawingItem) {
-            title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(drawingItem.text, { num: (drawingItem.num || ' ') })}`;
+            title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(drawingItem.text, {
+                num: drawingItem.num || ' ',
+            })}`;
         }
 
         this.activeDrawing = drawing;
@@ -111,22 +129,20 @@ export default class DrawToolsStore {
         this._pervDrawingObjectCount = count;
     };
 
-    findComputedDrawing = (drawing) => {
+    findComputedDrawing = drawing => {
         const group = this.activeToolsGroup.find(drawGroup => drawGroup.key === drawing.name);
         if (group) {
-            const drawingItem = group.items.find(item => (
-                item.v0 === drawing.v0
-                    && item.v1 === drawing.v1
-                    && item.d0 === drawing.d0
-                    && item.d1 === drawing.d1
-            ));
+            const drawingItem = group.items.find(
+                item =>
+                    item.v0 === drawing.v0 && item.v1 === drawing.v1 && item.d0 === drawing.d0 && item.d1 === drawing.d1
+            );
             if (drawingItem) {
                 drawingItem.prefix = drawingItem.id === 'continuous' ? t.translate('Continuous') : '';
             }
             return drawingItem;
         }
         return null;
-    }
+    };
 
     @action.bound drawingFinished() {
         this.computeActiveDrawTools();
@@ -163,7 +179,9 @@ export default class DrawToolsStore {
     }
 
     @action.bound onDeleted(indx) {
-        if (indx === undefined && !this.activeDrawing) { return; }
+        if (indx === undefined && !this.activeDrawing) {
+            return;
+        }
 
         if (indx !== undefined && indx >= 0 && this.stx.drawingObjects[indx]) {
             this.activeDrawing = this.stx.drawingObjects[indx];
@@ -176,7 +194,9 @@ export default class DrawToolsStore {
     }
 
     @action.bound onSetting(indx) {
-        if (!this.stx.drawingObjects[indx]) { return; }
+        if (!this.stx.drawingObjects[indx]) {
+            return;
+        }
 
         this.showDrawToolDialog(this.stx.drawingObjects[indx]);
     }
@@ -186,11 +206,10 @@ export default class DrawToolsStore {
         const ignoreBarType = ['vertical', 'horizontal'];
         const groups = {};
         this.stx.drawingObjects.forEach((item, indx) => {
-            item = ((drawTools[item.name]) ? { ...item, ...drawTools[item.name] } : item);
+            item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;
-            item.bars = (ignoreBarType.indexOf(item.name) === -1)
-                ? (Math.abs(parseInt(item.p1[0] - item.p0[0], 10)) + 1)
-                : null;
+            item.bars =
+                ignoreBarType.indexOf(item.name) === -1 ? Math.abs(parseInt(item.p1[0] - item.p0[0], 10)) + 1 : null;
 
             if (items[item.name]) {
                 items[item.name]++;
@@ -216,7 +235,7 @@ export default class DrawToolsStore {
 
         // get the values of group and sort group by the number of their children
         // this way the single item stay at top
-        this.activeToolsGroup = Object.values(groups).sort((a, b) => (a.items.length - b.items.length));
+        this.activeToolsGroup = Object.values(groups).sort((a, b) => a.items.length - b.items.length);
     }
 
     @action.bound updatePortalNode(portalNodeId) {

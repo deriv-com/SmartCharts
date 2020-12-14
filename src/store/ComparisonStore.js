@@ -4,13 +4,23 @@ import MenuStore from './MenuStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
 import Menu from '../components/Menu.jsx';
-import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 const swatchColors = [
-    '#8ec648', '#00afed', '#ee652e', '#912a8e',
-    '#fff126', '#e9088c', '#ea1d2c', '#00a553',
-    '#00a99c', '#0056a4', '#f4932f', '#0073ba',
-    '#66308f', '#323390',
+    '#8ec648',
+    '#00afed',
+    '#ee652e',
+    '#912a8e',
+    '#fff126',
+    '#e9088c',
+    '#ea1d2c',
+    '#00a553',
+    '#00a99c',
+    '#0056a4',
+    '#f4932f',
+    '#0073ba',
+    '#66308f',
+    '#323390',
 ];
 
 export default class ComparisonStore {
@@ -20,7 +30,7 @@ export default class ComparisonStore {
 
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route:'comparison' });
+        this.menu = new MenuStore(mainStore, { route: 'comparison' });
         this.ComparisonMenu = this.menu.connect(Menu);
         this.categoricalDisplay = new CategoricalDisplayStore({
             getActiveCategory: () => this.activeComparisons,
@@ -40,7 +50,9 @@ export default class ComparisonStore {
         when(() => this.context, this.onContextReady);
     }
 
-    get context() { return this.mainStore.chart.context; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
 
     @action.bound updateProps(searchInputClassName) {
         this.searchInputClassName = searchInputClassName;
@@ -86,7 +98,7 @@ export default class ComparisonStore {
     }
 
     @action.bound removeAll() {
-        this.comparisonSymbols.forEach((x) => {
+        this.comparisonSymbols.forEach(x => {
             this.onDeleteItem(x);
         });
     }
@@ -118,7 +130,9 @@ export default class ComparisonStore {
             symbolObject,
         });
         for (let i = 0; i < exists.length; i++) {
-            if (exists[i].parameters.isComparison) { return; }
+            if (exists[i].parameters.isComparison) {
+                return;
+            }
         }
 
         // don't allow symbol if same as main chart or just white space
@@ -135,7 +149,6 @@ export default class ComparisonStore {
             });
         }
 
-
         this.menu.setOpen(false);
     }
 
@@ -146,11 +159,14 @@ export default class ComparisonStore {
         const usedColors = {};
         for (const s in stx.chart.series) {
             const series = stx.chart.series[s];
-            if (!series.parameters.isComparison) { continue; }
+            if (!series.parameters.isComparison) {
+                continue;
+            }
             usedColors[series.parameters.color] = true;
         }
 
-        for (let i = 0; i < swatchColors.length; i++) { // find first unused color from available colors
+        for (let i = 0; i < swatchColors.length; i++) {
+            // find first unused color from available colors
             if (!usedColors[swatchColors[i]]) {
                 selectedColor = swatchColors[i];
                 break;
@@ -160,7 +176,7 @@ export default class ComparisonStore {
         return selectedColor;
     }
 
-    @action.bound onSymbolChange({ action : symbolAction }) {
+    @action.bound onSymbolChange({ action: symbolAction }) {
         if (symbolAction === 'master') {
             const { stx } = this.context;
             if (this.currentActiveSymbol !== stx.chart.symbol) {
@@ -179,7 +195,9 @@ export default class ComparisonStore {
     }
 
     updateComparisons() {
-        if (!this.context) { return; }
+        if (!this.context) {
+            return;
+        }
         const { stx } = this.context;
         const comparisonSymbolsKeys = Object.keys(stx.chart.series);
         if (comparisonSymbolsKeys.length !== this.comparisonSymbols.length) {
