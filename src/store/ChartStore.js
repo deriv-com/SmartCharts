@@ -686,6 +686,17 @@ class ChartStore {
             return org_run(fc, startValues, endValues);
         };
 
+        /**
+         * We got the error of `Cannot read property 't2' of undefined`
+         * that we coun't reproduce and after contacting ChartIQ support
+         * we still couldn't determind why this issue happen, as a result
+         * this peice of code is to makes that error slient.
+         */
+        stxx.prepend('touchmove', function () {
+            if (this.grabStartValues && this.grabStartValues.t2 && this.grabStartValues.t1) return false; // continue
+            return true; // exit
+        });
+
         stxx.isAutoScale = settings && settings.isAutoScale !== false;
 
         ChartStore.chartCount += 1;
