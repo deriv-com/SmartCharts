@@ -18,16 +18,18 @@ const getMonthHeaders = () => ({
 });
 
 export const CalendarMonths = ({ calendar_date, isPeriodDisabled, onClick, selected_date }) => {
-    const moment_date    = moment.utc(calendar_date);
+    const moment_date = moment.utc(calendar_date);
     const selected_month = moment.utc(selected_date).month();
-    const month_headers  = getMonthHeaders();
+    const month_headers = getMonthHeaders();
 
     return (
-        <div className="calendar-month-panel">
+        <div className='calendar-month-panel'>
             {Object.keys(month_headers).map((month, idx) => (
                 <span
                     key={month}
-                    className={`calendar-month ${(idx === selected_month) ? 'active' : ''} ${isPeriodDisabled(moment_date.month(month), 'month') ? 'disabled' : ''} `}
+                    className={`calendar-month ${idx === selected_month ? 'active' : ''} ${
+                        isPeriodDisabled(moment_date.month(month), 'month') ? 'disabled' : ''
+                    } `}
                     onClick={onClick.month}
                     data-month={idx}
                 >

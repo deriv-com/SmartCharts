@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import ReactDOM             from 'react-dom';
-import { CSSTransition }    from 'react-transition-group';
-import classNames           from 'classnames';
-import MenuMobile           from './MenuMobile.jsx';
-import Tooltip              from './Tooltip.jsx';
-import { CloseIcon }        from './Icons.jsx';
+import ReactDOM from 'react-dom';
+import { CSSTransition } from 'react-transition-group';
+import classNames from 'classnames';
+import MenuMobile from './MenuMobile.jsx';
+import Tooltip from './Tooltip.jsx';
+import { CloseIcon } from './Icons.jsx';
 
 class Menu extends Component {
-    onOverlayClick = (e) => {
+    onOverlayClick = e => {
         if (e.target.className === 'cq-modal__overlay') {
             this.props.handleCloseDialog();
         }
@@ -42,22 +42,19 @@ class Menu extends Component {
         if (!ready) return '';
 
         const first = React.Children.map(children, (child, i) => (i === 0 ? child : null));
-        const rest  = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
+        const rest = React.Children.map(children, (child, i) => (i !== 0 ? child : null));
         if (modalMode) {
             const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
             const newDialog = ReactDOM.createPortal(
                 <div className={`smartcharts-${theme}`}>
                     <div className={`smartcharts-${isMobile ? 'mobile' : 'desktop'}`}>
                         <div className={`cq-modal-dropdown ${className || ''} ${open && 'stxMenuActive'}`}>
-                            <div
-                                className="cq-modal__overlay"
-                                onClick={this.onOverlayClick}
-                            >
+                            <div className='cq-modal__overlay' onClick={this.onOverlayClick}>
                                 <CSSTransition
                                     appear
                                     in={dialogStatus}
                                     timeout={300}
-                                    classNames="sc-dialog"
+                                    classNames='sc-dialog'
                                     unmountOnExit
                                 >
                                     <DropdownDialog
@@ -75,75 +72,67 @@ class Menu extends Component {
                         </div>
                     </div>
                 </div>,
-                portalNode,
+                portalNode
             );
 
             if (emptyMenu) {
-                return (open && newDialog);
+                return open && newDialog;
             }
 
             return (
                 <Tooltip
                     className={classNames('ciq-menu', className || '', {
-                        stxMenuActive : (enabled && open),
+                        stxMenuActive: enabled && open,
                         'ciq-enabled': enabled,
                         'ciq-disabled': !enabled,
                     })}
                     content={tooltip}
                     enabled={tooltip}
-                    position="right"
+                    position='right'
                 >
                     <div
-                        className="cq-menu-btn"
+                        className='cq-menu-btn'
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                         onClick={enabled ? onTitleClick : () => null}
                     >
                         {first}
                     </div>
-                    {(enabled && open) && newDialog}
+                    {enabled && open && newDialog}
                 </Tooltip>
             );
         }
 
-        const oldDropdown = (shouldRenderDialogs
-            && (
-                <DropdownDialog
-                    className={classNames('cq-menu-dropdown', {
-                        'cq-menu-dropdown-enter-done': dialogStatus,
-                    })}
-                    isMobile={isMobile}
-                    isFullscreen={isFullscreen}
-                >
-                    {title
-                && (
-                    <div className="title">
-                        <div className="title-text">{title}</div>
-                        <CloseIcon
-                            className="icon-close-menu"
-                            onClick={onTitleClick}
-                        />
+        const oldDropdown = shouldRenderDialogs && (
+            <DropdownDialog
+                className={classNames('cq-menu-dropdown', {
+                    'cq-menu-dropdown-enter-done': dialogStatus,
+                })}
+                isMobile={isMobile}
+                isFullscreen={isFullscreen}
+            >
+                {title && (
+                    <div className='title'>
+                        <div className='title-text'>{title}</div>
+                        <CloseIcon className='icon-close-menu' onClick={onTitleClick} />
                     </div>
-                )
-                    }
-                    {rest}
-                </DropdownDialog>
-            ));
+                )}
+                {rest}
+            </DropdownDialog>
+        );
 
         return (
-
-            enabled && (
+            (enabled && (
                 <div className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}>
                     <div
-                        className="cq-menu-btn"
+                        className='cq-menu-btn'
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                         onClick={onTitleClick}
                     >
                         {first}
                     </div>
-                    {(isMobile && portalNodeId)
-                    && (
+                    {(isMobile && portalNodeId && (
                         <MenuMobile
                             className={className}
                             open={open}
@@ -151,16 +140,12 @@ class Menu extends Component {
                             portalNodeId={portalNodeId}
                             onClick={this.onOverlayClick}
                         />
-                    )
-                || (oldDropdown)}
+                    )) ||
+                        oldDropdown}
                 </div>
-            ) || (
+            )) || (
                 <div className={`ciq-menu ciq-disabled ${className || ''}`}>
-                    <div
-                        className="cq-menu-btn"
-                        onMouseEnter={onMouseEnter}
-                        onMouseLeave={onMouseLeave}
-                    >
+                    <div className='cq-menu-btn' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                         {first}
                     </div>
                 </div>
@@ -170,6 +155,6 @@ class Menu extends Component {
 }
 
 Menu.Title = ({ children }) => children;
-Menu.Body  = ({ children }) => children;
+Menu.Body = ({ children }) => children;
 
 export default Menu;

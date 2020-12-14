@@ -13,7 +13,7 @@ class NetworkMonitor {
     statusStarted = false;
     statusStartedPromise = new PendingPromise();
 
-    setNetworkStatus = (status) => {
+    setNetworkStatus = status => {
         const is_online = this.isOnline();
         if (status !== this.last_status || is_online !== this.last_is_online) {
             this.last_status = status;
@@ -60,7 +60,7 @@ class NetworkMonitor {
         this.statusStartedPromise.resolve();
     }
 
-    _statusResponse = (response) => {
+    _statusResponse = response => {
         if (response.error) {
             this.statusStarted = false;
         }
@@ -73,7 +73,7 @@ class NetworkMonitor {
         if (response.ping === 'pong') {
             this.setNetworkStatus('online');
         }
-    }
+    };
 
     static getInstance() {
         if (!this._instance) {

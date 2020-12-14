@@ -12,29 +12,25 @@ const historyCandleResponse = {
         ticks_history: 'R_50',
     },
     history: {
-        prices: [
-            '272.2381',
-            '272.2038',
-            '272.1995',
-        ],
-        times: [
-            '1524809066',
-            '1524809068',
-            '1524809070',
-        ],
+        prices: ['272.2381', '272.2038', '272.1995'],
+        times: ['1524809066', '1524809068', '1524809070'],
     },
     msg_type: 'history',
 };
-const historyCandleResponseResult = [{
-    Close: 272.2381,
-    Date: '2018-04-27T06:04:26',
-}, {
-    Close: 272.2038,
-    Date: '2018-04-27T06:04:28',
-}, {
-    Close: 272.1995,
-    Date: '2018-04-27T06:04:30',
-}];
+const historyCandleResponseResult = [
+    {
+        Close: 272.2381,
+        Date: '2018-04-27T06:04:26',
+    },
+    {
+        Close: 272.2038,
+        Date: '2018-04-27T06:04:28',
+    },
+    {
+        Close: 272.1995,
+        Date: '2018-04-27T06:04:30',
+    },
+];
 
 const historyTicksResponse = {
     candles: [
@@ -70,25 +66,29 @@ const historyTicksResponse = {
     },
     msg_type: 'candles',
 };
-const historyTicksResponseResult = [{
-    Close: 272.123,
-    Date: '2018-04-27T06:04:00',
-    High: 272.3895,
-    Low: 272.0952,
-    Open: 272.3895,
-}, {
-    Close: 272.0673,
-    Date: '2018-04-27T06:05:00',
-    High: 272.2343,
-    Low: 271.9868,
-    Open: 272.1483,
-}, {
-    Close: 271.7995,
-    Date: '2018-04-27T06:06:00',
-    High: 272.2094,
-    Low: 271.7787,
-    Open: 272.081,
-}];
+const historyTicksResponseResult = [
+    {
+        Close: 272.123,
+        Date: '2018-04-27T06:04:00',
+        High: 272.3895,
+        Low: 272.0952,
+        Open: 272.3895,
+    },
+    {
+        Close: 272.0673,
+        Date: '2018-04-27T06:05:00',
+        High: 272.2343,
+        Low: 271.9868,
+        Open: 272.1483,
+    },
+    {
+        Close: 271.7995,
+        Date: '2018-04-27T06:06:00',
+        High: 272.2094,
+        Low: 271.7787,
+        Open: 272.081,
+    },
+];
 
 const tickCandleResponse = {
     echo_req: {
@@ -151,27 +151,23 @@ const tickTickResponseResult = {
 describe('TickHistoryFormatter test', () => {
     it('Test parse history style="candles"', () => {
         const history = TickHistoryFormatter.formatHistory(historyCandleResponse);
-        expect(history)
-            .to.deep.equal(historyCandleResponseResult);
+        expect(history).to.deep.equal(historyCandleResponseResult);
     });
 
     it('Test parse history style="ticks"', () => {
         const history = TickHistoryFormatter.formatHistory(historyTicksResponse);
-        expect(history)
-            .to.deep.equal(historyTicksResponseResult);
+        expect(history).to.deep.equal(historyTicksResponseResult);
     });
 
     it('Test parse tick style="candles"', () => {
         const tick = TickHistoryFormatter.formatTick(tickCandleResponse);
         delete tick.ohlc;
-        expect(tick)
-            .to.deep.equal(tickCandleResponseResult);
+        expect(tick).to.deep.equal(tickCandleResponseResult);
     });
 
     it('Test parse tick style="ticks"', () => {
         const tick = TickHistoryFormatter.formatTick(tickTickResponse);
         delete tick.tick;
-        expect(tick)
-            .to.deep.equal(tickTickResponseResult);
+        expect(tick).to.deep.equal(tickTickResponseResult);
     });
 });

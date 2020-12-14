@@ -1,6 +1,6 @@
-import React        from 'react';
-import classNames   from 'classnames';
-import { connect }  from '../store/Connect';
+import React from 'react';
+import classNames from 'classnames';
+import { connect } from '../store/Connect';
 import '../../sass/components/_scroll.scss';
 
 const Scroll = ({
@@ -15,7 +15,7 @@ const Scroll = ({
     onScroll = () => null,
     setPanel,
 }) => {
-    const handleRef = (_ref) => {
+    const handleRef = _ref => {
         setScrollPanel(_ref);
         if (setPanel) setPanel(_ref);
     };

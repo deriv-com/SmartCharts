@@ -46,61 +46,67 @@ class KeystrokeHub extends Helper {
         const stx = hub.context.stx;
         let push = 1;
         switch (key) {
-        case 'up':
-            stx.zoomIn();
-            break;
-        case 'down':
-            stx.zoomOut();
-            break;
-        case 'home':
-            stx.home();
-            stx.headsUpHR();
-            break;
-        case 'end':
-            stx.chart.scroll = stx.chart.dataSet.length;
-            stx.draw();
-            stx.headsUpHR();
-            break;
-        case 'left':
-            if (stx.ctrl) {
-                stx.zoomOut();
-            } else {
-                push = 1;
-                if (stx.shift || hub.capsLock) { push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth))); }
-                if (stx.chart.scroll + push >= stx.chart.dataSet.length) { push = stx.chart.dataSet.length - stx.chart.scroll; }
-                stx.chart.scroll += push;
-                stx.draw();
-                stx.headsUpHR();
-            }
-            break;
-        case 'right':
-            if (stx.ctrl) {
+            case 'up':
                 stx.zoomIn();
-            } else {
-                push = 1;
-                if (stx.shift || hub.capsLock) { push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth))); }
-                stx.chart.scroll -= push;
+                break;
+            case 'down':
+                stx.zoomOut();
+                break;
+            case 'home':
+                stx.home();
+                stx.headsUpHR();
+                break;
+            case 'end':
+                stx.chart.scroll = stx.chart.dataSet.length;
                 stx.draw();
                 stx.headsUpHR();
-            }
-            break;
-        case 'delete':
-        case 'backspace':
-            if (CIQ.ChartEngine.drawingLine) {
-                stx.undo();
-            } else if (stx.anyHighlighted) {
-                stx.deleteHighlighted();
-            } else {
-                return false;
-            }
-            break;
-        case 'escape':
-            if (CIQ.ChartEngine.drawingLine) {
-                stx.undo();
-            }
-            break;
-        default:
-            return false; // not captured
+                break;
+            case 'left':
+                if (stx.ctrl) {
+                    stx.zoomOut();
+                } else {
+                    push = 1;
+                    if (stx.shift || hub.capsLock) {
+                        push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
+                    }
+                    if (stx.chart.scroll + push >= stx.chart.dataSet.length) {
+                        push = stx.chart.dataSet.length - stx.chart.scroll;
+                    }
+                    stx.chart.scroll += push;
+                    stx.draw();
+                    stx.headsUpHR();
+                }
+                break;
+            case 'right':
+                if (stx.ctrl) {
+                    stx.zoomIn();
+                } else {
+                    push = 1;
+                    if (stx.shift || hub.capsLock) {
+                        push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
+                    }
+                    stx.chart.scroll -= push;
+                    stx.draw();
+                    stx.headsUpHR();
+                }
+                break;
+            case 'delete':
+            case 'backspace':
+                if (CIQ.ChartEngine.drawingLine) {
+                    stx.undo();
+                } else if (stx.anyHighlighted) {
+                    stx.deleteHighlighted();
+                } else {
+                    return false;
+                }
+                break;
+            case 'escape':
+                if (CIQ.ChartEngine.drawingLine) {
+                    stx.undo();
+                }
+                break;
+            default:
+                return false; // not captured
         }
         return true;
     }
@@ -127,7 +133,9 @@ class KeystrokeHub extends Helper {
             const helper = claims[i].helper;
             const response = helper.keyStroke(hub, key, e, keystroke);
             if (response) {
-                if (!response.allowDefault) { e.preventDefault(); }
+                if (!response.allowDefault) {
+                    e.preventDefault();
+                }
                 return true;
             }
         }
@@ -154,42 +162,54 @@ class KeystrokeHub extends Helper {
      * @private
      */
     handler(obj) {
-        if (!this.context) { return; }
+        if (!this.context) {
+            return;
+        }
         const stx = this.context.stx;
-        if (stx.editingAnnotation) { return; }
+        if (stx.editingAnnotation) {
+            return;
+        }
         const e = obj.e,
             key = obj.key,
             keystroke = obj.keystroke,
             targetTagName = obj.e.target.tagName;
         switch (key) {
-        case 16:
-            stx.shift = keystroke.shift;
-            break;
-        case 17:
-        case 18:
-            stx.ctrl = keystroke.ctrl;
-            break;
-        case 91:
-            stx.cmd = keystroke.cmd;
-            break;
-        case 20:
-            this.capsLock = !this.capsLock;
-            break;
-        default:
-            break;
+            case 16:
+                stx.shift = keystroke.shift;
+                break;
+            case 17:
+            case 18:
+                stx.ctrl = keystroke.ctrl;
+                break;
+            case 91:
+                stx.cmd = keystroke.cmd;
+                break;
+            case 20:
+                this.capsLock = !this.capsLock;
+                break;
+            default:
+                break;
         }
         if (!CIQ.ChartEngine.drawingLine) {
-            if (this.processKeyStrokeClaims(this, key, e, keystroke)) { return; }
+            if (this.processKeyStrokeClaims(this, key, e, keystroke)) {
+                return;
+            }
         }
 
         if (key !== 'escape') {
-            if (this.context.isModal()) { return; }
+            if (this.context.isModal()) {
+                return;
+            }
         }
 
-        if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') { return; } // target is not the chart
+        if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
+            return;
+        } // target is not the chart
 
         if (this.params.cb) {
-            if (this.params.cb(key, this)) { e.preventDefault(); }
+            if (this.params.cb(key, this)) {
+                e.preventDefault();
+            }
         }
     }
 }

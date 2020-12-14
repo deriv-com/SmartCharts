@@ -2,7 +2,7 @@ import { when } from 'mobx';
 import { patchPixelFromChart } from '../utils';
 import { red as RED } from '../../sass/_themes.scss';
 
-const is_firefox = (navigator.userAgent.search('Firefox')) > 0;
+const is_firefox = navigator.userAgent.search('Firefox') > 0;
 
 class CurrentSpotStore {
     constructor(mainStore) {
@@ -10,48 +10,57 @@ class CurrentSpotStore {
         when(() => this.context, this.onContextReady);
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get state() { return this.mainStore.state; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get state() {
+        return this.mainStore.state;
+    }
 
     onContextReady = () => {
         if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.drawSpot);
         patchPixelFromChart(this.stx);
-    }
+    };
 
     drawSpot = () => {
-        if (this.state.endEpoch) { return; }
+        if (this.state.endEpoch) {
+            return;
+        }
         const stx = this.stx;
         const chart = stx.chart;
         let len = chart.dataSet.length;
-        if (!len) { return; }
+        if (!len) {
+            return;
+        }
         let bar = chart.dataSet[len - 1];
         let prevBar = chart.dataSet[len - 2];
 
         if (!bar || !prevBar || !bar.Close || !prevBar.Close) {
-            const dataSetClose = [...chart.dataSet].filter(item => (item && item.Close));
+            const dataSetClose = [...chart.dataSet].filter(item => item && item.Close);
             len = dataSetClose.length;
-            if (!len) { return; }
+            if (!len) {
+                return;
+            }
             bar = dataSetClose[len - 1];
             prevBar = dataSetClose[len - 2];
         }
 
-        if (!bar || !prevBar || !bar.Close || !prevBar.Close) { return; }
+        if (!bar || !prevBar || !bar.Close || !prevBar.Close) {
+            return;
+        }
         let x = stx.pixelFromTick(len - 1, chart);
         const deltaX = bar.chartJustAdvanced ? x - stx.pixelFromTick(len - 2, chart) : 0;
         const y = stx.pixelFromPrice(bar.Close, chart.panel);
 
-        const  progress = Math.min(bar.tickAnimationProgress || 0, 1);
+        const progress = Math.min(bar.tickAnimationProgress || 0, 1);
         if (progress) {
-            x -=  (1 - progress) * deltaX;
+            x -= (1 - progress) * deltaX;
         }
 
-        if (
-            x < 0
-            || x > chart.yAxis.left
-            || y < chart.yAxis.top
-            || y > chart.yAxis.bottom
-        ) {
+        if (x < 0 || x > chart.yAxis.left || y < chart.yAxis.top || y > chart.yAxis.bottom) {
             return;
         }
 
@@ -75,7 +84,7 @@ class CurrentSpotStore {
             ctx.fill();
         }
         ctx.restore();
-    }
+    };
 }
 
 export default CurrentSpotStore;

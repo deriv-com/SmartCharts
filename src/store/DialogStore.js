@@ -7,19 +7,30 @@ let activeDialog;
 export default class DialogStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, () => {
-            this.routingStore.registerDialog(this);
-        });
+        when(
+            () => this.context,
+            () => {
+                this.routingStore.registerDialog(this);
+            }
+        );
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get routingStore() { return this.mainStore.routing; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get routingStore() {
+        return this.mainStore.routing;
+    }
 
     @observable open = false;
     onClose = () => this.setOpen(false);
-    setOpen = debounce((val) => {
-        this.openDialog(val);
-    }, 10, { leading: true, trailing: false });
+    setOpen = debounce(
+        val => {
+            this.openDialog(val);
+        },
+        10,
+        { leading: true, trailing: false }
+    );
 
     @action.bound openDialog(val) {
         if (this.open !== val) {
@@ -29,10 +40,15 @@ export default class DialogStore {
                 // the items which has no menu, this trigger right after
                 // firing open action, this delay prevent that issue.
                 setTimeout(this.register, 100);
-            } else { this.unregister(); }
+            } else {
+                this.unregister();
+            }
 
-            if (val === true) { // close active dialog.
-                if (activeDialog) { activeDialog.openDialog(false); }
+            if (val === true) {
+                // close active dialog.
+                if (activeDialog) {
+                    activeDialog.openDialog(false);
+                }
                 activeDialog = this;
             } else {
                 activeDialog = undefined;
@@ -40,15 +56,19 @@ export default class DialogStore {
         }
     }
 
-    handleClickOutside = (e) => {
+    handleClickOutside = e => {
         let isRightClick = false;
-        if ('which' in e) { isRightClick = e.which === 3; } else if ('button' in e) { isRightClick = e.button === 2; }
+        if ('which' in e) {
+            isRightClick = e.which === 3;
+        } else if ('button' in e) {
+            isRightClick = e.button === 2;
+        }
 
         if (!e.isHandledByDialog && !isRightClick) {
             this.onClose();
         }
     };
-    closeOnEscape = (e) => {
+    closeOnEscape = e => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.onClose();

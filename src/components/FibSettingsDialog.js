@@ -113,6 +113,5 @@ class FibSettingsDialog extends DialogContentTag {
     }
 }
 
-
 document.registerElement('cq-fib-settings-dialog', FibSettingsDialog);
 export default FibSettingsDialog;

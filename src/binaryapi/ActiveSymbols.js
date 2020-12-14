@@ -43,21 +43,23 @@ export default class ActiveSymbols {
         for (const symbolObj of this.processedSymbols) {
             this.symbolMap[symbolObj.symbol] = symbolObj;
         }
-        this._tradingTimes.onMarketOpenCloseChanged(action((changes) => {
-            for (const symbol in changes) {
-                const symObj = this.symbolMap[symbol];
-                if (symObj) {
-                    symObj.exchange_is_open = changes[symbol];
+        this._tradingTimes.onMarketOpenCloseChanged(
+            action(changes => {
+                for (const symbol in changes) {
+                    const symObj = this.symbolMap[symbol];
+                    if (symObj) {
+                        symObj.exchange_is_open = changes[symbol];
+                    }
                 }
-            }
-            this.changes = changes;
-        }));
+                this.changes = changes;
+            })
+        );
         this.symbolsPromise.resolve();
         return this.activeSymbols;
     }
 
     @computed get activeSymbols() {
-        const categorized = cloneCategories(this.categorizedSymbols, (item) => {
+        const categorized = cloneCategories(this.categorizedSymbols, item => {
             const { symbol } = item.dataObject;
             if (symbol in this.changes) {
                 item.dataObject.exchange_is_open = this.changes[symbol];
@@ -89,10 +91,10 @@ export default class ActiveSymbols {
             });
         }
 
-
         // Categorize symbols in order defined by another array; there's probably a more
         // efficient algo for this, but for just ~100 items it's not worth the effort
-        const orderedMarkets = typeof this._params.getMarketsOrder === 'function' ? this._params.getMarketsOrder(symbols) : DefaultSymbols;
+        const orderedMarkets =
+            typeof this._params.getMarketsOrder === 'function' ? this._params.getMarketsOrder(symbols) : DefaultSymbols;
         const orderedSymbols = [];
         for (const o of orderedMarkets) {
             for (const p of processedSymbols) {

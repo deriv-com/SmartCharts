@@ -12,9 +12,15 @@ export default class AssetInformationStore {
         return this.mainStore.timeperiod.timeUnit === 'tick';
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get visible() { return !this.mainStore.chart.isMobile && this.mainStore.chartSetting.assetInformation; }
-    get stx() { return this.context.stx; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get visible() {
+        return !this.mainStore.chart.isMobile && this.mainStore.chartSetting.assetInformation;
+    }
+    get stx() {
+        return this.context.stx;
+    }
 
     onContextReady = () => {
         this.stx.prepend('headsUpHR', this.update);
@@ -25,8 +31,7 @@ export default class AssetInformationStore {
     _open = null;
     _close = null;
     _high = null;
-    _low  = null;
-
+    _low = null;
 
     update = () => {
         // do not query dom on each frame
@@ -54,10 +59,7 @@ export default class AssetInformationStore {
             return;
         }
 
-
-        const {
-            Open, High, Low, Close,
-        } = prices.data || { };
+        const { Open, High, Low, Close } = prices.data || {};
 
         if (!Open && !High && !Low && !Close) {
             container.style.visibility = 'hidden';
@@ -75,13 +77,12 @@ export default class AssetInformationStore {
             }
         }
 
-
         if (this._container) {
-            this._open.textContent = (Open && !this.isTick) ? Open.toFixed(this.decimalPlaces) : '';
-            this._high.textContent = (High && !this.isTick) ? High.toFixed(this.decimalPlaces) : '';
-            this._low.textContent = (Low && !this.isTick) ? Low.toFixed(this.decimalPlaces) : '';
-            this._close.textContent = (Close && !this.isTick) ? Close.toFixed(this.decimalPlaces) : '';
+            this._open.textContent = Open && !this.isTick ? Open.toFixed(this.decimalPlaces) : '';
+            this._high.textContent = High && !this.isTick ? High.toFixed(this.decimalPlaces) : '';
+            this._low.textContent = Low && !this.isTick ? Low.toFixed(this.decimalPlaces) : '';
+            this._close.textContent = Close && !this.isTick ? Close.toFixed(this.decimalPlaces) : '';
             this._spot.textContent = Close ? Close.toFixed(this.decimalPlaces) : null;
         }
-    }
+    };
 }

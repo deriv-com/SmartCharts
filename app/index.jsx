@@ -1,4 +1,5 @@
-import { // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+import {
+    // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
     SmartChart,
     StudyLegend,
     Views,
@@ -42,7 +43,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const trackJSDomains = ['binary.com', 'binary.me'];
-window.isProductionWebsite = trackJSDomains.reduce((acc, val) => (acc || window.location.host.endsWith(val)), false);
+window.isProductionWebsite = trackJSDomains.reduce((acc, val) => acc || window.location.host.endsWith(val), false);
 
 if (window.isProductionWebsite) {
     window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
@@ -98,10 +99,7 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID',
-    'IT', 'PL', 'PT', 'RU', 'TH',
-    'VI', 'ZH_CN', 'ZH_TW',
-];
+const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID', 'IT', 'PL', 'PT', 'RU', 'TH', 'VI', 'ZH_CN', 'ZH_TW'];
 
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
@@ -131,11 +129,12 @@ class App extends Component {
         settings.activeLanguages = activeLanguages;
         if (settings.historical) {
             this.removeAllComparisons();
-            endEpoch = (new Date(`${today}:00Z`).valueOf() / 1000);
+            endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
             chartType = 'mountain';
             granularity = 0;
             if (layout) {
-                granularity = layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10); // eslint-disable-line
+                granularity =
+                    layout.timeUnit === 'second' ? 0 : parseInt(layout.interval * IntervalEnum[layout.timeUnit], 10); // eslint-disable-line
 
                 if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
@@ -146,13 +145,11 @@ class App extends Component {
         }
         settings.isHighestLowestMarkerEnabled = false;
 
-        connectionManager.on(
-            ConnectionManager.EVENT_CONNECTION_CLOSE,
-            () => this.setState({ isConnectionOpened: false }),
+        connectionManager.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () =>
+            this.setState({ isConnectionOpened: false })
         );
-        connectionManager.on(
-            ConnectionManager.EVENT_CONNECTION_REOPEN,
-            () => this.setState({ isConnectionOpened: true }),
+        connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () =>
+            this.setState({ isConnectionOpened: true })
         );
 
         this.state = {
@@ -185,27 +182,26 @@ class App extends Component {
         } catch (e) {
             console.log(e);
         }
-    }
+    };
 
     handleNetworkStatus = status => this.setState({ networkStatus: status });
 
-    symbolChange = (symbol) => {
+    symbolChange = symbol => {
         logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
         this.notifier.removeByCategory('activesymbol');
         this.setState({ symbol });
     };
 
-    saveSettings = (settings) => {
+    saveSettings = settings => {
         const prevSetting = this.state.settings;
         console.log('settings updated:', settings);
         localStorage.setItem('smartchart-setting', JSON.stringify(settings));
-
 
         if (!prevSetting.historical && settings.historical) {
             this.setState({
                 chartType: 'mountain',
                 granularity: 0,
-                endEpoch: (new Date(`${today}:00Z`).valueOf() / 1000),
+                endEpoch: new Date(`${today}:00Z`).valueOf() / 1000,
             });
             this.removeAllComparisons();
         } else if (!settings.historical) {
@@ -223,19 +219,18 @@ class App extends Component {
         }
     };
 
-    handleDateChange = (value) => {
-        this.setState({ endEpoch: (value !== '') ? (new Date(`${value}:00Z`).valueOf() / 1000) : undefined });
+    handleDateChange = value => {
+        this.setState({ endEpoch: value !== '' ? new Date(`${value}:00Z`).valueOf() / 1000 : undefined });
     };
     changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
     changeChartType = chartType => this.setState({ chartType });
-    handleStateChange = (tag, option) => console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`)
+    handleStateChange = (tag, option) =>
+        console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`);
     renderTopWidgets = () => (
         <>
             <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
             {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <Notification
-                notifier={this.notifier}
-            />
+            <Notification notifier={this.notifier} />
         </>
     );
 
@@ -247,10 +242,7 @@ class App extends Component {
 
     renderToolbarWidget = () => (
         <ToolbarWidget>
-            <ChartMode
-                onChartType={this.changeChartType}
-                onGranularity={this.changeGranularity}
-            />
+            <ChartMode onChartType={this.changeChartType} onGranularity={this.changeGranularity} />
             <StudyLegend />
             <Views />
             <DrawTools />
@@ -258,13 +250,13 @@ class App extends Component {
         </ToolbarWidget>
     );
 
-    onMessage = (e) => {
+    onMessage = e => {
         this.notifier.notify(e);
     };
 
     getIsChartReady = isChartReady => isChartReady;
 
-    onMarkerRef = (ref) => {
+    onMarkerRef = ref => {
         if (ref) {
             ref.setPosition({
                 epoch: this.state.endEpoch,
@@ -313,18 +305,19 @@ class App extends Component {
                 enabledChartFooter
             >
                 {endEpoch ? (
-                    <Marker
-                        className="chart-marker-historical"
-                        markerRef={this.onMarkerRef}
-                    ><span>{moment(endEpoch * 1000).utc().format('DD MMMM YYYY - HH:mm')}</span>
+                    <Marker className='chart-marker-historical' markerRef={this.onMarkerRef}>
+                        <span>
+                            {moment(endEpoch * 1000)
+                                .utc()
+                                .format('DD MMMM YYYY - HH:mm')}
+                        </span>
                     </Marker>
-                ) : ''}
+                ) : (
+                    ''
+                )}
             </SmartChart>
         );
     }
 }
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('root'),
-);
+ReactDOM.render(<App />, document.getElementById('root'));

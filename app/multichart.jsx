@@ -1,5 +1,6 @@
 import { configure } from 'mobx';
-import { // eslint-disable-line import/no-extraneous-dependencies
+import {
+    // eslint-disable-line import/no-extraneous-dependencies
     SmartChart,
     // TradeStartLine,
     // TradeEndLine,
@@ -66,8 +67,8 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 
 const App = () => (
-    <div className="grid">
-        <div className="chart-instance">
+    <div className='grid'>
+        <div className='chart-instance'>
             <SmartChart
                 onSymbolChange={symbol => console.log('Symbol has changed to:', symbol)}
                 isMobile={isMobile}
@@ -76,16 +77,16 @@ const App = () => (
                 requestForget={requestForget}
             />
         </div>
-        <div className="side-chart">
+        <div className='side-chart'>
             <SmartChart
                 isMobile={isMobile}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
-                id="side"
+                id='side'
             />
         </div>
-        <div className="bottom-chart">
+        <div className='bottom-chart'>
             <SmartChart
                 chartControlsWidgets={renderControls}
                 settings={{ theme: 'dark' }}
@@ -93,13 +94,10 @@ const App = () => (
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}
                 requestForget={requestForget}
-                id="bottom"
+                id='bottom'
             />
         </div>
     </div>
 );
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('root'),
-);
+ReactDOM.render(<App />, document.getElementById('root'));

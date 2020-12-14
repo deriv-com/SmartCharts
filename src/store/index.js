@@ -51,7 +51,7 @@ export default class MainStore {
     routing = new RoutingStore(this);
     currentSpot = new CurrentSpotStore(this);
     chartTable = new ChartTableStore(this);
-    lastDigitStats= new LastDigitStatsStore(this);
+    lastDigitStats = new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
     navigationWidget = new NavigationWidgetStore(this);
     highestLowest = new HighestLowestStore(this);
