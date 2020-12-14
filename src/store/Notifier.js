@@ -1,5 +1,7 @@
 class Notifier {
-    static get CATEGORY_ACTIVE_SYMBOL() { return 'activesymbol'; }
+    static get CATEGORY_ACTIVE_SYMBOL() {
+        return 'activesymbol';
+    }
     onMessage;
 
     /*

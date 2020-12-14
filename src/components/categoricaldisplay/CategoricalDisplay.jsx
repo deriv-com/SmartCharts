@@ -1,5 +1,5 @@
-import React    from 'react';
-import Scroll   from '../Scroll.jsx';
+import React from 'react';
+import Scroll from '../Scroll.jsx';
 import '../../../sass/components/_categorical-display.scss';
 
 const CategoricalDisplay = ({
@@ -19,7 +19,7 @@ const CategoricalDisplay = ({
 }) => {
     const innerPanel = (
         <ResultsPanel
-            onSelectItem={(item) => {
+            onSelectItem={item => {
                 onSelectItem(item);
                 setFilterText('');
             }}
@@ -29,47 +29,27 @@ const CategoricalDisplay = ({
         />
     );
     return (
-        <div
-            className={`sc-mcd ${isNestedList ? 'sc-mcd--nested' : ''}`}
-            style={{ height }}
-            id={id}
-        >
+        <div className={`sc-mcd ${isNestedList ? 'sc-mcd--nested' : ''}`} style={{ height }} id={id}>
             {!isMobile && (
-                <div className="sc-mcd__tabs">
-                    <div className="sc-mcd__tabs__head">
-                        {t.translate('Markets')}
-                    </div>
-                    <div className="sc-mcd__tabs__body">
-                        {!isNestedList && <FilterPanel /> }
-                    </div>
+                <div className='sc-mcd__tabs'>
+                    <div className='sc-mcd__tabs__head'>{t.translate('Markets')}</div>
+                    <div className='sc-mcd__tabs__body'>{!isNestedList && <FilterPanel />}</div>
                 </div>
             )}
-            <div className="sc-mcd__content">
-                <div className="sc-mcd__content__head">
+            <div className='sc-mcd__content'>
+                <div className='sc-mcd__content__head'>
                     <SearchInput searchInputClassName={searchInputClassName} />
                 </div>
-                <div className="sc-mcd__content__body">
-                    {
-                        isMobile
-                            ? (
-                                <div
-                                    className="sc-mcd__content__body__scroll"
-                                    onScroll={updateScrollSpy}
-                                    ref={setScrollPanel}
-                                >
-                                    {innerPanel}
-                                </div>
-                            )
-                            : (
-                                <Scroll
-                                    autoHide
-                                    onScroll={updateScrollSpy}
-                                    setPanel={setScrollPanel}
-                                >
-                                    {innerPanel}
-                                </Scroll>
-                            )
-                    }
+                <div className='sc-mcd__content__body'>
+                    {isMobile ? (
+                        <div className='sc-mcd__content__body__scroll' onScroll={updateScrollSpy} ref={setScrollPanel}>
+                            {innerPanel}
+                        </div>
+                    ) : (
+                        <Scroll autoHide onScroll={updateScrollSpy} setPanel={setScrollPanel}>
+                            {innerPanel}
+                        </Scroll>
+                    )}
                 </div>
             </div>
         </div>

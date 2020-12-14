@@ -1,6 +1,12 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { createObjectFromLocalStorage, calculateTimeUnitInterval, calculateGranularity, getUTCDate, getUTCEpoch } from '../utils';
+import {
+    createObjectFromLocalStorage,
+    calculateTimeUnitInterval,
+    calculateGranularity,
+    getUTCDate,
+    getUTCEpoch,
+} from '../utils';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
 
@@ -36,14 +42,30 @@ class ChartState {
     chartControlsWidgets;
     enabledChartFooter;
 
-    get comparisonStore() { return this.mainStore.comparison; }
-    get stxx() { return this.chartStore.stxx; }
-    get context() { return this.chartStore.context; }
-    get chartTypeStore() { return this.mainStore.chartType; }
-    get timeperiodStore() { return this.mainStore.timeperiod; }
-    get loader() { return this.mainStore.loader; }
-    get drawTools() { return this.mainStore.drawTools; }
-    get indicatorRatio() { return this.mainStore.chart; }
+    get comparisonStore() {
+        return this.mainStore.comparison;
+    }
+    get stxx() {
+        return this.chartStore.stxx;
+    }
+    get context() {
+        return this.chartStore.context;
+    }
+    get chartTypeStore() {
+        return this.mainStore.chartType;
+    }
+    get timeperiodStore() {
+        return this.mainStore.timeperiod;
+    }
+    get loader() {
+        return this.mainStore.loader;
+    }
+    get drawTools() {
+        return this.mainStore.drawTools;
+    }
+    get indicatorRatio() {
+        return this.mainStore.chart;
+    }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -110,10 +132,10 @@ class ChartState {
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
 
-        if (networkStatus && (
-            !this.mainStore.chart.networkStatus
-                || networkStatus.class !== this.mainStore.chart.networkStatus.class
-        )) {
+        if (
+            networkStatus &&
+            (!this.mainStore.chart.networkStatus || networkStatus.class !== this.mainStore.chart.networkStatus.class)
+        ) {
             this.mainStore.chart.networkStatus = networkStatus;
         }
 
@@ -156,7 +178,7 @@ class ChartState {
             }
         }
 
-        if (this.chartStore.activeSymbols && (refreshActiveSymbols !== this.refreshActiveSymbols)) {
+        if (this.chartStore.activeSymbols && refreshActiveSymbols !== this.refreshActiveSymbols) {
             this.refreshActiveSymbols = refreshActiveSymbols;
 
             if (this.refreshActiveSymbols) {
@@ -205,8 +227,7 @@ class ChartState {
             this.crosshairState = crosshair;
         }
 
-        if (crosshairTooltipLeftAllow !== undefined
-            && this.crosshairTooltipLeftAllow !== crosshairTooltipLeftAllow) {
+        if (crosshairTooltipLeftAllow !== undefined && this.crosshairTooltipLeftAllow !== crosshairTooltipLeftAllow) {
             this.crosshairTooltipLeftAllow = crosshairTooltipLeftAllow;
         }
 
@@ -329,8 +350,9 @@ class ChartState {
 
     @action.bound setChartGranularity(granularity) {
         const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
-        const isChartTypeCandle = this.mainStore.chartType.isCandle
-            || (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
+        const isChartTypeCandle =
+            this.mainStore.chartType.isCandle ||
+            (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
 
         if (this.context && isTimeUnitSecond && isChartTypeCandle) {
             this.setChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
@@ -350,12 +372,16 @@ class ChartState {
     }
 
     setEnableScroll() {
-        if (!this.enableScroll || !this.stxx) { return; }
+        if (!this.enableScroll || !this.stxx) {
+            return;
+        }
         this.stxx.allowScroll = true;
     }
 
     setDisableScroll() {
-        if (!this.stxx) { return; }
+        if (!this.stxx) {
+            return;
+        }
         this.stxx.allowScroll = false;
     }
 
@@ -417,8 +443,10 @@ class ChartState {
         // Update Indictor panel height
         const indicatorCount = Object.keys(layoutData.panels).filter(item => item !== 'chart').length;
         const indiactorHeightPercent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
-        Object.keys(layoutData.panels).forEach((id) => {
-            if (id === 'chart') { return; }
+        Object.keys(layoutData.panels).forEach(id => {
+            if (id === 'chart') {
+                return;
+            }
             const panel = layoutData.panels[id];
             panel.percent = indiactorHeightPercent;
         });
@@ -475,8 +503,9 @@ class ChartState {
         this.stxx.chart.entryTick = null;
 
         if (this.scrollToEpoch && !this.startEpoch && !force) {
-            const startEntry = this.stxx.chart.dataSet
-                .find(entry =>  entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf());
+            const startEntry = this.stxx.chart.dataSet.find(
+                entry => entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf()
+            );
 
             if (startEntry) {
                 this.stxx.chart.entryTick = this.stxx.tickFromDate(startEntry.DT);
@@ -501,7 +530,7 @@ class ChartState {
                 // This assignment should be always after draw()
                 this.stxx.chart.lockScroll = true;
             });
-        } else if (scrollToEpoch && this.startEpoch || force) {
+        } else if ((scrollToEpoch && this.startEpoch) || force) {
             // scale 1:1 happen
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
@@ -511,8 +540,8 @@ class ChartState {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
-                this.stxx.setMaxTicks(Math.floor(scrollToTarget * 6 / 5) || 2);
-                this.stxx.chart.scroll = Math.floor(scrollToTarget * 17 / 15) || 1;
+                this.stxx.setMaxTicks(Math.floor((scrollToTarget * 6) / 5) || 2);
+                this.stxx.chart.scroll = Math.floor((scrollToTarget * 17) / 15) || 1;
                 this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
@@ -527,7 +556,7 @@ class ChartState {
         }
         this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
         this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
-    }
+    };
 
     cleanChart() {
         if (!this.clearChart || !this.isChartReady) return;

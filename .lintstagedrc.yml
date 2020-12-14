@@ -1,0 +1,2 @@
+./{app,loaders,src}/**/*.{js,jsx,scss}:
+ - ./node_modules/.bin/prettier --config ./.prettierrc --write "./{app,loaders,src}/**/*.{js,jsx,scss}"

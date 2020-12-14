@@ -22,7 +22,7 @@ const ChartTypes = ({
     types,
     isMobile,
 }) => {
-    if (Type === undefined) return (null);
+    if (Type === undefined) return null;
 
     const onItemClick = (idx, chartType) => {
         if (Type.id !== chartType.id) {
@@ -35,8 +35,8 @@ const ChartTypes = ({
 
     if (newDesign) {
         return (
-            <div className="sc-chart-type">
-                {types.map((chartType) => {
+            <div className='sc-chart-type'>
+                {types.map(chartType => {
                     const Icon = chartType.icon;
                     let className = 'sc-chart-type__item';
                     className += chartType.active ? ' sc-chart-type__item--active' : '';
@@ -46,13 +46,13 @@ const ChartTypes = ({
                     return (
                         <Tooltip
                             key={chartType.id}
-                            enabled={(chartType.disabled && !isMobile)}
+                            enabled={chartType.disabled && !isMobile}
                             className={className}
                             content={t.translate('Available only for non-tick time intervals.')}
                             onClick={onClick}
                         >
                             <Icon />
-                            <span className="text">{t.translate(chartType.text)}</span>
+                            <span className='text'>{t.translate(chartType.text)}</span>
                         </Tooltip>
                     );
                 })}
@@ -60,13 +60,8 @@ const ChartTypes = ({
         );
     }
 
-
     return (
-        <ChartTypeMenu
-            className="ciq-display ciq-chart-types"
-            enabled={enabled}
-            title={t.translate('Chart types')}
-        >
+        <ChartTypeMenu className='ciq-display ciq-chart-types' enabled={enabled} title={t.translate('Chart types')}>
             <ChartTypeMenu.Title>
                 <TypeIcon
                     Icon={Type.icon}
@@ -75,26 +70,19 @@ const ChartTypes = ({
                 />
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
-                <div className="body">
-                    <ChartTypeList
-                        height={260}
-                        onItemClick={onItemClick}
-                    >
+                <div className='body'>
+                    <ChartTypeList height={260} onItemClick={onItemClick}>
                         {T => (
                             <>
-                                <span className="left">
+                                <span className='left'>
                                     <TypeIcon Icon={Type.icon} className={`margin ${T.active ? 'active' : ''}`} />
-                                    <span className="ciq-icon-text">{T.text}</span>
+                                    <span className='ciq-icon-text'>{T.text}</span>
                                 </span>
-                                {T.settingsOnClick
-                            && (
-                                <span
-                                    className="ciq-aggregate-setting"
-                                    onClick={() => showAggregateDialog(T.id)}
-                                >
-                                    <SettingIcon />
-                                </span>
-                            )}
+                                {T.settingsOnClick && (
+                                    <span className='ciq-aggregate-setting' onClick={() => showAggregateDialog(T.id)}>
+                                        <SettingIcon />
+                                    </span>
+                                )}
                             </>
                         )}
                     </ChartTypeList>
@@ -105,15 +93,15 @@ const ChartTypes = ({
 };
 
 export default connect(({ chartType, state, chart }) => ({
-    chartId            : state.chartId,
-    ChartTypeMenu      : chartType.ChartTypeMenu,
-    ChartTypeList      : chartType.ChartTypeList,
-    menuOpen           : chartType.menu.open,
-    onChange           : chartType.setTypeFromUI,
-    setOpen            : chartType.menu.setOpen,
+    chartId: state.chartId,
+    ChartTypeMenu: chartType.ChartTypeMenu,
+    ChartTypeList: chartType.ChartTypeList,
+    menuOpen: chartType.menu.open,
+    onChange: chartType.setTypeFromUI,
+    setOpen: chartType.menu.setOpen,
     showAggregateDialog: chartType.showAggregateDialog,
-    Type               : chartType.type,
-    updateProps        : chartType.updateProps,
-    types              : chartType.types,
-    isMobile           : chart.isMobile,
+    Type: chartType.type,
+    updateProps: chartType.updateProps,
+    types: chartType.types,
+    isMobile: chart.isMobile,
 }))(ChartTypes);

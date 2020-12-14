@@ -7,12 +7,19 @@ export default class MenuStore {
     constructor(mainStore, options) {
         this.mainStore = mainStore;
         this.dialog = new DialogStore(mainStore);
-        reaction(() => this.open, () => this.blurInput());
-        if (options && options.route) { this.route = options.route; }
+        reaction(
+            () => this.open,
+            () => this.blurInput()
+        );
+        if (options && options.route) {
+            this.route = options.route;
+        }
         this.DropDownDialog = this.dialog.connect(Dialog);
     }
 
-    get context() { return this.mainStore.chart.context; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
 
     get routingStore() {
         return this.mainStore.routing;
@@ -20,7 +27,9 @@ export default class MenuStore {
 
     @observable dialogStatus = false;
     @observable route = '';
-    @computed get open() { return this.dialog.open; }
+    @computed get open() {
+        return this.dialog.open;
+    }
     @action.bound setOpen(val) {
         this.dialog.setOpen(val);
         /**
@@ -76,5 +85,5 @@ export default class MenuStore {
         isMobile: c.isMobile,
         shouldRenderDialogs: c.shouldRenderDialogs,
         theme: chartSetting.theme,
-    }))
+    }));
 }

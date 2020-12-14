@@ -1,4 +1,3 @@
-
 /**
  * Abstract class for UI Helpers
  * @name CIQ.UI.Helper

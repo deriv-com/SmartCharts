@@ -7,15 +7,15 @@ export const plotterDrawText = () => {
         for (let i = 0; i < series.text.length; i++) {
             const textObj = series.text[i];
             const w = textObj.width ? textObj.width : context.measureText(textObj.text).width;
-            const offset = this.getYAxisWidth() ? ((this.getYAxisWidth() - w) / 2) : 0;
+            const offset = this.getYAxisWidth() ? (this.getYAxisWidth() - w) / 2 : 0;
             if (textObj.bg) {
                 const h = textObj.height ? textObj.height : 12;
                 const prev = context.fillStyle;
                 context.fillStyle = textObj.bg;
                 if (context.textAlign === 'right') {
-                    context.fillRect(textObj.x, textObj.y - (h / 2), -w, -h);
+                    context.fillRect(textObj.x, textObj.y - h / 2, -w, -h);
                 } else {
-                    context.fillRect(textObj.x, textObj.y - (h / 2), w, h);
+                    context.fillRect(textObj.x, textObj.y - h / 2, w, h);
                 }
                 context.fillStyle = prev;
             }

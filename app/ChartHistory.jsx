@@ -24,16 +24,16 @@ class ChartHistory extends React.PureComponent {
     onChangeDate = ({ target }) => {
         const date = target.value;
         this.setState({ date, focusOnDate: false, focusOnTime: true }, this.updateStore);
-    }
+    };
 
     onChangeTime = ({ target }) => {
         const time = target.value;
         this.setState({ time, focusOnDate: false, focusOnTime: false }, this.updateStore);
-    }
+    };
 
     onDisableFocus = () => {
         this.setState({ focusOnDate: false, focusOnTime: false });
-    }
+    };
 
     updateStore() {
         const { date, time } = this.state;
@@ -42,12 +42,12 @@ class ChartHistory extends React.PureComponent {
 
     render() {
         return (
-            <div className="ciq-chart-history">
+            <div className='ciq-chart-history'>
                 <strong>{t.translate('Historical Data')}:</strong>
                 <DatePicker
                     placeholder={t.translate('select date')}
-                    name="date"
-                    format="DD MMMM YYYY"
+                    name='date'
+                    format='DD MMMM YYYY'
                     focus={this.state.focusOnDate}
                     disableFocus={this.onDisableFocus}
                     has_today_btn
@@ -57,8 +57,8 @@ class ChartHistory extends React.PureComponent {
                     max_date={moment.utc().toDate()}
                 />
                 <TimePicker
-                    placeholder="time"
-                    name="time"
+                    placeholder='time'
+                    name='time'
                     focus={this.state.focusOnTime}
                     disableFocus={this.onDisableFocus}
                     is_clearable

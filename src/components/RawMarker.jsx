@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from '../store/Connect';
-import { getUTCDate } from  '../utils';
+import { getUTCDate } from '../utils';
 
 class RawMarker extends React.Component {
     price = null;
@@ -15,8 +15,10 @@ class RawMarker extends React.Component {
 
     componentDidMount() {
         const { contextPromise } = this.props;
-        contextPromise.then((ctx) => {
-            if (this.hasUnmountedBeforeInjection) { return; }
+        contextPromise.then(ctx => {
+            if (this.hasUnmountedBeforeInjection) {
+                return;
+            }
 
             this.ctx = ctx;
             this.stx = this.ctx.stx;
@@ -30,8 +32,10 @@ class RawMarker extends React.Component {
         const { shouldRedraw, contextPromise } = this.props;
 
         if (shouldRedraw) {
-            contextPromise.then((ctx) => {
-                if (this.hasUnmountedBeforeInjection) { return; }
+            contextPromise.then(ctx => {
+                if (this.hasUnmountedBeforeInjection) {
+                    return;
+                }
 
                 this.ctx = ctx;
                 this.stx = this.ctx.stx;
@@ -54,24 +58,17 @@ class RawMarker extends React.Component {
     }
 
     draw = () => {
-        if (!this.ctx) { return; }
+        if (!this.ctx) {
+            return;
+        }
 
-        const {
-            threshold = 0,
-            epoch_array,
-            draw_callback,
-            price_array = [],
-        } = this.props;
+        const { threshold = 0, epoch_array, draw_callback, price_array = [] } = this.props;
 
-        if (
-            !this.last_epoch_array
-            || this.last_epoch_array.toString() !== epoch_array.toString()
-        ) {
-            this.date_array = epoch_array
-                .map(epoch => ({
-                    date: CIQ.strToDateTime(getUTCDate(epoch)),
-                    epoch,
-                }));
+        if (!this.last_epoch_array || this.last_epoch_array.toString() !== epoch_array.toString()) {
+            this.date_array = epoch_array.map(epoch => ({
+                date: CIQ.strToDateTime(getUTCDate(epoch)),
+                epoch,
+            }));
             this.last_epoch_array = epoch_array;
         }
 
@@ -79,11 +76,7 @@ class RawMarker extends React.Component {
         const chart = stx.chart;
         const show = !threshold || stx.layout.candleWidth >= threshold;
 
-        if (show
-            && chart.dataSet
-            && chart.dataSet.length
-            && stx.mainSeriesRenderer
-        ) {
+        if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
             const points = [];
             this.date_array.forEach(({ date, epoch }) => {
                 const tick_idx = stx.tickFromDate(date, chart);
@@ -112,19 +105,14 @@ class RawMarker extends React.Component {
                         // const delta_x = x - pixelFromTick(stx, tick_idx - 1);
                         const delta_y = price - bar_prev.Close;
                         const ratio = (date - bar.DT) / (bar.DT - bar_prev.DT);
-                        x +=  ratio * delta_x;
+                        x += ratio * delta_x;
                         price += ratio * delta_y;
                     }
                 }
 
                 const y = price ? stx.pixelFromPrice(price, chart.panel) : 0;
 
-                const visible =  (
-                    x >= 0
-                    && chart.yAxis.left > x
-                    && chart.yAxis.top <= y
-                    && chart.yAxis.bottom >= y
-                );
+                const visible = x >= 0 && chart.yAxis.left > x && chart.yAxis.top <= y && chart.yAxis.bottom >= y;
                 const yAxis = chart.yAxis;
                 const top = Math.min(Math.max(+y, yAxis.top), yAxis.bottom);
                 const left = Math.min(Math.max(x, 0), yAxis.left);
@@ -139,8 +127,7 @@ class RawMarker extends React.Component {
                     max_left: yAxis.left,
                 });
             });
-            const prices = price_array
-                .map(price => stx.pixelFromPrice(price * 1, chart.panel));
+            const prices = price_array.map(price => stx.pixelFromPrice(price * 1, chart.panel));
             const canvas = stx.chart.context.canvas;
             if (canvas.style.height.indexOf(canvas.height) < 0) {
                 this.canvas_height = canvas.height;
@@ -153,10 +140,11 @@ class RawMarker extends React.Component {
                 prices,
             });
         }
+    };
+
+    render() {
+        return null;
     }
-
-
-    render() { return null; }
 }
 
 export default connect(({ chart }) => ({
