@@ -5,8 +5,8 @@ import FavoriteStore from '../store/FavoriteStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 const Favorite = ({ category, id }) => {
-    const [store, setStore] = useState(null);
-    const [is_favorate, setFavorite] = useState(false);
+    const [store] = useState(FavoriteStore.getInstance());
+    const [is_favorite, setFavorite] = useState(false);
 
     const onClick = useCallback(
         e => {
@@ -18,11 +18,11 @@ const Favorite = ({ category, id }) => {
     );
     const onFavoriteUpdate = useCallback(() => {
         const isFavorite = store.isFavorite(category, id);
-        if (isFavorite !== is_favorate) {
+        if (isFavorite !== is_favorite) {
             setFavorite(isFavorite);
             logEvent(LogCategories.CategoricalDisplay, LogActions.Favorite, `${isFavorite ? 'Add ' : 'Remove '} ${id}`);
         }
-    }, [store, category, id, is_favorate]);
+    }, [store, category, id, is_favorite]);
 
     useEffect(() => {
         if (store && store.onFavoriteUpdate) {
@@ -30,16 +30,12 @@ const Favorite = ({ category, id }) => {
             setFavorite(store.isFavorite(category, id));
         }
     }, [store, category, id, onFavoriteUpdate]);
-    useEffect(() => {
-        const _store = FavoriteStore.getInstance();
-        setStore(_store);
-    }, [category, id]);
 
     return !category || !id ? null : (
         <FavoriteIcon
             onClick={onClick}
             className={classNames('ciq-favorite', {
-                'ciq-active-favorite': is_favorate,
+                'ciq-active-favorite': is_favorite,
             })}
         />
     );
