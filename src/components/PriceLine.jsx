@@ -34,7 +34,7 @@ const PriceLine = ({
 
     useEffect(() => {
         init();
-    }, []);
+    }, [init]);
 
     return (
         showBarrier && (

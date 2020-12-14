@@ -6,9 +6,7 @@ import Chart from './Chart.jsx';
 const mainStore = new MainStore();
 const SmartChart = ({ children, ...props }) => (
     <Provider {...mainStore}>
-        <Chart {...props}>
-            {children}
-        </Chart>
+        <Chart {...props}>{children}</Chart>
     </Provider>
 );
 

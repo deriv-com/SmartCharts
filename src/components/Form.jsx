@@ -41,7 +41,7 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }) => {
         const barWidth = 238; // css hardcode
         const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
         return activeWidth < 0 ? 0 : activeWidth;
-    }, [value]);
+    }, [value, min, max]);
 
     const handleChange = useCallback(el => onChange(el.currentTarget.value), [onChange]);
 
@@ -88,7 +88,7 @@ export const DropDown = ({ subtitle, rows, children, value, onRowClick, classNam
         return () => {
             document.removeEventListener('click', handleClose);
         };
-    }, []);
+    }, [handleClose]);
 
     return (
         <div
@@ -283,7 +283,7 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }) => {
         return () => {
             document.removeEventListener('click', handleClose);
         };
-    }, []);
+    }, [handleClose]);
 
     return (
         <div ref={innerRef} className={classNames('sc-color-picker', { active: open })} style={{ top, left, width }}>
@@ -379,7 +379,7 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }) => {
 
     useEffect(() => {
         setInnerValue(value);
-    }, []);
+    }, [value]);
 
     return (
         <div className='sc-numeric-input'>
