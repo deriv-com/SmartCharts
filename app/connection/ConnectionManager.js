@@ -123,7 +123,7 @@ class ConnectionManager extends EventEmitter {
     }
 
     async send(data, timeout) {
-        const req = Object.assign({}, data);
+        const req = { ...data };
         req.req_id = req.req_id || this._counterReqId++;
 
         if (this._websocket.readyState !== WebSocket.OPEN) {
