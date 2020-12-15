@@ -37,10 +37,10 @@ export const Checkbox = ({ id, label, checked, disabled, onChange }) => (
 );
 
 export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }) => {
-    const getActiveWidth = useMemo(() => {
+    const activeWidth = useMemo(() => {
         const barWidth = 238; // css hardcode
-        const activeWidth = Math.round((barWidth * (value - min)) / (max - min));
-        return activeWidth < 0 ? 0 : activeWidth;
+        const width = Math.round((barWidth * (value - min)) / (max - min));
+        return width < 0 ? 0 : width;
     }, [value, min, max]);
 
     const handleChange = useCallback(el => onChange(el.currentTarget.value), [onChange]);
@@ -49,7 +49,7 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }) => {
         <div className='sc-slider'>
             <div className='sc-slider-range'>
                 <div className='sc-slider-bar' />
-                <div className='sc-slider-active-bar' style={{ width: getActiveWidth }} />
+                <div className='sc-slider-active-bar' style={{ width: activeWidth }} />
                 <input type='range' min={min} max={max} step={step} onChange={handleChange} value={value} />
             </div>
             <div className='value'>{value}</div>
