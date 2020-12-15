@@ -30,7 +30,10 @@ class Notification extends React.Component {
 
     onRemove(id) {
         this.setState(prevState => ({
-            messages: prevState.messages.map(message => ({ ...message, hide: message.id === id ? true : message.hide })),
+            messages: prevState.messages.map(message => ({
+                ...message,
+                hide: message.id === id ? true : message.hide,
+            })),
         }));
 
         /**
@@ -46,13 +49,13 @@ class Notification extends React.Component {
     }
 
     onRemoveAll() {
-        this.state.messages.forEach((x) => {
+        this.state.messages.forEach(x => {
             this.onRemove(x.id);
         });
     }
 
-    onRemoveByCategory = (category) => {
-        this.state.messages.map((msg) => {
+    onRemoveByCategory = category => {
+        this.state.messages.map(msg => {
             if (msg.category === category) {
                 this.onRemove(msg.id);
             }
@@ -61,23 +64,17 @@ class Notification extends React.Component {
 
     render() {
         return (
-            <div className="cq-notifications">
+            <div className='cq-notifications'>
                 {this.state.messages.map(message => (
-                    <div
-                        key={message.id}
-                        className={`notification ${message.type} ${message.hide ? 'hide' : ''}`}
-                    >
-                        <span
-                            className={`ic-icon icon-notification-${message.type}`}
-                        />
-                        <div className="text"> {message.text} </div>
-                        <span onClick={() => this.onRemove(message.id)} className="close-icon" />
+                    <div key={message.id} className={`notification ${message.type} ${message.hide ? 'hide' : ''}`}>
+                        <span className={`ic-icon icon-notification-${message.type}`} />
+                        <div className='text'> {message.text} </div>
+                        <span onClick={() => this.onRemove(message.id)} className='close-icon' />
                     </div>
                 ))}
             </div>
         );
     }
 }
-
 
 export default Notification;

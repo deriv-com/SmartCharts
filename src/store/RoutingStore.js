@@ -8,24 +8,27 @@ export default class RoutingStore {
     }
 
     @action.bound handleRouting() {
-        window.addEventListener('hashchange', () => {
-            const hash = window.history.state.urlPath.replace('#', '');
-            if (hash === '') {
-                this.closeAll();
-            }
-        }, false);
+        window.addEventListener(
+            'hashchange',
+            () => {
+                const hash = window.history.state.urlPath.replace('#', '');
+                if (hash === '') {
+                    this.closeAll();
+                }
+            },
+            false
+        );
     }
 
     @action.bound updateRoute(route, dialogStatus) {
         const enableRouting = this.mainStore.chart.enableRouting;
         if (enableRouting && dialogStatus && route) {
-            window.history.replaceState({ urlPath:'#' }, '', '#');
-            window.history.pushState({ urlPath:`#${route}` }, '', `#${route}`);
+            window.history.replaceState({ urlPath: '#' }, '', '#');
+            window.history.pushState({ urlPath: `#${route}` }, '', `#${route}`);
         } else if (enableRouting && !dialogStatus && route) {
-            window.history.replaceState({ urlPath:'#' }, '', '#');
+            window.history.replaceState({ urlPath: '#' }, '', '#');
         }
     }
-
 
     @action.bound registerDialog(dialogStore) {
         allDialogs.push(dialogStore);

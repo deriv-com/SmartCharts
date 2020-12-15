@@ -9,15 +9,14 @@ export class Translation {
         if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
         } else {
-           import(/* webpackChunkName: "[request]" */`../translation/${lang}.json`)
-               .then((imported_lang) => {
-                   if (imported_lang) {
-                       lang_map[lang] = imported_lang.default;
-                       this.lang = lang;
-                   } else {
-                       console.error('Unsupported language:', lang);
-                   }
-               });
+            import(/* webpackChunkName: "[request]" */ `../translation/${lang}.json`).then(imported_lang => {
+                if (imported_lang) {
+                    lang_map[lang] = imported_lang.default;
+                    this.lang = lang;
+                } else {
+                    console.error('Unsupported language:', lang);
+                }
+            });
         }
     }
 
@@ -33,7 +32,7 @@ export class Translation {
     translate(...args) {
         const curr_lang = lang_map[this.lang];
         const key = args[0].trim();
-        const key_with_quotation = key.replace(/"/gi, '\\\"'); /* eslint-disable-line */
+        const key_with_quotation = key.replace(/"/gi, '\\"'); /* eslint-disable-line */
         let translated = key;
         let has_quotation = false;
 
@@ -45,7 +44,7 @@ export class Translation {
         }
 
         if (args[1]) {
-            Object.keys(args[1]).forEach((prop) => {
+            Object.keys(args[1]).forEach(prop => {
                 translated = translated.replace(`[${prop}]`, args[1][prop]);
             });
         }

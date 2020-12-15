@@ -1,4 +1,3 @@
-
 // Extract out only the translations into an array
 // TODO: Plural translations not supported!!
 function translationLoader(source) {

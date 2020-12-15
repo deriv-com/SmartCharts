@@ -23,7 +23,7 @@ export default function plotSpline(points, tension, context, colorPatternChanges
         const d01 = Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2));
         const d12 = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 
-        const fa = tension * d01 / (d01 + d12);
+        const fa = (tension * d01) / (d01 + d12);
         const fb = tension - fa;
 
         const p1x = x1 + fa * (x0 - x2);
@@ -35,19 +35,27 @@ export default function plotSpline(points, tension, context, colorPatternChanges
         return [p1x, p1y, p2x, p2y];
     }
 
-    if (!tension || tension < 0) { tension = 0; }
+    if (!tension || tension < 0) {
+        tension = 0;
+    }
     let cp = []; // array of control points, as x0,y0,x1,y1,...
     const n = points.length;
     // Draw an open curve, not connected at the ends
     for (let i = 0; i < n - 4; i += 2) {
         cp = cp.concat(getControlPoints(i));
     }
-    if (cp === null) { return; }
-    if (!colorPatternChanges) { colorPatternChanges = []; }
+    if (cp === null) {
+        return;
+    }
+    if (!colorPatternChanges) {
+        colorPatternChanges = [];
+    }
     let colorPatternIndex = 0;
 
     function seeIfStrokeNeeded(i) {
-        if (colorPatternIndex === colorPatternChanges.length) { return; }
+        if (colorPatternIndex === colorPatternChanges.length) {
+            return;
+        }
         const colorPatternChange = colorPatternChanges[colorPatternIndex];
         if (colorPatternChange.coord[0] === points[i] && colorPatternChange.coord[1] === points[i + 1]) {
             context.stroke();

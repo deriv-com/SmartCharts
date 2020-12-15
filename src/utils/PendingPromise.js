@@ -1,4 +1,3 @@
-
 export default function PendingPromise(data = null) {
     let resolve;
     let reject;
@@ -6,11 +5,11 @@ export default function PendingPromise(data = null) {
         resolve = _resolve;
         reject = _reject;
     });
-    promise.resolve = (res) => {
+    promise.resolve = res => {
         promise.isPending = false;
         resolve(res);
     };
-    promise.reject = (error) => {
+    promise.reject = error => {
         promise.isPending = false;
         reject(error);
     };

@@ -2,14 +2,18 @@
 export function getParents(el, parentSelector = 'body') {
     const parentElement = document.querySelector(parentSelector);
 
-    if (!parentElement) { return []; }
+    if (!parentElement) {
+        return [];
+    }
 
     const parents = [];
     let p = el.parentNode;
 
     while (p !== parentElement) {
         // if parentElement is not in hierarchy
-        if (p === null) { return []; }
+        if (p === null) {
+            return [];
+        }
 
         parents.push(p);
         p = p.parentNode;
@@ -29,22 +33,26 @@ export function createElement(html) {
 
 // Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
 export function aggregation(baseClass, ...mixins) {
-    const copyProps = (target, source) => { // this function copies all properties and symbols, filtering out some special ones
+    const copyProps = (target, source) => {
+        // this function copies all properties and symbols, filtering out some special ones
         Object.getOwnPropertyNames(source)
             .concat(Object.getOwnPropertySymbols(source))
-            .forEach((prop) => {
-                if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) { Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop)); }
+            .forEach(prop => {
+                if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
+                    Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
+                }
             });
     };
     class base extends baseClass {
         constructor(...args) {
             super(...args);
-            mixins.forEach((mixin) => {
-                copyProps(this, (new mixin())); // eslint-disable-line new-cap
+            mixins.forEach(mixin => {
+                copyProps(this, new mixin()); // eslint-disable-line new-cap
             });
         }
     }
-    mixins.forEach((mixin) => { // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
+    mixins.forEach(mixin => {
+        // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
         copyProps(base.prototype, mixin.prototype);
         copyProps(base, mixin);
     });

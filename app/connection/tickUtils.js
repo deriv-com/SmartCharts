@@ -1,4 +1,6 @@
-function getLast(arr) { return arr[arr.length - 1]; }
+function getLast(arr) {
+    return arr[arr.length - 1];
+}
 
 function binarySearch(arr, val, cmp = a => a) {
     let start = 0;
@@ -39,7 +41,7 @@ function mergeTicks(master, patch) {
     // the tick data is the same
     return {
         prices: alpha.prices.slice(0, intersect).concat(omega.prices),
-        times : alpha.times.slice(0, intersect).concat(omega.times),
+        times: alpha.times.slice(0, intersect).concat(omega.times),
     };
 }
 
@@ -72,7 +74,8 @@ function mergeCandles(master, patch) {
         } else {
             [alphaEnd, omegaStart] = [alpha.length - 1, intersect];
         }
-    } else if (isPatchOmega && intersect === alpha.length - 1) { // omega replaces alpha
+    } else if (isPatchOmega && intersect === alpha.length - 1) {
+        // omega replaces alpha
         [alphaEnd, omegaStart] = [intersect, 0];
     } else {
         [alphaEnd, omegaStart] = [intersect + 1, 1];

@@ -115,7 +115,8 @@
                 width: 80px;
                 border-radius: 0 0 $border-radius;
             }
-            .time-picker-hours, .time-picker-minutes {
+            .time-picker-hours,
+            .time-picker-minutes {
                 display: inline-block;
                 height: 245px;
                 overflow: hidden;

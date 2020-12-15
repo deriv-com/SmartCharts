@@ -38,9 +38,15 @@ export default class MarkerStore {
     }
 
     @action.bound destructor() {
-        if (this._injectionId) { this.stx.removeInjection(this._injectionId); }
-        if (this._listenerId) { this.stx.removeEventListener(this._listenerId); }
-        if (this.mainStore.chart.feed) { this.mainStore.chart.feed.offPagination(this.updateMarkerTick); }
+        if (this._injectionId) {
+            this.stx.removeInjection(this._injectionId);
+        }
+        if (this._listenerId) {
+            this.stx.removeEventListener(this._listenerId);
+        }
+        if (this.mainStore.chart.feed) {
+            this.mainStore.chart.feed.offPagination(this.updateMarkerTick);
+        }
         this._injectionId = null;
         this._listenerId = null;
     }
@@ -51,8 +57,12 @@ export default class MarkerStore {
 
         let isUpdateMarkerTickRequired = false;
         let isUpdatePositionRequired = false;
-        updatePropIfChanged(this, { x, xPositioner }, () => { isUpdateMarkerTickRequired = true; });
-        updatePropIfChanged(this, { y, yPositioner }, () => { isUpdatePositionRequired   = true; });
+        updatePropIfChanged(this, { x, xPositioner }, () => {
+            isUpdateMarkerTickRequired = true;
+        });
+        updatePropIfChanged(this, { y, yPositioner }, () => {
+            isUpdatePositionRequired = true;
+        });
 
         // TODO this condition isn't needed any more if the current algorithm works.
         if (isUpdateMarkerTickRequired) {
@@ -98,13 +108,17 @@ export default class MarkerStore {
             }
 
             // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
-            if (dummyMarker.params.xPositioner === 'date'
-                && !this.isDistantFuture
-                && this.stx.masterData[this.tick]
-                && this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
+            if (
+                dummyMarker.params.xPositioner === 'date' &&
+                !this.isDistantFuture &&
+                this.stx.masterData[this.tick] &&
+                this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
             ) {
                 // if the marker is not distance future but it is greater than the last item in the masterData, it will be hidden.
-                if (this.yPositioner !== 'none' && this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
+                if (
+                    this.yPositioner !== 'none' &&
+                    this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()
+                ) {
                     this.hideMarker();
                     return;
                 }
@@ -119,7 +133,7 @@ export default class MarkerStore {
                         Close: null,
                     },
                     null,
-                    { fillGaps: true },
+                    { fillGaps: true }
                 );
                 this.stx.createDataSet();
                 // this.tick += 1;
@@ -243,7 +257,7 @@ export default class MarkerStore {
                     Close: null,
                 },
                 null,
-                { fillGaps: true },
+                { fillGaps: true }
             );
             this.stx.createDataSet();
 
@@ -273,7 +287,8 @@ export default class MarkerStore {
         return {
             chart: this.chart,
             params: {
-                x, xPositioner,
+                x,
+                xPositioner,
             },
         };
     }

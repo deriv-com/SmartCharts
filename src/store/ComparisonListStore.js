@@ -14,8 +14,12 @@ export default class ComparisonListStore {
 
     @observable animatedPrices = [];
     animatedPriceStore = [];
-    get comparisonSymbols() { return this.mainStore.comparison.comparisonSymbols; }
-    get context() { return this.mainStore.chart.context; }
+    get comparisonSymbols() {
+        return this.mainStore.comparison.comparisonSymbols;
+    }
+    get context() {
+        return this.mainStore.chart.context;
+    }
 
     @action.bound syncAnimatedPricesWithComparisons() {
         let diff = this.comparisonSymbols.length - this.animatedPrices.length;

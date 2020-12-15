@@ -12,10 +12,7 @@ export class MarketOpeningTimeCounter extends React.Component {
         };
     }
     componentDidMount() {
-        this.timerInterval = setInterval(
-            () => this.tick(),
-            1000,
-        );
+        this.timerInterval = setInterval(() => this.tick(), 1000);
     }
     componentWillUnmount() {
         clearInterval(this.timerInterval);
@@ -33,10 +30,6 @@ export class MarketOpeningTimeCounter extends React.Component {
         if (openTime) {
             timeUntilOpenTime = displayMilliseconds(openTime.getTime() - this.state.time);
         }
-        return (
-            <span>
-                {timeUntilOpenTime}
-            </span>
-        );
+        return <span>{timeUntilOpenTime}</span>;
     }
 }

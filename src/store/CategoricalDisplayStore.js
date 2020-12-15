@@ -1,7 +1,7 @@
-import React            from 'react';
+import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import { connect }      from './Connect';
-import SearchInput      from '../components/SearchInput.jsx';
+import { connect } from './Connect';
+import SearchInput from '../components/SearchInput.jsx';
 import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
 import { cloneCategories, cloneCategory } from '../utils';
 
@@ -21,13 +21,17 @@ export default class CategoricalDisplayStore {
         getCurrentActiveMarket,
         searchInputClassName,
     }) {
-        reaction(() => (getIsShown && getIsShown() && this.scrollPanel), () => {
-            if (getIsShown() && this.scrollPanel) {
-                this.scrollToActiveSymbol();
+        reaction(
+            () => getIsShown && getIsShown() && this.scrollPanel,
+            () => {
+                if (getIsShown() && this.scrollPanel) {
+                    this.scrollToActiveSymbol();
+                }
+            },
+            {
+                delay: 200,
             }
-        }, {
-            delay: 200,
-        });
+        );
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
         this.getActiveCategory = getActiveCategory;
@@ -51,8 +55,8 @@ export default class CategoricalDisplayStore {
             favoritesId,
         }))(ActiveItem);
 
-        const getItemType = (categoryId) => {
-            if (categoryId === 'active' && (this.getActiveCategory !== undefined)) {
+        const getItemType = categoryId => {
+            if (categoryId === 'active' && this.getActiveCategory !== undefined) {
                 return activeItem;
             }
 
@@ -101,9 +105,13 @@ export default class CategoricalDisplayStore {
     lastFilteredItems = [];
     activeCategories = [];
 
-    get chart() { return this.mainStore.chart; }
+    get chart() {
+        return this.mainStore.chart;
+    }
 
-    get context() { return this.chart.context; }
+    get context() {
+        return this.chart.context;
+    }
 
     get height() {
         return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
@@ -123,7 +131,7 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @computed get favoritesCategory()  {
+    @computed get favoritesCategory() {
         this.pauseScrollSpy = true;
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
@@ -133,7 +141,9 @@ export default class CategoricalDisplayStore {
             emptyDescription: t.translate('There are no favorites yet.'),
             data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
-        setTimeout(() => { this.pauseScrollSpy = false; }, 20);
+        setTimeout(() => {
+            this.pauseScrollSpy = false;
+        }, 20);
         return favoritesCategory;
     }
 
@@ -141,7 +151,7 @@ export default class CategoricalDisplayStore {
         let filteredItems = cloneCategories(this.getCategoricalItems());
         const activeItmes = this.activeCategories.length
             ? this.activeCategories
-            : [(this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite')];
+            : [this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite'];
 
         for (const item of filteredItems) {
             if (activeItmes.includes(item.categoryId)) {
@@ -151,15 +161,15 @@ export default class CategoricalDisplayStore {
 
         if (this.favoritesId) {
             const favsCategory = { ...this.favoritesCategory };
-            const findFavItem = (category) => {
+            const findFavItem = category => {
                 const foundItems = [];
                 if (category.hasSubcategory) {
-                    category.data.forEach((subcategory) => {
+                    category.data.forEach(subcategory => {
                         const foundSubItems = findFavItem(subcategory);
                         foundItems.push(...foundSubItems);
                     });
                 } else {
-                    favsCategory.data.forEach((favItem) => {
+                    favsCategory.data.forEach(favItem => {
                         if (typeof favItem === 'string') {
                             const itemObj = category.data.find(item => item.itemId === favItem);
                             if (itemObj) {
@@ -171,10 +181,9 @@ export default class CategoricalDisplayStore {
                 return foundItems;
             };
 
-            const favsCategoryItem = favsCategory.data
-                .filter(favItem => (typeof favItem !== 'string'));
+            const favsCategoryItem = favsCategory.data.filter(favItem => typeof favItem !== 'string');
 
-            filteredItems.forEach((category) => {
+            filteredItems.forEach(category => {
                 const foundItems = findFavItem(category);
                 favsCategoryItem.push(...foundItems);
             });
@@ -194,12 +203,19 @@ export default class CategoricalDisplayStore {
         }
 
         let searchHasResult = false;
-        const queries = this.filterText.split(' ').filter(x => x !== '').map(b => b.toLowerCase().trim());
+        const queries = this.filterText
+            .split(' ')
+            .filter(x => x !== '')
+            .map(b => b.toLowerCase().trim());
         // regex to check all separate words by comma, should exist in the string
         const hasSearchString = text => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
-        const filterCategory = (c) => {
-            c.data = c.data.filter(item => hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol)));
-            if (c.data.length) { searchHasResult = true; }
+        const filterCategory = c => {
+            c.data = c.data.filter(item =>
+                hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol))
+            );
+            if (c.data.length) {
+                searchHasResult = true;
+            }
         };
 
         for (const category of filteredItems) {
@@ -213,7 +229,6 @@ export default class CategoricalDisplayStore {
             }
         }
 
-
         if (!searchHasResult) {
             filteredItems = this.lastFilteredItems;
         }
@@ -224,10 +239,13 @@ export default class CategoricalDisplayStore {
         return filteredItems;
     }
 
-
     @action.bound updateScrollSpy() {
-        if (this.pauseScrollSpy || !this.scrollPanel) { return; }
-        if (this.filteredItems.length === 0) { return; }
+        if (this.pauseScrollSpy || !this.scrollPanel) {
+            return;
+        }
+        if (this.filteredItems.length === 0) {
+            return;
+        }
 
         // hits: 40px for title hight + 4px for content bottom border
         const categoryTitleHeight = 44;
@@ -238,7 +256,9 @@ export default class CategoricalDisplayStore {
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
 
-            if (!el) { return; }
+            if (!el) {
+                return;
+            }
             const gap_top = Object.keys(this.categoryElements).indexOf(category.categoryId) * 40;
 
             const r = el.getBoundingClientRect();
@@ -258,7 +278,7 @@ export default class CategoricalDisplayStore {
         }
 
         const offsetTop = this.scrollPanel.getBoundingClientRect().top - window.scrollY;
-        this.activeHeadOffset = (this.chart.isMobile ? offsetTop : 0);
+        this.activeHeadOffset = this.chart.isMobile ? offsetTop : 0;
         this.scrollTop = scrollTop;
         this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;
@@ -309,7 +329,9 @@ export default class CategoricalDisplayStore {
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
-            setTimeout(() => { this.pauseScrollSpy = false; }, 20);
+            setTimeout(() => {
+                this.pauseScrollSpy = false;
+            }, 20);
         }
     }
 
@@ -342,7 +364,7 @@ export default class CategoricalDisplayStore {
         this.focusedCategoryKey = null;
         this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
         this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
-        this.activeMarket =  this.getCurrentActiveMarket ? this.getCurrentActiveMarket() : '';
+        this.activeMarket = this.getCurrentActiveMarket ? this.getCurrentActiveMarket() : '';
         const el = this.categoryElements[this.activeCategoryKey];
         const activeSubCategoryClassName = `.sc-mcd__category--${this.activeCategoryKey}  .sc-mcd__category__content--${this.activeSubCategory}`;
         const el_active_sub_category = this.scrollPanel.querySelector(activeSubCategoryClassName);
@@ -363,15 +385,19 @@ export default class CategoricalDisplayStore {
             this.scrollPanel.scrollTop = el.offsetTop;
             if (el_active_market) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
-                this.scrollPanel.scrollTop = (el.offsetTop + el_active_market.offsetTop - topOffset);
+                this.scrollPanel.scrollTop = el.offsetTop + el_active_market.offsetTop - topOffset;
             } else if (el_active_sub_category) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 0;
-                this.scrollPanel.scrollTop = (el.offsetTop + el_active_sub_category.offsetTop - topOffset);
+                this.scrollPanel.scrollTop = el.offsetTop + el_active_sub_category.offsetTop - topOffset;
             }
         }
-        setTimeout(() => { this.pauseScrollSpy = false; }, 20);
+        setTimeout(() => {
+            this.pauseScrollSpy = false;
+        }, 20);
 
-        if (!this.isInit) { this.init(); }
+        if (!this.isInit) {
+            this.init();
+        }
         if (!this.mainStore.chart.isMobile) {
             setTimeout(() => this.searchInput.current.focus(), 0);
         }
@@ -379,7 +405,7 @@ export default class CategoricalDisplayStore {
         if (!this.mainStore.chart.isMobile) {
             const categories = Object.keys(this.categoryElements);
             const last_category = categories.pop();
-            const last_category_bottom_gap = this.height - (64 + (categories.length * 40)); // to make the last category height reach it's filter tab
+            const last_category_bottom_gap = this.height - (64 + categories.length * 40); // to make the last category height reach it's filter tab
             if (this.categoryElements[last_category]) {
                 this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
             }
@@ -401,5 +427,5 @@ export default class CategoricalDisplayStore {
         setFilterText: this.setFilterText,
         height: this.height,
         isMobile: this.chart.isMobile,
-    }))
+    }));
 }

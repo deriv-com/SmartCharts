@@ -98,7 +98,6 @@ import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
 
-
 import Portugal from '../../sass/icons/flags/portugal.svg';
 import Russia from '../../sass/icons/flags/russia.svg';
 import Thailand from '../../sass/icons/flags/thailand.svg';
@@ -209,24 +208,20 @@ import DrawToolsRectangle from '../../sass/icons/draw-tools/ic-rectangle.svg';
 import DrawToolsTrend from '../../sass/icons/draw-tools/ic-trend.svg';
 import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
 
-export const Wrapper = SvgLogo => (props) => {
+export const Wrapper = SvgLogo => props => {
     let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
     className = `ic-icon ${className || ''}`;
     const vb = SvgLogo.viewBox.split(' ').slice(2);
 
     return (
-        <span
-            className={className}
-            tooltip-title={tooltip}
-            {...p}
-        >
+        <span className={className} tooltip-title={tooltip} {...p}>
             <svg width={vb[0]} height={vb[1]}>
                 <use xlinkHref={__webpack_public_path__ + SvgLogo.url /* eslint-disable-line no-undef */} />
             </svg>
             {tooltip && (
                 <>
                     <br />
-                    <span className="ic-subtitle">{tooltip}</span>
+                    <span className='ic-subtitle'>{tooltip}</span>
                 </>
             )}
         </span>
@@ -437,7 +432,6 @@ const FlagIconMap = {
     WallStreet: Wrapper(WallStreet),
 };
 
-
 export const FlagIcons = {
     USD: Wrapper(USD),
     GBP: Wrapper(GBP),
@@ -454,7 +448,6 @@ export const FlagIcons = {
     Poland: Wrapper(PLN),
     Spanish: Wrapper(Spanish),
 };
-
 
 export const ItemIconMap = {
     SPC: FlagIconMap.USD,
@@ -492,10 +485,13 @@ export const ItemIconMap = {
 };
 
 function createCompositeIcon(A, B, icId) {
-    return (props) => {
+    return props => {
         const { className, ...p } = props;
         return (
-            <span className={`${icId} ${className}`} {...p}><A /><B /></span>
+            <span className={`${icId} ${className}`} {...p}>
+                <A />
+                <B />
+            </span>
         );
     };
 }
@@ -507,7 +503,7 @@ function frx(flagA, flagB) {
 }
 
 export const OTCBadgeIcon = Wrapper(OTCBadge);
-const SmartFXIcon  = Wrapper(SmartFX);
+const SmartFXIcon = Wrapper(SmartFX);
 
 function otc(flag, symbol) {
     const FlagIcon = FlagIconMap[flag];
