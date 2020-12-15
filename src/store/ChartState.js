@@ -535,13 +535,12 @@ class ChartState {
             this.stxx.chart.lockScroll = true;
             this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
-
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
-                this.stxx.setMaxTicks(Math.floor((scrollToTarget * 6) / 5) || 2);
-                this.stxx.chart.scroll = Math.floor((scrollToTarget * 17) / 15) || 1;
+                this.stxx.setMaxTicks(Math.floor((scrollToTarget * 3) / 2) || 2);
+                this.stxx.chart.scroll = Math.floor((scrollToTarget * 5) / 4) || 1;
                 this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
