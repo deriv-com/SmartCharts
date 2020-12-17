@@ -214,8 +214,12 @@ class ChartState {
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.setIsChartScrollingToEpoch(true);
                 this.scrollChartToLeft();
-                // Set this delay to ensure the chart scrolling is completed
-                setTimeout(() => this.stateChange(STATE.SCROLL_TO_LEFT), 400);
+                // This part will fire if we pass `scrollToEpoch` to chart
+                // just to ensure scale 1:1 work prefectly if we have endEpoch
+                // we call scrollChartToLeft() twice with some delay and notify
+                // the STATE change with a delay to ensure scrolling is completed
+                setTimeout(() => this.scrollChartToLeft(), 400);
+                setTimeout(() => this.stateChange(STATE.SCROLL_TO_LEFT), 900);
             }
         }
 
