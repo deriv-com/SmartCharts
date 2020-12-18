@@ -70,7 +70,7 @@ const Chart = props => {
         isLoading,
     } = props;
 
-    const currentPosition = `cq-chart-control-${chartControlsWidgets && position && !isMobile ? position : 'bottom'}`;
+    const hasPosition = chartControlsWidgets && position && !isMobile;
     const TopWidgets = topWidgets || defaultTopWidgets;
     // if there are any markers, then increase the subholder z-index
     const ToolbarWidget = toolbarWidget;
@@ -91,7 +91,12 @@ const Chart = props => {
                 })}
             >
                 <div className='cq-context' ref={rootRef}>
-                    <div className={currentPosition}>
+                    <div
+                        className={classNames({
+                            [`cq-chart-control-${position}`]: hasPosition,
+                            'cq-chart-control-bottom': !hasPosition,
+                        })}
+                    >
                         <div className='ciq-chart-area'>
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
                                 <RenderInsideChart at='holder'>
