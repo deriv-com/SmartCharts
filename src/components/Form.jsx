@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/sort-comp,react/no-multi-comp */
-import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
+import React from 'react';
 import debounce from 'lodash.debounce';
 import classNames from 'classnames';
 import Scroll from './Scroll.jsx';
@@ -37,13 +37,13 @@ export const Checkbox = ({ id, label, checked, disabled, onChange }) => (
 );
 
 export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }) => {
-    const activeWidth = useMemo(() => {
+    const activeWidth = React.useMemo(() => {
         const barWidth = 238; // css hardcode
         const width = Math.round((barWidth * (value - min)) / (max - min));
         return width < 0 ? 0 : width;
     }, [value, min, max]);
 
-    const handleChange = useCallback(el => onChange(el.currentTarget.value), [onChange]);
+    const handleChange = React.useCallback(el => onChange(el.currentTarget.value), [onChange]);
 
     return (
         <div className='sc-slider'>
@@ -58,21 +58,21 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }) => {
 };
 
 export const DropDown = ({ subtitle, rows, children, value, onRowClick, className }) => {
-    const [open, setOpen] = useState(false);
-    const [top, setTop] = useState(0);
-    const [left, setLeft] = useState(0);
-    const [width, setWidth] = useState(null);
-    const innerRef = useRef();
-    const innerTitleRef = useRef();
+    const [open, setOpen] = React.useState(false);
+    const [top, setTop] = React.useState(0);
+    const [left, setLeft] = React.useState(0);
+    const [width, setWidth] = React.useState(null);
+    const innerRef = React.useRef();
+    const innerTitleRef = React.useRef();
 
-    const handleClick = useCallback(() => {
+    const handleClick = React.useCallback(() => {
         const bounding = innerRef.current.getBoundingClientRect();
         setTop(!open ? bounding.top : null);
         setLeft(!open ? bounding.left : null);
         setWidth(bounding.width);
         setOpen(prevState => !prevState);
     }, [open, innerRef]);
-    const handleClose = useCallback(
+    const handleClose = React.useCallback(
         e => {
             if (e.target !== innerTitleRef.current) {
                 setOpen(false);
@@ -83,7 +83,7 @@ export const DropDown = ({ subtitle, rows, children, value, onRowClick, classNam
         [innerTitleRef]
     );
 
-    useEffect(() => {
+    React.useEffect(() => {
         document.addEventListener('click', handleClose, false);
         return () => {
             document.removeEventListener('click', handleClose);
@@ -248,26 +248,26 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }) => {
             '#580028',
         ],
     ];
-    const [open, setOpen] = useState(false);
-    const [top, setTop] = useState(0);
-    const [left, setLeft] = useState(0);
-    const [width, setWidth] = useState(null);
-    const innerRef = useRef();
-    const innerTitleRef = useRef();
+    const [open, setOpen] = React.useState(false);
+    const [top, setTop] = React.useState(0);
+    const [left, setLeft] = React.useState(0);
+    const [width, setWidth] = React.useState(null);
+    const innerRef = React.useRef();
+    const innerTitleRef = React.useRef();
 
-    const backgroundColor = useMemo(() => {
+    const backgroundColor = React.useMemo(() => {
         if (color !== 'auto') return color;
         return theme === 'light' ? '#000000' : '#ffffff';
     }, [color, theme]);
 
-    const handleClick = useCallback(() => {
+    const handleClick = React.useCallback(() => {
         const bounding = innerRef.current.getBoundingClientRect();
         setTop(!open ? bounding.top : null);
         setLeft(!open ? bounding.left : null);
         setWidth(bounding.width);
         setOpen(prevState => !prevState);
     }, [open, innerRef]);
-    const handleClose = useCallback(
+    const handleClose = React.useCallback(
         e => {
             if (e.target !== innerTitleRef.current) {
                 setOpen(false);
@@ -278,7 +278,7 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }) => {
         [innerTitleRef]
     );
 
-    useEffect(() => {
+    React.useEffect(() => {
         document.addEventListener('click', handleClose, false);
         return () => {
             document.removeEventListener('click', handleClose);
@@ -334,7 +334,7 @@ export const SwitchIcon = ({ id, label, value, onChange, noramIcon, activeIcon }
 
 // NumericInput fires onChange on Enter or onBlur
 export const NumericInput = ({ subtitle, onChange, min, max, step, value }) => {
-    const [innerValue, setInnerValue] = useState(false);
+    const [innerValue, setInnerValue] = React.useState(false);
 
     const handleFireOnChange = debounce(
         () => {
@@ -377,7 +377,7 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }) => {
         handleFireOnChange();
     };
 
-    useEffect(() => {
+    React.useEffect(() => {
         setInnerValue(value);
     }, [value]);
 

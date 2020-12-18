@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import PriceLineArrow from './PriceLineArrow.jsx';
 import PriceLineTitle from './PriceLineTitle.jsx';
@@ -25,14 +25,14 @@ const PriceLine = ({
     isOverlapping,
     init,
 }) => {
-    const showBarrier = useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
-    const showBarrierDragLine = useMemo(
+    const showBarrier = React.useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
+    const showBarrierDragLine = React.useMemo(
         () => !hideBarrierLine && (!hideOffscreenLine || !offScreen) && !isOverlapping,
         [hideBarrierLine, hideOffscreenLine, offScreen, isOverlapping]
     );
-    const opacity = useMemo(() => isOverlapping && opacityOnOverlap, [isOverlapping, opacityOnOverlap]);
+    const opacity = React.useMemo(() => isOverlapping && opacityOnOverlap, [isOverlapping, opacityOnOverlap]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         init();
     }, [init]);
 

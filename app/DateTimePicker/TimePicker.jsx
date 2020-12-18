@@ -2,7 +2,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/no-unused-state */
-/* eslint-disable max-classes-per-file */
 import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';

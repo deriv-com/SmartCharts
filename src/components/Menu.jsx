@@ -125,7 +125,7 @@ const Menu = ({
 
     return (
         (enabled && (
-            <div className={`ciq-menu ciq-enabled ${className || ''} ${open && 'stxMenuActive'}`}>
+            <div className={classNames('ciq-menu ciq-enabled', className, { stxMenuActive: open })}>
                 <div
                     className='cq-menu-btn'
                     onMouseEnter={onMouseEnter}
@@ -146,7 +146,7 @@ const Menu = ({
                     oldDropdown}
             </div>
         )) || (
-            <div className={`ciq-menu ciq-disabled ${className || ''}`}>
+            <div className={classNames('ciq-menu ciq-disabled', className)}>
                 <div className='cq-menu-btn' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                     {first}
                 </div>
