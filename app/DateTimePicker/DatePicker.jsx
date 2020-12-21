@@ -4,6 +4,7 @@ import Calendar from './Calendar.jsx';
 import './date-picker.scss';
 import { Wrapper } from '../../src/components/Icons.jsx';
 import CalendarIC from '../icons/ic-calendar.svg';
+import { usePrevious, useStateCallback } from '../../src/hooks';
 
 const CalendarIcon = Wrapper(CalendarIC);
 const DatePickerInput = ({
@@ -62,10 +63,12 @@ const DatePicker = React.memo(props => {
         value: props_value,
     } = props;
 
-    const [value, setValue] = React.useState(props_value || '');
+    const [value, setValue] = useStateCallback(props_value || '');
     const [is_datepicker_visible, setIsDatepickerVisible] = React.useState(focus || false);
     const mainRef = React.useRef();
     const calendarRef = React.useRef();
+
+    const prev_focus = usePrevious(focus);
 
     const onClickOutside = React.useCallback(
         e => {
@@ -87,10 +90,10 @@ const DatePicker = React.memo(props => {
     }, [onClickOutside]);
 
     React.useEffect(() => {
-        if (focus && is_datepicker_visible !== focus) {
+        if (focus && focus !== prev_focus && is_datepicker_visible !== focus) {
             setIsDatepickerVisible(!is_datepicker_visible);
         }
-    }, [focus, is_datepicker_visible]);
+    }, [focus, prev_focus, is_datepicker_visible]);
 
     const handleVisibility = () => {
         setIsDatepickerVisible(!is_datepicker_visible);
@@ -116,8 +119,7 @@ const DatePicker = React.memo(props => {
 
     // TODO: handle cases where user inputs date before min_date and date after max_date
     const updateDatePickerValue = (_value, _mode) => {
-        setValue(_value);
-        setTimeout(updateStore);
+        setValue(_value, updateStore);
 
         // update Calendar
         const new_date = _mode === 'duration' ? moment.utc().add(_value, 'days').format(date_format) : _value;
@@ -134,9 +136,9 @@ const DatePicker = React.memo(props => {
     };
 
     // update MobX store
-    const updateStore = () => {
-        if (onChange === 'function') {
-            onChange({ target: { name, value } });
+    const updateStore = _value => {
+        if (typeof onChange === 'function') {
+            onChange({ target: { name, value: _value } });
         }
     };
 

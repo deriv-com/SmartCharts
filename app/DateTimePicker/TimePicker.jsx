@@ -181,6 +181,7 @@ const TimePicker = React.memo(props => {
     const [minutes] = React.useState([...Array(12).keys()].map(a => `0${a * 5}`.slice(-2)));
     const wrapper_ref = React.useRef();
     const prev_value = usePrevious(value);
+    const prev_focus = usePrevious(focus);
     const prev_is_open = usePrevious(is_open);
 
     const handleClickOutside = React.useCallback(
@@ -237,7 +238,7 @@ const TimePicker = React.memo(props => {
             setValue(`${hour}:${last_available_min}`);
         };
 
-        if (focus === true && prev_is_open !== focus) {
+        if (focus === true && prev_focus !== focus && prev_is_open !== focus) {
             toggleDropDown();
         }
 
