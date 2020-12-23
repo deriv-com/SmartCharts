@@ -67,7 +67,7 @@ class StreamManager {
                 open,
                 epoch,
             };
-            if (+candles[candles.length - 1].epoch === +candle.epoch) {
+            if (candles[candles.length - 1] && +candles[candles.length - 1].epoch === +candle.epoch) {
                 candles[candles.length - 1] = candle;
             } else {
                 candles.push(candle);
