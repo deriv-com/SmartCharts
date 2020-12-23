@@ -904,6 +904,7 @@ class ChartStore {
     }
 
     @action.bound changeSymbol(symbolObj, granularity) {
+        if (!this.stxx) return;
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
