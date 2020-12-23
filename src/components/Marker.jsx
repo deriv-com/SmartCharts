@@ -1,10 +1,11 @@
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from '../store/Connect';
 import MarkerStore from '../store/MarkerStore';
 import '../../sass/components/_markers.scss';
 
 const Marker = ({ display, left, bottom, children, className }) => (
-    <div className={`stx-marker ${className || ''}`} style={{ display, left, bottom }}>
+    <div className={classNames('stx-marker', className)} style={{ display, left, bottom }}>
         {children}
     </div>
 );

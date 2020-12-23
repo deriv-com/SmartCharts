@@ -15,10 +15,8 @@ const ChartFooterNetwork = React.memo(({ networkStatus }) => (
     </Tooltip>
 ));
 
-const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => {
-    if (!context) return null;
-
-    return (
+const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) =>
+    context ? (
         <div className='sc-chart-footer'>
             <ChartFooterNetwork networkStatus={networkStatus} />
             <div className='sc-chart-footer__item sc-chart-footer__item--time'>
@@ -38,8 +36,7 @@ const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }) => 
                 </div>
             </div>
         </div>
-    );
-};
+    ) : null;
 
 export default connect(({ chart }) => ({
     context: chart.context,

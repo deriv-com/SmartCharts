@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from '../store/Connect';
 import { DownloadIcon, PngIcon, CsvIcon } from './Icons.jsx';
 import { InlineLoader } from './Loader.jsx';
@@ -14,7 +15,7 @@ const Share = ({ Dialog, menuOpen, downloadCSV, downloadPNG, isLoadingPNG, porta
         portalNodeId={portalNodeId}
     >
         <Dialog.Title>
-            <div className={`sc-download__menu ${menuOpen ? 'sc-download__menu--active' : ''}`}>
+            <div className={classNames('sc-download__menu', { 'sc-download__menu--active': menuOpen })}>
                 <DownloadIcon />
             </div>
         </Dialog.Title>
