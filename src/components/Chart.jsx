@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import RenderInsideChart from './RenderInsideChart.jsx';
 import ChartTitle from './ChartTitle.jsx';
@@ -21,143 +21,134 @@ import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
 import PaginationLoader from './PaginationLoader.jsx';
 
-class Chart extends Component {
-    constructor(props) {
-        super(props);
-        this.root = React.createRef();
-    }
+const Chart = props => {
+    const rootRef = React.useRef();
 
-    componentDidMount() {
-        const { updateProps, init, ...props } = this.props;
+    React.useEffect(() => {
+        const { updateProps, init, ...otherProps } = props;
         initGA();
         logPageView();
-        updateProps(props);
-        init(this.root.current, props);
-    }
+        updateProps(otherProps);
+        init(rootRef.current, otherProps);
 
-    componentDidUpdate(prevProps) {
-        const { updateProps, init, ...props } = this.props;
-        const { updateProps: prevUpdateProps, init: prevInit, ...previousProps } = prevProps;
+        return () => {
+            props.destroy();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-        if (previousProps !== props) {
-            updateProps(props);
-        }
-    }
+    React.useEffect(() => {
+        const { updateProps, init, ...otherProps } = props;
+        updateProps(otherProps);
+    });
 
-    componentWillUnmount() {
-        this.props.destroy();
-    }
+    const defaultTopWidgets = () => <ChartTitle />;
 
-    defaultTopWidgets = () => <ChartTitle />;
+    const {
+        DrawToolsSettingsDialog,
+        StudySettingsDialog,
+        isCandle,
+        isSpline,
+        isMobile = false,
+        isChartAvailable,
+        isHighestLowestMarkerEnabled,
+        barriers = [],
+        children,
+        chartControlsWidgets,
+        AggregateChartSettingsDialog,
+        topWidgets,
+        chartContainerHeight,
+        containerWidth,
+        isChartClosed,
+        theme,
+        position,
+        bottomWidgets,
+        enabledChartFooter = true,
+        enabledNavigationWidget = true,
+        toolbarWidget,
+        onCrosshairChange,
+        isLoading,
+    } = props;
 
-    render() {
-        const {
-            DrawToolsSettingsDialog,
-            StudySettingsDialog,
-            isCandle,
-            isSpline,
-            isMobile = false,
-            isChartAvailable,
-            isHighestLowestMarkerEnabled,
-            barriers = [],
-            children,
-            chartControlsWidgets,
-            AggregateChartSettingsDialog,
-            topWidgets,
-            chartContainerHeight,
-            containerWidth,
-            isChartClosed,
-            theme,
-            position,
-            bottomWidgets,
-            enabledChartFooter = true,
-            enabledNavigationWidget = true,
-            toolbarWidget,
-            onCrosshairChange,
-            isLoading,
-        } = this.props;
+    const hasPosition = chartControlsWidgets && position && !isMobile;
+    const TopWidgets = topWidgets || defaultTopWidgets;
+    // if there are any markers, then increase the subholder z-index
+    const ToolbarWidget = toolbarWidget;
 
-        const currentPosition = `cq-chart-control-${
-            chartControlsWidgets && position && !isMobile ? position : 'bottom'
-        }`;
-        const TopWidgets = topWidgets || this.defaultTopWidgets;
-        // if there are any markers, then increase the subholder z-index
-        const ToolbarWidget = toolbarWidget;
-
-        return (
+    return (
+        <div
+            className={classNames('smartcharts', `smartcharts-${theme}`, {
+                'smartcharts--navigation-widget': enabledNavigationWidget,
+                'smartcharts--loading': isLoading,
+                'smartcharts--has-markers': children && children.length,
+                [`smartcharts-${containerWidth}`]: !isMobile,
+            })}
+        >
             <div
-                className={classNames('smartcharts', `smartcharts-${theme}`, {
-                    'smartcharts--navigation-widget': enabledNavigationWidget,
-                    'smartcharts--loading': isLoading,
-                    'smartcharts--has-markers': children && children.length,
-                    [`smartcharts-${containerWidth}`]: !isMobile,
+                className={classNames({
+                    'smartcharts-mobile': isMobile,
+                    'smartcharts-desktop': !isMobile,
                 })}
             >
-                <div
-                    className={classNames({
-                        'smartcharts-mobile': isMobile,
-                        'smartcharts-desktop': !isMobile,
-                    })}
-                >
-                    <div className='cq-context' ref={this.root}>
-                        <div className={currentPosition}>
-                            <div className='ciq-chart-area'>
-                                <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
-                                    <RenderInsideChart at='holder'>
-                                        {barriers.map((barr, idx) => (
-                                            <Barrier
-                                                key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
-                                                {...barr}
-                                            />
-                                        ))}
-                                    </RenderInsideChart>
-                                    <RenderInsideChart at='subholder'>
-                                        {!isCandle && !isSpline && isHighestLowestMarkerEnabled && (
-                                            <HighestLowestMarker />
-                                        )}
-                                    </RenderInsideChart>
-                                    <RenderInsideChart at='subholder' hideInScrollToEpoch>
-                                        {children}
-                                    </RenderInsideChart>
-                                    <RenderInsideChart at='subholder'>
-                                        <PaginationLoader />
-                                    </RenderInsideChart>
-                                    <div className='cq-top-ui-widgets'>
-                                        <TopWidgets />
-                                    </div>
-                                    <div className='chartContainer' style={{ height: chartContainerHeight }}>
-                                        <Crosshair />
-                                    </div>
-                                    {enabledNavigationWidget && (
-                                        <NavigationWidget onCrosshairChange={onCrosshairChange} />
-                                    )}
-                                    {toolbarWidget && <ToolbarWidget />}
-                                    {!isChartAvailable && (
-                                        <div className='cq-chart-unavailable'>
-                                            {t.translate('Chart data is not available for this symbol.')}
-                                        </div>
-                                    )}
-                                    <BottomWidgetsContainer>
-                                        <BottomWidget bottomWidgets={bottomWidgets} />
-                                    </BottomWidgetsContainer>
+                <div className='cq-context' ref={rootRef}>
+                    <div
+                        className={classNames({
+                            [`cq-chart-control-${position}`]: hasPosition,
+                            'cq-chart-control-bottom': !hasPosition,
+                        })}
+                    >
+                        <div className='ciq-chart-area'>
+                            <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
+                                <RenderInsideChart at='holder'>
+                                    {barriers.map((barr, idx) => (
+                                        <Barrier
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
+                                            {...barr}
+                                        />
+                                    ))}
+                                </RenderInsideChart>
+                                <RenderInsideChart at='subholder'>
+                                    {!isCandle && !isSpline && isHighestLowestMarkerEnabled && <HighestLowestMarker />}
+                                </RenderInsideChart>
+                                <RenderInsideChart at='subholder' hideInScrollToEpoch>
+                                    {children}
+                                </RenderInsideChart>
+                                <RenderInsideChart at='subholder'>
+                                    <PaginationLoader />
+                                </RenderInsideChart>
+                                <div className='cq-top-ui-widgets'>
+                                    <TopWidgets />
                                 </div>
-                                {chartControlsWidgets !== null && !enabledChartFooter && (
-                                    <ChartControls widgets={chartControlsWidgets} />
+                                <div className='chartContainer' style={{ height: chartContainerHeight }}>
+                                    <Crosshair />
+                                </div>
+                                {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}
+                                {toolbarWidget && <ToolbarWidget />}
+                                {!isChartAvailable && (
+                                    <div className='cq-chart-unavailable'>
+                                        {t.translate('Chart data is not available for this symbol.')}
+                                    </div>
                                 )}
-                                {enabledChartFooter && <ChartFooter />}
-                                <Loader />
+                                <BottomWidgetsContainer>
+                                    <BottomWidget bottomWidgets={bottomWidgets} />
+                                </BottomWidgetsContainer>
                             </div>
+                            {chartControlsWidgets !== null && !enabledChartFooter && (
+                                <ChartControls widgets={chartControlsWidgets} />
+                            )}
+                            {enabledChartFooter && <ChartFooter />}
+                            <Loader />
                         </div>
                     </div>
-                    <DrawToolsSettingsDialog />
-                    <AggregateChartSettingsDialog />
-                    <StudySettingsDialog />
-                    <div id='smartcharts_modal' className='ciq-modal' />
                 </div>
+                <DrawToolsSettingsDialog />
+                <AggregateChartSettingsDialog />
+                <StudySettingsDialog />
+                <div id='smartcharts_modal' className='ciq-modal' />
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }) => ({
     init: chart.init,
