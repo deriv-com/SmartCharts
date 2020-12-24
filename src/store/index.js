@@ -20,7 +20,6 @@ import RoutingStore from './RoutingStore';
 import CurrentSpotStore from './CurrentSpotStore';
 import ChartState from './ChartState';
 import Notifier from './Notifier';
-import ChartTableStore from './ChartTableStore';
 import LastDigitStatsStore from './LastDigitStatsStore';
 import NavigationWidgetStore from './NavigationWidgetStore';
 import HighestLowestStore from './HighestLowestStore';
@@ -50,7 +49,6 @@ export default class MainStore {
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
     currentSpot = new CurrentSpotStore(this);
-    chartTable = new ChartTableStore(this);
     lastDigitStats = new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
     navigationWidget = new NavigationWidgetStore(this);
