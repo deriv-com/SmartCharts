@@ -4,7 +4,6 @@ import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
 import ChartMode from './components/ChartMode.jsx';
 import StudyLegend from './components/StudyLegend.jsx';
-import Comparison from './components/Comparison.jsx';
 import Views from './components/Views.jsx';
 import CrosshairToggle from './components/CrosshairToggle.jsx';
 import Timeperiod from './components/Timeperiod.jsx';
@@ -33,7 +32,6 @@ export {
     ChartTitle,
     ChartTypes,
     ChartMode,
-    Comparison,
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
@@ -58,7 +56,6 @@ export default {
     ChartTitle,
     ChartTypes,
     ChartMode,
-    Comparison,
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,

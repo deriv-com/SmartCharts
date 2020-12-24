@@ -4,7 +4,6 @@ import ChartStore from './ChartStore';
 import ChartTypeStore from './ChartTypeStore';
 import ChartModeStore from './ChartModeStore';
 import StudyLegendStore from './StudyLegendStore';
-import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
 import ViewStore from './ViewStore';
@@ -33,7 +32,6 @@ export default class MainStore {
     chartType = new ChartTypeStore(this);
     chartMode = new ChartModeStore(this);
     studies = new StudyLegendStore(this);
-    comparison = new ComparisonStore(this);
     drawTools = new DrawToolsStore(this);
     chartTitle = new ChartTitleStore(this);
     timeperiod = new TimeperiodStore(this);
