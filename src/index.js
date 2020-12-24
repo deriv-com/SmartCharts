@@ -14,7 +14,6 @@ import ChartSetting from './components/ChartSetting.jsx';
 import Share from './components/Share.jsx';
 import SmartChart from './components/SmartChart.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
-import AssetInformation from './components/AssetInformation.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
 import ToolbarWidget from './components/ToolbarWidget.jsx';
@@ -28,7 +27,6 @@ function setSmartChartsPublicPath(path) {
 const Marker = FastMarker;
 
 export {
-    AssetInformation,
     Barrier,
     ChartSetting,
     ChartSize,
@@ -54,7 +52,6 @@ export {
 };
 
 export default {
-    AssetInformation,
     Barrier,
     ChartSetting,
     ChartSize,

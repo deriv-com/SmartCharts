@@ -147,7 +147,6 @@ Props marked with `*` are **mandatory**:
 | theme                        | Sets the chart theme. themes are (`dark\|light`), and default is `light`.                                                             |
 | lang                         | Sets the language. Defaults to `en`.                                                                                                  |
 | position                     | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`. |
-| assetInformation             | Show or hide the asset information. In mobile this will be always be `false`. Defaults to `true`.                                     |
 | enabledNavigationWidget      | Show or hide navigation widget. Defaults to `false`                                                                                   |
 | isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.                                                           |
 
@@ -318,7 +317,6 @@ Here are the following components you can import:
 
 - Top widgets:
   - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
-  - `<AssetInformation />`
 - Chart controls:
   - `<CrosshairToggle enabled={true} />`
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`

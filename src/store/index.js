@@ -7,7 +7,6 @@ import StudyLegendStore from './StudyLegendStore';
 import ComparisonStore from './ComparisonStore';
 import DrawToolsStore from './DrawToolsStore';
 import ChartTitleStore from './ChartTitleStore';
-import AssetInformationStore from './AssetInformationStore';
 import ViewStore from './ViewStore';
 import CrosshairStore from './CrosshairStore';
 import ShareStore from './ShareStore';
@@ -38,7 +37,6 @@ export default class MainStore {
     drawTools = new DrawToolsStore(this);
     chartTitle = new ChartTitleStore(this);
     timeperiod = new TimeperiodStore(this);
-    assetInformation = new AssetInformationStore(this);
     view = new ViewStore(this);
     crosshair = new CrosshairStore(this);
     share = new ShareStore(this);
