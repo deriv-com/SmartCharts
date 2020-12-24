@@ -282,12 +282,12 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ComparisonList, ToolbarWidget } from "@binary-com/smartcharts";
+import { ChartMode, ToolbarWidget } from "@binary-com/smartcharts";
 
 const renderTopWidgets = () => (
   <React.Fragment>
     <div>Hi I just replaced the top widgets!</div>
-    <ComparisonList />
+    <ChartMode />
   </React.Fragment>
 );
 
@@ -300,7 +300,7 @@ const renderBottomWidgets = () => (
 const renderToolbarWidgets = () => (
   <ToolbarWidget position="top">
     <div>Hi I just replaced the top widgets!</div>
-    <ComparisonList />
+    <ChartMode />
   </ToolbarWidget>
 );
 
@@ -319,7 +319,6 @@ Here are the following components you can import:
 - Top widgets:
   - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
   - `<AssetInformation />`
-  - `<ComparisonList />`
 - Chart controls:
   - `<CrosshairToggle enabled={true} />`
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`

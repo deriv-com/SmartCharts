@@ -13,7 +13,6 @@ import DrawTools from './components/DrawTools.jsx';
 import ChartSetting from './components/ChartSetting.jsx';
 import Share from './components/Share.jsx';
 import SmartChart from './components/SmartChart.jsx';
-import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
 import AssetInformation from './components/AssetInformation.jsx';
 import FastMarker from './components/FastMarker.jsx';
@@ -37,7 +36,6 @@ export {
     ChartTypes,
     ChartMode,
     Comparison,
-    ComparisonList,
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
@@ -64,7 +62,6 @@ export default {
     ChartTypes,
     ChartMode,
     Comparison,
-    ComparisonList,
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
