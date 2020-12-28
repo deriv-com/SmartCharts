@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { displayMilliseconds } from '../utils/index';
 import ServerTime from '../utils/ServerTime';
 
 export const MarketOpeningTimeCounter = ({ symbolOpenTime }) => {
-    const [time, setTime] = useState(0);
+    const [time, setTime] = React.useState(0);
 
-    const timeUntilOpenTime = useMemo(() => {
+    const timeUntilOpenTime = React.useMemo(() => {
         let output = null;
         const {
             symbolOpenTime: { openTime },
@@ -16,7 +16,7 @@ export const MarketOpeningTimeCounter = ({ symbolOpenTime }) => {
         return output;
     }, [symbolOpenTime, time]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         const serverTime = ServerTime.getInstance();
         const timer = setInterval(() => setTime(serverTime.getLocalDate().getTime()), 1000);
         return () => clearInterval(timer);
