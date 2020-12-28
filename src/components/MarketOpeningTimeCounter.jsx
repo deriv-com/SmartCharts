@@ -20,7 +20,7 @@ export const MarketOpeningTimeCounter = ({ symbolOpenTime }) => {
         const serverTime = ServerTime.getInstance();
         const timer = setInterval(() => setTime(serverTime.getLocalDate().getTime()), 1000);
         return () => clearInterval(timer);
-    });
+    }, []);
 
     return <span>{timeUntilOpenTime}</span>;
 };
