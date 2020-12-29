@@ -158,10 +158,6 @@ export default class ChartTypeStore {
         if (type.id === this.type.id) {
             return;
         }
-        if (type.id === 'table') {
-            this.mainStore.chartTable.setOpen(true);
-            return;
-        }
         if (type.id === 'spline') {
             // Spline is just a line with tension
             this.stx.chart.tension = this.stx.layout.tension = 0.5;

@@ -102,7 +102,7 @@ Props marked with `*` are **mandatory**:
 | requestAPI\*              | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.                                                                                                                                                                                                                             |
 | requestSubscribe\*        | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`). |
 | requestForget\*           | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.                                                                                                                                                           |
-| id                        | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.                                                                                                           |
+| id                        | Uniquely identifies a chart's indicators, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.                                                                                                           |
 | getMarketsOrder           | Callback function to set/order the active symbols category. `active_symbols` is passed to the callback and an array of markets is expected in return. Allowed values are `forex`, `indices`, `stocks`, `commodities`, `synthetic_index`. Defaults to `undefined`                                                                                                 |
 | symbol                    | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.                                                                                                                                                                                                                                                            |
 | initialData               | Set initial data that the library requires for booting up. Refer [initialData](#initial-data) for usage details.                                                                                                                                                                                                                                                      |
@@ -147,7 +147,6 @@ Props marked with `*` are **mandatory**:
 | theme                        | Sets the chart theme. themes are (`dark\|light`), and default is `light`.                                                             |
 | lang                         | Sets the language. Defaults to `en`.                                                                                                  |
 | position                     | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`. |
-| assetInformation             | Show or hide the asset information. In mobile this will be always be `false`. Defaults to `true`.                                     |
 | enabledNavigationWidget      | Show or hide navigation widget. Defaults to `false`                                                                                   |
 | isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.                                                           |
 
@@ -282,12 +281,12 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ComparisonList, ToolbarWidget } from "@binary-com/smartcharts";
+import { ChartMode, ToolbarWidget } from "@binary-com/smartcharts";
 
 const renderTopWidgets = () => (
   <React.Fragment>
     <div>Hi I just replaced the top widgets!</div>
-    <ComparisonList />
+    <ChartMode />
   </React.Fragment>
 );
 
@@ -300,7 +299,7 @@ const renderBottomWidgets = () => (
 const renderToolbarWidgets = () => (
   <ToolbarWidget position="top">
     <div>Hi I just replaced the top widgets!</div>
-    <ComparisonList />
+    <ChartMode />
   </ToolbarWidget>
 );
 
@@ -318,13 +317,10 @@ Here are the following components you can import:
 
 - Top widgets:
   - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
-  - `<AssetInformation />`
-  - `<ComparisonList />`
 - Chart controls:
   - `<CrosshairToggle enabled={true} />`
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
   - `<StudyLegend />`
-  - `<Comparison />`
   - `<DrawTools />`
   - `<Views />`
   - `<Share />`

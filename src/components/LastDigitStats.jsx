@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from '../store/Connect';
 import '../../sass/components/_last-digits.scss';
 
@@ -10,7 +11,12 @@ const Bar = ({ x, bar }) => (
 );
 
 const LastDigitStats = ({ isVisible, bars, marketDisplayName, shouldMinimiseLastDigits }) => (
-    <div className={`cq-last-digits ${isVisible ? 'show' : ''} ${shouldMinimiseLastDigits ? 'minimised' : ''}`}>
+    <div
+        className={classNames('cq-last-digits', {
+            show: isVisible,
+            minimised: shouldMinimiseLastDigits,
+        })}
+    >
         <div className='cq-bars'>
             {bars.map((bar, idx) => (
                 <Bar

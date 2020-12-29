@@ -16,10 +16,8 @@ const NavigationWidget = ({
     onMouseLeave,
     isScaledOneOne,
     onCrosshairChange,
-}) => {
-    if (!context) return '';
-
-    return (
+}) =>
+    context ? (
         <div className='sc-navigation-widget' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <div
                 className={classNames('sc-navigation-widget__item', 'sc-navigation-widget__item--scale', {
@@ -36,8 +34,7 @@ const NavigationWidget = ({
                 <ZoomoutIcon onClick={zoomOut} />
             </div>
         </div>
-    );
-};
+    ) : null;
 
 export default connect(({ chart, chartSize, navigationWidget }) => ({
     context: chart.context,
