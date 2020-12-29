@@ -405,7 +405,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .smartcharts-dark .sc-input--active{border-color:#85acb0 !important}
 @-webkit-keyframes blinking-network-status{40%{opacity:1}100%{opacity:0}}
 @keyframes blinking-network-status{40%{opacity:1}100%{opacity:0}}
-.barrier-area{padding:13px 0}
+.barrier-area{padding:13px 0;position:absolute;width:100%}
 .chart-line{position:absolute;z-index:35}
 .chart-line.horizontal{width:100%;left:0;font-size:1em}
 .chart-line.horizontal:hover{z-index:105}
