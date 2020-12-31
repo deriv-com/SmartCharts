@@ -249,14 +249,15 @@ const App = () => {
 
     const getMarketsOrder = marketsOrder !== '' && marketsOrder !== 'null' ? () => marketsOrder.split(',') : undefined;
 
-    const [feedCall] = React.useState(
-        urlParams.feedcall_tradingTimes === 'false' ? { tradingTimes: false, activeSymbols: false } : {}
-    );
-    const [initialData] = React.useState(
-        urlParams.initialdata_masterData === 'true'
-            ? { masterData: masterData(), tradingTimes: MockTradingTime, activeSymbols: MockActiveSymbol }
-            : {}
-    );
+    const [feedCall] = React.useState({
+        ...(urlParams.feedcall_tradingTimes === 'false' ? { tradingTimes: false } : {}),
+        ...(urlParams.feedcall_activeSymbols === 'false' ? { activeSymbols: false } : {}),
+    });
+    const [initialData] = React.useState({
+        ...(urlParams.initialdata_masterData === 'true' ? { masterData: masterData() } : {}),
+        ...(urlParams.initialdata_tradingTimes === 'true' ? { tradingTimes: MockTradingTime } : {}),
+        ...(urlParams.initialdata_activeSymbols === 'true' ? { activeSymbols: MockActiveSymbol } : {}),
+    });
 
     const handleNetworkStatus = status => setNetworkStatus(status);
 
