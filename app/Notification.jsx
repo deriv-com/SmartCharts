@@ -1,40 +1,18 @@
 import React from 'react';
 import './_ciq-notification.scss';
 
-class Notification extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { messages: [] };
-        props.notifier.onMessage(this.onMessage);
-        props.notifier.onRemoveByCategory(this.onRemoveByCategory);
-    }
+const Notification = ({ notifier }) => {
+    const [messages, setMessages] = React.useState([]);
+    const messages_ref = React.useRef();
+    messages_ref.current = messages;
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.messages.length !== nextState.messages.length;
-    }
-
-    onMessage = (message, duration = 10) => {
-        const msg = {
-            type: 'warning',
-            ...message,
-            id: new Date().getTime(),
-            hide: false,
-        };
-
-        this.setState(prevState => ({ messages: prevState.messages.concat([msg]) }));
-
-        if (duration > 0) {
-            setTimeout(() => this.onRemove(msg.id), duration * 1000);
-        }
-    };
-
-    onRemove(id) {
-        this.setState(prevState => ({
-            messages: prevState.messages.map(message => ({
+    const onRemove = React.useCallback(id => {
+        setMessages(
+            messages_ref.current.map(message => ({
                 ...message,
                 hide: message.id === id ? true : message.hide,
-            })),
-        }));
+            }))
+        );
 
         /**
             message removing has an animation which animate 300ms so,
@@ -42,39 +20,49 @@ class Notification extends React.Component {
             the animated finish, I remove the message for the store
         */
         setTimeout(() => {
-            this.setState(prevState => ({
-                messages: prevState.messages.filter(x => x.id !== id),
-            }));
+            setMessages(messages_ref.current.filter(x => x.id !== id));
         }, 300);
-    }
+    }, []);
 
-    onRemoveAll() {
-        this.state.messages.forEach(x => {
-            this.onRemove(x.id);
-        });
-    }
+    React.useEffect(() => {
+        const onMessage = (message, duration = 10) => {
+            const msg = {
+                type: 'warning',
+                ...message,
+                id: new Date().getTime(),
+                hide: false,
+            };
 
-    onRemoveByCategory = category => {
-        this.state.messages.map(msg => {
-            if (msg.category === category) {
-                this.onRemove(msg.id);
+            setMessages(messages_ref.current.concat([msg]));
+
+            if (duration > 0) {
+                setTimeout(() => onRemove(msg.id), duration * 1000);
             }
-        });
-    };
+        };
 
-    render() {
-        return (
-            <div className='cq-notifications'>
-                {this.state.messages.map(message => (
-                    <div key={message.id} className={`notification ${message.type} ${message.hide ? 'hide' : ''}`}>
-                        <span className={`ic-icon icon-notification-${message.type}`} />
-                        <div className='text'> {message.text} </div>
-                        <span onClick={() => this.onRemove(message.id)} className='close-icon' />
-                    </div>
-                ))}
-            </div>
-        );
-    }
-}
+        const onRemoveByCategory = category => {
+            messages_ref.current.map(msg => {
+                if (msg.category === category) {
+                    onRemove(msg.id);
+                }
+            });
+        };
+
+        notifier.onMessage(onMessage);
+        notifier.onRemoveByCategory(onRemoveByCategory);
+    }, [notifier, onRemove]);
+
+    return (
+        <div className='cq-notifications'>
+            {messages.map(message => (
+                <div key={message.id} className={`notification ${message.type} ${message.hide ? 'hide' : ''}`}>
+                    <span className={`ic-icon icon-notification-${message.type}`} />
+                    <div className='text'> {message.text} </div>
+                    <span onClick={() => onRemove(message.id)} className='close-icon' />
+                </div>
+            ))}
+        </div>
+    );
+};
 
 export default Notification;

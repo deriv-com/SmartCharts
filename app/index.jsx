@@ -16,7 +16,7 @@ import {
     Marker,
     ToolbarWidget,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
 import 'url-search-params-polyfill';
@@ -106,28 +106,34 @@ const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 
-class App extends Component {
-    startingLanguage = 'en';
-
-    constructor(props) {
-        super(props);
-        this.notifier = new ChartNotifier();
-        const layoutString = localStorage.getItem(`layout-${chartId}`),
-            layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
-        let chartType;
-        let granularity;
-        let endEpoch;
-        let settings = createObjectFromLocalStorage('smartchart-setting');
-
-        if (settings) {
-            settings.language = language;
-            this.startingLanguage = settings.language;
+const App = () => {
+    const startingLanguageRef = React.useRef('en');
+    const settingsRef = React.useRef();
+    const [notifier] = React.useState(new ChartNotifier());
+    const [layoutString] = React.useState(localStorage.getItem(`layout-${chartId}`));
+    const [layout] = React.useState(JSON.parse(layoutString !== '' ? layoutString : '{}'));
+    const initialSettings = React.useMemo(() => {
+        let _settings = createObjectFromLocalStorage('smartchart-setting');
+        if (_settings) {
+            _settings.language = language;
+            startingLanguageRef.current = _settings.language;
         } else {
-            settings = { language };
+            _settings = { language };
         }
+        _settings.activeLanguages = activeLanguages;
 
-        settings.activeLanguages = activeLanguages;
-        if (settings.historical) {
+        if (_settings.historical) {
+            _settings.isHighestLowestMarkerEnabled = false;
+        }
+        return _settings;
+    }, []);
+
+    const [settings, setSettings] = React.useState(initialSettings);
+    settingsRef.current = settings;
+
+    const memoizedValues = React.useMemo(() => {
+        let endEpoch, granularity, chartType;
+        if (settingsRef.current.historical) {
             endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
             chartType = 'mountain';
             granularity = 0;
@@ -142,28 +148,27 @@ class App extends Component {
                 }
             }
         }
-        settings.isHighestLowestMarkerEnabled = false;
-
-        connectionManager.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () =>
-            this.setState({ isConnectionOpened: false })
-        );
-        connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () =>
-            this.setState({ isConnectionOpened: true })
-        );
-
-        this.state = {
-            settings,
-            endEpoch,
+        return {
             chartType,
             granularity,
-            isConnectionOpened: true,
+            endEpoch,
         };
-    }
+    }, [layout]);
 
-    componentDidMount() {
+    const [chartType, setChartType] = React.useState(memoizedValues.chartType);
+    const [granularity, setGranularity] = React.useState(memoizedValues.granularity);
+    const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
+    const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
+    const [networkStatus, setNetworkStatus] = React.useState();
+    const [symbol, setSymbol] = React.useState();
+
+    React.useEffect(() => {
+        connectionManager.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => setIsConnectionOpened(false));
+        connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => setIsConnectionOpened(true));
+
         const networkMonitor = NetworkMonitor.getInstance();
-        networkMonitor.init(requestAPI, this.handleNetworkStatus);
-    }
+        networkMonitor.init(requestAPI, handleNetworkStatus);
+    }, []);
 
     /*
     shouldComponentUpdate(nextProps, nextState) {
@@ -172,138 +177,135 @@ class App extends Component {
     }
     */
 
-    handleNetworkStatus = status => this.setState({ networkStatus: status });
+    const handleNetworkStatus = status => setNetworkStatus(status);
 
-    symbolChange = symbol => {
-        logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, symbol);
-        this.notifier.removeByCategory('activesymbol');
-        this.setState({ symbol });
-    };
+    const saveSettings = React.useCallback(newSettings => {
+        const prevSetting = settingsRef.current;
+        console.log('settings updated:', newSettings);
+        localStorage.setItem('smartchart-setting', JSON.stringify(newSettings));
 
-    saveSettings = settings => {
-        const prevSetting = this.state.settings;
-        console.log('settings updated:', settings);
-        localStorage.setItem('smartchart-setting', JSON.stringify(settings));
-
-        if (!prevSetting.historical && settings.historical) {
-            this.setState({
-                chartType: 'mountain',
-                granularity: 0,
-                endEpoch: new Date(`${today}:00Z`).valueOf() / 1000,
-            });
-        } else if (!settings.historical) {
-            this.handleDateChange('');
+        if (!prevSetting.historical && newSettings.historical) {
+            setChartType('mountain');
+            setGranularity(0);
+            setEndEpoch(new Date(`${today}:00Z`).valueOf() / 1000);
+        } else if (!newSettings.historical) {
+            handleDateChange('');
         }
 
-        this.setState({ settings });
-        if (this.startingLanguage !== settings.language) {
+        setSettings(newSettings);
+
+        if (startingLanguageRef.current !== newSettings.language) {
             // Place language in URL:
             const { origin, search, pathname } = window.location;
             const url = new URLSearchParams(search);
             url.delete('l');
-            url.set('l', settings.language);
+            url.set('l', newSettings.language);
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
+    }, []);
+
+    const handleDateChange = value => {
+        setEndEpoch(value !== '' ? new Date(`${value}:00Z`).valueOf() / 1000 : undefined);
     };
 
-    handleDateChange = value => {
-        this.setState({ endEpoch: value !== '' ? new Date(`${value}:00Z`).valueOf() / 1000 : undefined });
-    };
-    changeGranularity = timePeriod => this.setState({ granularity: timePeriod });
-    changeChartType = chartType => this.setState({ chartType });
-    handleStateChange = (tag, option) =>
+    const handleStateChange = (tag, option) =>
         console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`);
-    renderTopWidgets = () => (
-        <>
-            <ChartTitle onChange={this.symbolChange} isNestedList={isMobile} />
-            {this.state.settings.historical ? <ChartHistory onChange={this.handleDateChange} /> : ''}
-            <Notification notifier={this.notifier} />
-        </>
-    );
 
-    renderControls = () => (
-        <>
-            <ChartSetting />
-        </>
-    );
+    const renderTopWidgets = React.useCallback(() => {
+        const symbolChange = new_symbol => {
+            logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, new_symbol);
+            notifier.removeByCategory('activesymbol');
+            setSymbol(new_symbol);
+        };
+        return (
+            <React.Fragment>
+                <ChartTitle onChange={symbolChange} isNestedList={isMobile} />
+                {settingsRef.current.historical ? <ChartHistory onChange={handleDateChange} /> : ''}
+                <Notification notifier={notifier} />
+            </React.Fragment>
+        );
+    }, [notifier]);
 
-    renderToolbarWidget = () => (
-        <ToolbarWidget>
-            <ChartMode onChartType={this.changeChartType} onGranularity={this.changeGranularity} />
-            <StudyLegend />
-            <Views />
-            <DrawTools />
-            <Share />
-        </ToolbarWidget>
-    );
+    const renderControls = React.useCallback(() => <ChartSetting />, []);
 
-    onMessage = e => {
-        this.notifier.notify(e);
+    const renderToolbarWidget = React.useCallback(() => {
+        const changeGranularity = timePeriod => setGranularity(timePeriod);
+        const changeChartType = _chartType => setChartType(_chartType);
+
+        return (
+            <ToolbarWidget>
+                <ChartMode onChartType={changeChartType} onGranularity={changeGranularity} />
+                <StudyLegend />
+                <Views />
+                <DrawTools />
+                <Share />
+            </ToolbarWidget>
+        );
+    }, []);
+
+    const onMessage = e => {
+        notifier.notify(e);
     };
 
-    getIsChartReady = isChartReady => isChartReady;
+    const getIsChartReady = isChartReady => isChartReady;
 
-    onMarkerRef = ref => {
+    const onMarkerRef = ref => {
         if (ref) {
             ref.setPosition({
-                epoch: this.state.endEpoch,
+                epoch: endEpoch,
             });
         }
     };
 
-    render() {
-        const { settings, isConnectionOpened, symbol, endEpoch, networkStatus } = this.state;
-
-        return (
-            <SmartChart
-                id={chartId}
-                chartStatusListener={isChartReady => this.getIsChartReady(isChartReady)}
-                stateChangeListener={this.handleStateChange}
-                isMobile={isMobile}
-                symbol={symbol}
-                settings={settings}
-                initialData={{
-                    masterData: masterData(),
-                    activeSymbols: MockActiveSymbol,
-                    tradingTimes: MockTradingTime,
-                }}
-                feedCall={{
-                    activeSymbols: false,
-                    tradingTimes: false,
-                }}
-                onMessage={this.onMessage}
-                enableRouting
-                topWidgets={this.renderTopWidgets}
-                toolbarWidget={this.renderToolbarWidget}
-                chartControlsWidgets={this.renderControls}
-                requestAPI={requestAPI}
-                requestSubscribe={requestSubscribe}
-                requestForget={requestForget}
-                endEpoch={endEpoch}
-                chartType={this.state.chartType}
-                granularity={this.state.granularity}
-                crosshair={isMobile ? 0 : null}
-                crosshairTooltipLeftAllow={660}
-                onSettingsChange={this.saveSettings}
-                isConnectionOpened={isConnectionOpened}
-                networkStatus={networkStatus}
-                shouldFetchTradingTimes
-                enabledChartFooter
-            >
-                {endEpoch ? (
-                    <Marker className='chart-marker-historical' markerRef={this.onMarkerRef}>
-                        <span>
-                            {moment(endEpoch * 1000)
-                                .utc()
-                                .format('DD MMMM YYYY - HH:mm')}
-                        </span>
-                    </Marker>
-                ) : (
-                    ''
-                )}
-            </SmartChart>
-        );
-    }
-}
+    return (
+        <SmartChart
+            id={chartId}
+            chartStatusListener={isChartReady => getIsChartReady(isChartReady)}
+            stateChangeListener={handleStateChange}
+            isMobile={isMobile}
+            symbol={symbol}
+            settings={settings}
+            initialData={{
+                masterData: masterData(),
+                activeSymbols: MockActiveSymbol,
+                tradingTimes: MockTradingTime,
+            }}
+            feedCall={{
+                activeSymbols: false,
+                tradingTimes: false,
+            }}
+            onMessage={onMessage}
+            enableRouting
+            topWidgets={renderTopWidgets}
+            toolbarWidget={renderToolbarWidget}
+            chartControlsWidgets={renderControls}
+            requestAPI={requestAPI}
+            requestSubscribe={requestSubscribe}
+            requestForget={requestForget}
+            endEpoch={endEpoch}
+            chartType={chartType}
+            granularity={granularity}
+            crosshair={isMobile ? 0 : null}
+            crosshairTooltipLeftAllow={660}
+            onSettingsChange={saveSettings}
+            isConnectionOpened={isConnectionOpened}
+            networkStatus={networkStatus}
+            shouldFetchTradingTimes
+            enabledChartFooter
+        >
+            {endEpoch ? (
+                <Marker className='chart-marker-historical' markerRef={onMarkerRef}>
+                    <span>
+                        {moment(endEpoch * 1000)
+                            .utc()
+                            .format('DD MMMM YYYY - HH:mm')}
+                    </span>
+                </Marker>
+            ) : (
+                ''
+            )}
+        </SmartChart>
+    );
+};
 
 ReactDOM.render(<App />, document.getElementById('root'));
