@@ -305,7 +305,7 @@ const App = () => {
                     open_market={openMarketRef.current}
                     open={!!openMarketRef.current.category}
                 />
-                {!!settingsRef.historical && <ChartHistory onChange={handleDateChange} />}
+                {!!settingsRef.current.historical && <ChartHistory onChange={handleDateChange} />}
                 <Notification notifier={notifier} />
             </React.Fragment>
         );
