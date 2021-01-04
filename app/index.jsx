@@ -28,7 +28,6 @@ import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
 import NetworkMonitor from './connection/NetworkMonitor';
-import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -262,15 +261,6 @@ class App extends Component {
                 isMobile={isMobile}
                 symbol={symbol}
                 settings={settings}
-                initialData={{
-                    masterData: masterData(),
-                    activeSymbols: MockActiveSymbol,
-                    tradingTimes: MockTradingTime,
-                }}
-                feedCall={{
-                    activeSymbols: false,
-                    tradingTimes: false,
-                }}
                 onMessage={this.onMessage}
                 enableRouting
                 topWidgets={this.renderTopWidgets}
