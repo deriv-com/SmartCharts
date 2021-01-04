@@ -42,9 +42,6 @@ class ChartState {
     chartControlsWidgets;
     enabledChartFooter;
 
-    get comparisonStore() {
-        return this.mainStore.comparison;
-    }
     get stxx() {
         return this.chartStore.stxx;
     }
@@ -103,7 +100,6 @@ class ChartState {
         margin = 0,
         onExportLayout,
         refreshActiveSymbols,
-        removeAllComparisons,
         scrollToEpoch,
         settings,
         shouldFetchTradingTimes = true,
@@ -216,10 +212,6 @@ class ChartState {
                 this.scrollChartToLeft();
                 this.stateChange(STATE.SCROLL_TO_LEFT);
             }
-        }
-
-        if (removeAllComparisons) {
-            this.comparisonStore.removeAll();
         }
 
         if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {

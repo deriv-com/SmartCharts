@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import Scroll from './Scroll.jsx';
 import { connect } from '../store/Connect';
 import NotificationBadge from './NotificationBadge.jsx';
@@ -105,7 +106,7 @@ const DrawTools = ({
             portalNodeId={portalNodeId}
         >
             <DrawToolsMenu.Title>
-                <div className={`sc-dtools__menu ${menuOpen ? 'sc-dtools__menu--active' : ''}`}>
+                <div className={classNames('sc-dtools__menu', { 'sc-dtools__menu--active': menuOpen })}>
                     <DrawToolIcon />
                     <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
                 </div>

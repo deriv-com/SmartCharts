@@ -5,10 +5,7 @@ import LastDigitStats from './LastDigitStats.jsx';
 
 const BottomWidget = ({ bottomWidgets, showLastDigitStats, digits, lastTick }) => {
     const Widget = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
-    if (Widget) {
-        return <Widget digits={digits} tick={toJS(lastTick)} />;
-    }
-    return null;
+    return Widget ? <Widget digits={digits} tick={toJS(lastTick)} /> : null;
 };
 
 export default connect(({ state, lastDigitStats }) => ({

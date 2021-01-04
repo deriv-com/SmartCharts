@@ -3,38 +3,28 @@ import PropTypes from 'prop-types';
 import { connect } from '../store/Connect';
 import '../../sass/components/_bottom-widget-container.scss';
 
-class BottomWidgetsContainer extends React.Component {
-    shouldComponentUpdate({ nextChildren }) {
-        if (React.Children.count(this.props.children) === React.Children.count(nextChildren)) {
-            return false;
-        }
-        return true;
+const BottomWidgetsContainer = ({ bottom, children, isReadyToShow, top, updateChartMargin }) => {
+    React.useEffect(() => {
+        const component = React.Children.only(children);
+
+        updateChartMargin(!!(component && component.props.bottomWidgets));
+    }, [children, updateChartMargin]);
+
+    if (!isReadyToShow) {
+        return null;
     }
 
-    componentDidUpdate() {
-        const component = React.Children.only(this.props.children);
+    const styles = {
+        top,
+        bottom,
+    };
 
-        this.props.updateChartMargin(!!(component && component.props.bottomWidgets));
-    }
-    render() {
-        const { bottom, isReadyToShow, children, top } = this.props;
-
-        if (!isReadyToShow) {
-            return null;
-        }
-
-        const styles = {
-            top,
-            bottom,
-        };
-
-        return (
-            <div className='cq-bottom-ui-widgets' style={styles}>
-                {children}
-            </div>
-        );
-    }
-}
+    return (
+        <div className='cq-bottom-ui-widgets' style={styles}>
+            {children}
+        </div>
+    );
+};
 
 BottomWidgetsContainer.propTypes = {
     bottom: PropTypes.number,

@@ -2,83 +2,81 @@ import React from 'react';
 import { connect } from '../store/Connect';
 import { getUTCDate } from '../utils';
 
-class RawMarker extends React.Component {
-    price = null;
-    date = null;
-    elem = null;
-    ctx = null;
-    stx = null;
-    injectionId = null;
-    hasUnmountedBeforeInjection = false;
-    shouldRedraw = false;
-    canvas_height = 0;
+const RawMarker = props => {
+    const ctx_ref = React.useRef(null);
+    const stx_ref = React.useRef(null);
+    const injection_id_ref = React.useRef(null);
+    const has_unmounted_before_injection_ref = React.useRef(false);
+    const canvas_height_ref = React.useRef(0);
+    const last_epoch_array_ref = React.useRef();
+    const date_array_ref = React.useRef();
+    const props_ref = React.useRef();
+    props_ref.current = props;
+    const { contextPromise, shouldRedraw } = props;
 
-    componentDidMount() {
-        const { contextPromise } = this.props;
+    React.useEffect(() => {
         contextPromise.then(ctx => {
-            if (this.hasUnmountedBeforeInjection) {
+            if (has_unmounted_before_injection_ref.current) {
                 return;
             }
 
-            this.ctx = ctx;
-            this.stx = this.ctx.stx;
+            ctx_ref.current = ctx;
+            stx_ref.current = ctx_ref.current.stx;
 
-            this.injectionId = this.stx.append('draw', this.draw);
-            this.draw();
+            injection_id_ref.current = stx_ref.current.append('draw', draw);
+            draw();
         });
-    }
 
-    componentDidUpdate() {
-        const { shouldRedraw, contextPromise } = this.props;
+        return () => {
+            if (injection_id_ref.current) {
+                // remove the injection on unmount
+                stx_ref.current.removeInjection(injection_id_ref.current);
+                ctx_ref.current = null;
+                stx_ref.current = null;
+            } else {
+                has_unmounted_before_injection_ref.current = true;
+            }
+        };
+    }, [contextPromise]);
 
+    React.useEffect(() => {
         if (shouldRedraw) {
             contextPromise.then(ctx => {
-                if (this.hasUnmountedBeforeInjection) {
+                if (has_unmounted_before_injection_ref.current) {
                     return;
                 }
 
-                this.ctx = ctx;
-                this.stx = this.ctx.stx;
+                ctx_ref.current = ctx;
+                stx_ref.current = ctx_ref.current.stx;
 
-                this.injectionId = this.stx.append('draw', this.draw);
-                this.draw();
+                injection_id_ref.current = stx_ref.current.append('draw', draw);
+                draw();
             });
         }
-    }
+    });
 
-    componentWillUnmount() {
-        if (this.injectionId) {
-            // remove the injection on unmount
-            this.stx.removeInjection(this.injectionId);
-            this.ctx = null;
-            this.stx = null;
-        } else {
-            this.hasUnmountedBeforeInjection = true;
-        }
-    }
-
-    draw = () => {
-        if (!this.ctx) {
+    const draw = () => {
+        if (!ctx_ref.current) {
             return;
         }
 
-        const { threshold = 0, epoch_array, draw_callback, price_array = [] } = this.props;
+        const { threshold = 0, epoch_array, draw_callback, price_array = [] } = props_ref.current;
 
-        if (!this.last_epoch_array || this.last_epoch_array.toString() !== epoch_array.toString()) {
-            this.date_array = epoch_array.map(epoch => ({
+        if (!last_epoch_array_ref.current || last_epoch_array_ref.current.toString() !== epoch_array.toString()) {
+            date_array_ref.current = epoch_array.map(epoch => ({
                 date: CIQ.strToDateTime(getUTCDate(epoch)),
                 epoch,
             }));
-            this.last_epoch_array = epoch_array;
+            last_epoch_array_ref.current = epoch_array;
         }
 
-        const stx = this.stx;
+        const stx = stx_ref.current;
         const chart = stx.chart;
         const show = !threshold || stx.layout.candleWidth >= threshold;
 
         if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
             const points = [];
-            this.date_array.forEach(({ date, epoch }) => {
+            date_array_ref.current.forEach(({ date, epoch }) => {
                 const tick_idx = stx.tickFromDate(date, chart);
 
                 // ChartIQ doesn't support placing markers in the middle of ticks.
@@ -130,22 +128,20 @@ class RawMarker extends React.Component {
             const prices = price_array.map(price => stx.pixelFromPrice(price * 1, chart.panel));
             const canvas = stx.chart.context.canvas;
             if (canvas.style.height.indexOf(canvas.height) < 0) {
-                this.canvas_height = canvas.height;
+                canvas_height_ref.current = canvas.height;
             }
 
             draw_callback({
                 ctx: stx.chart.context,
-                canvas_height: this.canvas_height,
+                canvas_height: canvas_height_ref.current,
                 points,
                 prices,
             });
         }
     };
 
-    render() {
-        return null;
-    }
-}
+    return null;
+};
 
 export default connect(({ chart }) => ({
     contextPromise: chart.contextPromise,

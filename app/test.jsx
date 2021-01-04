@@ -3,7 +3,6 @@ import {
     SmartChart,
     ChartMode,
     StudyLegend,
-    Comparison,
     Views,
     CrosshairToggle,
     ChartSize,
@@ -169,7 +168,6 @@ class App extends Component {
         }
         settings.activeLanguages = activeLanguage ? activeLanguagesList : null;
         if (settings.historical) {
-            this.removeAllComparisons();
             endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
             chartType = 'line';
             isChartTypeCandle = false;
@@ -240,17 +238,6 @@ class App extends Component {
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
     */
-    removeAllComparisons = () => {
-        try {
-            const layoutString = localStorage.getItem(`layout-${chartId}`),
-                layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
-
-            layout.symbols.splice(1, layout.symbols.length - 1);
-            localStorage.setItem(`layout-${chartId}`, JSON.stringify(layout));
-        } catch (e) {
-            console.log(e);
-        }
-    };
 
     handleNetworkStatus = status => this.setState({ networkStatus: status });
 
@@ -272,7 +259,6 @@ class App extends Component {
                 granularity: 0,
                 endEpoch: new Date(`${today}:00Z`).valueOf() / 1000,
             });
-            this.removeAllComparisons();
         } else if (!settings.historical) {
             this.handleDateChange('');
         }
@@ -342,7 +328,6 @@ class App extends Component {
                 }}
             />
             <StudyLegend portalNodeId='portal-node' />
-            {this.state.settings.historical ? '' : <Comparison />}
             <DrawTools portalNodeId='portal-node' />
             <Views />
             <Share portalNodeId='portal-node' />
@@ -636,7 +621,6 @@ class App extends Component {
                         chartControlsWidgets={null}
                         enabledNavigationWidget={enabledNavigationWidget}
                         enabledChartFooter={this.state.enabledFooter}
-                        removeAllComparisons={settings.historical}
                         topWidgets={this.renderTopWidgets}
                         settings={settings}
                         initialData={initialData}
