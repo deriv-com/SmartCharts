@@ -1,8 +1,9 @@
 import React from 'react';
+import classNames from 'classnames';
 import { connect } from '../store/Connect';
 
 export const InlineLoader = ({ children, className, enabled = true, ...props }) => (
-    <div className={`sc-inline-loader ${enabled ? 'sc-inline-loader--enable' : ''} ${className}`} {...props}>
+    <div className={classNames('sc-inline-loader', className, { 'sc-inline-loader--enable': enabled })} {...props}>
         {children}
         {enabled && (
             <div className='sc-inline-loader__inner'>
@@ -16,7 +17,7 @@ export const InlineLoader = ({ children, className, enabled = true, ...props }) 
 );
 
 const Loader = ({ isActive, currentState }) => (
-    <div className={`sc-loader ${isActive ? 'show' : ''}`}>
+    <div className={classNames('sc-loader', { show: isActive })}>
         <div className='sc-loader-spin' />
         <div className='sc-loader-status'>{currentState}</div>
     </div>

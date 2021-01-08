@@ -6,7 +6,6 @@ import {
     // TradeEndLine,
     ChartTypes,
     StudyLegend,
-    Comparison,
     Views,
     CrosshairToggle,
     setSmartChartsPublicPath,
@@ -52,7 +51,6 @@ const renderControls = () => (
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
         <StudyLegend />
-        <Comparison />
         <DrawTools />
         <Views />
         <Share />

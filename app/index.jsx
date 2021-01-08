@@ -28,7 +28,6 @@ import Notification from './Notification.jsx';
 import ChartNotifier from './ChartNotifier.js';
 import ChartHistory from './ChartHistory.jsx';
 import NetworkMonitor from './connection/NetworkMonitor';
-import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
 
 setSmartChartsPublicPath('./dist/');
 
@@ -128,7 +127,6 @@ class App extends Component {
 
         settings.activeLanguages = activeLanguages;
         if (settings.historical) {
-            this.removeAllComparisons();
             endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
             chartType = 'mountain';
             granularity = 0;
@@ -172,17 +170,6 @@ class App extends Component {
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
     */
-    removeAllComparisons = () => {
-        try {
-            const layoutString = localStorage.getItem(`layout-${chartId}`),
-                layout = JSON.parse(layoutString !== '' ? layoutString : '{}');
-
-            layout.symbols.splice(1, layout.symbols.length - 1);
-            localStorage.setItem(`layout-${chartId}`, JSON.stringify(layout));
-        } catch (e) {
-            console.log(e);
-        }
-    };
 
     handleNetworkStatus = status => this.setState({ networkStatus: status });
 
@@ -203,7 +190,6 @@ class App extends Component {
                 granularity: 0,
                 endEpoch: new Date(`${today}:00Z`).valueOf() / 1000,
             });
-            this.removeAllComparisons();
         } else if (!settings.historical) {
             this.handleDateChange('');
         }
@@ -275,18 +261,8 @@ class App extends Component {
                 isMobile={isMobile}
                 symbol={symbol}
                 settings={settings}
-                initialData={{
-                    masterData: masterData(),
-                    activeSymbols: MockActiveSymbol,
-                    tradingTimes: MockTradingTime,
-                }}
-                feedCall={{
-                    activeSymbols: false,
-                    tradingTimes: false,
-                }}
                 onMessage={this.onMessage}
                 enableRouting
-                removeAllComparisons={settings.historical}
                 topWidgets={this.renderTopWidgets}
                 toolbarWidget={this.renderToolbarWidget}
                 chartControlsWidgets={this.renderControls}

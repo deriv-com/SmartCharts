@@ -4,7 +4,6 @@ import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes.jsx';
 import ChartMode from './components/ChartMode.jsx';
 import StudyLegend from './components/StudyLegend.jsx';
-import Comparison from './components/Comparison.jsx';
 import Views from './components/Views.jsx';
 import CrosshairToggle from './components/CrosshairToggle.jsx';
 import Timeperiod from './components/Timeperiod.jsx';
@@ -13,9 +12,7 @@ import DrawTools from './components/DrawTools.jsx';
 import ChartSetting from './components/ChartSetting.jsx';
 import Share from './components/Share.jsx';
 import SmartChart from './components/SmartChart.jsx';
-import ComparisonList from './components/ComparisonList.jsx';
 import ChartTitle from './components/ChartTitle.jsx';
-import AssetInformation from './components/AssetInformation.jsx';
 import FastMarker from './components/FastMarker.jsx';
 import RawMarker from './components/RawMarker.jsx';
 import ToolbarWidget from './components/ToolbarWidget.jsx';
@@ -29,15 +26,12 @@ function setSmartChartsPublicPath(path) {
 const Marker = FastMarker;
 
 export {
-    AssetInformation,
     Barrier,
     ChartSetting,
     ChartSize,
     ChartTitle,
     ChartTypes,
     ChartMode,
-    Comparison,
-    ComparisonList,
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,
@@ -56,15 +50,12 @@ export {
 };
 
 export default {
-    AssetInformation,
     Barrier,
     ChartSetting,
     ChartSize,
     ChartTitle,
     ChartTypes,
     ChartMode,
-    Comparison,
-    ComparisonList,
     createObjectFromLocalStorage,
     CrosshairToggle,
     DrawTools,

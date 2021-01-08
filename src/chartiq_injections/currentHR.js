@@ -2,6 +2,8 @@
 export const drawCurrentPriceLine = () => {
     CIQ.ChartEngine.prototype.drawCurrentHR = function () {
         if (this.runPrepend('drawCurrentHR', arguments)) return;
+        this.labelType = 'currentSpot';
+        this.yaxisLabelStyle = 'roundRectArrow';
         var backgroundColor, color;
         var mainSeriesRenderer = this.mainSeriesRenderer || {};
         if (mainSeriesRenderer.noCurrentHR) return;

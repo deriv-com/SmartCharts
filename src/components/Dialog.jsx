@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
 import { CloseIcon } from './Icons.jsx';
 import '../../sass/components/_dialog.scss';
 
@@ -15,7 +16,7 @@ const Dialog = ({
     useEffect(() => updateCloseCallback(handleCloseDialog));
     return (
         <div
-            className={`sc-dialog ${className} ${enableTabular ? 'sc-dialog--tabular' : ''}`}
+            className={classNames('sc-dialog', className, { 'sc-dialog--tabular': enableTabular })}
             onClick={onContainerClick}
         >
             {title && (

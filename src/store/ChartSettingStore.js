@@ -28,7 +28,6 @@ export default class ChartSettingStore {
     languages = [];
     defaultLanguage = {};
     onSettingsChange;
-    @observable assetInformation = true;
     @observable language = null;
     @observable position = 'bottom';
     @observable theme = 'light';
@@ -42,7 +41,6 @@ export default class ChartSettingStore {
             return;
         }
         const {
-            assetInformation,
             countdown,
             historical,
             language,
@@ -76,9 +74,6 @@ export default class ChartSettingStore {
         if (language !== undefined) {
             this.setLanguage(language);
         }
-        if (assetInformation !== undefined) {
-            this.setAssetInformation(assetInformation);
-        }
         if (historical !== undefined) {
             this.setHistorical(historical);
         }
@@ -93,7 +88,6 @@ export default class ChartSettingStore {
     saveSetting() {
         if (this.onSettingsChange) {
             this.onSettingsChange({
-                assetInformation: this.assetInformation,
                 countdown: this.countdown,
                 historical: this.historical,
                 language: this.language.key,
@@ -167,15 +161,6 @@ export default class ChartSettingStore {
             this.mainStore.chart.resizeScreen();
         }, 10);
         this.menu.setOpen(false);
-    }
-
-    @action.bound setAssetInformation(value) {
-        if (this.assetInformation === value) {
-            return;
-        }
-        this.assetInformation = value;
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `${value ? 'Show' : 'Hide'} Asset Information`);
-        this.saveSetting();
     }
 
     @action.bound showCountdown(value) {
