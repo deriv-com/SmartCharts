@@ -92,8 +92,8 @@ const ChartTypes = ({
     );
 };
 
-export default connect(({ chartType, state, chart }) => ({
-    chartId: state.chartId,
+export default connect(({ chartType, chart }) => ({
+    chartId: chart.chartId,
     ChartTypeMenu: chartType.ChartTypeMenu,
     ChartTypeList: chartType.ChartTypeList,
     menuOpen: chartType.menu.open,

@@ -13,8 +13,10 @@ export default class LastDigitStatsStore {
                 // TODO: call onMasterDataUpdate on symobl change.
                 this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
                 this.mainStore.chart.feed.onMasterDataReinitialize(() => {
-                    this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
-                    this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+                    if (this.context && this.mainStore.chart.feed) {
+                        this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
+                        this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
+                    }
                 });
             }
         );
@@ -40,7 +42,7 @@ export default class LastDigitStatsStore {
     }
 
     @computed get decimalPlaces() {
-        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places || 2;
     }
 
     @computed get isVisible() {
@@ -56,6 +58,8 @@ export default class LastDigitStatsStore {
     }
 
     @action.bound async updateLastDigitStats() {
+        if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
+
         this.digits = [];
         this.bars = [];
         this.latestData = [];
@@ -74,6 +78,7 @@ export default class LastDigitStatsStore {
             });
             this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
         }
+        if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
 
         this.latestData.forEach(price => {
             const lastDigit = (+price).toFixed(this.decimalPlaces).slice(-1);
@@ -83,6 +88,8 @@ export default class LastDigitStatsStore {
     }
 
     @action.bound onMasterDataUpdate({ Close, tick }) {
+        if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
+
         this.lastTick = tick;
         if (this.marketDisplayName !== this.lastSymbol) {
             this.lastSymbol = this.marketDisplayName;

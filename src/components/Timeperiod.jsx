@@ -86,8 +86,8 @@ const Timeperiod = ({
     }
 };
 
-export default connect(({ timeperiod: s, state, chartType, loader }) => ({
-    chartId: state.chartId,
+export default connect(({ timeperiod: s, chart, chartType, loader }) => ({
+    chartId: chart.chartId,
     timeUnit: s.timeUnit,
     interval: s.interval,
     isMobile: s.mainStore.chart.isMobile,

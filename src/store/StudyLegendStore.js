@@ -382,7 +382,7 @@ export default class StudyLegendStore {
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
     renderLegend = () => {
-        if (!this.shouldRenderLegend()) {
+        if (!this.context || !this.shouldRenderLegend()) {
             return;
         }
 
