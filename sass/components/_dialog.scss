@@ -240,6 +240,9 @@
         left: 10px;
         width: calc(100% - 20px);
 
+        .react-tabs__tab-panel {
+            height: 430px;
+        }
         .cq-titlebar {
             height: 40px;
             display: flex;
@@ -278,7 +281,9 @@
                 .sc-dialog__head--info {
                     position: absolute;
                     left: 50px;
-                    width: calc(100% - 114px);
+                    width: calc(100% - 90px);
+                    padding: 10px 8px;
+                    font-size: 14px;
                     @include themify($themes) {
                         background: themed('DialogTabularHeadBg');
                     }

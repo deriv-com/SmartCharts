@@ -256,6 +256,14 @@
 }
 
 .smartcharts-mobile {
+    .sc-studies {
+        .react-tabs__tab-panel {
+            height: 380px !important;
+        }
+        .sc-dialog {
+            top: 100px !important;
+        }
+    }
     .tabs--vertical .react-tabs__tab-list {
         width: 50px;
         min-width: 50px;

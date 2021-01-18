@@ -129,7 +129,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
                                 categories={searchedCategories}
                                 onSelectItem={onSelectItem}
                                 onInfoItem={onInfoItem}
-                                disableAll={activeItems.length === 5}
+                                disableAll={activeItems.length === (isMobile ? 2 : 5)}
                             />
                         )
                         : (<NoResultView text={searchQuery} />)
