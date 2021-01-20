@@ -7473,7 +7473,7 @@ CIQ.ChartEngine.prototype.findHighlights = function (isTap, clearOnly) {
 		this.setMeasure();
 	}
 
-	if (highlightedDraggable && !myPanel.noDrag) {
+	if (highlightedDraggable && myPanel && !myPanel.noDrag) {
 		if (this.longHoldTookEffect && !this.cancelLongHold) {
 			if (highlightedDraggable.params) {
 				// series, highlight relatives
