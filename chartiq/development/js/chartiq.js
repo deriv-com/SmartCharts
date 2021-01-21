@@ -14628,7 +14628,7 @@ CIQ.ChartEngine.prototype.adjustBackingStore = function (canvas, context) {
 };
 
 CIQ.ChartEngine.prototype.reconstituteBackingStore = function () {
-	if (!this.useBackingStore) return;
+	if (!this.useBackingStore || !this.backing) return;
 	var canvases = [this.chart.canvas];
 	if (this.useBackgroundCanvas) canvases.push(this.chart.backgroundCanvas);
 	var backing = this.backing;
