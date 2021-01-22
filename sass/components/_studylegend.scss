@@ -24,6 +24,14 @@
         padding: 8px 0px 8px 8px;
         box-sizing: border-box;
 
+        > h3 {
+            font-size: 14px;
+            color: #999999;
+            font-weight: normal;
+            padding: 0 8px;
+            margin: 18px 0;
+            display: none;
+        }
         &__head {
             display: flex;
             justify-content: space-between;
@@ -173,7 +181,7 @@
                     line-height: 1.43;
                     letter-spacing: normal;
                     text-align: right;
-                    margin-left: 8px;
+                    margin-left: 16px;
                 }
                 .ic-icon {
                     width: 16px;
@@ -258,7 +266,7 @@
 .smartcharts-mobile {
     .sc-studies {
         .react-tabs__tab-panel {
-            height: 380px !important;
+            height: 425px !important;
         }
         .sc-dialog {
             top: 100px !important;
@@ -293,6 +301,10 @@
     }
     .sc-studies__panel {
         width: 100%;
+
+        > h3 {
+            display: block;
+        }
     }
     .sc-studies__panel__content--active .sc-studies__list__item {
         padding: 4px;

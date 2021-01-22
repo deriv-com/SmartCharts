@@ -156,6 +156,7 @@ const TabularDisplay = ({ onSelectTab, selectedTab, categories, searchedCategori
         {categories.map(Category => (
             <TabPanel key={`panel--${Category.id}`}>
                 <div className="sc-studies__panel">
+                    <h3>{Category.name}</h3>
                     <IndicatorList
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
