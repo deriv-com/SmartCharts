@@ -181,7 +181,7 @@
                     line-height: 1.43;
                     letter-spacing: normal;
                     text-align: right;
-                    margin-left: 16px;
+                    margin-left: 8px;
                 }
                 .ic-icon {
                     width: 16px;
@@ -249,6 +249,11 @@
             background: themed('IndicatorInfoBg');
         }
 
+        &__content {
+            background: #ff0000;
+            margin: -20px -20px 0;
+            padding: 0;
+        }
         p {
             font-size: 14px;
             font-weight: normal;
@@ -267,9 +272,6 @@
     .sc-studies {
         .react-tabs__tab-panel {
             height: 425px !important;
-        }
-        .sc-dialog {
-            top: 100px !important;
         }
     }
     .tabs--vertical .react-tabs__tab-list {
@@ -311,14 +313,24 @@
     }
     .sc-studies__list__item .info {
         padding: 8px 0 8px 8px;
-    }
-    .sc-studies__list__item .info .text {
-        padding-left: 0px;
+
+        .text {
+            padding-left: 0px;
+        }
     }
     .sc-studies__list__item .ic-info {
         opacity: 1;
     }
+    .sc-studies__list__item .detail span {
+        margin-left: 16px;
+    }
     .sc-studies__info {
         width: calc(100% - 50px);
+
+        > p {
+            max-height: 360px;
+            height: 360px;
+            overflow-y: scroll;
+        }
     }
 }

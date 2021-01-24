@@ -230,9 +230,15 @@ const StudyLegend = ({
 
                 {infoItem && (
                     <div className="sc-studies__info">
-                        <p>
-                            {infoItem.description}
-                        </p>
+                        <Scroll
+                            autoHide
+                            height="360px"
+                            className="studies__info__content"
+                        >
+                            <p>
+                                {infoItem.description}
+                            </p>
+                        </Scroll>
                         <button
                             type="button"
                             className="sc-btn sc-btn--primary sc-btn--w100"
