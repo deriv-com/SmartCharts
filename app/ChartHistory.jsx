@@ -4,71 +4,68 @@ import DatePicker from './DateTimePicker/DatePicker.jsx';
 import TimePicker from './DateTimePicker/TimePicker.jsx';
 import './chart-history.scss';
 
-class ChartHistory extends React.PureComponent {
-    constructor(props) {
-        super(props);
-        this.state = {
-            date: moment().format('YYYY/MM/DD'),
-            focusOnDate: false,
-            focusOnTime: false,
-            time: '00:00',
-        };
-    }
+const ChartHistory = React.memo(({ onChange }) => {
+    const [date, setDate] = React.useState(moment().format('YYYY/MM/DD'));
+    const [focusOnDate, setFocusOnDate] = React.useState(false);
+    const [focusOnTime, setFocusOnTime] = React.useState(false);
+    const [time, setTime] = React.useState('00:00');
 
-    componentDidMount() {
-        this.setState({
-            focusOnDate: true,
-        });
-    }
+    React.useEffect(() => {
+        setFocusOnDate(true);
+    }, []);
 
-    onChangeDate = ({ target }) => {
-        const date = target.value;
-        this.setState({ date, focusOnDate: false, focusOnTime: true }, this.updateStore);
+    const onChangeDate = ({ target }) => {
+        const new_date = target.value;
+        setDate(new_date);
+        setFocusOnDate(false);
+        setFocusOnTime(true);
+        updateStore(new_date, time);
     };
 
-    onChangeTime = ({ target }) => {
-        const time = target.value;
-        this.setState({ time, focusOnDate: false, focusOnTime: false }, this.updateStore);
+    const onChangeTime = ({ target }) => {
+        const new_time = target.value;
+        setTime(new_time);
+        setFocusOnDate(false);
+        setFocusOnTime(false);
+        updateStore(date, new_time);
     };
 
-    onDisableFocus = () => {
-        this.setState({ focusOnDate: false, focusOnTime: false });
+    const onDisableFocus = () => {
+        setFocusOnDate(false);
+        setFocusOnTime(false);
     };
 
-    updateStore() {
-        const { date, time } = this.state;
-        this.props.onChange(`${date} ${time}`);
-    }
+    const updateStore = (new_date, new_time) => {
+        onChange(`${new_date} ${new_time}`);
+    };
 
-    render() {
-        return (
-            <div className='ciq-chart-history'>
-                <strong>{t.translate('Historical Data')}:</strong>
-                <DatePicker
-                    placeholder={t.translate('select date')}
-                    name='date'
-                    format='DD MMMM YYYY'
-                    focus={this.state.focusOnDate}
-                    disableFocus={this.onDisableFocus}
-                    has_today_btn
-                    value={this.state.date}
-                    onChange={this.onChangeDate}
-                    min_date={moment.utc().subtract(1, 'years').toDate()}
-                    max_date={moment.utc().toDate()}
-                />
-                <TimePicker
-                    placeholder='time'
-                    name='time'
-                    focus={this.state.focusOnTime}
-                    disableFocus={this.onDisableFocus}
-                    is_clearable
-                    start_date={moment(this.state.date, 'YYYY/MM/DD').valueOf() / 1000}
-                    value={this.state.time}
-                    onChange={this.onChangeTime}
-                />
-            </div>
-        );
-    }
-}
+    return (
+        <div className='ciq-chart-history'>
+            <strong>{t.translate('Historical Data')}:</strong>
+            <DatePicker
+                placeholder={t.translate('select date')}
+                name='date'
+                format='DD MMMM YYYY'
+                focus={focusOnDate}
+                disableFocus={onDisableFocus}
+                has_today_btn
+                value={date}
+                onChange={onChangeDate}
+                min_date={moment.utc().subtract(1, 'years').toDate()}
+                max_date={moment.utc().toDate()}
+            />
+            <TimePicker
+                placeholder='time'
+                name='time'
+                focus={focusOnTime}
+                disableFocus={onDisableFocus}
+                is_clearable
+                start_date={moment(date, 'YYYY/MM/DD').valueOf() / 1000}
+                value={time}
+                onChange={onChangeTime}
+            />
+        </div>
+    );
+});
 
 export default ChartHistory;
