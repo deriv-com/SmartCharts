@@ -181,6 +181,7 @@ export default class BarrierStore {
     }
 
     @action.bound destructor() {
+        if (!this.context) return;
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
