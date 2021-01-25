@@ -202,6 +202,8 @@ export default class DrawToolsStore {
     }
 
     @action.bound computeActiveDrawTools() {
+        if (!this.context) return;
+
         const items = {};
         const ignoreBarType = ['vertical', 'horizontal'];
         const groups = {};

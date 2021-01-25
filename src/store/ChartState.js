@@ -64,6 +64,10 @@ class ChartState {
         return this.mainStore.chart;
     }
 
+    get rootElement() {
+        return this.chartStore.rootElement;
+    }
+
     constructor(mainStore) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
@@ -78,7 +82,6 @@ class ChartState {
         this.stxx.append('zoomOut', this.setEnableScroll.bind(this));
         this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
-        this.rootNode = this.mainStore.chart.rootNode;
         this.granularity = this.chartStore.granularity;
         this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
@@ -92,7 +95,6 @@ class ChartState {
         chartType,
         clearChart,
         endEpoch,
-        id,
         isAnimationEnabled = true,
         isConnectionOpened,
         isStaticChart,
@@ -117,7 +119,6 @@ class ChartState {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
-        this.chartId = id;
         this.chartStatusListener = chartStatusListener;
         this.stateChangeListener = stateChangeListener;
         this.isAnimationEnabled = isAnimationEnabled;
@@ -288,15 +289,14 @@ class ChartState {
     }
 
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
+        if (!this.stxx) return;
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
         this.stxx.setStyle('stx_yaxis', 'color', Theme[`${theme}_chart_text`]);
         this.stxx.setStyle('stx_xaxis', 'color', Theme[`${theme}_chart_text`]);
         this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
-        if (!this.rootNode) {
-            this.rootNode = this.mainStore.chart.rootNode;
-        }
-        this.rootNode.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
+
+        this.rootElement.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);
@@ -338,7 +338,11 @@ class ChartState {
     @action.bound setChartIsReady(isChartReady) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
-            this.stateChange(STATE.READY);
+
+            if (isChartReady) {
+                this.stateChange(STATE.READY);
+            }
+
             if (this.chartStatusListener && typeof this.chartStatusListener === 'function') {
                 this.chartStatusListener(isChartReady);
             }
@@ -383,15 +387,15 @@ class ChartState {
     }
 
     saveLayout() {
-        if (!this.chartId || !this.stxx) return;
+        if (!this.chartStore.chartId || !this.stxx) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.chartId}`, json);
+        CIQ.localStorageSetItem(`layout-${this.chartStore.chartId}`, json);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
+        let layoutData = createObjectFromLocalStorage(`layout-${this.chartStore.chartId}`);
 
         if (!layoutData || !layoutData.symbols.length) return false;
 
@@ -451,6 +455,7 @@ class ChartState {
         this.stxx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
+                if (!this.context) return;
                 if (layoutData.tension) {
                     this.stxx.chart.tension = layoutData.tension;
                 }
@@ -472,19 +477,19 @@ class ChartState {
     }
 
     saveDrawings() {
-        if (!this.chartId) return;
+        if (!this.chartStore.chartId) return;
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(`${symbol}-${this.chartId}`);
+            CIQ.localStorage.removeItem(`${symbol}-${this.chartStore.chartId}`);
         } else {
-            CIQ.localStorageSetItem(`${symbol}-${this.chartId}`, JSON.stringify(obj));
+            CIQ.localStorageSetItem(`${symbol}-${this.chartStore.chartId}`, JSON.stringify(obj));
         }
     }
 
     restoreDrawings() {
         if (this.stxx && this.stxx.chart) {
-            const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartId}`);
+            const drawings = createObjectFromLocalStorage(`${this.stxx.chart.symbol}-${this.chartStore.chartId}`);
             if (drawings) {
                 this.stxx.importDrawings(drawings);
                 this.stxx.draw();
@@ -496,6 +501,8 @@ class ChartState {
     }
 
     scrollChartToLeft = (leftTick, force) => {
+        if (!this.stxx?.chart) return;
+
         const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
         this.stxx.chart.entryTick = null;
 

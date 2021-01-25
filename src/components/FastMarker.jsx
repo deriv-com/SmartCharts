@@ -126,7 +126,7 @@ const FastMarker = props => {
                 injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
                 updateCSS();
             });
-        } else if (injection_id_ref.current) {
+        } else if (injection_id_ref.current && stx_ref.current) {
             // remove the injection on unmount
             stx_ref.current.removeInjection(injection_id_ref.current);
             ctx_ref.current = null;
