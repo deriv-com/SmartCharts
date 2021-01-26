@@ -273,6 +273,10 @@
         .react-tabs__tab-panel {
             height: 425px !important;
         }
+        .sc-dialog {
+            overflow-y: scroll;
+            max-height: calc(100vh - 90px);
+        }
     }
     .tabs--vertical .react-tabs__tab-list {
         width: 50px;
