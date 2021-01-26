@@ -10,9 +10,13 @@ class CrosshairStore {
         when(() => this.context, this.onContextReady);
     }
 
-    @computed get activeSymbol() { return this.mainStore.chart.currentActiveSymbol; }
+    @computed get activeSymbol() {
+        return this.mainStore.chart.currentActiveSymbol;
+    }
 
-    @computed get decimalPlaces() { return this.activeSymbol.decimal_places; }
+    @computed get decimalPlaces() {
+        return this.activeSymbol.decimal_places;
+    }
 
     get showOhl() {
         return this.stx.layout.timeUnit !== 'second';
@@ -41,7 +45,7 @@ class CrosshairStore {
 
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
-        const state = (typeof storedState !== 'number') ? 2 : storedState;
+        const state = typeof storedState !== 'number' ? 2 : storedState;
         this.setCrosshairState(state);
 
         this.stx.append('headsUpHR', this.renderCrosshairTooltip);
@@ -78,7 +82,9 @@ class CrosshairStore {
     }
 
     @action.bound setCrosshairState(state) {
-        if (!this.context) { return; }
+        if (!this.context) {
+            return;
+        }
 
         this.state = state;
         this.setFloatPriceLabelStyle();
@@ -98,9 +104,7 @@ class CrosshairStore {
 
         const { crossX, crossY } = stx.controls;
         // crosshairs are not on
-        if ((crossX && crossX.style.display === 'none')
-            || (crossY && crossY.style.display === 'none')
-        ) {
+        if ((crossX && crossX.style.display === 'none') || (crossY && crossY.style.display === 'none')) {
             return;
         }
 
@@ -115,8 +119,7 @@ class CrosshairStore {
 
         let goodBar;
         let overBar = true;
-        let highPx,
-            lowPx;
+        let highPx, lowPx;
 
         if (data !== undefined && data && data.DT) {
             goodBar = true;
@@ -137,16 +140,19 @@ class CrosshairStore {
             }
         }
 
-        if (!(stx.insideChart
-            && stx.layout.crosshair
-            && stx.displayCrosshairs
-            && !stx.overXAxis
-            && !stx.overYAxis
-            && !stx.openDialog
-            && !stx.activeDrawing
-            && !stx.grabbingScreen
-            && goodBar
-            && overBar)
+        if (
+            !(
+                stx.insideChart &&
+                stx.layout.crosshair &&
+                stx.displayCrosshairs &&
+                !stx.overXAxis &&
+                !stx.overYAxis &&
+                !stx.openDialog &&
+                !stx.activeDrawing &&
+                !stx.grabbingScreen &&
+                goodBar &&
+                overBar
+            )
         ) {
             this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
             this.lastBar = {};
@@ -164,13 +170,14 @@ class CrosshairStore {
             top: CIQ.ChartEngine.crosshairY - this.stx.top,
             rows,
         });
-    }
+    };
 
     calculateRows(data) {
         const { stx } = this;
         const dupMap = {};
         const fields = [];
-        { // Access main chart panel and yAxis in this scope:
+        {
+            // Access main chart panel and yAxis in this scope:
             const { panel } = stx.chart;
             const { yAxis } = panel;
             fields.push({
@@ -200,7 +207,6 @@ class CrosshairStore {
                 dupMap.Open = dupMap.High = dupMap.Low = 1;
             }
         }
-
 
         if (this.showSeries) {
             const renderers = stx.chart.seriesRenderers;
@@ -322,19 +328,23 @@ class CrosshairStore {
             }
 
             const fieldName = displayName.replace(/^(Result )(.*)/, '$2');
-            if ((dsField || dsField === 0)
-                && (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
+            if (
+                (dsField || dsField === 0) &&
+                (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)
             ) {
                 let fieldValue = '';
                 if (dsField.Close || dsField.Close === 0) {
                     dsField = dsField.Close;
                 }
                 if (dsField.constructor === Number) {
-                    if (!yAxis) { // raw value
+                    if (!yAxis) {
+                        // raw value
                         fieldValue = dsField.toFixed(labelDecimalPlaces);
-                    } else if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) { // in comparison mode with custom formatter
+                    } else if (yAxis.originalPriceFormatter && yAxis.originalPriceFormatter.func) {
+                        // in comparison mode with custom formatter
                         fieldValue = yAxis.originalPriceFormatter.func(stx, panel, dsField, labelDecimalPlaces);
-                    } else if (yAxis.priceFormatter && yAxis.priceFormatter !== CIQ.Comparison.priceFormat) { // using custom formatter
+                    } else if (yAxis.priceFormatter && yAxis.priceFormatter !== CIQ.Comparison.priceFormat) {
+                        // using custom formatter
                         fieldValue = yAxis.priceFormatter(stx, panel, dsField, labelDecimalPlaces);
                     } else {
                         fieldValue = stx.formatYAxisPrice(dsField, panel, labelDecimalPlaces, yAxis);
@@ -367,12 +377,12 @@ class CrosshairStore {
         return rows;
     }
 
-    updateVisibility = (visible) => {
+    updateVisibility = visible => {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
 
         if (this.state === 2 && visible) crosshair.classList.add('active');
         else if (this.state === 2) crosshair.classList.remove('active');
-    }
+    };
 
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
@@ -382,7 +392,7 @@ class CrosshairStore {
         crosshair.style.transform = `translate(${left}px, ${top}px)`;
 
         const tooltipRightLimit = this.mainStore.state.crosshairTooltipLeftAllow || MAX_TOOLTIP_WIDTH;
-        const arrow = (left <= tooltipRightLimit) ? 'arrow-left' : 'arrow-right';
+        const arrow = left <= tooltipRightLimit ? 'arrow-left' : 'arrow-right';
         if (arrow !== this.prev_arrow) {
             crosshair.classList.remove(this.prev_arrow);
             crosshair.classList.add(arrow);
@@ -392,12 +402,16 @@ class CrosshairStore {
         // if there is a need to update the rows.
         if (rows !== null) {
             const content = crosshair.querySelector('.cq-crosshair-content');
-            content.innerHTML = rows.map(r => `
+            content.innerHTML = rows
+                .map(
+                    r => `
                 <div class="row">
                     <span>${r.name !== 'DT' ? r.name : r.value}</span>
                     <span>${r.name !== 'DT' ? r.value : ''}</span>
                 </div>
-            `).join('');
+            `
+                )
+                .join('');
         }
     }
 }

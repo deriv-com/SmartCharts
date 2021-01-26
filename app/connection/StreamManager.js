@@ -59,13 +59,15 @@ class StreamManager {
     _cacheTick(key, { ohlc, tick }) {
         if (ohlc) {
             const candles = this._tickHistoryCache[key].candles;
-            const {
-                close, open_time: epoch, high, low, open,
-            } = ohlc;
+            const { close, open_time: epoch, high, low, open } = ohlc;
             const candle = {
-                close, high, low, open, epoch,
+                close,
+                high,
+                low,
+                open,
+                epoch,
             };
-            if (+candles[candles.length - 1].epoch === +candle.epoch) {
+            if (candles[candles.length - 1] && +candles[candles.length - 1].epoch === +candle.epoch) {
                 candles[candles.length - 1] = candle;
             } else {
                 candles.push(candle);
@@ -98,11 +100,10 @@ class StreamManager {
         if (this._streamIds[key]) {
             const id = this._streamIds[key];
             this._beingForgotten[key] = true;
-            this._connection.send({ forget: id })
-                .then(() => {
-                    delete this._beingForgotten[key];
-                    delete this._streamIds[key];
-                });
+            this._connection.send({ forget: id }).then(() => {
+                delete this._beingForgotten[key];
+                delete this._streamIds[key];
+            });
         }
 
         if (this._tickHistoryCache[key]) {
@@ -117,14 +118,16 @@ class StreamManager {
         const subscribePromise = this._connection.send(request);
         this._tickHistoryPromises[key] = subscribePromise;
 
-        subscribePromise.then((response) => {
-            this._onReceiveTickHistory(response);
-            if (response.error) {
+        subscribePromise
+            .then(response => {
+                this._onReceiveTickHistory(response);
+                if (response.error) {
+                    this._forgetStream(key);
+                }
+            })
+            .catch(() => {
                 this._forgetStream(key);
-            }
-        }).catch(() => {
-            this._forgetStream(key);
-        });
+            });
 
         stream.onNoSubscriber(() => this._forgetStream(key));
 
@@ -144,7 +147,8 @@ class StreamManager {
         }
 
         const responseStart = tickHistoryResponse.echo_req.start;
-        if (responseStart > request.start) { // request needs more data
+        if (responseStart > request.start) {
+            // request needs more data
             const patchRequest = { ...request };
             delete patchRequest.subscribe;
             const { history, candles } = tickHistoryResponse;
@@ -181,7 +185,8 @@ class StreamManager {
 
         if (history) {
             const { prices, times } = history;
-            clone = { ...others,
+            clone = {
+                ...others,
                 history: {
                     prices: prices.slice(0),
                     times: times.slice(0),

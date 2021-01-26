@@ -1,7 +1,7 @@
-import React            from 'react';
-import classNames       from 'classnames';
-import { connect }      from '../store/Connect';
-import CrosshairToggle  from './CrosshairToggle.jsx';
+import React from 'react';
+import classNames from 'classnames';
+import { connect } from '../store/Connect';
+import CrosshairToggle from './CrosshairToggle.jsx';
 import '../../sass/components/_navigation-widget.scss';
 
 import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons.jsx';
@@ -16,15 +16,9 @@ const NavigationWidget = ({
     onMouseLeave,
     isScaledOneOne,
     onCrosshairChange,
-}) => {
-    if (!context) return '';
-
-    return (
-        <div
-            className="sc-navigation-widget"
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
-        >
+}) =>
+    context ? (
+        <div className='sc-navigation-widget' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <div
                 className={classNames('sc-navigation-widget__item', 'sc-navigation-widget__item--scale', {
                     'sc-navigation-widget__item--hidden': !enableScale,
@@ -34,16 +28,13 @@ const NavigationWidget = ({
             >
                 <ScaleIcon />
             </div>
-            <div
-                className="sc-navigation-widget__item sc-navigation-widget__item--zoom"
-            >
+            <div className='sc-navigation-widget__item sc-navigation-widget__item--zoom'>
                 <ZoominIcon onClick={zoomIn} />
                 <CrosshairToggle onChange={onCrosshairChange} />
                 <ZoomoutIcon onClick={zoomOut} />
             </div>
         </div>
-    );
-};
+    ) : null;
 
 export default connect(({ chart, chartSize, navigationWidget }) => ({
     context: chart.context,

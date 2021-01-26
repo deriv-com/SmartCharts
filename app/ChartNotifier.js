@@ -1,5 +1,3 @@
-
-
 export default class ChartNotifier {
     messageCallback = null;
     removeByCategoryCallback = null;

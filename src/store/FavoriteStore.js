@@ -4,7 +4,9 @@ import { createObjectFromLocalStorage } from '../utils';
 
 function loadFavorites() {
     const local = createObjectFromLocalStorage('cq-favorites');
-    if (!local) { return; }
+    if (!local) {
+        return;
+    }
 
     const favorites = {};
     for (const categoryName in local) {
@@ -19,7 +21,9 @@ function loadFavorites() {
 }
 
 class FavoriteStore {
-    static get EVENT_FAVORITES_UPDATE() { return 'EVENT_FAVORITES_UPDATE'; }
+    static get EVENT_FAVORITES_UPDATE() {
+        return 'EVENT_FAVORITES_UPDATE';
+    }
 
     @observable favoritesMap = loadFavorites() || {
         indicators: {},

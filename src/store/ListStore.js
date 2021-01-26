@@ -2,9 +2,7 @@ import { action } from 'mobx';
 import { connect } from './Connect';
 
 export default class ListStore {
-    constructor({
-        getContext, getItems, onItemSelected,
-    }) {
+    constructor({ getContext, getItems, onItemSelected }) {
         this.getContext = getContext;
         this.getItems = getItems; // items : [{id: '', text: '', disabled?: false, active?: false}]
         this.onItemSelected = onItemSelected;

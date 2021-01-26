@@ -59,7 +59,7 @@ class DelayedSubscription extends Subscription {
             console.error('Unable to update delayed feed without epoch from last tick');
             this._endTimer();
         }
-    }
+    };
 }
 
 export default DelayedSubscription;

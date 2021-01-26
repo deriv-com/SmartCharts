@@ -10,18 +10,14 @@ const Tooltip = ({
     ...props
 }) => (
     <div
-        className={classNames(
-            'sc-tooltip',
-            className,
-            {
-                [`sc-tooltip--${position}`]: !!position,
-                'sc-tooltip--enable': enabled,
-            },
-        )}
+        className={classNames('sc-tooltip', className, {
+            [`sc-tooltip--${position}`]: !!position,
+            'sc-tooltip--enable': enabled,
+        })}
         {...props}
     >
         {children}
-        <div className="sc-tooltip__inner">{content}</div>
+        <div className='sc-tooltip__inner'>{content}</div>
     </div>
 );
 

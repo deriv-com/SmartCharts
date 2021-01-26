@@ -2,41 +2,25 @@ import React from 'react';
 import { displayMilliseconds } from '../utils/index';
 import ServerTime from '../utils/ServerTime';
 
-export class MarketOpeningTimeCounter extends React.Component {
-    constructor(props) {
-        super(props);
-        this.serverTime = ServerTime.getInstance();
+export const MarketOpeningTimeCounter = ({ symbolOpenTime }) => {
+    const [time, setTime] = React.useState(0);
 
-        this.state = {
-            time: this.serverTime.getLocalDate().getTime(),
-        };
-    }
-    componentDidMount() {
-        this.timerInterval = setInterval(
-            () => this.tick(),
-            1000,
-        );
-    }
-    componentWillUnmount() {
-        clearInterval(this.timerInterval);
-    }
-    tick() {
-        this.setState({
-            time: this.serverTime.getLocalDate().getTime(),
-        });
-    }
-    // 86400000 = 24 hour * 60 min * 60s * 1000ms
-    render() {
-        let timeUntilOpenTime = null;
-        const symbolOpenTime = this.props.symbolOpenTime.symbolOpenTime || {};
-        const openTime = symbolOpenTime.openTime || null;
+    const timeUntilOpenTime = React.useMemo(() => {
+        let output = null;
+        const {
+            symbolOpenTime: { openTime },
+        } = symbolOpenTime || {};
         if (openTime) {
-            timeUntilOpenTime = displayMilliseconds(openTime.getTime() - this.state.time);
+            output = displayMilliseconds(openTime.getTime() - time);
         }
-        return (
-            <span>
-                {timeUntilOpenTime}
-            </span>
-        );
-    }
-}
+        return output;
+    }, [symbolOpenTime, time]);
+
+    React.useEffect(() => {
+        const serverTime = ServerTime.getInstance();
+        const timer = setInterval(() => setTime(serverTime.getLocalDate().getTime()), 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    return <span>{timeUntilOpenTime}</span>;
+};
