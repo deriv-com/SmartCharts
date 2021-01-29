@@ -52,15 +52,12 @@ export default class BottomWidgetsContainerStore {
                 marginBottom += 64;
             }
 
-            if (
-                this.stx.chart.yAxis.initialMarginTop !== marginTop ||
-                this.stx.chart.yAxis.initialMarginBottom !== marginBottom
-            ) {
-                this.stx.chart.yAxis.initialMarginTop = marginTop;
-                this.stx.chart.yAxis.initialMarginBottom = marginBottom;
-                this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
-                this.stx.draw();
-            }
+            this.mainStore.chart.setChartInitialMargin({
+                top: marginTop,
+                bottom: marginBottom,
+                draw: true,
+            });
+
             if (!this.mainStore.state.shouldMinimiseLastDigits) {
                 this.mainStore.state.setShouldMinimiseLastDigit(this.stx.chart.panel.height < 460);
             }

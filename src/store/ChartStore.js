@@ -165,6 +165,24 @@ class ChartStore {
         };
     };
 
+    setChartInitialMargin(params) {
+        const { yAxisMargin } = this.stateStore;
+        const top = params?.top || yAxisMargin.top;
+        const bottom = params?.bottom || yAxisMargin.bottom;
+
+        if (this.stxx.chart.yAxis.initialMarginTop === top && this.stxx.chart.yAxis.initialMarginBottom === bottom) {
+            return;
+        }
+
+        this.stxx.chart.yAxis.initialMarginTop = top;
+        this.stxx.chart.yAxis.initialMarginBottom = bottom;
+        this.stxx.calculateYAxisMargins(this.stxx.chart.panel.yAxis);
+
+        if (params?.draw) {
+            this.stxx.draw();
+        }
+    }
+
     init = (rootNode, props) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);

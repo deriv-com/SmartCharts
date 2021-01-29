@@ -541,6 +541,7 @@ class ChartState {
                 this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
+            this.mainStore.chart.setChartInitialMargin();
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         } else {

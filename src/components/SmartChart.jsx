@@ -3,11 +3,16 @@ import { Provider } from 'mobx-react';
 import MainStore from '../store';
 import Chart from './Chart.jsx';
 
-const mainStore = new MainStore();
-const SmartChart = ({ children, ...props }) => (
-    <Provider {...mainStore}>
-        <Chart {...props}>{children}</Chart>
-    </Provider>
-);
+const SmartChart = ({ children, ...props }) => {
+    const customStore = React.useRef();
+    if (!customStore.current) {
+        customStore.current = new MainStore();
+    }
+    return (
+        <Provider {...customStore.current}>
+            <Chart {...props}>{children}</Chart>
+        </Provider>
+    );
+};
 
 export default SmartChart;
