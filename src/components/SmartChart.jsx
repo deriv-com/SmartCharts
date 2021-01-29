@@ -4,14 +4,12 @@ import MainStore from '../store';
 import Chart from './Chart.jsx';
 
 const SmartChart = ({ children, ...props }) => {
-    const store = React.useRef();
-
-    if (!store.current) {
-        store.current = new MainStore();
+    const customStore = React.useRef();
+    if (!customStore.current) {
+        customStore.current = new MainStore();
     }
-
     return (
-        <Provider {...store.current}>
+        <Provider {...customStore.current}>
             <Chart {...props}>{children}</Chart>
         </Provider>
     );
