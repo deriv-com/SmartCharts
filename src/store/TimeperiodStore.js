@@ -88,6 +88,7 @@ export default class TimeperiodStore {
     }
 
     updateCountdown() {
+        if (!this.context) return;
         const stx = this.context.stx;
         this.remain = null;
         this.clearCountdown();
@@ -167,6 +168,7 @@ export default class TimeperiodStore {
     }
 
     @action.bound updateDisplay() {
+        if (!this.context) return;
         const stx = this.context.stx;
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;

@@ -24,6 +24,14 @@
         padding: 8px 0px 8px 8px;
         box-sizing: border-box;
 
+        > h3 {
+            font-size: 14px;
+            color: #999999;
+            font-weight: normal;
+            padding: 0 8px;
+            margin: 18px 0;
+            display: none;
+        }
         &__head {
             display: flex;
             justify-content: space-between;
@@ -241,6 +249,10 @@
             background: themed('IndicatorInfoBg');
         }
 
+        &__content {
+            margin: -20px -20px 0;
+            padding: 0;
+        }
         p {
             font-size: 14px;
             font-weight: normal;
@@ -251,6 +263,80 @@
         }
         .btn {
             width: 100%;
+        }
+    }
+}
+
+.smartcharts-mobile {
+    .stx-panel-control {
+        left: 5px;
+    }
+    .sc-studies {
+        .react-tabs__tab-panel {
+            height: 425px !important;
+        }
+        .sc-dialog {
+            overflow-y: scroll;
+            max-height: calc(100vh - 90px);
+        }
+    }
+    .tabs--vertical .react-tabs__tab-list {
+        width: 50px;
+        min-width: 50px;
+
+        .react-tabs__tab {
+            span:not(.sc-notification-badge):not(.ic-icon) {
+                display: none;
+            }
+            .sc-notification-badge {
+                position: absolute;
+                top: 2px;
+                left: 19px;
+            }
+            .ic-icon {
+                width: 22px;
+                height: 22px;
+
+                svg {
+                    width: 22px;
+                    height: 22px;
+                }
+            }
+        }
+    }
+    .tabs--vertical .react-tabs__tab-panel {
+        width: calc(100% - 50px);
+    }
+    .sc-studies__panel {
+        width: 100%;
+
+        > h3 {
+            display: block;
+        }
+    }
+    .sc-studies__panel__content--active .sc-studies__list__item {
+        padding: 4px;
+    }
+    .sc-studies__list__item .info {
+        padding: 8px 0 8px 8px;
+
+        .text {
+            padding-left: 0px;
+        }
+    }
+    .sc-studies__list__item .ic-info {
+        opacity: 1;
+    }
+    .sc-studies__list__item .detail span {
+        margin-left: 16px;
+    }
+    .sc-studies__info {
+        width: calc(100% - 50px);
+
+        > p {
+            max-height: 360px;
+            height: 360px;
+            overflow-y: scroll;
         }
     }
 }

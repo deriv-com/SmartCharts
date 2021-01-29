@@ -69,7 +69,7 @@ export default class ChartTitleStore {
         return this.mainStore.chart.currentActiveSymbol;
     }
     @computed get isSymbolOpen() {
-        return this.currentSymbol.exchange_is_open;
+        return this.currentSymbol?.exchange_is_open;
     }
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;

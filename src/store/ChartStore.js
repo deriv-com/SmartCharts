@@ -88,6 +88,10 @@ class ChartStore {
         return this.currentActiveSymbol.decimal_places;
     }
 
+    get rootElement() {
+        return document.getElementById(this.chartId);
+    }
+
     currentCloseQuote = () => {
         if (!this.stxx) {
             return;
@@ -158,7 +162,8 @@ class ChartStore {
         const chartHeight = this.chartNode.offsetHeight;
         const isSmallScreen = chartHeight < 780;
         const denominator = num >= 5 ? num : num + 1;
-        const indicatorsHeight = Math.round((chartHeight - (isSmallScreen ? 340 : 320)) / denominator);
+        const reservedHeight = this.isMobile ? 160 : 320;
+        const indicatorsHeight = Math.round((chartHeight - (reservedHeight + (isSmallScreen ? 20 : 0))) / denominator);
         return {
             height: indicatorsHeight,
             percent: indicatorsHeight / chartHeight,
@@ -169,6 +174,7 @@ class ChartStore {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
+        this.chartId = props.id || 'base-chart';
 
         if (window.CIQ) {
             this._initChart(rootNode, props);
@@ -575,6 +581,29 @@ class ChartStore {
                 this.positionSticky(m);
             }
         };
+        // In some cases we faced some cases that color1 or color2 get undefined
+        // and this cause the application to crash, as a result, we we set below
+        // condition to slient that error
+        CIQ.colorsEqual = function (color1, color2) {
+            if (!color2 || !color1 || typeof color1 !== 'string' || typeof color2 !== 'string') {
+                return false;
+            } // Modified by SmartChart team
+            if (color1 === color2) return true;
+            if (!color1 && !color2) return true;
+            if (!color1 || !color2) return false;
+            if (color1 === 'transparent') color1 = 'rgba(0,0,0,0)';
+            if (color2 === 'transparent') color2 = 'rgba(0,0,0,0)';
+            const alpha = /^rgba\(.*,(.+)\)/;
+            let rgba1 = color1.match(alpha);
+            let rgba2 = color2.match(alpha);
+            rgba1 = rgba1 ? parseFloat(rgba1[1]) : 1;
+            rgba2 = rgba2 ? parseFloat(rgba2[1]) : 1;
+            if (rgba1 !== rgba2) return false;
+
+            const first = CIQ.colorToHex(color1);
+            const second = CIQ.colorToHex(color2);
+            return first.toLowerCase() === second.toLowerCase();
+        };
 
         const {
             symbol,
@@ -909,7 +938,6 @@ class ChartStore {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
         }
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
-
         if (
             isSymbolAvailable &&
             symbolObj.symbol === this.currentActiveSymbol.symbol &&
@@ -1010,7 +1038,7 @@ class ChartStore {
     loadChartWithInitalData(symbol, masterData) {
         if (!masterData) return;
 
-        const layoutData = createObjectFromLocalStorage(`layout-${this.stateStore.chartId}`);
+        const layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
         if (!layoutData || !layoutData.symbols.length) return;
         const layout_symbol = layoutData.symbols[0].symbol;
 
@@ -1131,6 +1159,10 @@ class ChartStore {
             this.stxx.destroy();
             this.stxx = null;
         }
+
+        this.currentActiveSymbol = null;
+        this.contextPromise = null;
+        this.context = null;
     }
 
     @action.bound openFullscreen() {

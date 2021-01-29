@@ -45,6 +45,8 @@ const Chart = props => {
     const defaultTopWidgets = () => <ChartTitle />;
 
     const {
+        id,
+        chartId,
         DrawToolsSettingsDialog,
         StudySettingsDialog,
         isCandle,
@@ -77,6 +79,7 @@ const Chart = props => {
 
     return (
         <div
+            id={id || chartId}
             className={classNames('smartcharts', `smartcharts-${theme}`, {
                 'smartcharts--navigation-widget': enabledNavigationWidget,
                 'smartcharts--loading': isLoading,
@@ -151,6 +154,7 @@ const Chart = props => {
 };
 
 export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }) => ({
+    chartId: chart.chartId,
     init: chart.init,
     destroy: chart.destroy,
     StudySettingsDialog: studies.StudySettingsDialog,

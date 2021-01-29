@@ -74,8 +74,8 @@ const ChartTitle = props => {
     return ChartTitleContainer;
 };
 
-export default connect(({ chartTitle: c, chart, state, chartSetting }) => ({
-    chartId: state.chartId,
+export default connect(({ chartTitle: c, chart, chartSetting }) => ({
+    chartId: chart.chartId,
     ChartTitleMenu: c.ChartTitleMenu,
     currentSymbol: c.currentSymbol,
     isMobile: chart.isMobile,
