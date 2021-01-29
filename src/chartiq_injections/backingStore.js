@@ -18,6 +18,7 @@ export const BackingStore = () => {
     };
 
     CIQ.ChartEngine.prototype.reconstituteBackingStore = function () {
+        // Added check for backing
         if (!this.useBackingStore || !this.backing) return;
         const canvases = [this.chart.canvas];
         if (this.useBackgroundCanvas) canvases.push(this.chart.backgroundCanvas);
