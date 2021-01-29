@@ -125,11 +125,15 @@ export default class StudyLegendStore {
         return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
     }
 
+    get maxAllowedItem() {
+        return this.mainStore.chart.isMobile ? 2 : 5;
+    }
+
     @action.bound removeExtraStudies() {
         if (this.stx.layout && this.stx.layout.studies) {
             Object.keys(this.stx.layout.studies).forEach((study, idx) => {
                 const type = this.stx.layout.studies[study].type;
-                if (idx >= 5 || this.excludedStudies[type]) {
+                if (idx >= this.maxAllowedItem || this.excludedStudies[type]) {
                     setTimeout(() => {
                         CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
                         this.renderLegend();
@@ -142,7 +146,7 @@ export default class StudyLegendStore {
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
-        if (this.stx.layout && addedIndicator < 5) {
+        if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
             const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
             CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
             const sd = CIQ.Studies.addStudy(this.stx, item);
@@ -337,6 +341,20 @@ export default class StudyLegendStore {
             }
 
             const panelObj = this.stx.panels[id];
+            if (this.mainStore.chart.isMobile) {
+                if (panelObj.up.className.indexOf('show') !== -1) {
+                    panelObj.up.className = 'stx-btn-panel';
+                }
+                if (panelObj.down.className.indexOf('show') !== -1) {
+                    panelObj.down.className = 'stx-btn-panel';
+                }
+                if (panelObj.solo.className.indexOf('show') !== -1) {
+                    panelObj.solo.className = 'stx-btn-panel';
+                }
+                if (panelObj.close.className.indexOf('show') !== -1) {
+                    panelObj.close.className = 'stx-btn-panel';
+                }
+            }
             const sd = this.stx.layout.studies[id];
             const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
             if (sd) {
