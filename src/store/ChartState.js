@@ -286,6 +286,7 @@ class ChartState {
 
     @action.bound setChartClosed(isClosed) {
         this.isChartClosed = isClosed;
+        this.stateChange(STATE.MARKET_STATE_CHANGE, { symbol: this.symbol, isClosed });
     }
 
     setChartTheme(theme, isChartClosed = this.isChartClosed) {
