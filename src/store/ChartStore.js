@@ -832,23 +832,25 @@ class ChartStore {
                 })
             );
         });
+    }
 
+    setResizeEvent = () => {
         if ('ResizeObserver' in window) {
             this.resizeObserver = new ResizeObserver(this.resizeScreen);
-            this.resizeObserver.observe(rootNode);
+            this.resizeObserver.observe(this.rootNode);
         } else {
             import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(
                 ({ default: ResizeObserver }) => {
                     window.ResizeObserver = ResizeObserver;
-                    if (stxx.isDestroyed || !rootNode) {
+                    if (this.stxx.isDestroyed || !this.rootNode) {
                         return;
                     }
                     this.resizeObserver = new ResizeObserver(this.resizeScreen);
-                    this.resizeObserver.observe(rootNode);
+                    this.resizeObserver.observe(this.rootNode);
                 }
             );
         }
-    }
+    };
 
     onMarketOpenClosedChange = changes => {
         const symbolObjects = this.stxx.getSymbols().map(item => item.symbolObject);

@@ -344,6 +344,7 @@ class ChartState {
             this.isChartReady = isChartReady;
 
             if (isChartReady) {
+                this.chartStore.setResizeEvent();
                 this.stateChange(STATE.READY);
             }
 
