@@ -89,7 +89,7 @@
         "md5-file": "^4.0.0",
         "mini-css-extract-plugin": "^0.8.0",
         "mkdirp": "^0.5.1",
-        "mobx": "^5.13.0",
+        "mobx": "^5.15.7",
         "mobx-react": "5.2.8",
         "mocha": "^7.1.2",
         "node-sass": "^4.14.1",
@@ -138,8 +138,8 @@
     },
     "peerDependencies": {
         "@babel/polyfill": "^7.0.0",
-        "mobx": "^5.0.3",
-        "mobx-react": "^5.1.2",
+        "mobx": "^5.15.7",
+        "mobx-react": "^6.2.2",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-transition-group": "^2.5.0"
