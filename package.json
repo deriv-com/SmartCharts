@@ -89,7 +89,7 @@
         "md5-file": "^4.0.0",
         "mini-css-extract-plugin": "^0.8.0",
         "mkdirp": "^0.5.1",
-        "mobx": "^5.13.0",
+        "mobx": "^5.15.7",
         "mobx-react": "5.2.8",
         "mocha": "^7.1.2",
         "node-sass": "^4.14.1",
@@ -104,9 +104,9 @@
         "postcss-svgo": "^4.0.2",
         "prettier": "^2.1.2",
         "raw-loader": "^3.1.0",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
-        "react-transition-group": "^4.2.2",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-transition-group": "^4.3.0",
         "regenerator-runtime": "^0.13.3",
         "resize-observer-polyfill": "^1.5.1",
         "rimraf": "^2.6.3",
@@ -138,11 +138,11 @@
     },
     "peerDependencies": {
         "@babel/polyfill": "^7.0.0",
-        "mobx": "^5.0.3",
+        "mobx": "^5.15.7",
         "mobx-react": "^5.1.2",
-        "react": "^16.4.0",
-        "react-dom": "^16.4.0",
-        "react-transition-group": "^2.5.0"
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-transition-group": "^4.3.0"
     },
     "resolutions": {
         "js-yaml": "^3.13.1",
