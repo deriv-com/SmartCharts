@@ -1,12 +1,16 @@
 {
-    "name": "@binary-com/smartcharts",
-    "version": "0.6.1",
+    "name": "@deriv/deriv-charts",
+    "version": "0.3.15",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
     "contributors": [
         "Lee Zhen Yong <bruce@binary.com>",
         "Mahboobeh Mohammadi <mahboobeh@binary.com>",
-        "Shayan Yazdanpanah <shayan@binary.com>"
+        "Shayan Yazdanpanah <shayan@binary.com>",
+        "Morteza Tavanarad <morteza@binary.com>",
+        "Kelly Anyi <kelly@binary.com>",
+        "Bala Krishna <bala@binary.com>",
+        "Zaki Hanafiah <zaki@binary.com>"
     ],
     "license": "ISC",
     "repository": {
@@ -16,7 +20,7 @@
     "homepage": "https://github.com/binary-com/SmartCharts#readme",
     "keywords": [
         "charts",
-        "binary.com"
+        "deriv"
     ],
     "nyc": {
         "sourceMap": false,
