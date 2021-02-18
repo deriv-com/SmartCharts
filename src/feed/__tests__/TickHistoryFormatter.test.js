@@ -1,5 +1,4 @@
-import { expect } from 'chai';
-import { describe, it } from 'mocha';
+import React from 'react';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
 const historyCandleResponse = {
@@ -151,23 +150,23 @@ const tickTickResponseResult = {
 describe('TickHistoryFormatter test', () => {
     it('Test parse history style="candles"', () => {
         const history = TickHistoryFormatter.formatHistory(historyCandleResponse);
-        expect(history).to.deep.equal(historyCandleResponseResult);
+        expect(history).toMatchObject(historyCandleResponseResult);
     });
 
     it('Test parse history style="ticks"', () => {
         const history = TickHistoryFormatter.formatHistory(historyTicksResponse);
-        expect(history).to.deep.equal(historyTicksResponseResult);
+        expect(history).toMatchObject(historyTicksResponseResult);
     });
 
     it('Test parse tick style="candles"', () => {
         const tick = TickHistoryFormatter.formatTick(tickCandleResponse);
         delete tick.ohlc;
-        expect(tick).to.deep.equal(tickCandleResponseResult);
+        expect(tick).toMatchObject(tickCandleResponseResult);
     });
 
     it('Test parse tick style="ticks"', () => {
         const tick = TickHistoryFormatter.formatTick(tickTickResponse);
         delete tick.tick;
-        expect(tick).to.deep.equal(tickTickResponseResult);
+        expect(tick).toMatchObject(tickTickResponseResult);
     });
 });

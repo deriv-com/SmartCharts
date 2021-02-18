@@ -4,7 +4,7 @@ import { CloseCircleIcon, SearchIcon } from './Icons.jsx';
 import '../../sass/components/_search.scss';
 
 const SearchInput = ({ placeholder, value, searchInput, searchInputClassName, onChange }) => (
-    <div className={classNames('sc-search-input', { active: value.trim() !== '' })}>
+    <div className={classNames('sc-search-input', { active: value?.trim() !== '' })}>
         <input
             className={searchInputClassName}
             value={value}
