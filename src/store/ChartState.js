@@ -92,6 +92,7 @@ class ChartState {
         enabledChartFooter,
         chartStatusListener,
         stateChangeListener,
+        getIndicatorHeightRatio,
         chartType,
         clearChart,
         endEpoch,
@@ -129,6 +130,7 @@ class ChartState {
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.showLastDigitStats = showLastDigitStats;
+        this.getIndicatorHeightRatio = getIndicatorHeightRatio;
 
         if (
             networkStatus &&

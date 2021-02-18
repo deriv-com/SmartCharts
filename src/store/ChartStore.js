@@ -158,16 +158,44 @@ class ChartStore {
         setTimeout(this.updateCanvas, this.isMobile ? 500 : 100);
     }
 
+    /**
+     * Get the height ratio of each active indicator in the bottom of chart
+     *
+     * this method get the number of active indicator that locate in the bottom
+     * chart and by considering the chart height return the height that each
+     * indicator should have.
+     * if the getIndicatorHeightRatio callback passed to the chart from parent
+     * component, use that callback to calculate the height ratio. the callback
+     * should return an object that contain {height, percent} properties. otherwise
+     * the chart ignore it and calculate the ratio by itself
+     *
+     * @version 0.3.16
+     * @param {number} num: count of active indicator in the bottom of chart
+     * @returns {number} height: height of each active indicator in the bottom
+     * @returns {number} percent: percent of height of an indicator compare to the chart heigh
+     */
     indicatorHeightRatio = num => {
-        const chartHeight = this.chartNode.offsetHeight;
-        const isSmallScreen = chartHeight < 780;
-        const denominator = num >= 5 ? num : num + 1;
-        const reservedHeight = this.isMobile ? 160 : 320;
-        const indicatorsHeight = Math.round((chartHeight - (reservedHeight + (isSmallScreen ? 20 : 0))) / denominator);
-        return {
-            height: indicatorsHeight,
-            percent: indicatorsHeight / chartHeight,
-        };
+        let ratio = {};
+
+        if (typeof this.stateStore.getIndicatorHeightRatio === 'function') {
+            ratio = this.stateStore.getIndicatorHeightRatio(this.chartNode.offsetHeight, num);
+        }
+
+        if (!ratio || !ratio.height || !ratio.percent) {
+            const chartHeight = this.chartNode.offsetHeight;
+            const isSmallScreen = chartHeight < 780;
+            const denominator = num >= 5 ? num : num + 1;
+            const reservedHeight = this.isMobile ? 160 : 320;
+            const indicatorsHeight = Math.round(
+                (chartHeight - (reservedHeight + (isSmallScreen ? 20 : 0))) / denominator
+            );
+            ratio = {
+                height: indicatorsHeight,
+                percent: indicatorsHeight / chartHeight,
+            };
+        }
+
+        return ratio;
     };
 
     init = (rootNode, props) => {
