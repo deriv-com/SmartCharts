@@ -1,10 +1,10 @@
 /**
- *	8.1.0
- *	Generation date: 2020-11-03T13:22:07.088Z
- *	Client name: binary ltd
- *	Package Type: Technical Analysis
+ *	8.2.0
+ *	Generation date: 2021-02-19T12:58:54.487Z
+ *	Client name: deriv limited
+ *	Package Type: Technical Analysis 8.2
  *	License type: annual
- *	Expiration date: "2021/04/01"
+ *	Expiration date: "2022/04/01"
  *	Domain lock: ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot","deriv.com","derivcrypto.com"]
  *	iFrame lock: true
  */
@@ -23,7 +23,7 @@
 
 import {CIQ} from "../js/chartiq.js";
 
-let __js_addons_animation_ = (_exports) => {
+let __js_addons_advanced_animation_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -33,7 +33,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
 /**
  * Add-On that animates the chart.
  *
- * Requires `addOns.js`
+ * Requires *addOns.js*.
  *
  * The chart is animated in three ways:
  * 1.  The current price pulsates
@@ -66,7 +66,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * ```
  * stxx.mainSeriesRenderer.supportsAnimation=false;
  * ```
- * Keep in mind that changing to a different chart type, may once again enable animation. You can override this by [adding an event listener]{@link CIQ.ChartEngine#addEventListener} on [layout changes]{@link layoutEventListener}.
+ * Keep in mind that changing to a different chart type, may once again enable animation. You can override this by [adding an event listener]{@link CIQ.ChartEngine#addEventListener} on [layout changes]{@link CIQ.ChartEngine~layoutEventListener}.
  *
  * @param {object} config The constructor parameters
  * @param {CIQ.ChartEngine} config.stx The chart object
@@ -515,7 +515,7 @@ CIQ.Animation =
 
 };
 
-let __js_addons_continuousZoom_ = (_exports) => {
+let __js_addons_advanced_continuousZoom_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -523,91 +523,106 @@ let __js_addons_continuousZoom_ = (_exports) => {
 var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
 
 /**
-	 * Add-On that allows a "continuous zoom", changing periodicities as the maxTicks and/or candlewidth hits a set boundary.
-	 * 
-	 * Although this feature is available for all chart styles, it shows best on continuous renderings such as lines and mountains, vs. candles and bars. 
-	 * This is because some users may find the changes in candle width, that takes place as the same range is displayed in a different periodicity, unnatural. 
-	 * The effect can be mitigated by increasing the number of boundaries so periodicities change more often, preventing large candle width changes; 
-	 * and by using the periodicity roll up feature instead of fetching new data from a quote feed. See examples.
-	 * 
-	 * See {@link CIQ.ChartEngine#setPeriodicity} and {@link CIQ.ChartEngine#createDataSet}
-	 *
-	 * Requires `addOns.js`
-	 *
-	 * The feature will not work without supplying at least one element within the periodicities array,
-	 * and at least one property within the boundaries object.
-	 *
-	 * @param {object} params Configuration parameters
-	 * @param {CIQ.ChartEngine} params.stx The chart object
-	 * @param {array} params.periodicities Set this array with eligible periodicities here, in any order. These will be the periodicities which will be used by the continuous zooming once a boundary is hit.
-	 * 										The periodicities are objects with period, interval, [timeUnit] properties (see {@link CIQ.ChartEngine#setPeriodicity}).
-	 * @param {object} params.boundaries Optional boundary cases to trigger the periodicity change. Hitting a max boundary will switch to the next larger periodicity; hitting a min boundary will switch to the next smaller periodicity.
-	 * @param {number} [params.boundaries.maxCandleWidth] largest size of candle in pixels to display before switching
-	 * @param {number} [params.boundaries.minCandleWidth] smallest size of candle in pixels to display before switching
-	 * @param {number} [params.boundaries.maxTicks] most number of ticks to display before switching
-	 * @param {number} [params.boundaries.minTicks] least number of ticks to display before switching
-	 * @constructor
-	 * @name  CIQ.ContinuousZoom
-     * @since 7.0.0
-     * @example
-     * new CIQ.ContinuousZoom({
-     *	stx: stxx,
-     *	periodicities:[
-     *		{period:1,   interval:"month"},
-     *		{period:1,   interval:"day"},
-     *		{period:2,   interval:30},
-     *		{period:1,   interval:5},
-     *		{period:15,  interval:1,  timeUnit:"second"},
-     *		{period:1,   interval:1,  timeUnit:"second"}
-     *	],
-     *	boundaries:{
-     *		maxCandleWidth: 100,
-     *		minCandleWidth: 3,
-     *		maxTicks: 500,
-     *		minTicks: 10
-     *	}
-     * });
-     * @example
-//smother periodicity change by rolling daily into weekly and monthly. 
-// Also try reusing the same interval data and have the chart roll it instead of fetching new data.
-stxx.dontRoll=false; 
-new CIQ.ContinuousZoom({
-    stx: stxx,
-    periodicities:[
-    	// daily interval data
-        {period:1,   interval:"month"},
-        {period:2,   interval:"week"},
-        {period:1,   interval:"week"},
-        {period:3,   interval:"day"},
-        {period:1,   interval:"day"},
-        // 30 minute interval data
-        {period:16,   interval:30},
-        {period:8,   interval:30},
-        {period:4,   interval:30},
-        {period:2,   interval:30},
-        // one minute interval data
-        {period:30,   interval:1},
-        {period:15,   interval:1},
-        {period:10,   interval:1},
-        {period:5,   interval:1},
-        {period:2,   interval:1},
-        {period:1,   interval:1},
-        // one second interval data
-        {period:30,  interval:1,  timeUnit:"second"},
-        {period:15,  interval:1,  timeUnit:"second"},
-        {period:5,   interval:1,  timeUnit:"second"},
-        {period:2,   interval:1,  timeUnit:"second"},
-        {period:1,   interval:1,  timeUnit:"second"},
-    ],
-    boundaries:{
-        maxCandleWidth: 15,
-        minCandleWidth: 3
-   }
-});
-     */
+ * Add-on that responds to the chart zoom action, changing periodicities as the number of ticks and/or candle width
+ * hits a set boundary.
+ *
+ * Although this feature is available for all chart styles, it shows best on continuous renderings
+ * such as lines and mountains vs. candles and bars. This is because some users may find the
+ * changes in candle width that take place as the same range is displayed in a different
+ * periodicity, inappropriate. The effect can be mitigated by increasing the number of boundaries
+ * so periodicities change more often, preventing large candle width changes, and by using the
+ * periodicity roll up feature instead of fetching new data from a quote feed. See examples.
+ *
+ * See {@link CIQ.ChartEngine#setPeriodicity} and {@link CIQ.ChartEngine#createDataSet}
+ *
+ * Requires *addOns.js*.
+ *
+ * The feature will not work without supplying at least one element within the periodicities array
+ * and at least one property within the boundaries object.
+ *
+ * @param {object} params Configuration parameters.
+ * @param {CIQ.ChartEngine} params.stx The chart object.
+ * @param {array} params.periodicities Set this array with eligible periodicities in any order.
+ * 		These will be the periodicities which will be used by the continuous zooming once a
+ * 		boundary is hit. The periodicities are objects with `period`, `interval`, and optional
+ * 		`timeUnit` properties (see {@link CIQ.ChartEngine#setPeriodicity}).
+ * @param {object} params.boundaries Optional boundary cases to trigger the periodicity change.
+ * 		Hitting a maximum boundary switches to the next larger periodicity; hitting a minimum
+ * 		boundary switches to the next smaller periodicity.
+ * @param {number} [params.boundaries.maxCandleWidth] Largest size of candle in pixels to display
+ * 		before switching periodicity.
+ * @param {number} [params.boundaries.minCandleWidth] Smallest size of candle in pixels to display
+ * 		before switching periodicity.
+ * @param {number} [params.boundaries.maxTicks] Most number of ticks to display before switching
+ * 		periodicity.
+ * @param {number} [params.boundaries.minTicks] Least number of ticks to display before switching
+ * 		periodicity.
+ *
+ * @constructor
+ * @name CIQ.ContinuousZoom
+ * @since 7.0.0
+ *
+ * @example
+ * new CIQ.ContinuousZoom({
+ *     stx: stxx,
+ *     periodicities: [
+ *         { period:1, interval:"month" },
+ *         { period:1, interval:"day" },
+ *         { period:2, interval:30 },
+ *         { period:1, interval:5 },
+ *         { period:15, interval:1, timeUnit:"second" },
+ *         { period:1, interval:1, timeUnit:"second" }
+ *     ],
+ *     boundaries: {
+ *         maxCandleWidth: 100,
+ *         minCandleWidth: 3,
+ *         maxTicks: 500,
+ *         minTicks: 10
+ *     }
+ * });
+ *
+ * @example
+ * // Smother periodicity change by rolling daily into weekly and monthly.
+ * // Also try reusing the same interval data and have the chart roll it instead of fetching new data.
+ * stxx.dontRoll = false;
+ * new CIQ.ContinuousZoom({
+ *     stx: stxx,
+ *     periodicities: [
+ *         // Daily interval data
+ *         {period:1, interval:"month"},
+ *         {period:2, interval:"week"},
+ *         {period:1, interval:"week"},
+ *         {period:3, interval:"day"},
+ *         {period:1, interval:"day"},
+ *         // 30 minute interval data
+ *         {period:16, interval:30},
+ *         {period:8, interval:30},
+ *         {period:4, interval:30},
+ *         {period:2, interval:30},
+ *         // one minute interval data
+ *         {period:30, interval:1},
+ *         {period:15, interval:1},
+ *         {period:10, interval:1},
+ *         {period:5, interval:1},
+ *         {period:2, interval:1},
+ *         {period:1, interval:1},
+ *         // One second interval data
+ *         {period:30,interval:1, timeUnit:"second"},
+ *         {period:15,interval:1, timeUnit:"second"},
+ *         {period:5, interval:1, timeUnit:"second"},
+ *         {period:2, interval:1, timeUnit:"second"},
+ *         {period:1, interval:1, timeUnit:"second"},
+ *     ],
+ *     boundaries: {
+ *         maxCandleWidth: 15,
+ *         minCandleWidth: 3
+ *    }
+ * });
+ */
 CIQ.ContinuousZoom =
 	CIQ.ContinuousZoom ||
 	function (params) {
+		this.cssRequired = true;
 		this.update(params);
 		this.stx.continuousZoom = this;
 
@@ -753,548 +768,7 @@ CIQ.ContinuousZoom.prototype.execute = function (zoomOut) {
 
 };
 
-let __js_addons_extendedHours_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Use this constructor to initialize filtering and visualization styles of extended hours by the use of shading and delimitation lines.
- *
- * Requires `addOns.js`.
- *
- * This visualization will only work if data for the corresponding sessions is provided from your quote feed and the market definitions have the corresponding entries.
- * See {@link CIQ.Market} for details on how to define extended (non-default) hours.
- *
- * By default all extended hour sessions are disabled unless explicitly enabled using {@link CIQ.ExtendedHours.prepare} or {@link CIQ.ExtendedHours.set}.
- *
- * All possible market sessions needed to be shaded at any given time should be enabled at once with this method.
- *
- * Your fetch should load the required data based on the `params.stx.layout.extended` and `params.stx.layout.marketSessions` settings.
- *
- * Remember that when `params.filter` is set to true, this module performs a filter of already loaded masterData when {@link CIQ.ExtendedHours.set} is invoked,
- * rather than calling {@link CIQ.ChartEngine#loadChart} to reload the data from the server every time you enable or disable this feature.
- * So you must always return all requested sessions on your fetch responses if this flag is set.
- *
- * CSS info:
- * - The styles for the shading of each session is determined by the corresponding CSS class in the form of "stx_market_session."+session_name (Example: `stx_market_session.pre`)
- * - The divider line is determined by the CSS class "stx_market_session.divider".
- *
- * **Important:** This module must be initialized before {@link CIQ.ChartEngine#importLayout} or the sessions will not be able to be restored.
- *
- * Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/g2vvww67/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
- *
- * @param {object} params The constructor parameters
- * @param {CIQ.ChartEngine} [params.stx] The chart object
- * @param {boolean} [params.filter] Setting to true performs a filter of masterData when {@link CIQ.ExtendedHours.set} is invoked, rather than calling {@link CIQ.ChartEngine#loadChart} to reload the data from the server.
- * @param {string} [params.menuContextClass] A CSS class name used to query the menu DOM
- * 		element that contains the UI control for the extended hours add-on. In a multi-chart
- * 		document, the add-on is available only on charts that have a menu DOM element with
- * 		the value for `menuContextClass` as a class attribute.
- *
- * @constructor
- * @name CIQ.ExtendedHours
- * @since
- * - 06-2016-02
- * - 3.0.0 Changed argument to an object to support `filter`.
- * - 3.0.0 No longer necessary to explicitly call new Chart to reload data. Instead call {@link CIQ.ExtendedHours.set} function.
- * - 5.0.0 No longer necessary to explicitly set `stx.layout.marketSessions` or `1stx.layout.extended` to manage sessions; instead call {@link CIQ.ExtendedHours.prepare} or {@link CIQ.ExtendedHours.set}.
- * - 8.0.0 Added `params.menuContextClass`.
- *
- * @example
- * // Call this only once to initialize the market sessions display manager.
- * new CIQ.ExtendedHours({stx:stxx, filter:true});
- *
- * // By default all sessions are disabled unless explicitly enabled.
- * // This forces the extended hours sessions ["pre","post"] to be enabled when the chart is initially loaded.
- * stxx.extendedHours.prepare(true);
- *
- * // Now display your chart.
- * stxx.loadChart(stxx.chart.symbol, {}, function() {});
- *
- * @example
- * // Once your chart is displayed, you can call this from any UI interface to turn on extended hours.
- * stx.extendedHours.set(true);
- *
- * // Or call this from any UI interface to turn off extended hours.
- * stx.extendedHours.set(false);
- *
- * @example
- * // CSS entries for a session divider and sessions named "pre" and "post".
- * .stx_market_session.divider {
- *     background-color: rgba(0,255,0,0.8);
- *     width: 1px;
- * }
- * .stx_market_session.pre {
- *     background-color: rgba(255,255,0,0.1);
- * }
- * .stx_market_session.post {
- *     background-color: rgba(0,0,255,0.2);
- * }
- */
-CIQ.ExtendedHours =
-	CIQ.ExtendedHours ||
-	function (params) {
-		var stx = params.stx;
-		this.filter = params.filter;
-		if (!stx) {
-			// backwards compatibility
-			stx = params;
-			this.filter = false;
-		}
-		var styles = {};
-		this.stx = stx;
-		this.stx.extendedHours = this;
-
-		const menuClass = `${
-			(params.menuContextClass && "." + params.menuContextClass) || "body"
-		} .extendedhours-ui`;
-		CIQ.addInternalStylesheet(`${menuClass} { display: inherit }`, menuClass);
-
-		stx.addEventListener("theme", function (tObject) {
-			// reinitialize the session colors after a theme change
-			styles = {};
-			for (var sess in stx.layout.marketSessions) {
-				if (!styles.session) styles.session = {};
-				styles.session[sess] = stx.canvasStyle("stx_market_session " + sess);
-			}
-		});
-
-		stx.addEventListener("symbolChange", function (tObject) {
-			// check if extended hours exists for this security
-			if (
-				tObject.action == "master" &&
-				stx.layout.extended &&
-				!(stx.chart.market.market_def && stx.chart.market.sessions.length)
-			) {
-				CIQ.alert("There are no Extended Hours for this instrument.");
-			}
-		});
-
-		/**
-		 * Prepares the extended hours settings and classes for the session names enumerated in the arguments without actually displaying or loading the data.
-		 *
-		 * This method can be used to force a particular session to load by default by calling it before {@link CIQ.ChartEngine#loadChart}.
-		 * Otherwise the chart will be loaded with all sessions disabled until {@link CIQ.ExtendedHours.set} is invoked.
-		 *
-		 * {@link CIQ.ChartEngine#importLayout} will also call this method to ensure the sessions are restored as previously saved.
-		 *
-		 * @param  {boolean} enable Set to turn on/off the extended-hours visualization.
-		 * @param  {array} sessions The sessions to visualize when enable is true.  Any sessions previously visualized will be disabled.  If set to null, will default to ["pre","post"].
-		 * @memberof CIQ.ExtendedHours
-		 * @method prepare
-		 * @since 5.0.0
-		 */
-		this.prepare = function (enable, sessions) {
-			stx.layout.extended = enable;
-			for (var sess in stx.layout.marketSessions) {
-				styles.session = {};
-				stx.chart.market.disableSession(sess);
-			}
-			stx.layout.marketSessions = {};
-			if (enable) {
-				if (!sessions) sessions = ["pre", "post"];
-				if (sessions.length) {
-					for (var s = 0; s < sessions.length; s++) {
-						stx.layout.marketSessions[sessions[s]] = true;
-					}
-				} else {
-					stx.layout.marketSessions = sessions;
-				}
-			}
-			for (sess in stx.layout.marketSessions) {
-				if (!styles.session) styles.session = {};
-				styles.session[sess] = stx.canvasStyle("stx_market_session " + sess);
-				stx.chart.market.disableSession(sess, true);
-			}
-		};
-
-		/**
-		 * gathers and renders the extended hours for the preset session names enumerated in prepare().
-		 * @param  {function} cb Optional callback function to be invoked once chart is reloaded with extended hours data.
-		 * @memberof CIQ.ExtendedHours
-		 * @method complete
-		 * @private
-		 * @since 5.0.0
-		 */
-		this.complete = function (cb) {
-			stx.changeOccurred("layout");
-			if (!stx.chart.market.market_def) {
-				// possibly a 24 hours Market. Not necessarily an error but nothing to do for ExtendedHours
-				if (cb) cb();
-				return;
-			}
-			if (this.filter) {
-				stx.createDataSet();
-				stx.draw();
-				if (cb) cb();
-			} else {
-				stx.loadChart(stx.chart.symbol, cb);
-			}
-		};
-
-		/**
-		 * Turns on or off extended hours for the session names enumerated in the arguments.
-		 * @param  {boolean} enable Set to turn on/off the extended-hours visualization.
-		 * @param  {array} sessions The sessions to visualize when enable is true.  Any sessions previously visualized will be disabled.  If set to null, will default to ["pre","post"].
-		 * @param  {function} cb Optional callback function to be invoked once chart is reloaded with extended hours data.
-		 * @memberof CIQ.ExtendedHours
-		 * @method set
-		 */
-		this.set = function (enable, sessions, cb) {
-			this.prepare(enable, sessions);
-			this.complete(cb);
-		};
-
-		// This injection shades the after hours portion of the chart for each yaxis.
-		// Only the panel to which the yaxis belongs will get shading.
-		// This means yaxes of overlays will bypass the shading block.
-		this.stx.append("drawYAxis", function (panel, parameters) {
-			if (!this.layout.extended) return;
-			if (
-				panel.yAxis != parameters.yAxis ||
-				panel.shareChartXAxis === false ||
-				panel.hidden
-			)
-				return;
-			var chart = panel.chart;
-			if (CIQ.ChartEngine.isDailyInterval(this.layout.interval)) return;
-			styles.divider = this.canvasStyle("stx_market_session divider");
-			if (styles.session) {
-				var m = chart.market;
-				var ranges = [];
-				var range = {};
-				var nextBoundary, thisSession;
-				for (var i = 0; i < chart.dataSegment.length; i++) {
-					var ds = chart.dataSegment[i];
-					if (!ds || !ds.DT) continue;
-					var c = null;
-					if (m.market_def) {
-						if (!nextBoundary || nextBoundary <= ds.DT) {
-							thisSession = m.getSession(ds.DT);
-							var filterSession =
-								thisSession !== "" &&
-								(!this.layout.marketSessions ||
-									!this.layout.marketSessions[thisSession]);
-							nextBoundary = m[filterSession ? "getNextOpen" : "getNextClose"](
-								ds.DT
-							);
-						}
-					}
-
-					var s = styles.session[thisSession];
-					if (s) c = s.backgroundColor;
-					if (range.color && range.color != c) {
-						ranges.push({
-							start: range.start,
-							end: range.end,
-							color: range.color
-						});
-						range = {};
-					}
-					if (c) {
-						var cw = this.layout.candleWidth;
-						if (ds.candleWidth) cw = ds.candleWidth;
-						range.end = this.pixelFromBar(i, chart) + cw / 2;
-						if (!range.start && range.start !== 0)
-							range.start = range.end - cw + 1;
-						range.color = c;
-					} else {
-						range = {};
-					}
-				}
-				if (range.start || range.start === 0)
-					ranges.push({
-						start: range.start,
-						end: range.end,
-						color: range.color
-					});
-				var noDashes = CIQ.isTransparent(styles.divider.backgroundColor);
-				var dividerLineWidth = styles.divider.width.replace(/px/g, "");
-				var dividerStyle = {
-					y0: panel.bottom,
-					y1: panel.top,
-					color: styles.divider.backgroundColor,
-					type: "line",
-					context: chart.context,
-					confineToPanel: panel,
-					pattern: "dashed",
-					lineWidth: dividerLineWidth,
-					deferStroke: true
-				};
-				this.startClip(panel.name);
-				chart.context.beginPath();
-				if (stx.highlightedDraggable) chart.context.globalAlpha *= 0.3;
-				for (i = 0; i < ranges.length; i++) {
-					chart.context.fillStyle = ranges[i].color;
-					if (!noDashes && ranges[i].start > chart.left)
-						this.plotLine(
-							CIQ.extend(
-								{ x0: ranges[i].start, x1: ranges[i].start },
-								dividerStyle
-							)
-						);
-					chart.context.fillRect(
-						ranges[i].start,
-						panel.top,
-						ranges[i].end - ranges[i].start,
-						panel.bottom - panel.top
-					);
-					if (!noDashes && ranges[i].end < chart.right)
-						this.plotLine(
-							CIQ.extend({ x0: ranges[i].end, x1: ranges[i].end }, dividerStyle)
-						);
-				}
-				chart.context.stroke();
-				this.endClip();
-			}
-		});
-	};
-
-};
-
-let __js_addons_fullScreen_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Creates an add-on that sets the chart UI to full-screen mode. In full-screen mode, a class `full-screen` is added
- * to the context element used for styling. In addition, elements with the class `full-screen-hide` are hidden.
- * Elements with the class `full-screen-show` that are normally hidden are shown.
- *
- * Requires `addOns.js`.
- *
- * ![Full-screen display](./img-Full-Screen-Chart.png)
- *
- * @param {object} params Configuration parameters
- * @param {CIQ.ChartEngine} [params.stx] The chart object
- * @constructor
- * @name CIQ.FullScreen
- * @example
- * 	new CIQ.FullScreen({stx:stxx});
- * @since 7.3.0
- */
-CIQ.FullScreen =
-	CIQ.FullScreen ||
-	function (params) {
-		if (!params) params = {};
-		if (!params.stx) {
-			console.warn("The Full Screen addon requires an stx parameter");
-			return;
-		}
-		this.stx = params.stx;
-		this.stx.fullScreen = this;
-		this.fullScreenButton = null;
-		this.fullScreenState = false;
-
-		//Attaches FullScreen button to HTML DOM inside .chartSize element
-		this.addFullScreenButton = function () {
-			if (this.stx.registerChartControl)
-				this.fullScreenButton = this.stx.registerChartControl(
-					"stx-full-screen",
-					"Full Screen",
-					(function (self) {
-						return function (e) {
-							self.fullScreenToggle(e);
-							e.stopPropagation();
-						};
-					})(this)
-				);
-		};
-
-		//Click event handler for the Full Screen button.
-		this.fullScreenToggle = function (e) {
-			// First check for availability of the requestFullScreen function
-			if (
-				document.documentElement.requestFullscreen ||
-				document.documentElement.webkitRequestFullscreen ||
-				document.documentElement.mozRequestFullscreen ||
-				document.documentElement.msRequestFullscreen
-			) {
-				// Check if full screen is already enabled
-				if (this.getFullScreenElement()) {
-					if (document.exitFullscreen) document.exitFullscreen();
-					else if (document.webkitExitFullscreen)
-						document.webkitExitFullscreen();
-					else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
-					else if (document.msExitFullscreen) document.msExitFullscreen();
-				} else {
-					// requestFullscreen methods need to be checked for again here because the browser will not allow the method to be stored in a local var
-					if (document.documentElement.requestFullscreen)
-						document.documentElement.requestFullscreen();
-					else if (document.documentElement.webkitRequestFullscreen)
-						document.documentElement.webkitRequestFullscreen();
-					else if (document.documentElement.mozRequestFullscreen)
-						document.documentElement.mozRequestFullscreen();
-					else if (document.documentElement.msRequestFullscreen)
-						document.documentElement.msRequestFullscreen();
-				}
-			} else {
-				//If the full screen api isn't available, manually trigger the fullScreen styling
-				this.fullScreenState = !this.fullScreenState;
-				this.fullScreenRender();
-			}
-		};
-
-		// Append/remove full-screen class to context or body and update button state
-		this.fullScreenRender = function () {
-			var containerElement = null;
-			containerElement = this.stx.container.closest(
-				"*[cq-context], cq-context, body"
-			);
-			if (containerElement) {
-				if (this.fullScreenState === true) {
-					if (this.fullScreenButton)
-						this.fullScreenButton.classList.add("active");
-					containerElement.classList.add("full-screen");
-				} else {
-					if (this.fullScreenButton)
-						this.fullScreenButton.classList.remove("active");
-					containerElement.classList.remove("full-screen");
-				}
-				// Trigger a resize event to update the chart size
-				window.dispatchEvent(new Event("resize"));
-			}
-		};
-
-		//Handle full screen change
-		this.onFullScreenChange = function () {
-			if (this.getFullScreenElement()) {
-				this.fullScreenState = true;
-			} else {
-				this.fullScreenState = false;
-			}
-			this.fullScreenRender();
-		};
-
-		this.getFullScreenElement = function () {
-			return (
-				document.fullscreenElement ||
-				document.webkitCurrentFullScreenElement ||
-				document.mozFullScreenElement ||
-				document.msFullscreenElement
-			);
-		};
-
-		document.addEventListener(
-			"fullscreenchange",
-			this.onFullScreenChange.bind(this),
-			false
-		);
-		document.addEventListener(
-			"webkitfullscreenchange",
-			this.onFullScreenChange.bind(this),
-			false
-		);
-		document.addEventListener(
-			"mozfullscreenchange",
-			this.onFullScreenChange.bind(this),
-			false
-		);
-		document.addEventListener(
-			"MSFullscreenChange",
-			this.onFullScreenChange.bind(this),
-			false
-		);
-
-		// Add the FullScreen button to chartControls
-		this.addFullScreenButton();
-	};
-
-};
-
-let __js_addons_inactivityTimer_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Add-On that puts the chart into "sleep mode" after a period of inactivity.
- *
- * Requires `addOns.js`
- *
- * In sleep mode, a class "ciq-sleeping" will be added to the body.  This will dim out the chart.
- * Sleep mode is ended when interaction with the chart is detected.
- *
- * @param {object} params Configuration parameters
- * @param {CIQ.ChartEngine} [params.stx] The chart object
- * @param {number} [params.minutes] Inactivity period in _minutes_.  Set to 0 to disable the sleep mode.
- * @param {number} [params.interval] Sleeping quote update interval in _seconds_.  During sleep mode, this is used for the update loop.
- * 									Set to non-zero positive number or defaults to 60.
- * @param {function} [params.wakeCB] Optional callback function after waking
- * @param {function} [params.sleepCB] Optional callback function after sleeping
- * @constructor
- * @name  CIQ.InactivityTimer
- * @since 3.0.0
- * @example
- * 	new CIQ.InactivityTimer({stx:stxx, minutes:30, interval:15});  //30 minutes of inactivity will put chart into sleep mode, updating every 15 seconds
- *
- */
-CIQ.InactivityTimer =
-	CIQ.InactivityTimer ||
-	function (params) {
-		if (!params.minutes) return;
-		if (!params.interval || params.interval < 0) params.interval = 60;
-		this.stx = params.stx;
-		this.timeout = params.minutes;
-		this.interval = params.interval;
-		this.wakeCB = params.wakeCB;
-		this.sleepCB = params.sleepCB;
-		this.sleepTimer = null;
-		this.sleeping = false;
-		this.last = new Date().getTime();
-		this.wakeChart = function () {
-			clearTimeout(this.sleepTimer);
-			this.last = new Date().getTime();
-			if (this.sleeping) {
-				if (this.stx.quoteDriver) this.stx.quoteDriver.updateChartLoop();
-				this.sleeping = false;
-				document.body.classList.remove("ciq-sleeping");
-			}
-			this.sleepTimer = setTimeout(
-				this.sleepChart.bind(this),
-				this.timeout * 60000
-			);
-			if (this.wakeCB) this.wakeCB();
-		};
-		this.sleepChart = function () {
-			if (!this.sleeping) {
-				if (this.stx.quoteDriver)
-					this.stx.quoteDriver.updateChartLoop(this.interval);
-				this.sleeping = true;
-				document.body.classList.add("ciq-sleeping");
-			}
-			if (this.sleepCB) this.sleepCB();
-		};
-
-		var self = this;
-		[
-			"mousemove",
-			"mousedown",
-			"touchstart",
-			"touchmove",
-			"pointerdown",
-			"pointermove",
-			"keydown",
-			"wheel"
-		].forEach(function (ev) {
-			document.body.addEventListener(ev, function (e) {
-				self.wakeChart();
-			});
-		});
-		this.wakeChart();
-	};
-
-};
-
-let __js_addons_outliers_ = (_exports) => {
+let __js_addons_advanced_outliers_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -1306,7 +780,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * values. Markers are placed at the location of the outlier values enabling the user to
  * restore the full extent of the y-axis by selecting the markers.
  *
- * Requires *js/addOns.js*.
+ * Requires *addOns.js*.
  *
  * ![Chart with hidden outliers](./img-Chart-with-Hidden-Outliers.png "Chart with hidden outliers")
  *
@@ -1331,7 +805,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * - 8.0.0 Added `params.altColors` and `params.menuContextClass`.
  *
  * @example
- * new CIQ.Outliers({stx:stxx});
+ * new CIQ.Outliers({ stx: stxx });
  */
 CIQ.Outliers =
 	CIQ.Outliers ||
@@ -1362,6 +836,7 @@ CIQ.Outliers =
 		}
 		this.stx = params.stx;
 		this.stx.outliers = this;
+		this.cssRequired = true;
 
 		this.multiplier = params.multiplier || 3; // Default to 3 for extreme outliers
 		this.altColors = params.altColors;
@@ -1377,12 +852,6 @@ CIQ.Outliers =
 				}.bind(event.stx.outliers)
 			);
 		});
-
-		// Enable the menu item
-		const menuClass = `${
-			(params.menuContextClass && "." + params.menuContextClass) || "body"
-		} .outliers-ui`;
-		CIQ.addInternalStylesheet(`${menuClass} { display: inherit }`, menuClass);
 
 		/**
 		 * Checks for outlier values in `dataSet`, and adds outlier markers (data point markers
@@ -2179,7 +1648,7 @@ CIQ.Outliers =
 
 };
 
-let __js_addons_plotComplementer_ = (_exports) => {
+let __js_addons_advanced_plotComplementer_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -2191,60 +1660,69 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  *
  * ![Plot Complementer](./img-Data-Forecasting.png)
  *
- * The complementary series is a permanent fixture of the series which it complements. It moves in tandem with the series,
- * and gets removed with the series. In all other respects, though, it behaves like its own series. It shows separately in
- * the panel legend and plots using its own renderer.
+ * The complementary series is a permanent fixture of the series which it complements. It moves
+ * in tandem with the series, and gets removed with the series. In all other respects, though, it
+ * behaves like its own series. It shows separately in the panel legend and plots using its own
+ * renderer.
  *
- * Charts can have multiple `PlotComplementer` instances. Each instance is attached to the chart engine as a member of a
- * `PlotComplementer` collection.
+ * Charts can have multiple `PlotComplementer` instances. Each instance is attached to the chart
+ * engine as a member of a `PlotComplementer` collection.
  *
- * Multiple `PlotComplementer` instances can be associated with a time series. To link a `PlotComplementer` to a series,
- * specify the series instrument in the `params.filter` function. See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
+ * Multiple `PlotComplementer` instances can be associated with a time series. To link a
+ * `PlotComplementer` to a series, specify the series instrument in the `params.filter` function.
+ * See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
  *
- * **Note:** The series created by this add-on is not exported with the layout, since it is created in tandem with the series
- * it complements. Currently, this feature works only with non-comparison series.
+ * **Note:** The series created by this add-on is not exported with the layout, since it is
+ * created in tandem with the series it complements. Currently, this feature works only with
+ * non-comparison series.
+ *
+ * Requires *addOns.js*.
  *
  * @param {object} params Configuration parameters.
  * @param {CIQ.ChartEngine} params.stx The chart object.
- * @param {string} [params.id] Unique key used by the add-on to identify itself. If not supplied, a random key is chosen.
- * @param {object} [params.quoteFeed] Attaches the quote feed to the quote driver to satisfy any quote requests for any
- * 					series created by the add-on.
- * @param {object} [params.behavior] Used as the behavior for the quote feed supplied in this parameter list.
- * @param {function} [params.filter] Used as the filter for the quote feed supplied in this parameter list.
- * 					See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
- * @param {object} [params.decorator] Container object for the `symbol` and `display` properties. The `decorator` provides the
- * 					label (`symbol`) for the complementary series and a short description (`display`) that is appended to
- * 					the label; for example:
- * ```javascript
+ * @param {string} [params.id] Unique key used by the add-on to identify itself. If not supplied,
+ * 		a random key is chosen.
+ * @param {object} [params.quoteFeed] Attaches the quote feed to the quote driver to satisfy any
+ * 		quote requests for any series created by the add-on.
+ * @param {object} [params.behavior] Used as the behavior for the quote feed supplied in this
+ * 		parameter list.
+ * @param {function} [params.filter] Used as the filter for the quote feed supplied in this
+ * 		parameter list. See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
+ * @param {object} [params.decorator] Container object for the `symbol` and `display` properties.
+ * 		The `decorator` provides the label (`symbol`) for the complementary series and a short
+ * 		description (`display`) that is appended to the label; for example:
+ * ```
  * decorator: {symbol:"_fcst", display:" Forecast"}
  * ```
- * @param {string} [params.decorator.symbol] Adds this string onto the ID when creating the complementary series.
- * 					Otherwise, a unique ID is used.
+ * @param {string} [params.decorator.symbol] Adds this string onto the ID when creating the
+ * 		complementary series. Otherwise, a unique ID is used.
  * @param {string} [params.decorator.display] Customizes the display value of the series.
- * @param {object} [params.renderingParameters={chartType:"line", width:1, opacity:0.5}] A collection of parameters
- * 					that override the default rendering parameters. The `renderingParameters` object can be set or changed
- * 					at any time. The default parameters can be restored by calling
- * 					{@link CIQ.PlotComplementer#resetRenderingParameters}.
- * 					<p>Here are a few examples of rendering parameters:</p>
- * ```javascript
- * //Assuming a PlotComplementer declared as "forecaster":
+ * @param {object} [params.renderingParameters={chartType: "line", width: 1, opacity: 0.5}] A
+ * 		collection of parameters that override the default rendering parameters. The
+ * 		`renderingParameters` object can be set or changed at any time. The default parameters
+ * 		can be restored by calling {@link CIQ.PlotComplementer#resetRenderingParameters}.
+ * 		<p>Here are a few examples of rendering parameters:</p>
+ * ```
+ * // Assuming a PlotComplementer declared as "forecaster":
  * forecaster.renderingParameters = {chartType:"scatterplot", opacity:0.5, field:"Certainty"}
  * forecaster.renderingParameters = {chartType:"histogram", border_color:"transparent", opacity:0.3}
  * forecaster.renderingParameters = {chartType:"channel", opacity:0.5, pattern:"dotted"}
  * forecaster.renderingParameters = {chartType:"candle", opacity:0.5, color:"blue", border_color:"blue"}
  * ```
+ *
  * @constructor
  * @name CIQ.PlotComplementer
  * @since 7.3.0
- * @example <caption>Use for Forecasting</caption>
-	var forecaster = new CIQ.PlotComplementer({
-						 stx:stxx,
-						 id:"forecast",
-						 quoteFeed: fcstFeed.quoteFeedForecastSimulator,
-						 behavior: {refreshInterval:60},
-						 decorator: {symbol:"_fcst", display:" Forecast"},
-						 renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
-					 });
+ *
+ * @example <caption>Forecasting</caption>
+ * let forecaster = new CIQ.PlotComplementer({
+ *     stx:stxx,
+ *     id:"forecast",
+ *     quoteFeed: fcstFeed.quoteFeedForecastSimulator,
+ *     behavior: {refreshInterval:60},
+ *     decorator: {symbol:"_fcst", display:" Forecast"},
+ *     renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
+ * });
  */
 CIQ.PlotComplementer =
 	CIQ.PlotComplementer ||
@@ -2405,7 +1883,564 @@ CIQ.PlotComplementer =
 
 };
 
-let __js_addons_rangeSlider_ = (_exports) => {
+let __js_addons_standard_extendedHours_ = (_exports) => {
+
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Use this constructor to initialize filtering and visualization styles of extended hours by the use of shading and delimitation lines.
+ *
+ * Requires *addOns.js*.
+ *
+ * This visualization will only work if data for the corresponding sessions is provided from your quote feed and the market definitions have the corresponding entries.
+ * See {@link CIQ.Market} for details on how to define extended (non-default) hours.
+ *
+ * By default all extended hour sessions are disabled unless explicitly enabled using {@link CIQ.ExtendedHours.prepare} or {@link CIQ.ExtendedHours.set}.
+ *
+ * All possible market sessions needed to be shaded at any given time should be enabled at once with this method.
+ *
+ * Your fetch should load the required data based on the `params.stx.layout.extended` and `params.stx.layout.marketSessions` settings.
+ *
+ * Remember that when `params.filter` is set to true, this module performs a filter of already loaded masterData when {@link CIQ.ExtendedHours.set} is invoked,
+ * rather than calling {@link CIQ.ChartEngine#loadChart} to reload the data from the server every time you enable or disable this feature.
+ * So you must always return all requested sessions on your fetch responses if this flag is set.
+ *
+ * CSS info:
+ * - The styles for the shading of each session is determined by the corresponding CSS class in the form of "stx_market_session."+session_name (Example: `stx_market_session.pre`)
+ * - The divider line is determined by the CSS class "stx_market_session.divider".
+ *
+ * **Important:** This module must be initialized before {@link CIQ.ChartEngine#importLayout} or the sessions will not be able to be restored.
+ *
+ * Example:
+ * <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top"
+ *         style="float:top"
+ *         src="https://jsfiddle.net/chartiq/g2vvww67/embedded/result,js,html/"
+ *         allowfullscreen="allowfullscreen" frameborder="1">
+ * </iframe>
+ *
+ * @param {object} params The constructor parameters.
+ * @param {CIQ.ChartEngine} [params.stx] The chart object.
+ * @param {boolean} [params.filter] Setting to true performs a filter of masterData when
+ * 		{@link CIQ.ExtendedHours.set} is invoked, rather than calling
+ * 		{@link CIQ.ChartEngine#loadChart} to reload the data from the server.
+ * @param {string} [params.menuContextClass] A CSS class name used to query the menu DOM
+ * 		element that contains the UI control for the extended hours add-on. In a multi-chart
+ * 		document, the add-on is available only on charts that have a menu DOM element with
+ * 		the value for `menuContextClass` as a class attribute.
+ *
+ * @constructor
+ * @name CIQ.ExtendedHours
+ * @since
+ * - 06-2016-02
+ * - 3.0.0 Changed argument to an object to support `filter`.
+ * - 3.0.0 No longer necessary to explicitly call new Chart to reload data. Instead call {@link CIQ.ExtendedHours.set} function.
+ * - 5.0.0 No longer necessary to explicitly set `stx.layout.marketSessions` or `1stx.layout.extended` to manage sessions; instead call {@link CIQ.ExtendedHours.prepare} or {@link CIQ.ExtendedHours.set}.
+ * - 8.0.0 Added `params.menuContextClass`.
+ *
+ * @example
+ * // Call this only once to initialize the market sessions display manager.
+ * new CIQ.ExtendedHours({stx:stxx, filter:true});
+ *
+ * // By default all sessions are disabled unless explicitly enabled.
+ * // This forces the extended hours sessions ["pre","post"] to be enabled when the chart is initially loaded.
+ * stxx.extendedHours.prepare(true);
+ *
+ * // Now display your chart.
+ * stxx.loadChart(stxx.chart.symbol, {}, function() {});
+ *
+ * @example
+ * // Once your chart is displayed, you can call this from any UI interface to turn on extended hours.
+ * stx.extendedHours.set(true);
+ *
+ * // Or call this from any UI interface to turn off extended hours.
+ * stx.extendedHours.set(false);
+ *
+ * @example
+ * // CSS entries for a session divider and sessions named "pre" and "post".
+ * .stx_market_session.divider {
+ *     background-color: rgba(0,255,0,0.8);
+ *     width: 1px;
+ * }
+ * .stx_market_session.pre {
+ *     background-color: rgba(255,255,0,0.1);
+ * }
+ * .stx_market_session.post {
+ *     background-color: rgba(0,0,255,0.2);
+ * }
+ */
+CIQ.ExtendedHours =
+	CIQ.ExtendedHours ||
+	function (params) {
+		var stx = params.stx;
+		this.filter = params.filter;
+		if (!stx) {
+			// backwards compatibility
+			stx = params;
+			this.filter = false;
+		}
+		var styles = {};
+		this.stx = stx;
+		this.stx.extendedHours = this;
+		this.cssRequired = true;
+
+		stx.addEventListener("theme", function (tObject) {
+			// reinitialize the session colors after a theme change
+			styles = {};
+			for (var sess in stx.layout.marketSessions) {
+				if (!styles.session) styles.session = {};
+				styles.session[sess] = stx.canvasStyle("stx_market_session " + sess);
+			}
+		});
+
+		stx.addEventListener("symbolChange", function (tObject) {
+			// check if extended hours exists for this security
+			if (
+				tObject.action == "master" &&
+				stx.layout.extended &&
+				!(stx.chart.market.market_def && stx.chart.market.sessions.length)
+			) {
+				CIQ.alert("There are no Extended Hours for this instrument.");
+			}
+		});
+
+		/**
+		 * Prepares the extended hours settings and classes for the session names enumerated in the arguments without actually displaying or loading the data.
+		 *
+		 * This method can be used to force a particular session to load by default by calling it before {@link CIQ.ChartEngine#loadChart}.
+		 * Otherwise the chart will be loaded with all sessions disabled until {@link CIQ.ExtendedHours.set} is invoked.
+		 *
+		 * {@link CIQ.ChartEngine#importLayout} will also call this method to ensure the sessions are restored as previously saved.
+		 *
+		 * @param  {boolean} enable Set to turn on/off the extended-hours visualization.
+		 * @param  {array} sessions The sessions to visualize when enable is true.  Any sessions previously visualized will be disabled.  If set to null, will default to ["pre","post"].
+		 * @memberof CIQ.ExtendedHours
+		 * @method prepare
+		 * @since 5.0.0
+		 */
+		this.prepare = function (enable, sessions) {
+			stx.layout.extended = enable;
+			for (var sess in stx.layout.marketSessions) {
+				styles.session = {};
+				stx.chart.market.disableSession(sess);
+			}
+			stx.layout.marketSessions = {};
+			if (enable) {
+				if (!sessions) sessions = ["pre", "post"];
+				if (sessions.length) {
+					for (var s = 0; s < sessions.length; s++) {
+						stx.layout.marketSessions[sessions[s]] = true;
+					}
+				} else {
+					stx.layout.marketSessions = sessions;
+				}
+			}
+			for (sess in stx.layout.marketSessions) {
+				if (!styles.session) styles.session = {};
+				styles.session[sess] = stx.canvasStyle("stx_market_session " + sess);
+				stx.chart.market.disableSession(sess, true);
+			}
+		};
+
+		/**
+		 * gathers and renders the extended hours for the preset session names enumerated in prepare().
+		 * @param  {function} cb Optional callback function to be invoked once chart is reloaded with extended hours data.
+		 * @memberof CIQ.ExtendedHours
+		 * @method complete
+		 * @private
+		 * @since 5.0.0
+		 */
+		this.complete = function (cb) {
+			stx.changeOccurred("layout");
+			if (!stx.chart.market.market_def) {
+				// possibly a 24 hours Market. Not necessarily an error but nothing to do for ExtendedHours
+				if (cb) cb();
+				return;
+			}
+			if (this.filter) {
+				stx.createDataSet();
+				stx.draw();
+				if (cb) cb();
+			} else {
+				stx.loadChart(stx.chart.symbol, cb);
+			}
+		};
+
+		/**
+		 * Turns on or off extended hours for the session names enumerated in the arguments.
+		 * @param  {boolean} enable Set to turn on/off the extended-hours visualization.
+		 * @param  {array} sessions The sessions to visualize when enable is true.  Any sessions previously visualized will be disabled.  If set to null, will default to ["pre","post"].
+		 * @param  {function} cb Optional callback function to be invoked once chart is reloaded with extended hours data.
+		 * @memberof CIQ.ExtendedHours
+		 * @method set
+		 */
+		this.set = function (enable, sessions, cb) {
+			this.prepare(enable, sessions);
+			this.complete(cb);
+		};
+
+		// This injection shades the after hours portion of the chart for each yaxis.
+		// Only the panel to which the yaxis belongs will get shading.
+		// This means yaxes of overlays will bypass the shading block.
+		this.stx.append("drawYAxis", function (panel, parameters) {
+			if (!this.layout.extended) return;
+			if (
+				panel.yAxis != parameters.yAxis ||
+				panel.shareChartXAxis === false ||
+				panel.hidden
+			)
+				return;
+			var chart = panel.chart;
+			if (CIQ.ChartEngine.isDailyInterval(this.layout.interval)) return;
+			styles.divider = this.canvasStyle("stx_market_session divider");
+			if (styles.session) {
+				var m = chart.market;
+				var ranges = [];
+				var range = {};
+				var nextBoundary, thisSession;
+				for (var i = 0; i < chart.dataSegment.length; i++) {
+					var ds = chart.dataSegment[i];
+					if (!ds || !ds.DT) continue;
+					var c = null;
+					if (m.market_def) {
+						if (!nextBoundary || nextBoundary <= ds.DT) {
+							thisSession = m.getSession(ds.DT);
+							var filterSession =
+								thisSession !== "" &&
+								(!this.layout.marketSessions ||
+									!this.layout.marketSessions[thisSession]);
+							nextBoundary = m[filterSession ? "getNextOpen" : "getNextClose"](
+								ds.DT
+							);
+						}
+					}
+
+					var s = styles.session[thisSession];
+					if (s) c = s.backgroundColor;
+					if (range.color && range.color != c) {
+						ranges.push({
+							start: range.start,
+							end: range.end,
+							color: range.color
+						});
+						range = {};
+					}
+					if (c) {
+						var cw = this.layout.candleWidth;
+						if (ds.candleWidth) cw = ds.candleWidth;
+						range.end = this.pixelFromBar(i, chart) + cw / 2;
+						if (!range.start && range.start !== 0)
+							range.start = range.end - cw + 1;
+						range.color = c;
+					} else {
+						range = {};
+					}
+				}
+				if (range.start || range.start === 0)
+					ranges.push({
+						start: range.start,
+						end: range.end,
+						color: range.color
+					});
+				var noDashes = CIQ.isTransparent(styles.divider.backgroundColor);
+				var dividerLineWidth = styles.divider.width.replace(/px/g, "");
+				var dividerStyle = {
+					y0: panel.bottom,
+					y1: panel.top,
+					color: styles.divider.backgroundColor,
+					type: "line",
+					context: chart.context,
+					confineToPanel: panel,
+					pattern: "dashed",
+					lineWidth: dividerLineWidth,
+					deferStroke: true
+				};
+				this.startClip(panel.name);
+				chart.context.beginPath();
+				if (stx.highlightedDraggable) chart.context.globalAlpha *= 0.3;
+				for (i = 0; i < ranges.length; i++) {
+					chart.context.fillStyle = ranges[i].color;
+					if (!noDashes && ranges[i].start > chart.left)
+						this.plotLine(
+							CIQ.extend(
+								{ x0: ranges[i].start, x1: ranges[i].start },
+								dividerStyle
+							)
+						);
+					chart.context.fillRect(
+						ranges[i].start,
+						panel.top,
+						ranges[i].end - ranges[i].start,
+						panel.bottom - panel.top
+					);
+					if (!noDashes && ranges[i].end < chart.right)
+						this.plotLine(
+							CIQ.extend({ x0: ranges[i].end, x1: ranges[i].end }, dividerStyle)
+						);
+				}
+				chart.context.stroke();
+				this.endClip();
+			}
+		});
+	};
+
+};
+
+let __js_addons_standard_fullScreen_ = (_exports) => {
+
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Creates an add-on that sets the chart UI to full-screen mode. In full-screen mode, a class
+ * `full-screen` is added to the context element used for styling. In addition, elements with the
+ * class `full-screen-hide` are hidden. Elements with the class `full-screen-show` that are
+ * normally hidden are shown.
+ *
+ * Requires *addOns.js*.
+ *
+ * ![Full-screen display](./img-Full-Screen-Chart.png)
+ *
+ * @param {object} params Configuration parameters.
+ * @param {CIQ.ChartEngine} [params.stx] The chart object.
+ *
+ * @constructor
+ * @name CIQ.FullScreen
+ * @since 7.3.0
+ *
+ * @example
+ * new CIQ.FullScreen({ stx: stxx });
+ */
+CIQ.FullScreen =
+	CIQ.FullScreen ||
+	function (params) {
+		if (!params) params = {};
+		if (!params.stx) {
+			console.warn("The Full Screen addon requires an stx parameter");
+			return;
+		}
+		// Check for loading within an iframe from another origin
+		try {
+			if (window.location.host !== window.top.location.host)
+				throw new Error(
+					window.location.host + " does not match " + window.top.location.host
+				);
+		} catch (exception) {
+			console.warn("Full screen mode disabled.");
+			return;
+		}
+		this.stx = params.stx;
+		this.stx.fullScreen = this;
+		this.fullScreenButton = null;
+		this.fullScreenState = false;
+
+		//Attaches FullScreen button to HTML DOM inside .chartSize element
+		this.addFullScreenButton = function () {
+			if (this.stx.registerChartControl)
+				this.fullScreenButton = this.stx.registerChartControl(
+					"stx-full-screen",
+					"Full Screen",
+					(function (self) {
+						return function (e) {
+							self.fullScreenToggle(e);
+							e.stopPropagation();
+						};
+					})(this)
+				);
+		};
+
+		//Click event handler for the Full Screen button.
+		this.fullScreenToggle = function (e) {
+			// First check for availability of the requestFullScreen function
+			if (
+				document.documentElement.requestFullscreen ||
+				document.documentElement.webkitRequestFullscreen ||
+				document.documentElement.mozRequestFullscreen ||
+				document.documentElement.msRequestFullscreen
+			) {
+				// Check if full screen is already enabled
+				if (this.getFullScreenElement()) {
+					if (document.exitFullscreen) document.exitFullscreen();
+					else if (document.webkitExitFullscreen)
+						document.webkitExitFullscreen();
+					else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
+					else if (document.msExitFullscreen) document.msExitFullscreen();
+				} else {
+					// requestFullscreen methods need to be checked for again here because the browser will not allow the method to be stored in a local var
+					if (document.documentElement.requestFullscreen)
+						document.documentElement.requestFullscreen();
+					else if (document.documentElement.webkitRequestFullscreen)
+						document.documentElement.webkitRequestFullscreen();
+					else if (document.documentElement.mozRequestFullscreen)
+						document.documentElement.mozRequestFullscreen();
+					else if (document.documentElement.msRequestFullscreen)
+						document.documentElement.msRequestFullscreen();
+				}
+			} else {
+				//If the full screen api isn't available, manually trigger the fullScreen styling
+				this.fullScreenState = !this.fullScreenState;
+				this.fullScreenRender();
+			}
+		};
+
+		// Append/remove full-screen class to context or body and update button state
+		this.fullScreenRender = function () {
+			var containerElement = null;
+			containerElement = this.stx.container.closest(
+				"*[cq-context], cq-context, body"
+			);
+			if (containerElement) {
+				if (this.fullScreenState === true) {
+					if (this.fullScreenButton)
+						this.fullScreenButton.classList.add("active");
+					containerElement.classList.add("full-screen");
+				} else {
+					if (this.fullScreenButton)
+						this.fullScreenButton.classList.remove("active");
+					containerElement.classList.remove("full-screen");
+				}
+				// Trigger a resize event to update the chart size
+				window.dispatchEvent(new Event("resize"));
+			}
+		};
+
+		//Handle full screen change
+		this.onFullScreenChange = function () {
+			if (this.getFullScreenElement()) {
+				this.fullScreenState = true;
+			} else {
+				this.fullScreenState = false;
+			}
+			this.fullScreenRender();
+		};
+
+		this.getFullScreenElement = function () {
+			return (
+				document.fullscreenElement ||
+				document.webkitCurrentFullScreenElement ||
+				document.mozFullScreenElement ||
+				document.msFullscreenElement
+			);
+		};
+
+		document.addEventListener(
+			"fullscreenchange",
+			this.onFullScreenChange.bind(this),
+			false
+		);
+		document.addEventListener(
+			"webkitfullscreenchange",
+			this.onFullScreenChange.bind(this),
+			false
+		);
+		document.addEventListener(
+			"mozfullscreenchange",
+			this.onFullScreenChange.bind(this),
+			false
+		);
+		document.addEventListener(
+			"MSFullscreenChange",
+			this.onFullScreenChange.bind(this),
+			false
+		);
+
+		// Add the FullScreen button to chartControls
+		this.addFullScreenButton();
+	};
+
+};
+
+let __js_addons_standard_inactivityTimer_ = (_exports) => {
+
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Add-On that puts the chart into "sleep mode" after a period of inactivity.
+ *
+ * Requires *addOns.js*.
+ *
+ * In sleep mode, a class "ciq-sleeping" will be added to the body.  This will dim out the chart.
+ * Sleep mode is ended when interaction with the chart is detected.
+ *
+ * @param {object} params Configuration parameters
+ * @param {CIQ.ChartEngine} [params.stx] The chart object
+ * @param {number} [params.minutes] Inactivity period in _minutes_.  Set to 0 to disable the sleep mode.
+ * @param {number} [params.interval] Sleeping quote update interval in _seconds_.  During sleep mode, this is used for the update loop.
+ * 									Set to non-zero positive number or defaults to 60.
+ * @param {function} [params.wakeCB] Optional callback function after waking
+ * @param {function} [params.sleepCB] Optional callback function after sleeping
+ * @constructor
+ * @name  CIQ.InactivityTimer
+ * @since 3.0.0
+ * @example
+ * 	new CIQ.InactivityTimer({stx:stxx, minutes:30, interval:15});  //30 minutes of inactivity will put chart into sleep mode, updating every 15 seconds
+ *
+ */
+CIQ.InactivityTimer =
+	CIQ.InactivityTimer ||
+	function (params) {
+		if (!params.minutes) return;
+		if (!params.interval || params.interval < 0) params.interval = 60;
+		this.stx = params.stx;
+		this.timeout = params.minutes;
+		this.interval = params.interval;
+		this.wakeCB = params.wakeCB;
+		this.sleepCB = params.sleepCB;
+		this.sleepTimer = null;
+		this.sleeping = false;
+		this.last = new Date().getTime();
+		this.wakeChart = function () {
+			clearTimeout(this.sleepTimer);
+			this.last = new Date().getTime();
+			if (this.sleeping) {
+				if (this.stx.quoteDriver) this.stx.quoteDriver.updateChartLoop();
+				this.sleeping = false;
+				document.body.classList.remove("ciq-sleeping");
+			}
+			this.sleepTimer = setTimeout(
+				this.sleepChart.bind(this),
+				this.timeout * 60000
+			);
+			if (this.wakeCB) this.wakeCB();
+		};
+		this.sleepChart = function () {
+			if (!this.sleeping) {
+				if (this.stx.quoteDriver)
+					this.stx.quoteDriver.updateChartLoop(this.interval);
+				this.sleeping = true;
+				document.body.classList.add("ciq-sleeping");
+			}
+			if (this.sleepCB) this.sleepCB();
+		};
+
+		var self = this;
+		[
+			"mousemove",
+			"mousedown",
+			"touchstart",
+			"touchmove",
+			"pointerdown",
+			"pointermove",
+			"keydown",
+			"wheel"
+		].forEach(function (ev) {
+			document.body.addEventListener(ev, function (e) {
+				self.wakeChart();
+			});
+		});
+		this.wakeChart();
+	};
+
+};
+
+let __js_addons_standard_rangeSlider_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -2417,7 +2452,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  *
  * This allows the `dataSegment` to be selectable as a portion of the dataset.
  *
- * Requires *js/addOns.js*.
+ * Requires *addOns.js*.
  *
  * It also requires additional CSS.
  *
@@ -2433,53 +2468,64 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  *     width: 5px;
  * }
  * ```
- * Once instantiated, it can be displayed or hidden by simply  setting the `rangeSlider` parameter of the primary chart's **layout object**,
- * and then issuing a layout change event to trigger the new status.
- * Make sure to use the callback to enable the slider on initial load to prevent 'out of sequence' issues.
- * See examples for exact syntax.
+ * Once instantiated, it can be displayed or hidden by simply setting the `rangeSlider` parameter
+ * of the primary chart's **layout object**, and then issuing a layout change event to trigger the
+ * new status. Make sure to use the callback to enable the slider on initial load to prevent
+ * "out of sequence" issues. See examples for exact syntax.
  *
- * Remember, a range slider is simply just another chart. So you configure it and customize it using the same parameters as you would the primary chart.
- * The only difference is that the slider object will be a sub element of the primary chart, living inside the `slider.slider` object.
- * <br>For example, if you wanted to turn off the x axis on the slider, assuming a chart instantiated as `stxx`, you would execute:
+ * Remember, a range slider is simply just another chart. So you configure it and customize it
+ * using the same parameters as you would the primary chart. The only difference is that the
+ * slider object will be a sub element of the primary chart, living inside the `slider.slider`
+ * object.
+ *
+ * For example, if you wanted to turn off the x-axis on the slider, assuming a chart instantiated
+ * as `stxx`, you would execute:
  * ```
- * stxx.slider.slider.xaxisHeight=0;
+ * stxx.slider.slider.xaxisHeight = 0;
  * ```
  *
- * If using chartIQ Web Components, the slider needs to be created **before** the UI manager (startUI) is called for custom themes to apply.
+ * If using chartIQ web components, the slider needs to be created **before** the UI manager
+ * (startUI) is called for custom themes to apply.
  *
- * It is important to note that the range slider chart container will 'create itself' **UNDER** the primary chart container, not **INSIDE**.
- * As such, to ensure styling is shared between the two containers, so they match in look and feel, all the styling must be on a parent div container rather than the primary chart container itself.
+ * It is important to note that the range slider chart container will create itself **under** the
+ * primary chart container, not **inside**. As such, to ensure styling is shared between the two
+ * containers and they match in look and feel, all the styling must be on a parent `div` container
+ * rather than the primary chart container itself.
  *
  * For example, do this:
  * ```
  * <div class="all-charts">
- * <div style="grid-column: span 6;grid-row: span 2;">
- *     <div class="chartwrap"> <!-- begin of wrapper with desired styling -->
- *     <div class="chartContainer1" style="width:100%;height:100%;position:relative"></div>
- *     <!-- the slider will be added here -->
+ *     <div style="grid-column: span 6; grid-row: span 2;">
+ *         <div class="chartwrap"> <!-- Beginning of wrapper with desired styling. -->
+ *             <div class="chartContainer1" style="width:100%;height:100%;position:relative"></div>
+ *             <!-- The slider will be added here. -->
+ *         </div> <!-- End of wrapper. -->
  *     </div>
- * </div> <!-- end of wrapper -->
  * </div>
  * ```
  *
  * Not this:
- * ```HTML
+ * ```
  * <div class="all-charts">
- * <div class="chartwrap" style="grid-column: span 6;grid-row: span 2;">
- *     <div class="chartContainer1" style="width:100%;height:100%;position:relative"></div>
- * </div>
+ *     <div class="chartwrap" style="grid-column: span 6; grid-row: span 2;">
+ *         <div class="chartContainer1" style="width: 100%; height: 100%; position: relative"></div>
+ *     </div>
  * </div>
  * ```
  *
  * Range slider working example:
- * <iframe width="800" height="350" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/dtug29yx/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+ * <iframe width="800" height="350" scrolling="no" seamless="seamless" align="top"
+ *         style="float:top" src="https://jsfiddle.net/chartiq/dtug29yx/embedded/result,js,html/"
+ *         allowfullscreen="allowfullscreen" frameborder="1">
+ * </iframe>
  *
  * @param {object} params Configuration parameters.
  * @param {CIQ.ChartEngine} [params.stx] The chart object.
- * @param {number} [params.height=95] Height of range slider panel.
- * @param {object} [params.yAxis] Optional yAxis parameters.
- * @param {number} [params.chartContainer=stxx.container] Handle to the main chart
- * 		container.
+ * @param {number} [params.height="95px"] Height of the range slider panel. Must include a CSS
+ * 		unit, such as "px".
+ * @param {object} [params.yAxis] Y-axis parameters.
+ * @param {number} [params.chartContainer] Handle to the main chart container. Defaults to
+ * 		`stxx.container`.
  * @param {string} [params.menuContextClass] A CSS class name used to query the menu DOM element
  * 		that contains the UI control for the range slider add-on. In a multi-chart document, the
  * 		add-on is available only on charts that have a menu DOM element with the value for
@@ -2493,40 +2539,46 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * - 8.0.0 Added `params.menuContextClass`.
  *
  * @example
- * <caption>Declare a range slider and enable by default using the loadChart callback.</caption>
- * var stxx=new CIQ.ChartEngine({container:document.querySelector(".chartContainer")});
+ * <caption>
+ * 		Create a range slider and enable it by default using the <code>loadChart</code> callback.
+ * </caption>
+ * const stxx = new CIQ.ChartEngine({ container: document.querySelector(".chartContainer") });
  *
- * stxx.attachQuoteFeed(quoteFeedSimulator,{refreshInterval:1,bufferSize:200});
- *
- * // instantiate a range slider
- * new CIQ.RangeSlider({stx:stxx});
- *
- * function displayChart(){
- *     stxx.newChart("SPY", null, null,function(){
- *         // for smoother visualization, enable AFTER THE MAIN CHART HAS COMPLETED LOADING ITS DATA.
- *         stxx.layout.rangeSlider=true; // show the slider
- *         stxx.changeOccurred("layout"); // signal the change to force a redraw.
- *     }
- * });
- *
- * @example
- * <caption>Declare a range slider and enable/disable using commands to be triggered from a menu.</caption>
- * var stxx=new CIQ.ChartEngine({container:document.querySelector(".chartContainer")});
+ * stxx.attachQuoteFeed(quoteFeedSimulator,{ refreshInterval: 1, bufferSize: 200 });
  *
  * // Instantiate a range slider.
- * new CIQ.RangeSlider({stx:stxx});
+ * new CIQ.RangeSlider({ stx: stxx });
+ *
+ * function displayChart(){
+ *     stxx.loadChart("SPY", null, function() {
+ *         // For smoother visualization, enable after the main chart has completed loading its data.
+ *         stxx.layout.rangeSlider = true; // Show the slider.
+ *         stxx.changeOccurred("layout"); // Signal the change to force a redraw.
+ *     });
+ * }
+ *
+ * @example
+ * <caption>
+ * 		Create a range slider and enable/disable it using commands to be triggered from a menu.
+ * </caption>
+ * const stxx = new CIQ.ChartEngine({ container: document.querySelector(".chartContainer") });
+ *
+ * // Instantiate a range slider.
+ * new CIQ.RangeSlider({ stx: stxx });
  *
  * // To display the slider from a menu use:
- * stxx.layout.rangeSlider=true; // show the slider
- * stxx.changeOccurred("layout"); // signal the change to force a redraw.
+ * stxx.layout.rangeSlider = true; // Show the slider.
+ * stxx.changeOccurred("layout"); // Signal the change to force a redraw.
  *
  * // To hide the slider from a menu use:
- * stxx.layout.rangeSlider=false; // hide the slider
- * stxx.changeOccurred("layout"); // signal the change to force a redraw.
+ * stxx.layout.rangeSlider = false; // Hide the slider.
+ * stxx.changeOccurred("layout"); // Signal the change to force a redraw.
  */
 CIQ.RangeSlider =
 	CIQ.RangeSlider ||
 	function (params) {
+		this.cssRequired = true;
+
 		var stx = params.stx;
 		stx.slider = this;
 		var sliderHeight = params.height ? params.height : "95px";
@@ -2557,7 +2609,7 @@ CIQ.RangeSlider =
 		self.xaxisHeight = 30;
 		self.manageTouchAndMouse = false;
 		self.minimumCandleWidth = 0;
-		self.container.style.cursor = "ew-resize";
+		self.chart.panel.subholder.style.cursor = "ew-resize";
 		var yAxis = self.chart.panel.yAxis;
 		yAxis.drawCurrentPriceLabel = false;
 		Object.defineProperty(yAxis, "position", {
@@ -2568,13 +2620,16 @@ CIQ.RangeSlider =
 				stx.slider.yAxisPosition = position;
 			}
 		});
+		const { get, set } = Object.getOwnPropertyDescriptor(
+			CIQ.ChartEngine.YAxis.prototype,
+			"width"
+		);
 		Object.defineProperty(yAxis, "width", {
 			get: function () {
-				if (stx.slider.yAxisWidth === 0) return 0;
-				return stx.slider.yAxisWidth || stx.chart.panel.yAxis.width;
+				return Math.max(get.call(yAxis), stx.chart.yAxis.width);
 			},
 			set: function (width) {
-				stx.slider.yAxisWidth = width;
+				set.call(yAxis, width);
 			}
 		});
 		CIQ.extend(yAxis, params.yAxis);
@@ -2582,11 +2637,6 @@ CIQ.RangeSlider =
 		if (self.controls.home) self.controls.home.style.width = 0;
 		self.initializeChart();
 		var subholder = self.chart.panel.subholder;
-
-		const menuClass = `${
-			(params.menuContextClass && "." + params.menuContextClass) || "body"
-		} .rangeslider-ui`;
-		CIQ.addInternalStylesheet(`${menuClass} { display: inherit }`, menuClass);
 
 		/**
 		 * Dynamically updates the styling of the range slider.
@@ -2675,7 +2725,7 @@ CIQ.RangeSlider =
 					doDraw = true;
 				}
 			});
-			if (!CIQ.UI.trulyVisible(ciqSlider)) return;
+			if (!CIQ.trulyVisible(ciqSlider)) return;
 			if (doDraw) {
 				self.setMainSeriesRenderer();
 				self.draw();
@@ -2684,6 +2734,7 @@ CIQ.RangeSlider =
 		};
 		this.adjustRange = function (chart) {
 			if (!chart.dataSet) return;
+			if (!chart.endPoints || !chart.endPoints.begin) return;
 			var myChart = self.chart;
 			if (!myChart.width) return;
 			var scrollOffset = 0,
@@ -2734,7 +2785,7 @@ CIQ.RangeSlider =
 				self.calculateYAxisPositions();
 		};
 		this.drawSlider = function () {
-			if (!CIQ.UI.trulyVisible(ciqSlider)) return;
+			if (!CIQ.trulyVisible(ciqSlider)) return;
 			if (!stx.chart.dataSet || !stx.chart.dataSet.length) return;
 			var style = this.style;
 			if (!style)
@@ -2800,9 +2851,9 @@ CIQ.RangeSlider =
 			obj.stx.slider.acceptLayoutChange(obj.stx.layout);
 		});
 		stx.addEventListener("preferences", function (obj) {
-			var language = obj.stx.preferences.language;
+			const { language } = obj.stx.preferences;
 			if (CIQ.I18N && self.preferences.language != language) {
-				CIQ.I18N.localize(self, language);
+				CIQ.I18N.setLocale(self, language);
 			}
 			self.preferences.language = language;
 			self.draw();
@@ -2829,7 +2880,7 @@ CIQ.RangeSlider =
 			this.slider.copyData(this.chart);
 		});
 		stx.append("draw", function () {
-			if (!CIQ.UI.trulyVisible(ciqSlider)) return;
+			if (!CIQ.trulyVisible(ciqSlider)) return;
 			if (!self.chart.dataSet) return;
 			this.slider.adjustRange(this.chart);
 			this.slider.calculateYAxisPosition();
@@ -2845,7 +2896,7 @@ CIQ.RangeSlider =
 			var totalHeightOfContainers = CIQ.elementDimensions(chartArea).height;
 			var chartContainers = chartArea.querySelectorAll(".chartContainer");
 			Array.from(chartContainers).forEach(function (container) {
-				if (container !== chartContainer && CIQ.UI.trulyVisible(container)) {
+				if (container !== chartContainer && CIQ.trulyVisible(container)) {
 					totalHeightOfContainers -= CIQ.elementDimensions(container, {
 						border: 1,
 						padding: 1,
@@ -2855,6 +2906,9 @@ CIQ.RangeSlider =
 			});
 			ciqChart.style.height = totalHeightOfContainers + "px";
 			if (this.layout.rangeSlider) {
+				if (self.chart.breakpoint !== this.chart.breakpoint) {
+					self.notifyBreakpoint(this.chart.breakpoint);
+				}
 				ciqSlider.style.display = "";
 				self.resizeChart();
 				self.initializeChart();
@@ -2868,8 +2922,9 @@ CIQ.RangeSlider =
 			subholder.addEventListener(
 				ev,
 				function (e) {
-					var start = e.offsetX;
+					var start = self.backOutX(e.pageX);
 					if (!start && start !== 0) return; // wrong event
+					start -= e.target.offsetLeft;
 					self.startDrag = start;
 					self.startPixelLeft = self.pixelLeft;
 					self.startPixelRight = self.pixelRight;
@@ -2883,15 +2938,20 @@ CIQ.RangeSlider =
 					if (start < self.pixelRight - bw) self.needsLeft = true;
 					if (start > self.pixelLeft + bw) self.needsRight = true;
 					if (CIQ.touchDevice) return;
-					e.target.classList.add("stx-drag-chart");
+					if (self.needsLeft && self.needsRight) {
+						// change to grab only if drag started from viewport
+						e.target.classList.add("stx-drag-chart");
+					}
 				},
 				{ passive: false }
 			);
 		});
-		["mouseup", "mouseout", "touchend", "pointerup"].forEach(function (ev) {
+		["mouseup", "mouseover", "touchend", "pointerup"].forEach(function (ev) {
 			subholder.addEventListener(ev, function (e) {
+				const { which, type } = e;
+				if (which === 1 && type !== "pointerup" && type !== "mouseup") return;
 				e.target.classList.remove("stx-drag-chart");
-				self.container.style.cursor = "ew-resize";
+				self.chart.panel.subholder.style.cursor = "ew-resize";
 				self.startDrag = null;
 				self.needsLeft = false;
 				self.needsRight = false;
@@ -2903,13 +2963,12 @@ CIQ.RangeSlider =
 				function (e) {
 					var startDrag = self.startDrag;
 					if (!startDrag && startDrag !== 0) return;
-					var touches = e.originalEvent && e.originalEvent.touches;
+					var touches = e.touches;
 					var movement =
-						touches && touches.length
-							? self.backOutX(touches[0].pageX) - e.target.offsetLeft
-							: e.offsetX;
+						(touches && touches.length
+							? self.backOutX(touches[0].pageX)
+							: self.backOutX(e.pageX)) - e.target.offsetLeft;
 					if (!movement && movement !== 0) return; // wrong event
-					self.container.style.cursor = "grab";
 					movement -= startDrag;
 					var tickLeft = self.tickLeft,
 						tickRight = self.tickRight;
@@ -2958,7 +3017,262 @@ CIQ.RangeSlider =
 
 };
 
-let __js_addons_tableView_ = (_exports) => {
+let __js_addons_standard_shortcuts_ = (_exports) => {
+
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Displays a legend of keyboard shortcuts and the actions the shortcuts perform.
+ *
+ * Delegates display of the legend to the
+ * [cq-floating-window]{@link WebComponents.cq-floating-window} web component by dispatching a
+ * "floatingWindow" event (see
+ * [floatingWindowEventListener]{@link CIQ.ChartEngine~floatingWindowEventListener}).
+ *
+ * Creates the legend from keyboard shortcut specifications contained in a configuration object;
+ * for example, the default chart configuration object (see the {@tutorial Chart Configuration}
+ * tutorial).
+ *
+ * Requires *addOns.js*.
+ *
+ * @param {object} params The constructor parameters.
+ * @param {CIQ.ChartEngine} params.stx The chart engine instance for which the keyboard shortcuts
+ * 		legend is created.
+ * @param {object} params.config A configuration object that includes specifications for hot keys
+ * 		and drawing tool keyboard shortcuts. Typically, this object is the chart configuration
+ * 		object. See the {@tutorial Chart Configuration} tutorial for the data format for keyboard
+ * 		shortcuts.
+ * @param {number} [params.width="580"] The width of the floating window that contains the
+ * 		keyboard shortcuts legend.
+ * @param {boolean} [params.windowForEachChart=true] A flag that indicates whether each chart
+ * 		instance in a multi-chart document has its own keyboard shortcuts legend. If false, all
+ * 		charts share the same legend.
+ *
+ * @constructor
+ * @name CIQ.Shortcuts
+ * @since 8.2.0
+ *
+ * @example
+ * new CIQ.Shortcuts(
+ *     stx: stxx,
+ *     config: {
+ *         drawingTools: [{ label: "line", shortcut: "l" }],
+ *         hotkeyConfig: {
+ *             hotkeys: [{ label: "Pan chart up", action: "up", commands: ["ArrowUp", "Up"] }]
+ *         }
+ *     }
+ * );
+ */
+CIQ.Shortcuts =
+	CIQ.Shortcuts ||
+	function ({ stx, width = 580, windowForEachChart = true, config } = {}) {
+		if (!stx) {
+			console.warn("The Shortcuts addon requires an stx parameter");
+			return;
+		}
+		/**
+		 * The chart engine instance for which the keyboard shortcuts legend is created.
+		 *
+		 * @type {CIQ.ChartEngine}
+		 * @memberof CIQ.Shortcuts#
+		 * @alias stx
+		 * @since 8.2.0
+		 */
+		this.stx = stx;
+		/**
+		 * Width of the floating window that contains the keyboard shortcuts legend.
+		 *
+		 * @type {number}
+		 * @memberof CIQ.Shortcuts#
+		 * @alias width
+		 * @since 8.2.0
+		 */
+		this.width = width;
+		/**
+		 * In a multi-chart document, indicates whether each chart has its own keyboard shortcuts
+		 * legend. If false, all charts share the same legend.
+		 *
+		 * @type {boolean}
+		 * @memberof CIQ.Shortcuts#
+		 * @alias windowForEachChart
+		 * @since 8.2.0
+		 */
+		this.windowForEachChart = windowForEachChart;
+		this.content = this.getShortcutContent(config);
+		this.enclosingContainer = stx.container.querySelector(".stx-subholder");
+
+		this.ensureMessagingAvailable(stx);
+		this.enableUI(stx);
+		this.cssRequired = true;
+
+		stx.shortcuts = this;
+	};
+
+/**
+ * Enables the keyboard shortcuts legend user interface.
+ *
+ * Adds a `showShortCuts` function to the {@link CIQ.UI.Layout} helper. The `showShortCuts`
+ * function calls this class's [toggle]{@link CIQ.Shortcuts#toggle} function to show and hide the
+ * keyboard shortcuts legend. Call `showShortCuts` in your application's user interface (see
+ * example).
+ *
+ * This function is called when the add-on is instantiated.
+ *
+ * @param {CIQ.ChartEngine} stx The chart engine that provides the UI context for the keyboard
+ * 		shortcuts legend.
+ *
+ * @memberof CIQ.Shortcuts
+ * @since 8.2.0
+ *
+ * @example <caption>Create a button that shows and hides the keyboard shortcuts legend.</caption>
+ * <div class="ciq-footer full-screen-hide">
+ *     <div class="shortcuts-ui ciq-shortcut-button"
+ *          stxtap="Layout.showShortcuts()"
+ *          title="Toggle shortcut legend">
+ *     </div>
+ * </div>
+ */
+CIQ.Shortcuts.prototype.enableUI = function (stx) {
+	if (!(stx && CIQ.UI)) return;
+	setTimeout(() => {
+		const layout = stx.uiContext.getAdvertised("Layout");
+		layout.showShortcuts = (node, value) => this.toggle(value);
+	});
+};
+
+/**
+ * Ensures that an instance of the [cq-floating-window]{@link WebComponents.cq-floating-window}
+ * web component is available to handle event messaging and create the shortcuts legend floating
+ * window.
+ *
+ * This function is called when the add-on is instantiated.
+ *
+ * @param {CIQ.ChartEngine} stx The chart engine that provides the UI context, which contains the
+ * [cq-floating-window]{@link WebComponents.cq-floating-window} web component.
+ *
+ * @memberof CIQ.Shortcuts
+ * @since 8.2.0
+ */
+CIQ.Shortcuts.prototype.ensureMessagingAvailable = function (stx) {
+	setTimeout(() => {
+		const contextContainer = stx.uiContext.topNode;
+		if (!contextContainer.querySelector("cq-floating-window")) {
+			contextContainer.append(document.createElement("cq-floating-window"));
+		}
+	});
+};
+
+/**
+ * Creates the contents of the keyboard shortcuts legend based on specifications contained in a
+ * configuration object. The contents are displayed in a
+ * [cq-floating-window]{@link WebComponents.cq-floating-window} web component.
+ *
+ * This function is called when the add-on is instantiated.
+ *
+ * @param {object} config A configuration object that includes specifications for drawing tool
+ * 		keyboard shortcuts and hot keys. Typically, this object is the chart configuration object
+ * 		(see the {@tutorial Chart Configuration} tutorial).
+ * @return {string} The keyboard shortcuts legend as HTML.
+ *
+ * @memberof CIQ.Shortcuts
+ * @since 8.2.0
+ */
+CIQ.Shortcuts.prototype.getShortcutContent = function (config) {
+	const drawingToolShortcuts = (config.drawingTools || [])
+		.filter((tool) => tool.shortcut)
+		.map(
+			({ label, shortcut }) =>
+				`<div class="ciq-shortcut">
+					<div>${label}</div>
+					<div><span>Alt</span> + <span>${shortcut.toUpperCase()}</span></div>
+				</div>`
+		)
+		.join("");
+
+	// Alt + key combination produces unpredictable accent characters depending on keyboard mapping
+	// default hotkeys include them for better coverage, avoid displaying them in legend
+	const isAscii = (str) => str.charCodeAt(str.length - 1) < 127;
+	const wrapKeys = (str) =>
+		str === " + "
+			? "<span>+</span>"
+			: str
+					.split("+")
+					.map((el) => (el && el !== " " ? "<span>" + el + "</span>" : ""))
+					.join(" + ");
+
+	const commandsToString = (commands) => {
+		return commands
+			.map((command) => command.replace(/Arrow|Key|Digit|^ | $/g, ""))
+			.map((command) => command.replace(/\+/, " + "))
+			.reduce(
+				(acc, command) =>
+					!acc.includes(command) && isAscii(command)
+						? acc.concat(command)
+						: acc,
+				[]
+			)
+			.map(wrapKeys)
+			.join("<br>");
+	};
+
+	const container = this.stx.container.closest("cq-context");
+	const extensionAvailable = (name) =>
+		container.hasAttribute(name.toLowerCase() + "-active");
+	const hotkeys = ((config.hotkeyConfig && config.hotkeyConfig.hotkeys) || [])
+		.map(({ label, action, commands, extension }) => {
+			if (extension && !extensionAvailable(extension)) {
+				return "";
+			}
+			return `<div class="ciq-shortcut"><div>${
+				label || action
+			}</div><div>${commandsToString(commands)}</div></div>`;
+		})
+		.join("");
+
+	return `
+		<div class="ciq-shortcut-container">
+			<div>
+				<div><b>Drawing tools shortcuts</b></div>
+				<div>${drawingToolShortcuts}</div>
+			</div>
+			<hr>
+			<div>
+				<div><b>Hotkeys</b></div>
+				<div>${hotkeys}</div>
+			</div>
+		</div>
+	`;
+};
+
+/**
+ * Opens and closes the floating window that contains the keyboard shortcuts legend.
+ *
+ * @param {boolean} [value] If true, the window is opened. If false, the window is closed.
+ * 		If not provided, the window state is toggled. That is, the window is opened if it is
+ * 		currently closed; closed, if it is currently open.
+ *
+ * @memberof CIQ.Shortcuts
+ * @since 8.2.0
+ */
+CIQ.Shortcuts.prototype.toggle = function (value) {
+	this.stx.dispatch("floatingWindow", {
+		type: "shortcut",
+		title: "Shortcuts",
+		content: this.content,
+		container: this.enclosingContainer,
+		onClose: () => (this.closed = true),
+		width: this.width,
+		status: value,
+		tag: this.windowForEachChart ? undefined : "shortcut"
+	});
+};
+
+};
+
+let __js_addons_standard_tableView_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -2974,6 +3288,8 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  *
  * The table view can be opened using the Alt+K keystroke combination and closed using the Escape
  * key (see the `tableView` action in `hotkeyConfig.hotkeys` in *js/defaultConfiguration.js*).
+ *
+ * Requires *addOns.js*.
  *
  * @param {object} params Configuration parameters.
  * @param {CIQ.ChartEngine} params.stx A reference to the chart engine that contains the chart for
@@ -2997,7 +3313,7 @@ var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
  * @since 8.1.0
  *
  * @example
- * new CIQ.TableView({stx:stxx});
+ * new CIQ.TableView({ stx: stxx });
  */
 CIQ.TableView =
 	CIQ.TableView ||
@@ -3017,7 +3333,8 @@ CIQ.TableView =
 		 * The chart engine instance that contains the chart for which the table view is created.
 		 *
 		 * @type CIQ.ChartEngine
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias stx
 		 * @since 8.1.0
 		 */
 		this.stx = stx;
@@ -3030,7 +3347,8 @@ CIQ.TableView =
 		 * [Volume Chart]{@link CIQ.Studies.createVolumeChart} study).
 		 *
 		 * @type boolean
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias viewAdditionalColumns
 		 * @since 8.1.0
 		 */
 		this.viewAdditionalColumns = false;
@@ -3039,7 +3357,8 @@ CIQ.TableView =
 		 * unit acceptable by the CSS `calc` function.
 		 *
 		 * @type string
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias minColumnWidth
 		 * @since 8.1.0
 		 */
 		this.minColumnWidth = minColumnWidth;
@@ -3048,7 +3367,8 @@ CIQ.TableView =
 		 * user interface elements, such as the menus and footer.
 		 *
 		 * @type number
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias coverUIMaxWidth
 		 * @since 8.1.0
 		 */
 		this.coverUIMaxWidth = coverUIMaxWidth;
@@ -3056,7 +3376,8 @@ CIQ.TableView =
 		 * A CSS selector used to obtain the DOM element that hosts the table view.
 		 *
 		 * @type string
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias coverContainer
 		 * @since 8.1.0
 		 */
 		this.coverContainer = coverContainer;
@@ -3066,7 +3387,8 @@ CIQ.TableView =
 		 * point.
 		 *
 		 * @type boolean
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias usePreviousCloseForChange
 		 * @since 8.1.0
 		 */
 		this.usePreviousCloseForChange = usePreviousCloseForChange;
@@ -3075,7 +3397,8 @@ CIQ.TableView =
 		 * static methods.
 		 *
 		 * @type TableViewBuilder
-		 * @memberof CIQ.TableView
+		 * @memberof CIQ.TableView#
+		 * @alias builder
 		 * @since 8.1.0
 		 */
 		this.builder = TableViewBuilder;
@@ -3083,6 +3406,7 @@ CIQ.TableView =
 		this.listeners = [];
 
 		stx.tableView = this;
+		this.cssRequired = true;
 
 		if (CIQ.UI) {
 			CIQ.UI.observeProperty("uiContext", stx, ({ value: uiContext }) => {
@@ -3412,6 +3736,7 @@ TableViewBuilder.createTable = function (stx, config = {}) {
 		contentEl.select();
 		document.execCommand("copy");
 		contentEl.remove();
+		stx.dispatch("notification", "copytoclipboard");
 	}
 
 	function downloadFn() {
@@ -3474,7 +3799,7 @@ TableViewBuilder.dataToHtml = function (data, { colHeaders, minColumnWidth }) {
 };
 
 /**
- * Tranforms the chart data into a character-separated values (CSV) file, including column headers.
+ * Transforms the chart data into a character-separated values (CSV) file, including column headers.
  *
  * @param {object[]} data The chart data.
  * @param {object} params Configuration parameters.
@@ -3551,7 +3876,7 @@ TableViewBuilder.getChartData = function (
 		additionalDataFields
 	}
 ) {
-	const data = stx.chart.dataSegment;
+	const data = stx.chart.dataSegment.filter((item) => item !== null);
 	const { usePreviousCloseForChange } = stx.tableView;
 	let out = [];
 	let length = 0;
@@ -3631,7 +3956,7 @@ TableViewBuilder.getDateFormatter = function (stx) {
 	return (dt, panel) => {
 		if (!dt) return "";
 
-		return CIQ.displayableDate(stx, stx.chart, dt);
+		return CIQ.displayableDate(stx, stx.chart, dt, true);
 	};
 };
 
@@ -3809,7 +4134,10 @@ TableViewBuilder.getCoverToolbar = function ({
 
 	const btnDownload = toolBar.querySelector(".ciq-data-table-download");
 	if (downloadFn) {
-		btnDownload.addEventListener("click", downloadFn);
+		btnDownload.addEventListener("click", function () {
+			btnDownload.blur();
+			downloadFn();
+		});
 	} else {
 		btnDownload.style.display = "none";
 	}
@@ -3883,7 +4211,7 @@ TableViewBuilder.getStudyDataNames = function (stx) {
 	}
 
 	function hasData(name) {
-		return stx.chart.dataSegment.some((data) => data[name]);
+		return stx.chart.dataSegment.some((data) => data && data[name]);
 	}
 };
 
@@ -3916,7 +4244,7 @@ TableViewBuilder.getSeriesDataNames = function (stx) {
 
 };
 
-let __js_addons_tooltip_ = (_exports) => {
+let __js_addons_standard_tooltip_ = (_exports) => {
 
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
@@ -3928,28 +4256,37 @@ if (!CIQ.Marker) {
 	console.error("tooltip addon requires first activating markers feature.");
 } else {
 	/**
-	 * Add-On that creates a hovering "tooltip" as mouse is moved over the chart when the cross-hairs are active.
+	 * Add-on that creates a detailed tooltip as the user's mouse hovers over data points on the
+	 * chart. The tooltip contains information such as the open, high, low, and close prices of
+	 * stock quotes.
 	 *
-	 * Tooltip Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/5kux6j8p/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+	 * Tooltip example:
+	 * <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top"
+	 *         style="float:top"
+	 *         src="https://jsfiddle.net/chartiq/5kux6j8p/embedded/result,js,html/"
+	 *         allowfullscreen="allowfullscreen" frameborder="1">
+	 * </iframe>
 	 *
-	 * The tool-tip is directly linked to the cross-hairs. So if you disable the cross hairs, the tool-tip also goes away.
+	 * **Note:** Prior to version 8.2.0, the tooltip was directly linked to the crosshairs. The
+	 * crosshairs had to be active for the tooltip to be displayed.
 	 *
-	 * To toggle cross-hairs use <a href="CIQ.ChartEngine.html#layout%5B%60crosshair%60%5D">CIQ.ChartEngine.layout.crosshair</a>. Set to `true` or `false` as needed.
+	 * Requires *addOns.js* and *markers.js*, or the bundle *standard.js*.
 	 *
-	 * Requires `addOns.js`; as well as `markers.js` or the bundle `standard.js`.
+	 * There can be only one `CIQ.Tooltip` per chart.
 	 *
-	 * There can be only one CIQ.Tooltip per chart.
+	 * Color and layout can be customized by overriding the CSS rule-sets defined for the
+	 * `stx-hu-tooltip` and related type selectors in *stx-chart.css*. Do not modify
+	 * *stx-chart.css*; create a separate style sheet file that overrides *stx-chart.css* in the
+	 * CSS cascade. See the example below.
 	 *
-	 * Color and layout can be customized via `stx-hu-tooltip` and related CSS classes. Defaults can be found in `stx-chart.css`.
-	 *
-	 * CIQ.Tooltip automatically creates its own HTML inside the chart container.
-	 * Here is an example of the structure (there will be one field tag per displayed element):
+	 * `CIQ.Tooltip` automatically creates its own HTML inside the chart container. Here is an
+	 * example of the structure (there will be one field tag per displayed element):
 	 * ```
 	 * <stx-hu-tooltip>
-	 * 		<stx-hu-tooltip-field>
-	 * 			<stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
-	 * 			<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-	 * 		</stx-hu-tooltip-field>
+	 *     <stx-hu-tooltip-field>
+	 *         <stx-hu-tooltip-field-name></stx-hu-tooltip-field-name>
+	 *         <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+	 *     </stx-hu-tooltip-field>
 	 * </stx-hu-tooltip>
 	 * ```
 	 * By default, the `stx-hu-tooltip-field` elements are inserted in the following order:
@@ -3962,21 +4299,25 @@ if (!CIQ.Marker) {
 	 * - series
 	 * - studies
 	 *
-	 * But the default layout can be changed. You can override the order of fields or change the labels by manually inserting
-	 * the HTML that the tooltip would otherwise have created for that field.
-	 * If no override HTML is found for a particular field, the default will be used.
-	 * This HTML must be placed *inside the chart container*.
+	 * But the default layout can be changed. You can override the order of fields or change the
+	 * labels by manually inserting the HTML that the tooltip would otherwise have created for
+	 * that field. If no override HTML is found for a particular field, the default is used.
+	 * **Note:** This HTML must be placed inside the chart container.
 	 *
-	 * All of the code is provided in `addOns.js` and can be fully customized by copying the source code from the library and overriding
-	 * the functions with your changes. Be sure to never modify a library file as this will hinder upgrades.
+	 * All of the code is provided in *addOns.js* and can be fully customized by copying the
+	 * source code from the library and overriding the functions with your changes. Be sure to
+	 * never modify a library file, as this will hinder upgrades.
 	 *
-	 * For example, concatenating the field name ( ie: 'Jaw' ) with the study name ( ie: 'Alligator' ) is the default behavior of the tooltip for displaying the value title.
-	 * Feel free to override this behavior by creating your own custom version of the renderFunction() for the CIQ.Tooltip.
-	 * To do this, copy the entire CIQ.Tooltip code (found in addOns.js) and make the changes to your custom version. Load your custom version instead.
-	 * Specifically, look for the following code in renderFunction() that pushes out the text for each study field:
+	 * For example, concatenating the field name (e.g., "Jaw") with the study name (e.g.,
+	 * "Alligator" ) is the default behavior of the tooltip for displaying the value title. Feel
+	 * free to override this behavior by creating your own custom version of the `renderFunction()`
+	 * for the `CIQ.Tooltip`. To do this, copy the entire `CIQ.Tooltip` code (found in *addOns.js*)
+	 * and make the changes to your custom version. Load your custom version instead. Specifically,
+	 * look for the following code in the `renderFunction()` that pushes out the text for each
+	 * study field:
 	 * ```
-	 * var newFieldName = document.createElement("stx-hu-tooltip-field-name");
-	 * newFieldName.innerHTML=this.translateIf(fieldName);
+	 * let newFieldName = document.createElement("stx-hu-tooltip-field-name");
+	 * newFieldName.innerHTML = this.translateIf(fieldName);
 	 * newField.appendChild(newFieldName);
 	 * ```
 	 * Replace `fieldName` with anything you want to use as the field title and push that instead.
@@ -3986,80 +4327,97 @@ if (!CIQ.Marker) {
 	 *
 	 * @param {object} tooltipParams The constructor parameters.
 	 * @param {CIQ.ChartEngine} [tooltipParams.stx] The chart object.
-	 * @param {boolean} [tooltipParams.ohl] set to true to show OHL data (Close is always shown).
-	 * @param {boolean} [tooltipParams.volume] set to true to show Volume.
-	 * @param {boolean} [tooltipParams.series] set to true to show value of series.
-	 * @param {boolean} [tooltipParams.studies] set to true to show value of studies.
-	 * @param {boolean} [tooltipParams.showOverBarOnly] set to true to show tooltip only when over the primary line/bars.
-	 * @param {boolean} [tooltipParams.change] set to true to show the change in daily value when isDailyInterval
-	 * @param {boolean} [tooltipParams.interpolation] set to true to show the estimated value when there is no data between bars. **Note** that a value of `null` is not considered missing data.
-	 * @param {boolean} [tooltipParams.useDataZone] set to true to show the date in the dataZone, false to use the displayZone
+	 * @param {boolean} [tooltipParams.ohl] Set to true to show OHL data (Close is always shown).
+	 * @param {boolean} [tooltipParams.volume] Set to true to show Volume.
+	 * @param {boolean} [tooltipParams.series] Set to true to show value of series.
+	 * @param {boolean} [tooltipParams.studies] Set to true to show value of studies.
+	 * @param {boolean} [tooltipParams.showOverBarOnly] Set to true to show the tooltip only when
+	 * 		the mouse is over the primary line/bars.
+	 * @param {boolean} [tooltipParams.change] Set to true to show the change in daily value
+	 * 		when the internal chart periodicity is a daily interval (see
+	 * 		{@link CIQ.ChartEngine.isDailyInterval}).
+	 * @param {boolean} [tooltipParams.interpolation] Set to true to show the estimated value when
+	 * 		there is no data between bars. **Note:** A value of `null` is not considered missing
+	 * 		data.
+	 * @param {boolean} [tooltipParams.useDataZone] Set to true to show the date in the `dataZone`
+	 * 		time zone; false, to use the `displayZone` time zone (see
+	 * 		{@link CIQ.ChartEngine#setTimeZone}).
+	 * @param {boolean} [tooltipParams.showBarHighlight=true] Specifies whether the bar (data
+	 * 		point) the mouse is hovering over is highlighted. Applies to the floating tooltip only
+	 * 		(the dynamic tooltip points to the bar). If the crosshairs are active, this parameter
+	 * 		is ignored.
+	 *
 	 * @constructor
-	 * @name  CIQ.Tooltip
-	 * @example <caption>Adding a hover tool tip to a chart:</caption>
-	 *
-	 * //First declare your chart engine
-	 * var stxx=new CIQ.ChartEngine({container:document.querySelector(".chartContainer")[0]});
-	 *
-	 * //Then link the tooltip to that chart.
-	 * //Note how we've enabled OHL, Volume, Series and Studies.
-	 * new CIQ.Tooltip({stx:stxx, ohl:true, volume:true, series:true, studies:true});
-	 *
-	 * @example <caption>Customize the order, layout or text in tooltip labels:</caption>
-	 * // In this example, we've rearranged the HTML to display the Close field first, then the DT
-	 * // We are also labeling the DT 'Date/Time' and the Close 'Last'
-	 * // The rest of the fields will be then displayed in their default order.
-	 *
-	  	<stx-hu-tooltip>
-			<stx-hu-tooltip-field field="Close">
-				<stx-hu-tooltip-field-name>Last</stx-hu-tooltip-field-name>
-				<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-			</stx-hu-tooltip-field>
-			<stx-hu-tooltip-field field="DT">
-				<stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
-				<stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
-			</stx-hu-tooltip-field>
-		</stx-hu-tooltip>
-	 *
-	 * @example
-	 * // Sample CSS for the hover tool tip. Working sample found in stx-chart.css
-		stx-hu-tooltip {
-			position: absolute;
-			left: -50000px;
-			z-index: 30;
-			white-space: nowrap;
-			padding: 6px;
-			border: 1px solid gray;
-			background-color: rgba(42,81,208,.5);
-			color: white;
-		}
-
-		stx-hu-tooltip-field {
-			display:table-row;
-		}
-
-		stx-hu-tooltip-field-name {
-			display:table-cell;
-			font-weight:bold;
-			padding-right:5px;
-		}
-
-		stx-hu-tooltip-field-name:after {
-			content:':';
-		}
-
-		stx-hu-tooltip-field-value {
-			display:table-cell;
-			text-align:right;
-		}
+	 * @name CIQ.Tooltip
 	 * @since
 	 * - 09-2016-19
-	 * - 5.0.0 Now `tooltipParams.showOverBarOnly` available to show tooltip only when over the primary line/bars.
-	 * - 5.1.1 [tooltipParams.change] set to true to show the change in daily value when displaying a daily interval.
-	 * - 6.2.5 New interpolation flag to show estimated value for missing series data points.
-	 * - 7.0.0 New useDataZone flag to show the DT in either the dataZone or displayZone date/time.
+	 * - 5.0.0 Now `tooltipParams.showOverBarOnly` is available to show tooltip only when over the
+	 * 		primary line/bars.
+	 * - 5.1.1 `tooltipParams.change` set to true to show the change in daily value when
+	 * 		displaying a daily interval.
+	 * - 6.2.5 New `tooltipParams.interpolation` flag to show estimated value for missing series
+	 * 		data points.
+	 * - 7.0.0 New `tooltipParams.useDataZone` flag to show the date in either the `dataZone` or
+	 * 		`displayZone` date/time.
+	 * - 8.2.0 Decoupled `CIQ.Tooltip` from the crosshairs and added highlighting of the data
+	 * 		point (or bar) the mouse is hovering over. The new `tooltipParams.showBarHighlight`
+	 * 		parameter enables or disables the highlighting.
+	 *
+	 * @example <caption>Add a tooltip to a chart:</caption>
+	 * // First declare your chart engine.
+	 * const stxx = new CIQ.ChartEngine({ container: document.querySelector(".chartContainer")[0] });
+	 *
+	 * // Then link the tooltip to that chart.
+	 * // Note how we've enabled OHL, Volume, Series and Studies.
+	 * new CIQ.Tooltip({ stx: stxx, ohl: true, volume: true, series: true, studies: true });
+	 *
+	 * @example <caption>Customize the order, layout, or text in tooltip labels:</caption>
+	 * // In this example, we've rearranged the HTML to display the Close field first, then the DT.
+	 * // We are also labeling the DT 'Date/Time' and the Close 'Last'.
+	 * // The rest of the fields are displayed in their default order.
+	 *
+	 * <stx-hu-tooltip>
+	 *     <stx-hu-tooltip-field field="Close">
+	 *         <stx-hu-tooltip-field-name>Last</stx-hu-tooltip-field-name>
+	 *         <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+	 *     </stx-hu-tooltip-field>
+	 *     <stx-hu-tooltip-field field="DT">
+	 *         <stx-hu-tooltip-field-name>Date/Time</stx-hu-tooltip-field-name>
+	 *         <stx-hu-tooltip-field-value></stx-hu-tooltip-field-value>
+	 *     </stx-hu-tooltip-field>
+	 * </stx-hu-tooltip>
+	 *
+	 * @example <caption>Customize the CSS for the tooltip (see <i>stx-chart.css</i>):</caption>
+	 * stx-hu-tooltip {
+	 *     position: absolute;
+	 *     left: -50000px;
+	 *     z-index: 30;
+	 *     white-space: nowrap;
+	 *     padding: 6px;
+	 *     border: 1px solid gray;
+	 *     background-color: rgba(42,81,208,.5);
+	 *     color: white;
+	 * }
+	 *
+	 * stx-hu-tooltip-field {
+	 *     display:table-row;
+	 * }
+	 *
+	 * stx-hu-tooltip-field-name {
+	 *     display:table-cell;
+	 *     font-weight:bold;
+	 *     padding-right:5px;
+	 * }
+	 *
+	 * stx-hu-tooltip-field-name:after {
+	 *     content:':';
+	 * }
+	 *
+	 * stx-hu-tooltip-field-value {
+	 *     display:table-cell;
+	 *     text-align:right;
+	 * }
 	 */
-
 	CIQ.Tooltip =
 		CIQ.Tooltip ||
 		function (tooltipParams) {
@@ -4070,23 +4428,38 @@ if (!CIQ.Marker) {
 				return;
 			}
 
-			var stx = tooltipParams.stx;
-			var showOhl = tooltipParams.ohl;
-			var showChange = tooltipParams.change;
-			var showVolume = tooltipParams.volume;
-			var showSeries = tooltipParams.series;
-			var showStudies = tooltipParams.studies;
-			var showOverBarOnly = tooltipParams.showOverBarOnly;
-			var showInterpolation = tooltipParams.interpolation;
-			var useDataZone = tooltipParams.useDataZone;
+			this.cssRequired = true;
 
-			var node = stx.chart.container.querySelector("stx-hu-tooltip");
+			const {
+				stx,
+				ohl: showOhl,
+				change: showChange,
+				volume: showVolume,
+				series: showSeries,
+				studies: showStudies,
+				interpolation: showInterpolation,
+				showOverBarOnly,
+				showBarHighlight = true,
+				useDataZone
+			} = tooltipParams;
+			const { container } = stx.chart;
+
+			let node = container.querySelector("stx-hu-tooltip");
 			if (!node) {
 				node = document.createElement("stx-hu-tooltip");
-				stx.chart.container.appendChild(node);
+				container.appendChild(node);
 			}
+
+			let highlightEl = container.querySelector(".stx-hu-tooltip-highlight");
+			if (!highlightEl) {
+				highlightEl = document.createElement("div");
+				highlightEl.classList.add("stx-hu-tooltip-highlight");
+				container.appendChild(highlightEl);
+			}
+
 			CIQ.Marker.Tooltip = function (params) {
 				if (!this.className) this.className = "CIQ.Marker.Tooltip";
+				this.highlightEl = highlightEl;
 				params.label = "tooltip";
 				CIQ.Marker.call(this, params);
 			};
@@ -4103,6 +4476,7 @@ if (!CIQ.Marker) {
 			};
 
 			CIQ.Marker.Tooltip.placementFunction = function (params) {
+				if (hideIfDisabled()) return;
 				var offset = 30;
 				var stx = params.stx;
 				for (var i = 0; i < params.arr.length; i++) {
@@ -4128,14 +4502,8 @@ if (!CIQ.Marker) {
 					}
 
 					if (
-						//	(stx.controls.crossX && stx.controls.crossX.style.display=="none") ||
-						//	(stx.controls.crossY && stx.controls.crossY.style.display=="none") ||
 						!(
 							stx.insideChart &&
-							stx.layout.crosshair &&
-							stx.displayCrosshairs &&
-							//		!stx.overXAxis &&
-							//		!stx.overYAxis &&
 							!stx.openDialog &&
 							!stx.activeDrawing &&
 							!stx.grabbingScreen &&
@@ -4143,6 +4511,7 @@ if (!CIQ.Marker) {
 							overBar
 						)
 					) {
+						highlightEl.style.display = "none";
 						marker.node.style.left = "-50000px";
 						marker.node.style.right = "auto";
 						marker.lastBar = {};
@@ -4154,8 +4523,10 @@ if (!CIQ.Marker) {
 							marker.lastBar
 						) &&
 						bar != stx.chart.dataSegment.length - 1
-					)
+					) {
 						return;
+					}
+
 					marker.lastBar = stx.chart.dataSegment[bar];
 					var cw = marker.lastBar.candleWidth || stx.layout.candleWidth;
 					if (
@@ -4168,7 +4539,7 @@ if (!CIQ.Marker) {
 						marker.node.style.left = "auto";
 						marker.node.style.right =
 							Math.round(
-								stx.container.clientWidth - stx.pixelFromBar(bar) + offset
+								container.clientWidth - stx.pixelFromBar(bar) + offset
 							) + "px";
 					} else {
 						marker.node.style.left =
@@ -4182,28 +4553,61 @@ if (!CIQ.Marker) {
 					if (top + height > stx.height) top = stx.height - height;
 					if (top < 0) top = 0;
 					marker.node.style.top = top + "px";
+
+					if (showBarHighlight && !stx.layout.crosshair) {
+						const candleWidth =
+							marker.lastBar.candleWidth || stx.layout.candleWidth;
+						const left = stx.pixelFromBar(bar) - candleWidth / 2;
+						let width = candleWidth;
+
+						if (left + width > stx.chart.width) {
+							// adjust width of last bar so it does not highlight past the edge of the chart into the y axis
+							width = stx.chart.width - left;
+						}
+
+						highlightEl.style.display = "block";
+						highlightEl.style.left = left + "px";
+						highlightEl.style.width = width + "px";
+					} else {
+						highlightEl.style.display = "none";
+					}
 				}
 				// temporarily disable overXAxis, overYAxis so the crosshairs don't hide if touch device and over Y axis (this can happen
 				// due to the offset which we apply)
 				var overXAxis = stx.overXAxis,
 					overYAxis = stx.overYAxis;
 				stx.overXAxis = stx.overYAxis = false;
-				stx.doDisplayCrosshairs();
 				stx.overXAxis = overXAxis;
 				stx.overYAxis = overYAxis;
 			};
 
+			function hideIfDisabled() {
+				const { headsUp } = stx.layout;
+				const instantiated = !!stx.huTooltip;
+				const noLayoutObject = typeof headsUp !== "object";
+				const layoutFalse = headsUp === false; // backwards compatibility
+				const enabled = headsUp && (headsUp === "floating" || headsUp.floating);
+
+				if (instantiated && (!(enabled || noLayoutObject) || layoutFalse)) {
+					const { huTooltip: tt } = stx;
+					const { node } = tt || {};
+
+					if (node) {
+						node.style.left = "-50000px";
+						node.style.right = "auto";
+						tt.lastBar = {};
+						if (tt.highlightEl) tt.highlightEl.style.display = "none";
+					}
+
+					return true;
+				}
+
+				return false;
+			}
+
 			function renderFunction() {
 				// the tooltip has not been initialized with this chart.
-				if (!this.huTooltip) return;
-
-				// crosshairs are not on
-				if (
-					(stx.controls.crossX &&
-						stx.controls.crossX.style.display == "none") ||
-					(stx.controls.crossY && stx.controls.crossY.style.display == "none")
-				)
-					return;
+				if (hideIfDisabled()) return;
 
 				var bar = this.barFromPixel(this.cx),
 					data = this.chart.dataSegment[bar];
@@ -4214,8 +4618,9 @@ if (!CIQ.Marker) {
 				if (
 					CIQ.Marker.Tooltip.sameBar(data, this.huTooltip.lastBar) &&
 					bar != this.chart.dataSegment.length - 1
-				)
+				) {
 					return;
+				}
 				var node = this.huTooltip.node;
 				Array.from(node.parentElement.querySelectorAll("[auto]")).forEach(
 					function (i) {
@@ -4525,23 +4930,12 @@ if (!CIQ.Marker) {
 				this.huTooltip.render();
 			}
 
-			CIQ.ChartEngine.prototype.append("undisplayCrosshairs", function () {
-				var tt = this.huTooltip;
-				if (tt && tt.node) {
-					var node = tt.node;
-					if (node) {
-						node.style.left = "-50000px";
-						node.style.right = "auto";
-						tt.lastBar = {};
-					}
-				}
-			});
-			CIQ.ChartEngine.prototype.append("deleteHighlighted", function () {
+			stx.append("deleteHighlighted", function () {
 				this.huTooltip.lastBar = {};
 				this.headsUpHR();
 			});
-			CIQ.ChartEngine.prototype.append("headsUpHR", renderFunction);
-			CIQ.ChartEngine.prototype.append("createDataSegment", renderFunction);
+			stx.append("headsUpHR", renderFunction);
+			stx.append("createDataSegment", renderFunction);
 			stx.huTooltip = new CIQ.Marker.Tooltip({
 				stx: stx,
 				xPositioner: "bar",
@@ -4555,32 +4949,34 @@ if (!CIQ.Marker) {
 
 
 let _exports = {CIQ};
-export {__js_addons_animation_ as animation};
-export {__js_addons_continuousZoom_ as continuousZoom};
-export {__js_addons_extendedHours_ as extendedHours};
-export {__js_addons_fullScreen_ as fullScreen};
-export {__js_addons_inactivityTimer_ as inactivityTimer};
-export {__js_addons_outliers_ as outliers};
-export {__js_addons_plotComplementer_ as plotComplementer};
-export {__js_addons_rangeSlider_ as rangeSlider};
-export {__js_addons_tableView_ as tableView};
-export {__js_addons_tooltip_ as tooltip};
+export {__js_addons_advanced_animation_ as animation};
+export {__js_addons_advanced_continuousZoom_ as continuousZoom};
+export {__js_addons_advanced_outliers_ as outliers};
+export {__js_addons_advanced_plotComplementer_ as plotComplementer};
+export {__js_addons_standard_extendedHours_ as extendedHours};
+export {__js_addons_standard_fullScreen_ as fullScreen};
+export {__js_addons_standard_inactivityTimer_ as inactivityTimer};
+export {__js_addons_standard_rangeSlider_ as rangeSlider};
+export {__js_addons_standard_shortcuts_ as shortcuts};
+export {__js_addons_standard_tableView_ as tableView};
+export {__js_addons_standard_tooltip_ as tooltip};
 
 export {CIQ};
 
 /* global __TREE_SHAKE__ */
 if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 	(_exports.CIQ || CIQ).activateImports(
-		__js_addons_animation_,
-		__js_addons_continuousZoom_,
-		__js_addons_extendedHours_,
-		__js_addons_fullScreen_,
-		__js_addons_inactivityTimer_,
-		__js_addons_outliers_,
-		__js_addons_plotComplementer_,
-		__js_addons_rangeSlider_,
-		__js_addons_tableView_,
-		__js_addons_tooltip_,
+		__js_addons_advanced_animation_,
+		__js_addons_advanced_continuousZoom_,
+		__js_addons_advanced_outliers_,
+		__js_addons_advanced_plotComplementer_,
+		__js_addons_standard_extendedHours_,
+		__js_addons_standard_fullScreen_,
+		__js_addons_standard_inactivityTimer_,
+		__js_addons_standard_rangeSlider_,
+		__js_addons_standard_shortcuts_,
+		__js_addons_standard_tableView_,
+		__js_addons_standard_tooltip_,
 		null
 	);
 }
