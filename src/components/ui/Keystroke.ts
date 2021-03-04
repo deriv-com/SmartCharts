@@ -15,7 +15,17 @@ class Keystroke {
      */
     static noKeyCapture = false;
 
-    constructor(node, cb) {
+    capsLock: any;
+    cb: any;
+    cmd: any;
+    ctrl: any;
+    downValue: any;
+    implementAndroidWorkaround: any;
+    key: any;
+    node: any;
+    shift: any;
+
+    constructor(node: any, cb: any) {
         this.node = node;
         this.cb = cb;
         this.initialize();
@@ -31,7 +41,7 @@ class Keystroke {
     // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
     // Note that CIQ.isAndroid is false when the user requests "desktop site" and so some input boxes won't work
     // in that situation. There is no workaround other than to always treat 229 as a false value (it is a swedish character)
-    androidWorkaroundKeyup(e) {
+    androidWorkaroundKeyup(e: any) {
         const newValue = e.target.value;
         let key;
         if (newValue.length > this.downValue.length) {
@@ -53,7 +63,7 @@ class Keystroke {
     // before the input field is updated, we save any key that has been handled by these in this.key
     // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
     // will always have the right key (capitalized) and that input field value will be up to date.
-    keyup = e => {
+    keyup = (e: any) => {
         const key = e.which;
         if (this.implementAndroidWorkaround) {
             this.androidWorkaroundKeyup(e);
@@ -85,12 +95,14 @@ class Keystroke {
         }
     };
 
-    keydown = e => {
+    keydown = (e: any) => {
         this.downValue = e.target.value;
+        // @ts-expect-error ts-migrate(2576) FIXME: Property 'noKeyCapture' is a static member of type... Remove this comment to see the full error message
         if (this.noKeyCapture) {
             return;
         }
         let key = e.which;
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         if (key === 229 && CIQ.isAndroid) {
             this.implementAndroidWorkaround = true;
             return;
@@ -174,7 +186,8 @@ class Keystroke {
      * @memberof CIQ.UI.Keystroke
      * @param e
      */
-    keypress = e => {
+    keypress = (e: any) => {
+        // @ts-expect-error ts-migrate(2576) FIXME: Property 'noKeyCapture' is a static member of type... Remove this comment to see the full error message
         if (this.noKeyCapture) {
             return;
         }
@@ -185,7 +198,7 @@ class Keystroke {
         this.key = key;
     };
 
-    onblur = e => {
+    onblur = (e: any) => {
         this.ctrl = false;
         this.cb({ key: 17, e, keystroke: this });
     };

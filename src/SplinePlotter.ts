@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals,no-restricted-properties */
 
-export default function plotSpline(points, tension, context, colorPatternChanges) {
-    function getControlPoints(i) {
+export default function plotSpline(points: any, tension: any, context: any, colorPatternChanges: any) {
+    function getControlPoints(i: any) {
         const x0 = points[i];
         const y0 = points[i + 1];
         const x1 = points[i + 2];
@@ -38,7 +38,7 @@ export default function plotSpline(points, tension, context, colorPatternChanges
     if (!tension || tension < 0) {
         tension = 0;
     }
-    let cp = []; // array of control points, as x0,y0,x1,y1,...
+    let cp: any = []; // array of control points, as x0,y0,x1,y1,...
     const n = points.length;
     // Draw an open curve, not connected at the ends
     for (let i = 0; i < n - 4; i += 2) {
@@ -52,7 +52,7 @@ export default function plotSpline(points, tension, context, colorPatternChanges
     }
     let colorPatternIndex = 0;
 
-    function seeIfStrokeNeeded(i) {
+    function seeIfStrokeNeeded(i: any) {
         if (colorPatternIndex === colorPatternChanges.length) {
             return;
         }

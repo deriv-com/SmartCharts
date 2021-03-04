@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
 import { connect } from '../store/Connect';
 import { getUTCDate } from '../utils';
@@ -25,7 +26,7 @@ import { getUTCDate } from '../utils';
 //  - the chart can have a zoom level, if `threshold` is provided
 //    the marker will only be shown if it's within that zoom threshold.
 
-const FastMarker = props => {
+const FastMarker = (props: any) => {
     const price_ref = React.useRef(null);
     const date_ref = React.useRef(null);
     const elem_ref = React.useRef(null);
@@ -35,8 +36,12 @@ const FastMarker = props => {
     const props_ref = React.useRef();
     props_ref.current = props;
 
-    const setPosition = ({ epoch, price }) => {
+    const setPosition = ({
+        epoch,
+        price,
+    }: any) => {
         price_ref.current = +price || null;
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         date_ref.current = CIQ.strToDateTime(getUTCDate(epoch));
         updateCSS();
     };
@@ -103,7 +108,7 @@ const FastMarker = props => {
         elem.style.visibility = show ? 'visible' : 'hidden';
     };
 
-    const setRef = ref => {
+    const setRef = (ref: any) => {
         elem_ref.current = ref;
         const { markerRef, contextPromise } = props_ref.current;
 
@@ -119,7 +124,7 @@ const FastMarker = props => {
         }
 
         if (ref !== null) {
-            contextPromise.then(ctx => {
+            contextPromise.then((ctx: any) => {
                 ctx_ref.current = ctx;
                 stx_ref.current = ctx_ref.current.stx;
 
@@ -137,12 +142,17 @@ const FastMarker = props => {
     const { children, className } = props;
 
     return (
+        // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove this comment to see the full error message
         <div className={className} ref={setRef} style={{ position: 'absolute' }}>
             {children}
+        {/* @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove this comment to see the full error message */}
         </div>
     );
 };
 
-export default connect(({ chart }) => ({
+// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+export default connect(({
+    chart,
+}: any) => ({
     contextPromise: chart.contextPromise,
 }))(FastMarker);

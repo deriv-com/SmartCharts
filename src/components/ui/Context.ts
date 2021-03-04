@@ -8,7 +8,12 @@
  * @constructor
  */
 class Context {
-    constructor(stx, topNode, params) {
+    advertised: any;
+    loader: any;
+    params: any;
+    stx: any;
+    topNode: any;
+    constructor(stx: any, topNode: any, params: any) {
         this.params = params || {};
         this.stx = stx;
         this.topNode = topNode;
@@ -30,7 +35,7 @@ class Context {
      * @returns {object} The storage object
      * @private
      */
-    static assembleContext(contextElement) {
+    static assembleContext(contextElement: any) {
         if (!contextElement.CIQ) {
             contextElement.CIQ = {};
         } // claim our namespace
@@ -49,7 +54,7 @@ class Context {
      * @param {string} helperName The helperName of the element. For instance "Loader"
      * @memberof CIQ.UI.Context
      */
-    advertiseAs(uiHelper, helperName) {
+    advertiseAs(uiHelper: any, helperName: any) {
         this.advertised[helperName] = uiHelper;
     }
 
@@ -61,7 +66,7 @@ class Context {
      * @memberof CIQ.UI.Context
      * @private
      */
-    getAdvertised(helperName) {
+    getAdvertised(helperName: any) {
         return this.advertised[helperName];
     }
 
@@ -70,7 +75,7 @@ class Context {
      * @param {CIQ.UI.Loader} loader Loader instance
      * @memberof CIQ.UI.Context
      */
-    setLoader(loader) {
+    setLoader(loader: any) {
         this.loader = loader;
     }
 

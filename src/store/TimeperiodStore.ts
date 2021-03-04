@@ -17,7 +17,10 @@ const TimeMap = {
 };
 
 export default class TimeperiodStore {
-    constructor(mainStore) {
+    _injectionId: any;
+    _serverTime: any;
+    mainStore: any;
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
         this._serverTime = ServerTime.getInstance();
         when(() => this.context, this.onContextReady);
@@ -36,10 +39,14 @@ export default class TimeperiodStore {
         return this.mainStore.chartTitle.isSymbolOpen;
     }
     get display() {
+        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
         return `${this.interval === 'day' ? 1 : this.interval / TimeMap[this.timeUnit]} ${UnitMap[this.timeUnit]}`;
     }
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable timeUnit = null;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable interval = null;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable preparingInterval = null;
     onGranularityChange = () => null;
 
@@ -68,6 +75,7 @@ export default class TimeperiodStore {
 
         reaction(
             () => this.mainStore.state.granularity,
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
             granularity => this.onGranularityChange(granularity)
         );
     };
@@ -76,6 +84,7 @@ export default class TimeperiodStore {
 
     clearCountdown() {
         if (this.countdownInterval) {
+            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
             clearInterval(this.countdownInterval);
         }
 
@@ -84,6 +93,7 @@ export default class TimeperiodStore {
         }
 
         this._injectionId = undefined;
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined' is not assignable to type 'null'.
         this.countdownInterval = undefined;
     }
 
@@ -107,9 +117,11 @@ export default class TimeperiodStore {
                     const now = this._serverTime.getUTCDate();
                     const diff = now - currentQuote.DT;
                     const chartInterval = getIntervalInSeconds(stx.layout) * 1000;
+                    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
                     const coefficient = diff > chartInterval ? parseInt(diff / chartInterval, 10) + 1 : 1;
 
                     if (this.context.stx) {
+                        // @ts-expect-error ts-migrate(2322) FIXME: Type 'string | null' is not assignable to type 'nu... Remove this comment to see the full error message
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
                         stx.draw();
                     }
@@ -139,13 +151,15 @@ export default class TimeperiodStore {
             }
 
             if (!this.countdownInterval) {
+                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Timeout' is not assignable to type 'null'.
                 this.countdownInterval = setInterval(setRemain, 1000);
                 setRemain();
             }
         }
     }
 
-    @action.bound setGranularity(granularity) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setGranularity(granularity: any) {
         if (this.mainStore.state.granularity !== undefined) {
             console.error(
                 'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
@@ -157,16 +171,19 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound updateProps(onChange) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound updateProps(onChange: any) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
         }
     }
 
-    @action.bound setPreparingInterval(interval) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setPreparingInterval(interval: any) {
         this.preparingInterval = interval;
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateDisplay() {
         if (!this.context) return;
         const stx = this.context.stx;

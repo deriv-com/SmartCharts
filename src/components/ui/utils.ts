@@ -1,5 +1,5 @@
 // jQuery parents() vanilla alternative: https://stackoverflow.com/a/12981248/1471258
-export function getParents(el, parentSelector = 'body') {
+export function getParents(el: any, parentSelector = 'body') {
     const parentElement = document.querySelector(parentSelector);
 
     if (!parentElement) {
@@ -25,26 +25,28 @@ export function getParents(el, parentSelector = 'body') {
     return parents;
 }
 
-export function createElement(html) {
+export function createElement(html: any) {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
     return wrapper.firstChild;
 }
 
 // Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
-export function aggregation(baseClass, ...mixins) {
-    const copyProps = (target, source) => {
+export function aggregation(baseClass: any, ...mixins: any[]) {
+    const copyProps = (target: any, source: any) => {
         // this function copies all properties and symbols, filtering out some special ones
         Object.getOwnPropertyNames(source)
+            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
             .concat(Object.getOwnPropertySymbols(source))
             .forEach(prop => {
                 if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
+                    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'PropertyDescriptor | undefined' ... Remove this comment to see the full error message
                     Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
                 }
             });
     };
     class base extends baseClass {
-        constructor(...args) {
+        constructor(...args: any[]) {
             super(...args);
             mixins.forEach(mixin => {
                 copyProps(this, new mixin()); // eslint-disable-line new-cap
@@ -59,7 +61,7 @@ export function aggregation(baseClass, ...mixins) {
     return base;
 }
 
-export function setHidden(element, isHidden) {
+export function setHidden(element: any, isHidden: any) {
     if (isHidden) {
         element.setAttribute('hidden', true);
     } else {
@@ -67,7 +69,7 @@ export function setHidden(element, isHidden) {
     }
 }
 
-export function downloadURI(uri, name) {
+export function downloadURI(uri: any, name: any) {
     const link = document.createElement('a');
     link.download = name;
     link.href = uri;

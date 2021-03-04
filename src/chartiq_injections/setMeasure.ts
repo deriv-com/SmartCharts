@@ -1,5 +1,50 @@
-export const overideMeasure = option => {
-    CIQ.ChartEngine.prototype.append('setMeasure', function (price1, price2, tick1, tick2, hover) {
+export const overideMeasure = (option: any) => {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
+    CIQ.ChartEngine.prototype.append('setMeasure', function(
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        price1: any,
+        price2: any,
+        tick1: any,
+        tick2: any,
+        hover: any
+    ) {
         let m = (this.drawingContainer || document).querySelector('.mMeasure');
         let message = '';
         if (!price1 && price1 !== 0) {
@@ -7,6 +52,7 @@ export const overideMeasure = option => {
         } else {
             if (price2 !== false) {
                 let distance = Math.round(Math.abs(price1 - price2) * this.chart.roundit) / this.chart.roundit;
+                // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
                 distance = distance.toFixed(this.chart.yAxis.printDecimalPlaces);
                 if (this.internationalizer) {
                     message += this.internationalizer.numbers.format(distance);
@@ -26,6 +72,7 @@ export const overideMeasure = option => {
                     if (this.internationalizer) {
                         pct = this.internationalizer.percent.format(pct / 100);
                     } else {
+                        // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
                         pct += '%';
                     }
                     message += ` (${pct})`;
@@ -59,6 +106,7 @@ export const overideMeasure = option => {
             }
         }
     });
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     CIQ.Drawing.BaseTwoPoint.prototype.measure = function () {
         if (this.p0 && this.p1) {
             this.stx.setMeasure(this.p0[1], this.p1[1], this.p0[0], this.p1[0], true, this.name);
@@ -66,11 +114,13 @@ export const overideMeasure = option => {
             const mStickyInterior = mSticky && mSticky.querySelector('.mStickyInterior');
             if (mStickyInterior) {
                 const lines = [];
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 let title = CIQ.capitalize(this.name);
 
                 if (option.drawToolsStore) {
                     const drawingItem = option.drawToolsStore.findComputedDrawing(this);
                     if (drawingItem) {
+                        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
                         title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(
                             drawingItem.text,
                             { num: drawingItem.num || ' ' }

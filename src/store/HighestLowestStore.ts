@@ -2,6 +2,9 @@ import { reaction, when } from 'mobx';
 import { getUTCEpoch } from '../utils';
 
 class HighestLowestStore {
+    highestRef: any;
+    lowestRef: any;
+    mainStore: any;
     highest = null;
     lowest = null;
 
@@ -24,7 +27,7 @@ class HighestLowestStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places || 0;
     }
 
-    constructor(mainStore) {
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
 
         when(() => this.context, this.onContextReady);
@@ -48,13 +51,13 @@ class HighestLowestStore {
         }
     };
 
-    setHighestRef = ref => {
+    setHighestRef = (ref: any) => {
         this.highestRef = ref;
         if (ref !== null) {
             this.highestRef.value = ref.div.querySelector('.spot__value');
         }
     };
-    setLowestRef = ref => {
+    setLowestRef = (ref: any) => {
         this.lowestRef = ref;
 
         if (ref !== null) {
@@ -73,20 +76,23 @@ class HighestLowestStore {
             this.highest = null;
             this.lowest = null;
 
-            this.stx.chart.dataSegment.forEach(tick => {
+            this.stx.chart.dataSegment.forEach((tick: any) => {
                 if (!tick) {
                     return;
                 }
 
+                // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
                 if (!this.highest || this.highest.Close <= tick.Close) {
                     this.highest = tick;
                 }
+                // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
                 if (!this.lowest || this.lowest.Close >= tick.Close) {
                     this.lowest = tick;
                 }
             });
         }
 
+        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
         if (!this.highest || !this.lowest || this.highest.Close === this.lowest.Close) {
             this.highestRef.setPosition({ epoch: null, price: null });
             this.lowestRef.setPosition({ epoch: null, price: null });
@@ -94,9 +100,11 @@ class HighestLowestStore {
         }
 
         if (this.highest) {
+            // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
             const price = this.highest.Close.toFixed(this.decimalPlaces);
 
             this.highestRef.setPosition({
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 epoch: getUTCEpoch(CIQ.strToDateTime(this.highest.Date)),
                 price,
             });
@@ -104,8 +112,10 @@ class HighestLowestStore {
             this.highestRef.value.textContent = price;
         }
         if (this.lowest) {
+            // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
             const price = this.lowest.Close.toFixed(this.decimalPlaces);
             this.lowestRef.setPosition({
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 epoch: getUTCEpoch(CIQ.strToDateTime(this.lowest.Date)),
                 price,
             });

@@ -1,8 +1,9 @@
-export function createObjectFromLocalStorage(key) {
+export function createObjectFromLocalStorage(key: any) {
     const val = localStorage.getItem(key);
     const isValid = val !== null;
     if (isValid) {
         try {
+            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
             return JSON.parse(val);
         } catch (e) {
             return undefined;
@@ -11,11 +12,14 @@ export function createObjectFromLocalStorage(key) {
     return undefined;
 }
 
-export function isValidProp(p) {
+export function isValidProp(p: any) {
     return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
 }
 
-export const getTimeUnit = ({ timeUnit, interval }) => {
+export const getTimeUnit = ({
+    timeUnit,
+    interval,
+}: any) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
     }
@@ -27,7 +31,10 @@ export const getTimeUnit = ({ timeUnit, interval }) => {
     }
     return timeUnit;
 };
-export const getIntervalInSeconds = ({ timeUnit, interval }) => {
+export const getIntervalInSeconds = ({
+    timeUnit,
+    interval,
+}: any) => {
     let unit = timeUnit;
     let interv = interval;
     if (interv === 'day') {
@@ -41,18 +48,19 @@ export const getIntervalInSeconds = ({ timeUnit, interval }) => {
     return unit * interv;
 };
 
-export function stableSort(arr, compare = (a, b) => a < b) {
+export function stableSort(arr: any, compare = (a: any, b: any) => a < b) {
     const original = arr.slice(0);
 
-    arr.sort((a, b) => {
+    arr.sort((a: any, b: any) => {
         const result = compare(a, b);
+        // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
         return result === 0 ? original.indexOf(a) - original.indexOf(b) : result;
     });
 
     return arr;
 }
 
-export function sameBar(bar1, bar2) {
+export function sameBar(bar1: any, bar2: any) {
     return !(
         !bar1 ||
         !bar2 ||
@@ -63,7 +71,7 @@ export function sameBar(bar1, bar2) {
     );
 }
 
-export function downloadFileInBrowser(filename, content, type, newTab) {
+export function downloadFileInBrowser(filename: any, content: any, type: any, newTab: any) {
     const blob = new Blob([content], { type });
     if (navigator.msSaveBlob) {
         // IE 10+
@@ -96,27 +104,28 @@ export function downloadFileInBrowser(filename, content, type, newTab) {
     }
 }
 
-export function stxtap(el, func) {
+export function stxtap(el: any, func: any) {
     if (el && !el.safeClickTouchEvents) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         CIQ.installTapEvent(el);
         el.addEventListener('stxtap', func);
     }
 }
 
-export function getUTCEpoch(date) {
+export function getUTCEpoch(date: any) {
     return (date.getTime() / 1000 - date.getTimezoneOffset() * 60) | 0;
 }
 
-export function getUTCDate(epoch) {
+export function getUTCDate(epoch: any) {
     const UTCdate = new Date(epoch * 1000).toISOString();
     return UTCdate.substring(0, 19);
 }
 
-export function getLocalDate(epoch) {
+export function getLocalDate(epoch: any) {
     return new Date(epoch * 1000);
 }
 
-export function updatePropIfChanged(source, props, onChanged) {
+export function updatePropIfChanged(source: any, props: any, onChanged: any) {
     let isChanged = false;
     for (const attr in props) {
         if (props[attr] !== undefined && source[attr] !== props[attr]) {
@@ -130,7 +139,7 @@ export function updatePropIfChanged(source, props, onChanged) {
     }
 }
 
-export function calculateTimeUnitInterval(granularity) {
+export function calculateTimeUnitInterval(granularity: any) {
     let interval = 1;
     let timeUnit = 'second';
 
@@ -144,35 +153,37 @@ export function calculateTimeUnitInterval(granularity) {
     return { interval, timeUnit };
 }
 
-export function calculateGranularity(period, interval) {
+export function calculateGranularity(period: any, interval: any) {
     const toSeconds = {
         second: 0,
         minute: 60,
         day: 24 * 60 * 60,
     };
 
+    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
     return toSeconds[interval] * period;
 }
 
-export function displayMilliseconds(ms) {
+export function displayMilliseconds(ms: any) {
     const totalSec = ms / 1000;
     if (totalSec <= 0) {
         return null;
     }
-    const padNum = n => `0${n}`.slice(-2);
+    const padNum = (n: any) => `0${n}`.slice(-2);
     const seconds = padNum(Math.trunc(totalSec % 60));
     const minutes = padNum(Math.trunc((totalSec / 60) % 60));
     let hours = Math.trunc((totalSec / 3600) % 24);
+    // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
     hours = hours ? `${hours}:` : '';
     return `${hours}${minutes}:${seconds}`;
 }
 
-export function cloneCategory(category, transformItem = x => x) {
-    const categoryData = [];
+export function cloneCategory(category: any, transformItem = (x: any) => x) {
+    const categoryData: any = [];
     const categoryCopy = { ...category, data: categoryData };
     if (category.hasSubcategory) {
         for (const subcategory of category.data) {
-            const subcategoryData = [];
+            const subcategoryData: any = [];
             const subcategoryCopy = { ...subcategory, data: subcategoryData };
             for (const item of subcategory.data) {
                 subcategoryData.push(transformItem(item));
@@ -188,7 +199,7 @@ export function cloneCategory(category, transformItem = x => x) {
     return categoryCopy;
 }
 
-export function cloneCategories(categories, transformItem = x => x) {
+export function cloneCategories(categories: any, transformItem = (x: any) => x) {
     const categorized = [];
     for (const category of categories) {
         categorized.push(cloneCategory(category, transformItem));
@@ -213,8 +224,8 @@ export function cloneCategories(categories, transformItem = x => x) {
 // However we need the pixel value down to the decimal points.
 // This is copy from chartiq.js file WITHOUT rounding down the pixel value.
 
-export function patchPixelFromChart(stx) {
-    stx.pixelFromTick = function (tick, _chart) {
+export function patchPixelFromChart(stx: any) {
+    stx.pixelFromTick = function (tick: any, _chart: any) {
         const chart = _chart || stx.chart;
         const dataSegment = chart.dataSegment,
             dataSet = chart.dataSet,
@@ -260,14 +271,14 @@ export const DIRECTIONS = Object.freeze({
     DOWN: 'DOWN',
 });
 
-export const formatCamelCase = s => {
+export const formatCamelCase = (s: any) => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
-export const prepareIndicatorName = name => {
+export const prepareIndicatorName = (name: any) => {
     const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
-    const getStudyBars = str => (str.match(StudyNameRegex) || []).pop();
+    const getStudyBars = (str: any) => (str.match(StudyNameRegex) || []).pop();
     // const capitalizeFirstLetter = (string) => {
     //     const str = string.replace(StudyNameRegex, '');
     //     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -279,14 +290,15 @@ export const prepareIndicatorName = name => {
     };
 };
 
-export const renderSVGString = icon => {
+export const renderSVGString = (icon: any) => {
     const vb = icon.viewBox.split(' ').slice(2);
     return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__webpack_public_path__'.
         // eslint-disable-next-line no-undef
         __webpack_public_path__ + icon.url
     }" /></svg>`;
 };
-export const wrapText = (str, letter_count) => {
+export const wrapText = (str: any, letter_count: any) => {
     if (str.length > letter_count) {
         let wrappedStr = str;
         const count = Math.floor(str.length / letter_count);
@@ -301,8 +313,7 @@ export const wrapText = (str, letter_count) => {
     return str;
 };
 
-export const stringToSlug = str =>
-    str
-        .toLowerCase()
-        .replace(/[^\w ]+/g, '')
-        .replace(/ +/g, '-');
+export const stringToSlug = (str: any) => str
+    .toLowerCase()
+    .replace(/[^\w ]+/g, '')
+    .replace(/ +/g, '-');

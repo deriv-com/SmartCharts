@@ -1,6 +1,9 @@
 import { action, observable, when } from 'mobx';
 
 class PaginationLoaderStore {
+    mainStore: any;
+    ref: any;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isOnPagination = false;
     paginationEndEpoch = null;
 
@@ -14,7 +17,7 @@ class PaginationLoaderStore {
         return this.mainStore.chart.stxx;
     }
 
-    constructor(mainStore) {
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
@@ -29,7 +32,7 @@ class PaginationLoaderStore {
         this.stx.prepend('mouseWheel', this.onMouseWheel);
     };
 
-    onMouseWheel = e => {
+    onMouseWheel = (e: any) => {
         e.preventDefault();
         let diff = null;
         const timeLimit = 40;
@@ -38,18 +41,22 @@ class PaginationLoaderStore {
         return false; // continue swiping
     };
 
-    setRef = ref => {
+    setRef = (ref: any) => {
         this.ref = ref;
         if (this.ref !== null) {
             this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
         }
     };
 
-    @action.bound updateOnPagination(state) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound updateOnPagination(state: any) {
         this.isOnPagination = state;
     }
 
-    @action.bound setOnPagination = ({ end }) => {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setOnPagination = ({
+        end,
+    }: any) => {
         this.isOnPagination = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 

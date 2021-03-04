@@ -3,6 +3,11 @@ import Subscription from './Subscription';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
 class RealtimeSubscription extends Subscription {
+    _binaryApi: any;
+    _emitter: any;
+    _request: any;
+    _stx: any;
+    // @ts-expect-error ts-migrate(7008) FIXME: Member '_tickCallback' implicitly has an 'any' typ... Remove this comment to see the full error message
     _tickCallback;
 
     pause() {
@@ -18,7 +23,8 @@ class RealtimeSubscription extends Subscription {
         return super.resume();
     }
 
-    async _startSubscribe(tickHistoryRequest) {
+    // @ts-expect-error ts-migrate(2416) FIXME: Property '_startSubscribe' in type 'RealtimeSubscr... Remove this comment to see the full error message
+    async _startSubscribe(tickHistoryRequest: any) {
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
         this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
         const response = await tickHistoryPromise;
@@ -43,8 +49,9 @@ class RealtimeSubscription extends Subscription {
 
     _getProcessTickHistoryClosure() {
         let hasHistory = false;
+        // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
         const tickHistoryPromise = new PendingPromise();
-        const processTickHistory = resp => {
+        const processTickHistory = (resp: any) => {
             if (this._stx.isDestroyed) {
                 const subscriptionId = resp.subscription.id;
                 this._binaryApi.forgetStream(subscriptionId);
@@ -62,7 +69,7 @@ class RealtimeSubscription extends Subscription {
         return [tickHistoryPromise, processTickHistory];
     }
 
-    _onTick(response) {
+    _onTick(response: any) {
         this.lastStreamEpoch = +Subscription.getEpochFromTick(response);
         const quotes = [TickHistoryFormatter.formatTick(response)];
         this._emitter.emit(Subscription.EVENT_CHART_DATA, quotes);

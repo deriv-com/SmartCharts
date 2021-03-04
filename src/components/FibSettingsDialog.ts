@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module 'chartiq' or its corresponding ... Remove this comment to see the full error message
 import CIQ from 'chartiq';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module './ui/DialogContentTag' or its ... Remove this comment to see the full error message
 import DialogContentTag from './ui/DialogContentTag';
 
 /**
@@ -28,6 +30,8 @@ import DialogContentTag from './ui/DialogContentTag';
  */
 
 class FibSettingsDialog extends DialogContentTag {
+    context: any;
+    node: any;
     /**
      * Sets up a handler to process changes to fields
      * @param {HTMLElement} node    The input field
@@ -37,11 +41,12 @@ class FibSettingsDialog extends DialogContentTag {
      * @private
      */
 
-    setChangeEvent(node, section, item) {
+    setChangeEvent(node: any, section: any, item: any) {
         let self = this;
 
         function closure() {
-            return function () {
+            // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+            return function(this: any, this: any) {
                 let vectorParameters = self.context.stx.currentVectorParameters;
                 let vectorType = vectorParameters.vectorType;
 
@@ -69,10 +74,11 @@ class FibSettingsDialog extends DialogContentTag {
      * @memberOf WebComponents.cq-fib-settings-dialog
      */
 
-    open(params) {
+    open(params: any) {
         super.open(arguments);
         let vectorParameters = this.context.stx.currentVectorParameters;
         let vectorType = vectorParameters.vectorType;
+        // @ts-expect-error ts-migrate(2581) FIXME: Cannot find name '$'. Do you need to install type ... Remove this comment to see the full error message
         let dialog = $(this);
 
         // fibonacci type
@@ -113,5 +119,6 @@ class FibSettingsDialog extends DialogContentTag {
     }
 }
 
+// @ts-expect-error ts-migrate(2551) FIXME: Property 'registerElement' does not exist on type ... Remove this comment to see the full error message
 document.registerElement('cq-fib-settings-dialog', FibSettingsDialog);
 export default FibSettingsDialog;

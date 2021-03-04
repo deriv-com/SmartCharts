@@ -2,10 +2,17 @@ import { observable } from 'mobx';
 import { connect } from './Connect';
 
 export default class ShadeStore {
+    _div: any;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable className = '';
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable visible = false;
 
-    setPosition = ({ top, bottom, right }) => {
+    setPosition = ({
+        top,
+        bottom,
+        right,
+    }: any) => {
         if (this._div) {
             let pos = null;
             if (bottom && top) {
@@ -26,14 +33,15 @@ export default class ShadeStore {
         }
     };
 
-    constructor(className) {
+    constructor(className: any) {
         this.className = className;
     }
 
-    setShadeRef = ref => {
+    setShadeRef = (ref: any) => {
         this._div = ref;
     };
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     connect = connect(() => ({
         visible: this.visible,
         className: this.className,

@@ -7,39 +7,76 @@ import {
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../sass/_themes.scss' or it... Remove this comment to see the full error message
 import Theme from '../../sass/_themes.scss';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../Constant' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { STATE } from '../Constant';
 
 class ChartState {
+    chartStore: any;
+    getIndicatorHeightRatio: any;
+    isAnimationEnabled: any;
+    mainStore: any;
+    margin: any;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable granularity;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable chartType;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable startEpoch;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable endEpoch;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable symbol;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isConnectionOpened;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isChartReady = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable chartStatusListener;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable stateChangeListener;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable settings;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable showLastDigitStats;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable scrollToEpoch;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable onExportLayout;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable clearChart;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isChartClosed = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable shouldMinimiseLastDigits = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isStaticChart = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable shouldFetchTradingTimes = true;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable refreshActiveSymbols;
+    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'hasReachedEndOfData'.
     @observable hasReachedEndOfData = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable prevChartType;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isChartScrollingToEpoch = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable crosshairState = 1;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable crosshairTooltipLeftAllow = null;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable maxTick;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable enableScroll = true;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable enableZoom = true;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable yAxisMargin = { top: 106, bottom: 64 };
+    // @ts-expect-error ts-migrate(7008) FIXME: Member 'chartControlsWidgets' implicitly has an 'a... Remove this comment to see the full error message
     chartControlsWidgets;
+    // @ts-expect-error ts-migrate(7008) FIXME: Member 'enabledChartFooter' implicitly has an 'any... Remove this comment to see the full error message
     enabledChartFooter;
 
     get stxx() {
@@ -68,12 +105,13 @@ class ChartState {
         return this.chartStore.rootElement;
     }
 
-    constructor(mainStore) {
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onContextReady = () => {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
@@ -86,6 +124,7 @@ class ChartState {
         this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateProps({
         networkStatus,
         chartControlsWidgets,
@@ -117,7 +156,7 @@ class ChartState {
         enableScroll = null,
         enableZoom = null,
         anchorChartToLeft = false,
-    }) {
+    }: any) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
@@ -213,14 +252,18 @@ class ChartState {
             this.scrollToEpoch = scrollToEpoch;
             if (this.mainStore.chart && this.mainStore.chart.feed && !isSymbolChanged && !isGranularityChanged) {
                 this.setIsChartScrollingToEpoch(true);
+                // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
                 this.scrollChartToLeft();
                 if (anchorChartToLeft) {
                     // just to ensure scale 1:1 work prefectly if we have endEpoch
                     // we call scrollChartToLeft() twice with some delay and notify
                     // the STATE change with a delay to ensure scrolling is completed
+                    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
                     setTimeout(() => this.scrollChartToLeft(), 400);
+                    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
                     setTimeout(() => this.stateChange(STATE.SCROLL_TO_LEFT), 900);
                 } else {
+                    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
                     this.stateChange(STATE.SCROLL_TO_LEFT);
                 }
             }
@@ -275,6 +318,7 @@ class ChartState {
         }
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound setMaxtTick() {
         if (this.stxx && this.maxTick) {
             this.stxx.setMaxTicks(this.maxTick);
@@ -282,20 +326,23 @@ class ChartState {
         }
     }
 
-    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch: any) {
         this.isChartScrollingToEpoch = isScrollingToEpoch;
     }
 
-    @action.bound hasReachedEndOfData(hasReachedEndOfData) {
+    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'hasReachedEndOfData'.
+    @action.bound hasReachedEndOfData(hasReachedEndOfData: any) {
         this.hasReachedEndOfData = hasReachedEndOfData;
     }
 
-    @action.bound setChartClosed(isClosed) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setChartClosed(isClosed: any) {
         this.isChartClosed = isClosed;
         this.stateChange(STATE.MARKET_STATE_CHANGE, { symbol: this.symbol, isClosed });
     }
 
-    setChartTheme(theme, isChartClosed = this.isChartClosed) {
+    setChartTheme(theme: any, isChartClosed = this.isChartClosed) {
         if (!this.stxx) return;
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
@@ -336,18 +383,21 @@ class ChartState {
         this.stxx.draw();
     }
 
-    @action.bound stateChange(tag, option) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound stateChange(tag: any, option: any) {
         if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
             this.stateChangeListener(tag, option);
         }
     }
 
-    @action.bound setChartIsReady(isChartReady) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setChartIsReady(isChartReady: any) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
 
             if (isChartReady) {
                 this.chartStore.setResizeEvent();
+                // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
                 this.stateChange(STATE.READY);
             }
 
@@ -357,7 +407,8 @@ class ChartState {
         }
     }
 
-    @action.bound setChartGranularity(granularity) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setChartGranularity(granularity: any) {
         const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
         const isChartTypeCandle =
             this.mainStore.chartType.isCandle ||
@@ -369,14 +420,16 @@ class ChartState {
         this.granularity = granularity === null ? undefined : granularity;
     }
 
-    @action.bound setChartType(chartType) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setChartType(chartType: any) {
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);
         }
     }
 
-    @action.bound setShouldMinimiseLastDigit(status) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setShouldMinimiseLastDigit(status: any) {
         this.shouldMinimiseLastDigits = status;
     }
 
@@ -398,6 +451,7 @@ class ChartState {
         if (!this.chartStore.chartId || !this.stxx) return;
         const layoutData = this.stxx.exportLayout(true);
         const json = JSON.stringify(layoutData);
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         CIQ.localStorageSetItem(`layout-${this.chartStore.chartId}`, json);
     }
 
@@ -489,8 +543,10 @@ class ChartState {
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             CIQ.localStorage.removeItem(`${symbol}-${this.chartStore.chartId}`);
         } else {
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             CIQ.localStorageSetItem(`${symbol}-${this.chartStore.chartId}`, JSON.stringify(obj));
         }
     }
@@ -508,7 +564,7 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft = (leftTick, force) => {
+    scrollChartToLeft = (leftTick: any, force: any) => {
         if (!this.stxx?.chart) return;
 
         const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
@@ -516,7 +572,8 @@ class ChartState {
 
         if (this.scrollToEpoch && !this.startEpoch && !force) {
             const startEntry = this.stxx.chart.dataSet.find(
-                entry => entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf()
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
+                (entry: any) => entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf()
             );
 
             if (startEntry) {
@@ -579,6 +636,7 @@ class ChartState {
         // Remove indiactors
         for (const id in this.stxx.layout.studies) {
             const sd = this.stxx.layout.studies[id];
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             CIQ.Studies.removeStudy(this.stxx, sd);
         }
         this.stxx.clearDrawings();
@@ -600,7 +658,9 @@ class ChartState {
         this.onExportLayout(currentLayout);
     }
 
-    scrollListener({ grab }) {
+    scrollListener({
+        grab,
+    }: any) {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
         }

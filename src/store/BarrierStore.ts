@@ -2,11 +2,27 @@ import { observable, action, computed } from 'mobx';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/PriceLine.jsx' was resolved ... Remove this comment to see the full error message
 import PriceLine from '../components/PriceLine.jsx';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Shade.jsx' was resolved to '... Remove this comment to see the full error message
 import Shade from '../components/Shade.jsx';
 import { isValidProp } from '../utils';
 
 export default class BarrierStore {
+    AboveShade: any;
+    BelowShade: any;
+    BetweenShade: any;
+    HighPriceLine: any;
+    LowPriceLine: any;
+    _high_barrier: any;
+    _injectionId: any;
+    _listenerId: any;
+    _low_barrier: any;
+    aboveShadeStore: any;
+    belowShadeStore: any;
+    betweenShadeStore: any;
+    mainStore: any;
+    title: any;
     static get SHADE_NONE_SINGLE() {
         return 'SHADE_NONE_SINGLE';
     }
@@ -30,34 +46,52 @@ export default class BarrierStore {
         return 'BARRIER_CHANGED';
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable shadeColor;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable color;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable foregroundColor;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isBetweenShadeVisible = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isTopShadeVisible = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isBottomShadeVisible = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable hidePriceLines = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable lineStyle = undefined;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isInitialized = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable initializePromise = new PendingPromise();
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable hideBarrierLine = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable hideOffscreenLine = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable hideOffscreenBarrier = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isSingleBarrier = false;
 
+    // @ts-expect-error ts-migrate(7008) FIXME: Member '_shadeState' implicitly has an 'any' type.
     _shadeState;
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get pip() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get yAxisWidth() {
         return this.mainStore.chart.yAxiswidth;
     }
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get priceLabelWidth() {
         return this.yAxisWidth + 1;
     }
 
-    constructor(mainStore) {
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
         this._high_barrier = new PriceLineStore(this.mainStore);
         this._low_barrier = new PriceLineStore(this.mainStore);
@@ -93,6 +127,7 @@ export default class BarrierStore {
         this.mainStore.chart._barriers.push(this);
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound init() {
         this.isInitialized = true;
         this.initializePromise.resolve();
@@ -112,6 +147,7 @@ export default class BarrierStore {
         this._drawShadedArea();
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateProps({
         color,
         foregroundColor,
@@ -131,7 +167,7 @@ export default class BarrierStore {
         showOffscreenArrows,
         isSingleBarrier,
         opacityOnOverlap,
-    }) {
+    }: any) {
         this.initializePromise.then(
             action(() => {
                 if (color) {
@@ -180,6 +216,7 @@ export default class BarrierStore {
         }
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound destructor() {
         if (!this.context) return;
         this.stx.removeInjection(this._injectionId);
@@ -187,7 +224,7 @@ export default class BarrierStore {
         this._high_barrier.destructor();
         this._low_barrier.destructor();
 
-        const i = this.mainStore.chart._barriers.findIndex(b => b === this);
+        const i = this.mainStore.chart._barriers.findIndex((b: any) => b === this);
         if (i !== -1) {
             this.mainStore.chart._barriers.splice(i, 1);
         }
@@ -208,7 +245,7 @@ export default class BarrierStore {
 
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
-        this._high_barrier.priceConstrainer = newPrice => {
+        this._high_barrier.priceConstrainer = (newPrice: any) => {
             const nextPrice =
                 this._low_barrier.visible && newPrice < this._low_barrier.realPrice
                     ? this._high_barrier.realPrice
@@ -219,7 +256,7 @@ export default class BarrierStore {
         };
 
         // barrier 2 cannot go above barrier 1
-        this._low_barrier.priceConstrainer = newPrice => {
+        this._low_barrier.priceConstrainer = (newPrice: any) => {
             const nextPrice = newPrice > this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
 
             this.mainStore.chart.calculateYaxisWidth(nextPrice);
@@ -239,7 +276,7 @@ export default class BarrierStore {
 
     _onBarrierChange = null;
 
-    set onBarrierChange(callback) {
+    set onBarrierChange(callback: any) {
         if (this._onBarrierChange !== callback) {
             this._onBarrierChange = callback;
         }
@@ -250,6 +287,7 @@ export default class BarrierStore {
         const low = this._low_barrier.visible ? +this._low_barrier.price.toFixed(this.pip) : undefined;
 
         if (this._onBarrierChange) {
+            // @ts-expect-error ts-migrate(2721) FIXME: Cannot invoke an object which is possibly 'null'.
             this._onBarrierChange({ high, low });
         }
     };

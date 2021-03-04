@@ -1,11 +1,11 @@
 import { getUTCDate } from '../utils';
 
 export class TickHistoryFormatter {
-    static formatHistory(response) {
+    static formatHistory(response: any) {
         const { history, candles } = response;
         if (history) {
             const { times, prices } = history;
-            const quotes = prices.map((p, idx) => ({
+            const quotes = prices.map((p: any, idx: any) => ({
                 Date: getUTCDate(+times[idx]),
                 Close: +p,
             }));
@@ -13,7 +13,7 @@ export class TickHistoryFormatter {
         }
 
         if (candles) {
-            const quotes = candles.map(c => ({
+            const quotes = candles.map((c: any) => ({
                 Date: getUTCDate(+c.epoch),
                 Open: +c.open,
                 High: +c.high,
@@ -24,7 +24,7 @@ export class TickHistoryFormatter {
         }
     }
 
-    static formatTick(response) {
+    static formatTick(response: any) {
         const { tick, ohlc } = response;
         if (tick) {
             return {

@@ -1,11 +1,32 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
 import { connect } from './Connect';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/SearchInput.jsx' was resolve... Remove this comment to see the full error message
 import SearchInput from '../components/SearchInput.jsx';
 import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
 import { cloneCategories, cloneCategory } from '../utils';
 
 export default class CategoricalDisplayStore {
+    FilterPanel: any;
+    ResultsPanel: any;
+    SearchInput: any;
+    activeMarket: any;
+    activeSubCategory: any;
+    categoryElements: any;
+    favoritesId: any;
+    getActiveCategory: any;
+    getCategoricalItems: any;
+    getCurrentActiveCategory: any;
+    getCurrentActiveMarket: any;
+    getCurrentActiveSubCategory: any;
+    id: any;
+    isInit: any;
+    mainStore: any;
+    onSelectItem: any;
+    pauseScrollSpy: any;
+    searchInput: any;
+    searchInputClassName: any;
     constructor({
         getCategoricalItems,
         onSelectItem,
@@ -20,7 +41,7 @@ export default class CategoricalDisplayStore {
         getCurrentActiveSubCategory,
         getCurrentActiveMarket,
         searchInputClassName,
-    }) {
+    }: any) {
         reaction(
             () => getIsShown && getIsShown() && this.scrollPanel,
             () => {
@@ -46,16 +67,18 @@ export default class CategoricalDisplayStore {
         this.searchInput = React.createRef();
         this.searchInputClassName = searchInputClassName;
 
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         const normalItem = connect(() => ({
             favoritesId,
         }))(NormalItem);
 
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         const activeItem = connect(() => ({
             activeOptions,
             favoritesId,
         }))(ActiveItem);
 
-        const getItemType = categoryId => {
+        const getItemType = (categoryId: any) => {
             if (categoryId === 'active' && this.getActiveCategory !== undefined) {
                 return activeItem;
             }
@@ -63,6 +86,7 @@ export default class CategoricalDisplayStore {
             return normalItem;
         };
 
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         this.ResultsPanel = connect(() => ({
             filteredItems: this.filteredItems,
             setCategoryElement: this.setCategoryElement,
@@ -73,7 +97,10 @@ export default class CategoricalDisplayStore {
             handleTitleClick: this.handleTitleClick,
         }))(ResultsPanel);
 
-        this.FilterPanel = connect(({ chart }) => ({
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+        this.FilterPanel = connect(({
+            chart,
+        }: any) => ({
             isMobile: chart.isMobile,
             filteredItems: this.filteredItems,
             handleFilterClick: this.handleFilterClick,
@@ -82,6 +109,7 @@ export default class CategoricalDisplayStore {
             isSearching: this.filterText !== '',
         }))(FilterPanel);
 
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         this.SearchInput = connect(() => ({
             placeholder: placeholderText,
             value: this.filterText,
@@ -91,14 +119,23 @@ export default class CategoricalDisplayStore {
         }))(SearchInput);
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isShown = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable scrollPanel;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable filterText = '';
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable activeCategoryKey = '';
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable focusedCategoryKey = null;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isScrollingDown = false;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable activeHeadKey = undefined;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable activeHeadTop = 0;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable activeHeadOffset = undefined;
     scrollTop = undefined;
     isUserScrolling = true;
@@ -117,6 +154,7 @@ export default class CategoricalDisplayStore {
         return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound init() {
         this.isInit = true;
         // Select first non-empty category:
@@ -131,13 +169,16 @@ export default class CategoricalDisplayStore {
         }
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get favoritesCategory() {
         this.pauseScrollSpy = true;
         const favoritesCategory = {
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
             hasSubcategory: false,
             active: true,
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
             emptyDescription: t.translate('There are no favorites yet.'),
             data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
@@ -147,6 +188,7 @@ export default class CategoricalDisplayStore {
         return favoritesCategory;
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get filteredItems() {
         let filteredItems = cloneCategories(this.getCategoricalItems());
         const activeItmes = this.activeCategories.length
@@ -161,17 +203,17 @@ export default class CategoricalDisplayStore {
 
         if (this.favoritesId) {
             const favsCategory = { ...this.favoritesCategory };
-            const findFavItem = category => {
-                const foundItems = [];
+            const findFavItem = (category: any) => {
+                const foundItems: any = [];
                 if (category.hasSubcategory) {
-                    category.data.forEach(subcategory => {
+                    category.data.forEach((subcategory: any) => {
                         const foundSubItems = findFavItem(subcategory);
                         foundItems.push(...foundSubItems);
                     });
                 } else {
                     favsCategory.data.forEach(favItem => {
                         if (typeof favItem === 'string') {
-                            const itemObj = category.data.find(item => item.itemId === favItem);
+                            const itemObj = category.data.find((item: any) => item.itemId === favItem);
                             if (itemObj) {
                                 foundItems.push(itemObj);
                             }
@@ -198,6 +240,7 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.filterText === '') {
+            // @ts-expect-error ts-migrate(2322) FIXME: Type 'any[]' is not assignable to type 'never[]'.
             this.lastFilteredItems = filteredItems;
             return filteredItems;
         }
@@ -208,10 +251,9 @@ export default class CategoricalDisplayStore {
             .filter(x => x !== '')
             .map(b => b.toLowerCase().trim());
         // regex to check all separate words by comma, should exist in the string
-        const hasSearchString = text => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
-        const filterCategory = c => {
-            c.data = c.data.filter(item =>
-                hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol))
+        const hasSearchString = (text: any) => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
+        const filterCategory = (c: any) => {
+            c.data = c.data.filter((item: any) => hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol))
             );
             if (c.data.length) {
                 searchHasResult = true;
@@ -234,11 +276,13 @@ export default class CategoricalDisplayStore {
         }
 
         if (!this.pauseScrollSpy) {
+            // @ts-expect-error ts-migrate(2322) FIXME: Type 'any[]' is not assignable to type 'never[]'.
             this.lastFilteredItems = filteredItems;
         }
         return filteredItems;
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateScrollSpy() {
         if (this.pauseScrollSpy || !this.scrollPanel) {
             return;
@@ -271,6 +315,7 @@ export default class CategoricalDisplayStore {
         }
 
         const scrollTop = this.scrollPanel.getBoundingClientRect().top;
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         if (this.scrollTop > scrollTop) {
             this.scrollUp();
         } else {
@@ -278,28 +323,34 @@ export default class CategoricalDisplayStore {
         }
 
         const offsetTop = this.scrollPanel.getBoundingClientRect().top - window.scrollY;
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'number' is not assignable to type 'undefined... Remove this comment to see the full error message
         this.activeHeadOffset = this.chart.isMobile ? offsetTop : 0;
         this.scrollTop = scrollTop;
         this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
         this.activeHeadTop = activeHeadTop;
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'undefined'.
         this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound scrollUp() {
         this.isScrollingDown = false;
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound scrollDown() {
         // This only affects when scrolling by mouse not by code
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
     }
 
-    @action.bound setCategoryElement(element, id) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setCategoryElement(element: any, id: any) {
         this.categoryElements[id] = element;
     }
 
-    @action.bound setFilterText(filterText) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setFilterText(filterText: any) {
         this.filterText = filterText;
         this.isUserScrolling = false;
         this.updateScrollSpy();
@@ -308,7 +359,8 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound handleFilterClick(categoryId) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound handleFilterClick(categoryId: any) {
         const el = this.categoryElements[categoryId];
         const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
@@ -326,6 +378,7 @@ export default class CategoricalDisplayStore {
                 this.scrollPanel.scrollTop = el.offsetTop - gap_top;
             }
             this.focusedCategoryKey = categoryId;
+            // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'undefined'.
             this.activeHeadKey = null;
             // scrollTop takes some time to take affect, so we need
             // a slight delay before enabling the scroll spy again
@@ -335,11 +388,13 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound setScrollPanel(element) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound setScrollPanel(element: any) {
         this.scrollPanel = element;
     }
 
-    @action.bound handleTitleClick(categoryId) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound handleTitleClick(categoryId: any) {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
             if (item.categoryId === categoryId) {
@@ -351,14 +406,17 @@ export default class CategoricalDisplayStore {
             }
 
             if (item.active && item.categoryId !== 'favorite') {
+                // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'any' is not assignable to parame... Remove this comment to see the full error message
                 this.activeCategories.push(item.categoryId);
             }
         }
 
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'number'.
         this.activeHeadTop = null;
         setTimeout(() => this.updateScrollSpy(), 0);
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound scrollToActiveSymbol() {
         const activeItemCount = this.getActiveCategory ? this.getActiveCategory().data.length : 0;
         this.focusedCategoryKey = null;
@@ -372,6 +430,7 @@ export default class CategoricalDisplayStore {
         const activeMarketClassName = `${activeSubCategoryClassName} .sc-mcd__item--${this.activeMarket}`;
         const el_active_market = this.scrollPanel.querySelector(activeMarketClassName);
 
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'string | null' is not assignable to type 'un... Remove this comment to see the full error message
         this.activeHeadKey = this.activeCategoryKey || null;
         this.activeHeadTop = 0;
         this.pauseScrollSpy = true;
@@ -379,6 +438,7 @@ export default class CategoricalDisplayStore {
 
         if (activeItemCount) {
             this.activeCategoryKey = 'active';
+            // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'undefined'.
             this.activeHeadKey = null;
             this.scrollPanel.scrollTop = 0;
         } else if (el) {
@@ -406,12 +466,15 @@ export default class CategoricalDisplayStore {
             const categories = Object.keys(this.categoryElements);
             const last_category = categories.pop();
             const last_category_bottom_gap = this.height - (64 + categories.length * 40); // to make the last category height reach it's filter tab
+            // @ts-expect-error ts-migrate(2538) FIXME: Type 'undefined' cannot be used as an index type.
             if (this.categoryElements[last_category]) {
+                // @ts-expect-error ts-migrate(2538) FIXME: Type 'undefined' cannot be used as an index type.
                 this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
             }
         }
     }
 
+    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     connect = connect(() => ({
         filteredItems: this.filteredItems,
         updateScrollSpy: this.updateScrollSpy,

@@ -1,22 +1,28 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
 import { observable, action, when, reaction } from 'mobx';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/SettingsDialog.jsx' was reso... Remove this comment to see the full error message
 import SettingsDialog from '../components/SettingsDialog.jsx';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Menu.jsx' was resolved to '/... Remove this comment to see the full error message
 import Menu from '../components/Menu.jsx';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/SearchInput.jsx' was resolve... Remove this comment to see the full error message
 import SearchInput from '../components/SearchInput.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../Constant' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { getIndicatorsTree, ExcludedStudies } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
+// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Icons.jsx' was resolved to '... Remove this comment to see the full error message
 import { IndicatorCatTrendLightIcon, IndicatorCatTrendDarkIcon } from '../components/Icons.jsx';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../sass/icons/chart/ic-maxi... Remove this comment to see the full error message
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../sass/icons/common/ic-min... Remove this comment to see the full error message
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
-
 // TODO:
 // import StudyInfo from '../study-info';
-
-const updateFieldHeading = (heading, type) => {
+const updateFieldHeading = (heading: any, type: any) => {
     const names = ['%D', '%K'];
     if (heading.toLowerCase() === type.toLowerCase() || heading === 'Result') {
         return 'Color';
@@ -26,24 +32,33 @@ const updateFieldHeading = (heading, type) => {
     }
     return heading;
 };
-
 export default class StudyLegendStore {
-    constructor(mainStore) {
+    SearchInput: any;
+    StudyMenu: any;
+    StudySettingsDialog: any;
+    activeStudies: any;
+    excludedStudies: any;
+    hasReachedLimits: any;
+    helper: any;
+    mainStore: any;
+    menu: any;
+    searchInput: any;
+    settingsDialog: any;
+    constructor(mainStore: any) {
         this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-
         this.menu = new MenuStore(mainStore, { route: 'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper.sd),
             favoritesId: 'indicators',
-            onChanged: items => this.updateStudy(this.helper.sd, items),
+            onChanged: (items: any) => this.updateStudy(this.helper.sd, items),
         });
         this.StudyMenu = this.menu.connect(Menu);
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
-
         this.searchInput = React.createRef();
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         this.SearchInput = connect(() => ({
             placeholder: 'Search',
             value: this.filterText,
@@ -51,32 +66,37 @@ export default class StudyLegendStore {
             searchInput: this.searchInput,
             searchInputClassName: 'searchInputClassName',
         }))(SearchInput);
-
-        reaction(
-            () => this.menu.open,
-            () => {
-                if (!this.menu.open) {
-                    this.setFilterText('');
-                }
-                setTimeout(() => {
-                    if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
-                }, 400);
+        reaction(() => this.menu.open, () => {
+            if (!this.menu.open) {
+                this.setFilterText('');
             }
-        );
+            setTimeout(() => {
+                if (this.searchInput && this.searchInput.current)
+                    this.searchInput.current.focus();
+            }, 400);
+        });
     }
-
     previousStudies = {};
+    // @ts-expect-error ts-migrate(7008) FIXME: Member 'searchInputClassName' implicitly has an 'a... Remove this comment to see the full error message
     searchInputClassName;
-    @observable selectedTab = 1;
-    @observable filterText = '';
-    @observable activeItems = [];
-    @observable infoItem = null;
-    @observable portalNodeIdChanged;
-
+    @observable
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    selectedTab = 1;
+    @observable
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    filterText = '';
+    @observable
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    activeItems = [];
+    @observable
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    infoItem = null;
+    @observable
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    portalNodeIdChanged;
     onContextReady = () => {
         this.stx.addEventListener('studyOverlayEdit', this.editStudy);
         this.stx.addEventListener('studyPanelEdit', this.editStudy);
-
         // to remove studies if user has already more than 5
         // and remove studies which are excluded
         this.removeExtraStudies();
@@ -85,7 +105,6 @@ export default class StudyLegendStore {
         this.stx.append('panelClose', this.onStudyRemoved);
         this.renderLegend();
     };
-
     get context() {
         return this.mainStore.chart.context;
     }
@@ -95,7 +114,6 @@ export default class StudyLegendStore {
     get indicatorRatio() {
         return this.mainStore.chart;
     }
-
     get items() {
         return [...getIndicatorsTree()].map(indicator => {
             // the only icon which is different on light/dark is trend
@@ -105,36 +123,32 @@ export default class StudyLegendStore {
                         ? IndicatorCatTrendLightIcon
                         : IndicatorCatTrendDarkIcon;
             }
-
             return indicator;
         });
     }
-
     get searchedItems() {
         return [...getIndicatorsTree()]
             .map(category => {
-                category.foundItems = category.items.filter(
-                    item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
-                );
-                return category;
-            })
+            category.foundItems = category.items.filter((item: any) => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1);
+            return category;
+        })
             .filter(category => category.foundItems.length);
     }
-
     get chartActiveStudies() {
-        return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
+        return (this.activeItems || []).filter(item => (item as any).dataObject.sd.panel === 'chart');
     }
-
     get maxAllowedItem() {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }
-
-    @action.bound removeExtraStudies() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    removeExtraStudies() {
         if (this.stx.layout && this.stx.layout.studies) {
             Object.keys(this.stx.layout.studies).forEach((study, idx) => {
                 const type = this.stx.layout.studies[study].type;
                 if (idx >= this.maxAllowedItem || this.excludedStudies[type]) {
                     setTimeout(() => {
+                        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                         CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
                         this.renderLegend();
                     }, 0);
@@ -142,14 +156,18 @@ export default class StudyLegendStore {
             });
         }
     }
-
-    @action.bound onSelectItem(item) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    onSelectItem(item: any) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
         if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
             const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             const sd = CIQ.Studies.addStudy(this.stx, item);
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             CIQ.Studies.studyLibrary[item].panelHeight = null;
             this.changeStudyPanelTitle(sd);
             setTimeout(this.updateIndicatorHeight, 20);
@@ -157,10 +175,10 @@ export default class StudyLegendStore {
             this.mainStore.chart.setYaxisWidth();
         }
     }
-
-    @action.bound updateIndicatorHeight() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    updateIndicatorHeight() {
         const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
-
         const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
         Object.keys(this.stx.panels).forEach((id, index) => {
             if (index === 0) {
@@ -173,44 +191,51 @@ export default class StudyLegendStore {
         this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
         this.stx.draw();
     }
-
     // Temporary prevent user from adding more than 5 indicators
     // TODO All traces can be removed after new design for studies
-    @action.bound updateStyle() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    updateStyle() {
         const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
-
-    @action.bound updateProps({ searchInputClassName }) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    updateProps({ searchInputClassName }: any) {
         this.searchInputClassName = searchInputClassName;
     }
-
-    @action.bound editStudy(study) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    editStudy(study: any) {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         const helper = new CIQ.Studies.DialogHelper(study);
         this.helper = helper;
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${helper.name}`);
-
         const attributes = helper.attributes;
-        const inputs = helper.inputs.map(inp => ({
+        const inputs = helper.inputs.map((inp: any) => ({
             id: inp.name,
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
             title: t.translate(inp.heading),
             value: inp.value,
             defaultValue: inp.defaultInput,
             type: inp.type === 'checkbox' ? 'switch' : inp.type,
             options: inp.options || null,
-            ...attributes[inp.name], // {min:1, max: 20}
-            category: 'inputs',
+            // {min:1, max: 20}
+            ...attributes[inp.name],
+            category: 'inputs'
         }));
-        const outputs = helper.outputs.map(out => ({
+        const outputs = helper.outputs.map((out: any) => ({
             id: out.name,
+            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
             title: t.translate(updateFieldHeading(out.heading, study.sd.type)),
             defaultValue: out.defaultOutput,
             value: out.color,
             type: 'colorpicker',
-            category: 'outputs',
+            category: 'outputs'
         }));
-        const parameters = helper.parameters.map(par => {
+        const parameters = helper.parameters.map((par: any) => {
             const shared = {
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
                 title: t.translate(par.heading),
                 ...attributes[par.name],
                 category: 'parameters',
@@ -224,7 +249,6 @@ export default class StudyLegendStore {
                     type: 'switch',
                 };
             }
-
             if (par.defaultValue.constructor === Number) {
                 return {
                     ...shared,
@@ -242,10 +266,10 @@ export default class StudyLegendStore {
             }
             throw new Error('Unrecognised parameter!');
         });
-
         this.settingsDialog.id = study.sd.type;
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = study.sd.libraryEntry.name;
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
         this.settingsDialog.formTitle = t.translate('Result');
         this.settingsDialog.formClassname = `form--${study.sd.type.toLowerCase().replace(/ /g, '-')}`;
         // TODO:
@@ -255,52 +279,59 @@ export default class StudyLegendStore {
         this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.setOpen(true);
     }
-
-    @action.bound deleteStudy(study) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    deleteStudy(study: any) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
         if (!study.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
             // causing the underlying chart to receive the mousedown (on IE win7)
             setTimeout(() => {
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 CIQ.Studies.removeStudy(this.stx, study);
                 this.renderLegend();
             }, 0);
             setTimeout(this.updateIndicatorHeight, 20);
         }
     }
-
-    @action.bound updateStudy(study, items) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    updateStudy(study: any, items: any) {
         const updates = {};
         for (const { id, category, value, type } of items) {
             let isChanged;
             if (type === 'numbercolorpicker') {
                 isChanged =
                     study[category][`${id}Color`] !== value.Color || study[category][`${id}Value`] !== value.Value;
-            } else {
+            }
+            else {
                 isChanged = study[category][id] !== value;
             }
-
             if (isChanged) {
+                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 updates[category] = updates[category] || {};
                 if (typeof value === 'object') {
                     for (const suffix in value) {
+                        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                         updates[category][`${id}${suffix}`] = value[suffix];
                     }
-                } else {
+                }
+                else {
+                    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                     updates[category][id] = value;
                 }
             }
         }
-        if (Object.keys(updates).length === 0) return;
-
+        if (Object.keys(updates).length === 0)
+            return;
         this.helper.updateStudy(updates);
         this.updateActiveStudies();
         this.stx.draw();
         this.changeStudyPanelTitle(this.helper.sd);
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
         this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
     }
-
-    changeStudyPanelTitle(sd) {
+    changeStudyPanelTitle(sd: any) {
         // Remove numbers from the end of indicator titles in mobile
         if (this.mainStore.chart.isMobile) {
             this.stx.panels[sd.panel].display = sd.type;
@@ -308,17 +339,17 @@ export default class StudyLegendStore {
             this.mainStore.state.saveLayout();
         }
     }
-
     shouldRenderLegend() {
         const stx = this.stx;
         if (!stx.layout.studies) {
             return false;
         }
-
         // Logic to determine if the studies have changed, otherwise don't re-create the legend
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
             let foundAChange = false;
             for (const id in stx.layout.studies) {
+                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 if (!this.previousStudies[id]) {
                     foundAChange = true;
                     break;
@@ -328,18 +359,16 @@ export default class StudyLegendStore {
                 return false;
             }
         }
-
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         this.previousStudies = CIQ.shallowClone(stx.layout.studies);
         return true;
     }
-
     handleDrawPanels = () => {
         const panelsLen = Object.keys(this.stx.panels).length;
         Object.keys(this.stx.panels).forEach((id, index) => {
             if (index === 0) {
                 return;
             }
-
             const panelObj = this.stx.panels[id];
             if (this.mainStore.chart.isMobile) {
                 if (panelObj.up.className.indexOf('show') !== -1) {
@@ -362,29 +391,24 @@ export default class StudyLegendStore {
                 if (nameObj.name.trim() !== sd.name.trim()) {
                     panelObj.title.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
                 }
-
                 // Regarding the ChartIQ.js, codes under Line 34217, edit function
                 // not mapped, this is a force to map edit function for indicators
                 if (sd.editFunction && panelObj && !panelObj.editFunction) {
                     this.stx.setPanelEdit(panelObj, sd.editFunction);
                 }
             }
-
             if (index === 1 || isSolo) {
                 // Hide the up arrow from first indicator to prevent user
                 // from moving the indicator panel above the main chart
                 panelObj.up.style.display = 'none';
             }
-
             if (index === panelsLen - 1 || isSolo) {
                 panelObj.down.style.display = 'none';
             }
-
             // Mean chart + 1 indicator
             if (panelsLen === 2) {
                 panelObj.solo.style.display = 'none';
             }
-
             // Updating Max/Min icon
             if (panelObj.solo.style.display !== 'none') {
                 const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
@@ -395,7 +419,6 @@ export default class StudyLegendStore {
             }
         });
     };
-
     /**
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
@@ -403,34 +426,31 @@ export default class StudyLegendStore {
         if (!this.context || !this.shouldRenderLegend()) {
             return;
         }
-
         this.updateActiveStudies();
         // Temporary prevent user from adding more than 5 indicators
         // All traces can be removed after new design for studies
         this.updateStyle();
     };
-
-    @action.bound setReachedLimit() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    setReachedLimit() {
         const hasReachedLimit = this.activeStudies.data.length >= 5;
         this.hasReachedLimits = hasReachedLimit;
     }
-
-    @action.bound updateActiveStudies() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    updateActiveStudies() {
         const stx = this.stx;
-        const activeItems = [];
-
+        const activeItems: any = [];
         Object.keys(stx.layout.studies || []).forEach(id => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) {
                 return;
             }
-            const studyObjCategory = getIndicatorsTree().find(category =>
-                category.items.find(item => item.id === sd.type)
-            );
-            const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
+            const studyObjCategory = getIndicatorsTree().find((category: any) => category.items.find((item: any) => item.id === sd.type));
+            const studyObj = studyObjCategory.items.find((item: any) => item.id === sd.type);
             if (studyObj) {
                 const nameObj = prepareIndicatorName(sd.name);
-
                 activeItems.push({
                     ...studyObj,
                     id: sd.inputs.id,
@@ -448,8 +468,9 @@ export default class StudyLegendStore {
         });
         this.activeItems = activeItems;
     }
-
-    @action.bound deleteAllStudies() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    deleteAllStudies() {
         const stx = this.stx;
         if (stx) {
             Object.keys(stx.layout.studies || []).forEach(id => {
@@ -458,34 +479,40 @@ export default class StudyLegendStore {
             setTimeout(this.updateIndicatorHeight, 20);
         }
     }
-
-    @action.bound clearStudies() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    clearStudies() {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
     }
-
-    @action.bound onStudyRemoved() {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    onStudyRemoved() {
         this.updateActiveStudies();
         setTimeout(this.updateIndicatorHeight, 20);
     }
-
-    @action.bound onSelectTab(tabIndex) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    onSelectTab(tabIndex: any) {
         this.setFilterText('');
         this.selectedTab = tabIndex;
         this.onInfoItem(null);
     }
-
-    @action.bound setFilterText(filterText) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    setFilterText(filterText: any) {
         this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
     }
-
-    @action.bound onInfoItem(study) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    onInfoItem(study: any) {
         this.infoItem = study;
     }
-
-    @action.bound updatePortalNode(portalNodeId) {
+    @action.bound
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    updatePortalNode(portalNodeId: any) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }

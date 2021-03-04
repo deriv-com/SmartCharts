@@ -1,5 +1,21 @@
 export const manageMasterDataLength = () => {
-    CIQ.ChartEngine.prototype.prepend('updateChartData', function () {
+    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
+    CIQ.ChartEngine.prototype.prepend('updateChartData', function(
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any,
+        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
+        this: any
+    ) {
         if (
             this.chart.lockScroll &&
             this.chart.dataSegment &&

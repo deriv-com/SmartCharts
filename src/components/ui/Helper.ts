@@ -4,7 +4,10 @@
  * @constructor
  */
 class Helper {
-    constructor(node, context) {
+    context: any;
+    injections: any;
+    node: any;
+    constructor(node: any, context: any) {
         this.node = node;
         this.context = context;
         this.injections = []; // To keep track of injections for later removal
@@ -17,7 +20,7 @@ class Helper {
      * @param {Function} code      The code to be run
      * @memberof CIQ.UI.Helper
      */
-    addInjection(position, injection, code) {
+    addInjection(position: any, injection: any, code: any) {
         this.injections.push(this.context.stx[position](injection, code));
     }
 

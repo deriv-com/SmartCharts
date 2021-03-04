@@ -2,9 +2,11 @@ import { observable, when, action } from 'mobx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ChartSizeStore {
+    mainStore: any;
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable stx;
 
-    constructor(mainStore) {
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
         when(() => this.mainStore.chart.context, this.onContextReady);
     }
@@ -17,12 +19,14 @@ export default class ChartSizeStore {
         return this.mainStore.state;
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateChartState() {
         this.stx.chart.lockScroll = false;
         this.stx.chart.lockAutoScroll = false;
         this.mainStore.chart.updateScaledOneOne(false);
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound zoomIn() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
         if (this.stx && this.state.enableZoom) {
@@ -34,6 +38,7 @@ export default class ChartSizeStore {
         }
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound zoomOut() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
         if (this.stx && this.state.enableZoom) {

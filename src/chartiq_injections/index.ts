@@ -6,7 +6,7 @@ import { plotterDrawText } from './plotterDrawText';
 import { overideMeasure } from './setMeasure';
 import { BackingStore } from './backingStore';
 
-const inject = option => {
+const inject = (option: any) => {
     createXAxis();
     drawCurrentPriceLine();
     maintainHeadsUpHR();

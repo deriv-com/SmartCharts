@@ -2,7 +2,6 @@
 import Helper from './Helper';
 import Keystroke from './Keystroke';
 import { claims } from '.';
-
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
  * "claim" keystrokes and intercept them, otherwise the keystrokes will be handled
@@ -17,24 +16,26 @@ import { claims } from '.';
  */
 class KeystrokeHub extends Helper {
     static instance = null;
-
-    constructor(node, context, params) {
+    capsLock: any;
+    keystroke: any;
+    params: any;
+    constructor(node: any, context: any, params: any) {
+        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
         super(node, context, params);
         this.node = node;
         this.context = context;
         this.params = params || {};
-
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'this' is not assignable to type 'null'.
         KeystrokeHub.instance = this;
         const self = this;
-
         function handler() {
-            return (...args) => {
+            return (...args: any[]) => {
+                // @ts-expect-error ts-migrate(2556) FIXME: Expected 1 arguments, but got 0 or more.
                 self.handler(...args);
             };
         }
         this.keystroke = new Keystroke(node, handler());
     }
-
     /**
      * Global default hotkey method. Pass this or your own metho in to CIQ.UI.KeystrokeHub
      * @memberof CIQ.UI.KeyboardShortcuts
@@ -42,7 +43,7 @@ class KeystrokeHub extends Helper {
      * @param  {CIQ.UI.KeystrokeHub} hub The hub that processed the key
      * @return {boolean}     Return true if you captured the key
      */
-    static defaultHotKeys(key, hub) {
+    static defaultHotKeys(key: any, hub: any) {
         const stx = hub.context.stx;
         let push = 1;
         switch (key) {
@@ -64,7 +65,8 @@ class KeystrokeHub extends Helper {
             case 'left':
                 if (stx.ctrl) {
                     stx.zoomOut();
-                } else {
+                }
+                else {
                     push = 1;
                     if (stx.shift || hub.capsLock) {
                         push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
@@ -80,7 +82,8 @@ class KeystrokeHub extends Helper {
             case 'right':
                 if (stx.ctrl) {
                     stx.zoomIn();
-                } else {
+                }
+                else {
                     push = 1;
                     if (stx.shift || hub.capsLock) {
                         push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
@@ -92,15 +95,19 @@ class KeystrokeHub extends Helper {
                 break;
             case 'delete':
             case 'backspace':
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 if (CIQ.ChartEngine.drawingLine) {
                     stx.undo();
-                } else if (stx.anyHighlighted) {
+                }
+                else if (stx.anyHighlighted) {
                     stx.deleteHighlighted();
-                } else {
+                }
+                else {
                     return false;
                 }
                 break;
             case 'escape':
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 if (CIQ.ChartEngine.drawingLine) {
                     stx.undo();
                 }
@@ -110,16 +117,14 @@ class KeystrokeHub extends Helper {
         }
         return true;
     }
-
     /**
      * Change the active context for the hub, for instance when dealing with multiple charts
      * @param {CIQ.UI.Context} context The context
      * @memberof CIQ.UI.KeystrokeHub
      */
-    setActiveContext(context) {
+    setActiveContext(context: any) {
         this.context = context;
     }
-
     /**
      * @param hub
      * @param key
@@ -128,9 +133,9 @@ class KeystrokeHub extends Helper {
      * @memberof CIQ.UI.KeystrokeHub
      * @private
      */
-    processKeyStrokeClaims(hub, key, e, keystroke) {
+    processKeyStrokeClaims(hub: any, key: any, e: any, keystroke: any) {
         for (let i = claims.length - 1; i > -1; i--) {
-            const helper = claims[i].helper;
+            const helper = (claims[i] as any).helper;
             const response = helper.keyStroke(hub, key, e, keystroke);
             if (response) {
                 if (!response.allowDefault) {
@@ -141,27 +146,25 @@ class KeystrokeHub extends Helper {
         }
         return false;
     }
-
-    addClaim(helper) {
+    addClaim(helper: any) {
+        // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
         claims.push({ helper });
     }
-
-    removeClaim(helper) {
+    removeClaim(helper: any) {
         for (let i = 0; i < claims.length; i++) {
-            if (claims[i].helper === helper) {
+            if ((claims[i] as any).helper === helper) {
                 claims.splice(i, 1);
                 return;
             }
         }
     }
-
     /**
      * Handles keystrokes
      * @param  {object} obj Event object
      * @memberof CIQ.UI.KeystrokeHub
      * @private
      */
-    handler(obj) {
+    handler(obj: any) {
         if (!this.context) {
             return;
         }
@@ -169,10 +172,7 @@ class KeystrokeHub extends Helper {
         if (stx.editingAnnotation) {
             return;
         }
-        const e = obj.e,
-            key = obj.key,
-            keystroke = obj.keystroke,
-            targetTagName = obj.e.target.tagName;
+        const e = obj.e, key = obj.key, keystroke = obj.keystroke, targetTagName = obj.e.target.tagName;
         switch (key) {
             case 16:
                 stx.shift = keystroke.shift;
@@ -190,22 +190,20 @@ class KeystrokeHub extends Helper {
             default:
                 break;
         }
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         if (!CIQ.ChartEngine.drawingLine) {
             if (this.processKeyStrokeClaims(this, key, e, keystroke)) {
                 return;
             }
         }
-
         if (key !== 'escape') {
             if (this.context.isModal()) {
                 return;
             }
         }
-
         if (targetTagName === 'INPUT' || targetTagName === 'TEXTAREA') {
             return;
         } // target is not the chart
-
         if (this.params.cb) {
             if (this.params.cb(key, this)) {
                 e.preventDefault();
@@ -213,5 +211,4 @@ class KeystrokeHub extends Helper {
         }
     }
 }
-
 export default KeystrokeHub;

@@ -2,12 +2,21 @@ import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 import PendingPromise from './PendingPromise';
 
 class ServerTime {
+    // @ts-expect-error ts-migrate(7008) FIXME: Member '_instance' implicitly has an 'any' type.
     static _instance;
 
+    _api: any;
+    clientTimeAtRequest: any;
+    getTimeInterval: any;
+    onTimeUpdated: any;
+    serverTimeAtResponse: any;
+    updateTimeInterval: any;
+
     clockStarted = false;
+    // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
     clockStartedPromise = new PendingPromise();
 
-    async init(api, updatedCallback) {
+    async init(api: any, updatedCallback: any) {
         this._api = api;
         this.onTimeUpdated = updatedCallback;
         if (!this.clockStarted) {
@@ -30,18 +39,20 @@ class ServerTime {
             // to boot up the speed, at the beginig
             // we use the user time
             this._timeResponse({
+                // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
                 time: parseInt(new Date().getTime() / 1000, 10),
             });
         }
         this.clockStartedPromise.resolve();
     }
 
-    _timeResponse = response => {
+    _timeResponse = (response: any) => {
         if (response.error) {
             this.clockStarted = false;
         }
 
         if (!this.clockStarted) {
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
             this.init();
             return;
         }
@@ -75,6 +86,7 @@ class ServerTime {
     }
 
     getUTCDate() {
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         return CIQ.strToDateTime(getUTCDate(this.getEpoch()));
     }
 

@@ -1,18 +1,18 @@
 export default function PendingPromise(data = null) {
-    let resolve;
-    let reject;
+    let resolve: any;
+    let reject: any;
     const promise = new Promise((_resolve, _reject) => {
         resolve = _resolve;
         reject = _reject;
     });
-    promise.resolve = res => {
-        promise.isPending = false;
+    (promise as any).resolve = (res: any) => {
+        (promise as any).isPending = false;
         resolve(res);
     };
-    promise.reject = error => {
-        promise.isPending = false;
+    (promise as any).reject = (error: any) => {
+        (promise as any).isPending = false;
         reject(error);
     };
-    promise.data = data;
+    (promise as any).data = data;
     return promise;
 }

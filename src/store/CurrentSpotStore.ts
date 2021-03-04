@@ -1,11 +1,13 @@
 import { when } from 'mobx';
 import { patchPixelFromChart } from '../utils';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '../../sass/_themes.scss' or it... Remove this comment to see the full error message
 import { red as RED } from '../../sass/_themes.scss';
 
 const is_firefox = navigator.userAgent.search('Firefox') > 0;
 
 class CurrentSpotStore {
-    constructor(mainStore) {
+    mainStore: any;
+    constructor(mainStore: any) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
     }
@@ -74,6 +76,7 @@ class CurrentSpotStore {
             ctx.shadowBlur = (glow * 35 + 4) | 0;
             let opacity = Math.sqrt(1.0 - glow) * 255;
             opacity |= 0;
+            // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
             opacity = opacity.toString(16);
             ctx.shadowColor = RED + opacity;
         }

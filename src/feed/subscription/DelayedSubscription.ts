@@ -1,10 +1,14 @@
 import Subscription from './Subscription';
 
 class DelayedSubscription extends Subscription {
+    _binaryApi: any;
+    _emitter: any;
+    _request: any;
+    // @ts-expect-error ts-migrate(7008) FIXME: Member '_timerId' implicitly has an 'any' type.
     _timerId;
     UPDATE_INTERVAL = 3000;
 
-    constructor(request, api, stx, delay) {
+    constructor(request: any, api: any, stx: any, delay: any) {
         super(request, api, stx);
         this._request = {
             ...this._request,
@@ -18,7 +22,8 @@ class DelayedSubscription extends Subscription {
         this._endTimer();
     }
 
-    async _startSubscribe(tickHistoryRequest) {
+    // @ts-expect-error ts-migrate(2416) FIXME: Property '_startSubscribe' in type 'DelayedSubscri... Remove this comment to see the full error message
+    async _startSubscribe(tickHistoryRequest: any) {
         const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
         const quotes = this._processHistoryResponse(response);
         this._startTimer();

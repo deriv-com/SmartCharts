@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'clas... Remove this comment to see the full error message
 import classNames from 'classnames';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
@@ -19,12 +21,14 @@ const Barrier = React.memo(
         priceLabelWidth,
         isSingleBarrier,
         ...props
-    }) =>
+    }: any) =>
         isInitialized && (
+            // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove this comment to see the full error message
             <div
                 className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
                 style={{ '--shade-color': shadeColor }}
             >
+                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <HighPriceLine
                     width={priceLabelWidth}
                     lineStyle={lineStyle}
@@ -33,7 +37,9 @@ const Barrier = React.memo(
                     {...props}
                 />
                 {!isSingleBarrier && (
+                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <>
+                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                         <LowPriceLine
                             width={priceLabelWidth}
                             lineStyle={lineStyle}
@@ -41,17 +47,21 @@ const Barrier = React.memo(
                             foregroundColor={foregroundColor}
                             {...props}
                         />
+                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                         <AboveShade />
+                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                         <BetweenShade />
+                        {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                         <BelowShade />
                     </>
                 )}
+            {/* @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove this comment to see the full error message */}
             </div>
         )
 );
 
 export default connect(
-    store => ({
+    (store: any) => ({
         HighPriceLine: store.HighPriceLine,
         LowPriceLine: store.LowPriceLine,
         AboveShade: store.AboveShade,

@@ -1,4 +1,6 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'chai... Remove this comment to see the full error message
 import { expect } from 'chai';
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moch... Remove this comment to see the full error message
 import { describe, it } from 'mocha';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
@@ -161,12 +163,14 @@ describe('TickHistoryFormatter test', () => {
 
     it('Test parse tick style="candles"', () => {
         const tick = TickHistoryFormatter.formatTick(tickCandleResponse);
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         delete tick.ohlc;
         expect(tick).to.deep.equal(tickCandleResponseResult);
     });
 
     it('Test parse tick style="ticks"', () => {
         const tick = TickHistoryFormatter.formatTick(tickTickResponse);
+        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         delete tick.tick;
         expect(tick).to.deep.equal(tickTickResponseResult);
     });

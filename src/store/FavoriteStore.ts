@@ -1,3 +1,4 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'even... Remove this comment to see the full error message
 import EventEmitter from 'event-emitter-es6';
 import { action, observable } from 'mobx';
 import { createObjectFromLocalStorage } from '../utils';
@@ -12,8 +13,10 @@ function loadFavorites() {
     for (const categoryName in local) {
         const category = {};
         for (const id of local[categoryName]) {
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             category[id] = true;
         }
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         favorites[categoryName] = category;
     }
 
@@ -25,12 +28,16 @@ class FavoriteStore {
         return 'EVENT_FAVORITES_UPDATE';
     }
 
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable favoritesMap = loadFavorites() || {
         indicators: {},
         'chartTitle&Comparison': {},
     };
 
+    // @ts-expect-error ts-migrate(7008) FIXME: Member 'instance' implicitly has an 'any' type.
     static instance;
+
+    _emitter: any;
 
     static getInstance() {
         if (!FavoriteStore.instance) {
@@ -44,19 +51,23 @@ class FavoriteStore {
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
-    onFavoriteUpdate(callback) {
+    onFavoriteUpdate(callback: any) {
         this._emitter.on(FavoriteStore.EVENT_FAVORITES_UPDATE, callback);
     }
 
-    offFavoriteUpdate(callback) {
+    offFavoriteUpdate(callback: any) {
         this._emitter.off(FavoriteStore.EVENT_FAVORITES_UPDATE, callback);
     }
 
-    @action.bound isFavorite(category, id) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound isFavorite(category: any, id: any) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         return id in this.favoritesMap[category];
     }
 
-    @action.bound toggleFavorite(category, id) {
+    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @action.bound toggleFavorite(category: any, id: any) {
+        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         const cat = this.favoritesMap[category];
         if (cat[id]) {
             delete cat[id];
@@ -72,11 +83,14 @@ class FavoriteStore {
         const favorites = {};
         for (const categoryName in this.favoritesMap) {
             const category = [];
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             for (const id in this.favoritesMap[categoryName]) {
                 category.push(id);
             }
+            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             favorites[categoryName] = category;
         }
+        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         CIQ.localStorageSetItem('cq-favorites', JSON.stringify(favorites));
     }
 }

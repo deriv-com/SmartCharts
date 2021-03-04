@@ -1,8 +1,9 @@
+// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
 import { connect } from '../store/Connect';
 import { getUTCDate } from '../utils';
 
-const RawMarker = props => {
+const RawMarker = (props: any) => {
     const ctx_ref = React.useRef(null);
     const stx_ref = React.useRef(null);
     const injection_id_ref = React.useRef(null);
@@ -15,7 +16,7 @@ const RawMarker = props => {
     const { contextPromise, shouldRedraw } = props;
 
     React.useEffect(() => {
-        contextPromise.then(ctx => {
+        contextPromise.then((ctx: any) => {
             if (has_unmounted_before_injection_ref.current) {
                 return;
             }
@@ -41,7 +42,7 @@ const RawMarker = props => {
 
     React.useEffect(() => {
         if (shouldRedraw) {
-            contextPromise.then(ctx => {
+            contextPromise.then((ctx: any) => {
                 if (has_unmounted_before_injection_ref.current) {
                     return;
                 }
@@ -63,7 +64,8 @@ const RawMarker = props => {
         const { threshold = 0, epoch_array, draw_callback, price_array = [] } = props_ref.current;
 
         if (!last_epoch_array_ref.current || last_epoch_array_ref.current.toString() !== epoch_array.toString()) {
-            date_array_ref.current = epoch_array.map(epoch => ({
+            date_array_ref.current = epoch_array.map((epoch: any) => ({
+                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 date: CIQ.strToDateTime(getUTCDate(epoch)),
                 epoch,
             }));
@@ -75,8 +77,11 @@ const RawMarker = props => {
         const show = !threshold || stx.layout.candleWidth >= threshold;
 
         if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
-            const points = [];
-            date_array_ref.current.forEach(({ date, epoch }) => {
+            const points: any = [];
+            date_array_ref.current.forEach(({
+                date,
+                epoch,
+            }: any) => {
                 const tick_idx = stx.tickFromDate(date, chart);
 
                 // ChartIQ doesn't support placing markers in the middle of ticks.
@@ -125,7 +130,7 @@ const RawMarker = props => {
                     max_left: yAxis.left,
                 });
             });
-            const prices = price_array.map(price => stx.pixelFromPrice(price * 1, chart.panel));
+            const prices = price_array.map((price: any) => stx.pixelFromPrice(price * 1, chart.panel));
             const canvas = stx.chart.context.canvas;
             if (canvas.style.height.indexOf(canvas.height) < 0) {
                 canvas_height_ref.current = canvas.height;
@@ -143,6 +148,9 @@ const RawMarker = props => {
     return null;
 };
 
-export default connect(({ chart }) => ({
+// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
+export default connect(({
+    chart,
+}: any) => ({
     contextPromise: chart.contextPromise,
 }))(RawMarker);
