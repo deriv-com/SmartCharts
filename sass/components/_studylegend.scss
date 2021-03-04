@@ -42,7 +42,6 @@
                 font-size: 12px;
                 font-weight: normal;
                 font-style: normal;
-                line-height: 0.1;
                 letter-spacing: normal;
                 padding: 0 8px;
                 @include themify($themes) {
@@ -268,6 +267,26 @@
 }
 
 .smartcharts-mobile {
+    .sc-studies--mobile-search {
+        .sc-dialog__head--search {
+            width: auto;
+            padding: 13px 0 13px 12px;
+        }
+        .sc-dialog__head--title {
+            width: 0px !important;
+            min-width: 0px !important;
+            overflow: hidden !important;
+            padding: 16px 0px !important;
+        }
+    }
+    .sc-dialog__head--title {
+        transition: all 0.3s ease-in-out;
+    }
+    .sc-dialog__head--search {
+        width: 50px;
+        padding: 13px;
+        transition: all 0.3s ease-in-out;
+    }
     .stx-panel-control {
         left: 5px;
     }

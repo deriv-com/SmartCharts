@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import NotificationBadge from './NotificationBadge.jsx';
 import Tooltip from './Tooltip.jsx';
 import Scroll from './Scroll.jsx';
@@ -14,6 +15,7 @@ import {
     BackIcon,
 } from './Icons.jsx';
 import '../../sass/components/_studylegend.scss';
+import { useOutsideClick } from '../hooks/index.js';
 
 const StudyIcon = ({ Icon, props }) => <Icon {...props} />;
 
@@ -193,11 +195,24 @@ const StudyLegend = ({
     portalNodeId,
     updatePortalNode,
     maxAllowedItem,
+    setFilterText,
 }) => {
+    const input_ref = React.useRef();
+    const [enable_search, setEnableSearch] = React.useState(false);
     updatePortalNode(portalNodeId);
+
+    useOutsideClick(input_ref, () => {
+        if (isMobile) {
+            setEnableSearch(false);
+            setFilterText('');
+        }
+    });
+
     return (
         <StudyMenu
-            className='sc-studies'
+            className={classNames('sc-studies', {
+                'sc-studies--mobile-search': enable_search,
+            })}
             isOpened={isOpened}
             setOpen={setOpen}
             isMobile={isMobile}
@@ -213,7 +228,11 @@ const StudyLegend = ({
                         {infoItem.name}
                     </div>
                 ) : (
-                    <div className='sc-dialog__head--search'>
+                    <div
+                        className='sc-dialog__head--search'
+                        onClick={() => isMobile && setEnableSearch(true)}
+                        ref={input_ref}
+                    >
                         <SearchInput />
                     </div>
                 )
@@ -282,4 +301,5 @@ export default connect(({ studies: st, chart }) => ({
     infoItem: st.infoItem,
     updatePortalNode: st.updatePortalNode,
     maxAllowedItem: st.maxAllowedItem,
+    setFilterText: st.setFilterText,
 }))(StudyLegend);
