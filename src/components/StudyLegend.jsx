@@ -203,9 +203,11 @@ const StudyLegend = ({
     updatePortalNode(portalNodeId);
 
     useOutsideClick(input_ref, () => {
-        if (isMobile && !!filterText) {
+        if (isMobile && enable_search) {
             setEnableSearch(false);
-            setFilterText('');
+            if (filterText) {
+                setFilterText('');
+            }
         }
     });
 
