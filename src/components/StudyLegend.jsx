@@ -196,13 +196,14 @@ const StudyLegend = ({
     updatePortalNode,
     maxAllowedItem,
     setFilterText,
+    filterText,
 }) => {
     const input_ref = React.useRef();
     const [enable_search, setEnableSearch] = React.useState(false);
     updatePortalNode(portalNodeId);
 
     useOutsideClick(input_ref, () => {
-        if (isMobile) {
+        if (isMobile && !!filterText) {
             setEnableSearch(false);
             setFilterText('');
         }
@@ -302,4 +303,5 @@ export default connect(({ studies: st, chart }) => ({
     updatePortalNode: st.updatePortalNode,
     maxAllowedItem: st.maxAllowedItem,
     setFilterText: st.setFilterText,
+    filterText: st.filterText,
 }))(StudyLegend);
