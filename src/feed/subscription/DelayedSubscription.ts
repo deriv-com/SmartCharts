@@ -4,8 +4,7 @@ class DelayedSubscription extends Subscription {
     _binaryApi: any;
     _emitter: any;
     _request: any;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member '_timerId' implicitly has an 'any' type.
-    _timerId;
+    _timerId?: ReturnType<typeof setInterval>;
     UPDATE_INTERVAL = 3000;
 
     constructor(request: any, api: any, stx: any, delay: any) {

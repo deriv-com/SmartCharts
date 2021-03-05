@@ -48,11 +48,8 @@ export default function animateChart(stx: any, animationParameters: any) {
         ticksFromEdgeOfScreen: 5,
         granularity: 1000000,
     };
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     animationParameters = CIQ.extend(params, animationParameters);
-    if ((params as any).tension)
-        stx.chart.tension = animationParameters.tension;
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
+    if ((params as any).tension) stx.chart.tension = animationParameters.tension;
     stx.tickAnimator = new CIQ.EaseMachine((Math as any).easeInOutCubic, 320);
     let filterSession = false;
     let nextBoundary: any = null;
@@ -64,14 +61,20 @@ export default function animateChart(stx: any, animationParameters: any) {
         initMarketSessionFlags();
     });
     stx.prepend('updateCurrentMarketData', function (this: any, data: any, chart: any, symbol: any, params: any) {
-        if (!chart)
-            chart = this.chart;
+        if (!chart) chart = this.chart;
         if (params && params.fromTrade && (chart.closePendingAnimation || chart.closePendingAnimation === 0)) {
             params.finalClose = chart.closePendingAnimation;
         }
     });
     // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    stx.append('updateChartData', function (this: any, this: any, this: any, appendQuotes: any, chart: any, params: any) {
+    stx.append('updateChartData', function (
+        this: any,
+        this: any,
+        this: any,
+        appendQuotes: any,
+        chart: any,
+        params: any
+    ) {
         // These chart types are the only types supported by animation
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         // This injection is just for charts which are not supported by animation.
@@ -91,16 +94,68 @@ export default function animateChart(stx: any, animationParameters: any) {
         }
     });
     // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    stx.prepend('updateChartData', function (this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, this: any, appendQuotes: any, chart: any, params: any) {
+    stx.prepend('updateChartData', function (
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        this: any,
+        appendQuotes: any,
+        chart: any,
+        params: any
+    ) {
         const self = this;
         if (!chart) {
             chart = self.chart;
         }
-        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none')
-            return;
+        if (!chart || !chart.defaultChartStyleConfig || chart.defaultChartStyleConfig == 'none') return;
         if (params !== undefined) {
-            if (params.animationEntry || params.secondarySeries)
-                return;
+            if (params.animationEntry || params.secondarySeries) return;
         }
         function completeLastBar(record: any) {
             if (!chart.masterData) {
@@ -110,10 +165,8 @@ export default function animateChart(stx: any, animationParameters: any) {
                 const bar = chart.masterData[md];
                 if (bar.Close || bar.Close === 0) {
                     bar.Close = record.Close;
-                    if (record.LastSize)
-                        bar.LastSize = record.LastSize;
-                    if (record.LastTime)
-                        bar.LastTime = record.LastTime;
+                    if (record.LastSize) bar.LastSize = record.LastSize;
+                    if (record.LastTime) bar.LastTime = record.LastTime;
                     self.updateCurrentMarketData({
                         Close: bar.Close,
                         DT: bar.DT,
@@ -142,7 +195,9 @@ export default function animateChart(stx: any, animationParameters: any) {
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         if (supportedChartType) {
             if (!tickAnimator) {
-                console.warn('Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js');
+                console.warn(
+                    'Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js'
+                );
                 return;
             }
             // If symbol changes then reset all of our variables
@@ -157,10 +212,8 @@ export default function animateChart(stx: any, animationParameters: any) {
                 return;
             }
         }
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         let newParams = CIQ.clone(params);
-        if (!newParams)
-            newParams = {};
+        if (!newParams) newParams = {};
         newParams.animationEntry = true;
         newParams.bypassGovernor = true;
         newParams.noCreateDataSet = false;
@@ -173,17 +226,18 @@ export default function animateChart(stx: any, animationParameters: any) {
         function cb(quote: any, prevQuote: any, chartJustAdvanced: any) {
             return function (newData: any) {
                 const newClose = newData.Close;
-                if (!chart.dataSet.length ||
+                if (
+                    !chart.dataSet.length ||
                     symbol != chart.symbol ||
                     period != self.layout.periodicity ||
                     interval != self.layout.interval ||
-                    timeUnit != self.layout.timeUnit) {
+                    timeUnit != self.layout.timeUnit
+                ) {
                     // console.log ("---- STOP animating: Old",symbol,' New : ',chart.symbol, Date())
                     tickAnimator.stop();
                     unanimateScroll();
                     return; // changed symbols mid animation
                 }
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 const q = CIQ.clone(quote);
                 q.Close = Math.round(newClose * animationParameters.granularity) / animationParameters.granularity; // <<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
                 // q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
@@ -201,18 +255,18 @@ export default function animateChart(stx: any, animationParameters: any) {
                 }
                 newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
                 // console.log("animating: Old",symbol,' New : ',chart.symbol);
-                const progress = tickAnimator.fc(Date.now() - tickAnimator.startTime, // delta time
-                0, // start value
-                1, // end value
-                tickAnimator.ms // duration
+                const progress = tickAnimator.fc(
+                    Date.now() - tickAnimator.startTime, // delta time
+                    0, // start value
+                    1, // end value
+                    tickAnimator.ms // duration
                 );
                 // the progress value will be used in "CurrentSpotStore.drawSpot" method.
                 // it's used to properly applow glow effect and position the current spot.
                 q.tickAnimationProgress = Math.min(progress, 1);
                 q.chartJustAdvanced = chartJustAdvanced;
                 const updateQuotes = [q];
-                if (chartJustAdvanced)
-                    updateQuotes.unshift(prevQuote);
+                if (chartJustAdvanced) updateQuotes.unshift(prevQuote);
                 self.updateChartData(updateQuotes, chart, newParams);
                 newParams.firstLoop = false;
                 if (tickAnimator.hasCompleted) {
@@ -249,19 +303,16 @@ export default function animateChart(stx: any, animationParameters: any) {
                 const beforeCurrentQuote = this.chart.dataSet[this.chart.dataSet.length - 2];
                 if (beforeCurrentQuote && beforeCurrentQuote.Close) {
                     this.prevQuote = beforeCurrentQuote;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
             if (this.extendedHours && chart.market.market_def) {
                 // Filter out unwanted sessions
                 const dtToFilter = quote.DT;
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 if (CIQ.ChartEngine.isDailyInterval(interval)) {
                     filterSession = !chart.market.isMarketDate(dtToFilter);
-                }
-                else if (!nextBoundary || nextBoundary <= dtToFilter) {
+                } else if (!nextBoundary || nextBoundary <= dtToFilter) {
                     const session = chart.market.getSession(dtToFilter);
                     filterSession =
                         session !== '' && (!this.layout.marketSessions || !this.layout.marketSessions[session]);
@@ -273,24 +324,18 @@ export default function animateChart(stx: any, animationParameters: any) {
                 }
             }
             let barSpan = period;
-            if (interval == 'second' || timeUnit == 'second')
-                barSpan *= 1000;
-            else if (interval == 'minute' || timeUnit == 'minute')
-                barSpan *= 60000;
-            if (!isNaN(interval))
-                barSpan *= interval;
+            if (interval == 'second' || timeUnit == 'second') barSpan *= 1000;
+            else if (interval == 'minute' || timeUnit == 'minute') barSpan *= 60000;
+            if (!isNaN(interval)) barSpan *= interval;
             if (interval == 'day' || timeUnit == 'day') {
                 chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
-            }
-            else if (interval == 'week' || timeUnit == 'week') {
+            } else if (interval == 'week' || timeUnit == 'week') {
                 chartJustAdvanced = quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
-            }
-            else if (interval == 'month' || timeUnit == 'month') {
+            } else if (interval == 'month' || timeUnit == 'month') {
                 chartJustAdvanced = quote.DT.getMonth() != this.prevQuote.DT.getMonth();
-            }
-            else
-                chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
-            const linearChart = (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.chart.standaloneBars;
+            } else chartJustAdvanced = quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
+            const linearChart =
+                (!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars) && !this.chart.standaloneBars;
             let beginningOffset = 0;
             if (chartJustAdvanced) {
                 if (this.animations.zoom.hasCompleted) {
@@ -307,43 +352,44 @@ export default function animateChart(stx: any, animationParameters: any) {
                         this.previousMicroPixels = this.micropixels;
                         this.nextMicroPixels = this.micropixels + candleWidth;
                         beginningOffset = candleWidth * -1;
-                        if (chart.dataSegment &&
+                        if (
+                            chart.dataSegment &&
                             chart.dataSegment.length < chart.maxTicks - animationParameters.ticksFromEdgeOfScreen &&
-                            !animationParameters.stayPut) {
+                            !animationParameters.stayPut
+                        ) {
                             chart.scroll++;
                             this.nextMicroPixels = this.micropixels;
                         }
                         chart.animatingHorizontalScroll = linearChart && !chart.lockScroll; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
                         chart.previousDataSetLength = chart.dataSet.length;
-                    }
-                    else if (chart.lockScroll) {
+                    } else if (chart.lockScroll) {
                         if (chart.entryTick !== undefined && chart.entryTick !== null) {
                             const dataLen = chart.dataSet.length;
                             const visibleTicks = dataLen - chart.entryTick + 1;
                             this.setMaxTicks(visibleTicks + 3);
                             chart.scroll = visibleTicks + 1;
-                        }
-                        else {
+                        } else {
                             this.setMaxTicks(chart.dataSet.length + (Math.floor(chart.dataSet.length / 5) || 2));
                             chart.scroll = chart.dataSet.length;
                         }
-                    }
-                    else {
+                    } else {
                         chart.scroll += 1;
                     }
-                }
-                else {
+                } else {
                     return false;
                 }
             }
             chart.closePendingAnimation = quote.Close;
             const start = chartJustAdvanced && !linearChart ? quote.Open : this.prevQuote.Close;
-            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
-            tickAnimator.run(cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced), {
-                Close: start,
-                micropixels: chart.lockScroll ? 0 : this.nextMicroPixels,
-                lineOffset: beginningOffset,
-            }, { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 });
+            tickAnimator.run(
+                cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced),
+                {
+                    Close: start,
+                    micropixels: chart.lockScroll ? 0 : this.nextMicroPixels,
+                    lineOffset: beginningOffset,
+                },
+                { Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 }
+            );
             return true; // bypass default behavior if the animation is on
         }
     });

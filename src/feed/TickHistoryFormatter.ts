@@ -32,7 +32,7 @@ export class TickHistoryFormatter {
                 Close: +tick.quote,
                 // Keep the origial value.
                 // It'll be used to pass down to deriv.app in BottomWidgets.
-                // TODO: use tick.epoch in RawMarker.jsx to speed up calculations.
+                // TODO: use tick.epoch in RawMarker to speed up calculations.
                 tick,
             };
         }

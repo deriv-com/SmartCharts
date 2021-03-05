@@ -1,6 +1,5 @@
 /* eslint-disable */
 export const drawCurrentPriceLine = () => {
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     CIQ.ChartEngine.prototype.drawCurrentHR = function () {
         if (this.runPrepend('drawCurrentHR', arguments)) return;
         this.labelType = 'currentSpot';

@@ -8,7 +8,6 @@ export default class RoutingStore {
         this.mainStore = mainStore;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound handleRouting() {
         window.addEventListener(
             'hashchange',
@@ -22,7 +21,6 @@ export default class RoutingStore {
         );
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateRoute(route: any, dialogStatus: any) {
         const enableRouting = this.mainStore.chart.enableRouting;
         if (enableRouting && dialogStatus && route) {
@@ -33,14 +31,11 @@ export default class RoutingStore {
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound registerDialog(dialogStore: any) {
         allDialogs.push(dialogStore);
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound closeAll() {
-        // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'm' implicitly has an 'any' type.
-        allDialogs.forEach(m => m.setOpen(false));
+        allDialogs.forEach((m: any) => m.setOpen(false));
     }
 }

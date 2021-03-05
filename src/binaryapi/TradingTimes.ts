@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'even... Remove this comment to see the full error message
 import EventEmitter from 'event-emitter-es6';
 import ServerTime from '../utils/ServerTime';
 import PendingPromise from '../utils/PendingPromise';
@@ -37,8 +36,7 @@ class TradingTimes {
     }
     async initialize() {
         await this._serverTime.init(this._api, () => {
-            if (typeof this.timeUpdateCallback === 'function')
-                this.timeUpdateCallback();
+            if (typeof this.timeUpdateCallback === 'function') this.timeUpdateCallback();
         });
         if (this.isInitialized) {
             return this.tradingTimesPromise;
@@ -96,10 +94,8 @@ class TradingTimes {
     }
     async _updateTradeTimes() {
         let response = {};
-        if (!this._tradingTimesMap && this._params.initialData)
-            response = this._params.initialData;
-        else if (this._params.enable !== false)
-            response = await this._api.getTradingTimes(this.lastUpdateDate);
+        if (!this._tradingTimesMap && this._params.initialData) response = this._params.initialData;
+        else if (this._params.enable !== false) response = await this._api.getTradingTimes(this.lastUpdateDate);
         else {
             console.error('TradingTimes feed is not enable nor has initial data!');
             return;
@@ -127,53 +123,52 @@ class TradingTimes {
                     const closes_early: any = [];
                     const opens_late: any = [];
                     events
-                        .map((event: any) => event.dates.includes(',')
-                        ? event.dates
-                            .split(',')
-                            .map((date: any) => ({
-                            date: date.trim(),
-                            description: event.descrip
-                        }))
-                        : [{ date: event.dates, description: event.descrip }])
+                        .map((event: any) =>
+                            event.dates.includes(',')
+                                ? event.dates.split(',').map((date: any) => ({
+                                      date: date.trim(),
+                                      description: event.descrip,
+                                  }))
+                                : [{ date: event.dates, description: event.descrip }]
+                        )
                         .reduce((ary: any, item: any) => ary.concat(item), [])
                         .forEach((event: any) => {
-                        const lower_description = event.description.toLowerCase();
-                        // Open Late
-                        if (/^opens late \(at (\d{1,2}:\d{1,2})\)$/gm.test(event.description.toLowerCase())) {
-                            const event_hour = `${lower_description
-                                .replace('opens late (at ', '')
-                                .replace(')', '')}:00`;
-                            const event_date = event.date === 'today' || event.date === DaysOfWeek[now.getDay()]
-                                ? dateStr.substring(0, 10)
-                                : event.date;
-                            opens_late.push({
-                                date: event_date,
-                                open: new Date(`${event_date}T${event_hour}Z`),
-                                close: new Date(`${event_date}T${close[0]}Z`),
-                            });
-                            // Close early
-                        }
-                        else if (/^closes early \(at (\d{1,2}:\d{1,2})\)$/gm.test(lower_description)) {
-                            const event_hour = `${lower_description
-                                .replace('closes early (at ', '')
-                                .replace(')', '')}:00`;
-                            const event_date = event.date === 'today' || event.date === DaysOfWeek[now.getDay()]
-                                ? dateStr.substring(0, 10)
-                                : event.date;
-                            closes_early.push({
-                                date: event_date,
-                                open: new Date(`${event_date}T${open[0]}Z`),
-                                close: new Date(`${event_date}T${event_hour}Z`),
-                            });
-                            // Special date
-                        }
-                        else if (/^\d{4}-\d{2}-\d{2}$/.test(event.date)) {
-                            holidays.push(event.date);
-                        }
-                        else if (event.date === 'today') {
-                            isClosedToday = true;
-                        }
-                    });
+                            const lower_description = event.description.toLowerCase();
+                            // Open Late
+                            if (/^opens late \(at (\d{1,2}:\d{1,2})\)$/gm.test(event.description.toLowerCase())) {
+                                const event_hour = `${lower_description
+                                    .replace('opens late (at ', '')
+                                    .replace(')', '')}:00`;
+                                const event_date =
+                                    event.date === 'today' || event.date === DaysOfWeek[now.getDay()]
+                                        ? dateStr.substring(0, 10)
+                                        : event.date;
+                                opens_late.push({
+                                    date: event_date,
+                                    open: new Date(`${event_date}T${event_hour}Z`),
+                                    close: new Date(`${event_date}T${close[0]}Z`),
+                                });
+                                // Close early
+                            } else if (/^closes early \(at (\d{1,2}:\d{1,2})\)$/gm.test(lower_description)) {
+                                const event_hour = `${lower_description
+                                    .replace('closes early (at ', '')
+                                    .replace(')', '')}:00`;
+                                const event_date =
+                                    event.date === 'today' || event.date === DaysOfWeek[now.getDay()]
+                                        ? dateStr.substring(0, 10)
+                                        : event.date;
+                                closes_early.push({
+                                    date: event_date,
+                                    open: new Date(`${event_date}T${open[0]}Z`),
+                                    close: new Date(`${event_date}T${event_hour}Z`),
+                                });
+                                // Special date
+                            } else if (/^\d{4}-\d{2}-\d{2}$/.test(event.date)) {
+                                holidays.push(event.date);
+                            } else if (event.date === 'today') {
+                                isClosedToday = true;
+                            }
+                        });
                     let _times;
                     const isOpenAllDay = open.length === 1 && open[0] === '00:00:00' && close[0] === '23:59:59';
                     const isClosedAllDay = open.length === 1 && open[0] === '--' && close[0] === '--';
@@ -224,11 +219,22 @@ class TradingTimes {
     _calcIsMarketOpened(symbol: any) {
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 10);
-        const { times, feed_license, isOpenAllDay, isClosedAllDay, holidays, closes_early, opens_late, isClosedToday, } = this._tradingTimesMap[symbol];
-        if (isClosedAllDay ||
+        const {
+            times,
+            feed_license,
+            isOpenAllDay,
+            isClosedAllDay,
+            holidays,
+            closes_early,
+            opens_late,
+            isClosedToday,
+        } = this._tradingTimesMap[symbol];
+        if (
+            isClosedAllDay ||
             feed_license === TradingTimes.FEED_UNAVAILABLE ||
             isClosedToday ||
-            holidays.includes(dateStr)) {
+            holidays.includes(dateStr)
+        ) {
             return false;
         }
         const opens_late_date = opens_late.find((event: any) => event.date === dateStr);
@@ -241,8 +247,7 @@ class TradingTimes {
             const { open, close } = closes_early_date;
             return !!(now >= open && now < close);
         }
-        if (isOpenAllDay)
-            return true;
+        if (isOpenAllDay) return true;
         for (const session of times) {
             const { open, close } = session;
             if (now >= open && now < close) {
@@ -256,8 +261,7 @@ class TradingTimes {
         let nextDate;
         for (const key in this._tradingTimesMap) {
             const { times, feed_license, isOpenAllDay, isClosedAllDay } = this._tradingTimesMap[key];
-            if (isOpenAllDay || isClosedAllDay || feed_license === TradingTimes.FEED_UNAVAILABLE)
-                continue;
+            if (isOpenAllDay || isClosedAllDay || feed_license === TradingTimes.FEED_UNAVAILABLE) continue;
             for (const session of times) {
                 const { open, close } = session;
                 if (open > now && (!nextDate || open < nextDate)) {

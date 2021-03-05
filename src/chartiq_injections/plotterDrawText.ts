@@ -3,7 +3,6 @@ export const plotterDrawText = () => {
     // as there isn't any option to make y-axis text align center, and also there
     // isn't any injection for drawText, we have to do a monkey patching for handling
     // this issue
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     CIQ.Plotter.prototype.drawText = function (context: any, series: any) {
         for (let i = 0; i < series.text.length; i++) {
             const textObj = series.text[i];

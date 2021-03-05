@@ -1,18 +1,27 @@
+interface IPendingPromise<T> extends Promise<T> {
+    resolve: (res?: any) => void;
+    reject: (error?: any) => void;
+    isPending: boolean;
+    data: any;
+}
+
 export default function PendingPromise(data = null) {
-    let resolve: any;
-    let reject: any;
-    const promise = new Promise((_resolve, _reject) => {
+    let resolve: (res?: any) => void;
+    let reject: (error?: any) => void;
+
+    const promise: IPendingPromise<any> = new Promise<any>((_resolve, _reject) => {
         resolve = _resolve;
         reject = _reject;
-    });
-    (promise as any).resolve = (res: any) => {
-        (promise as any).isPending = false;
+    }) as IPendingPromise<any>;
+
+    promise.resolve = (res: any) => {
+        promise.isPending = false;
         resolve(res);
     };
-    (promise as any).reject = (error: any) => {
-        (promise as any).isPending = false;
+    promise.reject = (error: any) => {
+        promise.isPending = false;
         reject(error);
     };
-    (promise as any).data = data;
+    promise.data = data;
     return promise;
 }

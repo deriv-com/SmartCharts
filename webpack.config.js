@@ -11,7 +11,7 @@ const isApp = process.env.BUILD_MODE === 'app';
 const BUILD_MODE = isApp ? process.env.BUILD_MODE : 'lib';
 const appEntryFile = isApp && process.env.APP_ENTRY ? process.env.APP_ENTRY : 'index';
 
-const output =  {
+const output = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'smartcharts.js',
     chunkFilename: '[name]-[chunkhash:6].smartcharts.js',
@@ -51,10 +51,7 @@ const config = {
                     {
                         loader: 'svgo-loader',
                         options: {
-                            plugins: [
-                                { removeUselessStrokeAndFill: false },
-                                { removeUnknownsAndDefaults: false },
-                            ],
+                            plugins: [{ removeUselessStrokeAndFill: false }, { removeUnknownsAndDefaults: false }],
                         },
                     },
                 ],
@@ -67,7 +64,8 @@ const config = {
                     {
                         loader: 'css-loader',
                         options: { sourceMap: true },
-                    }, {
+                    },
+                    {
                         loader: 'postcss-loader',
                         options: {
                             ident: 'postcss',
@@ -78,25 +76,21 @@ const config = {
                                 require('postcss-svgo'),
                             ],
                         },
-                    }, {
+                    },
+                    {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
                             data: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
-                            includePaths: [
-                                path.resolve(__dirname, './src'),
-                            ],
+                            includePaths: [path.resolve(__dirname, './src')],
                         },
-                    }],
+                    },
+                ],
             },
             { parser: { amd: false } },
             {
                 test: /\.(js|jsx)$/,
-                exclude: [
-                    /node_modules/,
-                    /\\chartiq/,
-                    /\\scripts/,
-                ],
+                exclude: [/node_modules/, /\\chartiq/, /\\scripts/],
                 loader: 'eslint-loader',
                 enforce: 'pre',
                 options: { fix: true },
@@ -116,13 +110,15 @@ const config = {
             },
             {
                 include: path.resolve(__dirname, 'src/utils/ga.js'),
-                use :[{
-                    loader: path.resolve('./loaders/exclude-block-loader.js'),
-                    options: {
-                        start:`@START-EXCLUDE: '${BUILD_MODE}'`,
-                        end: '@END-EXCLUDE',
+                use: [
+                    {
+                        loader: path.resolve('./loaders/exclude-block-loader.js'),
+                        options: {
+                            start: `@START-EXCLUDE: '${BUILD_MODE}'`,
+                            end: '@END-EXCLUDE',
+                        },
                     },
-                }],
+                ],
             },
         ],
     },
@@ -146,7 +142,7 @@ const config = {
             root: 'ReactDOM',
         },
         'babel-polyfill': 'babel-polyfill',
-        'react-transition-group':  {
+        'react-transition-group': {
             commonjs: 'react-transition-group',
             commonjs2: 'react-transition-group',
             root: 'ReactTransitionGroup',
@@ -165,7 +161,7 @@ if (production) {
             'process.env': {
                 NODE_ENV: JSON.stringify('production'),
             },
-        }),
+        })
     );
 }
 
@@ -175,49 +171,49 @@ if (process.env.ANALYZE_BUNDLE) {
 
 if (isApp) {
     config.entry = path.resolve(__dirname, `./app/${appEntryFile}.jsx`);
-    config.plugins.push(new CopyWebpackPlugin({
-        patterns: [
-            { from: './sass/favicons/*.png' },
-            { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
-            { from: './app/browser-detection.js' },
-            { from: './app/assets/*.svg' },
-            { from: './nojs-smartcharts.css' },
-            {
-                from: production
-                    ? './node_modules/react/umd/react.production.min.js'
-                    : './node_modules/react/umd/react.development.js',
-                to: 'react.js',
-            },
-            {
-                from: production
-                    ? './node_modules/react-dom/umd/react-dom.production.min.js'
-                    : './node_modules/react-dom/umd/react-dom.development.js',
-                to: 'react-dom.js',
-            },
-            {
-                from: production
-                    ? './node_modules/mobx/lib/mobx.umd.min.js'
-                    : './node_modules/mobx/lib/mobx.umd.js',
-                to: 'mobx.js',
-            },
-            {
-                from: production
-                    ? './node_modules/mobx-react/index.min.js'
-                    : './node_modules/mobx-react/index.js',
-                to: 'mobx-react.js',
-            },
-            {
-                from: production
-                    ? './node_modules/moment/min/moment-with-locales.min.js'
-                    : './node_modules/moment/min/moment-with-locales.js',
-                to: 'moment.js',
-            },
-            {
-                from: './node_modules/react-transition-group/dist/react-transition-group.js',
-                to: 'react-transition-group.js',
-            },
-        ]
-    }));
+    config.plugins.push(
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: './sass/favicons/*.png' },
+                { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
+                { from: './app/browser-detection.js' },
+                { from: './app/assets/*.svg' },
+                { from: './nojs-smartcharts.css' },
+                {
+                    from: production
+                        ? './node_modules/react/umd/react.production.min.js'
+                        : './node_modules/react/umd/react.development.js',
+                    to: 'react.js',
+                },
+                {
+                    from: production
+                        ? './node_modules/react-dom/umd/react-dom.production.min.js'
+                        : './node_modules/react-dom/umd/react-dom.development.js',
+                    to: 'react-dom.js',
+                },
+                {
+                    from: production
+                        ? './node_modules/mobx/lib/mobx.umd.min.js'
+                        : './node_modules/mobx/lib/mobx.umd.js',
+                    to: 'mobx.js',
+                },
+                {
+                    from: production ? './node_modules/mobx-react/index.min.js' : './node_modules/mobx-react/index.js',
+                    to: 'mobx-react.js',
+                },
+                {
+                    from: production
+                        ? './node_modules/moment/min/moment-with-locales.min.js'
+                        : './node_modules/moment/min/moment-with-locales.js',
+                    to: 'moment.js',
+                },
+                {
+                    from: './node_modules/react-transition-group/dist/react-transition-group.js',
+                    to: 'react-transition-group.js',
+                },
+            ],
+        })
+    );
 }
 
 module.exports = config;

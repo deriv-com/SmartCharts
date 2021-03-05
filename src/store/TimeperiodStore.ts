@@ -39,18 +39,16 @@ export default class TimeperiodStore {
         return this.mainStore.chartTitle.isSymbolOpen;
     }
     get display() {
-        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-        return `${this.interval === 'day' ? 1 : this.interval / TimeMap[this.timeUnit]} ${UnitMap[this.timeUnit]}`;
+        return `${
+            this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
+        } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @observable timeUnit = null;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @observable interval = null;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @observable timeUnit: string | null = null;
+    @observable interval: string | number | null = null;
     @observable preparingInterval = null;
-    onGranularityChange = () => null;
+    onGranularityChange = (x: any) => null;
 
-    remain = null;
+    remain: string | null = null;
 
     onContextReady = () => {
         const { timeUnit, interval } = this.context.stx.layout;
@@ -75,16 +73,14 @@ export default class TimeperiodStore {
 
         reaction(
             () => this.mainStore.state.granularity,
-            // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
             granularity => this.onGranularityChange(granularity)
         );
     };
 
-    countdownInterval = null;
+    countdownInterval?: ReturnType<typeof setInterval>;
 
     clearCountdown() {
         if (this.countdownInterval) {
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
             clearInterval(this.countdownInterval);
         }
 
@@ -93,7 +89,6 @@ export default class TimeperiodStore {
         }
 
         this._injectionId = undefined;
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'undefined' is not assignable to type 'null'.
         this.countdownInterval = undefined;
     }
 
@@ -117,11 +112,10 @@ export default class TimeperiodStore {
                     const now = this._serverTime.getUTCDate();
                     const diff = now - currentQuote.DT;
                     const chartInterval = getIntervalInSeconds(stx.layout) * 1000;
-                    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
-                    const coefficient = diff > chartInterval ? parseInt(diff / chartInterval, 10) + 1 : 1;
+                    const coefficient =
+                        diff > chartInterval ? parseInt(((diff / chartInterval) as unknown) as string, 10) + 1 : 1;
 
                     if (this.context.stx) {
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type 'string | null' is not assignable to type 'nu... Remove this comment to see the full error message
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
                         stx.draw();
                     }
@@ -151,14 +145,12 @@ export default class TimeperiodStore {
             }
 
             if (!this.countdownInterval) {
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'Timeout' is not assignable to type 'null'.
                 this.countdownInterval = setInterval(setRemain, 1000);
                 setRemain();
             }
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound setGranularity(granularity: any) {
         if (this.mainStore.state.granularity !== undefined) {
             console.error(
@@ -171,19 +163,16 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateProps(onChange: any) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound setPreparingInterval(interval: any) {
         this.preparingInterval = interval;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateDisplay() {
         if (!this.context) return;
         const stx = this.context.stx;

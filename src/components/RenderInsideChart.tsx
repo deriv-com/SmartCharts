@@ -1,6 +1,4 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import ReactDOM from 'react-dom';
 import { createElement } from './ui/utils';
 import { connect } from '../store/Connect';
@@ -39,11 +37,7 @@ const RenderInsideChart = ({
     return null;
 };
 
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-export default connect(({
-    chart,
-    state,
-}: any) => ({
+export default connect(({ chart, state }: any) => ({
     contextPromise: chart.contextPromise,
     isChartReady: state.isChartReady,
     isChartScrollingToEpoch: state.isChartScrollingToEpoch,

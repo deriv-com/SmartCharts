@@ -13,7 +13,7 @@ class Context {
     params: any;
     stx: any;
     topNode: any;
-    constructor(stx: any, topNode: any, params: any) {
+    constructor(stx: any, topNode: any, params?: any) {
         this.params = params || {};
         this.stx = stx;
         this.topNode = topNode;

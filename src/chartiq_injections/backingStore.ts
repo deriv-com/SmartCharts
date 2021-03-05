@@ -1,5 +1,4 @@
 export const BackingStore = () => {
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     CIQ.ChartEngine.prototype.disableBackingStore = function () {
         if (!this.useBackingStore) return;
         const canvases = [this.chart.canvas];
@@ -18,7 +17,6 @@ export const BackingStore = () => {
         this.draw();
     };
 
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     CIQ.ChartEngine.prototype.reconstituteBackingStore = function () {
         // Added check for backing
         if (!this.useBackingStore || !this.backing) return;

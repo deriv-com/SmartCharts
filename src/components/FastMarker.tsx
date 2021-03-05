@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
 import { connect } from '../store/Connect';
 import { getUTCDate } from '../utils';
@@ -36,12 +35,8 @@ const FastMarker = (props: any) => {
     const props_ref = React.useRef();
     props_ref.current = props;
 
-    const setPosition = ({
-        epoch,
-        price,
-    }: any) => {
+    const setPosition = ({ epoch, price }: any) => {
         price_ref.current = +price || null;
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         date_ref.current = CIQ.strToDateTime(getUTCDate(epoch));
         updateCSS();
     };
@@ -142,17 +137,12 @@ const FastMarker = (props: any) => {
     const { children, className } = props;
 
     return (
-        // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove this comment to see the full error message
         <div className={className} ref={setRef} style={{ position: 'absolute' }}>
             {children}
-        {/* @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove this comment to see the full error message */}
         </div>
     );
 };
 
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-export default connect(({
-    chart,
-}: any) => ({
+export default connect(({ chart }: any) => ({
     contextPromise: chart.contextPromise,
 }))(FastMarker);

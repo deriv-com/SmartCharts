@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'even... Remove this comment to see the full error message
 import EventEmitter from 'event-emitter-es6';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
@@ -74,10 +73,7 @@ class Subscription {
         this._emitter.on(Subscription.EVENT_CHART_DATA, callback);
     }
 
-    static getLatestEpoch({
-        candles,
-        history,
-    }: any) {
+    static getLatestEpoch({ candles, history }: any) {
         if (candles) {
             return candles[candles.length - 1].epoch;
         }
@@ -88,10 +84,7 @@ class Subscription {
         }
     }
 
-    static getEpochFromTick({
-        tick,
-        ohlc,
-    }: any) {
+    static getEpochFromTick({ tick, ohlc }: any) {
         return tick ? tick.epoch : ohlc.open_time;
     }
 }

@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import moment from 'moment';
 import React from 'react';
-
 export const CalendarDecades = ({ calendar_date, isPeriodDisabled, onClick, selected_date }) => {
     const selected_year = moment.utc(selected_date).year();
     const moment_date = moment.utc(calendar_date);

@@ -49,6 +49,5 @@ export default class MainStore {
     highestLowest = new HighestLowestStore(this);
     paginationLoader = new PaginationLoaderStore(this);
     toolbarWidget = new ToolbarWidgetStore(this);
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 0 arguments, but got 1.
-    scroll = new ScrollStore(this);
+    scroll = new ScrollStore();
 }

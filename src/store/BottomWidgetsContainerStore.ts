@@ -2,15 +2,10 @@ import { action, observable, when } from 'mobx';
 
 export default class BottomWidgetsContainerStore {
     mainStore: any;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable bottom = 0;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isReadyToShow = false;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable mainChartHeight = 0;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable top = 0;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable totalHeight = 0;
 
     get context() {
@@ -34,7 +29,6 @@ export default class BottomWidgetsContainerStore {
         this.isReadyToShow = true;
     };
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateChartHeight() {
         this.mainChartHeight = this.stx.panels.chart.height;
         this.totalHeight = Object.keys(this.stx.panels).reduce(

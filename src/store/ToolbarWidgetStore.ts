@@ -35,7 +35,6 @@ export default class ToolbarWidgetStore {
         );
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onMouseEnter() {
         this.crosshairStore.updateVisibility(false);
 
@@ -46,7 +45,6 @@ export default class ToolbarWidgetStore {
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onMouseLeave() {
         this.crosshairStore.updateVisibility(true);
     }

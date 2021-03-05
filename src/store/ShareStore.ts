@@ -1,8 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser } from '../utils';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Menu.jsx' was resolved to '/... Remove this comment to see the full error message
-import Menu from '../components/Menu.jsx';
+import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ShareStore {
@@ -24,23 +23,18 @@ export default class ShareStore {
         return this.context.stx;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get timeUnit() {
         return this.mainStore.timeperiod.timeUnit;
     }
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get timeperiodDisplay() {
         return this.mainStore.timeperiod.display;
     }
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get marketDisplayName() {
         return this.mainStore.chart.currentActiveSymbol.name;
     }
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isLoadingPNG = false;
 
     createNewTab() {
@@ -48,12 +42,10 @@ export default class ShareStore {
         return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound downloadPNG() {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
-        // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module '../.... Remove this comment to see the full error message
         import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js').then(html2canvas => {
             // since react rerenders is not immediate, we use CIQ.appendClassName to
             // immediately append/unappend class name before taking screenshot.
@@ -66,7 +58,6 @@ export default class ShareStore {
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound _onCanvasReady(canvas: any, newTab: any) {
         const content = canvas.toDataURL('image/png');
         downloadFileInBrowser(`${new Date().toUTCString()}.png`, content, 'image/png;', newTab);
@@ -74,7 +65,6 @@ export default class ShareStore {
         this.screenshotArea.classList.remove('ciq-chart--screenshot');
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound downloadCSV() {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
@@ -85,13 +75,7 @@ export default class ShareStore {
                 ? this.stx.masterData
                 : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
 
-        allowableItems.forEach(({
-            DT,
-            Open,
-            High,
-            Low,
-            Close,
-        }: any) => {
+        allowableItems.forEach(({ DT, Open, High, Low, Close }: any) => {
             const year = DT.getFullYear();
             const month = DT.getMonth() + 1; // months from 1-12
             const day = DT.getDate();

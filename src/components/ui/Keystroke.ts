@@ -102,7 +102,6 @@ class Keystroke {
             return;
         }
         let key = e.which;
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         if (key === 229 && CIQ.isAndroid) {
             this.implementAndroidWorkaround = true;
             return;

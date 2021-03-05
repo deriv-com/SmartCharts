@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'even... Remove this comment to see the full error message
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import { connect } from './Connect';
@@ -22,25 +21,17 @@ export default class PriceLineStore {
     opacityOnOverlap: any;
     showOffscreenArrows: any;
     _relative = false;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable draggable = true;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isDragging = false;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable visible = true;
     // @observable top = 0;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable _price = 0;
     // @observable zIndex;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable offScreen = false;
     // @observable uncentered = false;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @observable title;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @observable isOverlapping;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @observable offScreenDirection;
+    @observable title: any;
+    @observable isOverlapping: any;
+    @observable offScreenDirection: any;
 
     set zIndex(value: any) {
         if (this._line) {
@@ -48,7 +39,6 @@ export default class PriceLineStore {
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get pip() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
@@ -73,7 +63,6 @@ export default class PriceLineStore {
                 callback.call(this, e);
             }
         };
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         CIQ.safeDrag(
             this._line,
             (e: any) => exitIfNotisDraggable(e, this._startDrag),
@@ -89,7 +78,6 @@ export default class PriceLineStore {
         return 'EVENT_DRAG_RELEASED';
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get priceDisplay() {
         let display = this._price.toFixed(this.pip);
         if (this.relative && this._price > 0) {
@@ -153,7 +141,6 @@ export default class PriceLineStore {
         return this.mainStore.chart.yAxiswidth;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound setDragLine(el: any) {
         this._line = el;
         if (this._line) {
@@ -174,7 +161,6 @@ export default class PriceLineStore {
         this.stx.editingAnnotation = false;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound _startDrag() {
         this._modalBegin();
         this.isDragging = true;
@@ -182,7 +168,6 @@ export default class PriceLineStore {
         this._startDragPrice = this._price;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound _dragLine(e: any) {
         if (!this._line) {
             return;
@@ -201,7 +186,6 @@ export default class PriceLineStore {
         this.price = newPrice;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound _endDrag() {
         this._modalEnd();
         this.isDragging = false;
@@ -221,7 +205,6 @@ export default class PriceLineStore {
         return price;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound _calculateTop = () => {
         if (this.stx.currentQuote() === null) {
             return;
@@ -311,7 +294,6 @@ export default class PriceLineStore {
         return false;
     }
 
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     connect = connect(() => ({
         priceDisplay: this.priceDisplay,
         visible: this.visible,

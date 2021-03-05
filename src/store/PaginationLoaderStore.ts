@@ -3,7 +3,6 @@ import { action, observable, when } from 'mobx';
 class PaginationLoaderStore {
     mainStore: any;
     ref: any;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable isOnPagination = false;
     paginationEndEpoch = null;
 
@@ -48,15 +47,11 @@ class PaginationLoaderStore {
         }
     };
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateOnPagination(state: any) {
         this.isOnPagination = state;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @action.bound setOnPagination = ({
-        end,
-    }: any) => {
+    @action.bound setOnPagination = ({ end }: any) => {
         this.isOnPagination = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 

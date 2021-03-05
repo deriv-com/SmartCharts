@@ -1,6 +1,5 @@
 import MenuStore from './MenuStore';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Menu.jsx' was resolved to '/... Remove this comment to see the full error message
-import Menu from '../components/Menu.jsx';
+import Menu from '../components/Menu';
 
 export default class ChartModeStore {
     ChartTypeMenu: any;

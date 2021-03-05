@@ -5,8 +5,8 @@ class HighestLowestStore {
     highestRef: any;
     lowestRef: any;
     mainStore: any;
-    highest = null;
-    lowest = null;
+    highest: any = null;
+    lowest: any = null;
 
     injectionId = null;
 
@@ -81,18 +81,15 @@ class HighestLowestStore {
                     return;
                 }
 
-                // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
                 if (!this.highest || this.highest.Close <= tick.Close) {
                     this.highest = tick;
                 }
-                // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
                 if (!this.lowest || this.lowest.Close >= tick.Close) {
                     this.lowest = tick;
                 }
             });
         }
 
-        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
         if (!this.highest || !this.lowest || this.highest.Close === this.lowest.Close) {
             this.highestRef.setPosition({ epoch: null, price: null });
             this.lowestRef.setPosition({ epoch: null, price: null });
@@ -100,11 +97,9 @@ class HighestLowestStore {
         }
 
         if (this.highest) {
-            // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
             const price = this.highest.Close.toFixed(this.decimalPlaces);
 
             this.highestRef.setPosition({
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 epoch: getUTCEpoch(CIQ.strToDateTime(this.highest.Date)),
                 price,
             });
@@ -112,10 +107,8 @@ class HighestLowestStore {
             this.highestRef.value.textContent = price;
         }
         if (this.lowest) {
-            // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
             const price = this.lowest.Close.toFixed(this.decimalPlaces);
             this.lowestRef.setPosition({
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 epoch: getUTCEpoch(CIQ.strToDateTime(this.lowest.Date)),
                 price,
             });

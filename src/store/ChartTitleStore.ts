@@ -2,13 +2,10 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Menu.jsx' was resolved to '/... Remove this comment to see the full error message
-import Menu from '../components/Menu.jsx';
+import Menu from '../components/Menu';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/AnimatedPrice.jsx' was resol... Remove this comment to see the full error message
-import AnimatedPrice from '../components/AnimatedPrice.jsx';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/SymbolSelectButton.jsx' was ... Remove this comment to see the full error message
-import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton.jsx';
+import AnimatedPrice from '../components/AnimatedPrice';
+import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
 import { connect } from './Connect';
 import ServerTime from '../utils/ServerTime';
 export default class ChartTitleStore {
@@ -28,7 +25,6 @@ export default class ChartTitleStore {
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
             getIsShown: () => this.menu.open,
-            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
@@ -42,7 +38,6 @@ export default class ChartTitleStore {
         this.ChartTitleMenu = this.menu.connect(Menu);
         this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
         const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         const PriceDisplay = connect(() => ({
             isVisible: this.isVisible && this.isShowChartPrice,
             status: this.animatedPrice.status,
@@ -50,7 +45,6 @@ export default class ChartTitleStore {
             todayChangePercent: this.todayChangePercent,
             SpotPrice,
         }))(ChartPrice);
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
         this.SymbolSelectButton = connect(() => ({
             symbol: this.currentSymbol,
             ChartPrice: PriceDisplay,
@@ -59,20 +53,15 @@ export default class ChartTitleStore {
         }))(SymbolSelectButton);
     }
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    todayChange = null;
+    todayChange: string | null = null;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    todayChangePercent = null;
+    todayChangePercent: string | null = null;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     isVisible = false;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     openMarket = {};
     enableShowPrice = false;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'searchInputClassName' implicitly has an 'a... Remove this comment to see the full error message
-    searchInputClassName;
+    searchInputClassName: any;
     get chart() {
         return this.mainStore.chart;
     }
@@ -83,36 +72,31 @@ export default class ChartTitleStore {
         return this.mainStore.crosshair;
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get currentSymbol() {
         return this.mainStore.chart.currentActiveSymbol;
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get isSymbolOpen() {
         return this.currentSymbol?.exchange_is_open;
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get isShowChartPrice() {
         return this.mainStore.chart.isChartAvailable;
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get tradingTimes() {
         return this.mainStore.chart.tradingTimes;
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get symbolOpenTime() {
-        const times = this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length
-            ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times
-            : [];
+        const times =
+            this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length
+                ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times
+                : [];
         const now = this.serverTime.getLocalDate().getTime();
         let openTime = times ? times.find((time: any) => time.open.getTime() > now) : null;
         if (!(openTime instanceof Date)) {
@@ -121,7 +105,6 @@ export default class ChartTitleStore {
         return { openTime };
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get currentActiveCategory() {
         if ((this.openMarket as any).category) {
             return (this.openMarket as any).category;
@@ -129,7 +112,6 @@ export default class ChartTitleStore {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get currentActiveSubCategory() {
         if ((this.openMarket as any).subcategory) {
             return (this.openMarket as any).subcategory;
@@ -137,7 +119,6 @@ export default class ChartTitleStore {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '';
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get currentActiveMarket() {
         if ((this.openMarket as any).market) {
             return (this.openMarket as any).market;
@@ -146,28 +127,29 @@ export default class ChartTitleStore {
     }
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
         this.update();
-        this.tradingTimes.onMarketOpenCloseChanged(action((changes: any) => {
-            for (const symbol in changes) {
-                if (this.currentSymbol.symbol === symbol) {
-                    this.currentSymbol.exchange_is_open = changes[symbol];
+        this.tradingTimes.onMarketOpenCloseChanged(
+            action((changes: any) => {
+                for (const symbol in changes) {
+                    if (this.currentSymbol.symbol === symbol) {
+                        this.currentSymbol.exchange_is_open = changes[symbol];
+                    }
                 }
-            }
-        }));
+            })
+        );
     };
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     setSymbol(symbolObj: any) {
         if (this.mainStore.state.symbol !== undefined) {
-            console.error('Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />');
+            console.error(
+                'Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />'
+            );
             return;
         }
         this.chart.changeSymbol(symbolObj);
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    update(quote: any) {
+    update(quote?: any) {
         if (!this.currentSymbol) {
             return;
         }
@@ -181,10 +163,8 @@ export default class ChartTitleStore {
             const oldPrice = quote.prevClose || this.animatedPrice.price;
             this.animatedPrice.setPrice(currentPrice, oldPrice);
             if (oldPrice) {
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
                 this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'null'.
-                this.todayChangePercent = ((this.todayChange / oldPrice) * 100).toFixed(2);
+                this.todayChangePercent = ((((this.todayChange as unknown) as number) / oldPrice) * 100).toFixed(2);
             }
         }
         // `todayChange` and `todayChangePercent` has problem on
@@ -202,13 +182,11 @@ export default class ChartTitleStore {
     onMouseEnter = () => this.crosshairStore.updateVisibility(false);
     onMouseLeave = () => this.crosshairStore.updateVisibility(true);
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     hidePrice() {
         this.isVisible = false;
         this.enableShowPrice = false;
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     updateProps({ open_market, open }: any) {
         if (open_market) {
             this.openMarket = open_market;

@@ -7,8 +7,7 @@ class RealtimeSubscription extends Subscription {
     _emitter: any;
     _request: any;
     _stx: any;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member '_tickCallback' implicitly has an 'any' typ... Remove this comment to see the full error message
-    _tickCallback;
+    _tickCallback: any;
 
     pause() {
         // prevent forget requests; active streams are invalid when connection closed
@@ -49,8 +48,7 @@ class RealtimeSubscription extends Subscription {
 
     _getProcessTickHistoryClosure() {
         let hasHistory = false;
-        // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
-        const tickHistoryPromise = new PendingPromise();
+        const tickHistoryPromise = PendingPromise();
         const processTickHistory = (resp: any) => {
             if (this._stx.isDestroyed) {
                 const subscriptionId = resp.subscription.id;

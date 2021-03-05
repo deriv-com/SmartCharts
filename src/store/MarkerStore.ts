@@ -13,27 +13,18 @@ export default class MarkerStore {
     yAxis: any;
     yPositioner = 'value';
     xPositioner = 'epoch';
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'tick' implicitly has an 'any' type.
-    tick;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'isDistantFuture' implicitly has an 'any' t... Remove this comment to see the full error message
-    isDistantFuture;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'className' implicitly has an 'any' type.
-    className;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'children' implicitly has an 'any' type.
-    children;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'x' implicitly has an 'any' type.
-    x;
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'y' implicitly has an 'any' type.
-    y;
+    tick: any;
+    isDistantFuture: any;
+    className: any;
+    children: any;
+    x: any;
+    y: any;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    display;
+    display: any;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    left;
+    left: any;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    bottom;
+    bottom: any;
     constructor(mainStore: any) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
@@ -46,7 +37,6 @@ export default class MarkerStore {
         this._injectionId = this.stx.prepend('positionMarkers', this.updateMarkerTick);
     }
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get shouldDrawMarkers() {
         // if this.y === null, we know line markers is passed, so check if chart has
         // been scrolled to the leftmost of the screen
@@ -54,7 +44,6 @@ export default class MarkerStore {
         return this.y === null ? this.stx.chart.isScrollLocationChanged : true;
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     destructor() {
         if (this._injectionId) {
             this.stx.removeInjection(this._injectionId);
@@ -69,7 +58,6 @@ export default class MarkerStore {
         this._listenerId = null;
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     updateProps({ children, className, y, yPositioner, x, xPositioner }: any) {
         this.className = className;
         this.children = children;
@@ -84,8 +72,7 @@ export default class MarkerStore {
         // TODO this condition isn't needed any more if the current algorithm works.
         if (isUpdateMarkerTickRequired) {
             this.updateMarkerTick(); // also calls updatePosition
-        }
-        else if (isUpdatePositionRequired) {
+        } else if (isUpdatePositionRequired) {
             // this.updatePosition();
             this.updateMarkerTick();
         }
@@ -95,11 +82,9 @@ export default class MarkerStore {
     // Considering how often this function is called, it made more sense to have the offset
     // done in CSS.
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     updatePosition() {
         // Don't position the markers when the chart hasn't been scrolled to the leftmost of the screen
-        if (!this.shouldDrawMarkers)
-            return;
+        if (!this.shouldDrawMarkers) return;
         // When the chart has not been initialized or there isn't any data in masterData it shouldn't position the markers.
         if (!this.stx || !this.stx.masterData || this.stx.masterData.length <= 0) {
             return;
@@ -123,13 +108,17 @@ export default class MarkerStore {
                 return;
             }
             // TODO: Temporary solution until ChartIQ can support displaying markers in dates with no tick data
-            if (dummyMarker.params.xPositioner === 'date' &&
+            if (
+                dummyMarker.params.xPositioner === 'date' &&
                 !this.isDistantFuture &&
                 this.stx.masterData[this.tick] &&
-                this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()) {
+                this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
+            ) {
                 // if the marker is not distance future but it is greater than the last item in the masterData, it will be hidden.
-                if (this.yPositioner !== 'none' &&
-                    this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()) {
+                if (
+                    this.yPositioner !== 'none' &&
+                    this.stx.masterData[this.stx.masterData.length - 1].DT.valueOf() < dummyMarker.params.x.valueOf()
+                ) {
                     this.hideMarker();
                     return;
                 }
@@ -137,10 +126,14 @@ export default class MarkerStore {
                  * Adding an invisible bar if the bar
                  * does not exist on the masterData
                  */
-                this.stx.updateChartData({
-                    DT: dummyMarker.params.x,
-                    Close: null,
-                }, null, { fillGaps: true });
+                this.stx.updateChartData(
+                    {
+                        DT: dummyMarker.params.x,
+                        Close: null,
+                    },
+                    null,
+                    { fillGaps: true }
+                );
                 this.stx.createDataSet();
                 // this.tick += 1;
                 this.stx.setMarkerTick(dummyMarker);
@@ -152,18 +145,14 @@ export default class MarkerStore {
             if (this.xPositioner === 'bar' && this.x) {
                 if (this.x < this.chart.xaxis.length) {
                     const xaxis = this.chart.xaxis[this.x];
-                    if (xaxis)
-                        quote = xaxis.data;
+                    if (xaxis) quote = xaxis.data;
                 }
                 left = this.stx.pixelFromBar(this.x, this.chart);
-            }
-            else {
-                if (this.tick < this.stx.chart.dataSet.length)
-                    quote = this.stx.chart.dataSet[this.tick];
+            } else {
+                if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
                 left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
             }
-            if (!quote)
-                quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
+            if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
             const isMarkerExceedRange = left < -MARKER_MAX_WIDTH || left > this.chart.width + MARKER_MAX_WIDTH;
             if (isMarkerExceedRange) {
                 this.hideMarker();
@@ -178,16 +167,14 @@ export default class MarkerStore {
         let val;
         const showsHighs = this.stx.chart.highLowBars || this.stx.highLowBars[this.stx.layout.chartType];
         let plotField = this.chart.defaultPlotField;
-        if (!plotField || showsHighs)
-            plotField = 'Close';
+        if (!plotField || showsHighs) plotField = 'Close';
         if (this.yPositioner.indexOf('candle') > -1) {
             // candle positioning, find the quote
             if (this.left) {
                 const bar = this.stx.barFromPixel(this.left, this.chart);
                 if (bar >= 0) {
                     quote = this.chart.xaxis[bar].data;
-                    if (!quote)
-                        quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
+                    if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
                 }
             }
         }
@@ -202,27 +189,20 @@ export default class MarkerStore {
         let bottom = 0;
         if (this.yPositioner === 'value' && this.y) {
             bottom = height - this.stx.pixelFromPrice(this.y, this.panel, this.yAxis);
-        }
-        else if (this.yPositioner === 'under_candle' && quote) {
+        } else if (this.yPositioner === 'under_candle' && quote) {
             val = quote[plotField];
-            if (showsHighs)
-                val = this.stx.getBarBounds(quote).low;
+            if (showsHighs) val = this.stx.getBarBounds(quote).low;
             bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
-        }
-        else if (this.yPositioner === 'on_candle' && quote) {
+        } else if (this.yPositioner === 'on_candle' && quote) {
             val = quote[plotField];
-            if (showsHighs)
-                val = (quote.Low + quote.High) / 2;
+            if (showsHighs) val = (quote.Low + quote.High) / 2;
             bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
-        }
-        else if (this.yPositioner === 'top') {
+        } else if (this.yPositioner === 'top') {
             bottom = height;
-        }
-        else if (quote) {
+        } else if (quote) {
             // above_candle
             val = quote[plotField];
-            if (showsHighs)
-                val = this.stx.getBarBounds(quote).high;
+            if (showsHighs) val = this.stx.getBarBounds(quote).high;
             bottom = height - this.stx.pixelFromPrice(val, this.panel, this.yAxis);
         }
         if (bottom < 0 || bottom > height) {
@@ -233,7 +213,6 @@ export default class MarkerStore {
         this.showMarker();
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     updateMarkerTick() {
         const dummyMarker = this.getDummyMarker();
         this.stx.setMarkerTick(dummyMarker);
@@ -246,24 +225,26 @@ export default class MarkerStore {
                 if (this.tick !== null) {
                     this.isDistantFuture = false;
                 }
-            }
-            else {
+            } else {
                 this.hideMarker();
                 return;
             }
         }
         if (this.tick !== null) {
             this.updatePosition();
-        }
-        else {
+        } else {
             /**
              * Adding an invisible bar if the bar
              * does not exist on the masterData
              */
-            this.stx.updateChartData({
-                DT: dummyMarker.params.x,
-                Close: null,
-            }, null, { fillGaps: true });
+            this.stx.updateChartData(
+                {
+                    DT: dummyMarker.params.x,
+                    Close: null,
+                },
+                null,
+                { fillGaps: true }
+            );
             this.stx.createDataSet();
             this.stx.setMarkerTick(dummyMarker);
             this.tick = (dummyMarker as any).tick;
@@ -272,8 +253,7 @@ export default class MarkerStore {
                     this.yPositioner = 'none';
                 }
                 this.updatePosition();
-            }
-            else {
+            } else {
                 this.hideMarker();
             }
         }
@@ -284,7 +264,6 @@ export default class MarkerStore {
         let xPositioner = this.xPositioner;
         if (this.xPositioner === 'epoch') {
             xPositioner = 'date';
-            // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
             x = CIQ.strToDateTime(getUTCDate(x));
         }
         return {

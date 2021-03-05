@@ -9,9 +9,7 @@ export default class ActiveSymbols {
     _params: any;
     _tradingTimes: any;
     processedSymbols: any;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable changes = {};
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable categorizedSymbols = [];
     symbolMap = {};
     // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
@@ -24,7 +22,6 @@ export default class ActiveSymbols {
         this._params = params;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
         if (this.isRetrievingSymbols && !retrieveNewActiveSymbols) {
             await this.symbolsPromise;
@@ -69,7 +66,6 @@ export default class ActiveSymbols {
         return this.activeSymbols;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get activeSymbols() {
         const categorized = cloneCategories(this.categorizedSymbols, item => {
             const { symbol } = item.dataObject;

@@ -1,6 +1,5 @@
 export const overideMeasure = (option: any) => {
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
-    CIQ.ChartEngine.prototype.append('setMeasure', function(
+    CIQ.ChartEngine.prototype.append('setMeasure', function (
         // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
         this: any,
         // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
@@ -106,7 +105,6 @@ export const overideMeasure = (option: any) => {
             }
         }
     });
-    // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
     CIQ.Drawing.BaseTwoPoint.prototype.measure = function () {
         if (this.p0 && this.p1) {
             this.stx.setMeasure(this.p0[1], this.p1[1], this.p0[0], this.p1[0], true, this.name);
@@ -114,13 +112,11 @@ export const overideMeasure = (option: any) => {
             const mStickyInterior = mSticky && mSticky.querySelector('.mStickyInterior');
             if (mStickyInterior) {
                 const lines = [];
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 let title = CIQ.capitalize(this.name);
 
                 if (option.drawToolsStore) {
                     const drawingItem = option.drawToolsStore.findComputedDrawing(this);
                     if (drawingItem) {
-                        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'.
                         title = `${drawingItem.prefix ? `${drawingItem.prefix} - ` : ''} ${t.translate(
                             drawingItem.text,
                             { num: drawingItem.num || ' ' }

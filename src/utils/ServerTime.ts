@@ -2,8 +2,7 @@ import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 import PendingPromise from './PendingPromise';
 
 class ServerTime {
-    // @ts-expect-error ts-migrate(7008) FIXME: Member '_instance' implicitly has an 'any' type.
-    static _instance;
+    static _instance: any;
 
     _api: any;
     clientTimeAtRequest: any;
@@ -13,8 +12,7 @@ class ServerTime {
     updateTimeInterval: any;
 
     clockStarted = false;
-    // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
-    clockStartedPromise = new PendingPromise();
+    clockStartedPromise = PendingPromise();
 
     async init(api: any, updatedCallback: any) {
         this._api = api;
@@ -86,7 +84,6 @@ class ServerTime {
     }
 
     getUTCDate() {
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         return CIQ.strToDateTime(getUTCDate(this.getEpoch()));
     }
 

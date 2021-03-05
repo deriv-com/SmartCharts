@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
 import React from 'react';
 import { connect } from '../store/Connect';
 import { getUTCDate } from '../utils';
@@ -65,7 +64,6 @@ const RawMarker = (props: any) => {
 
         if (!last_epoch_array_ref.current || last_epoch_array_ref.current.toString() !== epoch_array.toString()) {
             date_array_ref.current = epoch_array.map((epoch: any) => ({
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 date: CIQ.strToDateTime(getUTCDate(epoch)),
                 epoch,
             }));
@@ -78,10 +76,7 @@ const RawMarker = (props: any) => {
 
         if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
             const points: any = [];
-            date_array_ref.current.forEach(({
-                date,
-                epoch,
-            }: any) => {
+            date_array_ref.current.forEach(({ date, epoch }: any) => {
                 const tick_idx = stx.tickFromDate(date, chart);
 
                 // ChartIQ doesn't support placing markers in the middle of ticks.
@@ -148,9 +143,6 @@ const RawMarker = (props: any) => {
     return null;
 };
 
-// @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
-export default connect(({
-    chart,
-}: any) => ({
+export default connect(({ chart }: any) => ({
     contextPromise: chart.contextPromise,
 }))(RawMarker);

@@ -1,8 +1,7 @@
 import { action, computed, reaction, observable } from 'mobx';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Dialog.jsx' was resolved to ... Remove this comment to see the full error message
-import Dialog from '../components/Dialog.jsx';
+import Dialog from '../components/Dialog';
 export default class MenuStore {
     DropDownDialog: any;
     dialog: any;
@@ -10,7 +9,10 @@ export default class MenuStore {
     constructor(mainStore: any, options: any) {
         this.mainStore = mainStore;
         this.dialog = new DialogStore(mainStore);
-        reaction(() => this.open, () => this.blurInput());
+        reaction(
+            () => this.open,
+            () => this.blurInput()
+        );
         if (options && options.route) {
             this.route = options.route;
         }
@@ -23,18 +25,14 @@ export default class MenuStore {
         return this.mainStore.routing;
     }
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     dialogStatus = false;
     @observable
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     route = '';
     @computed
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     get open() {
         return this.dialog.open;
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     setOpen(val: any) {
         this.dialog.setOpen(val);
         /**
@@ -48,20 +46,17 @@ export default class MenuStore {
         if (this.open === false) {
             (document.activeElement as any).blur();
             stx.modalEnd();
-        }
-        else {
+        } else {
             stx.modalBegin();
         }
         stx.allowZoom = !this.open;
         if (!this.open) {
             this.mainStore.state.setEnableScroll();
-        }
-        else {
+        } else {
             this.mainStore.state.setDisableScroll();
         }
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     onTitleClick(e: any) {
         if (e) {
             e.stopPropagation();
@@ -69,17 +64,14 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     handleDialogStatus() {
         this.dialogStatus = this.open;
     }
     @action.bound
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     handleCloseDialog() {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);
     }
-    // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
     connect = connect(({ chart: c, chartSetting }: any) => ({
         ready: c.context,
         setOpen: this.setOpen,

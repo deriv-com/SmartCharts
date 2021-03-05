@@ -1,5 +1,5 @@
 {
-    "parser": "babel-eslint",
+    "parser": "@typescript-eslint/parser",
     "extends": [
         "prettier",
         "prettier/react",
@@ -9,7 +9,9 @@
         "plugin:import/warnings",
         "airbnb",
         "airbnb-base",
-        "binary"
+        "binary",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/eslint-recommended"
     ],
     "env": {
         "browser": true,
@@ -17,7 +19,7 @@
         "es6": true,
         "node": true
     },
-    "plugins": ["react", "prettier"],
+    "plugins": ["react", "prettier", "@typescript-eslint"],
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"

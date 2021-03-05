@@ -1,6 +1,6 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'reac... Remove this comment to see the full error message
-import React, { Component } from 'react';
+import React from 'react';
 import { inject } from 'mobx-react';
+
 function connectMainStore(mapperFunction: any) {
     // Combine both stores and props, with props taking precedence
     const mapStoresAndProps = (mainStore: any, props: any /* , context */) => ({
@@ -11,7 +11,7 @@ function connectMainStore(mapperFunction: any) {
 }
 function connectCustomStore(mapperFunction: any, CustomStore: any) {
     return (WrappedComponent: any) => {
-        class StoredComponent extends Component {
+        class StoredComponent extends React.Component<React.FC> {
             injectedComponent: any;
             props: any;
             store: any;
@@ -43,16 +43,18 @@ function connectCustomStore(mapperFunction: any, CustomStore: any) {
             }
         }
         // make some nice names that will show up in the React Devtools
-        const wrappedDisplayName = WrappedComponent.displayName ||
+        const wrappedDisplayName =
+            WrappedComponent.displayName ||
             WrappedComponent.name ||
             (WrappedComponent.constructor && WrappedComponent.constructor.name) ||
             'Unknown';
+
         (StoredComponent as any).displayName = `unbox-${wrappedDisplayName}`;
         return inject(mainStore => ({ mainStore }))(StoredComponent);
     };
 }
 // if store is not defined, main store is used
-export function connect(mapperFunction: any, CustomStore: any) {
+export function connect(mapperFunction: any, CustomStore?: any) {
     if (CustomStore === undefined) {
         return connectMainStore(mapperFunction);
     }

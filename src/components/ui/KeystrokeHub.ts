@@ -65,8 +65,7 @@ class KeystrokeHub extends Helper {
             case 'left':
                 if (stx.ctrl) {
                     stx.zoomOut();
-                }
-                else {
+                } else {
                     push = 1;
                     if (stx.shift || hub.capsLock) {
                         push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
@@ -82,8 +81,7 @@ class KeystrokeHub extends Helper {
             case 'right':
                 if (stx.ctrl) {
                     stx.zoomIn();
-                }
-                else {
+                } else {
                     push = 1;
                     if (stx.shift || hub.capsLock) {
                         push = Math.max(5, 5 * (8 - Math.round(stx.layout.candleWidth)));
@@ -95,19 +93,15 @@ class KeystrokeHub extends Helper {
                 break;
             case 'delete':
             case 'backspace':
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 if (CIQ.ChartEngine.drawingLine) {
                     stx.undo();
-                }
-                else if (stx.anyHighlighted) {
+                } else if (stx.anyHighlighted) {
                     stx.deleteHighlighted();
-                }
-                else {
+                } else {
                     return false;
                 }
                 break;
             case 'escape':
-                // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
                 if (CIQ.ChartEngine.drawingLine) {
                     stx.undo();
                 }
@@ -172,7 +166,10 @@ class KeystrokeHub extends Helper {
         if (stx.editingAnnotation) {
             return;
         }
-        const e = obj.e, key = obj.key, keystroke = obj.keystroke, targetTagName = obj.e.target.tagName;
+        const e = obj.e,
+            key = obj.key,
+            keystroke = obj.keystroke,
+            targetTagName = obj.e.target.tagName;
         switch (key) {
             case 16:
                 stx.shift = keystroke.shift;
@@ -190,7 +187,6 @@ class KeystrokeHub extends Helper {
             default:
                 break;
         }
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         if (!CIQ.ChartEngine.drawingLine) {
             if (this.processKeyStrokeClaims(this, key, e, keystroke)) {
                 return;

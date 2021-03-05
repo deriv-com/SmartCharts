@@ -1,9 +1,7 @@
 export function createObjectFromLocalStorage(key: any) {
     const val = localStorage.getItem(key);
-    const isValid = val !== null;
-    if (isValid) {
+    if (val !== null) {
         try {
-            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'string | null' is not assignable... Remove this comment to see the full error message
             return JSON.parse(val);
         } catch (e) {
             return undefined;
@@ -16,10 +14,7 @@ export function isValidProp(p: any) {
     return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
 }
 
-export const getTimeUnit = ({
-    timeUnit,
-    interval,
-}: any) => {
+export const getTimeUnit = ({ timeUnit, interval }: any) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
     }
@@ -31,10 +26,7 @@ export const getTimeUnit = ({
     }
     return timeUnit;
 };
-export const getIntervalInSeconds = ({
-    timeUnit,
-    interval,
-}: any) => {
+export const getIntervalInSeconds = ({ timeUnit, interval }: any) => {
     let unit = timeUnit;
     let interv = interval;
     if (interv === 'day') {
@@ -106,7 +98,6 @@ export function downloadFileInBrowser(filename: any, content: any, type: any, ne
 
 export function stxtap(el: any, func: any) {
     if (el && !el.safeClickTouchEvents) {
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         CIQ.installTapEvent(el);
         el.addEventListener('stxtap', func);
     }
@@ -313,7 +304,8 @@ export const wrapText = (str: any, letter_count: any) => {
     return str;
 };
 
-export const stringToSlug = (str: any) => str
-    .toLowerCase()
-    .replace(/[^\w ]+/g, '')
-    .replace(/ +/g, '-');
+export const stringToSlug = (str: any) =>
+    str
+        .toLowerCase()
+        .replace(/[^\w ]+/g, '')
+        .replace(/ +/g, '-');

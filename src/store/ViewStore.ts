@@ -1,8 +1,7 @@
 import { observable, action, reaction, computed } from 'mobx';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
-// @ts-expect-error ts-migrate(6142) FIXME: Module '../components/Menu.jsx' was resolved to '/... Remove this comment to see the full error message
-import Menu from '../components/Menu.jsx';
+import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ViewStore {
@@ -26,18 +25,13 @@ export default class ViewStore {
         );
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
     ViewsMenu: any;
     mainStore: any;
     menu: any;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable templateName = '';
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @observable currentRoute = 'main';
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
-    @observable isInputActive;
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
+    @observable isInputActive = false;
     @observable routes = {
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
@@ -55,17 +49,14 @@ export default class ViewStore {
         return this.mainStore.loader;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @computed get sortedItems() {
         return [...ViewStore.views].sort((a, b) => (a.name < b.name ? -1 : 1));
     }
 
     static updateLocalStorage() {
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 'CIQ'.
         CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onChange(e: any) {
         if (this.currentRoute === 'overwrite') {
             return;
@@ -73,7 +64,6 @@ export default class ViewStore {
         this.templateName = e.target.value;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onSubmit(e: any) {
         if (e.keyCode === 13) {
             this.saveViews();
@@ -81,18 +71,15 @@ export default class ViewStore {
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onCancel() {
         this.templateName = '';
         this.updateRoute('main');
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound updateRoute(name: any) {
         this.currentRoute = name;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound saveViews() {
         if (ViewStore.views.some((x: any) => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
@@ -105,10 +92,11 @@ export default class ViewStore {
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
-        const templateIndex = ViewStore.views.findIndex((x: any) => x.name.toLowerCase() === this.templateName.toLowerCase());
+        const templateIndex = ViewStore.views.findIndex(
+            (x: any) => x.name.toLowerCase() === this.templateName.toLowerCase()
+        );
         ViewStore.views[templateIndex].layout = layout;
         ViewStore.views[templateIndex].name = this.templateName.trim();
         ViewStore.updateLocalStorage();
@@ -116,7 +104,6 @@ export default class ViewStore {
         this.templateName = '';
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound remove(idx: any, e: any) {
         ViewStore.views = this.sortedItems.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
@@ -124,7 +111,6 @@ export default class ViewStore {
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound removeAll() {
         ViewStore.views = [];
         ViewStore.updateLocalStorage();
@@ -132,7 +118,6 @@ export default class ViewStore {
         this.updateRoute('new');
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound applyLayout(idx: any, e: any) {
         if (e.nativeEvent.is_item_removed) {
             return;
@@ -178,12 +163,10 @@ export default class ViewStore {
         setTimeout(importLayout, 100);
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onToggleNew() {
         this.updateRoute('main');
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound inputRef(ref: any) {
         if (ref) {
             ref.focus();
@@ -191,12 +174,10 @@ export default class ViewStore {
         }
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onFocus() {
         this.isInputActive = true;
     }
 
-    // @ts-expect-error ts-migrate(1219) FIXME: Experimental support for decorators is a feature t... Remove this comment to see the full error message
     @action.bound onBlur() {
         this.isInputActive = false;
     }
