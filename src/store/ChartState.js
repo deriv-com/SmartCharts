@@ -60,6 +60,9 @@ class ChartState {
     get drawTools() {
         return this.mainStore.drawTools;
     }
+    get studiesStore() {
+        return this.mainStore.studies;
+    }
     get indicatorRatio() {
         return this.mainStore.chart;
     }
@@ -95,6 +98,7 @@ class ChartState {
         getIndicatorHeightRatio,
         chartType,
         clearChart,
+        clearStudyLegend,
         endEpoch,
         isAnimationEnabled = true,
         isConnectionOpened,
@@ -272,6 +276,10 @@ class ChartState {
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
             this.stxx.draw();
+        }
+
+        if (clearStudyLegend && this.studiesStore?.activeItems.length) {
+            this.studiesStore?.deleteAllStudies();
         }
     }
 
