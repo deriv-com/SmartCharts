@@ -59,7 +59,7 @@ export const drawTools = {
 export const getIndicatorsTree = () => [
     {
         id: 'momentum',
-        name: 'Momentum',
+        name: t.translate('Momentum'),
         icon: IndicatorCatMomentumIcon,
         items: [
             {
@@ -138,7 +138,7 @@ export const getIndicatorsTree = () => [
     },
     {
         id: 'trend',
-        name: 'Trend',
+        name: t.translate('Trend'),
         icon: IndicatorCatTrendLightIcon,
         items: [
             {
@@ -193,7 +193,7 @@ export const getIndicatorsTree = () => [
     },
     {
         id: 'volatility',
-        name: 'Volatility',
+        name: t.translate('Volatility'),
         icon: IndicatorCatVolatilityIcon,
         items: [
             {
@@ -216,7 +216,7 @@ export const getIndicatorsTree = () => [
     },
     {
         id: 'moving-averages',
-        name: 'Moving averages',
+        name: t.translate('Moving averages'),
         icon: IndicatorCatAveragesIcon,
         items: [
             {
@@ -247,7 +247,7 @@ export const getIndicatorsTree = () => [
     },
     {
         id: 'others',
-        name: 'Others',
+        name: t.translate('Others'),
         icon: IndicatorCatOtherIcon,
         items: [
             {
