@@ -282,6 +282,18 @@ const App = () => {
             networkStatus={networkStatus}
             shouldFetchTradingTimes
             enabledChartFooter
+            getIndicatorHeightRatio={(chart_height, indicator_count) => {
+                const isSmallScreen = chart_height < 780;
+                const denominator = indicator_count >= 5 ? indicator_count : indicator_count + 1;
+                const reservedHeight = isMobile ? 100 : 320;
+                const indicatorsHeight = Math.round(
+                    (chart_height - (reservedHeight + (isSmallScreen ? 20 : 0))) / denominator
+                );
+                return {
+                    height: indicatorsHeight,
+                    percent: indicatorsHeight / chart_height,
+                };
+            }}
         >
             {endEpoch ? (
                 <Marker className='chart-marker-historical' markerRef={onMarkerRef}>
