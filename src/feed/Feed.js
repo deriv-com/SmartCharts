@@ -209,6 +209,7 @@ class Feed {
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
+                this.paginationLoader.updateOnPagination(false);
                 return;
             }
 
@@ -254,6 +255,7 @@ class Feed {
 
         this._emitDataUpdate(quotes, comparisonChartSymbol, true);
         this._mainStore.state.setMaxtTick();
+        this.paginationLoader.updateOnPagination(false);
     }
 
     async fetchPaginationData(symbol, suggestedStartDate, endDate, params, callback) {
