@@ -45,7 +45,7 @@ export default class StudyLegendStore {
 
         this.searchInput = React.createRef();
         this.SearchInput = connect(() => ({
-            placeholder: 'Search',
+            placeholder: t.translate('Search'),
             value: this.filterText,
             onChange: this.setFilterText,
             searchInput: this.searchInput,
