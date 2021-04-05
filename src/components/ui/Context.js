@@ -31,9 +31,15 @@ class Context {
      * @private
      */
     static assembleContext(contextElement) {
-        if (!contextElement.CIQ) { contextElement.CIQ = {}; } // claim our namespace
-        if (!contextElement.CIQ.UI) { contextElement.CIQ.UI = {}; }
-        if (!contextElement.CIQ.UI.Components) { contextElement.CIQ.UI.Components = []; }
+        if (!contextElement.CIQ) {
+            contextElement.CIQ = {};
+        } // claim our namespace
+        if (!contextElement.CIQ.UI) {
+            contextElement.CIQ.UI = {};
+        }
+        if (!contextElement.CIQ.UI.Components) {
+            contextElement.CIQ.UI.Components = [];
+        }
         return contextElement.CIQ.UI;
     }
 
@@ -46,7 +52,6 @@ class Context {
     advertiseAs(uiHelper, helperName) {
         this.advertised[helperName] = uiHelper;
     }
-
 
     /**
      * Finds the nearest (parent) node that contains the class (CIQ.UI.Element type) referenced
@@ -75,7 +80,7 @@ class Context {
      * @memberof CIQ.UI.Context
      */
     isModal() {
-        return (this.stx.openDialog !== '');
+        return this.stx.openDialog !== '';
     }
 }
 

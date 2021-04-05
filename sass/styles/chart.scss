@@ -144,6 +144,7 @@ html, body {
     margin: 2px;
     opacity: 0;
     transition: opacity 0.5s;
+    display: none;
     @include themify($themes) {
         background-color: themed('ChartBg');
     }
@@ -1070,6 +1071,23 @@ $spot-color: #0298d3;
         }
         .mStickyRightClick {
             margin-left: -2px !important;
+        }
+    }
+    .stx-panel-control {
+        .stx-panel-title {
+            font-size: 13px;
+            line-height: 2;
+        }
+        .stx-btn-panel {
+            .stx-ico-edit {
+                width: 22px;
+                height: 22px;
+
+                svg {
+                    width: 22px;
+                    height: 22px;
+                }
+            }
         }
     }
 }

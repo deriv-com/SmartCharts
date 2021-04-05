@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from '../store/Connect';
-import { getUTCDate } from  '../utils';
+import { getUTCDate } from '../utils';
 
 // Render given Components under stx-subholder.
 // This component is used to position a marker on the chart.
@@ -25,50 +25,50 @@ import { getUTCDate } from  '../utils';
 //  - the chart can have a zoom level, if `threshold` is provided
 //    the marker will only be shown if it's within that zoom threshold.
 
-class FastMarker extends Component {
-    price = null;
-    date = null;
-    elem = null;
-    ctx = null;
-    stx = null;
-    injectionId = null;
+const FastMarker = props => {
+    const price_ref = React.useRef(null);
+    const date_ref = React.useRef(null);
+    const elem_ref = React.useRef(null);
+    const ctx_ref = React.useRef(null);
+    const stx_ref = React.useRef(null);
+    const injection_id_ref = React.useRef();
+    const props_ref = React.useRef();
+    props_ref.current = props;
 
-    setPosition = ({ epoch, price }) => {
-        this.price = +price || null;
-        this.date = CIQ.strToDateTime(getUTCDate(epoch));
-        this.updateCSS();
-    }
+    const setPosition = ({ epoch, price }) => {
+        price_ref.current = +price || null;
+        date_ref.current = CIQ.strToDateTime(getUTCDate(epoch));
+        updateCSS();
+    };
 
-    updateCSS = () => {
-        if (!this.elem || !this.ctx) { return; }
-        if (!this.date) {
-            this.elem.style.visibility = 'hidden';
+    const updateCSS = () => {
+        if (!elem_ref.current || !ctx_ref.current) {
+            return;
+        }
+        if (!date_ref.current) {
+            elem_ref.current.style.visibility = 'hidden';
             return;
         }
 
-        const offsetTop = this.props.offsetTop || 0;
-        const offsetLeft = this.props.offsetLeft || 0;
-        const elem = this.elem;
-        const stx = this.stx;
+        const offsetTop = props_ref.current.offsetTop || 0;
+        const offsetLeft = props_ref.current.offsetLeft || 0;
+        const elem = elem_ref.current;
+        const stx = stx_ref.current;
         const chart = stx.chart;
 
-        let top = 0, left = 0, show = true;
+        let top = 0,
+            left = 0,
+            show = true;
 
-        const threshold = +this.props.threshold || 0;
+        const threshold = +props_ref.current.threshold || 0;
         show = !threshold || stx.layout.candleWidth >= threshold;
 
-        if (show
-            && chart.dataSet
-            && chart.dataSet.length
-            && stx.mainSeriesRenderer
-        ) {
-            let tickIdx = stx.tickFromDate(this.date, chart);
+        if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
+            let tickIdx = stx.tickFromDate(date_ref.current, chart);
 
-            if (tickIdx > -1
-                && stx.chart.dataSet[tickIdx]
-                && stx.chart.dataSet[tickIdx].Close !== this.price) {
-                delete stx.chart.tickCache[this.date.getTime()];
-                tickIdx = stx.tickFromDate(this.date, chart);
+            if (tickIdx > -1 && stx.chart.dataSet[tickIdx] && stx.chart.dataSet[tickIdx].Close !== price_ref.current) {
+                delete stx.chart.tickCache[date_ref.current.getTime()];
+                tickIdx = stx.tickFromDate(date_ref.current, chart);
             }
 
             let x = stx.pixelFromTick(tickIdx, chart);
@@ -76,23 +76,21 @@ class FastMarker extends Component {
             // ChartIQ doesn't support placing markers in the middle of ticks.
             const bar = chart.dataSet[tickIdx];
             // Here we interpolate the pixel distance between two adjacent ticks.
-            if (bar && bar.DT < this.date) {
+            if (bar && bar.DT < date_ref.current) {
                 const barNext = chart.dataSet[tickIdx + 1];
                 const barPrev = tickIdx > 0 ? chart.dataSet[tickIdx - 1] : null;
-                if (barNext && barNext.Close && barNext.DT > this.date) {
+                if (barNext && barNext.Close && barNext.DT > date_ref.current) {
                     const pixelToNextBar = stx.pixelFromTick(tickIdx + 1, chart) - x;
-                    x +=  (this.date - bar.DT) / (barNext.DT - bar.DT) * pixelToNextBar;
+                    x += ((date_ref.current - bar.DT) / (barNext.DT - bar.DT)) * pixelToNextBar;
                 } else if (barPrev && barPrev.Close) {
                     const pixelFromPrevBar = x - stx.pixelFromTick(tickIdx - 1, chart);
-                    x +=  (this.date - bar.DT) / (bar.DT - barPrev.DT) * pixelFromPrevBar;
+                    x += ((date_ref.current - bar.DT) / (bar.DT - barPrev.DT)) * pixelFromPrevBar;
                 }
             }
 
-            const y = this.price ? stx.pixelFromPrice(this.price, chart.panel) : 0;
+            const y = price_ref.current ? stx.pixelFromPrice(price_ref.current, chart.panel) : 0;
 
-            if (chart.yAxis.left > x
-                && chart.yAxis.top <= y
-                && chart.yAxis.bottom >= y) {
+            if (chart.yAxis.left > x && chart.yAxis.top <= y && chart.yAxis.bottom >= y) {
                 top = +y;
                 left = Math.round(x);
             } else {
@@ -103,51 +101,47 @@ class FastMarker extends Component {
         // patch DOM without triggering recalculate layout.
         elem.style.transform = `translate(${left + offsetLeft}px, ${top + offsetTop}px)`;
         elem.style.visibility = show ? 'visible' : 'hidden';
-    }
+    };
 
-    setRef = (ref) => {
-        this.elem = ref;
+    const setRef = ref => {
+        elem_ref.current = ref;
+        const { markerRef, contextPromise } = props_ref.current;
 
-        const data = ref ? {
-            div: ref,
-            setPosition: this.setPosition,
-        } : null;
+        const data = ref
+            ? {
+                  div: ref,
+                  setPosition,
+              }
+            : null;
 
-        if (this.props.markerRef) {
-            this.props.markerRef(data);
+        if (markerRef) {
+            markerRef(data);
         }
 
         if (ref !== null) {
-            const { contextPromise } = this.props;
+            contextPromise.then(ctx => {
+                ctx_ref.current = ctx;
+                stx_ref.current = ctx_ref.current.stx;
 
-            contextPromise.then((ctx) => {
-                this.ctx = ctx;
-                this.stx = this.ctx.stx;
-
-                this.injectionId = this.stx.append('draw', this.updateCSS);
-                this.updateCSS();
+                injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
+                updateCSS();
             });
-        } else if (this.injectionId) {
+        } else if (injection_id_ref.current && stx_ref.current) {
             // remove the injection on unmount
-            this.stx.removeInjection(this.injectionId);
-            this.ctx = null;
-            this.stx = null;
+            stx_ref.current.removeInjection(injection_id_ref.current);
+            ctx_ref.current = null;
+            stx_ref.current = null;
         }
-    }
+    };
 
-    render() {
-        const { className, children } = this.props;
-        return (
-            <div
-                className={className}
-                ref={this.setRef}
-                style={{ position: 'absolute' }}
-            >
-                {children}
-            </div>
-        );
-    }
-}
+    const { children, className } = props;
+
+    return (
+        <div className={className} ref={setRef} style={{ position: 'absolute' }}>
+            {children}
+        </div>
+    );
+};
 
 export default connect(({ chart }) => ({
     contextPromise: chart.contextPromise,

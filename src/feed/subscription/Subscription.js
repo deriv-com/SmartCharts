@@ -3,7 +3,9 @@ import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
 class Subscription {
     lastStreamEpoch;
-    static get EVENT_CHART_DATA() { return 'EVENT_CHART_DATA'; }
+    static get EVENT_CHART_DATA() {
+        return 'EVENT_CHART_DATA';
+    }
 
     constructor(request, api, stx) {
         this._binaryApi = api;

@@ -3,14 +3,17 @@ import { CategoryIconMap } from '../Icons.jsx';
 
 const FilterItemIcon = React.memo(({ categoryId }) => {
     const CategoryIcon = CategoryIconMap[categoryId];
-    return (CategoryIcon && <CategoryIcon className={`ic-${categoryId}`} />);
+    return CategoryIcon && <CategoryIcon className={`ic-${categoryId}`} />;
 });
 
 const FilterItem = React.memo(({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }) => {
-    const isActive = focusedCategoryKey && focusedCategoryKey.length ? focusedCategoryKey === category.categoryId : activeCategoryKey === category.categoryId;
+    const isActive =
+        focusedCategoryKey && focusedCategoryKey.length
+            ? focusedCategoryKey === category.categoryId
+            : activeCategoryKey === category.categoryId;
     return (
         <div
-            className={`sc-mcd__filter__item ${(isActive && !isSearching) ? 'sc-mcd__filter__item--selected' : ''}`}
+            className={`sc-mcd__filter__item ${isActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
             onClick={e => handleFilterClick(category.categoryId, e)}
         >
             <FilterItemIcon categoryId={category.categoryId} />
@@ -19,8 +22,14 @@ const FilterItem = React.memo(({ focusedCategoryKey, activeCategoryKey, handleFi
     );
 });
 
-export const FilterPanel = ({ filteredItems, handleFilterClick, focusedCategoryKey, activeCategoryKey, isSearching }) => (
-    <div className="sc-mcd__filter">
+export const FilterPanel = ({
+    filteredItems,
+    handleFilterClick,
+    focusedCategoryKey,
+    activeCategoryKey,
+    isSearching,
+}) => (
+    <div className='sc-mcd__filter'>
         {filteredItems.map(category => (
             <FilterItem
                 key={category.categoryId}

@@ -3,30 +3,33 @@ import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line
 import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
-    static get EVENT_CONNECTION_CLOSE() { return 'CONNECTION_CLOSE'; }
-    static get EVENT_CONNECTION_REOPEN() { return 'CONNECTION_REOPEN'; }
+    static get EVENT_CONNECTION_CLOSE() {
+        return 'CONNECTION_CLOSE';
+    }
+    static get EVENT_CONNECTION_REOPEN() {
+        return 'CONNECTION_REOPEN';
+    }
 
     constructor({ appId, endpoint, language }) {
         super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
         this._initialize();
-        this._pendingRequests = { };
+        this._pendingRequests = {};
         this._bufferedRequests = [];
     }
 
     _initialize() {
         this._websocket = new RobustWebsocket(this._url, null, {
             shouldReconnect(event /* , ws */) {
-                if (event.code === 1006
-                && event.type === 'close') {
+                if (event.code === 1006 && event.type === 'close') {
                     // Server websocket disconnected; reset to restore connection
                     return 0;
                 }
-                if (event.code === 1008
-                    || event.code === 1011
-                    || event.type === 'close') return;
-                if (event.type === 'online') { return 0; }
+                if (event.code === 1008 || event.code === 1011 || event.type === 'close') return;
+                if (event.type === 'online') {
+                    return 0;
+                }
                 return 3000;
             },
         });
@@ -69,15 +72,14 @@ class ConnectionManager extends EventEmitter {
 
     _pingCheck() {
         if (this._websocket.readyState === WebSocket.OPEN) {
-            this.send({ ping: 1 }, 5000)
-                .catch(() => {
-                    if (this._websocket.readyState === WebSocket.OPEN) {
-                        console.error('Server unresponsive. Creating new connection...');
-                        // Reset connection if ping gets no pong from server
-                        this._websocket.close();
-                        this._initialize();
-                    }
-                });
+            this.send({ ping: 1 }, 5000).catch(() => {
+                if (this._websocket.readyState === WebSocket.OPEN) {
+                    console.error('Server unresponsive. Creating new connection...');
+                    // Reset connection if ping gets no pong from server
+                    this._websocket.close();
+                    this._initialize();
+                }
+            });
         }
     }
 
@@ -87,7 +89,7 @@ class ConnectionManager extends EventEmitter {
             this._pingTimer = undefined;
         }
 
-        Object.keys(this._pendingRequests).forEach((req_id) => {
+        Object.keys(this._pendingRequests).forEach(req_id => {
             this._bufferedRequests.push(this._pendingRequests[req_id]);
         });
 
@@ -121,7 +123,7 @@ class ConnectionManager extends EventEmitter {
     }
 
     async send(data, timeout) {
-        const req = Object.assign({}, data);
+        const req = { ...data };
         req.req_id = req.req_id || this._counterReqId++;
 
         if (this._websocket.readyState !== WebSocket.OPEN) {

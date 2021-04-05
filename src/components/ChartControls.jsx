@@ -1,16 +1,15 @@
-import React        from 'react';
-import classNames   from 'classnames';
-import { connect }  from '../store/Connect';
-import ChartTypes   from './ChartTypes.jsx';
-import StudyLegend  from './StudyLegend.jsx';
-import Views        from './Views.jsx';
+import React from 'react';
+import classNames from 'classnames';
+import { connect } from '../store/Connect';
+import ChartTypes from './ChartTypes.jsx';
+import StudyLegend from './StudyLegend.jsx';
+import Views from './Views.jsx';
 import CrosshairToggle from './CrosshairToggle.jsx';
-import Timeperiod   from './Timeperiod.jsx';
-import ChartSize    from './ChartSize.jsx';
-import DrawTools    from './DrawTools.jsx';
-import Share        from './Share.jsx';
+import Timeperiod from './Timeperiod.jsx';
+import ChartSize from './ChartSize.jsx';
+import DrawTools from './DrawTools.jsx';
+import Share from './Share.jsx';
 import '../../sass/components/_chart-controls.scss';
-
 
 export const RenderDefaultControls = ({ isMobile }) => (
     <>
@@ -25,38 +24,25 @@ export const RenderDefaultControls = ({ isMobile }) => (
     </>
 );
 
-const ChartControls = ({
-    isMobile,
-    hasOpenMenu,
-    widgets,
-    context,
-}) => {
-    const Controls =  widgets || RenderDefaultControls;
+const ChartControls = ({ isMobile, hasOpenMenu, widgets, context }) => {
+    const Controls = widgets || RenderDefaultControls;
 
     return (
         <div className={classNames('cq-chart-controls', { active: hasOpenMenu })}>
-            { context ? <Controls isMobile={isMobile} /> : null }
+            {context ? <Controls isMobile={isMobile} /> : null}
         </div>
     );
 };
 
-export default connect(({ chart,
-    chartType,
-    studies,
-    drawTools,
-    view,
-    share,
-    timeperiod,
-    chartSetting }) => ({
+export default connect(({ chart, chartType, studies, drawTools, view, share, timeperiod, chartSetting }) => ({
     isMobile: chart.isMobile,
     context: chart.context,
-    hasOpenMenu: (
-        chartType.menu.open
-            || studies.menu.open
-            || drawTools.menu.open
-            || view.menu.open
-            || share.menu.open
-            || timeperiod.menu.open
-            || chartSetting.menu.open
-    ),
+    hasOpenMenu:
+        chartType.menu.open ||
+        studies.menu.open ||
+        drawTools.menu.open ||
+        view.menu.open ||
+        share.menu.open ||
+        timeperiod.menu.open ||
+        chartSetting.menu.open,
 }))(ChartControls);
