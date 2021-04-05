@@ -102,9 +102,12 @@ Props marked with `*` are **mandatory**:
 | requestAPI\*              | SmartCharts will make single API calls by passing the request input directly to this method, and expects a `Promise` to be returned.                                                                                                                                                                                                                             |
 | requestSubscribe\*        | SmartCharts will make streaming calls via this method. `requestSubscribe` expects 2 parameters `(request, callback) => {}`: the `request` input and a `callback` in which response will be passed to for each time a response is available. Keep track of this `callback` as SmartCharts will pass this to you to forget the subscription (via `requestForget`). |
 | requestForget\*           | When SmartCharts no longer needs a subscription (made via `requestSubscribe`), it will call this method (passing in `request` and `callback` passed from `requestSubscribe`) to halt the subscription.                                                                                                                                                           |
-| id                        | Uniquely identifies a chart's indicators, comparisons, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.                                                                                                           |
+| id                        | Uniquely identifies a chart's indicators, symbol and layout; saving them to local storage and loading them when page refresh. If not set, SmartCharts renders a fresh chart with default values on each refresh. Defaults to `undefined`.                                                                                                           |
 | getMarketsOrder           | Callback function to set/order the active symbols category. `active_symbols` is passed to the callback and an array of markets is expected in return. Allowed values are `forex`, `indices`, `stocks`, `commodities`, `synthetic_index`. Defaults to `undefined`                                                                                                 |
+| getIndicatorHeightRatio           | Callback function to set/order the height of the active indicators that attach to the bottom of the chart. The chart pass two parameters, `chart_height` and `indicator_count` and the callback should return an object that contains two parameters, `height` and `percent` which `height` present the height of each indicator in pixel and the `percent` present the percentage of height compare to chart height. Example:  `getIndicatorHeightRatio: (chart_height, indicator_count) => ({height, percent})` . Defaults to `undefined`                                                                                       |
 | symbol                    | Sets the main chart symbol. Defaults to `R_100`. Refer [Props vs UI](#props-vs-ui) for usage details.                                                                                                                                                                                                                                                            |
+| initialData               | Set initial data that the library requires for booting up. Refer [initialData](#initial-data) for usage details.                                                                                                                                                                                                                                                      |
+| feedCall                  | Enable/Disable the feed call for getting requirement resources. Default is `{activeSymbols: true,tradingTimes: true}`                                                                                                                                                                                                                                             |
 | granularity               | Sets the granularity of the chart. Allowed values are 60, 120, 180, 300, 600, 900, 1800, 3600, 7200, 14400, 28800, 86400. Defaults to 0. Refer [Props vs UI](#props-vs-ui) for usage details.                                                                                                                                                                    |
 | chartType                 | Sets the chartType. Choose between `mountain` (Line), `line` (Dot), `colored_line` (Colored Dot), `spline`, `baseline`, `candle`, `colored_bar` (OHLC), `hollow_candle`, `heikinashi`, `kagi`, `linebreak`, `renko`, `rangebars`, and `pandf` (Point & Figure). Defaults to `mountain`. Refer [Props vs UI](#props-vs-ui) for usage details.                     |
 | startEpoch                | Set the start epoch of the chart                                                                                                                                                                                                                                                                                                                                 |
@@ -145,9 +148,18 @@ Props marked with `*` are **mandatory**:
 | theme                        | Sets the chart theme. themes are (`dark\|light`), and default is `light`.                                                             |
 | lang                         | Sets the language. Defaults to `en`.                                                                                                  |
 | position                     | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`. |
-| assetInformation             | Show or hide the asset information. In mobile this will be always be `false`. Defaults to `true`.                                     |
 | enabledNavigationWidget      | Show or hide navigation widget. Defaults to `false`                                                                                   |
 | isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.                                                           |
+
+#### InitialData
+
+Initial data property designed to pass prepared chart data in case you don't want to wait for Feed data or if you simply want to make the chart render quicker on its initial load. It gets the properties below and all of them are optional, so if you pass the data, the chart will use that data, but if you pass `null` instead, the chart will default to the Feed call and get the data from API.
+**notice:** these data are only use for initialing sequence and after that, chart request on Feed to get data.
+| Attribute | Description | Sample Data |
+| --- | --- | --- |
+| activeSymbols | An array of active symbols (available markets) is used to load the market selector. Default is `null`. This value would update in the chart is user toggle property of `refreshActiveSymbols` that cause the chart to request for activeSymbols on the Feed | `[{ allow_forward_starting: 0, display_name: 'AUD Index', exchange_is_open: 1, is_trading_suspended: 0, market: 'forex', market_display_name: 'Forex', pip: 0.001, submarket: 'smart_fx', submarket_display_name: 'Smart FX', symbol: 'WLDAUD', symbol_type: 'smart_fx' }, ...]`
+|tradingTimes | An array of markets trading time is used to determine close/open markets. Default is `null`. The chart will request new data via Feed in a sequence that is calculated regards markets trading time. | `{trading_times: {markets: [{ name: 'Forex', submarkets: [{ name: 'Major Pairs', symbols: [{name: 'AUD/JPY', symbol: 'frxAUDJPY', times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' }, trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],events: [{ dates: 'Fridays', descrip: 'Closes early (at 20:55)' },{ dates: '2020-12-25', descrip: 'Christmas Day' },{ dates: '2021-01-01', descrip: "New Year's Day" }], ...}, ]},...]...],}}`
+| masterData | An array of ticks that are used to load the graph (candles). Default is `null`. If the Feed is available, the chart will call `fetchInitialData` via Feed to get the initial ticks, for old data it calls `fetchPaginationData` and receives new ticks constantly. If this property is filled, chart user `symbol` property and `setting` property (to extract chart type and interval) and the masterData to load the graph. **Notice:** chart interval in the setting property should be the same as masterData epoch/Date property. If the symbol property does not fill, the chart uses the `symbol` property that exists in the localStorage with the key of `layout-*`, and if that property also does not fill, the chart throws a console error. **(if the desired symbol does not fill in the `symbol` property or `layout-*` localStorage, it caused the chart to just load the given masterData and does not call for the `fetchInitialData` API)**. | `[{"Date":"2020-11-16T04:28:00", "Close":8287.85}, {"Date":"2020-11-16T04:26:00", "Open":8283.25,"High":8293.750015,"Low":8278.75,"Close":8293.75},...]`
 
 #### Barriers API
 
@@ -270,12 +282,12 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ComparisonList, ToolbarWidget } from "@binary-com/smartcharts";
+import { ChartMode, ToolbarWidget } from "@binary-com/smartcharts";
 
 const renderTopWidgets = () => (
   <React.Fragment>
     <div>Hi I just replaced the top widgets!</div>
-    <ComparisonList />
+    <ChartMode />
   </React.Fragment>
 );
 
@@ -288,7 +300,7 @@ const renderBottomWidgets = () => (
 const renderToolbarWidgets = () => (
   <ToolbarWidget position="top">
     <div>Hi I just replaced the top widgets!</div>
-    <ComparisonList />
+    <ChartMode />
   </ToolbarWidget>
 );
 
@@ -306,13 +318,10 @@ Here are the following components you can import:
 
 - Top widgets:
   - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
-  - `<AssetInformation />`
-  - `<ComparisonList />`
 - Chart controls:
   - `<CrosshairToggle enabled={true} />`
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
   - `<StudyLegend />`
-  - `<Comparison />`
   - `<DrawTools />`
   - `<Views />`
   - `<Share />`

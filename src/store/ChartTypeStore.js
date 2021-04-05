@@ -5,65 +5,73 @@ import SettingsDialogStore from './SettingsDialogStore';
 import List from '../components/List.jsx';
 import Menu from '../components/Menu.jsx';
 import SettingsDialog from '../components/SettingsDialog.jsx';
-import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { ChartTypes } from '../Constant';
 
-const notCandles = [...ChartTypes]
-    .filter(t => !t.candleOnly)
-    .map(t => t.id);
+const notCandles = [...ChartTypes].filter(t => !t.candleOnly).map(t => t.id);
 
-const aggregateCharts = [...ChartTypes]
-    .filter(t => t.settingsOnClick);
+const aggregateCharts = [...ChartTypes].filter(t => t.settingsOnClick);
 
 function getAggregates() {
     return {
         heikinashi: true,
         kagi: {
             title: t.translate('Kagi'),
-            inputs: [{
-                id: 'kagi',
-                title: t.translate('Reversal Percentage'),
-                type: 'numericinput',
-            }],
+            inputs: [
+                {
+                    id: 'kagi',
+                    title: t.translate('Reversal Percentage'),
+                    type: 'numericinput',
+                },
+            ],
         },
         renko: {
             title: t.translate('Renko'),
-            inputs: [{
-                id: 'renko',
-                title: t.translate('Range'),
-                type: 'numericinput',
-            }],
+            inputs: [
+                {
+                    id: 'renko',
+                    title: t.translate('Range'),
+                    type: 'numericinput',
+                },
+            ],
         },
         linebreak: {
             title: t.translate('Line Break'),
-            inputs: [{
-                id: 'priceLines',
-                title: t.translate('Price Lines'),
-                type: 'numericinput',
-                max: 10,
-                step: 1,
-                min: 1,
-            }],
+            inputs: [
+                {
+                    id: 'priceLines',
+                    title: t.translate('Price Lines'),
+                    type: 'numericinput',
+                    max: 10,
+                    step: 1,
+                    min: 1,
+                },
+            ],
         },
         rangebars: {
             title: t.translate('Range Bars'),
-            inputs: [{
-                id: 'range',
-                title: t.translate('Range'),
-                type: 'numericinput',
-            }],
+            inputs: [
+                {
+                    id: 'range',
+                    title: t.translate('Range'),
+                    type: 'numericinput',
+                },
+            ],
         },
         pandf: {
             title: t.translate('Point & Figure'),
-            inputs: [{
-                id: 'box',
-                title: t.translate('Box Size'),
-                type: 'numericinput',
-            }, {
-                id: 'reversal',
-                title: t.translate('Reversal'),
-                type: 'numericinput',
-            }],
+            inputs: [
+                {
+                    id: 'box',
+                    title: t.translate('Box Size'),
+                    type: 'numericinput',
+                },
+                {
+                    id: 'reversal',
+                    title: t.translate('Reversal'),
+                    type: 'numericinput',
+                },
+            ],
         },
     };
 }
@@ -72,7 +80,7 @@ export default class ChartTypeStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route:'chart-type' });
+        this.menu = new MenuStore(mainStore, { route: 'chart-type' });
 
         this.list = new ListStore({
             getContext: () => this.context,
@@ -92,12 +100,24 @@ export default class ChartTypeStore {
     @observable type = 'mountain';
     onChartTypeChanged;
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get chartTypeProp() { return this.mainStore.state.chartType; }
-    get isCandle() { return this.type ? notCandles.indexOf(this.type.id) === -1 : false; }
-    get isSpline() { return this.type.id === 'spline'; }
-    get isAggregateChart() { return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType); }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get chartTypeProp() {
+        return this.mainStore.state.chartType;
+    }
+    get isCandle() {
+        return this.type ? notCandles.indexOf(this.type.id) === -1 : false;
+    }
+    get isSpline() {
+        return this.type.id === 'spline';
+    }
+    get isAggregateChart() {
+        return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType);
+    }
 
     onContextReady = () => {
         this.aggregates = getAggregates();
@@ -105,16 +125,21 @@ export default class ChartTypeStore {
 
         this.setChartTypeFromLayout(this.stx.layout);
 
-        reaction(() => this.mainStore.state.chartType, () => {
-            if (this.mainStore.state.chartType !== undefined) {
-                this.setType(this.mainStore.state.chartType);
+        reaction(
+            () => this.mainStore.state.chartType,
+            () => {
+                if (this.mainStore.state.chartType !== undefined) {
+                    this.setType(this.mainStore.state.chartType);
+                }
             }
-        });
+        );
     };
 
     @action.bound setTypeFromUI(type) {
         if (this.chartTypeProp !== undefined) {
-            console.error('Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />');
+            console.error(
+                'Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />'
+            );
             return;
         }
 
@@ -131,10 +156,6 @@ export default class ChartTypeStore {
             type = this.types.find(t => t.id === type);
         }
         if (type.id === this.type.id) {
-            return;
-        }
-        if (type.id === 'table') {
-            this.mainStore.chartTable.setOpen(true);
             return;
         }
         if (type.id === 'spline') {
@@ -169,13 +190,13 @@ export default class ChartTypeStore {
         const aggregate = this.aggregates[aggregateId];
         this.settingsDialog.title = aggregate.title;
         const inputs = aggregate.inputs.map(({ id, ...agg }) => {
-            const name = (id === 'box' || id === 'reversal') ? `pandf.${id}` : id;
+            const name = id === 'box' || id === 'reversal' ? `pandf.${id}` : id;
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, name);
             const value = tuple.obj[tuple.member];
             const defaultValue = this.stx.chart.defaultChartStyleConfig[id];
             return {
                 id: name,
-                value: (value != undefined) ? value : defaultValue, // eslint-disable-line eqeqeq
+                value: value != undefined ? value : defaultValue, // eslint-disable-line eqeqeq
                 defaultValue,
                 ...agg,
             };
@@ -184,7 +205,7 @@ export default class ChartTypeStore {
         this.settingsDialog.setOpen(true);
     }
 
-    updateAggregate = (items) => {
+    updateAggregate = items => {
         for (const { id, value } of items) {
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);
             tuple.obj[tuple.member] = value;
@@ -216,7 +237,8 @@ export default class ChartTypeStore {
 
     getChartTypeFromLayout(layout) {
         let chartType;
-        if (layout.tension) { // We assume that if tension is set, spline is enabled
+        if (layout.tension) {
+            // We assume that if tension is set, spline is enabled
             chartType = 'spline';
         } else if (this.aggregates[layout.aggregationType]) {
             chartType = layout.aggregationType;

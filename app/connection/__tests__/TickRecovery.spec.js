@@ -51,20 +51,8 @@ describe('Test mergeTickHistory (Ticks)', () => {
             ticks_history: 'R_50',
         },
         history: {
-            prices: [
-                '184.7895',
-                '184.7663',
-                '184.7995',
-                '184.7967',
-                '184.8159',
-            ],
-            times: [
-                '1532340062',
-                '1532340064',
-                '1532340066',
-                '1532340068',
-                '1532340070',
-            ],
+            prices: ['184.7895', '184.7663', '184.7995', '184.7967', '184.8159'],
+            times: ['1532340062', '1532340064', '1532340066', '1532340068', '1532340070'],
         },
         msg_type: 'history',
     };
@@ -79,46 +67,19 @@ describe('Test mergeTickHistory (Ticks)', () => {
             ticks_history: 'R_50',
         },
         history: {
-            prices: [
-                '184.7967',
-                '184.8159',
-                '184.7690',
-                '184.7956',
-                '184.8107',
-                '184.7957',
-                '184.7942',
-            ],
-            times: [
-                '1532340068',
-                '1532340070',
-                '1532340072',
-                '1532340074',
-                '1532340076',
-                '1532340078',
-                '1532340080',
-            ],
+            prices: ['184.7967', '184.8159', '184.7690', '184.7956', '184.8107', '184.7957', '184.7942'],
+            times: ['1532340068', '1532340070', '1532340072', '1532340074', '1532340076', '1532340078', '1532340080'],
         },
         msg_type: 'history',
     };
     it('Merge 2 cleanly divided tick arrays', () => {
-        const b = { history: {
-            prices: [
-                '184.7690',
-                '184.7956',
-                '184.8107',
-                '184.7957',
-                '184.7942',
-            ],
-            times: [
-                '1532340072',
-                '1532340074',
-                '1532340076',
-                '1532340078',
-                '1532340080',
-            ],
-        } };
-        expect(() => mergeTickHistory(partA, b))
-            .to.throw('Cannot merge tick data with no overlaps!');
+        const b = {
+            history: {
+                prices: ['184.7690', '184.7956', '184.8107', '184.7957', '184.7942'],
+                times: ['1532340072', '1532340074', '1532340076', '1532340078', '1532340080'],
+            },
+        };
+        expect(() => mergeTickHistory(partA, b)).to.throw('Cannot merge tick data with no overlaps!');
     });
 
     it('Merge 2 overlapping tick data arrays', () => {
@@ -704,7 +665,6 @@ describe('Test mergeTickHistory (Candles)', () => {
             },
             msg_type: 'candles',
         };
-        expect(() => mergeTickHistory(smallGapPartA, incompleteB))
-            .to.throw('Candle data cannot be merged!');
+        expect(() => mergeTickHistory(smallGapPartA, incompleteB)).to.throw('Candle data cannot be merged!');
     });
 });

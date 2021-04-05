@@ -73,19 +73,18 @@ describe('TradingTimes test', async function () {
             for (const symbol of ['BFX', 'AEX', 'FCHI', 'OBX']) {
                 expect(changes[symbol]).to.be.true;
             }
-    
+
             this.clock.tick('07:30:00'); // 14:30:00
-    
+
             changes = spy.lastCall.args[0];
             expect(changes['OBX']).to.be.false;
-    
+
             this.clock.tick('01:00:00'); // 15:30:00
-    
+
             changes = spy.lastCall.args[0];
             for (const symbol of ['BFX', 'AEX', 'FCHI']) {
                 expect(changes[symbol]).to.be.false;
             }
-    
         }, 0);
     });
 
@@ -115,8 +114,7 @@ describe('TradingTimes test', async function () {
 
             changes = spy.lastCall.args[0];
             expect(changes[OTC_HSI]).to.be.false;
-
-         }, 0);
+        }, 0);
     });
 
     it('Trade request for the next day will be called if no available open/closing times are available for query', function () {

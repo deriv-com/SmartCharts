@@ -7,14 +7,28 @@ import Shade from '../components/Shade.jsx';
 import { isValidProp } from '../utils';
 
 export default class BarrierStore {
-    static get SHADE_NONE_SINGLE() { return 'SHADE_NONE_SINGLE'; }
-    static get SHADE_NONE_DOUBLE() { return 'SHADE_NONE_DOUBLE'; }
-    static get SHADE_ABOVE() { return 'SHADE_ABOVE'; }
-    static get SHADE_BELOW() { return 'SHADE_BELOW'; }
-    static get SHADE_BETWEEN() { return 'SHADE_BETWEEN'; }
-    static get SHADE_OUTSIDE() { return 'SHADE_OUTSIDE'; }
+    static get SHADE_NONE_SINGLE() {
+        return 'SHADE_NONE_SINGLE';
+    }
+    static get SHADE_NONE_DOUBLE() {
+        return 'SHADE_NONE_DOUBLE';
+    }
+    static get SHADE_ABOVE() {
+        return 'SHADE_ABOVE';
+    }
+    static get SHADE_BELOW() {
+        return 'SHADE_BELOW';
+    }
+    static get SHADE_BETWEEN() {
+        return 'SHADE_BETWEEN';
+    }
+    static get SHADE_OUTSIDE() {
+        return 'SHADE_OUTSIDE';
+    }
 
-    static get BARRIER_CHANGED() { return 'BARRIER_CHANGED'; }
+    static get BARRIER_CHANGED() {
+        return 'BARRIER_CHANGED';
+    }
 
     @observable shadeColor;
     @observable color;
@@ -33,9 +47,15 @@ export default class BarrierStore {
 
     _shadeState;
 
-    @computed get pip() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-    @computed get yAxisWidth() { return this.mainStore.chart.yAxiswidth; }
-    @computed get priceLabelWidth() { return this.yAxisWidth + 1; }
+    @computed get pip() {
+        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+    }
+    @computed get yAxisWidth() {
+        return this.mainStore.chart.yAxiswidth;
+    }
+    @computed get priceLabelWidth() {
+        return this.yAxisWidth + 1;
+    }
 
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -63,7 +83,9 @@ export default class BarrierStore {
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
-        if (this.context && mainStore.chart.currentCloseQuote()) { this.init(); }
+        if (this.context && mainStore.chart.currentCloseQuote()) {
+            this.init();
+        }
 
         this.HighPriceLine = this._high_barrier.connect(PriceLine);
         this.LowPriceLine = this._low_barrier.connect(PriceLine);
@@ -91,31 +113,75 @@ export default class BarrierStore {
     }
 
     @action.bound updateProps({
-        color, foregroundColor, shadeColor, shade, high, low, relative, draggable, onChange, hideBarrierLine, hideOffscreenBarrier, hideOffscreenLine, hidePriceLines, lineStyle, title, showOffscreenArrows, isSingleBarrier, opacityOnOverlap,
+        color,
+        foregroundColor,
+        shadeColor,
+        shade,
+        high,
+        low,
+        relative,
+        draggable,
+        onChange,
+        hideBarrierLine,
+        hideOffscreenBarrier,
+        hideOffscreenLine,
+        hidePriceLines,
+        lineStyle,
+        title,
+        showOffscreenArrows,
+        isSingleBarrier,
+        opacityOnOverlap,
     }) {
-        this.initializePromise.then(action(() => {
-            if (color) { this.color = color; }
-            if (foregroundColor) { this.foregroundColor = foregroundColor; }
-            if (shadeColor) { this.shadeColor = shadeColor; }
-            if (shade) { this.shadeState = `SHADE_${shade}`.toUpperCase(); }
-            if (relative !== undefined) { this.relative = relative; }
-            if (draggable !== undefined) { this.draggable = draggable; }
-            if (isValidProp(high)) { this.high_barrier = high; }
-            if (isValidProp(low)) { this.low_barrier = low; }
-            if (onChange) { this.onBarrierChange = onChange; }
-            if (title) { this.title = title; }
-            this.lineStyle = lineStyle;
-            this.hideBarrierLine = !!hideBarrierLine;
-            this.hidePriceLines = !!hidePriceLines;
-            this.hideOffscreenLine = !!hideOffscreenLine;
-            this.hideOffscreenBarrier = !!hideOffscreenBarrier;
-            this.isSingleBarrier = !!isSingleBarrier;
-        }));
-        if (opacityOnOverlap) { this.opacityOnOverlap = opacityOnOverlap; }
-        if (showOffscreenArrows) { this.showOffscreenArrows = showOffscreenArrows; }
+        this.initializePromise.then(
+            action(() => {
+                if (color) {
+                    this.color = color;
+                }
+                if (foregroundColor) {
+                    this.foregroundColor = foregroundColor;
+                }
+                if (shadeColor) {
+                    this.shadeColor = shadeColor;
+                }
+                if (shade) {
+                    this.shadeState = `SHADE_${shade}`.toUpperCase();
+                }
+                if (relative !== undefined) {
+                    this.relative = relative;
+                }
+                if (draggable !== undefined) {
+                    this.draggable = draggable;
+                }
+                if (isValidProp(high)) {
+                    this.high_barrier = high;
+                }
+                if (isValidProp(low)) {
+                    this.low_barrier = low;
+                }
+                if (onChange) {
+                    this.onBarrierChange = onChange;
+                }
+                if (title) {
+                    this.title = title;
+                }
+                this.lineStyle = lineStyle;
+                this.hideBarrierLine = !!hideBarrierLine;
+                this.hidePriceLines = !!hidePriceLines;
+                this.hideOffscreenLine = !!hideOffscreenLine;
+                this.hideOffscreenBarrier = !!hideOffscreenBarrier;
+                this.isSingleBarrier = !!isSingleBarrier;
+            })
+        );
+        if (opacityOnOverlap) {
+            this.opacityOnOverlap = opacityOnOverlap;
+        }
+        if (showOffscreenArrows) {
+            this.showOffscreenArrows = showOffscreenArrows;
+        }
     }
 
     @action.bound destructor() {
+        if (!this.context) return;
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
@@ -127,33 +193,49 @@ export default class BarrierStore {
         }
     }
 
-    get high_barrier() { return this._high_barrier.price; }
-    get low_barrier() { return this._low_barrier.price; }
-    set high_barrier(price) { this._high_barrier.price = price; }
-    set low_barrier(price) { this._low_barrier.price = price; }
+    get high_barrier() {
+        return this._high_barrier.price;
+    }
+    get low_barrier() {
+        return this._low_barrier.price;
+    }
+    set high_barrier(price) {
+        this._high_barrier.price = price;
+    }
+    set low_barrier(price) {
+        this._low_barrier.price = price;
+    }
 
     _setupConstrainBarrierPrices() {
         // barrier 1 cannot go below barrier 2
-        this._high_barrier.priceConstrainer = (newPrice) => {
-            const nextPrice = (this._low_barrier.visible && (newPrice < this._low_barrier.realPrice))
-                ? this._high_barrier.realPrice : newPrice;
+        this._high_barrier.priceConstrainer = newPrice => {
+            const nextPrice =
+                this._low_barrier.visible && newPrice < this._low_barrier.realPrice
+                    ? this._high_barrier.realPrice
+                    : newPrice;
             this.mainStore.chart.calculateYaxisWidth(nextPrice);
 
             return nextPrice;
         };
 
         // barrier 2 cannot go above barrier 1
-        this._low_barrier.priceConstrainer = (newPrice) => {
-            const nextPrice = (newPrice > this._high_barrier.realPrice) ? this._low_barrier.realPrice : newPrice;
+        this._low_barrier.priceConstrainer = newPrice => {
+            const nextPrice = newPrice > this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
 
             this.mainStore.chart.calculateYaxisWidth(nextPrice);
             return nextPrice;
         };
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get chart() { return this.stx.chart; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get chart() {
+        return this.stx.chart;
+    }
 
     _onBarrierChange = null;
 
@@ -165,9 +247,11 @@ export default class BarrierStore {
 
     _fireOnBarrierChange = () => {
         const high = this._high_barrier.visible ? +this._high_barrier.price.toFixed(this.pip) : undefined;
-        const low  = this._low_barrier.visible  ? +this._low_barrier.price.toFixed(this.pip)  : undefined;
+        const low = this._low_barrier.visible ? +this._low_barrier.price.toFixed(this.pip) : undefined;
 
-        if (this._onBarrierChange) { this._onBarrierChange({ high, low }); }
+        if (this._onBarrierChange) {
+            this._onBarrierChange({ high, low });
+        }
     };
 
     get shadeState() {
@@ -175,21 +259,23 @@ export default class BarrierStore {
     }
 
     set shadeState(shadeState) {
-        if (this._shadeState === shadeState) { return; }
+        if (this._shadeState === shadeState) {
+            return;
+        }
         this._shadeState = shadeState;
 
-        const noShade = this._shadeState === BarrierStore.SHADE_NONE_SINGLE
-            || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
+        const noShade =
+            this._shadeState === BarrierStore.SHADE_NONE_SINGLE || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         if (noShade) {
             this.aboveShadeStore.visible = false;
             this.betweenShadeStore.visible = false;
             this.belowShadeStore.visible = false;
         } else {
-            const aboveShadeEnable = this._shadeState === BarrierStore.SHADE_ABOVE
-                || this._shadeState === BarrierStore.SHADE_OUTSIDE;
-            const belowShadeEnable = this._shadeState === BarrierStore.SHADE_BELOW
-                || this._shadeState === BarrierStore.SHADE_OUTSIDE;
+            const aboveShadeEnable =
+                this._shadeState === BarrierStore.SHADE_ABOVE || this._shadeState === BarrierStore.SHADE_OUTSIDE;
+            const belowShadeEnable =
+                this._shadeState === BarrierStore.SHADE_BELOW || this._shadeState === BarrierStore.SHADE_OUTSIDE;
             const betweenShadeEnable = this._shadeState === BarrierStore.SHADE_BETWEEN;
 
             this.aboveShadeStore.visible = aboveShadeEnable;
@@ -199,9 +285,10 @@ export default class BarrierStore {
             this._drawShadedArea();
         }
 
-        const showLowBarrier = this._shadeState === BarrierStore.SHADE_OUTSIDE
-            || this._shadeState === BarrierStore.SHADE_BETWEEN
-            || this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
+        const showLowBarrier =
+            this._shadeState === BarrierStore.SHADE_OUTSIDE ||
+            this._shadeState === BarrierStore.SHADE_BETWEEN ||
+            this._shadeState === BarrierStore.SHADE_NONE_DOUBLE;
 
         const wasLowBarrierVisible = this._low_barrier.visible;
         this._low_barrier.visible = showLowBarrier;
@@ -249,7 +336,9 @@ export default class BarrierStore {
     }
 
     _drawShadedArea = () => {
-        if (!this.isInitialized) { return; }
+        if (!this.isInitialized) {
+            return;
+        }
 
         if (this._shadeState === BarrierStore.SHADE_ABOVE) {
             this._shadeAbove();
@@ -262,10 +351,10 @@ export default class BarrierStore {
         }
 
         if (this._low_barrier.visible && this._isBarriersOffScreen()) {
-            const order = (this._high_barrier.top === 0) ? null : 101;
+            const order = this._high_barrier.top === 0 ? null : 101;
             this._high_barrier.zIndex = order;
         }
-    }
+    };
 
     _isBarriersOffScreen() {
         return this._high_barrier.offScreen && this._low_barrier.offScreen;
@@ -273,9 +362,9 @@ export default class BarrierStore {
 
     _shadeBetween() {
         this.betweenShadeStore.setPosition({
-            top : this._high_barrier.top,
-            bottom : this._low_barrier.top,
-            right : this.yAxisWidth,
+            top: this._high_barrier.top,
+            bottom: this._low_barrier.top,
+            right: this.yAxisWidth,
         });
     }
 

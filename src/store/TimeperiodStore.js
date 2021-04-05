@@ -1,7 +1,7 @@
 import { observable, action, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 import ServerTime from '../utils/ServerTime';
-import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 const UnitMap = {
     tick: 'T',
@@ -23,12 +23,20 @@ export default class TimeperiodStore {
         when(() => this.context, this.onContextReady);
     }
 
-    get context() { return this.mainStore.chart.context; }
-    get loader() { return this.mainStore.loader; }
-    get isTick() { return this.timeUnit === 'tick'; }
-    get isSymbolOpen() { return this.mainStore.chartTitle.isSymbolOpen; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get loader() {
+        return this.mainStore.loader;
+    }
+    get isTick() {
+        return this.timeUnit === 'tick';
+    }
+    get isSymbolOpen() {
+        return this.mainStore.chartTitle.isSymbolOpen;
+    }
     get display() {
-        return `${this.interval === 'day' ? 1 : (this.interval / TimeMap[this.timeUnit])} ${UnitMap[this.timeUnit]}`;
+        return `${this.interval === 'day' ? 1 : this.interval / TimeMap[this.timeUnit]} ${UnitMap[this.timeUnit]}`;
     }
     @observable timeUnit = null;
     @observable interval = null;
@@ -44,18 +52,24 @@ export default class TimeperiodStore {
 
         this.updateCountdown();
 
-        reaction(() => [
-            this.timeUnit,
-            this.interval,
-            this.mainStore.chartSetting.countdown,
-            this.mainStore.chartType.type,
-            this.loader.currentState,
-            this.isSymbolOpen,
-        ], this.updateCountdown.bind(this));
+        reaction(
+            () => [
+                this.timeUnit,
+                this.interval,
+                this.mainStore.chartSetting.countdown,
+                this.mainStore.chartType.type,
+                this.loader.currentState,
+                this.isSymbolOpen,
+            ],
+            this.updateCountdown.bind(this)
+        );
 
         this.context.stx.addEventListener('newChart', this.updateDisplay);
 
-        reaction(() => this.mainStore.state.granularity, granularity => this.onGranularityChange(granularity));
+        reaction(
+            () => this.mainStore.state.granularity,
+            granularity => this.onGranularityChange(granularity)
+        );
     };
 
     countdownInterval = null;
@@ -65,7 +79,7 @@ export default class TimeperiodStore {
             clearInterval(this.countdownInterval);
         }
 
-        if (this._injectionId && this.context)  {
+        if (this._injectionId && this.context) {
             this.context.stx.removeInjection(this._injectionId);
         }
 
@@ -74,6 +88,7 @@ export default class TimeperiodStore {
     }
 
     updateCountdown() {
+        if (!this.context) return;
         const stx = this.context.stx;
         this.remain = null;
         this.clearCountdown();
@@ -86,16 +101,16 @@ export default class TimeperiodStore {
 
             const { dataSegment } = stx.chart;
             if (dataSegment && dataSegment.length) {
-                const dataSegmentClose = [...dataSegment].filter(item => (item && item.Close));
+                const dataSegmentClose = [...dataSegment].filter(item => item && item.Close);
                 if (dataSegmentClose && dataSegmentClose.length) {
                     const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
                     const now = this._serverTime.getUTCDate();
                     const diff = now - currentQuote.DT;
-                    const chartInterval = (getIntervalInSeconds(stx.layout) * 1000);
-                    const coefficient = (diff > chartInterval) ? (parseInt(diff / chartInterval, 10) + 1) : 1;
+                    const chartInterval = getIntervalInSeconds(stx.layout) * 1000;
+                    const coefficient = diff > chartInterval ? parseInt(diff / chartInterval, 10) + 1 : 1;
 
                     if (this.context.stx) {
-                        this.remain = displayMilliseconds((coefficient * chartInterval) - diff);
+                        this.remain = displayMilliseconds(coefficient * chartInterval - diff);
                         stx.draw();
                     }
                 }
@@ -132,7 +147,9 @@ export default class TimeperiodStore {
 
     @action.bound setGranularity(granularity) {
         if (this.mainStore.state.granularity !== undefined) {
-            console.error('Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />');
+            console.error(
+                'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
+            );
             return;
         }
 
@@ -151,6 +168,7 @@ export default class TimeperiodStore {
     }
 
     @action.bound updateDisplay() {
+        if (!this.context) return;
         const stx = this.context.stx;
         this.timeUnit = getTimeUnit(stx.layout);
         this.interval = stx.layout.interval;
@@ -163,11 +181,11 @@ export default class TimeperiodStore {
         const bottomPos = 66;
         let y = stx.chart.currentPriceLabelY + labelHeight;
         if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
-            y =  stx.chart.panel.bottom - bottomPos;
+            y = stx.chart.panel.bottom - bottomPos;
             y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
         } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
             y = topPos;
         }
         return y;
-    }
+    };
 }

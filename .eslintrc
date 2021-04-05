@@ -1,10 +1,15 @@
 {
     "parser": "babel-eslint",
     "extends": [
-        "eslint:recommended",
+        "prettier",
+        "prettier/react",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
         "plugin:import/errors",
         "plugin:import/warnings",
-        "airbnb"
+        "airbnb",
+        "airbnb-base",
+        "binary"
     ],
     "env": {
         "browser": true,
@@ -12,9 +17,7 @@
         "es6": true,
         "node": true
     },
-    "plugins": [
-        "react"
-    ],
+    "plugins": ["react", "prettier"],
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"
@@ -39,7 +42,7 @@
         "react/jsx-indent": 0,
         "key-spacing": 0,
         "object-curly-newline": 0,
-        "react/jsx-indent-props": ["error", 4],
+        "react/jsx-indent-props": 0,
         "react/jsx-uses-vars": 2,
         "jsx-a11y/click-events-have-key-events": 0,
         "no-lonely-if": 2,
@@ -53,7 +56,8 @@
         "no-multi-assign": 0,
         "block-scoped-var": 2,
         "no-continue": 0,
-        "indent": [2, 4],
+        "indent": 0,
+        "arrow-parens": 0,
         "no-param-reassign": 0,
         "consistent-return": 0,
         "no-plusplus": 0,
@@ -66,7 +70,7 @@
         "no-mixed-operators": 0,
         "max-len": 0,
         "prefer-const": 2,
-        "import/no-extraneous-dependencies": ["error", {"packageDir": "./"}],
+        "import/no-extraneous-dependencies": ["error", { "packageDir": "./" }],
         "no-underscore-dangle": 0,
         "prefer-destructuring": 0,
         "react/no-access-state-in-setstate": 2,
@@ -79,17 +83,19 @@
         "no-unused-expressions": 2,
         "semi": 2,
         "no-console": 0,
-        "no-restricted-syntax": [
-            "error",
-            "LabeledStatement",
-            "WithStatement"
-        ],
-        "jsx-a11y/label-has-for": [ 2, {
-            "components": [ "Label" ],
-            "required": {
-                "some": [ "nesting", "id" ]
-            },
-            "allowChildren": false,
-        }]
+        "radix": 0,
+        "quotes": 0,
+        "jsx-quotes": ["error", "prefer-single"],
+        "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+        "jsx-a11y/label-has-for": [
+            2,
+            {
+                "components": ["Label"],
+                "required": {
+                    "some": ["nesting", "id"]
+                },
+                "allowChildren": false
+            }
+        ]
     }
 }

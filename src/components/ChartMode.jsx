@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React        from 'react';
-import classNames   from 'classnames';
-import { connect }  from '../store/Connect';
-import ChartTypes   from './ChartTypes.jsx';
-import Timeperiod   from './Timeperiod.jsx';
+import React from 'react';
+import classNames from 'classnames';
+import { connect } from '../store/Connect';
+import ChartTypes from './ChartTypes.jsx';
+import Timeperiod from './Timeperiod.jsx';
 import {
     TypeAreaGrayscaleIcon,
     TypeCandleGrayscaleIcon,
@@ -19,19 +19,11 @@ const TypeMap = {
     hollow_candle: TypeHollowGrayscaleIcon,
 };
 
-const ChartMode = ({
-    ChartTypeMenu,
-    menuOpen,
-    onChartType,
-    onGranularity,
-    Type,
-    displayInterval,
-    portalNodeId,
-}) => {
+const ChartMode = ({ ChartTypeMenu, menuOpen, onChartType, onGranularity, Type, displayInterval, portalNodeId }) => {
     const TypeIcon = TypeMap[Type.id];
     return (
         <ChartTypeMenu
-            className="ciq-display sc-chart-mode"
+            className='ciq-display sc-chart-mode'
             title={t.translate('Chart types')}
             tooltip={t.translate('Chart types')}
             modalMode
@@ -40,18 +32,16 @@ const ChartMode = ({
         >
             <ChartTypeMenu.Title>
                 <div className={classNames('sc-chart-mode__menu', { 'sc-chart-mode__menu--active': menuOpen })}>
-                    <span className="sc-chart-mode__menu__timeperiod">
-                        {displayInterval}
-                    </span>
+                    <span className='sc-chart-mode__menu__timeperiod'>{displayInterval}</span>
                     <TypeIcon tooltip-title={t.translate(Type.text)} />
                 </div>
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
-                <div className="sc-chart-mode__section">
-                    <div className="sc-chart-mode__section__item">
+                <div className='sc-chart-mode__section'>
+                    <div className='sc-chart-mode__section__item'>
                         <ChartTypes newDesign onChange={onChartType} />
                     </div>
-                    <div className="sc-chart-mode__section__item">
+                    <div className='sc-chart-mode__section__item'>
                         <Timeperiod newDesign onChange={onGranularity} />
                     </div>
                 </div>
@@ -61,8 +51,8 @@ const ChartMode = ({
 };
 
 export default connect(({ chartMode, chartType, timeperiod }) => ({
-    ChartTypeMenu   : chartMode.ChartTypeMenu,
-    menuOpen        : chartMode.menu.open,
-    Type            : chartType.type,
-    displayInterval : timeperiod.display,
+    ChartTypeMenu: chartMode.ChartTypeMenu,
+    menuOpen: chartMode.menu.open,
+    Type: chartType.type,
+    displayInterval: timeperiod.display,
 }))(ChartMode);

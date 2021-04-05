@@ -12,7 +12,7 @@ function connectMainStore(mapperFunction) {
 }
 
 function connectCustomStore(mapperFunction, CustomStore) {
-    return (WrappedComponent) => {
+    return WrappedComponent => {
         class StoredComponent extends Component {
             constructor(props) {
                 super(props);
@@ -46,16 +46,16 @@ function connectCustomStore(mapperFunction, CustomStore) {
         }
 
         // make some nice names that will show up in the React Devtools
-        const wrappedDisplayName = WrappedComponent.displayName
-            || WrappedComponent.name
-            || (WrappedComponent.constructor && WrappedComponent.constructor.name)
-            || 'Unknown';
+        const wrappedDisplayName =
+            WrappedComponent.displayName ||
+            WrappedComponent.name ||
+            (WrappedComponent.constructor && WrappedComponent.constructor.name) ||
+            'Unknown';
         StoredComponent.displayName = `unbox-${wrappedDisplayName}`;
 
         return inject(mainStore => ({ mainStore }))(StoredComponent);
     };
 }
-
 
 // if store is not defined, main store is used
 export function connect(mapperFunction, CustomStore) {

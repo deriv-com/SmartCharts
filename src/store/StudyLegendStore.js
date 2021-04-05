@@ -6,27 +6,22 @@ import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog.jsx';
 import Menu from '../components/Menu.jsx';
 import SearchInput from '../components/SearchInput.jsx';
-import { logEvent, LogCategories, LogActions } from  '../utils/ga';
+import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { getIndicatorsTree, ExcludedStudies } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
-import {
-    IndicatorCatTrendLightIcon,
-    IndicatorCatTrendDarkIcon,
-} from '../components/Icons.jsx';
-import MaximizeIcon    from '../../sass/icons/chart/ic-maximize.svg';
-import MinimizeIcon    from '../../sass/icons/common/ic-minimize.svg';
+import { IndicatorCatTrendLightIcon, IndicatorCatTrendDarkIcon } from '../components/Icons.jsx';
+import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
+import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 
 // TODO:
 // import StudyInfo from '../study-info';
 
 const updateFieldHeading = (heading, type) => {
     const names = ['%D', '%K'];
-    if (
-        heading.toLowerCase() === type.toLowerCase()
-        || heading === 'Result'
-    ) {
+    if (heading.toLowerCase() === type.toLowerCase() || heading === 'Result') {
         return 'Color';
-    } if (names.indexOf(heading) > 0) {
+    }
+    if (names.indexOf(heading) > 0) {
         return `${heading} Color`;
     }
     return heading;
@@ -38,7 +33,7 @@ export default class StudyLegendStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
 
-        this.menu = new MenuStore(mainStore, { route:'indicators' });
+        this.menu = new MenuStore(mainStore, { route: 'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper.sd),
@@ -50,24 +45,27 @@ export default class StudyLegendStore {
 
         this.searchInput = React.createRef();
         this.SearchInput = connect(() => ({
-            placeholder: 'Search',
+            placeholder: t.translate('Search'),
             value: this.filterText,
             onChange: this.setFilterText,
             searchInput: this.searchInput,
             searchInputClassName: 'searchInputClassName',
         }))(SearchInput);
 
-        reaction(() => this.menu.open, () => {
-            if (!this.menu.open) {
-                this.setFilterText('');
+        reaction(
+            () => this.menu.open,
+            () => {
+                if (!this.menu.open) {
+                    this.setFilterText('');
+                }
+                setTimeout(() => {
+                    if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
+                }, 400);
             }
-            setTimeout(() => {
-                if (this.searchInput && this.searchInput.current) this.searchInput.current.focus();
-            }, 400);
-        });
+        );
     }
 
-    previousStudies = { };
+    previousStudies = {};
     searchInputClassName;
     @observable selectedTab = 1;
     @observable filterText = '';
@@ -88,15 +86,24 @@ export default class StudyLegendStore {
         this.renderLegend();
     };
 
-    get context() { return this.mainStore.chart.context; }
-    get stx() { return this.context.stx; }
-    get indicatorRatio() { return this.mainStore.chart; }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get stx() {
+        return this.context.stx;
+    }
+    get indicatorRatio() {
+        return this.mainStore.chart;
+    }
 
     get items() {
-        return [...getIndicatorsTree()].map((indicator) => {
+        return [...getIndicatorsTree()].map(indicator => {
             // the only icon which is different on light/dark is trend
             if (indicator.id === 'trend') {
-                indicator.icon = this.mainStore.chartSetting.theme === 'light' ? IndicatorCatTrendLightIcon : IndicatorCatTrendDarkIcon;
+                indicator.icon =
+                    this.mainStore.chartSetting.theme === 'light'
+                        ? IndicatorCatTrendLightIcon
+                        : IndicatorCatTrendDarkIcon;
             }
 
             return indicator;
@@ -105,8 +112,10 @@ export default class StudyLegendStore {
 
     get searchedItems() {
         return [...getIndicatorsTree()]
-            .map((category) => {
-                category.foundItems = category.items.filter(item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1);
+            .map(category => {
+                category.foundItems = category.items.filter(
+                    item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
+                );
                 return category;
             })
             .filter(category => category.foundItems.length);
@@ -116,11 +125,15 @@ export default class StudyLegendStore {
         return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
     }
 
+    get maxAllowedItem() {
+        return this.mainStore.chart.isMobile ? 2 : 5;
+    }
+
     @action.bound removeExtraStudies() {
         if (this.stx.layout && this.stx.layout.studies) {
             Object.keys(this.stx.layout.studies).forEach((study, idx) => {
                 const type = this.stx.layout.studies[study].type;
-                if (idx >= 5 || this.excludedStudies[type]) {
+                if (idx >= this.maxAllowedItem || this.excludedStudies[type]) {
                     setTimeout(() => {
                         CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
                         this.renderLegend();
@@ -133,7 +146,7 @@ export default class StudyLegendStore {
     @action.bound onSelectItem(item) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
-        if (this.stx.layout && addedIndicator < 5) {
+        if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
             const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
             CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
             const sd = CIQ.Studies.addStudy(this.stx, item);
@@ -150,7 +163,9 @@ export default class StudyLegendStore {
 
         const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
         Object.keys(this.stx.panels).forEach((id, index) => {
-            if (index === 0) { return; }
+            if (index === 0) {
+                return;
+            }
             const panelObj = this.stx.panels[id];
             panelObj.percent = heightRatio.percent;
         });
@@ -194,7 +209,7 @@ export default class StudyLegendStore {
             type: 'colorpicker',
             category: 'outputs',
         }));
-        const parameters = helper.parameters.map((par) => {
+        const parameters = helper.parameters.map(par => {
             const shared = {
                 title: t.translate(par.heading),
                 ...attributes[par.name],
@@ -255,18 +270,18 @@ export default class StudyLegendStore {
     }
 
     @action.bound updateStudy(study, items) {
-        const updates = { };
+        const updates = {};
         for (const { id, category, value, type } of items) {
             let isChanged;
             if (type === 'numbercolorpicker') {
-                isChanged = study[category][`${id}Color`] !== value.Color
-                    || study[category][`${id}Value`] !== value.Value;
+                isChanged =
+                    study[category][`${id}Color`] !== value.Color || study[category][`${id}Value`] !== value.Value;
             } else {
                 isChanged = study[category][id] !== value;
             }
 
             if (isChanged) {
-                updates[category] = updates[category] || { };
+                updates[category] = updates[category] || {};
                 if (typeof value === 'object') {
                     for (const suffix in value) {
                         updates[category][`${id}${suffix}`] = value[suffix];
@@ -296,7 +311,9 @@ export default class StudyLegendStore {
 
     shouldRenderLegend() {
         const stx = this.stx;
-        if (!stx.layout.studies) { return false; }
+        if (!stx.layout.studies) {
+            return false;
+        }
 
         // Logic to determine if the studies have changed, otherwise don't re-create the legend
         if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
@@ -307,7 +324,9 @@ export default class StudyLegendStore {
                     break;
                 }
             }
-            if (!foundAChange) { return false; }
+            if (!foundAChange) {
+                return false;
+            }
         }
 
         this.previousStudies = CIQ.shallowClone(stx.layout.studies);
@@ -317,9 +336,25 @@ export default class StudyLegendStore {
     handleDrawPanels = () => {
         const panelsLen = Object.keys(this.stx.panels).length;
         Object.keys(this.stx.panels).forEach((id, index) => {
-            if (index === 0) { return; }
+            if (index === 0) {
+                return;
+            }
 
             const panelObj = this.stx.panels[id];
+            if (this.mainStore.chart.isMobile) {
+                if (panelObj.up.className.indexOf('show') !== -1) {
+                    panelObj.up.className = 'stx-btn-panel';
+                }
+                if (panelObj.down.className.indexOf('show') !== -1) {
+                    panelObj.down.className = 'stx-btn-panel';
+                }
+                if (panelObj.solo.className.indexOf('show') !== -1) {
+                    panelObj.solo.className = 'stx-btn-panel';
+                }
+                if (panelObj.close.className.indexOf('show') !== -1) {
+                    panelObj.close.className = 'stx-btn-panel';
+                }
+            }
             const sd = this.stx.layout.studies[id];
             const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
             if (sd) {
@@ -341,7 +376,7 @@ export default class StudyLegendStore {
                 panelObj.up.style.display = 'none';
             }
 
-            if (index === (panelsLen - 1) || isSolo) {
+            if (index === panelsLen - 1 || isSolo) {
                 panelObj.down.style.display = 'none';
             }
 
@@ -359,13 +394,15 @@ export default class StudyLegendStore {
                 }
             }
         });
-    }
+    };
 
     /**
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
     renderLegend = () => {
-        if (!this.shouldRenderLegend()) { return; }
+        if (!this.context || !this.shouldRenderLegend()) {
+            return;
+        }
 
         this.updateActiveStudies();
         // Temporary prevent user from adding more than 5 indicators
@@ -382,10 +419,14 @@ export default class StudyLegendStore {
         const stx = this.stx;
         const activeItems = [];
 
-        Object.keys(stx.layout.studies || []).forEach((id) => {
+        Object.keys(stx.layout.studies || []).forEach(id => {
             const sd = stx.layout.studies[id];
-            if (sd.customLegend) { return; }
-            const studyObjCategory = getIndicatorsTree().find(category => category.items.find(item => item.id === sd.type));
+            if (sd.customLegend) {
+                return;
+            }
+            const studyObjCategory = getIndicatorsTree().find(category =>
+                category.items.find(item => item.id === sd.type)
+            );
             const studyObj = studyObjCategory.items.find(item => item.id === sd.type);
             if (studyObj) {
                 const nameObj = prepareIndicatorName(sd.name);
@@ -411,7 +452,7 @@ export default class StudyLegendStore {
     @action.bound deleteAllStudies() {
         const stx = this.stx;
         if (stx) {
-            Object.keys(stx.layout.studies || []).forEach((id) => {
+            Object.keys(stx.layout.studies || []).forEach(id => {
                 this.deleteStudy(stx.layout.studies[id]);
             });
             setTimeout(this.updateIndicatorHeight, 20);
@@ -436,7 +477,7 @@ export default class StudyLegendStore {
     }
 
     @action.bound setFilterText(filterText) {
-        this.selectedTab = (filterText !== '') ? 0 : 1;
+        this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
     }
 

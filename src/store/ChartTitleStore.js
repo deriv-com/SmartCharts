@@ -56,16 +56,35 @@ export default class ChartTitleStore {
     enableShowPrice = false;
     searchInputClassName;
 
-    get chart() { return this.mainStore.chart; }
-    get context() { return this.mainStore.chart.context; }
-    get crosshairStore() { return this.mainStore.crosshair; }
-    @computed get currentSymbol() { return this.mainStore.chart.currentActiveSymbol; }
-    @computed get isSymbolOpen() { return this.currentSymbol.exchange_is_open; }
-    @computed get decimalPlaces() { return this.mainStore.chart.currentActiveSymbol.decimal_places; }
-    @computed get isShowChartPrice() { return this.mainStore.chart.isChartAvailable; }
-    @computed get tradingTimes() { return this.mainStore.chart.tradingTimes; }
+    get chart() {
+        return this.mainStore.chart;
+    }
+    get context() {
+        return this.mainStore.chart.context;
+    }
+    get crosshairStore() {
+        return this.mainStore.crosshair;
+    }
+    @computed get currentSymbol() {
+        return this.mainStore.chart.currentActiveSymbol;
+    }
+    @computed get isSymbolOpen() {
+        return this.currentSymbol?.exchange_is_open;
+    }
+    @computed get decimalPlaces() {
+        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+    }
+    @computed get isShowChartPrice() {
+        return this.mainStore.chart.isChartAvailable;
+    }
+    @computed get tradingTimes() {
+        return this.mainStore.chart.tradingTimes;
+    }
     @computed get symbolOpenTime() {
-        const times = this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times : [];
+        const times =
+            this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length
+                ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times
+                : [];
         const now = this.serverTime.getLocalDate().getTime();
         let openTime = times ? times.find(time => time.open.getTime() > now) : null;
 
@@ -76,17 +95,23 @@ export default class ChartTitleStore {
         return { openTime };
     }
     @computed get currentActiveCategory() {
-        if (this.openMarket.category) { return this.openMarket.category; }
+        if (this.openMarket.category) {
+            return this.openMarket.category;
+        }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
     }
 
     @computed get currentActiveSubCategory() {
-        if (this.openMarket.subcategory) { return this.openMarket.subcategory; }
-        return (this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '');
+        if (this.openMarket.subcategory) {
+            return this.openMarket.subcategory;
+        }
+        return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '';
     }
 
     @computed get currentActiveMarket() {
-        if (this.openMarket.market) { return this.openMarket.market; }
+        if (this.openMarket.market) {
+            return this.openMarket.market;
+        }
         return null;
     }
 
@@ -94,18 +119,22 @@ export default class ChartTitleStore {
         this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
 
-        this.tradingTimes.onMarketOpenCloseChanged(action((changes) => {
-            for (const symbol in changes) {
-                if (this.currentSymbol.symbol === symbol) {
-                    this.currentSymbol.exchange_is_open = changes[symbol];
+        this.tradingTimes.onMarketOpenCloseChanged(
+            action(changes => {
+                for (const symbol in changes) {
+                    if (this.currentSymbol.symbol === symbol) {
+                        this.currentSymbol.exchange_is_open = changes[symbol];
+                    }
                 }
-            }
-        }));
+            })
+        );
     };
 
     @action.bound setSymbol(symbolObj) {
         if (this.mainStore.state.symbol !== undefined) {
-            console.error('Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />');
+            console.error(
+                'Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />'
+            );
             return;
         }
 
@@ -113,10 +142,14 @@ export default class ChartTitleStore {
     }
 
     @action.bound update(quote) {
-        if (!this.currentSymbol) { return; }
+        if (!this.currentSymbol) {
+            return;
+        }
 
         const isVisible = quote || !this.isShowChartPrice;
-        if (!isVisible) { return; }
+        if (!isVisible) {
+            return;
+        }
 
         let currentPrice = quote.Close;
         if (currentPrice) {

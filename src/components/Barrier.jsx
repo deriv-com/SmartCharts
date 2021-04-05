@@ -1,40 +1,54 @@
-import React        from 'react';
-import classNames   from 'classnames';
-import { connect }  from '../store/Connect';
+import React from 'react';
+import classNames from 'classnames';
+import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 
-const Barrier = React.memo(({
-    shadeColor = '#39b19d',
-    color = '#39b19d',
-    foregroundColor = '#ffffff',
-    HighPriceLine,
-    LowPriceLine,
-    AboveShade,
-    BetweenShade,
-    BelowShade,
-    hidePriceLines,
-    lineStyle,
-    isInitialized,
-    priceLabelWidth,
-    isSingleBarrier,
-    ...props
-}) => (isInitialized && (
-    <div
-        className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
-        style={{ '--shade-color': shadeColor }}
-    >
-        <HighPriceLine width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />
-        { !isSingleBarrier && (
-            <>
-                <LowPriceLine  width={priceLabelWidth} lineStyle={lineStyle} color={color} foregroundColor={foregroundColor} {...props} />
-                <AboveShade />
-                <BetweenShade />
-                <BelowShade />
-            </>
-        )}
-    </div>
-)));
-
+const Barrier = React.memo(
+    ({
+        shadeColor = '#39b19d',
+        color = '#39b19d',
+        foregroundColor = '#ffffff',
+        HighPriceLine,
+        LowPriceLine,
+        AboveShade,
+        BetweenShade,
+        BelowShade,
+        hidePriceLines,
+        lineStyle,
+        isInitialized,
+        priceLabelWidth,
+        isSingleBarrier,
+        ...props
+    }) =>
+        isInitialized && (
+            <div
+                className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
+                style={{ '--shade-color': shadeColor }}
+            >
+                <HighPriceLine
+                    width={priceLabelWidth}
+                    lineStyle={lineStyle}
+                    color={color}
+                    foregroundColor={foregroundColor}
+                    {...props}
+                />
+                {!isSingleBarrier && (
+                    <>
+                        <LowPriceLine
+                            width={priceLabelWidth}
+                            lineStyle={lineStyle}
+                            color={color}
+                            foregroundColor={foregroundColor}
+                            {...props}
+                        />
+                        <AboveShade />
+                        <BetweenShade />
+                        <BelowShade />
+                    </>
+                )}
+            </div>
+        )
+);
 
 export default connect(
     store => ({
@@ -58,5 +72,5 @@ export default connect(
         isSingleBarrier: store.isSingleBarrier,
         opacityOnOverlap: store.opacityOnOverlap,
     }),
-    BarrierStore,
+    BarrierStore
 )(Barrier);

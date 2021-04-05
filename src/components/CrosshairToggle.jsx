@@ -3,13 +3,7 @@ import { connect } from '../store/Connect';
 import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons.jsx';
 import { Toggle } from './Form.jsx';
 
-const CrosshairToggle = ({
-    state,
-    setCrosshairState,
-    onChange,
-    updateProps,
-    isVisible = true,
-}) => {
+const CrosshairToggle = ({ state, setCrosshairState, onChange, updateProps, isVisible = true }) => {
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
 
     const onCrosshairToggle = () => {
@@ -21,17 +15,14 @@ const CrosshairToggle = ({
     if (!isVisible) return null;
 
     return (
-        <Toggle
-            active={state !== 0}
-            onChange={onCrosshairToggle}
-        >
+        <Toggle active={state !== 0} onChange={onCrosshairToggle}>
             <CrosshairIcon />
         </Toggle>
     );
 };
 
 export default connect(({ crosshair }) => ({
-    state: (typeof crosshair.state !== 'number') ? 0 : crosshair.state,
+    state: typeof crosshair.state !== 'number' ? 0 : crosshair.state,
     setCrosshairState: crosshair.setCrosshairState,
     updateProps: crosshair.updateProps,
 }))(CrosshairToggle);
