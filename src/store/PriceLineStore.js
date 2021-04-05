@@ -124,10 +124,6 @@ export default class PriceLineStore {
         return this.relative ? this.mainStore.chart.currentCloseQuote().Close + this._price : this._price;
     }
 
-    get yAxiswidth() {
-        return this.mainStore.chart.yAxiswidth;
-    }
-
     @action.bound setDragLine(el) {
         this._line = el;
         if (this._line) {
