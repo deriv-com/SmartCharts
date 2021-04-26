@@ -61,7 +61,8 @@
 .sc-mcd__filter,
 .sc-mcd__category__head .category-title-left,
 .sc-mcd__category__head {
-    .ic-icon > svg {
+    // temp workaround for cryptocurrency svg icon that cannot be themed
+    .ic-icon:not(.ic-cryptocurrency) > svg {
         @include themify($themes) {
             fill: themed('MenuIcon');
             stroke: themed('MenuIcon');
@@ -141,11 +142,19 @@
     }
 }
 
-.smartcharts-mobile {
-    .cq-chart-controls .ciq-menu {
-        padding: 0px;
+.smartcharts {
+    // temp workaround for svg icon that cannot be themed
+    &-dark {
+        .ic-cryptocurrency > svg {
+            filter: brightness(3);
+        }
     }
-    br, .ic-subtitle {
-        display: none;
+    &-mobile {
+        .cq-chart-controls .ciq-menu {
+            padding: 0px;
+        }
+        br, .ic-subtitle {
+            display: none;
+        }
     }
 }
