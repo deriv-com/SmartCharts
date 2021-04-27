@@ -149,6 +149,13 @@ import XLMUSD from '../../sass/icons/active-symbols/cryptos/ic-xlmusd.svg';
 import XMRUSD from '../../sass/icons/active-symbols/cryptos/ic-xmrusd.svg';
 import ZECUSD from '../../sass/icons/active-symbols/cryptos/ic-zecusd.svg';
 import BTCETH from '../../sass/icons/active-symbols/cryptos/ic-btceth.svg';
+import DSHUSD from '../../sass/icons/active-symbols/cryptos/ic-dshusd.svg';
+import ETHUSD from '../../sass/icons/active-symbols/cryptos/ic-ethusd.svg';
+import BCHUSD from '../../sass/icons/active-symbols/cryptos/ic-bchusd.svg';
+import LTCUSD from '../../sass/icons/active-symbols/cryptos/ic-ltcusd.svg';
+import EOSUSD from '../../sass/icons/active-symbols/cryptos/ic-eosusd.svg';
+import XRPUSD from '../../sass/icons/active-symbols/cryptos/ic-xrpusd.svg';
+import BTCUSD from '../../sass/icons/active-symbols/cryptos/ic-btcusd.svg';
 
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
@@ -507,6 +514,13 @@ export const ItemIconMap = {
     cryZECUSD: Wrapper(ZECUSD),
     cryXMRUSD: Wrapper(XMRUSD),
     cryXLMUSD: Wrapper(XLMUSD),
+    cryDSHUSD: Wrapper(DSHUSD),
+    cryETHUSD: Wrapper(ETHUSD),
+    cryBCHUSD: Wrapper(BCHUSD),
+    cryLTCUSD: Wrapper(LTCUSD),
+    cryEOSUSD: Wrapper(EOSUSD),
+    cryXRPUSD: Wrapper(XRPUSD),
+    cryBTCUSD: Wrapper(BTCUSD),
 };
 
 function createCompositeIcon(A, B, icId) {
