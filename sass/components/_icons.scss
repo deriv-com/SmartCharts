@@ -61,8 +61,7 @@
 .sc-mcd__filter,
 .sc-mcd__category__head .category-title-left,
 .sc-mcd__category__head {
-    // temp workaround for cryptocurrency svg icon that cannot be themed
-    .ic-icon:not(.ic-cryptocurrency) > svg {
+    .ic-icon > svg {
         @include themify($themes) {
             fill: themed('MenuIcon');
             stroke: themed('MenuIcon');
@@ -144,9 +143,17 @@
 
 .smartcharts {
     // temp workaround for svg icon that cannot be themed
+    .ic-cryptocurrency > svg {
+        stroke: none !important;
+    }
     &-dark {
         .ic-cryptocurrency > svg {
             filter: brightness(3);
+        }
+        .sc-mcd__filter__item--selected {
+            .ic-cryptocurrency > svg {
+                filter: brightness(6);
+            }
         }
     }
     &-mobile {
