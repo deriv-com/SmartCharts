@@ -2,7 +2,7 @@ import { observable, action, computed, runInAction } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 
-const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
+const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
 export default class ActiveSymbols {
     @observable changes = {};
