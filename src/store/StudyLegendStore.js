@@ -125,6 +125,10 @@ export default class StudyLegendStore {
         return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
     }
 
+    get hasPredictionIndicator() {
+        return (this.activeItems || []).filter(item => item.isPrediction).length > 0;
+    }
+
     get maxAllowedItem() {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }

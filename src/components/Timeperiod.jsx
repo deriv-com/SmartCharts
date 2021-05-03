@@ -1,11 +1,66 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useEffect } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { connect } from '../store/Connect';
 import Tooltip from './Tooltip.jsx';
 import { InlineLoader } from './Loader.jsx';
 import { Intervals } from '../Constant';
 import '../../sass/components/_timeperiod.scss';
+
+const enableLoader = (isLoading, inval, preparingInterval) => isLoading && inval === preparingInterval;
+const enableTooltip = (isMobile, key, chartType_id) => !isMobile && chartType_id !== 'mountain' && key === 'tick';
+
+const TimeperiodItem = React.memo(
+    ({ item, category, isLoading, isMobile, chartTypeId, interval, timeUnit, preparingInterval, onClick }) => {
+        const is_tick = React.useMemo(() => category.key === 'tick', [category]);
+        const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, preparingInterval), [
+            isLoading,
+            item,
+            preparingInterval,
+        ]);
+        const enable_tooltip = React.useMemo(() => enableTooltip(isMobile, category.key, chartTypeId), [
+            isMobile,
+            category.key,
+            chartTypeId,
+        ]);
+        const is_disabled = React.useMemo(() => is_tick && chartTypeId !== 'mountain', [is_tick, chartTypeId]);
+        const is_active = React.useMemo(
+            () =>
+                timeUnit === category.key &&
+                (((category.key === 'minute' || is_tick) && item.num === interval) ||
+                    (category.key === 'hour' && item.num === interval / 60) ||
+                    (category.key === 'day' && item.num === 1)),
+            [is_tick, category, item, interval, timeUnit]
+        );
+
+        const handleClick = React.useCallback(() => onClick(chartTypeId, category.key, item.interval), [
+            chartTypeId,
+            category,
+            item,
+            onClick,
+        ]);
+
+        return (
+            <Tooltip
+                key={item.interval}
+                onClick={handleClick}
+                className={classNames('sc-interval__item', {
+                    'sc-interval__item--active': is_active,
+                    'sc-interval__item--disabled': is_disabled,
+                    'pre-loading': is_loading,
+                })}
+                enabled={enable_tooltip}
+                content={t.translate('Available only for "Area" chart type.')}
+            >
+                <InlineLoader enabled={is_loading}>
+                    <span>
+                        {item.num} {t.translate(item.num === 1 ? category.single : category.plural)}
+                    </span>
+                </InlineLoader>
+            </Tooltip>
+        );
+    }
+);
 
 const Timeperiod = ({
     chartId,
@@ -14,76 +69,47 @@ const Timeperiod = ({
     isMobile,
     onChange,
     updateProps,
-    newDesign,
-    chartType,
+    chartTypeId,
     isLoading,
-    setPreparingInterval,
     preparingInterval,
+    changeGranularity,
 }) => {
-    const onGranularityClick = granularity => {
-        onChange(granularity, chartId);
-    };
-    const onIntervalClick = (chartTypeId, key, inval) => {
-        if (key === 'tick' && chartTypeId !== 'mountain') {
+    const onIntervalClick = (chart_type_id, key, inval) => {
+        if (key === 'tick' && chart_type_id !== 'mountain') {
             return;
         }
-        setPreparingInterval(inval);
-        onGranularityClick(inval);
+        changeGranularity(inval, chartId);
     };
-    const enableTooltip = key => chartType.id !== 'mountain' && !isMobile && key === 'tick';
-    const enableLoader = inval => isLoading && inval === preparingInterval;
-    const ItemClassName = (unit, time) => {
-        let className = 'sc-interval__item';
+    React.useEffect(() => updateProps(onChange));
 
-        if (
-            timeUnit === unit &&
-            (((unit === 'minute' || unit === 'tick') && time === interval) ||
-                (unit === 'hour' && time === interval / 60) ||
-                (unit === 'day' && time === 1))
-        ) {
-            className += ' sc-interval__item--active';
-        } else if (unit === 'tick' && chartType.id !== 'mountain') {
-            className += ' sc-interval__item--disabled';
-        }
-
-        return className;
-    };
-
-    useEffect(() => updateProps(onChange));
-
-    if (newDesign) {
-        return (
-            <div className='sc-interval'>
-                <div className='sc-interval__head'>
-                    <strong>{t.translate('Time interval')}</strong>
-                </div>
-                <div className='sc-interval__info'>
-                    {t.translate('Tick interval only available for "Area" Chart type.')}
-                </div>
-                <div className='sc-interval__content'>
-                    {Intervals.map(category =>
-                        category.items.map(item => (
-                            <Tooltip
-                                key={item.interval}
-                                onClick={() => onIntervalClick(chartType.id, category.key, item.interval)}
-                                className={classNames(ItemClassName(category.key, item.num), {
-                                    'pre-loading': enableLoader(item.interval),
-                                })}
-                                enabled={enableTooltip(category.key)}
-                                content={t.translate('Available only for "Area" chart type.')}
-                            >
-                                <InlineLoader enabled={enableLoader(item.interval)}>
-                                    <span>
-                                        {item.num} {t.translate(item.num === 1 ? category.single : category.plural)}
-                                    </span>
-                                </InlineLoader>
-                            </Tooltip>
-                        ))
-                    )}
-                </div>
+    return (
+        <div className='sc-interval'>
+            <div className='sc-interval__head'>
+                <strong>{t.translate('Time interval')}</strong>
             </div>
-        );
-    }
+            <div className='sc-interval__info'>
+                {t.translate('Tick interval only available for "Area" Chart type.')}
+            </div>
+            <div className='sc-interval__content'>
+                {Intervals.map(category =>
+                    category.items.map(item => (
+                        <TimeperiodItem
+                            key={item.interval}
+                            item={item}
+                            category={category}
+                            isLoading={isLoading}
+                            isMobile={isMobile}
+                            chartTypeId={chartTypeId}
+                            interval={interval}
+                            timeUnit={timeUnit}
+                            preparingInterval={preparingInterval}
+                            onClick={onIntervalClick}
+                        />
+                    ))
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default connect(({ timeperiod: s, chart, chartType, loader }) => ({
@@ -93,8 +119,8 @@ export default connect(({ timeperiod: s, chart, chartType, loader }) => ({
     isMobile: s.mainStore.chart.isMobile,
     onChange: s.setGranularity,
     updateProps: s.updateProps,
-    chartType: chartType.type,
+    chartTypeId: chartType.type.id,
     isLoading: loader.isActive,
     preparingInterval: s.preparingInterval,
-    setPreparingInterval: s.setPreparingInterval,
+    changeGranularity: s.changeGranularity,
 }))(Timeperiod);

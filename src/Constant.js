@@ -69,6 +69,7 @@ export const getIndicatorsTree = () => [
                     "The Awesome Oscillator is an indicator used to measure market momentum. AO calculates the difference of a 34 Period and 5 Period Simple Moving Averages. The Simple Moving Averages that are used are not calculated using closing price but rather each bar's midpoints. AO is generally used to affirm trends or to anticipate possible reversals."
                 ),
                 icon: IndicatorAwesomeOscillatorIcon,
+                isPrediction: true,
             },
             {
                 id: 'Detrended',
@@ -85,6 +86,7 @@ export const getIndicatorsTree = () => [
                     'The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligator indicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase (absence of a trend) is when the bars on both sides are red. The awakening phase (formation of a trend) is when there are red and green bars on both sides. When there are green bars on both sides, it indicates the eating phase (trend strengthening). A solitary red bar appearing after the eating phase indicates the beginning of the sated phase (trend approaching its end).'
                 ),
                 icon: IndicatorGatorIcon,
+                isPrediction: true,
             },
             {
                 id: 'macd',
@@ -93,6 +95,7 @@ export const getIndicatorsTree = () => [
                     "MACD is a trading indicator used in technical analysis of stock prices. It is supposed to reveal changes in the strength, direction, momentum, and duration of a trend in a stock's price."
                 ),
                 icon: IndicatorMacdIcon,
+                isPrediction: true,
             },
             {
                 id: 'Price ROC',
@@ -133,6 +136,7 @@ export const getIndicatorsTree = () => [
                     'Developed by Larry Williams, Williams %R is a momentum indicator that is the inverse of the Fast Stochastic Oscillator. Also referred to as %R, Williams %R reflects the level of the close relative to the highest high for the look-back period.'
                 ),
                 icon: IndicatorWilliamPercentIcon,
+                isPrediction: true,
             },
         ],
     },
@@ -148,6 +152,7 @@ export const getIndicatorsTree = () => [
                     'Developed by Tushar Chande in 1995, Aroon is an indicator system that determines whether a stock is trending or not and how strong the trend is. There are two separate indicators: Aroon-Up and Aroon-Down. A 25-day Aroon-Up measures the number of days since a 25-day high. A 25-day Aroon-Down measures the number of days since a 25-day low.'
                 ),
                 icon: IndicatorAroonIcon,
+                isPrediction: true,
             },
             {
                 id: 'ADX',
@@ -156,6 +161,7 @@ export const getIndicatorsTree = () => [
                     'The Average Directional Movement Index index (ADX) was developed in 1978 by J. Welles Wilder as an indicator of trend strength in a series of prices of a financial instrument ADX will range between 0 and 100. Generally, ADX readings below 20 indicate trend weakness, and readings above 40 indicate trend strength.'
                 ),
                 icon: IndicatorAdxIcon,
+                isPrediction: true,
             },
             {
                 id: 'CCI',
@@ -164,6 +170,7 @@ export const getIndicatorsTree = () => [
                     'The Commodity Channel Index (CCI) is a versatile indicator that can be used to identify a new trend or warn of extreme conditions.'
                 ),
                 icon: IndicatorCommodityChannelIndexIcon,
+                isPrediction: true,
             },
             {
                 id: 'Ichimoku Clouds',
@@ -172,6 +179,7 @@ export const getIndicatorsTree = () => [
                     'The Ichimoku Cloud, also known as Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistance, identifies trend direction, gauges momentum and provides trading signals. Ichimoku Kinko Hyo translates into “one look equilibrium chart”.'
                 ),
                 icon: IndicatorIchimokuIcon,
+                isPrediction: true,
             },
             {
                 id: 'PSAR',
@@ -180,6 +188,7 @@ export const getIndicatorsTree = () => [
                     'The parabolic SAR is calculated almost independently for each trend in the price. When the price is in an uptrend, the SAR emerges below the price and converges upwards towards it. Similarly, on a downtrend, the SAR emerges above the price and converges downwards. At each step within a trend, the SAR is calculated one period in advance.'
                 ),
                 icon: IndicatorParabolicIcon,
+                isPrediction: true,
             },
             {
                 id: 'ZigZag',
@@ -188,6 +197,7 @@ export const getIndicatorsTree = () => [
                     'Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.'
                 ),
                 icon: IndicatorZigZagIcon,
+                isPrediction: true,
             },
         ],
     },
@@ -211,6 +221,7 @@ export const getIndicatorsTree = () => [
                     'The Donchian Channel is an indicator used in market trading developed by Richard Donchian. It is formed by taking the highest high and the lowest low of the last n periods. The area between the high and the low is the channel for the period chosen.'
                 ),
                 icon: IndicatorDonchianIcon,
+                isPrediction: true,
             },
         ],
     },
@@ -226,6 +237,7 @@ export const getIndicatorsTree = () => [
                     'The Moving Average (MA) helps to identify the overall market trend by filtering out short-term price fluctuations. Using historical data, it calculates the average price over a specific period and plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, a downtrend if it moves downwards. A buy signal occurs when the price moves above the MA line.'
                 ),
                 icon: IndicatorAveragesIcon,
+                isPrediction: true,
             },
             {
                 id: 'MA Env',
@@ -234,6 +246,7 @@ export const getIndicatorsTree = () => [
                     'The Moving Average Envelope (MAE) helps to identify strong price movement that indicates the start of a trend. The MAE creates a moving average line as well as 2 bands around it. In theory, when the market price touches the upper or lower bands, a trend reversal will occur, indicating a buy signal.'
                 ),
                 icon: IndicatorEnvelopeIcon,
+                isPrediction: true,
             },
             {
                 id: 'Rainbow MA',
@@ -242,6 +255,7 @@ export const getIndicatorsTree = () => [
                     'The Rainbow Moving Average (RMA) displays several moving average lines simultaneously. When the lines intersect, it’s an indicator of price reversal and the angle of the lines are helpful to predict the trend strength. The steeper the curve, the stronger the trend. When the price crosses the moving average lines from below, it signals an upward trend. When the price crosses the moving average lines from above, it signals a downward trend. The RMA is easier to use compared to using several different moving average indicators at once.'
                 ),
                 icon: IndicatorRainbowIcon,
+                isPrediction: true,
             },
         ],
     },
@@ -257,6 +271,7 @@ export const getIndicatorsTree = () => [
                     'Bill Williams introduced the Alligator indicator in 1995. The Alligator is as much a metaphor as it is an indicator. It consists of three lines, overlaid on a pricing chart, that represent the jaw, the teeth and the lips of the beast, and was created to help the trader confirm the presence of a trend and its direction. The Alligator indicator can also help traders designate impulse and corrective wave formations, but the tool works best when combined with a momentum indicator.'
                 ),
                 icon: IndicatorAlligatorIcon,
+                isPrediction: true,
             },
             {
                 id: 'Fractal Chaos Bands',
@@ -265,6 +280,7 @@ export const getIndicatorsTree = () => [
                     'Fractals are indicators on candlestick charts that identify reversal points in the market. Traders often use fractals to get an idea about the direction in which the price will develop. A fractal will form when a particular price pattern happens on a chart.'
                 ),
                 icon: IndicatorFractalChaosIcon,
+                isPrediction: true,
             },
         ],
     },

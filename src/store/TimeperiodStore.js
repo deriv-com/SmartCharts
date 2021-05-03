@@ -163,8 +163,9 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setPreparingInterval(interval) {
+    @action.bound changeGranularity(interval) {
         this.preparingInterval = interval;
+        this.onGranularityChange(interval);
     }
 
     @action.bound updateDisplay() {
