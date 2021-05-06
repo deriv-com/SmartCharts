@@ -2,6 +2,8 @@ import { observable, action, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 import ServerTime from '../utils/ServerTime';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
+import SettingsDialogStore from './SettingsDialogStore';
+import IndicatorPredictionDialog from '../components/IndicatorPredictionDialog.jsx';
 
 const UnitMap = {
     tick: 'T',
@@ -19,6 +21,11 @@ const TimeMap = {
 export default class TimeperiodStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
+        this.predictionIndicator = new SettingsDialogStore({
+            mainStore,
+        });
+        this.PredictionIndicatorDialog = this.predictionIndicator.connect(IndicatorPredictionDialog);
+
         this._serverTime = ServerTime.getInstance();
         when(() => this.context, this.onContextReady);
     }
@@ -164,8 +171,13 @@ export default class TimeperiodStore {
     }
 
     @action.bound changeGranularity(interval) {
-        this.preparingInterval = interval;
-        this.onGranularityChange(interval);
+        if (this.mainStore.studies.hasPredictionIndicator) {
+            // show the dialog
+            this.predictionIndicator.setOpen(true);
+        } else {
+            this.preparingInterval = interval;
+            this.onGranularityChange(interval);
+        }
     }
 
     @action.bound updateDisplay() {
