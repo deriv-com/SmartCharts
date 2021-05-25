@@ -214,6 +214,15 @@
                 opacity: 0.3;
                 pointer-events: none;
             }
+            &--disabled-prediction {
+                .info {
+                    opacity: 0.3;
+                    pointer-events: none;
+                }
+                .detail {
+                    opacity: 0;
+                }
+            }
         }
     }
     &__category {

@@ -73,6 +73,8 @@ const Timeperiod = ({
     isLoading,
     preparingInterval,
     changeGranularity,
+    updatePortalNode,
+    portalNodeId,
 }) => {
     const onIntervalClick = (chart_type_id, key, inval) => {
         if (key === 'tick' && chart_type_id !== 'mountain') {
@@ -81,6 +83,7 @@ const Timeperiod = ({
         changeGranularity(inval, chartId);
     };
     React.useEffect(() => updateProps(onChange));
+    updatePortalNode(portalNodeId);
 
     return (
         <div className='sc-interval'>
@@ -123,4 +126,5 @@ export default connect(({ timeperiod: s, chart, chartType, loader }) => ({
     isLoading: loader.isActive,
     preparingInterval: s.preparingInterval,
     changeGranularity: s.changeGranularity,
+    updatePortalNode: s.updatePortalNode,
 }))(Timeperiod);

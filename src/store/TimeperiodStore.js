@@ -2,7 +2,7 @@ import { observable, action, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 import ServerTime from '../utils/ServerTime';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import SettingsDialogStore from './SettingsDialogStore';
+import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
 import IndicatorPredictionDialog from '../components/IndicatorPredictionDialog.jsx';
 
 const UnitMap = {
@@ -19,9 +19,11 @@ const TimeMap = {
 };
 
 export default class TimeperiodStore {
+    @observable portalNodeIdChanged;
+
     constructor(mainStore) {
         this.mainStore = mainStore;
-        this.predictionIndicator = new SettingsDialogStore({
+        this.predictionIndicator = new IndicatorPredictionDialogStore({
             mainStore,
         });
         this.PredictionIndicatorDialog = this.predictionIndicator.connect(IndicatorPredictionDialog);
@@ -48,6 +50,8 @@ export default class TimeperiodStore {
     @observable timeUnit = null;
     @observable interval = null;
     @observable preparingInterval = null;
+    @observable portalNodeIdChanged;
+
     onGranularityChange = () => null;
 
     remain = null;
@@ -171,8 +175,8 @@ export default class TimeperiodStore {
     }
 
     @action.bound changeGranularity(interval) {
-        if (this.mainStore.studies.hasPredictionIndicator) {
-            // show the dialog
+        if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
+            this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
         } else {
             this.preparingInterval = interval;
@@ -201,4 +205,8 @@ export default class TimeperiodStore {
         }
         return y;
     };
+
+    @action.bound updatePortalNode(portalNodeId) {
+        this.portalNodeIdChanged = portalNodeId;
+    }
 }

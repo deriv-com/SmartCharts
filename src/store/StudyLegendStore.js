@@ -453,6 +453,18 @@ export default class StudyLegendStore {
         this.activeItems = activeItems;
     }
 
+    @action.bound deletePredictionStudies() {
+        const stx = this.stx;
+        if (stx) {
+            (this.activeItems || [])
+                .filter(item => item.isPrediction)
+                .forEach(item => {
+                    this.deleteStudy(item.dataObject.sd);
+                });
+            setTimeout(this.updateIndicatorHeight, 20);
+        }
+    }
+
     @action.bound deleteAllStudies() {
         const stx = this.stx;
         if (stx) {

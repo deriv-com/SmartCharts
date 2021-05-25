@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import NotificationBadge from './NotificationBadge.jsx';
 import Tooltip from './Tooltip.jsx';
 import Scroll from './Scroll.jsx';
@@ -33,14 +34,24 @@ const NoResultView = ({ text }) => (
     </div>
 );
 
-const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll }) => (
+const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll, isTick }) => (
     <div className='sc-studies__list'>
         {items.map(Item => (
             <Tooltip
                 key={`item--${Item.id}`}
-                className={`sc-studies__list__item ${disableAll && 'sc-studies__list__item--disabled'}`}
-                enabled={!!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30)}
-                content={`${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`}
+                className={classNames('sc-studies__list__item ', {
+                    'sc-studies__list__item--disabled': disableAll,
+                    'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
+                })}
+                enabled={
+                    !!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30) ||
+                    (Item.isPrediction && isTick)
+                }
+                content={
+                    Item.isPrediction && isTick
+                        ? 'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
+                        : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
+                }
             >
                 <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
                     <StudyIcon Icon={Item.icon} />
@@ -59,7 +70,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
     </div>
 );
 
-const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll }) => (
+const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll, isTick }) => (
     <Scroll autoHide>
         {categories.map(Category => (
             <div key={Category.id} className='sc-studies__category'>
@@ -70,6 +81,7 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disab
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
                         disableAll={disableAll}
+                        isTick={isTick}
                     />
                 </div>
             </div>
@@ -109,6 +121,7 @@ const TabularDisplay = ({
     searchQuery,
     isMobile,
     maxAllowedItem,
+    isTick,
 }) => (
     <Tabs className='tabs--vertical' selectedIndex={selectedTab} onSelect={onSelectTab}>
         <TabList>
@@ -133,6 +146,7 @@ const TabularDisplay = ({
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
                         disableAll={activeItems.length === (isMobile ? 2 : 5)}
+                        isTick={isTick}
                     />
                 ) : (
                     <NoResultView text={searchQuery} />
@@ -163,6 +177,7 @@ const TabularDisplay = ({
                         onInfoItem={onInfoItem}
                         items={Category.items}
                         disableAll={activeItems.length === maxAllowedItem}
+                        isTick={isTick}
                     />
                 </div>
             </TabPanel>
@@ -193,6 +208,7 @@ const StudyLegend = ({
     portalNodeId,
     updatePortalNode,
     maxAllowedItem,
+    isTick,
 }) => {
     updatePortalNode(portalNodeId);
     return (
@@ -254,13 +270,14 @@ const StudyLegend = ({
                     searchQuery={searchQuery}
                     isMobile={isMobile}
                     maxAllowedItem={maxAllowedItem}
+                    isTick={isTick}
                 />
             </StudyMenu.Body>
         </StudyMenu>
     );
 };
 
-export default connect(({ studies: st, chart }) => ({
+export default connect(({ studies: st, chart, timeperiod }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
     StudyMenu: st.StudyMenu,
@@ -282,4 +299,5 @@ export default connect(({ studies: st, chart }) => ({
     infoItem: st.infoItem,
     updatePortalNode: st.updatePortalNode,
     maxAllowedItem: st.maxAllowedItem,
+    isTick: timeperiod.isTick,
 }))(StudyLegend);
