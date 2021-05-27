@@ -137,6 +137,11 @@ import Boom1000 from '../../sass/icons/active-symbols/volatility/boom1000 index/
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 import Step from '../../sass/icons/active-symbols/volatility/step index/step index.svg';
+import JD10 from '../../sass/icons/active-symbols/volatility/jd10 index/ic-10-index.svg';
+import JD25 from '../../sass/icons/active-symbols/volatility/jd25 index/ic-25-index.svg';
+import JD50 from '../../sass/icons/active-symbols/volatility/jd50 index/ic-50-index.svg';
+import JD75 from '../../sass/icons/active-symbols/volatility/jd75 index/ic-75-index.svg';
+import JD100 from '../../sass/icons/active-symbols/volatility/jd100 index/ic-100-index.svg';
 
 /* Cryptocurrency */
 import BNBUSD from '../../sass/icons/active-symbols/cryptos/ic-bnbusd.svg';
@@ -503,6 +508,11 @@ export const ItemIconMap = {
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
     stpRNG: Wrapper(Step),
+    JD10: Wrapper(JD10),
+    JD25: Wrapper(JD25),
+    JD50: Wrapper(JD50),
+    JD75: Wrapper(JD75),
+    JD100: Wrapper(JD100),
     /* Cryptocurrency Indices */
     cryBNBUSD: Wrapper(BNBUSD),
     cryBTCLTC: Wrapper(BTCLTC),
