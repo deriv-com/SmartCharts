@@ -37,35 +37,39 @@ const NoResultView = ({ text }) => (
 const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll, isTick }) => (
     <div className='sc-studies__list'>
         {items.map(Item => (
-            <Tooltip
+            <div
                 key={`item--${Item.id}`}
                 className={classNames('sc-studies__list__item ', {
                     'sc-studies__list__item--disabled': disableAll,
                     'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
                 })}
-                enabled={
-                    !!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30) ||
-                    (Item.isPrediction && isTick)
-                }
-                content={
-                    Item.isPrediction && isTick
-                        ? 'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
-                        : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
-                }
             >
-                <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
-                    <StudyIcon Icon={Item.icon} />
-                    <div className='text'>
-                        <span>{Item.name}</span>
-                        {Item.bars && <small>({Item.bars})</small>}
+                <Tooltip
+                    className='sc-studies__list__item__box'
+                    enabled={
+                        !!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30) ||
+                        (Item.isPrediction && isTick)
+                    }
+                    content={
+                        Item.isPrediction && isTick
+                            ? 'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
+                            : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
+                    }
+                >
+                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
+                        <StudyIcon Icon={Item.icon} />
+                        <div className='text'>
+                            <span>{Item.name}</span>
+                            {Item.bars && <small>({Item.bars})</small>}
+                        </div>
                     </div>
-                </div>
-                <div className='detail'>
-                    {onInfoItem && <InfoCircleIcon className='ic-info' onClick={() => onInfoItem(Item)} />}
-                    {onEditItem && <SettingIcon onClick={() => onEditItem(Item.dataObject)} />}
-                    {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />}
-                </div>
-            </Tooltip>
+                    <div className='detail'>
+                        {onInfoItem && <InfoCircleIcon className='ic-info' onClick={() => onInfoItem(Item)} />}
+                        {onEditItem && <SettingIcon onClick={() => onEditItem(Item.dataObject)} />}
+                        {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />}
+                    </div>
+                </Tooltip>
+            </div>
         ))}
     </div>
 );
@@ -139,7 +143,7 @@ const TabularDisplay = ({
             ))}
         </TabList>
         <TabPanel key='panel--search'>
-            <div className='sc-studies__panel'>
+            <div className='sc-studies__panel sc-studies__panel--search'>
                 {searchedCategories.length ? (
                     <TabularDisplaySearchPanel
                         categories={searchedCategories}
