@@ -95,7 +95,6 @@ export const getIndicatorsTree = () => [
                     "MACD is a trading indicator used in technical analysis of stock prices. It is supposed to reveal changes in the strength, direction, momentum, and duration of a trend in a stock's price."
                 ),
                 icon: IndicatorMacdIcon,
-                isPrediction: true,
             },
             {
                 id: 'Price ROC',
@@ -120,6 +119,7 @@ export const getIndicatorsTree = () => [
                     "A technical momentum indicator that compares a security's closing price to its price range over a given time period. The oscillator's sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result."
                 ),
                 icon: IndicatorStochasticOscillatorIcon,
+                isPrediction: true,
             },
             {
                 id: 'Stch Mtm',
@@ -152,7 +152,6 @@ export const getIndicatorsTree = () => [
                     'Developed by Tushar Chande in 1995, Aroon is an indicator system that determines whether a stock is trending or not and how strong the trend is. There are two separate indicators: Aroon-Up and Aroon-Down. A 25-day Aroon-Up measures the number of days since a 25-day high. A 25-day Aroon-Down measures the number of days since a 25-day low.'
                 ),
                 icon: IndicatorAroonIcon,
-                isPrediction: true,
             },
             {
                 id: 'ADX',
@@ -237,7 +236,6 @@ export const getIndicatorsTree = () => [
                     'The Moving Average (MA) helps to identify the overall market trend by filtering out short-term price fluctuations. Using historical data, it calculates the average price over a specific period and plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, a downtrend if it moves downwards. A buy signal occurs when the price moves above the MA line.'
                 ),
                 icon: IndicatorAveragesIcon,
-                isPrediction: true,
             },
             {
                 id: 'MA Env',
