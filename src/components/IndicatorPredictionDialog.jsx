@@ -12,10 +12,11 @@ const IndicatorPredictionDialog = ({ Dialog, dialogPortalNodeId, onCancel, onCon
         <Dialog.Title />
         <Dialog.Body>
             <div className='cq-indicator-prediction'>
-                <strong>Are you sure?</strong>
+                <strong>{t.translate('Are you sure?')}</strong>
                 <p>
-                    Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval,
-                    these indicators will be removed from your chart.
+                    {t.translate(
+                        'Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.'
+                    )}
                 </p>
                 <div className='cq-indicator-prediction__footer'>
                     <button type='button' className='sc-btn sc-btn--outline-secondary' onClick={onCancel}>

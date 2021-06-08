@@ -243,9 +243,6 @@
                     opacity: 0.3;
                     pointer-events: none;
                 }
-                .detail {
-                    opacity: 0;
-                }
             }
         }
     }
@@ -285,17 +282,35 @@
         &__content {
             margin: -20px -20px 0;
             padding: 0;
+
+            p {
+                padding: 16px 24px;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                margin: 0px;
+            }
         }
-        p {
-            font-size: 14px;
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1.43;
-            letter-spacing: normal;
-            margin: 0px;
-        }
-        .btn {
+        &__footer {
             width: 100%;
+            position: relative;
+
+            .sc-btn {
+                width: 100%;
+
+                &:disabled {
+                    opacity: 0.32;
+                    pointer-events: none;
+                }
+            }
+            .sc-tooltip__inner {
+                width: 280px;
+                height: auto;
+                white-space: break-spaces;
+                text-align: center;
+            }
         }
     }
 }

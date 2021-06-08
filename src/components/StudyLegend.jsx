@@ -15,6 +15,7 @@ import {
     BackIcon,
 } from './Icons.jsx';
 import '../../sass/components/_studylegend.scss';
+import { TooltipsContent } from '../Constant.js';
 
 const StudyIcon = ({ Icon, props }) => <Icon {...props} />;
 
@@ -52,7 +53,7 @@ const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoIt
                     }
                     content={
                         Item.isPrediction && isTick
-                            ? 'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
+                            ? TooltipsContent.predictionIndicator
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
@@ -248,16 +249,21 @@ const StudyLegend = ({
             <StudyMenu.Body>
                 {infoItem && (
                     <div className='sc-studies__info'>
-                        <Scroll autoHide height='360px' className='studies__info__content'>
+                        <Scroll autoHide height='360px' className='sc-studies__info__content'>
                             <p>{infoItem.description}</p>
                         </Scroll>
-                        <button
-                            type='button'
-                            className='sc-btn sc-btn--primary sc-btn--w100'
-                            onClick={() => onSelectItem(infoItem.id)}
-                        >
-                            {t.translate('Add')}
-                        </button>
+                        <div className='sc-studies__info__footer'>
+                            <Tooltip enabled={infoItem.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
+                                <button
+                                    type='button'
+                                    className='sc-btn sc-btn--primary sc-btn--w100'
+                                    onClick={() => onSelectItem(infoItem.id)}
+                                    disabled={infoItem.disabledAddBtn}
+                                >
+                                    {t.translate('Add')}
+                                </button>
+                            </Tooltip>
+                        </div>
                     </div>
                 )}
                 <TabularDisplay

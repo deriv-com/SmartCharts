@@ -498,7 +498,12 @@ export default class StudyLegendStore {
     }
 
     @action.bound onInfoItem(study) {
-        this.infoItem = study;
+        this.infoItem = study
+            ? {
+                  ...study,
+                  disabledAddBtn: this.mainStore.timeperiod.isTick,
+              }
+            : study;
     }
 
     @action.bound updatePortalNode(portalNodeId) {
