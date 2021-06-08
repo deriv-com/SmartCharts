@@ -38,7 +38,8 @@
         "deploy:production": "npm run build-travis && echo 'charts.binary.com' > CNAME  && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
         "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'",
         "prettify": "./node_modules/.bin/prettier --config ./.prettierrc --write \"./{app,loaders,src}/**/*.{js,jsx,scss}\"",
-        "precommit": "lint-staged --allow-empty"
+        "precommit": "lint-staged --allow-empty",
+        "test:qa": "cd e2e_tests &&  jest -c ./jest.config.js --maxWorkers=2 --detectOpenHandles"
     },
     "devDependencies": {
         "@babel/cli": "^7.5.5",
@@ -84,6 +85,8 @@
         "gettext-loader2": "^0.3.0",
         "gh-pages": "^2.1.1",
         "husky": "^4.2.5",
+        "jest": "^27.0.4",
+        "jest-playwright-preset": "^1.6.0",
         "json-loader": "^0.5.7",
         "lint-staged": "^10.4.0",
         "md5-file": "^4.0.0",
@@ -95,6 +98,7 @@
         "node-sass": "^4.14.1",
         "nyc": "^14.1.1",
         "path": "^0.12.7",
+        "playwright": "^1.11.1",
         "po-loader": "^0.5.0",
         "po2json": "^1.0.0-alpha",
         "postcss-import": "^12.0.1",
@@ -129,6 +133,8 @@
     "dependencies": {
         "@welldone-software/why-did-you-render": "^3.3.8",
         "classnames": "^2.2.6",
+        "core-js": "^3.14.0",
+        "dotenv": "^10.0.0",
         "event-emitter-es6": "^1.1.5",
         "lodash.debounce": "^4.0.8",
         "moment": "^2.24.0",
