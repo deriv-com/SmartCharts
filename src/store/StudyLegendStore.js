@@ -501,7 +501,7 @@ export default class StudyLegendStore {
         this.infoItem = study
             ? {
                   ...study,
-                  disabledAddBtn: this.mainStore.timeperiod.isTick,
+                  disabledAddBtn: study.isPrediction && this.mainStore.timeperiod.isTick,
               }
             : study;
     }
