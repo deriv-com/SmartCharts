@@ -88,8 +88,10 @@
             display: flex;
             flex-direction: column;
             margin: 0 0 0 20px;
-            min-width: 15rem;
-            min-height: 4.2rem;
+            @media (min-width: 768px) {
+                min-width: 15rem;
+                min-height: 4.2rem;
+            }
 
             .cq-market {
                 font-size: 1em;
