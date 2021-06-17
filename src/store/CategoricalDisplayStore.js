@@ -367,10 +367,9 @@ export default class CategoricalDisplayStore {
         this.activeMarket = this.getCurrentActiveMarket ? this.getCurrentActiveMarket() : '';
         const el = this.categoryElements[this.activeCategoryKey];
         const activeSubCategoryClassName = `.sc-mcd__category--${this.activeCategoryKey}  .sc-mcd__category__content--${this.activeSubCategory}`;
-        const el_active_sub_category = this.scrollPanel.querySelector(activeSubCategoryClassName);
-
+        const el_active_sub_category = this.scrollPanel?.querySelector(activeSubCategoryClassName);
         const activeMarketClassName = `${activeSubCategoryClassName} .sc-mcd__item--${this.activeMarket}`;
-        const el_active_market = this.scrollPanel.querySelector(activeMarketClassName);
+        const el_active_market = this.scrollPanel?.querySelector(activeMarketClassName);
 
         this.activeHeadKey = this.activeCategoryKey || null;
         this.activeHeadTop = 0;
@@ -380,15 +379,15 @@ export default class CategoricalDisplayStore {
         if (activeItemCount) {
             this.activeCategoryKey = 'active';
             this.activeHeadKey = null;
-            this.scrollPanel.scrollTop = 0;
+            this.scrollPanel?.scrollTop = 0;
         } else if (el) {
-            this.scrollPanel.scrollTop = el.offsetTop;
+            this.scrollPanel?.scrollTop = el.offsetTop;
             if (el_active_market) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
-                this.scrollPanel.scrollTop = el.offsetTop + el_active_market.offsetTop - topOffset;
+                this.scrollPanel?.scrollTop = el.offsetTop + el_active_market.offsetTop - topOffset;
             } else if (el_active_sub_category) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 0;
-                this.scrollPanel.scrollTop = el.offsetTop + el_active_sub_category.offsetTop - topOffset;
+                this.scrollPanel?.scrollTop = el.offsetTop + el_active_sub_category.offsetTop - topOffset;
             }
         }
         setTimeout(() => {
