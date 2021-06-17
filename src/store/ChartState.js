@@ -303,7 +303,8 @@ class ChartState {
         this.stxx.setStyle('stx_xaxis', 'color', Theme[`${theme}_chart_text`]);
         this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
 
-        this.rootElement?.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
+        if (this.rootElement)
+            this.rootElement.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);

@@ -379,15 +379,15 @@ export default class CategoricalDisplayStore {
         if (activeItemCount) {
             this.activeCategoryKey = 'active';
             this.activeHeadKey = null;
-            this.scrollPanel?.scrollTop = 0;
-        } else if (el) {
-            this.scrollPanel?.scrollTop = el.offsetTop;
+            if (this.scrollPanel) this.scrollPanel.scrollTop = 0;
+        } else if (el && this.scrollPanel) {
+            this.scrollPanel.scrollTop = el.offsetTop;
             if (el_active_market) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
-                this.scrollPanel?.scrollTop = el.offsetTop + el_active_market.offsetTop - topOffset;
+                this.scrollPanel.scrollTop = el.offsetTop + el_active_market.offsetTop - topOffset;
             } else if (el_active_sub_category) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 0;
-                this.scrollPanel?.scrollTop = el.offsetTop + el_active_sub_category.offsetTop - topOffset;
+                this.scrollPanel.scrollTop = el.offsetTop + el_active_sub_category.offsetTop - topOffset;
             }
         }
         setTimeout(() => {
