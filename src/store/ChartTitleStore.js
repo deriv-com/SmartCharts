@@ -184,9 +184,9 @@ export default class ChartTitleStore {
         this.enableShowPrice = false;
     }
 
-    @action.bound updateProps({ open_market, open }) {
-        if (open_market) {
-            this.openMarket = open_market;
+    @action.bound updateProps({ open_market, openMarket, open }) {
+        if (open_market || openMarket) {
+            this.openMarket = open_market || openMarket;
         }
         if (open) {
             this.menu.setOpen(true);
