@@ -21,9 +21,7 @@ const ChartTitle = props => {
         onMouseEnter,
         onMouseLeave,
         open,
-        // TODO: after one release and replacing open_market to openMarket in Deriv, we should remove this
         open_market,
-        openMarket,
         isNestedList,
     } = props;
 
@@ -31,7 +29,7 @@ const ChartTitle = props => {
         const { updateProps, ...otherProps } = props;
         updateProps(otherProps);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open, open_market, openMarket]);
+    }, [open, open_market]);
 
     if (!currentSymbol) {
         return null;

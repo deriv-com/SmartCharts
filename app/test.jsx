@@ -302,7 +302,7 @@ const App = () => {
             <React.Fragment>
                 <ChartTitle
                     onChange={symbolChange}
-                    openMarket={openMarketRef.current}
+                    open_market={openMarketRef.current}
                     open={!!openMarketRef.current.category}
                 />
                 {!!settingsRef.current.historical && <ChartHistory onChange={handleDateChange} />}
