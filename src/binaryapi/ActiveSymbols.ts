@@ -1,22 +1,55 @@
 import { observable, action, computed, runInAction } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
+import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
+import TradingTimes from './TradingTimes';
+import { TChanges, TChartParams } from 'src/types';
 
 const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
 
+type TProcessedSymbolItem = {
+    symbol: string;
+    name: string;
+    market: string;
+    market_display_name: string;
+    submarket_display_name: string;
+    exchange_is_open: boolean;
+    decimal_places: number;
+};
+
+type TProcessedSymbols = TProcessedSymbolItem[];
+
+type TCategorizedSymbolItem = {
+    categoryName: any;
+    categoryId: any;
+    hasSubcategory: boolean;
+    data: TSubCategory[];
+};
+
+type TCategorizedSymbols = TCategorizedSymbolItem[];
+
+type TSubCategory = {
+    subcategoryName: string;
+    data: {
+        enabled: boolean;
+        itemId: string;
+        display: string;
+        dataObject: TProcessedSymbolItem;
+    }[];
+};
+
 export default class ActiveSymbols {
     _api: any;
-    _params: any;
-    _tradingTimes: any;
-    processedSymbols: any;
-    @observable changes = {};
-    @observable categorizedSymbols = [];
-    symbolMap = {};
-    // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
-    symbolsPromise = new PendingPromise();
+    _params: TChartParams;
+    _tradingTimes: TradingTimes;
+    processedSymbols: TProcessedSymbols = [];
+    @observable changes: TChanges = {};
+    @observable categorizedSymbols: TCategorizedSymbols = [];
+    symbolMap: { [key: string]: TProcessedSymbolItem } = {};
+    symbolsPromise = PendingPromise();
     isRetrievingSymbols = false;
 
-    constructor(api: any, tradingTimes: any, params: any) {
+    constructor(api: any, tradingTimes: TradingTimes, params: TChartParams) {
         this._api = api;
         this._tradingTimes = tradingTimes;
         this._params = params;
@@ -30,12 +63,12 @@ export default class ActiveSymbols {
 
         this.isRetrievingSymbols = true;
 
-        let active_symbols: any = [];
+        let active_symbols: TActiveSymbols = [];
         if (this._params.initialData && !this.processedSymbols) {
-            active_symbols = this._params.initialData;
+            active_symbols = this._params.initialData.activeSymbols as TActiveSymbols;
         } else if (this._params.enable !== false) {
-            const response = await this._api.getActiveSymbols();
-            active_symbols = response.active_symbols;
+            const response = (await this._api.getActiveSymbols()) as ActiveSymbolsResponse;
+            active_symbols = response.active_symbols as TActiveSymbols;
         } else {
             console.error('ActiveSymbols feed is not enable nor has initial data!');
             return;
@@ -43,17 +76,14 @@ export default class ActiveSymbols {
 
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
-            // @ts-expect-error ts-migrate(2322) FIXME: Type '{ categoryName: any; categoryId: any; hasSub... Remove this comment to see the full error message
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
         });
         for (const symbolObj of this.processedSymbols) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this.symbolMap[symbolObj.symbol] = symbolObj;
         }
         this._tradingTimes.onMarketOpenCloseChanged(
-            action((changes: any) => {
+            action((changes: TChanges) => {
                 for (const symbol in changes) {
-                    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                     const symObj = this.symbolMap[symbol];
                     if (symObj) {
                         symObj.exchange_is_open = changes[symbol];
@@ -70,7 +100,6 @@ export default class ActiveSymbols {
         const categorized = cloneCategories(this.categorizedSymbols, item => {
             const { symbol } = item.dataObject;
             if (symbol in this.changes) {
-                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 item.dataObject.exchange_is_open = this.changes[symbol];
             }
             return { ...item };
@@ -78,13 +107,12 @@ export default class ActiveSymbols {
         return categorized;
     }
 
-    getSymbolObj(symbol: any) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    getSymbolObj(symbol: string) {
         return this.symbolMap[symbol];
     }
 
-    _processSymbols(symbols: any) {
-        const processedSymbols = [];
+    _processSymbols(symbols: TActiveSymbols): TProcessedSymbols {
+        const processedSymbols: TProcessedSymbols = [];
 
         // Stable sort is required to retain the order of the symbol name
         stableSort(symbols, (a, b) => a.submarket_display_name.localeCompare(b.submarket_display_name));
@@ -117,14 +145,14 @@ export default class ActiveSymbols {
         return orderedSymbols;
     }
 
-    _categorizeActiveSymbols(activeSymbols: any) {
+    _categorizeActiveSymbols(activeSymbols: TProcessedSymbols): TCategorizedSymbols {
         const categorizedSymbols = [];
         const first = activeSymbols[0];
-        const getSubcategory = (d: any) => ({
+        const getSubcategory = (d: TProcessedSymbolItem): TSubCategory => ({
             subcategoryName: d.submarket_display_name,
             data: [],
         });
-        const getCategory = (d: any) => ({
+        const getCategory = (d: TProcessedSymbolItem): TCategorizedSymbolItem => ({
             categoryName: d.market_display_name,
             categoryId: d.market,
             hasSubcategory: true,
@@ -134,30 +162,23 @@ export default class ActiveSymbols {
         let category = getCategory(first);
         for (const symbol of activeSymbols) {
             if (category.categoryName !== symbol.market_display_name) {
-                // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ subcategoryName: any; data: ne... Remove this comment to see the full error message
                 category.data.push(subcategory);
                 categorizedSymbols.push(category);
                 subcategory = getSubcategory(symbol);
                 category = getCategory(symbol);
             }
             if (subcategory.subcategoryName !== symbol.submarket_display_name) {
-                // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ subcategoryName: any; data: ne... Remove this comment to see the full error message
                 category.data.push(subcategory);
                 subcategory = getSubcategory(symbol);
             }
             subcategory.data.push({
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'boolean' is not assignable to type 'never'.
                 enabled: true,
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
                 itemId: symbol.symbol,
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
                 display: symbol.name,
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
                 dataObject: symbol,
             });
         }
 
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type '{ subcategoryName: any; data: ne... Remove this comment to see the full error message
         category.data.push(subcategory);
         categorizedSymbols.push(category);
 

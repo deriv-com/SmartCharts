@@ -1,22 +1,6 @@
+// @ts-nocheck
 export const createXAxis = () => {
-    CIQ.ChartEngine.prototype.append('createXAxis', function (
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any
-    ) {
+    CIQ.ChartEngine.prototype.append('createXAxis', function () {
         if (this.chart.xaxis && this.chart.xaxis.length && this.chart.xaxis[0].DT) {
             const first = this.chart.xaxis[0].DT.valueOf();
             const last = this.chart.xaxis.slice(-1)[0].DT.valueOf();

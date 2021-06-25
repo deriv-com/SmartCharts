@@ -23,13 +23,14 @@ const output = {
 
 const config = {
     devtool: 'source-map',
-    entry: path.resolve(__dirname, './src/index.js'),
+    entry: path.resolve(__dirname, './src/index.ts'),
     output,
     resolve: {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
             chartiq: path.resolve(__dirname, `chartiq/${production ? 'production' : 'development'}/index.js`),
         },
+        extensions: ['.ts', '.tsx', '.js'],
     },
     devServer: {
         publicPath: '/dist/',
@@ -96,7 +97,7 @@ const config = {
                 options: { fix: true },
             },
             {
-                test: /\.(js|jsx)$/,
+                test: /\.(js|jsx|ts|tsx)$/,
                 // exclude: /node_modules/,
                 loader: 'babel-loader',
             },

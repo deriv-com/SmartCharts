@@ -1,4 +1,3 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'sino... Remove this comment to see the full error message
 import sinon from 'sinon';
 
 const friday_trading_times = {
@@ -4488,7 +4487,7 @@ export default class DummyBinaryAPI {
         this.getTradingTimes = sinon.fake(this.getTradingTimes.bind(this));
     }
 
-    getTradingTimes(date: any) {
+    getTradingTimes(date: string) {
         let trading_times = friday_trading_times;
         if (date === '2018-08-25') trading_times = saturday_trading_times;
         if (date === '2018-08-26') trading_times = sunday_trading_times;

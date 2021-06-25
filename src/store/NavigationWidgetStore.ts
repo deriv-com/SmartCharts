@@ -1,8 +1,9 @@
 import { action, when, computed, reaction, observable } from 'mobx';
+import { TMainStore } from 'src/types';
 
 export default class NavigationWidgetStore {
-    mainStore: any;
-    @observable mouse_in: any;
+    mainStore: TMainStore;
+    @observable mouse_in = false;
     get chart() {
         return this.mainStore.chart;
     }

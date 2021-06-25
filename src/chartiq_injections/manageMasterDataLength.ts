@@ -1,20 +1,6 @@
+// @ts-nocheck
 export const manageMasterDataLength = () => {
-    CIQ.ChartEngine.prototype.prepend('updateChartData', function (
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any
-    ) {
+    CIQ.ChartEngine.prototype.prepend('updateChartData', function () {
         if (
             this.chart.lockScroll &&
             this.chart.dataSegment &&

@@ -1,20 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './RenderInsideChart' was resolved to '... Remove this comment to see the full error message
 import RenderInsideChart from './RenderInsideChart';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartTitle' was resolved to '/Users/... Remove this comment to see the full error message
 import ChartTitle from './ChartTitle';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Loader' was resolved to '/Users/bala... Remove this comment to see the full error message
 import Loader from './Loader';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Barrier' was resolved to '/Users/bal... Remove this comment to see the full error message
 import Barrier from './Barrier';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './BottomWidget' was resolved to '/User... Remove this comment to see the full error message
 import BottomWidget from './BottomWidget';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './BottomWidgetsContainer' was resolved... Remove this comment to see the full error message
 import BottomWidgetsContainer from './BottomWidgetsContainer';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './NavigationWidget' was resolved to '/... Remove this comment to see the full error message
 import NavigationWidget from './NavigationWidget';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './HighestLowestMarker' was resolved to... Remove this comment to see the full error message
 import HighestLowestMarker from './HighestLowestMarker';
 /* css + scss */
 import '../../sass/main.scss';
@@ -22,19 +14,16 @@ import 'react-tabs/style/react-tabs.css';
 
 import './ui';
 
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartControls' was resolved to '/Use... Remove this comment to see the full error message
 import ChartControls from './ChartControls';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartFooter' was resolved to '/Users... Remove this comment to see the full error message
 import ChartFooter from './ChartFooter';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Crosshair' was resolved to '/Users/b... Remove this comment to see the full error message
 import Crosshair from './Crosshair';
 import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './PaginationLoader' was resolved to '/... Remove this comment to see the full error message
 import PaginationLoader from './PaginationLoader';
+import { TMainStore } from 'src/types';
 
 const Chart = (props: any) => {
-    const rootRef = React.useRef();
+    const rootRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         const { updateProps, init, ...otherProps } = props;
@@ -141,7 +130,6 @@ const Chart = (props: any) => {
                                 {toolbarWidget && <ToolbarWidget />}
                                 {!isChartAvailable && (
                                     <div className='cq-chart-unavailable'>
-                                        {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
                                         {t.translate('Chart data is not available for this symbol.')}
                                     </div>
                                 )}
@@ -166,7 +154,7 @@ const Chart = (props: any) => {
     );
 };
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }: any) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }: TMainStore) => ({
     chartId: chart.chartId,
     init: chart.init,
     destroy: chart.destroy,

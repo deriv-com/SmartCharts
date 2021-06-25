@@ -1,25 +1,13 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './NotificationBadge' was resolved to '... Remove this comment to see the full error message
 import NotificationBadge from './NotificationBadge';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Tooltip' was resolved to '/Users/bal... Remove this comment to see the full error message
 import Tooltip from './Tooltip';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Scroll' was resolved to '/Users/bala... Remove this comment to see the full error message
 import Scroll from './Scroll';
 import { connect } from '../store/Connect';
-import {
-    IndicatorIcon,
-    ActiveIcon,
-    EmptyStateIcon,
-    SettingIcon,
-    DeleteIcon,
-    InfoCircleIcon,
-    BackIcon,
-    // @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
-} from './Icons';
+import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
 
-const StudyIcon = ({ Icon, props }: any) => <Icon {...props} />;
+const StudyIcon = ({ Icon, props }: { Icon: (props: any) => JSX.Element; props?: any }) => <Icon {...props} />;
 
 const EmptyView = () => (
     <div className='sc-studies--empty'>
@@ -28,10 +16,9 @@ const EmptyView = () => (
     </div>
 );
 
-const NoResultView = ({ text }: any) => (
+const NoResultView = ({ text }: { text: string }) => (
     <div className='sc-studies--empty'>
         <strong>
-            {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
             {t.translate('No results for')} “{text}”
         </strong>
         <p>{t.translate('Try checking your spelling or use a different term')}</p>
@@ -77,8 +64,6 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disab
                         disableAll={disableAll}
                     />
                 </div>
-                // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove
-                this comment to see the full error message
             </div>
         ))}
     </Scroll>
@@ -93,7 +78,6 @@ const TabularDisplayActivePanel = ({ items, onDeleteItem, onEditItem, clearAll, 
                     : t.translate('Up to 5 active indicators allowed.')}
             </p>
             <button type='button' className='sc-btn sc-btn--sm sc-btn--outline-secondary' onClick={() => clearAll()}>
-                {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
                 {t.translate('Clear all')}
             </button>
         </div>
@@ -244,7 +228,6 @@ const StudyLegend = ({
                             className='sc-btn sc-btn--primary sc-btn--w100'
                             onClick={() => onSelectItem(infoItem.id)}
                         >
-                            {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
                             {t.translate('Add')}
                         </button>
                     </div>

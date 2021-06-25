@@ -1,25 +1,20 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartTypes' was resolved to '/Users/... Remove this comment to see the full error message
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import ChartTypes from './ChartTypes';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './StudyLegend' was resolved to '/Users... Remove this comment to see the full error message
 import StudyLegend from './StudyLegend';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Views' was resolved to '/Users/balak... Remove this comment to see the full error message
 import Views from './Views';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './CrosshairToggle' was resolved to '/U... Remove this comment to see the full error message
 import CrosshairToggle from './CrosshairToggle';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Timeperiod' was resolved to '/Users/... Remove this comment to see the full error message
 import Timeperiod from './Timeperiod';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartSize' was resolved to '/Users/b... Remove this comment to see the full error message
 import ChartSize from './ChartSize';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './DrawTools' was resolved to '/Users/b... Remove this comment to see the full error message
 import DrawTools from './DrawTools';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Share' was resolved to '/Users/balak... Remove this comment to see the full error message
 import Share from './Share';
 import '../../sass/components/_chart-controls.scss';
 
-export const RenderDefaultControls = ({ isMobile }: any) => (
+type TRenderDefaultControls = { isMobile: boolean };
+
+export const RenderDefaultControls: React.FC<TRenderDefaultControls> = ({ isMobile }) => (
     <>
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
@@ -32,7 +27,21 @@ export const RenderDefaultControls = ({ isMobile }: any) => (
     </>
 );
 
-const ChartControls = ({ isMobile, hasOpenMenu, widgets, context }: any) => {
+type TChartControlsProps = {
+    widgets: any;
+};
+
+const ChartControls: React.FC<TChartControlsProps> = ({ widgets }) => {
+    const { chart, chartType, studies, drawTools, view, share, chartSetting } = useStores();
+    const { context, isMobile } = chart;
+    const hasOpenMenu =
+        chartType.menu.open ||
+        studies.menu.open ||
+        drawTools.menu.open ||
+        view.menu.open ||
+        share.menu.open ||
+        chartSetting.menu.open;
+
     const Controls = widgets || RenderDefaultControls;
 
     return (
@@ -42,15 +51,4 @@ const ChartControls = ({ isMobile, hasOpenMenu, widgets, context }: any) => {
     );
 };
 
-export default connect(({ chart, chartType, studies, drawTools, view, share, timeperiod, chartSetting }: any) => ({
-    isMobile: chart.isMobile,
-    context: chart.context,
-    hasOpenMenu:
-        chartType.menu.open ||
-        studies.menu.open ||
-        drawTools.menu.open ||
-        view.menu.open ||
-        share.menu.open ||
-        timeperiod.menu.open ||
-        chartSetting.menu.open,
-}))(ChartControls);
+export default observer(ChartControls);

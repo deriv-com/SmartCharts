@@ -1,14 +1,16 @@
 import EventEmitter from 'event-emitter-es6';
 import ServerTime from '../utils/ServerTime';
 import PendingPromise from '../utils/PendingPromise';
+import { TChartParams, TError, TOpenClose, TTradingTimesItem, TTradingTimesSymbol } from 'src/types';
+
 const DaysOfWeek = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'];
 class TradingTimes {
     _api: any;
     _emitter: any;
-    _params: any;
-    _serverTime: any;
+    _params: TChartParams;
+    _serverTime: ServerTime;
     _shouldFetchTradingTimes: any;
-    _tradingTimesMap: any;
+    _tradingTimesMap?: { [key: string]: TTradingTimesItem };
     _updateTimer: any;
     lastUpdateDate: any;
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() {
@@ -18,11 +20,9 @@ class TradingTimes {
         return 'chartonly';
     }
     isInitialized = false;
-    // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
-    tradingTimesPromise = new PendingPromise();
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'timeUpdateCallback' implicitly has an 'any... Remove this comment to see the full error message
-    timeUpdateCallback;
-    constructor(api: any, params: any) {
+    tradingTimesPromise = PendingPromise();
+    timeUpdateCallback: any;
+    constructor(api: any, params?: TChartParams) {
         this._params = params || {};
         this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || true;
         this._api = api;
@@ -61,48 +61,44 @@ class TradingTimes {
                     this.lastUpdateDate = (now > nextUpdateDate ? now : nextUpdateDate).toISOString().substring(0, 10);
                     // Retain the current market open close status, because the trade times
                     // will now be the following day:
-                    const isOpenMap = {};
+                    const isOpenMap: { [key: string]: boolean } = {};
                     for (const key in this._tradingTimesMap) {
-                        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-                        isOpenMap[key] = this._tradingTimesMap[key].isOpened;
+                        isOpenMap[key] = !!this._tradingTimesMap[key].isOpened;
                     }
                     await this._updateTradeTimes();
                     for (const key in this._tradingTimesMap) {
-                        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                         this._tradingTimesMap[key].isOpened = isOpenMap[key];
                     }
                     // next update date will be 00:00 hours (UTC) of the following day:
                     nextUpdate = nextUpdateDate;
                 }
-                const waitPeriod = nextUpdate - this._serverTime.getLocalDate();
+                const waitPeriod = (nextUpdate as any) - (this._serverTime.getLocalDate() as any);
                 this._updateTimer = setTimeout(periodicUpdate, waitPeriod);
             };
             await periodicUpdate();
         }
     }
     _updateMarketOpenClosed() {
-        const changed = {};
+        const changed: { [symbol: string]: boolean | undefined } = {};
         for (const symbol in this._tradingTimesMap) {
             const isOpened = this._calcIsMarketOpened(symbol);
             if (this._tradingTimesMap[symbol].isOpened !== isOpened) {
                 this._tradingTimesMap[symbol].isOpened = isOpened;
-                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 changed[symbol] = isOpened;
             }
         }
         return changed;
     }
     async _updateTradeTimes() {
-        let response = {};
+        let response: any = {};
         if (!this._tradingTimesMap && this._params.initialData) response = this._params.initialData;
         else if (this._params.enable !== false) response = await this._api.getTradingTimes(this.lastUpdateDate);
         else {
             console.error('TradingTimes feed is not enable nor has initial data!');
             return;
         }
-        if ((response as any).error) {
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'error' does not exist on type '{}'.
-            const { error } = response;
+        if (response?.error) {
+            const error = response.error as TError;
             console.error(`Error getting trading times on ${this.lastUpdateDate}: [${error.code}] "${error.message}"`);
             return;
         }
@@ -110,29 +106,33 @@ class TradingTimes {
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
         const getUTCDate = (hour: any) => new Date(`${dateStr}${hour}Z`);
-        const { markets } = (response as any).trading_times;
+
+        if (!response?.trading_times) return;
+
+        const { markets } = response?.trading_times;
+
         for (const market of markets) {
-            const { submarkets } = market;
+            const { submarkets = [] } = market;
             for (const submarket of submarkets) {
-                const { symbols } = submarket;
+                const { symbols = [] } = submarket;
                 for (const symbolObj of symbols) {
-                    const { events, times, symbol, feed_license, delay_amount } = symbolObj;
+                    const { events, times, symbol, feed_license, delay_amount } = symbolObj as TTradingTimesSymbol;
                     const { open, close } = times;
                     let isClosedToday = false;
-                    const holidays: any = [];
-                    const closes_early: any = [];
-                    const opens_late: any = [];
+                    const holidays: string[] = [];
+                    const closes_early: TOpenClose[] = [];
+                    const opens_late: TOpenClose[] = [];
                     events
-                        .map((event: any) =>
+                        .map(event =>
                             event.dates.includes(',')
-                                ? event.dates.split(',').map((date: any) => ({
+                                ? event.dates.split(',').map(date => ({
                                       date: date.trim(),
                                       description: event.descrip,
                                   }))
                                 : [{ date: event.dates, description: event.descrip }]
                         )
-                        .reduce((ary: any, item: any) => ary.concat(item), [])
-                        .forEach((event: any) => {
+                        .reduce((ary, item) => ary.concat(item), [])
+                        .forEach(event => {
                             const lower_description = event.description.toLowerCase();
                             // Open Late
                             if (/^opens late \(at (\d{1,2}:\d{1,2})\)$/gm.test(event.description.toLowerCase())) {
@@ -193,7 +193,7 @@ class TradingTimes {
             }
         }
     }
-    isFeedUnavailable(symbol: any) {
+    isFeedUnavailable(symbol: string) {
         if (!this._tradingTimesMap) {
             return;
         }
@@ -203,10 +203,10 @@ class TradingTimes {
         }
         return this._tradingTimesMap[symbol].feed_license === TradingTimes.FEED_UNAVAILABLE;
     }
-    getDelayedMinutes(symbol: any) {
-        return this._tradingTimesMap[symbol].delay_amount;
+    getDelayedMinutes(symbol: string) {
+        return this._tradingTimesMap?.[symbol].delay_amount;
     }
-    isMarketOpened(symbol: any) {
+    isMarketOpened(symbol: string) {
         if (!this._tradingTimesMap) {
             return;
         }
@@ -216,9 +216,12 @@ class TradingTimes {
         }
         return this._tradingTimesMap[symbol].isOpened;
     }
-    _calcIsMarketOpened(symbol: any) {
+    _calcIsMarketOpened(symbol: string) {
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 10);
+
+        if (!this._tradingTimesMap) return;
+
         const {
             times,
             feed_license,
@@ -248,10 +251,13 @@ class TradingTimes {
             return !!(now >= open && now < close);
         }
         if (isOpenAllDay) return true;
-        for (const session of times) {
-            const { open, close } = session;
-            if (now >= open && now < close) {
-                return true;
+
+        if (times) {
+            for (const session of times) {
+                const { open, close } = session;
+                if (now >= open && now < close) {
+                    return true;
+                }
             }
         }
         return false;
@@ -262,13 +268,16 @@ class TradingTimes {
         for (const key in this._tradingTimesMap) {
             const { times, feed_license, isOpenAllDay, isClosedAllDay } = this._tradingTimesMap[key];
             if (isOpenAllDay || isClosedAllDay || feed_license === TradingTimes.FEED_UNAVAILABLE) continue;
-            for (const session of times) {
-                const { open, close } = session;
-                if (open > now && (!nextDate || open < nextDate)) {
-                    nextDate = open;
-                }
-                if (close > now && (!nextDate || close < nextDate)) {
-                    nextDate = close;
+
+            if (times) {
+                for (const session of times) {
+                    const { open, close } = session;
+                    if (open > now && (!nextDate || open < nextDate)) {
+                        nextDate = open;
+                    }
+                    if (close > now && (!nextDate || close < nextDate)) {
+                        nextDate = close;
+                    }
                 }
             }
         }

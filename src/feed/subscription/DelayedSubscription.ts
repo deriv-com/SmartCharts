@@ -1,3 +1,4 @@
+import { TicksHistoryRequest, TicksHistoryResponse } from '@deriv/api-types';
 import Subscription from './Subscription';
 
 class DelayedSubscription extends Subscription {
@@ -7,7 +8,7 @@ class DelayedSubscription extends Subscription {
     _timerId?: ReturnType<typeof setInterval>;
     UPDATE_INTERVAL = 3000;
 
-    constructor(request: any, api: any, stx: any, delay: any) {
+    constructor(request: any, api: any, stx: any, delay: number) {
         super(request, api, stx);
         this._request = {
             ...this._request,
@@ -21,9 +22,8 @@ class DelayedSubscription extends Subscription {
         this._endTimer();
     }
 
-    // @ts-expect-error ts-migrate(2416) FIXME: Property '_startSubscribe' in type 'DelayedSubscri... Remove this comment to see the full error message
-    async _startSubscribe(tickHistoryRequest: any) {
-        const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+    async _startSubscribe(tickHistoryRequest: TicksHistoryRequest) {
+        const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(tickHistoryRequest);
         const quotes = this._processHistoryResponse(response);
         this._startTimer();
         return quotes;

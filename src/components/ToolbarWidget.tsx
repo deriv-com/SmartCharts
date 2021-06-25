@@ -1,11 +1,20 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import '../../sass/components/_toolbar-widget.scss';
 
-const ToolbarWidget = ({ position = 'top', children, context, onMouseEnter, onMouseLeave }: any) => {
-    if (!context) return '';
+type TToolbarWidgetProps = {
+    position: string;
+};
+
+const ToolbarWidget: React.FC<TToolbarWidgetProps> = ({ position = 'top', children }) => {
+    const { chart, toolbarWidget } = useStores();
+    const { context } = chart;
+    const { onMouseEnter, onMouseLeave } = toolbarWidget;
+
+    if (!context) return null;
 
     return (
         <div
@@ -20,8 +29,4 @@ const ToolbarWidget = ({ position = 'top', children, context, onMouseEnter, onMo
     );
 };
 
-export default connect(({ chart, toolbarWidget }: any) => ({
-    context: chart.context,
-    onMouseEnter: toolbarWidget.onMouseEnter,
-    onMouseLeave: toolbarWidget.onMouseLeave,
-}))(ToolbarWidget);
+export default observer(ToolbarWidget);

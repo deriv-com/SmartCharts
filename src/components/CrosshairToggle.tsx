@@ -1,11 +1,20 @@
 import React from 'react';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Form' was resolved to '/Users/balakr... Remove this comment to see the full error message
 import { Toggle } from './Form';
 
-const CrosshairToggle = ({ state, setCrosshairState, onChange, updateProps, isVisible = true }: any) => {
+type TCrosshairToggleProps = {
+    onChange?: any;
+    isVisible?: boolean;
+};
+
+const CrosshairToggle: React.FC<TCrosshairToggleProps> = ({ onChange, isVisible = true }) => {
+    const { crosshair } = useStores();
+    const { setCrosshairState, updateProps } = crosshair;
+
+    const state = typeof crosshair.state !== 'number' ? 0 : crosshair.state;
+
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
 
     const onCrosshairToggle = () => {
@@ -23,8 +32,4 @@ const CrosshairToggle = ({ state, setCrosshairState, onChange, updateProps, isVi
     );
 };
 
-export default connect(({ crosshair }: any) => ({
-    state: typeof crosshair.state !== 'number' ? 0 : crosshair.state,
-    setCrosshairState: crosshair.setCrosshairState,
-    updateProps: crosshair.updateProps,
-}))(CrosshairToggle);
+export default observer(CrosshairToggle);

@@ -3,8 +3,9 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Form' was resolved to '/Users/balakr... Remove this comment to see the full error message
+import { observer } from 'mobx-react-lite';
+import { TMainStore } from 'src/types';
+import { useStores } from 'src/store';
 import { FormGroup, SwitchIcon } from './Form';
 import {
     SettingIcon,
@@ -16,11 +17,28 @@ import {
     SettingCountdownMap,
     SettingHistoricalMap,
     SettingHighestLowestMap,
-    // @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 } from './Icons';
 import '../../sass/components/_chart-setting.scss';
 
-const ChartSettingItem = ({ title, id, label, value, onChange, noramIcon, activeIcon }: any) => (
+type ChartSettingsItemProps = {
+    title: string;
+    id: string;
+    label: string;
+    value: boolean;
+    onChange: TMainStore['chartSetting']['showCountdown'];
+    noramIcon: (props: any) => JSX.Element;
+    activeIcon: (props: any) => JSX.Element;
+};
+
+const ChartSettingItem: React.FC<ChartSettingsItemProps> = ({
+    title,
+    id,
+    label,
+    value,
+    onChange,
+    noramIcon,
+    activeIcon,
+}) => (
     <FormGroup title={title} type={id}>
         <SwitchIcon
             id={id}
@@ -33,145 +51,134 @@ const ChartSettingItem = ({ title, id, label, value, onChange, noramIcon, active
     </FormGroup>
 );
 
-const ChartSetting = ({
-    ChartSettingMenu,
-    countdown,
-    historical,
-    isHighestLowestMarkerEnabled,
-    languages,
-    menuOpen,
-    selectedLanguage,
-    setHistorical,
-    setLanguage,
-    setTheme,
-    showCountdown,
-    theme,
-    toggleHighestLowestMarker,
-}: any) => (
-    <ChartSettingMenu className='sc-chart-setting' title={t.translate('Platform settings')} enableTabular modalMode>
-        <ChartSettingMenu.Title>
-            <SettingIcon
-                className={classNames('ic-icon-with-sub', { active: menuOpen })}
-                tooltip-title={t.translate('Settings')}
-            />
-        </ChartSettingMenu.Title>
-        <ChartSettingMenu.Body>
-            <Tabs className='tabs--vertical'>
-                <TabList>
-                    <Tab key='theme'>
-                        <ThemeIcon />
-                        {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
-                        {t.translate('Themes')}
-                    </Tab>
-                    <Tab key='language'>
-                        <LanguageIcon />
-                        {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
-                        {t.translate('Language')}
-                    </Tab>
-                    <Tab key='platform'>
-                        <ChartIcon />
-                        {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
-                        {t.translate('Charts')}
-                    </Tab>
-                </TabList>
-                <TabPanel>
-                    <div className='sc-chart-setting__panel'>
-                        <FormGroup title={t.translate('Select theme')} type='theme'>
-                            <div
-                                className={classNames('form__group__item', {
-                                    'form__group__item--active': theme === 'dark',
-                                })}
-                                onClick={() => setTheme('dark')}
-                            >
-                                <ThemeDarkIcon />
-                                <div className='text'>{t.translate('Dark')}</div>
-                            </div>
-                            <div
-                                className={classNames('form__group__item', {
-                                    'form__group__item--active': theme === 'light',
-                                })}
-                                onClick={() => setTheme('light')}
-                            >
-                                <ThemeLightIcon />
-                                <div className='text'>{t.translate('Light')}</div>
-                            </div>
-                        </FormGroup>
-                    </div>
-                </TabPanel>
-                <TabPanel>
-                    <div className='sc-chart-setting__panel'>
-                        <FormGroup title={t.translate('Select language')} type='language'>
-                            {languages.map((language: any) => (
+const ChartSetting: React.FC = () => {
+    const { chartSetting } = useStores();
+    const {
+        ChartSettingMenu,
+        menu,
+        countdown,
+        historical,
+        isHighestLowestMarkerEnabled,
+        languages,
+        language: selectedLanguage,
+        setHistorical,
+        setLanguage,
+        setTheme,
+        showCountdown,
+        theme,
+        toggleHighestLowestMarker,
+    } = chartSetting;
+
+    const menuOpen = menu.dialog.open;
+
+    return (
+        <ChartSettingMenu className='sc-chart-setting' title={t.translate('Platform settings')} enableTabular modalMode>
+            <ChartSettingMenu.Title>
+                <SettingIcon
+                    className={classNames('ic-icon-with-sub', { active: menuOpen })}
+                    tooltip-title={t.translate('Settings')}
+                />
+            </ChartSettingMenu.Title>
+            <ChartSettingMenu.Body>
+                <Tabs className='tabs--vertical'>
+                    <TabList>
+                        <Tab key='theme'>
+                            <ThemeIcon />
+                            {t.translate('Themes')}
+                        </Tab>
+                        <Tab key='language'>
+                            <LanguageIcon />
+                            {t.translate('Language')}
+                        </Tab>
+                        <Tab key='platform'>
+                            <ChartIcon />
+                            {t.translate('Charts')}
+                        </Tab>
+                    </TabList>
+                    <TabPanel>
+                        <div className='sc-chart-setting__panel'>
+                            <FormGroup title={t.translate('Select theme')} type='theme'>
                                 <div
-                                    key={language.key}
-                                    onClick={() => setLanguage(language.key)}
                                     className={classNames('form__group__item', {
-                                        'form__group__item--active': selectedLanguage.key === language.key,
+                                        'form__group__item--active': theme === 'dark',
                                     })}
+                                    onClick={() => setTheme('dark')}
                                 >
-                                    {language.icon}
-                                    <span className='text'>{language.name}</span>
-                                    // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any'
-                                    because no i... Remove this comment to see the full error message
+                                    <ThemeDarkIcon />
+                                    <div className='text'>{t.translate('Dark')}</div>
                                 </div>
-                            ))}
-                        </FormGroup>
-                    </div>
-                </TabPanel>
-                <TabPanel>
-                    <div className='sc-chart-setting__panel'>
-                        <ChartSettingItem
-                            title={t.translate('Interval duration')}
-                            id='countdown'
-                            label={t.translate('Display remaining time for each interval')}
-                            value={countdown}
-                            onChange={showCountdown}
-                            noramIcon={SettingCountdownMap[theme].normal}
-                            activeIcon={SettingCountdownMap[theme].active}
-                        />
-
-                        <ChartSettingItem
-                            title={t.translate('Historical data mode')}
-                            id='historical'
-                            label={t.translate('Display data for a specific date and time')}
-                            value={historical}
-                            onChange={setHistorical}
-                            noramIcon={SettingHistoricalMap[theme].normal}
-                            activeIcon={SettingHistoricalMap[theme].active}
-                        />
-
-                        <FormGroup title={t.translate('Highest and lowest spot')} id='highestlowest'>
-                            <SwitchIcon
-                                id='highestlowest'
-                                label={t.translate('Display the highest and lowest spot price')}
-                                value={isHighestLowestMarkerEnabled}
-                                onChange={toggleHighestLowestMarker}
-                                noramIcon={SettingHighestLowestMap[theme].normal}
-                                activeIcon={SettingHighestLowestMap[theme].active}
+                                <div
+                                    className={classNames('form__group__item', {
+                                        'form__group__item--active': theme === 'light',
+                                    })}
+                                    onClick={() => setTheme('light')}
+                                >
+                                    <ThemeLightIcon />
+                                    <div className='text'>{t.translate('Light')}</div>
+                                </div>
+                            </FormGroup>
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div className='sc-chart-setting__panel'>
+                            <FormGroup title={t.translate('Select language')} type='language'>
+                                {languages.map(language => (
+                                    <div
+                                        key={language.key}
+                                        onClick={() => setLanguage(language.key)}
+                                        className={classNames('form__group__item', {
+                                            'form__group__item--active': selectedLanguage?.key === language.key,
+                                        })}
+                                    >
+                                        {language.icon}
+                                        <span className='text'>{language.name}</span>
+                                    </div>
+                                ))}
+                            </FormGroup>
+                        </div>
+                    </TabPanel>
+                    <TabPanel>
+                        <div className='sc-chart-setting__panel'>
+                            <ChartSettingItem
+                                title={t.translate('Interval duration')}
+                                id='countdown'
+                                label={t.translate('Display remaining time for each interval')}
+                                value={countdown}
+                                onChange={showCountdown}
+                                noramIcon={SettingCountdownMap[theme as keyof typeof SettingCountdownMap].normal}
+                                activeIcon={SettingCountdownMap[theme as keyof typeof SettingCountdownMap].active}
                             />
-                        </FormGroup>
-                    </div>
-                </TabPanel>
-            </Tabs>
-        </ChartSettingMenu.Body>
-    </ChartSettingMenu>
-);
 
-export default connect(({ chartSetting: s }) => ({
-    ChartSettingMenu: s.ChartSettingMenu,
-    closeMenu: s.menu.onTitleClick,
-    countdown: s.countdown,
-    historical: s.historical,
-    isAutoScale: s.isAutoScale,
-    isHighestLowestMarkerEnabled: s.isHighestLowestMarkerEnabled,
-    languages: s.languages,
-    menuOpen: s.menu.dialog.open,
-    selectedLanguage: s.language,
-    setAutoScale: s.setAutoScale,
-    setHistorical: s.setHistorical,
-    setLanguage: s.setLanguage,
-    setTheme: s.setTheme,
-    showCountdown: s.showCountdown,
-    theme: s.theme,
-    toggleHighestLowestMarker: s.toggleHighestLowestMarker,
-}))(ChartSetting);
+                            <ChartSettingItem
+                                title={t.translate('Historical data mode')}
+                                id='historical'
+                                label={t.translate('Display data for a specific date and time')}
+                                value={historical}
+                                onChange={setHistorical}
+                                noramIcon={SettingHistoricalMap[theme as keyof typeof SettingHistoricalMap].normal}
+                                activeIcon={SettingHistoricalMap[theme as keyof typeof SettingHistoricalMap].active}
+                            />
+
+                            <FormGroup title={t.translate('Highest and lowest spot')}>
+                                <SwitchIcon
+                                    id='highestlowest'
+                                    label={t.translate('Display the highest and lowest spot price')}
+                                    value={isHighestLowestMarkerEnabled}
+                                    onChange={toggleHighestLowestMarker}
+                                    noramIcon={
+                                        SettingHighestLowestMap[theme as keyof typeof SettingHighestLowestMap].normal
+                                    }
+                                    activeIcon={
+                                        SettingHighestLowestMap[theme as keyof typeof SettingHighestLowestMap].active
+                                    }
+                                />
+                            </FormGroup>
+                        </div>
+                    </TabPanel>
+                </Tabs>
+            </ChartSettingMenu.Body>
+        </ChartSettingMenu>
+    );
+};
+
+export default observer(ChartSetting);

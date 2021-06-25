@@ -3,11 +3,8 @@ import ReactDOM from 'react-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './MenuMobile' was resolved to '/Users/... Remove this comment to see the full error message
 import MenuMobile from './MenuMobile';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Tooltip' was resolved to '/Users/bal... Remove this comment to see the full error message
 import Tooltip from './Tooltip';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { CloseIcon } from './Icons';
 
 const Menu = ({

@@ -1,21 +1,34 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import '../../sass/components/_scroll.scss';
 
-const Scroll = ({
+type TScrollProps = {
+    className?: string;
+    autoHide?: boolean;
+    freeze?: boolean;
+    height?: string | number;
+    width?: string | number;
+    setPanel?: (ref: HTMLDivElement) => void;
+    onScroll?: (ev: React.UIEvent<HTMLElement>) => void;
+};
+
+const Scroll: React.FC<TScrollProps> = ({
     children,
     className,
     height,
     width,
-    setScrollPanel,
-    isHover,
     autoHide,
     freeze = false,
     onScroll = () => null,
     setPanel,
-}: any) => {
-    const handleRef = (_ref: any) => {
+}) => {
+    const { scroll } = useStores();
+
+    const { setScrollPanel, isHover } = scroll;
+
+    const handleRef = (_ref: HTMLDivElement) => {
         setScrollPanel(_ref);
         if (setPanel) setPanel(_ref);
     };
@@ -39,7 +52,4 @@ const Scroll = ({
     );
 };
 
-export default connect(({ scroll: s }) => ({
-    setScrollPanel: s.setScrollPanel,
-    isHover: s.isHover,
-}))(Scroll);
+export default observer(Scroll);

@@ -1,4 +1,6 @@
-export function createObjectFromLocalStorage(key: any) {
+import { TGranularity } from 'src/types';
+
+export function createObjectFromLocalStorage(key: string) {
     const val = localStorage.getItem(key);
     if (val !== null) {
         try {
@@ -10,15 +12,15 @@ export function createObjectFromLocalStorage(key: any) {
     return undefined;
 }
 
-export function isValidProp(p: any) {
+export function isValidProp(p: number) {
     return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
 }
 
-export const getTimeUnit = ({ timeUnit, interval }: any) => {
+export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval?: string | number }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
     }
-    if (timeUnit === 'minute' && interval % 60 === 0) {
+    if (timeUnit === 'minute' && (interval as any) % 60 === 0) {
         return 'hour';
     }
     if (timeUnit === 'second') {
@@ -26,7 +28,14 @@ export const getTimeUnit = ({ timeUnit, interval }: any) => {
     }
     return timeUnit;
 };
-export const getIntervalInSeconds = ({ timeUnit, interval }: any) => {
+
+export const getIntervalInSeconds = ({
+    timeUnit,
+    interval,
+}: {
+    timeUnit?: string | number;
+    interval?: string | number;
+}) => {
     let unit = timeUnit;
     let interv = interval;
     if (interv === 'day') {
@@ -37,15 +46,25 @@ export const getIntervalInSeconds = ({ timeUnit, interval }: any) => {
     } else if (timeUnit === 'second') {
         unit = 1;
     }
-    return unit * interv;
+
+    if (unit != undefined && interv != undefined) {
+        if (typeof unit === 'string') {
+            unit = Number(unit);
+        }
+        if (typeof interv === 'string') {
+            interv = Number(interv);
+        }
+        return unit * interv;
+    }
+
+    return 0;
 };
 
-export function stableSort(arr: any, compare = (a: any, b: any) => a < b) {
+export function stableSort<T>(arr: T[], compare: (a: T, b: T) => number) {
     const original = arr.slice(0);
 
-    arr.sort((a: any, b: any) => {
+    arr.sort((a: T, b: T) => {
         const result = compare(a, b);
-        // @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
         return result === 0 ? original.indexOf(a) - original.indexOf(b) : result;
     });
 
@@ -63,7 +82,7 @@ export function sameBar(bar1: any, bar2: any) {
     );
 }
 
-export function downloadFileInBrowser(filename: any, content: any, type: any, newTab: any) {
+export function downloadFileInBrowser(filename: string, content: any, type: string, newTab: any) {
     const blob = new Blob([content], { type });
     if (navigator.msSaveBlob) {
         // IE 10+
@@ -103,16 +122,16 @@ export function stxtap(el: any, func: any) {
     }
 }
 
-export function getUTCEpoch(date: any) {
+export function getUTCEpoch(date: Date) {
     return (date.getTime() / 1000 - date.getTimezoneOffset() * 60) | 0;
 }
 
-export function getUTCDate(epoch: any) {
+export function getUTCDate(epoch: number) {
     const UTCdate = new Date(epoch * 1000).toISOString();
     return UTCdate.substring(0, 19);
 }
 
-export function getLocalDate(epoch: any) {
+export function getLocalDate(epoch: number) {
     return new Date(epoch * 1000);
 }
 
@@ -130,7 +149,7 @@ export function updatePropIfChanged(source: any, props: any, onChanged: any) {
     }
 }
 
-export function calculateTimeUnitInterval(granularity: any) {
+export function calculateTimeUnitInterval(granularity: number) {
     let interval = 1;
     let timeUnit = 'second';
 
@@ -144,27 +163,25 @@ export function calculateTimeUnitInterval(granularity: any) {
     return { interval, timeUnit };
 }
 
-export function calculateGranularity(period: any, interval: any) {
+export function calculateGranularity(period: number, interval: string): TGranularity {
     const toSeconds = {
         second: 0,
         minute: 60,
         day: 24 * 60 * 60,
     };
 
-    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-    return toSeconds[interval] * period;
+    return (toSeconds[interval as keyof typeof toSeconds] * period) as TGranularity;
 }
 
-export function displayMilliseconds(ms: any) {
+export function displayMilliseconds(ms: number) {
     const totalSec = ms / 1000;
     if (totalSec <= 0) {
         return null;
     }
-    const padNum = (n: any) => `0${n}`.slice(-2);
+    const padNum = (n: number) => `0${n}`.slice(-2);
     const seconds = padNum(Math.trunc(totalSec % 60));
     const minutes = padNum(Math.trunc((totalSec / 60) % 60));
-    let hours = Math.trunc((totalSec / 3600) % 24);
-    // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
+    let hours: string | number = Math.trunc((totalSec / 3600) % 24);
     hours = hours ? `${hours}:` : '';
     return `${hours}${minutes}:${seconds}`;
 }
@@ -262,14 +279,14 @@ export const DIRECTIONS = Object.freeze({
     DOWN: 'DOWN',
 });
 
-export const formatCamelCase = (s: any) => {
+export const formatCamelCase = (s: string) => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
-export const prepareIndicatorName = (name: any) => {
+export const prepareIndicatorName = (name: string) => {
     const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
-    const getStudyBars = (str: any) => (str.match(StudyNameRegex) || []).pop();
+    const getStudyBars = (str: string) => (str.match(StudyNameRegex) || []).pop();
     // const capitalizeFirstLetter = (string) => {
     //     const str = string.replace(StudyNameRegex, '');
     //     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -284,12 +301,10 @@ export const prepareIndicatorName = (name: any) => {
 export const renderSVGString = (icon: any) => {
     const vb = icon.viewBox.split(' ').slice(2);
     return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${
-        // @ts-expect-error ts-migrate(2304) FIXME: Cannot find name '__webpack_public_path__'.
-        // eslint-disable-next-line no-undef
         __webpack_public_path__ + icon.url
     }" /></svg>`;
 };
-export const wrapText = (str: any, letter_count: any) => {
+export const wrapText = (str: string, letter_count: number) => {
     if (str.length > letter_count) {
         let wrappedStr = str;
         const count = Math.floor(str.length / letter_count);
@@ -304,7 +319,7 @@ export const wrapText = (str: any, letter_count: any) => {
     return str;
 };
 
-export const stringToSlug = (str: any) =>
+export const stringToSlug = (str: string) =>
     str
         .toLowerCase()
         .replace(/[^\w ]+/g, '')

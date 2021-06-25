@@ -1,8 +1,13 @@
-import React from 'react'; // @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
+import React from 'react';
 import { ArrowGreenIcon, ArrowOrangeIcon } from './Icons';
 import { ARROW_HEIGHT, ARROW_COLORS, DIRECTIONS } from '../utils';
 
-const PriceLineArrow = ({ offScreenDirection, color }: any) => {
+type TPriceLineArrowProps = {
+    offScreenDirection: keyof typeof DIRECTIONS;
+    color: keyof typeof ARROW_COLORS;
+};
+
+const PriceLineArrow: React.FC<TPriceLineArrowProps> = ({ offScreenDirection, color }) => {
     const top = offScreenDirection === DIRECTIONS.UP && `${-ARROW_HEIGHT}px`;
     const transform = offScreenDirection === DIRECTIONS.DOWN && 'rotate(180deg)';
 

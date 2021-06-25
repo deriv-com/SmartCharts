@@ -1,21 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import '../../sass/components/_menu-dropdown.scss';
 
-const MenuMobile = ({ className, menu_element, portalNodeId, open, onClick, theme }: any) => {
+type TMenuMobileProps = {
+    className: string;
+    open: boolean;
+    portalNodeId?: string;
+    onClick: React.MouseEventHandler<HTMLDivElement>;
+    menu_element: React.ReactElement;
+};
+
+const MenuMobile: React.FC<TMenuMobileProps> = ({ className, menu_element, portalNodeId, open, onClick }) => {
+    const { chartSetting } = useStores();
+    const { theme } = chartSetting;
     // fix to remove body background scrolling when scrolling on absolute element
     const disableBodyScroll = () => {
         if (open) {
             document.body.style.overflow = 'hidden';
         } else {
-            // @ts-expect-error ts-migrate(2322) FIXME: Type 'null' is not assignable to type 'string'.
-            document.body.style.overflow = null;
+            document.body.style.overflow = '';
         }
     };
 
     disableBodyScroll();
     if (!portalNodeId) return menu_element;
+    const portalElement = document.getElementById(portalNodeId);
+
+    if (!portalElement) return null;
+
     return ReactDOM.createPortal(
         <div className={`smartcharts-portal ${open ? 'smartcharts-portal--open' : ''}`}>
             <div className={`smartcharts smartcharts-${theme}`}>
@@ -28,10 +42,8 @@ const MenuMobile = ({ className, menu_element, portalNodeId, open, onClick, them
                 </div>
             </div>
         </div>,
-        document.getElementById(portalNodeId)
+        portalElement
     );
 };
 
-export default connect(({ chartSetting }: any) => ({
-    theme: chartSetting.theme,
-}))(MenuMobile);
+export default observer(MenuMobile);

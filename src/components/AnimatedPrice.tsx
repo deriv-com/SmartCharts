@@ -1,7 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const AnimatedPrice = ({ isIncrease, price, className }: any) => (
+type TAnimatedPriceProps = {
+    isIncrease: boolean;
+    price: string;
+    className: string;
+};
+
+const AnimatedPrice: React.FC<TAnimatedPriceProps> = ({ isIncrease, price, className }) => (
     <>
         {!price && <span className='cq-comparison-loader stx-show' />}
         <div

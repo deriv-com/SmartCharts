@@ -1,17 +1,22 @@
 import React from 'react';
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { FavoriteIcon } from './Icons';
 import FavoriteStore from '../store/FavoriteStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
-const Favorite = ({ category, id }: any) => {
+type TFavoriteProps = {
+    category: string;
+    id: string;
+};
+
+const Favorite: React.FC<TFavoriteProps> = ({ category, id }) => {
     const [store] = React.useState(FavoriteStore.getInstance());
     const [is_favorite, setFavorite] = React.useState(false);
 
     const onClick = React.useCallback(
-        (e: any) => {
+        (e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
+            // @ts-ignore
             e.nativeEvent.isHandledByDialog = true; // prevent close dialog
             store.toggleFavorite(category, id);
         },

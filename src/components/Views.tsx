@@ -1,13 +1,21 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
+import { TMainStore } from 'src/types';
 
-const ViewItem = ({ view, remove, onClick }: any) => (
+type TViewItemProps = {
+    onClick: (event: React.MouseEvent<HTMLElement>) => void;
+    view: any;
+    remove: TMainStore['view']['remove'];
+};
+
+const ViewItem: React.FC<TViewItemProps> = ({ view, remove, onClick }) => (
     <Tooltip
         className='sc-views__views__list__item'
         onClick={onClick}
@@ -19,7 +27,7 @@ const ViewItem = ({ view, remove, onClick }: any) => (
     </Tooltip>
 );
 
-const EmptyView = ({ onClick }: any) => (
+const EmptyView = ({ onClick }: { onClick: (event: React.MouseEvent<HTMLElement>) => void }) => (
     <div className='sc-views--empty'>
         <EmptyStateIcon />
         <p>{t.translate('You have no saved templates yet.')}</p>
@@ -30,7 +38,13 @@ const EmptyView = ({ onClick }: any) => (
     </div>
 );
 
-const OverwriteView = ({ templateName, onCancel, onOverwrite }: any) => (
+type TOverwriteViewProps = {
+    templateName: TMainStore['view']['templateName'];
+    onCancel: TMainStore['view']['routes']['main'];
+    onOverwrite: TMainStore['view']['routes']['overwrite'];
+};
+
+const OverwriteView: React.FC<TOverwriteViewProps> = ({ templateName, onCancel, onOverwrite }) => (
     <div className='sc-views--overwrite'>
         <div className='sc-views--overwrite__content'>
             <OverwriteStateIcon />
@@ -51,8 +65,15 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }: any) => (
     </div>
 );
 
-const ActiveListView = ({ views, removeAll, applyLayout, remove }: any) => {
-    if (!views.length) return '';
+type TActiveListViewProps = {
+    removeAll: TMainStore['view']['removeAll'];
+    views: TMainStore['view']['sortedItems'];
+    applyLayout: TMainStore['view']['applyLayout'];
+    remove: TMainStore['view']['remove'];
+};
+
+const ActiveListView: React.FC<TActiveListViewProps> = ({ views, removeAll, applyLayout, remove }) => {
+    if (!views.length) return null;
 
     return (
         <div className='sc-views__views'>
@@ -78,26 +99,34 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }: any) => {
     );
 };
 
-const Views = ({
-    ViewsMenu,
-    menuOpen,
-    views,
-    currentRoute,
-    onToggleNew,
-    routes: { main, overwrite },
-    onChange,
-    onSubmit,
-    applyLayout,
-    remove,
-    inputRef,
-    saveViews,
-    templateName,
-    removeAll,
-    isInputActive,
-    onFocus,
-    onBlur,
-    portalNodeId,
-}: any) => {
+type TViewsProps = {
+    portalNodeId?: string;
+};
+
+const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {
+    const { view } = useStores();
+
+    const {
+        ViewsMenu,
+        sortedItems: views,
+        routes: { main, overwrite },
+        onChange,
+        remove,
+        onSubmit,
+        applyLayout,
+        inputRef,
+        currentRoute,
+        templateName,
+        onToggleNew,
+        saveViews,
+        removeAll,
+        isInputActive,
+        onFocus,
+        onBlur,
+    } = view;
+
+    const menuOpen = view.menu.dialog.open;
+
     const isActive = isInputActive || templateName !== '';
 
     return (
@@ -180,23 +209,4 @@ const Views = ({
     );
 };
 
-export default connect(({ view: s }) => ({
-    ViewsMenu: s.ViewsMenu,
-    views: s.sortedItems,
-    routes: s.routes,
-    onOverwrite: s.onOverwrite,
-    onChange: s.onChange,
-    remove: s.remove,
-    onSubmit: s.onSubmit,
-    applyLayout: s.applyLayout,
-    menuOpen: s.menu.dialog.open,
-    inputRef: s.inputRef,
-    currentRoute: s.currentRoute,
-    templateName: s.templateName,
-    onToggleNew: s.onToggleNew,
-    saveViews: s.saveViews,
-    removeAll: s.removeAll,
-    isInputActive: s.isInputActive,
-    onFocus: s.onFocus,
-    onBlur: s.onBlur,
-}))(Views);
+export default observer(Views);

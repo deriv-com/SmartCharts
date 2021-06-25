@@ -14,7 +14,7 @@ import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 // TODO:
 // import StudyInfo from '../study-info';
-const updateFieldHeading = (heading: any, type: any) => {
+const updateFieldHeading = (heading: string, type: string) => {
     const names = ['%D', '%K'];
     if (heading.toLowerCase() === type.toLowerCase() || heading === 'Result') {
         return 'Color';
@@ -374,7 +374,7 @@ export default class StudyLegendStore {
             if (panelObj.solo.style.display !== 'none') {
                 const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
                 const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
+                if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== (soloIcon as any).id) {
                     InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
                 }
             }

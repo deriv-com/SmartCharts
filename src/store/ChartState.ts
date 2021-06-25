@@ -9,24 +9,26 @@ import {
 } from '../utils';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
+import { TGranularity } from 'src/types';
+import ChartStore from './ChartStore';
 
 class ChartState {
-    chartStore: any;
+    chartStore: ChartStore;
     getIndicatorHeightRatio: any;
     isAnimationEnabled: any;
     mainStore: any;
     margin: any;
-    @observable granularity: any;
+    @observable granularity: TGranularity;
     @observable chartType: any;
     @observable startEpoch: any;
     @observable endEpoch: any;
-    @observable symbol: any;
-    @observable isConnectionOpened: any;
+    @observable symbol?: string;
+    @observable isConnectionOpened = false;
     @observable isChartReady = false;
     @observable chartStatusListener: any;
     @observable stateChangeListener: any;
     @observable settings: any;
-    @observable showLastDigitStats: any;
+    @observable showLastDigitStats = false;
     @observable scrollToEpoch: any;
     @observable onExportLayout: any;
     @observable clearChart: any;
@@ -35,7 +37,6 @@ class ChartState {
     @observable isStaticChart = false;
     @observable shouldFetchTradingTimes = true;
     @observable refreshActiveSymbols: any;
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'hasReachedEndOfData'.
     @observable hasReachedEndOfData = false;
     @observable prevChartType: any;
     @observable isChartScrollingToEpoch = false;
@@ -288,21 +289,16 @@ class ChartState {
         }
     }
 
-    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch: any) {
+    @action.bound setIsChartScrollingToEpoch(isScrollingToEpoch: boolean) {
         this.isChartScrollingToEpoch = isScrollingToEpoch;
     }
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'hasReachedEndOfData'.
-    @action.bound hasReachedEndOfData(hasReachedEndOfData: any) {
-        this.hasReachedEndOfData = hasReachedEndOfData;
-    }
-
-    @action.bound setChartClosed(isClosed: any) {
+    @action.bound setChartClosed(isClosed: boolean) {
         this.isChartClosed = isClosed;
         this.stateChange(STATE.MARKET_STATE_CHANGE, { symbol: this.symbol, isClosed });
     }
 
-    setChartTheme(theme: any, isChartClosed = this.isChartClosed) {
+    setChartTheme(theme: string, isChartClosed = this.isChartClosed) {
         if (!this.stxx) return;
         this.stxx.clearStyles();
         this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
@@ -310,7 +306,7 @@ class ChartState {
         this.stxx.setStyle('stx_xaxis', 'color', Theme[`${theme}_chart_text`]);
         this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
 
-        this.rootElement.querySelector('.chartContainer').style.backgroundColor = Theme[`${theme}_chart_bg`];
+        (this.rootElement?.querySelector('.chartContainer') as any).style.backgroundColor = Theme[`${theme}_chart_bg`];
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
             this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);
@@ -417,17 +413,17 @@ class ChartState {
         // prop values will always take precedence
         if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
             // symbol prop takes precedence over local storage data
-            const symbolObject = this.chartStore.activeSymbols.getSymbolObj(this.symbol);
+            const symbolObject = this.chartStore.activeSymbols?.getSymbolObj(this.symbol);
             layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
         }
 
         for (const symbolDat of layoutData.symbols) {
             // Symbol from cache may be in different language, so replace it with server's
             const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.chartStore.activeSymbols.getSymbolObj(cachedSymbol);
+            const updatedSymbol = this.chartStore.activeSymbols?.getSymbolObj(cachedSymbol);
             symbolDat.symbolObject = updatedSymbol;
             if (symbolDat.parameters) {
-                symbolDat.parameters.display = updatedSymbol.name;
+                symbolDat.parameters.display = updatedSymbol?.name;
 
                 // These gap settings are default when new comparisons are added,
                 // but for backward support we need to set them here.

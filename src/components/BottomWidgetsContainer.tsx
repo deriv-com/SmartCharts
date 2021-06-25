@@ -1,21 +1,13 @@
 import React from 'react';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import '../../sass/components/_bottom-widget-container.scss';
 
-type OwnProps = {
-    bottom?: number;
-    isReadyToShow?: boolean;
-    top?: number;
-    updateChartMargin: (...args: any[]) => any;
-};
-
-// @ts-expect-error ts-migrate(2456) FIXME: Type alias 'Props' circularly references itself.
-type Props = OwnProps & typeof BottomWidgetsContainer.defaultProps;
-
-// @ts-expect-error ts-migrate(7022) FIXME: 'BottomWidgetsContainer' implicitly has type 'any'... Remove this comment to see the full error message
-const BottomWidgetsContainer = ({ bottom, children, isReadyToShow, top, updateChartMargin }: Props) => {
+const BottomWidgetsContainer: React.FC = ({ children }) => {
+    const { bottomWidgetsContainer } = useStores();
+    const { bottom, isReadyToShow, top, updateChartMargin } = bottomWidgetsContainer;
     React.useEffect(() => {
-        const component = React.Children.only(children);
+        const component = React.Children.only(children) as React.ReactElement;
 
         updateChartMargin(!!(component && component.props.bottomWidgets));
     }, [children, updateChartMargin]);
@@ -42,9 +34,4 @@ BottomWidgetsContainer.defaultProps = {
     top: 0,
 };
 
-export default connect(({ bottomWidgetsContainer: store }) => ({
-    bottom: store.bottom,
-    isReadyToShow: store.isReadyToShow,
-    top: store.top,
-    updateChartMargin: store.updateChartMargin,
-}))(BottomWidgetsContainer);
+export default observer(BottomWidgetsContainer);

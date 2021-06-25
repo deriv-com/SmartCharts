@@ -1,6 +1,6 @@
 /* eslint-disable prefer-destructuring */
 import Helper from './Helper';
-import Keystroke from './Keystroke';
+import Keystroke, { TKeystrokeProps } from './Keystroke';
 import { claims } from '.';
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
@@ -15,22 +15,19 @@ import { claims } from '.';
  * @constructor
  */
 class KeystrokeHub extends Helper {
-    static instance = null;
-    capsLock: any;
-    keystroke: any;
+    static instance: KeystrokeHub | null = null;
+    capsLock = false;
+    keystroke: Keystroke;
     params: any;
-    constructor(node: any, context: any, params: any) {
-        // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 3.
-        super(node, context, params);
+    constructor(node: HTMLElement, context: any, params: { cb: (key: string, hub: KeystrokeHub) => boolean }) {
+        super(node, context);
         this.node = node;
         this.context = context;
         this.params = params || {};
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'this' is not assignable to type 'null'.
         KeystrokeHub.instance = this;
         const self = this;
         function handler() {
-            return (...args: any[]) => {
-                // @ts-expect-error ts-migrate(2556) FIXME: Expected 1 arguments, but got 0 or more.
+            return (...args: [TKeystrokeProps]) => {
                 self.handler(...args);
             };
         }
@@ -43,7 +40,7 @@ class KeystrokeHub extends Helper {
      * @param  {CIQ.UI.KeystrokeHub} hub The hub that processed the key
      * @return {boolean}     Return true if you captured the key
      */
-    static defaultHotKeys(key: any, hub: any) {
+    static defaultHotKeys(key: string, hub: KeystrokeHub) {
         const stx = hub.context.stx;
         let push = 1;
         switch (key) {
@@ -127,9 +124,9 @@ class KeystrokeHub extends Helper {
      * @memberof CIQ.UI.KeystrokeHub
      * @private
      */
-    processKeyStrokeClaims(hub: any, key: any, e: any, keystroke: any) {
+    processKeyStrokeClaims(hub: KeystrokeHub, key: string | number, e: any, keystroke: any) {
         for (let i = claims.length - 1; i > -1; i--) {
-            const helper = (claims[i] as any).helper;
+            const helper = claims[i].helper;
             const response = helper.keyStroke(hub, key, e, keystroke);
             if (response) {
                 if (!response.allowDefault) {
@@ -141,7 +138,6 @@ class KeystrokeHub extends Helper {
         return false;
     }
     addClaim(helper: any) {
-        // @ts-expect-error ts-migrate(2322) FIXME: Type 'any' is not assignable to type 'never'.
         claims.push({ helper });
     }
     removeClaim(helper: any) {
@@ -158,7 +154,7 @@ class KeystrokeHub extends Helper {
      * @memberof CIQ.UI.KeystrokeHub
      * @private
      */
-    handler(obj: any) {
+    handler(obj: TKeystrokeProps) {
         if (!this.context) {
             return;
         }
@@ -169,7 +165,7 @@ class KeystrokeHub extends Helper {
         const e = obj.e,
             key = obj.key,
             keystroke = obj.keystroke,
-            targetTagName = obj.e.target.tagName;
+            targetTagName = (obj.e.target as HTMLElement).tagName;
         switch (key) {
             case 16:
                 stx.shift = keystroke.shift;

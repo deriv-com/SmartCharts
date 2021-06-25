@@ -4,4 +4,4 @@
  * @type {Boolean}
  */
 
-export const claims = [];
+export const claims: any[] = [];

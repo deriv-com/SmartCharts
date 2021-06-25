@@ -1,5 +1,5 @@
 // jQuery parents() vanilla alternative: https://stackoverflow.com/a/12981248/1471258
-export function getParents(el: any, parentSelector = 'body') {
+export function getParents(el: HTMLElement, parentSelector = 'body') {
     const parentElement = document.querySelector(parentSelector);
 
     if (!parentElement) {
@@ -25,7 +25,7 @@ export function getParents(el: any, parentSelector = 'body') {
     return parents;
 }
 
-export function createElement(html: any) {
+export function createElement(html: string) {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
     return wrapper.firstChild;
@@ -36,12 +36,10 @@ export function aggregation(baseClass: any, ...mixins: any[]) {
     const copyProps = (target: any, source: any) => {
         // this function copies all properties and symbols, filtering out some special ones
         Object.getOwnPropertyNames(source)
-            // @ts-expect-error ts-migrate(2769) FIXME: No overload matches this call.
-            .concat(Object.getOwnPropertySymbols(source))
+            .concat(Object.getOwnPropertySymbols(source) as any)
             .forEach(prop => {
                 if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
-                    // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'PropertyDescriptor | undefined' ... Remove this comment to see the full error message
-                    Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop));
+                    Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop) as any);
                 }
             });
     };
@@ -61,15 +59,15 @@ export function aggregation(baseClass: any, ...mixins: any[]) {
     return base;
 }
 
-export function setHidden(element: any, isHidden: any) {
+export function setHidden(element: HTMLElement, isHidden: boolean) {
     if (isHidden) {
-        element.setAttribute('hidden', true);
+        element.setAttribute('hidden', 'true');
     } else {
         element.removeAttribute('hidden');
     }
 }
 
-export function downloadURI(uri: any, name: any) {
+export function downloadURI(uri: string, name: string) {
     const link = document.createElement('a');
     link.download = name;
     link.href = uri;

@@ -1,32 +1,40 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import '../../sass/components/_chart-title.scss';
 
-const ChartTitle = (props: any) => {
+type TChartTitleProps = {
+    containerId?: string;
+    enabled?: boolean;
+    portalNodeId?: string;
+    searchInputClassName?: string;
+    open?: boolean;
+    open_market?: string;
+    isNestedList?: boolean;
+};
+
+const ChartTitle: React.FC<TChartTitleProps> = props => {
+    const { chartTitle, chart, chartSetting } = useStores();
+    const { isMobile } = chart;
+
+    const { theme } = chartSetting;
     const {
-        chartId,
         ChartTitleMenu,
-        containerId,
         currentSymbol,
-        enabled,
-        isMobile,
         MarketSelector,
-        portalNodeId,
-        onChange,
+        setSymbol: onChange,
         SymbolSelectButton,
-        setMenuOpen,
-        searchInputClassName,
-        theme,
         onMouseEnter,
         onMouseLeave,
-        open,
-        open_market,
-        isNestedList,
-    } = props;
+        updateProps,
+    } = chartTitle;
+    const setMenuOpen = chartTitle.menu.setOpen;
+
+    const { containerId, enabled, portalNodeId, searchInputClassName, open, open_market, isNestedList } = props;
 
     React.useEffect(() => {
-        const { updateProps, ...otherProps } = props;
+        const { ...otherProps } = props;
         updateProps(otherProps);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open, open_market]);
@@ -55,7 +63,7 @@ const ChartTitle = (props: any) => {
                     searchInputClassName={searchInputClassName}
                     onSelectItem={(x: any) => {
                         if (x.symbol !== currentSymbol.symbol) {
-                            onChange(x.symbol, chartId);
+                            onChange(x.symbol);
                         }
                         setMenuOpen(false);
                     }}
@@ -67,24 +75,11 @@ const ChartTitle = (props: any) => {
     if (containerId) {
         return ReactDOM.createPortal(
             <div className={`smartcharts-${theme}`}>{ChartTitleContainer}</div>,
-            document.getElementById(containerId)
+            document.getElementById(containerId) as HTMLElement
         );
     }
 
     return ChartTitleContainer;
 };
 
-export default connect(({ chartTitle: c, chart, chartSetting }: any) => ({
-    chartId: chart.chartId,
-    ChartTitleMenu: c.ChartTitleMenu,
-    currentSymbol: c.currentSymbol,
-    isMobile: chart.isMobile,
-    MarketSelector: c.MarketSelector,
-    onChange: c.setSymbol,
-    setMenuOpen: c.menu.setOpen,
-    SymbolSelectButton: c.SymbolSelectButton,
-    onMouseEnter: c.onMouseEnter,
-    onMouseLeave: c.onMouseLeave,
-    updateProps: c.updateProps,
-    theme: chartSetting.theme,
-}))(ChartTitle);
+export default observer(ChartTitle);

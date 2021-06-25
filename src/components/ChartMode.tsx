@@ -2,19 +2,23 @@
 
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartTypes' was resolved to '/Users/... Remove this comment to see the full error message
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import ChartTypes from './ChartTypes';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Timeperiod' was resolved to '/Users/... Remove this comment to see the full error message
 import Timeperiod from './Timeperiod';
 import {
     TypeAreaGrayscaleIcon,
     TypeCandleGrayscaleIcon,
     TypeHollowGrayscaleIcon,
     TypeOhlcGrayscaleIcon,
-    // @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 } from './Icons';
 import '../../sass/components/_chart-mode.scss';
+
+type TChartModeProps = {
+    portalNodeId: string;
+    onChartType: any;
+    onGranularity: (granularity: number) => void;
+};
 
 const TypeMap = {
     mountain: TypeAreaGrayscaleIcon,
@@ -23,17 +27,15 @@ const TypeMap = {
     hollow_candle: TypeHollowGrayscaleIcon,
 };
 
-const ChartMode = ({
-    ChartTypeMenu,
-    menuOpen,
-    onChartType,
-    onGranularity,
-    Type,
-    displayInterval,
-    portalNodeId,
-}: any) => {
-    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-    const TypeIcon = TypeMap[Type.id];
+const ChartMode: React.FC<TChartModeProps> = ({ onChartType, onGranularity, portalNodeId }) => {
+    const { chartMode, chartType, timeperiod } = useStores();
+
+    const { ChartTypeMenu } = chartMode;
+    const { type } = chartType;
+    const { display: displayInterval } = timeperiod;
+    const menuOpen = chartMode.menu.open;
+
+    const TypeIcon = TypeMap[type.id as keyof typeof TypeMap];
     return (
         <ChartTypeMenu
             className='ciq-display sc-chart-mode'
@@ -46,7 +48,7 @@ const ChartMode = ({
             <ChartTypeMenu.Title>
                 <div className={classNames('sc-chart-mode__menu', { 'sc-chart-mode__menu--active': menuOpen })}>
                     <span className='sc-chart-mode__menu__timeperiod'>{displayInterval}</span>
-                    <TypeIcon tooltip-title={t.translate(Type.text)} />
+                    <TypeIcon tooltip-title={t.translate(type.text)} />
                 </div>
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
@@ -63,9 +65,4 @@ const ChartMode = ({
     );
 };
 
-export default connect(({ chartMode, chartType, timeperiod }: any) => ({
-    ChartTypeMenu: chartMode.ChartTypeMenu,
-    menuOpen: chartMode.menu.open,
-    Type: chartType.type,
-    displayInterval: timeperiod.display,
-}))(ChartMode);
+export default observer(ChartMode);

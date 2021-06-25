@@ -1,10 +1,13 @@
-import React from 'react'; // @ts-expect-error ts-migrate(6142) FIXME: Module './FastMarker' was resolved to '/Users/... Remove this comment to see the full error message
+import React from 'react';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import FastMarker from './FastMarker';
-import { connect } from '../store/Connect';
 import '../../sass/components/_pagination-loader.scss';
 
-const PaginationLoader = ({ isOnPagination, setRef }: any) =>
-    isOnPagination ? (
+const PaginationLoader: React.FC = () => {
+    const { paginationLoader } = useStores();
+    const { isOnPagination, setRef } = paginationLoader;
+    return isOnPagination ? (
         <FastMarker markerRef={setRef} className='pagination'>
             <div className='pagination__loader'>
                 <div className='pagination__loader-background' />
@@ -13,8 +16,6 @@ const PaginationLoader = ({ isOnPagination, setRef }: any) =>
     ) : (
         <></>
     );
+};
 
-export default connect(({ paginationLoader: s }) => ({
-    isOnPagination: s.isOnPagination,
-    setRef: s.setRef,
-}))(PaginationLoader);
+export default observer(PaginationLoader);

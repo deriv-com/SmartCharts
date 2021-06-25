@@ -1,11 +1,7 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moch... Remove this comment to see the full error message
 import { afterEach, beforeEach, describe, it } from 'mocha';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'chai... Remove this comment to see the full error message
 import chai, { expect } from 'chai';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'sino... Remove this comment to see the full error message
 import sinon from 'sinon';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'chai... Remove this comment to see the full error message
-import sinonChai from 'chai-sinon';
+import sinonChai from 'sinon-chai';
 import TradingTimes from '../TradingTimes';
 import DummyBinaryAPI from './DummyBinaryAPI';
 
@@ -14,8 +10,7 @@ chai.use(sinonChai);
 describe('TradingTimes test', async function () {
     const unlicensedSymbols = ['SPC', 'DFMGI', 'AS51'];
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    beforeEach(async function (this: any, this: any, this: any, this: any, this: any) {
+    beforeEach(async function () {
         this.clock = sinon.useFakeTimers({
             now: 1535068800000, // Friday, 2018-08-24
         });
@@ -24,14 +19,12 @@ describe('TradingTimes test', async function () {
         await this.tt.initialize();
     });
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    afterEach(function (this: any, this: any) {
+    afterEach(function () {
         this.tt.destructor();
         this.clock.restore();
     });
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    it('Test isFeedUnavailable works', function (this: any, this: any) {
+    it('Test isFeedUnavailable works', function () {
         for (const s of unlicensedSymbols) {
             expect(this.tt.isFeedUnavailable(s)).to.be.true;
         }
@@ -41,8 +34,7 @@ describe('TradingTimes test', async function () {
         }
     });
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    it('Test getDelayedMinutes', function (this: any, this: any) {
+    it('Test getDelayedMinutes', function () {
         expect(this.tt.getDelayedMinutes('BSESENSEX30')).to.be.equal(10);
         expect(this.tt.getDelayedMinutes('R_50')).to.be.equal(0);
     });
@@ -53,16 +45,7 @@ describe('TradingTimes test', async function () {
         }
     });
 
-    it('Test if onMarketOpenCloseChanged event is fired correctly', function (// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any) {
+    it('Test if onMarketOpenCloseChanged event is fired correctly', function () {
         const spy = sinon.spy();
         this.tt.onMarketOpenCloseChanged(spy);
         // STI (Singapore Index) opens at 1:00 and closes at 9:00
@@ -80,8 +63,7 @@ describe('TradingTimes test', async function () {
         }, 0);
     });
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    it('Test onMarketOpenCloseChanged changed object is correct', function (this: any, this: any, this: any, this: any) {
+    it('Test onMarketOpenCloseChanged changed object is correct', function () {
         const spy = sinon.spy();
         let changes;
         this.tt.onMarketOpenCloseChanged(spy);
@@ -106,8 +88,7 @@ describe('TradingTimes test', async function () {
         }, 0);
     });
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    it('Test onMarketOpenCloseChanged changed object in multiple open close sessions', function (this: any, this: any, this: any, this: any, this: any) {
+    it('Test onMarketOpenCloseChanged changed object in multiple open close sessions', function () {
         const spy = sinon.spy();
         const OTC_HSI = 'OTC_HSI';
         let changes;
@@ -136,8 +117,7 @@ describe('TradingTimes test', async function () {
         }, 0);
     });
 
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    it('Trade request for the next day will be called if no available open/closing times are available for query', function (this: any, this: any, this: any, this: any) {
+    it('Trade request for the next day will be called if no available open/closing times are available for query', function () {
         expect(this.dummyBinaryApi.getTradingTimes).to.be.calledOnce;
         const getCalledDate = () => this.dummyBinaryApi.getTradingTimes.lastCall.args[0];
 
@@ -151,15 +131,7 @@ describe('TradingTimes test', async function () {
         }, 0);
     });
 
-    it('Test markets that closed on certain days of the week', function (// @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any, // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    this: any) {
+    it('Test markets that closed on certain days of the week', function () {
         const frxAUDJPY = 'frxAUDJPY';
 
         expect(this.tt.isMarketOpened(frxAUDJPY)).to.be.true;

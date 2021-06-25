@@ -1,8 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './PriceLineArrow' was resolved to '/Us... Remove this comment to see the full error message
 import PriceLineArrow from './PriceLineArrow';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './PriceLineTitle' was resolved to '/Us... Remove this comment to see the full error message
 import PriceLineTitle from './PriceLineTitle';
 
 const PriceLine = ({

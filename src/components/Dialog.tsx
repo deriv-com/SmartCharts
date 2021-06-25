@@ -1,11 +1,20 @@
 import React, { useEffect } from 'react';
 
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { CloseIcon } from './Icons';
 import '../../sass/components/_dialog.scss';
 
-const Dialog = ({
+type TDialogProps = {
+    className: string;
+    enableTabular: boolean;
+    title: string;
+    onContainerClick: React.MouseEventHandler<HTMLDivElement>;
+    handleCloseDialog: React.MouseEventHandler<HTMLDivElement>;
+    customHead: React.ReactElement;
+    updateCloseCallback: (fn: React.MouseEventHandler<HTMLDivElement>) => void;
+};
+
+const Dialog: React.FC<TDialogProps> = ({
     children,
     onContainerClick,
     className = '',
@@ -14,7 +23,7 @@ const Dialog = ({
     enableTabular = false,
     handleCloseDialog,
     updateCloseCallback,
-}: any) => {
+}) => {
     useEffect(() => updateCloseCallback(handleCloseDialog));
     return (
         <div

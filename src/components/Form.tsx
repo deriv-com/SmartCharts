@@ -1,16 +1,19 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/sort-comp,react/no-multi-comp */
-import React from 'react'; // @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'loda... Remove this comment to see the full error message
+import React from 'react';
 import debounce from 'lodash.debounce';
 
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Scroll' was resolved to '/Users/bala... Remove this comment to see the full error message
 import Scroll from './Scroll';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon, CheckboxIcon, CheckboxActiveIcon } from './Icons';
 import '../../sass/components/_form.scss';
 
-export const FormGroup = ({ title, type, children }: any) => (
+type TFormGroupProps = {
+    title?: string | null;
+    type?: string;
+};
+
+export const FormGroup: React.FC<TFormGroupProps> = ({ title, type, children }) => (
     <div className={`form__group ${type ? `form__group--${type}` : ''}`}>
         {title && (
             <div className='form__label'>
@@ -21,7 +24,15 @@ export const FormGroup = ({ title, type, children }: any) => (
     </div>
 );
 
-export const Checkbox = ({ id, label, checked, disabled, onChange }: any) => (
+type TCheckboxProps = {
+    id: string;
+    label: string;
+    checked: boolean;
+    disabled?: boolean;
+    onChange: (checked: boolean) => void;
+};
+
+export const Checkbox: React.FC<TCheckboxProps> = ({ id, label, checked, disabled, onChange }) => (
     <span onClick={() => onChange(!checked)}>
         <label
             htmlFor={id}
@@ -62,17 +73,17 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }: any) =>
 
 export const DropDown = ({ subtitle, rows, children, value, onRowClick, className }: any) => {
     const [open, setOpen] = React.useState(false);
-    const [top, setTop] = React.useState(0);
-    const [left, setLeft] = React.useState(0);
-    const [width, setWidth] = React.useState(null);
-    const innerRef = React.useRef();
-    const innerTitleRef = React.useRef();
+    const [top, setTop] = React.useState<number | undefined>(0);
+    const [left, setLeft] = React.useState<number | undefined>(0);
+    const [width, setWidth] = React.useState<number | undefined>();
+    const innerRef = React.useRef<HTMLDivElement>(null);
+    const innerTitleRef = React.useRef<HTMLDivElement>(null);
 
     const handleClick = React.useCallback(() => {
-        const bounding = innerRef.current.getBoundingClientRect();
-        setTop(!open ? bounding.top : null);
-        setLeft(!open ? bounding.left : null);
-        setWidth(bounding.width);
+        const bounding = innerRef.current?.getBoundingClientRect();
+        setTop(!open ? bounding?.top : undefined);
+        setLeft(!open ? bounding?.left : undefined);
+        setWidth(bounding?.width);
         setOpen((prevState: any) => !prevState);
     }, [open, innerRef]);
     const handleClose = React.useCallback(
@@ -252,11 +263,11 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }: any) => {
         ],
     ];
     const [open, setOpen] = React.useState(false);
-    const [top, setTop] = React.useState(0);
-    const [left, setLeft] = React.useState(0);
-    const [width, setWidth] = React.useState(null);
-    const innerRef = React.useRef();
-    const innerTitleRef = React.useRef();
+    const [top, setTop] = React.useState<number | undefined>(0);
+    const [left, setLeft] = React.useState<number | undefined>(0);
+    const [width, setWidth] = React.useState<number | undefined>();
+    const innerRef = React.useRef<HTMLDivElement>(null);
+    const innerTitleRef = React.useRef<HTMLDivElement>(null);
 
     const backgroundColor = React.useMemo(() => {
         if (color !== 'auto') return color;
@@ -264,10 +275,10 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }: any) => {
     }, [color, theme]);
 
     const handleClick = React.useCallback(() => {
-        const bounding = innerRef.current.getBoundingClientRect();
-        setTop(!open ? bounding.top : null);
-        setLeft(!open ? bounding.left : null);
-        setWidth(bounding.width);
+        const bounding = innerRef.current?.getBoundingClientRect();
+        setTop(!open ? bounding?.top : undefined);
+        setLeft(!open ? bounding?.left : undefined);
+        setWidth(bounding?.width);
         setOpen((prevState: any) => !prevState);
     }, [open, innerRef]);
     const handleClose = React.useCallback(
@@ -323,7 +334,21 @@ export const Switch = ({ value, onChange }: any) => (
     </div>
 );
 
-export const SwitchIcon = ({ id, label, value, onChange, noramIcon, activeIcon }: any) => {
+export const SwitchIcon = ({
+    id,
+    label,
+    value,
+    onChange,
+    noramIcon,
+    activeIcon,
+}: {
+    id: string;
+    label: string;
+    value: boolean;
+    onChange: (checked: boolean) => void;
+    noramIcon: (props: any) => JSX.Element;
+    activeIcon: (props: any) => JSX.Element;
+}) => {
     const Icon = value ? activeIcon : noramIcon;
     return (
         <div className='sc-switch-icon'>
@@ -337,7 +362,7 @@ export const SwitchIcon = ({ id, label, value, onChange, noramIcon, activeIcon }
 
 // NumericInput fires onChange on Enter or onBlur
 export const NumericInput = ({ subtitle, onChange, min, max, step, value }: any) => {
-    const [innerValue, setInnerValue] = React.useState(false);
+    const [innerValue, setInnerValue] = React.useState('');
 
     const handleFireOnChange = debounce(
         () => {
@@ -376,7 +401,7 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: any)
         handleFireOnChange();
     };
     const onDecrease = () => {
-        setInnerValue((prevState: any) => prevState - 1);
+        setInnerValue((prevState: any) => (prevState - 1) as any);
         handleFireOnChange();
     };
 

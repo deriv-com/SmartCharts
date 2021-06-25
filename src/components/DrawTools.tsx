@@ -2,26 +2,36 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Scroll' was resolved to '/Users/bala... Remove this comment to see the full error message
+import { observer } from 'mobx-react-lite';
+import { TMainStore } from 'src/types';
 import Scroll from './Scroll';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './NotificationBadge' was resolved to '... Remove this comment to see the full error message
 import NotificationBadge from './NotificationBadge';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { DrawToolIcon, ActiveIcon, DeleteIcon, SettingIcon, EmptyStateIcon } from './Icons';
 import '../../sass/components/_draw_tools.scss';
+import { useStores } from 'src/store';
 
-const ActivePanelView = ({ enabled, children }: any) =>
+type TActivePanelViewProps = {
+    enabled: boolean;
+};
+
+const ActivePanelView: React.FC<TActivePanelViewProps> = ({ enabled, children }) =>
     enabled ? (
         <div className='sc-dtools--empty'>
             <EmptyStateIcon />
             <p>{t.translate('You have no active drawings yet.')}</p>
         </div>
     ) : (
-        children
+        <React.Fragment>{children ? children : null}</React.Fragment>
     );
 
-const Info = ({ Icon, text, num, bars }: any) => (
+type InfoProps = {
+    Icon: (props: any) => JSX.Element;
+    text: string;
+    num?: number;
+    bars?: any;
+};
+
+const Info: React.FC<InfoProps> = ({ Icon, text, num, bars }) => (
     <div className='info'>
         {Icon ? <Icon className='icon' /> : ''}
         <div className='text'>
@@ -36,8 +46,6 @@ const DrawToolsList = ({ items, onClick }: any) => (
         {items.map((Item: any) => (
             <div key={Item.id} className='sc-dtools__list__item' onClick={() => onClick(Item.id)}>
                 <Info Icon={Item.icon} text={Item.text} />
-                // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove
-                this comment to see the full error message
             </div>
         ))}
     </div>
@@ -71,9 +79,15 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: any) => (
     </div>
 );
 
-const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }: any) => (
+type TActiveDrawToolsListProps = {
+    activeDrawToolsGroup: TMainStore['drawTools']['activeToolsGroup'];
+    onSetting: TMainStore['drawTools']['onSetting'];
+    onDelete: TMainStore['drawTools']['onDeleted'];
+};
+
+const ActiveDrawToolsList: React.FC<TActiveDrawToolsListProps> = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
     <Scroll autoHide height={320}>
-        {activeDrawToolsGroup.map((group: any) =>
+        {activeDrawToolsGroup.map(group =>
             group.items && group.items.length === 1 ? (
                 <ActiveDrawToolsListItem
                     key={group.key}
@@ -88,19 +102,27 @@ const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }: any)
     </Scroll>
 );
 
-const DrawTools = ({
-    clearAll,
-    selectTool,
-    DrawToolsMenu,
-    menuOpen,
-    drawToolsItems,
-    activeDrawToolsItemsNo,
-    activeDrawToolsGroup,
-    onSetting,
-    onDelete,
-    portalNodeId,
-    updatePortalNode,
-}: any) => {
+type DrawToolsProps = {
+    portalNodeId: string;
+};
+
+const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {
+    const { drawTools } = useStores();
+
+    const {
+        clearAll,
+        selectTool,
+        DrawToolsMenu,
+        drawToolsItems,
+        activeToolsNo: activeDrawToolsItemsNo,
+        activeToolsGroup: activeDrawToolsGroup,
+        onDeleted: onDelete,
+        onSetting,
+        updatePortalNode,
+    } = drawTools;
+
+    const menuOpen = drawTools.menu.open;
+
     updatePortalNode(portalNodeId);
     return (
         <DrawToolsMenu
@@ -123,13 +145,11 @@ const DrawTools = ({
                     <TabList>
                         <Tab>
                             <ActiveIcon />
-                            {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
                             {t.translate('Active')}
                             <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
                         </Tab>
                         <Tab>
                             <DrawToolIcon />
-                            {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
                             {t.translate('All drawings')}
                         </Tab>
                     </TabList>
@@ -168,15 +188,4 @@ const DrawTools = ({
     );
 };
 
-export default connect(({ drawTools: dt }) => ({
-    clearAll: dt.clearAll,
-    selectTool: dt.selectTool,
-    DrawToolsMenu: dt.DrawToolsMenu,
-    menuOpen: dt.menu.open,
-    drawToolsItems: dt.drawToolsItems,
-    activeDrawToolsItemsNo: dt.activeToolsNo,
-    activeDrawToolsGroup: dt.activeToolsGroup,
-    onSetting: dt.onSetting,
-    onDelete: dt.onDeleted,
-    updatePortalNode: dt.updatePortalNode,
-}))(DrawTools);
+export default observer(DrawTools);

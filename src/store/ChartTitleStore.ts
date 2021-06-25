@@ -8,14 +8,16 @@ import AnimatedPrice from '../components/AnimatedPrice';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
 import { connect } from './Connect';
 import ServerTime from '../utils/ServerTime';
+import { TMainStore } from '../types';
+
 export default class ChartTitleStore {
     ChartTitleMenu: any;
     MarketSelector: any;
     SymbolSelectButton: any;
-    animatedPrice: any;
-    categoricalDisplay: any;
-    mainStore: any;
-    menu: any;
+    animatedPrice: AnimatedPriceStore;
+    categoricalDisplay: CategoricalDisplayStore;
+    mainStore: TMainStore;
+    menu: MenuStore;
     serverTime: any;
     constructor(mainStore: any) {
         this.mainStore = mainStore;
@@ -81,7 +83,7 @@ export default class ChartTitleStore {
     }
     @computed
     get decimalPlaces() {
-        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+        return (this.mainStore.chart.currentActiveSymbol?.decimal_places as number) || 2;
     }
     @computed
     get isShowChartPrice() {
@@ -94,7 +96,7 @@ export default class ChartTitleStore {
     @computed
     get symbolOpenTime() {
         const times =
-            this.tradingTimes._tradingTimesMap && this.tradingTimes._tradingTimesMap.length
+            this.tradingTimes?._tradingTimesMap && this.tradingTimes._tradingTimesMap.length && this.currentSymbol
                 ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times
                 : [];
         const now = this.serverTime.getLocalDate().getTime();
@@ -128,10 +130,10 @@ export default class ChartTitleStore {
     onContextReady = () => {
         this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
-        this.tradingTimes.onMarketOpenCloseChanged(
+        this.tradingTimes?.onMarketOpenCloseChanged(
             action((changes: any) => {
                 for (const symbol in changes) {
-                    if (this.currentSymbol.symbol === symbol) {
+                    if (this.currentSymbol?.symbol === symbol) {
                         this.currentSymbol.exchange_is_open = changes[symbol];
                     }
                 }
@@ -164,7 +166,7 @@ export default class ChartTitleStore {
             this.animatedPrice.setPrice(currentPrice, oldPrice);
             if (oldPrice) {
                 this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
-                this.todayChangePercent = ((((this.todayChange as unknown) as number) / oldPrice) * 100).toFixed(2);
+                this.todayChangePercent = ((Number(this.todayChange) / oldPrice) * 100).toFixed(2);
             }
         }
         // `todayChange` and `todayChangePercent` has problem on

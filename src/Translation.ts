@@ -1,19 +1,21 @@
-const lang_map = {};
+const lang_map: {
+    [key: string]: {
+        [key: string]: string;
+    };
+} = {};
 
 export class Translation {
-    lang: any;
+    lang: string;
     constructor(lang = 'en') {
         this.lang = lang;
     }
 
-    setLanguage(lang: any) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    setLanguage(lang: string) {
         if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
         } else {
             import(/* webpackChunkName: "[request]" */ `../translation/${lang}.json`).then(imported_lang => {
                 if (imported_lang) {
-                    // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                     lang_map[lang] = imported_lang.default;
                     this.lang = lang;
                 } else {
@@ -32,8 +34,7 @@ export class Translation {
      * Note: The first key-value pair will be used to determine the plural form.
      *
      */
-    translate(...args: any[]) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
+    translate(...args: [string, { [key: string]: string }]) {
         const curr_lang = lang_map[this.lang];
         const key = args[0].trim();
         const key_with_quotation = key.replace(/"/gi, '\\"'); /* eslint-disable-line */

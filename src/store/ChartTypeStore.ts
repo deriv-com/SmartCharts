@@ -7,8 +7,9 @@ import Menu from '../components/Menu';
 import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { ChartTypes } from '../Constant';
+import { ChartType, TMainStore } from 'src/types';
 const notCandles = [...ChartTypes].filter(t => !t.candleOnly).map(t => t.id);
-const aggregateCharts = [...ChartTypes].filter(t => t.settingsOnClick);
+const aggregateCharts = [...ChartTypes].filter(t => (t as any).settingsOnClick);
 function getAggregates() {
     return {
         heikinashi: true,
@@ -77,9 +78,9 @@ export default class ChartTypeStore {
     ChartTypeList: any;
     ChartTypeMenu: any;
     aggregates: any;
-    chartTypes: any;
+    chartTypes: typeof ChartTypes = [];
     list: any;
-    mainStore: any;
+    mainStore: TMainStore;
     menu: any;
     settingsDialog: any;
     constructor(mainStore: any) {
@@ -99,9 +100,8 @@ export default class ChartTypeStore {
         this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
     @observable
-    type = 'mountain';
-    // @ts-expect-error ts-migrate(7008) FIXME: Member 'onChartTypeChanged' implicitly has an 'any... Remove this comment to see the full error message
-    onChartTypeChanged;
+    type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
+    onChartTypeChanged: any;
     get context() {
         return this.mainStore.chart.context;
     }
@@ -112,10 +112,10 @@ export default class ChartTypeStore {
         return this.mainStore.state.chartType;
     }
     get isCandle() {
-        return this.type ? notCandles.indexOf((this.type as any).id) === -1 : false;
+        return this.type ? notCandles.indexOf(this.type.id) === -1 : false;
     }
     get isSpline() {
-        return (this.type as any).id === 'spline';
+        return this.type.id === 'spline';
     }
     get isAggregateChart() {
         return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType);
@@ -134,7 +134,7 @@ export default class ChartTypeStore {
         );
     };
     @action.bound
-    setTypeFromUI(type: any) {
+    setTypeFromUI(type: string | ChartType) {
         if (this.chartTypeProp !== undefined) {
             console.error(
                 'Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />'
@@ -144,15 +144,15 @@ export default class ChartTypeStore {
         this.setType(type);
     }
     @action.bound
-    setType(type: any) {
+    setType(type: string | ChartType) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (!type) {
             type = 'mountain';
         }
         if (typeof type === 'string') {
-            type = this.types.find((t: any) => t.id === type);
+            type = this.types.find(t => t.id === type) as ChartType;
         }
-        if (type.id === (this.type as any).id) {
+        if (type.id === this.type.id) {
             return;
         }
         if (type.id === 'spline') {
@@ -179,8 +179,8 @@ export default class ChartTypeStore {
         this.onChartTypeChanged = onChange;
     }
     @action.bound
-    showAggregateDialog(aggregateId: any) {
-        if (aggregateId !== (this.type as any).id) {
+    showAggregateDialog(aggregateId: string) {
+        if (aggregateId !== this.type.id) {
             this.setType(aggregateId);
         }
         const aggregate = this.aggregates[aggregateId];
@@ -212,19 +212,19 @@ export default class ChartTypeStore {
     @computed
     get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
-        if (this.chartTypes === undefined) {
+        if (this.chartTypes === undefined || this.chartTypes.length === 0) {
             this.chartTypes = [...ChartTypes];
         }
-        return this.chartTypes.map((t: any) => ({
+        return this.chartTypes.map(t => ({
             ...t,
-            active: t.id === (this.type as any).id,
+            active: t.id === this.type.id,
             disabled: t.candleOnly ? isTickSelected : false,
         }));
     }
     @action.bound
     setChartTypeFromLayout(layout: any) {
         const chartType = this.getChartTypeFromLayout(layout);
-        const typeIdx = this.chartTypes.findIndex((t: any) => t.id === chartType);
+        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.type = this.chartTypes[typeIdx];
     }
     getChartTypeFromLayout(layout: any) {
@@ -239,9 +239,9 @@ export default class ChartTypeStore {
         }
         return chartType;
     }
-    isTypeCandle(type: any) {
+    isTypeCandle(type: ChartType | string) {
         if (typeof type === 'string') {
-            type = this.types.find((t: any) => t.id === type);
+            type = this.types.find((t: any) => t.id === type) as ChartType;
         }
         return notCandles.indexOf(type.id) === -1;
     }

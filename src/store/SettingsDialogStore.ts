@@ -2,6 +2,7 @@ import { observable, action, computed, reaction } from 'mobx';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu';
+import { TSettingsItemGroup, TSettingsItems } from 'src/types';
 export default class SettingsDialogStore {
     SettingDialogMenu: any;
     getContext: any;
@@ -11,7 +12,7 @@ export default class SettingsDialogStore {
     onDeleted: any;
     onItemActive: any;
     @observable
-    items: any[] = []; // [{id: '', title: '', value: ''}]
+    items: TSettingsItems[] = []; // [{id: '', title: '', value: ''}]
     @observable
     title = '';
     @observable
@@ -96,7 +97,7 @@ export default class SettingsDialogStore {
     }
     @action.bound
     onResetClick() {
-        const items = this.items.map(item => ({ ...(item as any), value: (item as any).defaultValue }));
+        const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
         this.items = items;
         this.onChanged(items);
     }
@@ -116,8 +117,8 @@ export default class SettingsDialogStore {
     }
     @computed
     get itemGroups() {
-        const restGroup: any = [];
-        const groups = [];
+        const restGroup: TSettingsItems[] = [];
+        const groups: TSettingsItemGroup[] = [];
         groups.push({
             key: '%K',
             fields: [],
@@ -140,10 +141,10 @@ export default class SettingsDialogStore {
         });
         for (const index in this.items) {
             const item = this.items[index];
-            const title = (item as any).title;
+            const title = item.title;
             const group = groups.find(x => title.indexOf(x.key) !== -1);
             if (group) {
-                (item as any).subtitle = title.replace(group.key, '').trim();
+                item.subtitle = title.replace(group.key, '').trim();
                 group.fields.push(item);
             } else {
                 restGroup.push(item);

@@ -1,4 +1,5 @@
 import { action, observable, when } from 'mobx';
+import React from 'react';
 
 class PaginationLoaderStore {
     mainStore: any;
@@ -31,7 +32,7 @@ class PaginationLoaderStore {
         this.stx.prepend('mouseWheel', this.onMouseWheel);
     };
 
-    onMouseWheel = (e: any) => {
+    onMouseWheel = (e: React.MouseEvent) => {
         e.preventDefault();
         let diff = null;
         const timeLimit = 40;

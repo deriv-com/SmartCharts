@@ -43,9 +43,9 @@ export default class TimeperiodStore {
             this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
         } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
-    @observable timeUnit: string | null = null;
+    @observable timeUnit?: string | null = null;
     @observable interval: string | number | null = null;
-    @observable preparingInterval = null;
+    @observable preparingInterval: number | null = null;
     onGranularityChange = (x: any) => null;
 
     remain: string | null = null;
@@ -112,8 +112,7 @@ export default class TimeperiodStore {
                     const now = this._serverTime.getUTCDate();
                     const diff = now - currentQuote.DT;
                     const chartInterval = getIntervalInSeconds(stx.layout) * 1000;
-                    const coefficient =
-                        diff > chartInterval ? parseInt(((diff / chartInterval) as unknown) as string, 10) + 1 : 1;
+                    const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
 
                     if (this.context.stx) {
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
@@ -151,7 +150,7 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setGranularity(granularity: any) {
+    @action.bound setGranularity(granularity: number) {
         if (this.mainStore.state.granularity !== undefined) {
             console.error(
                 'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
@@ -169,7 +168,7 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setPreparingInterval(interval: any) {
+    @action.bound setPreparingInterval(interval: number) {
         this.preparingInterval = interval;
     }
 

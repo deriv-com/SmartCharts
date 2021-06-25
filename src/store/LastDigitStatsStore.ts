@@ -1,11 +1,9 @@
+import { TickSpotData, TicksStreamResponse } from '@deriv/api-types';
 import { observable, action, computed, when } from 'mobx';
+import { TMainStore, TBar } from '../types';
 
-type IBars = {
-    height: number;
-    cName: string;
-};
 export default class LastDigitStatsStore {
-    mainStore: any;
+    mainStore: TMainStore;
 
     constructor(mainStore: any) {
         this.mainStore = mainStore;
@@ -35,19 +33,19 @@ export default class LastDigitStatsStore {
     }
     count = 1000;
     digits: number[] = [];
-    latestData = [];
-    lastSymbol = null;
+    latestData: any[] = [];
+    lastSymbol: any = null;
     @observable
-    bars: IBars[] = [];
+    bars: TBar[] = [];
     // api tick
     @observable
-    lastTick = null;
+    lastTick?: TickSpotData | null = null;
     get api() {
         return this.mainStore.chart.api;
     }
     @computed
     get decimalPlaces() {
-        return this.mainStore.chart.currentActiveSymbol?.decimal_places || 2;
+        return (this.mainStore.chart.currentActiveSymbol?.decimal_places as number) || 2;
     }
     @computed
     get isVisible() {
@@ -76,7 +74,7 @@ export default class LastDigitStatsStore {
                 .slice(-this.count)
                 .map((x: any) => x.Close.toFixed(this.decimalPlaces));
         } else {
-            const tickHistory = await this.api.getTickHistory({
+            const tickHistory = await this.api?.getTickHistory({
                 symbol: this.mainStore.chart.currentActiveSymbol.symbol,
                 count: this.count,
             });
@@ -85,13 +83,12 @@ export default class LastDigitStatsStore {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.latestData.forEach(price => {
             const lastDigit = (+price).toFixed(this.decimalPlaces).slice(-1);
-            // @ts-expect-error ts-migrate(7015) FIXME: Element implicitly has an 'any' type because index... Remove this comment to see the full error message
-            this.digits[lastDigit]++;
+            this.digits[(lastDigit as unknown) as number]++;
         });
         this.updateBars();
     }
     @action.bound
-    onMasterDataUpdate({ Close, tick }: any) {
+    onMasterDataUpdate({ Close, tick }: TicksStreamResponse & { Close: string }) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.lastTick = tick;
         if (this.marketDisplayName !== this.lastSymbol) {
@@ -99,16 +96,12 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.updateLastDigitStats();
         } else if (this.latestData.length) {
-            // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
             const firstDigit = (+this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
-            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
             this.latestData.push(+price);
-            // @ts-expect-error ts-migrate(7015) FIXME: Element implicitly has an 'any' type because index... Remove this comment to see the full error message
-            this.digits[lastDigit]++;
-            // @ts-expect-error ts-migrate(7015) FIXME: Element implicitly has an 'any' type because index... Remove this comment to see the full error message
-            this.digits[firstDigit]--;
+            this.digits[(lastDigit as unknown) as number]++;
+            this.digits[(firstDigit as unknown) as number]--;
             this.updateBars();
         }
     }
@@ -117,10 +110,10 @@ export default class LastDigitStatsStore {
         const min = Math.min(...this.digits);
         const max = Math.max(...this.digits);
         this.digits.forEach((digit, idx) => {
-            (this.bars[idx] as any).height = (digit * 100) / this.count;
-            if (digit === min) (this.bars[idx] as any).cName = 'min';
-            else if (digit === max) (this.bars[idx] as any).cName = 'max';
-            else (this.bars[idx] as any).cName = '';
+            this.bars[idx].height = (digit * 100) / this.count;
+            if (digit === min) this.bars[idx].cName = 'min';
+            else if (digit === max) this.bars[idx].cName = 'max';
+            else this.bars[idx].cName = '';
         });
         this.bars = this.bars.slice(0); // force array update
     }

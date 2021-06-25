@@ -1,25 +1,29 @@
+import { ServerTimeResponse } from '@deriv/api-types';
 import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 import PendingPromise from './PendingPromise';
 
 class ServerTime {
-    static _instance: any;
+    static _instance: ServerTime;
 
     _api: any;
-    clientTimeAtRequest: any;
-    getTimeInterval: any;
-    onTimeUpdated: any;
-    serverTimeAtResponse: any;
-    updateTimeInterval: any;
+    clientTimeAtRequest?: number;
+    getTimeInterval?: ReturnType<typeof setInterval>;
+    onTimeUpdated?: () => void;
+    serverTimeAtResponse?: number;
+    updateTimeInterval?: ReturnType<typeof setInterval>;
 
     clockStarted = false;
     clockStartedPromise = PendingPromise();
 
-    async init(api: any, updatedCallback: any) {
+    async init(api?: any, updatedCallback?: () => void) {
         this._api = api;
         this.onTimeUpdated = updatedCallback;
         if (!this.clockStarted) {
             this.clockStarted = true;
-            clearInterval(this.getTimeInterval);
+
+            if (this.getTimeInterval) {
+                clearInterval(this.getTimeInterval);
+            }
             await this.requestTime();
             this.getTimeInterval = setInterval(this.requestTime.bind(this), 30000);
         } else {
@@ -37,37 +41,40 @@ class ServerTime {
             // to boot up the speed, at the beginig
             // we use the user time
             this._timeResponse({
-                // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
-                time: parseInt(new Date().getTime() / 1000, 10),
+                time: Math.floor(new Date().getTime() / 1000),
             });
         }
         this.clockStartedPromise.resolve();
     }
 
-    _timeResponse = (response: any) => {
+    _timeResponse = (response: ServerTimeResponse | { time: number; error?: any }) => {
         if (response.error) {
             this.clockStarted = false;
         }
 
         if (!this.clockStarted) {
-            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 0.
             this.init();
             return;
         }
 
         const serverTime = response.time;
         const clientTimeAtResponse = getUTCEpoch(new Date());
-        this.serverTimeAtResponse = serverTime + (clientTimeAtResponse - this.clientTimeAtRequest) / 2;
+
+        if (serverTime && this.clientTimeAtRequest) {
+            this.serverTimeAtResponse = serverTime + (clientTimeAtResponse - this.clientTimeAtRequest) / 2;
+        }
 
         const updateTime = () => {
-            this.serverTimeAtResponse += 1;
+            if (this.serverTimeAtResponse) this.serverTimeAtResponse += 1;
 
             if (typeof this.onTimeUpdated === 'function') {
                 this.onTimeUpdated();
             }
         };
 
-        clearInterval(this.updateTimeInterval);
+        if (this.updateTimeInterval) {
+            clearInterval(this.updateTimeInterval);
+        }
         this.updateTimeInterval = setInterval(updateTime, 1000);
     };
 

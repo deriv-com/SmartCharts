@@ -1,3 +1,13 @@
+import React from 'react';
+
+export type TKeystrokeProps = {
+    key: string | number;
+    e: Event | React.SyntheticEvent;
+    keystroke: Keystroke;
+};
+
+export type TKeystrokeCallback = ({ key, e, keystroke }: TKeystrokeProps) => void;
+
 /**
  * UI Helper for capturing and handling keystrokes. cb to capture the key. Developer is responsible
  * for calling e.preventDefault() and/or e.stopPropagation();
@@ -13,19 +23,19 @@ class Keystroke {
      * @memberof CIQ.UI.Keystroke
      * @type {Boolean}
      */
-    static noKeyCapture = false;
+    noKeyCapture = false;
 
-    capsLock: any;
-    cb: any;
-    cmd: any;
-    ctrl: any;
-    downValue: any;
-    implementAndroidWorkaround: any;
-    key: any;
+    capsLock = false;
+    cb?: TKeystrokeCallback;
+    cmd = false;
+    ctrl = false;
+    downValue = '';
+    implementAndroidWorkaround = false;
+    key?: string | number | null;
     node: any;
-    shift: any;
+    shift = false;
 
-    constructor(node: any, cb: any) {
+    constructor(node: HTMLElement, cb: TKeystrokeCallback) {
         this.node = node;
         this.cb = cb;
         this.initialize();
@@ -41,15 +51,15 @@ class Keystroke {
     // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
     // Note that CIQ.isAndroid is false when the user requests "desktop site" and so some input boxes won't work
     // in that situation. There is no workaround other than to always treat 229 as a false value (it is a swedish character)
-    androidWorkaroundKeyup(e: any) {
-        const newValue = e.target.value;
+    androidWorkaroundKeyup(e: React.KeyboardEvent<HTMLInputElement>) {
+        const newValue = (e.target as HTMLInputElement).value;
         let key;
         if (newValue.length > this.downValue.length) {
             key = newValue.charCodeAt(newValue.length - 1);
         } else {
             key = 'delete';
         }
-        this.cb({ key, e, keystroke: this });
+        this.cb?.({ key, e, keystroke: this });
     }
 
     // Managing keystroke events. We will get three key events from the browser: keydown, keyup, keypress
@@ -63,7 +73,7 @@ class Keystroke {
     // before the input field is updated, we save any key that has been handled by these in this.key
     // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
     // will always have the right key (capitalized) and that input field value will be up to date.
-    keyup = (e: any) => {
+    keyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
         const key = e.which;
         if (this.implementAndroidWorkaround) {
             this.androidWorkaroundKeyup(e);
@@ -74,16 +84,16 @@ class Keystroke {
         switch (key) {
             case 16:
                 this.shift = false;
-                this.cb({ key, e, keystroke: this });
+                this.cb?.({ key, e, keystroke: this });
                 return;
             case 17:
             case 18:
                 this.ctrl = false;
-                this.cb({ key, e, keystroke: this });
+                this.cb?.({ key, e, keystroke: this });
                 return;
             case 91:
                 this.cmd = false;
-                this.cb({ key, e, keystroke: this });
+                this.cb?.({ key, e, keystroke: this });
                 return;
             default:
                 break;
@@ -91,17 +101,16 @@ class Keystroke {
         // This is where we handle the keystroke, regardless of whether we captured the key with a down or press event
         // The exception to this is the arrow keys, which are processed in keydown
         if (this.key) {
-            this.cb({ key: this.key, e, keystroke: this });
+            this.cb?.({ key: this.key, e, keystroke: this });
         }
     };
 
-    keydown = (e: any) => {
-        this.downValue = e.target.value;
-        // @ts-expect-error ts-migrate(2576) FIXME: Property 'noKeyCapture' is a static member of type... Remove this comment to see the full error message
+    keydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        this.downValue = (e.target as HTMLInputElement).value;
         if (this.noKeyCapture) {
             return;
         }
-        let key = e.which;
+        let key: string | number = e.which;
         if (key === 229 && CIQ.isAndroid) {
             this.implementAndroidWorkaround = true;
             return;
@@ -176,7 +185,7 @@ class Keystroke {
                 key = 'down';
             }
             this.key = null;
-            this.cb({ key, e, keystroke: this });
+            this.cb?.({ key, e, keystroke: this });
         }
     };
 
@@ -185,8 +194,7 @@ class Keystroke {
      * @memberof CIQ.UI.Keystroke
      * @param e
      */
-    keypress = (e: any) => {
-        // @ts-expect-error ts-migrate(2576) FIXME: Property 'noKeyCapture' is a static member of type... Remove this comment to see the full error message
+    keypress = (e: React.KeyboardEvent) => {
         if (this.noKeyCapture) {
             return;
         }
@@ -197,9 +205,9 @@ class Keystroke {
         this.key = key;
     };
 
-    onblur = (e: any) => {
+    onblur = (e: FocusEvent) => {
         this.ctrl = false;
-        this.cb({ key: 17, e, keystroke: this });
+        this.cb?.({ key: 17, e, keystroke: this });
     };
 
     /**

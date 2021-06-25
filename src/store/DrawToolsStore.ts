@@ -1,4 +1,5 @@
 import { action, reaction, when, observable, computed } from 'mobx';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu';
@@ -6,11 +7,28 @@ import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { formatCamelCase } from '../utils';
 import { drawTools } from '../Constant';
+
+type TDrawToolsGroup = {
+    key: string;
+    name: string;
+    items: TDrawingObject[];
+};
+
+type TDrawingObject = {
+    name: string;
+    p0: any[];
+    p1: any[];
+    num: string | number;
+    bars: number | null;
+    text: string;
+    index: number;
+};
+
 export default class DrawToolsStore {
     DrawToolsMenu: any;
     DrawToolsSettingsDialog: any;
     _pervDrawingObjectCount: any;
-    mainStore: any;
+    mainStore: TMainStore;
     menu: any;
     settingsDialog: any;
     constructor(mainStore: any) {
@@ -48,7 +66,7 @@ export default class DrawToolsStore {
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => (drawTools as any)[key]);
     @observable
-    activeToolsGroup: any[] = [];
+    activeToolsGroup: TDrawToolsGroup[] = [];
     @observable
     portalNodeIdChanged: any;
     onContextReady = () => {
@@ -67,7 +85,7 @@ export default class DrawToolsStore {
     doubleClick = () => this.drawingFinished();
     @computed
     get activeToolsNo() {
-        return this.activeToolsGroup.reduce((a, b) => a + (b as any).items.length, 0);
+        return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
     }
     @action.bound
     onRightClickDrawing(drawing: any) {
@@ -192,19 +210,20 @@ export default class DrawToolsStore {
         }
         this.showDrawToolDialog(this.stx.drawingObjects[indx]);
     }
+
     @action.bound
     computeActiveDrawTools() {
         if (!this.context) return;
-        const items: { [x: string]: any } = {};
+        const items: { [x: string]: number } = {};
         const ignoreBarType = ['vertical', 'horizontal'];
-        const groups: { [x: string]: any } = {};
-        this.stx.drawingObjects.forEach((item: any, indx: any) => {
+        const groups: {
+            [key: string]: TDrawToolsGroup;
+        } = {};
+        this.stx.drawingObjects.forEach((item: TDrawingObject, indx: number) => {
             item = (drawTools as any)[item.name] ? { ...item, ...(drawTools as any)[item.name] } : item;
             item.index = indx;
             item.bars =
-                ignoreBarType.indexOf(item.name) === -1
-                    ? Math.abs(parseInt(((item.p1[0] - item.p0[0]) as unknown) as string, 10)) + 1
-                    : null;
+                ignoreBarType.indexOf(item.name) === -1 ? Math.abs(Math.floor(item.p1[0] - item.p0[0])) + 1 : null;
             if (items[item.name]) {
                 items[item.name]++;
                 item.num = items[item.name];
@@ -227,10 +246,10 @@ export default class DrawToolsStore {
         });
         // get the values of group and sort group by the number of their children
         // this way the single item stay at top
-        this.activeToolsGroup = Object.values(groups).sort((a, b) => (a as any).items.length - (b as any).items.length);
+        this.activeToolsGroup = Object.values(groups).sort((a, b) => a.items.length - b.items.length);
     }
     @action.bound
-    updatePortalNode(portalNodeId: any) {
+    updatePortalNode(portalNodeId: string) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }

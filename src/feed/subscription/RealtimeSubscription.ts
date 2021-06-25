@@ -1,3 +1,5 @@
+import { TicksHistoryRequest, TicksStreamResponse } from '@deriv/api-types';
+import { IPendingPromise } from 'src/types';
 import PendingPromise from '../../utils/PendingPromise';
 import Subscription from './Subscription';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
@@ -22,8 +24,7 @@ class RealtimeSubscription extends Subscription {
         return super.resume();
     }
 
-    // @ts-expect-error ts-migrate(2416) FIXME: Property '_startSubscribe' in type 'RealtimeSubscr... Remove this comment to see the full error message
-    async _startSubscribe(tickHistoryRequest: any) {
+    async _startSubscribe(tickHistoryRequest: TicksHistoryRequest) {
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
         this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
         const response = await tickHistoryPromise;
@@ -46,12 +47,12 @@ class RealtimeSubscription extends Subscription {
         super.forget();
     }
 
-    _getProcessTickHistoryClosure() {
+    _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse>, (resp: TicksStreamResponse) => void] {
         let hasHistory = false;
-        const tickHistoryPromise = PendingPromise();
-        const processTickHistory = (resp: any) => {
+        const tickHistoryPromise = PendingPromise<TicksStreamResponse>();
+        const processTickHistory = (resp: TicksStreamResponse) => {
             if (this._stx.isDestroyed) {
-                const subscriptionId = resp.subscription.id;
+                const subscriptionId = resp.subscription?.id;
                 this._binaryApi.forgetStream(subscriptionId);
                 return;
             }
@@ -67,7 +68,7 @@ class RealtimeSubscription extends Subscription {
         return [tickHistoryPromise, processTickHistory];
     }
 
-    _onTick(response: any) {
+    _onTick(response: TicksStreamResponse) {
         this.lastStreamEpoch = +Subscription.getEpochFromTick(response);
         const quotes = [TickHistoryFormatter.formatTick(response)];
         this._emitter.emit(Subscription.EVENT_CHART_DATA, quotes);

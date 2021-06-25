@@ -26,13 +26,13 @@ import { getUTCDate } from '../utils';
 //    the marker will only be shown if it's within that zoom threshold.
 
 const FastMarker = (props: any) => {
-    const price_ref = React.useRef(null);
-    const date_ref = React.useRef(null);
-    const elem_ref = React.useRef(null);
-    const ctx_ref = React.useRef(null);
-    const stx_ref = React.useRef(null);
+    const price_ref = React.useRef<number | null>(null);
+    const date_ref = React.useRef<any>(null);
+    const elem_ref = React.useRef<any>(null);
+    const ctx_ref = React.useRef<any>(null);
+    const stx_ref = React.useRef<any>(null);
     const injection_id_ref = React.useRef();
-    const props_ref = React.useRef();
+    const props_ref = React.useRef(props);
     props_ref.current = props;
 
     const setPosition = ({ epoch, price }: any) => {
@@ -42,7 +42,7 @@ const FastMarker = (props: any) => {
     };
 
     const updateCSS = () => {
-        if (!elem_ref.current || !ctx_ref.current) {
+        if (!elem_ref.current || !ctx_ref.current || !stx_ref.current) {
             return;
         }
         if (!date_ref.current) {

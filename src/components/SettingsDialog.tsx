@@ -1,7 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Scroll' was resolved to '/Users/bala... Remove this comment to see the full error message
 import Scroll from './Scroll';
 import {
     FormGroup,
@@ -13,13 +12,18 @@ import {
     DropDown,
     NumberColorPicker,
     FontSetting,
-    // @ts-expect-error ts-migrate(6142) FIXME: Module './Form' was resolved to '/Users/balakr... Remove this comment to see the full error message
 } from './Form';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { DeleteIcon } from './Icons';
 import '../../sass/components/_settings-dialog.scss';
 
-const SettingsPanelItem = ({ group, title, type, Field }: any) => (
+type TSettingsPanelItem = {
+    group?: string;
+    title: string;
+    type: string;
+    Field: React.ReactChild;
+};
+
+const SettingsPanelItem: React.FC<TSettingsPanelItem> = ({ group, title, type, Field }) => (
     <FormGroup
         title={
             type === 'select' ||
@@ -98,8 +102,6 @@ const SettingsPanelGroup = ({
                     step={item.step}
                     max={item.max}
                 />
-                // @ts-expect-error ts-migrate(7026) FIXME: JSX element implicitly has type 'any' because no i... Remove
-                this comment to see the full error message
             </span>
         ),
         numbercolorpicker: (item: any) => (
@@ -114,16 +116,13 @@ const SettingsPanelGroup = ({
         <div className={`form__input-group ${input_group_name}`}>
             {title === 'Show Zones' ? '' : <h4>{title}</h4>}
             {items.map(
-                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 (item: any) =>
-                    renderMap[item.type] && (
+                    renderMap[item.type as keyof typeof renderMap] && (
                         <SettingsPanelItem
                             key={item.id}
                             type={item.type}
-                            active={item.active}
                             title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
-                            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-                            Field={renderMap[item.type](item)}
+                            Field={renderMap[item.type as keyof typeof renderMap](item)}
                         />
                     )
             )}
@@ -164,14 +163,12 @@ const SettingsPanel = ({ itemGroups, theme, onItemChange, setScrollPanel, freeze
 
 const ResetButton = ({ onClick }: any) => (
     <button type='button' className='sc-btn sc-btn--outline-secondary sc-btn--reset' onClick={onClick}>
-        {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
         {t.translate('Reset')}
     </button>
 );
 
 const DoneButton = ({ onClick }: any) => (
     <button type='button' className='sc-btn sc-btn--primary sc-btn--save' onClick={() => onClick()}>
-        {/* @ts-expect-error ts-migrate(2304) FIXME: Cannot find name 't'. */}
         {t.translate('Done')}
     </button>
 );

@@ -1,3 +1,4 @@
+import React from 'react';
 import BottomWidgetsContainerStore from './BottomWidgetsContainerStore';
 import TimeperiodStore from './TimeperiodStore';
 import ChartStore from './ChartStore';
@@ -23,8 +24,9 @@ import HighestLowestStore from './HighestLowestStore';
 import PaginationLoaderStore from './PaginationLoaderStore';
 import ToolbarWidgetStore from './ToolbarWidgetStore';
 import ScrollStore from './ScrollStore';
+import { TMainStore } from '../types';
 
-export default class MainStore {
+export default class MainStore implements TMainStore {
     notifier = new Notifier();
     favorites = FavoriteStore.getInstance();
     chart = new ChartStore(this);
@@ -51,3 +53,15 @@ export default class MainStore {
     toolbarWidget = new ToolbarWidgetStore(this);
     scroll = new ScrollStore();
 }
+
+let stores_context: React.Context<TMainStore>;
+
+export const initContext = (): void => {
+    if (!stores_context) {
+        const root_store = new MainStore();
+
+        stores_context = React.createContext<TMainStore>(root_store);
+    }
+};
+
+export const useStores = (): TMainStore => React.useContext(stores_context);

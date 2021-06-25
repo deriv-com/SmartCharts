@@ -1,16 +1,22 @@
-import React from 'react'; // @ts-expect-error ts-migrate(6142) FIXME: Module './Scroll' was resolved to '/Users/bala... Remove this comment to see the full error message
+import React from 'react';
 import Scroll from './Scroll';
 import '../../sass/components/_ciq-list.scss';
 
-const List = ({ height, items, onItemClick, children }: any) => {
-    const hasFunctionAsChildren = typeof children === 'function';
-    const renderRow = hasFunctionAsChildren ? children : (item: any) => item.text;
+type TListProps<T> = {
+    height: number;
+    items: T[];
+    onItemClick: (idx: number, item: T) => void;
+    children: React.ReactNode;
+};
+
+const List = <T extends { id: string }>({ height, items, onItemClick, children }: TListProps<T>) => {
+    const renderRow = typeof children === 'function' ? children : (item: any) => item.text;
     // eslint-disable-next-line no-useless-concat
     const itemClassName = (it: any) =>
         'ciq-list-item' + ` ${it.disabled ? 'disabled' : ''}` + ` ${it.active ? 'active' : ''}`;
     return (
-        <Scroll className='ciq-list' autoHeight autoHide style={height && { height: `${height}px` }}>
-            {items.map((it: any, idx: any) => (
+        <Scroll className='ciq-list' autoHide height={height ? `${height}px` : ''}>
+            {items.map((it: T, idx: number) => (
                 <div key={it.id} className={itemClassName(it)} onClick={() => onItemClick(idx, it)}>
                     {renderRow(it)}
                 </div>

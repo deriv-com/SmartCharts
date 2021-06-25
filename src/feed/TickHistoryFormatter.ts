@@ -1,11 +1,13 @@
+import { TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
+import { OHLCStreamResponse, TQuote } from 'src/types';
 import { getUTCDate } from '../utils';
 
 export class TickHistoryFormatter {
-    static formatHistory(response: any) {
+    static formatHistory(response: TicksHistoryResponse): TQuote[] | undefined {
         const { history, candles } = response;
         if (history) {
-            const { times, prices } = history;
-            const quotes = prices.map((p: any, idx: any) => ({
+            const { times = [], prices = [] } = history;
+            const quotes = prices.map((p, idx) => ({
                 Date: getUTCDate(+times[idx]),
                 Close: +p,
             }));
@@ -13,23 +15,28 @@ export class TickHistoryFormatter {
         }
 
         if (candles) {
-            const quotes = candles.map((c: any) => ({
-                Date: getUTCDate(+c.epoch),
-                Open: +c.open,
-                High: +c.high,
-                Low: +c.low,
-                Close: +c.close,
-            }));
+            const quotes: TQuote[] = candles.map(c => {
+                const candle = c as Required<typeof c>;
+                return {
+                    Date: getUTCDate(+candle.epoch),
+                    Open: +candle.open,
+                    High: +candle.high,
+                    Low: +candle.low,
+                    Close: +candle.close,
+                };
+            });
             return quotes;
         }
+        return undefined;
     }
 
-    static formatTick(response: any) {
-        const { tick, ohlc } = response;
-        if (tick) {
+    static formatTick(response: TicksStreamResponse | OHLCStreamResponse): TQuote | undefined {
+        if ('tick' in response) {
+            const { tick } = response as Required<typeof response>;
+            const t = tick as Required<typeof tick>;
             return {
-                Date: getUTCDate(+tick.epoch),
-                Close: +tick.quote,
+                Date: getUTCDate(+t.epoch),
+                Close: +t.quote,
                 // Keep the origial value.
                 // It'll be used to pass down to deriv.app in BottomWidgets.
                 // TODO: use tick.epoch in RawMarker to speed up calculations.
@@ -37,7 +44,8 @@ export class TickHistoryFormatter {
             };
         }
 
-        if (ohlc) {
+        if ('ohlc' in response) {
+            const { ohlc } = response as OHLCStreamResponse;
             return {
                 Date: getUTCDate(+ohlc.open_time),
                 Open: +ohlc.open,
@@ -47,5 +55,7 @@ export class TickHistoryFormatter {
                 ohlc,
             };
         }
+
+        return undefined;
     }
 }

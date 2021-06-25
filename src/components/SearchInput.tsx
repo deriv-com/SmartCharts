@@ -1,10 +1,23 @@
 import React from 'react';
 import classNames from 'classnames';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
 import { CloseCircleIcon, SearchIcon } from './Icons';
 import '../../sass/components/_search.scss';
 
-const SearchInput = ({ placeholder, value, searchInput, searchInputClassName, onChange }: any) => (
+type TSearchInputProps = {
+    placeholder: string;
+    value: string;
+    searchInput: React.RefObject<HTMLInputElement>;
+    searchInputClassName: string;
+    onChange: (value: string) => void;
+};
+
+const SearchInput: React.FC<TSearchInputProps> = ({
+    placeholder,
+    value,
+    searchInput,
+    searchInputClassName,
+    onChange,
+}) => (
     <div className={classNames('sc-search-input', { active: value.trim() !== '' })}>
         <input
             className={searchInputClassName}
@@ -12,7 +25,7 @@ const SearchInput = ({ placeholder, value, searchInput, searchInputClassName, on
             ref={searchInput}
             onChange={(e: any) => onChange(e.target.value)}
             type='text'
-            spellCheck='off'
+            spellCheck='false'
             autoComplete='off'
             autoCorrect='off'
             autoCapitalize='off'

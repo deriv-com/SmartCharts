@@ -155,7 +155,7 @@ export default class ViewStore {
                     chartType = 'spline';
                 }
             }
-            this.mainStore.chartType.setType(chartType);
+            this.mainStore.chartType.setType(chartType as string);
             this.mainStore.state.setChartType(chartType);
             this.menu.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');

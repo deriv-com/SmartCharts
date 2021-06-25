@@ -24,19 +24,21 @@ import HomeIcon from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
 import { STATE } from '../Constant';
+import { ActiveSymbolsItem, TChanges, TGranularity, TMainStore } from 'src/types';
+import BarrierStore from './BarrierStore';
 class ChartStore {
-    static keystrokeHub: any;
+    static keystrokeHub: KeystrokeHub;
     static chartCount = 0;
-    static tradingTimes: any;
-    static activeSymbols: any;
-    chartId: any;
+    static tradingTimes: TradingTimes | null;
+    static activeSymbols: ActiveSymbols;
+    chartId?: string;
     feed: any;
-    mainStore: any;
-    resizeObserver: any;
+    mainStore: TMainStore;
+    resizeObserver?: ResizeObserver;
     constructor(mainStore: any) {
         this.mainStore = mainStore;
     }
-    feedCall: any;
+    feedCall: { tradingTimes?: boolean; activeSymbols?: boolean } = {};
     RANGE_PADDING_PX = 125;
     contextPromise: ReturnType<typeof PendingPromise> | null = PendingPromise();
     rootNode: HTMLElement | null = null;
@@ -46,7 +48,7 @@ class ChartStore {
         granularity: 0,
         chartType: 'mountain',
     };
-    granularity: any;
+    granularity: TGranularity;
     enableRouting = null;
     chartNode?: HTMLElement | null = null;
     chartControlsNode?: HTMLElement | null = null;
@@ -54,19 +56,19 @@ class ChartStore {
     state: any;
     onMessage = null;
     defaultMinimumBars = 5;
-    _barriers = [];
+    _barriers: BarrierStore[] = [];
     @observable
     containerWidth: number | null = null;
     @observable
     context: any = null;
     @observable
-    currentActiveSymbol: any;
+    currentActiveSymbol?: ActiveSymbolsItem | null;
     @observable
     isChartAvailable = true;
     @observable
-    chartHeight: any;
+    chartHeight?: number;
     @observable
-    chartContainerHeight: any;
+    chartContainerHeight?: number;
     @observable
     isMobile = false;
     @observable
@@ -78,16 +80,15 @@ class ChartStore {
     @observable
     yAxiswidth = 0;
     @observable
-    serverTime: any;
+    serverTime?: string;
     @observable
-    networkStatus: any;
-    @observable
-    lastCountDownSecond: any;
-    @observable
-    countDownLabel: any;
+    networkStatus?: {
+        tooltip: string;
+        class: string;
+    };
 
-    tradingTimes: any;
-    activeSymbols: any;
+    tradingTimes?: TradingTimes;
+    activeSymbols?: ActiveSymbols;
     get loader() {
         return this.mainStore.loader;
     }
@@ -102,10 +103,10 @@ class ChartStore {
     }
     @computed
     get pip() {
-        return this.currentActiveSymbol.decimal_places;
+        return this.currentActiveSymbol?.decimal_places;
     }
     get rootElement() {
-        return document.getElementById(this.chartId);
+        return this.chartId ? document.getElementById(this.chartId) : null;
     }
     currentCloseQuote = () => {
         if (!this.stxx) {
@@ -136,7 +137,7 @@ class ChartStore {
             offsetHeight = 40;
         }
         this.chartHeight = this.chartNode?.offsetHeight;
-        this.chartContainerHeight = this.chartHeight - offsetHeight - (historicalMobile ? 45 : 0);
+        this.chartContainerHeight = (this.chartHeight || 0) - offsetHeight - (historicalMobile ? 45 : 0);
     }
     updateCanvas = () => {
         if (!this.stxx) {
@@ -213,7 +214,7 @@ class ChartStore {
         if ((window as any).CIQ) {
             this._initChart(rootNode, props);
         } else {
-            // @ts-expect-error ts-migrate(2307) FIXME: Cannot find module 'chartiq' or its corresponding ... Remove this comment to see the full error message
+            // @ts-ignore
             import(/* webpackChunkName: "chartiq" */ 'chartiq').then(
                 action(({ CIQ, SplinePlotter }) => {
                     CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(
@@ -406,9 +407,9 @@ class ChartStore {
                     this.micropixels += layout.candleWidth / 2;
                 } // bar charts display at beginning of candle
                 if (this.isHistoricalMode() && _self.isMobile) {
-                    exactScroll = parseInt(((exactScroll * 0.8) as unknown) as string, 10); // eslint-disable-line
+                    exactScroll = Math.floor(exactScroll * 0.8); // eslint-disable-line
                 } else if (this.isHistoricalMode()) {
-                    exactScroll = parseInt(((exactScroll * 0.9) as unknown) as string, 10); // eslint-disable-line
+                    exactScroll = Math.floor(exactScroll * 0.9); // eslint-disable-line
                 }
                 if (params.animate) {
                     const self = this;
@@ -769,9 +770,9 @@ class ChartStore {
         stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
         this.stateStore.stateChange(STATE.INITIAL);
         this.loader.setState('market-symbol');
-        this.activeSymbols.retrieveActiveSymbols().then(() => {
+        this.activeSymbols?.retrieveActiveSymbols().then(() => {
             this.loader.setState('trading-time');
-            this.tradingTimes.initialize().then(
+            this.tradingTimes?.initialize().then(
                 action(() => {
                     // In the odd event that chart is destroyed by the time
                     // the request finishes, just calmly return...
@@ -783,16 +784,16 @@ class ChartStore {
                     if (!isRestoreSuccess) {
                         this.changeSymbol(
                             // default to first available symbol
-                            symbol || Object.keys(this.activeSymbols.symbolMap)[0],
+                            symbol || (this.activeSymbols && Object.keys(this.activeSymbols.symbolMap)[0]),
                             this.granularity
                         );
                     }
                     this.context = context;
-                    this.chartClosedOpenThemeChange(!this.currentActiveSymbol.exchange_is_open);
-                    this.mainStore.chart.tradingTimes.onMarketOpenCloseChanged(
-                        action((changes: any) => {
+                    this.chartClosedOpenThemeChange(!this.currentActiveSymbol?.exchange_is_open);
+                    this.mainStore.chart.tradingTimes?.onMarketOpenCloseChanged(
+                        action((changes: TChanges) => {
                             for (const sy in changes) {
-                                if (this.currentActiveSymbol.symbol === sy) {
+                                if (this.currentActiveSymbol?.symbol === sy) {
                                     this.chartClosedOpenThemeChange(!changes[sy]);
                                 }
                             }
@@ -810,8 +811,8 @@ class ChartStore {
                             }
                         }
                     );
-                    this.tradingTimes.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
-                    this.tradingTimes.onTimeChanged(this.onServerTimeChange);
+                    this.tradingTimes?.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
+                    this.tradingTimes?.onTimeChanged(this.onServerTimeChange);
                     setTimeout(
                         action(() => {
                             // Defer the render of the dialogs and dropdowns; this enables
@@ -827,7 +828,7 @@ class ChartStore {
     setResizeEvent = () => {
         if ('ResizeObserver' in window) {
             this.resizeObserver = new ResizeObserver(this.resizeScreen);
-            this.resizeObserver.observe(this.rootNode);
+            if (this.rootNode) this.resizeObserver.observe(this.rootNode);
         } else {
             import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(
                 ({ default: ResizeObserver }) => {
@@ -862,7 +863,7 @@ class ChartStore {
             this.refreshChart();
         }
     };
-    getMaxMasterDataSize(granularity: any) {
+    getMaxMasterDataSize(granularity: TGranularity) {
         let maxMasterDataSize = 5000;
         // When granularity is 1 day
         if (granularity === 86400) maxMasterDataSize = Math.floor(2.8 * 365);
@@ -870,7 +871,7 @@ class ChartStore {
         else if (granularity === 28800) maxMasterDataSize = Math.floor(2.8 * 365 * 3);
         return maxMasterDataSize;
     }
-    chartClosedOpenThemeChange(isChartClosed: any) {
+    chartClosedOpenThemeChange(isChartClosed: boolean) {
         this.mainStore.state.setChartClosed(isChartClosed);
         this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
     }
@@ -879,7 +880,7 @@ class ChartStore {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
         const activeSymbols = this.activeSymbols.activeSymbols;
         return cloneCategories(activeSymbols, item => {
-            const selected = item.dataObject.symbol === this.currentActiveSymbol.symbol;
+            const selected = item.dataObject.symbol === this.currentActiveSymbol?.symbol;
             return {
                 ...item,
                 selected,
@@ -888,7 +889,11 @@ class ChartStore {
     }
     @action.bound
     onServerTimeChange() {
-        this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format('DD MMM YYYY HH:mm:ss [GMT]');
+        if (this.tradingTimes?._serverTime) {
+            this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format(
+                'DD MMM YYYY HH:mm:ss [GMT]'
+            );
+        }
     }
     @action.bound
     onMouseEnter() {
@@ -921,15 +926,15 @@ class ChartStore {
         this.isChartAvailable = status;
     }
     @action.bound
-    changeSymbol(symbolObj: any, granularity: any) {
+    changeSymbol(symbolObj: any, granularity?: TGranularity) {
         if (!this.stxx) return;
         if (typeof symbolObj === 'string') {
-            symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
+            symbolObj = this.activeSymbols?.getSymbolObj(symbolObj);
         }
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
         if (
             isSymbolAvailable &&
-            symbolObj.symbol === this.currentActiveSymbol.symbol &&
+            symbolObj.symbol === this.currentActiveSymbol?.symbol &&
             granularity !== undefined &&
             granularity === this.granularity
         ) {
@@ -1084,7 +1089,7 @@ class ChartStore {
         if (startEpoch || endEpoch) {
             const dtLeft = startEpoch ? CIQ.strToDateTime(getUTCDate(startEpoch - epochPadding)) : undefined;
             const dtRight = endEpoch ? CIQ.strToDateTime(getUTCDate(endEpoch + epochPadding)) : undefined;
-            const periodicity = calculateTimeUnitInterval(this.granularity);
+            const periodicity = calculateTimeUnitInterval(this.granularity as number);
             range = {
                 dtLeft,
                 dtRight,

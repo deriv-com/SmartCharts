@@ -24,7 +24,7 @@ class HighestLowestStore {
         return this.mainStore.chartSetting.isHighestLowestMarkerEnabled;
     }
     get decimalPlaces() {
-        return this.mainStore.chart.currentActiveSymbol.decimal_places || 0;
+        return this.mainStore.chart.currentActiveSymbol.decimal_places || 2;
     }
 
     constructor(mainStore: any) {

@@ -3,12 +3,13 @@ import MenuStore from './MenuStore';
 import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
+import { TMainStore } from 'src/types';
 
 export default class ShareStore {
     Dialog: any;
-    mainStore: any;
-    menu: any;
-    screenshotArea: any;
+    mainStore: TMainStore;
+    menu: MenuStore;
+    screenshotArea?: Element | null;
     constructor(mainStore: any) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'download' });
@@ -30,10 +31,10 @@ export default class ShareStore {
         return this.mainStore.timeperiod.display;
     }
     @computed get marketDisplayName() {
-        return this.mainStore.chart.currentActiveSymbol.name;
+        return this.mainStore.chart.currentActiveSymbol?.name;
     }
     @computed get decimalPlaces() {
-        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places;
     }
     @observable isLoadingPNG = false;
 
@@ -46,10 +47,11 @@ export default class ShareStore {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
+        // @ts-ignore
         import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js').then(html2canvas => {
             // since react rerenders is not immediate, we use CIQ.appendClassName to
             // immediately append/unappend class name before taking screenshot.
-            this.screenshotArea.classList.add('ciq-chart--screenshot');
+            this.screenshotArea?.classList.add('ciq-chart--screenshot');
             setTimeout(() => {
                 html2canvas.default(this.screenshotArea).then((canvas: any) => this._onCanvasReady(canvas, newTab));
             }, 0);
@@ -62,7 +64,7 @@ export default class ShareStore {
         const content = canvas.toDataURL('image/png');
         downloadFileInBrowser(`${new Date().toUTCString()}.png`, content, 'image/png;', newTab);
         this.isLoadingPNG = false;
-        this.screenshotArea.classList.remove('ciq-chart--screenshot');
+        this.screenshotArea?.classList.remove('ciq-chart--screenshot');
     }
 
     @action.bound downloadCSV() {
@@ -115,6 +117,6 @@ export default class ShareStore {
     }
 
     onContextReady = () => {
-        this.screenshotArea = this.context.topNode.querySelector('.ciq-chart');
+        this.screenshotArea = (this.context.topNode as HTMLElement).querySelector('.ciq-chart');
     };
 }

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* TAKEN OUT OF ADDONS.JS */
 /* eslint-disable no-unused-vars,eqeqeq,no-shadow,no-alert,no-restricted-globals,prefer-const,prefer-destructuring */
 /**
@@ -66,15 +67,7 @@ export default function animateChart(stx: any, animationParameters: any) {
             params.finalClose = chart.closePendingAnimation;
         }
     });
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    stx.append('updateChartData', function (
-        this: any,
-        this: any,
-        this: any,
-        appendQuotes: any,
-        chart: any,
-        params: any
-    ) {
+    stx.append('updateChartData', function (appendQuotes: any, chart: any, params: any) {
         // These chart types are the only types supported by animation
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         // This injection is just for charts which are not supported by animation.
@@ -93,62 +86,7 @@ export default function animateChart(stx: any, animationParameters: any) {
             }
         }
     });
-    // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-    stx.prepend('updateChartData', function (
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        this: any,
-        appendQuotes: any,
-        chart: any,
-        params: any
-    ) {
+    stx.prepend('updateChartData', function (appendQuotes: any, chart: any, params: any) {
         const self = this;
         if (!chart) {
             chart = self.chart;

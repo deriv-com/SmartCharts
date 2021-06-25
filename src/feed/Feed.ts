@@ -4,11 +4,13 @@ import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
+import { TicksHistoryResponse } from '@deriv/api-types';
+import { TMainStore, TQuote } from 'src/types';
 class Feed {
     _binaryApi: any;
     _connectionClosedDate: any;
     _emitter: any;
-    _mainStore: any;
+    _mainStore: TMainStore;
     _serverTime: any;
     _stx: any;
     _tradingTimes: any;
@@ -48,9 +50,9 @@ class Feed {
     get paginationLoader() {
         return this._mainStore.paginationLoader;
     }
-    _activeStreams = {};
+    _activeStreams: { [key: string]: any } = {};
     _isConnectionOpened = true;
-    constructor(binaryApi: any, stx: any, mainStore: any, tradingTimes: any) {
+    constructor(binaryApi: any, stx: any, mainStore: TMainStore, tradingTimes: any) {
         this._stx = stx;
         this._binaryApi = binaryApi;
         this._mainStore = mainStore;
@@ -60,7 +62,7 @@ class Feed {
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
     onRangeChanged = (forceLoad: any) => {
-        const periodicity = calculateTimeUnitInterval(this.granularity);
+        const periodicity = calculateTimeUnitInterval(this.granularity as any);
         const rangeTime = (this.granularity || 1) * this._stx.chart.maxTicks;
         let dtLeft = null;
         let dtRight = null;
@@ -123,11 +125,8 @@ class Feed {
         this._forgetStream(key);
     }
     _forgetStream(key: any) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (this._activeStreams[key]) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._activeStreams[key].forget();
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             delete this._activeStreams[key];
         }
     }
@@ -152,11 +151,10 @@ class Feed {
         this.loader.setState('chart-data');
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.notifier.notifyFeedUnavailable(symbolName);
-            let dataCallback = { quotes: [] };
+            let dataCallback: any = { quotes: [] };
             if (isComparisonChart) {
                 // Passing error will prevent the chart from being shown; for
                 // main chart we still want the chart to be shown, just disabled
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ quotes: never[]; error: string; suppressAl... Remove this comment to see the full error message
                 dataCallback = { error: 'StreamingNotAllowed', suppressAlert: true, ...dataCallback };
             } else {
                 this._mainStore.chart.setChartAvailability(false);
@@ -164,19 +162,19 @@ class Feed {
             callback(dataCallback);
             return;
         }
-        const tickHistoryRequest = {
+        const tickHistoryRequest: any = {
             start,
             symbol,
             granularity,
         };
         let getHistoryOnly = false;
-        let quotes;
+        let quotes: TQuote[] | undefined;
         if (end) {
             // When there is end; no streaming required
-            (tickHistoryRequest as any).end = end;
+            tickHistoryRequest.end = end;
             getHistoryOnly = true;
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
-            let subscription;
+            let subscription: DelayedSubscription | RealtimeSubscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
                 this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
@@ -213,7 +211,6 @@ class Feed {
                 subscription.forget();
                 return;
             }
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._activeStreams[key] = subscription;
         } else {
             this._mainStore.notifier.notifyMarketClose(symbolName);
@@ -221,7 +218,7 @@ class Feed {
             getHistoryOnly = true;
         }
         if (getHistoryOnly) {
-            const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
+            const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(tickHistoryRequest);
             quotes = TickHistoryFormatter.formatHistory(response);
         }
         if (!quotes) {
@@ -263,7 +260,7 @@ class Feed {
         const now = this._serverTime.getEpoch();
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - Math.ceil(2.8 * 365 * 24 * 60 * 60); /* == 3 Years */
-        let result = { quotes: [] };
+        let result: any = { quotes: [] };
         let firstEpoch;
         if (end > startLimit) {
             try {
@@ -305,7 +302,6 @@ class Feed {
                 }
             } catch (err) {
                 console.error(err);
-                // @ts-expect-error ts-migrate(2322) FIXME: Type '{ error: any; }' is not assignable to type '... Remove this comment to see the full error message
                 result = { error: err };
             }
         }
@@ -330,7 +326,6 @@ class Feed {
         }
     }
     _forgetIfEndEpoch(key: any) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         const subscription = this._activeStreams[key];
         let result = true;
         if (!subscription) {
@@ -338,7 +333,6 @@ class Feed {
         }
         const lastEpoch = subscription.lastStreamEpoch;
         if (this.endEpoch && lastEpoch + this.granularity > this.endEpoch) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (
                 this._activeStreams[key] &&
                 this.granularity === 0 &&
@@ -355,7 +349,6 @@ class Feed {
         return result;
     }
     _appendChartData(quotes: any, key: any, comparisonChartSymbol: any) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
@@ -460,7 +453,6 @@ class Feed {
     }
     _onConnectionClosed() {
         for (const key in this._activeStreams) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._activeStreams[key].pause();
         }
         this._connectionClosedDate = new Date();
@@ -471,8 +463,7 @@ class Feed {
             return;
         }
         const { granularity } = this._unpackKey(keys[0]);
-        // @ts-expect-error ts-migrate(2362) FIXME: The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
-        const elapsedSeconds = ((new Date() - this._connectionClosedDate) / 1000) | 0;
+        const elapsedSeconds = (((new Date() as any) - this._connectionClosedDate) / 1000) | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();
@@ -483,10 +474,9 @@ class Feed {
         }
         this._connectionClosedDate = undefined;
     }
-    _resumeStream(key: any) {
+    _resumeStream(key: string) {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         this._activeStreams[key].resume().then((quotes: any) => {
             if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
@@ -495,18 +485,18 @@ class Feed {
     _getKey({ symbol, granularity }: any) {
         return `${symbol}-${granularity}`;
     }
-    _unpackKey(key: any) {
+    _unpackKey(key: string) {
         const [symbol, granularity] = key.split('-');
         return { symbol, granularity: +granularity };
     }
-    _trimQuotes(quotes = []) {
+    _trimQuotes(quotes: TQuote[] = []) {
         let startTickIndex = null;
         let endTickIndex = null;
         let trimmedQuotes = quotes;
         if (!trimmedQuotes.length) return [];
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(
-                tick => CIQ.strToDateTime((tick as any).Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch))
+                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch))
             );
             if (startTickIndex > -1) {
                 trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
@@ -514,10 +504,10 @@ class Feed {
         }
         if (this.endEpoch && this.margin) {
             endTickIndex = trimmedQuotes.findIndex(
-                tick => CIQ.strToDateTime((tick as any).Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch))
+                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch))
             );
             if (endTickIndex > -1) {
-                const addon = (trimmedQuotes[endTickIndex] as any).Date === getUTCDate(this.endEpoch) ? 2 : 1;
+                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
         }

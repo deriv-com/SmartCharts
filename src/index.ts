@@ -1,4 +1,3 @@
-/* eslint-disable no-new, react/jsx-indent, react/no-danger, react/jsx-indent-props */
 import Barrier from './components/Barrier';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes';
@@ -18,13 +17,15 @@ import RawMarker from './components/RawMarker';
 import ToolbarWidget from './components/ToolbarWidget';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
+import { initContext } from './store';
 
-function setSmartChartsPublicPath(path: any) {
-    // @ts-ignore
+function setSmartChartsPublicPath(path: string) {
     __webpack_public_path__ = path; // eslint-disable-line
 }
 
 const Marker = FastMarker;
+
+initContext();
 
 export {
     Barrier,

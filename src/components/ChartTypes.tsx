@@ -1,34 +1,39 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
+import { ChartType } from 'src/types';
 import { SettingIcon } from './Icons';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Tooltip' was resolved to '/Users/bal... Remove this comment to see the full error message
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
 
-const TypeIcon = ({ Icon, props }: any) => <Icon {...props} />;
+type TTypeIcon = {
+    Icon: (props: any) => JSX.Element;
+    className: string;
+};
 
-const ChartTypes = ({
-    chartId,
-    ChartTypeList,
-    ChartTypeMenu,
-    enabled,
-    menuOpen,
-    onChange,
-    setOpen,
-    showAggregateDialog,
-    Type,
-    updateProps,
-    newDesign,
-    types,
-    isMobile,
-}: any) => {
-    if (Type === undefined) return null;
+const TypeIcon: React.FC<TTypeIcon> = ({ Icon, ...props }) => <Icon {...props} />;
 
-    const onItemClick = (idx: any, chartType: any) => {
-        if (Type.id !== chartType.id) {
-            onChange(chartType.id, chartType.candleOnly, chartId);
+type TChartTypesProps = {
+    enabled?: boolean;
+    newDesign?: any;
+    onChange?: any;
+};
+
+const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: onChangeFn }) => {
+    const { chartType, chart } = useStores();
+
+    const { ChartTypeMenu, ChartTypeList, setTypeFromUI, showAggregateDialog, updateProps, types, type } = chartType;
+    const { menuOpen, setOpen } = chartType.menu;
+    const { isMobile } = chart;
+
+    const onChange = onChangeFn || setTypeFromUI;
+
+    if (type === undefined) return null;
+
+    const onItemClick = (chartType: ChartType) => {
+        if (type.id !== chartType.id) {
+            onChange(chartType.id);
         }
         setOpen(false);
     };
@@ -38,13 +43,13 @@ const ChartTypes = ({
     if (newDesign) {
         return (
             <div className='sc-chart-type'>
-                {types.map((chartType: any) => {
+                {types.map(chartType => {
                     const Icon = chartType.icon;
                     let className = 'sc-chart-type__item';
                     className += chartType.active ? ' sc-chart-type__item--active' : '';
                     className += chartType.disabled ? ' sc-chart-type__item--disabled' : '';
 
-                    const onClick = () => (chartType.disabled ? null : onItemClick(0, chartType));
+                    const onClick = () => (chartType.disabled ? null : onItemClick(chartType));
                     return (
                         <Tooltip
                             key={chartType.id}
@@ -66,9 +71,9 @@ const ChartTypes = ({
         <ChartTypeMenu className='ciq-display ciq-chart-types' enabled={enabled} title={t.translate('Chart types')}>
             <ChartTypeMenu.Title>
                 <TypeIcon
-                    Icon={Type.icon}
+                    Icon={type.icon}
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
-                    tooltip-title={t.translate(Type.text)}
+                    tooltip-title={t.translate(type.text)}
                 />
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
@@ -77,7 +82,7 @@ const ChartTypes = ({
                         {(T: any) => (
                             <>
                                 <span className='left'>
-                                    <TypeIcon Icon={Type.icon} className={`margin ${T.active ? 'active' : ''}`} />
+                                    <TypeIcon Icon={type.icon} className={`margin ${T.active ? 'active' : ''}`} />
                                     <span className='ciq-icon-text'>{T.text}</span>
                                 </span>
                                 {T.settingsOnClick && (
@@ -94,16 +99,4 @@ const ChartTypes = ({
     );
 };
 
-export default connect(({ chartType, chart }: any) => ({
-    chartId: chart.chartId,
-    ChartTypeMenu: chartType.ChartTypeMenu,
-    ChartTypeList: chartType.ChartTypeList,
-    menuOpen: chartType.menu.open,
-    onChange: chartType.setTypeFromUI,
-    setOpen: chartType.menu.setOpen,
-    showAggregateDialog: chartType.showAggregateDialog,
-    Type: chartType.type,
-    updateProps: chartType.updateProps,
-    types: chartType.types,
-    isMobile: chart.isMobile,
-}))(ChartTypes);
+export default observer(ChartTypes);

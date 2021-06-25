@@ -1,14 +1,17 @@
 import React from 'react';
-import { connect } from '../store/Connect';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Icons' was resolved to '/Users/balak... Remove this comment to see the full error message
+import { TMainStore } from 'src/types';
+import { useStores } from 'src/store';
+import { observer } from 'mobx-react-lite';
 import { HelpCenterIcon, FullScreenIcon } from './Icons';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './Tooltip' was resolved to '/Users/bal... Remove this comment to see the full error message
 import Tooltip from './Tooltip';
-// @ts-expect-error ts-migrate(6142) FIXME: Module './ChartSetting' was resolved to '/User... Remove this comment to see the full error message
 import ChartSetting from './ChartSetting';
 import '../../sass/components/_chart-footer.scss';
 
-const ChartFooterNetwork = React.memo(({ networkStatus }: any) => (
+type TChartFooterNetworkProps = {
+    networkStatus: TMainStore['chart']['networkStatus'];
+};
+
+const ChartFooterNetwork: React.FC<TChartFooterNetworkProps> = React.memo(({ networkStatus }) => (
     <Tooltip
         className='sc-chart-footer__item sc-chart-footer__item--status'
         content={`${t.translate('Network status')}: ${networkStatus ? t.translate(networkStatus.tooltip) : ''}`}
@@ -18,8 +21,11 @@ const ChartFooterNetwork = React.memo(({ networkStatus }: any) => (
     </Tooltip>
 ));
 
-const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }: any) =>
-    context ? (
+const ChartFooter: React.FC = () => {
+    const { chart } = useStores();
+    const { context, serverTime, networkStatus, openFullscreen } = chart;
+
+    return context ? (
         <div className='sc-chart-footer'>
             <ChartFooterNetwork networkStatus={networkStatus} />
             <div className='sc-chart-footer__item sc-chart-footer__item--time'>
@@ -40,10 +46,6 @@ const ChartFooter = ({ context, serverTime, networkStatus, openFullscreen }: any
             </div>
         </div>
     ) : null;
+};
 
-export default connect(({ chart }: any) => ({
-    context: chart.context,
-    serverTime: chart.serverTime,
-    networkStatus: chart.networkStatus,
-    openFullscreen: chart.openFullscreen,
-}))(ChartFooter);
+export default observer(ChartFooter);

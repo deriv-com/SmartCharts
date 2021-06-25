@@ -1,43 +1,6 @@
+// @ts-nocheck
 export const overideMeasure = (option: any) => {
     CIQ.ChartEngine.prototype.append('setMeasure', function (
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
-        // @ts-expect-error ts-migrate(2300) FIXME: Duplicate identifier 'this'.
-        this: any,
         price1: any,
         price2: any,
         tick1: any,
@@ -51,7 +14,6 @@ export const overideMeasure = (option: any) => {
         } else {
             if (price2 !== false) {
                 let distance = Math.round(Math.abs(price1 - price2) * this.chart.roundit) / this.chart.roundit;
-                // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
                 distance = distance.toFixed(this.chart.yAxis.printDecimalPlaces);
                 if (this.internationalizer) {
                     message += this.internationalizer.numbers.format(distance);
@@ -71,7 +33,6 @@ export const overideMeasure = (option: any) => {
                     if (this.internationalizer) {
                         pct = this.internationalizer.percent.format(pct / 100);
                     } else {
-                        // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'number'.
                         pct += '%';
                     }
                     message += ` (${pct})`;

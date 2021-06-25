@@ -1,10 +1,10 @@
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'chai... Remove this comment to see the full error message
+import { TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
 import { expect } from 'chai';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'moch... Remove this comment to see the full error message
 import { describe, it } from 'mocha';
+import { OHLCStreamResponse } from 'src/types';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
-const historyCandleResponse = {
+const historyCandleResponse: TicksHistoryResponse = {
     echo_req: {
         adjust_start_time: 1,
         count: 3,
@@ -14,8 +14,8 @@ const historyCandleResponse = {
         ticks_history: 'R_50',
     },
     history: {
-        prices: ['272.2381', '272.2038', '272.1995'],
-        times: ['1524809066', '1524809068', '1524809070'],
+        prices: [272.2381, 272.2038, 272.1995],
+        times: [1524809066, 1524809068, 1524809070],
     },
     msg_type: 'history',
 };
@@ -34,28 +34,28 @@ const historyCandleResponseResult = [
     },
 ];
 
-const historyTicksResponse = {
+const historyTicksResponse: TicksHistoryResponse = {
     candles: [
         {
-            close: '272.1230',
+            close: 272.123,
             epoch: 1524809040,
-            high: '272.3895',
-            low: '272.0952',
-            open: '272.3895',
+            high: 272.3895,
+            low: 272.0952,
+            open: 272.3895,
         },
         {
-            close: '272.0673',
+            close: 272.0673,
             epoch: 1524809100,
-            high: '272.2343',
-            low: '271.9868',
-            open: '272.1483',
+            high: 272.2343,
+            low: 271.9868,
+            open: 272.1483,
         },
         {
-            close: '271.7995',
+            close: 271.7995,
             epoch: 1524809160,
-            high: '272.2094',
-            low: '271.7787',
-            open: '272.0810',
+            high: 272.2094,
+            low: 271.7787,
+            open: 272.081,
         },
     ],
     echo_req: {
@@ -92,7 +92,7 @@ const historyTicksResponseResult = [
     },
 ];
 
-const tickCandleResponse = {
+const tickCandleResponse: OHLCStreamResponse = {
     echo_req: {
         adjust_start_time: 1,
         count: 3,
@@ -124,7 +124,7 @@ const tickCandleResponseResult = {
     Open: 271.9735,
 };
 
-const tickTickResponse = {
+const tickTickResponse: TicksStreamResponse = {
     echo_req: {
         adjust_start_time: 1,
         count: 3,
@@ -137,12 +137,13 @@ const tickTickResponse = {
     },
     msg_type: 'tick',
     tick: {
-        ask: '271.8308',
-        bid: '271.7908',
-        epoch: '1524812092',
+        ask: 271.8308,
+        bid: 271.7908,
+        epoch: 1524812092,
         id: 'fc1fe29b-f0a2-8840-39d7-d2f58209bb3b',
-        quote: '271.8108',
+        quote: 271.8108,
         symbol: 'R_50',
+        pip_size: 4,
     },
 };
 const tickTickResponseResult = {
@@ -163,15 +164,13 @@ describe('TickHistoryFormatter test', () => {
 
     it('Test parse tick style="candles"', () => {
         const tick = TickHistoryFormatter.formatTick(tickCandleResponse);
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-        delete tick.ohlc;
+        delete tick?.ohlc;
         expect(tick).to.deep.equal(tickCandleResponseResult);
     });
 
     it('Test parse tick style="ticks"', () => {
         const tick = TickHistoryFormatter.formatTick(tickTickResponse);
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
-        delete tick.tick;
+        delete tick?.tick;
         expect(tick).to.deep.equal(tickTickResponseResult);
     });
 });

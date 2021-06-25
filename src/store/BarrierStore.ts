@@ -5,6 +5,7 @@ import PendingPromise from '../utils/PendingPromise';
 import PriceLine from '../components/PriceLine';
 import Shade from '../components/Shade';
 import { isValidProp } from '../utils';
+import { TMainStore } from 'src/types';
 
 export default class BarrierStore {
     AboveShade: any;
@@ -19,7 +20,7 @@ export default class BarrierStore {
     aboveShadeStore: any;
     belowShadeStore: any;
     betweenShadeStore: any;
-    mainStore: any;
+    mainStore: TMainStore;
     title: any;
     static get SHADE_NONE_SINGLE() {
         return 'SHADE_NONE_SINGLE';
@@ -62,7 +63,7 @@ export default class BarrierStore {
     _shadeState: any;
 
     @computed get pip() {
-        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places;
     }
     @computed get yAxisWidth() {
         return this.mainStore.chart.yAxiswidth;
@@ -71,7 +72,7 @@ export default class BarrierStore {
         return this.yAxisWidth + 1;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         this._high_barrier = new PriceLineStore(this.mainStore);
         this._low_barrier = new PriceLineStore(this.mainStore);
