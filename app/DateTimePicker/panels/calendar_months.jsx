@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import moment from 'moment';
 import React from 'react';
+
 const getMonthHeaders = () => ({
     Jan: t.translate('Jan'),
     Feb: t.translate('Feb'),
