@@ -35,6 +35,11 @@ const Favorite: React.FC<TFavoriteProps> = ({ category, id }) => {
             store.onFavoriteUpdate(onFavoriteUpdate);
             setFavorite(store.isFavorite(category, id));
         }
+        return () => {
+            if (store) {
+                store.offFavoriteUpdate(onFavoriteUpdate);
+            }
+        };
     }, [store, category, id, onFavoriteUpdate]);
 
     return !category || !id ? null : (

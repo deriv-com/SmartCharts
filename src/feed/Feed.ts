@@ -196,6 +196,7 @@ class Feed {
                     category: 'activesymbol',
                 });
                 callback({ quotes: [] });
+                this.paginationLoader.updateOnPagination(false);
                 return;
             }
             subscription.onChartData((tickResponse: any) => {
@@ -232,6 +233,7 @@ class Feed {
         this.scaleChart();
         this._emitDataUpdate(quotes, comparisonChartSymbol, true);
         this._mainStore.state.setMaxtTick();
+        this.paginationLoader.updateOnPagination(false);
     }
     async fetchPaginationData(symbol: any, suggestedStartDate: any, endDate: any, params: any, callback: any) {
         const end = getUTCEpoch(endDate);

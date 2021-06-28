@@ -87,7 +87,8 @@ class CrosshairStore {
     }
     renderCrosshairTooltip = () => {
         // if no tooltip exists, then skip
-        if (this.state !== 2) return;
+        if (this.state !== 2 || !this.context?.stx) return;
+
         const stx = this.stx;
         const { crossX, crossY } = stx.controls;
         // crosshairs are not on

@@ -51,7 +51,7 @@ export default class StudyLegendStore {
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
         this.searchInput = React.createRef();
         this.SearchInput = connect(() => ({
-            placeholder: 'Search',
+            placeholder: t.translate('Search'),
             value: this.filterText,
             onChange: this.setFilterText,
             searchInput: this.searchInput,

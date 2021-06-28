@@ -141,11 +141,27 @@
     }
 }
 
-.smartcharts-mobile {
-    .cq-chart-controls .ciq-menu {
-        padding: 0px;
+.smartcharts {
+    // temp workaround for svg icon that cannot be themed
+    .ic-cryptocurrency > svg {
+        stroke: none !important;
     }
-    br, .ic-subtitle {
-        display: none;
+    &-dark {
+        .ic-cryptocurrency > svg {
+            filter: brightness(3);
+        }
+        .sc-mcd__filter__item--selected {
+            .ic-cryptocurrency > svg {
+                filter: brightness(6);
+            }
+        }
+    }
+    &-mobile {
+        .cq-chart-controls .ciq-menu {
+            padding: 0px;
+        }
+        br, .ic-subtitle {
+            display: none;
+        }
     }
 }

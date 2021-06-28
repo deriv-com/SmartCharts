@@ -40,6 +40,7 @@ import Star from '../../sass/icons/favorite/ic-favorite-normal.svg';
 import Tick from '../../sass/icons/tick/ic-tick.svg';
 import Time from '../../sass/icons/time/ic-time.svg';
 import Active from '../../sass/icons/common/ic-active.svg';
+import Cryptocurrency from '../../sass/icons/sidebar/cryptocurrency/ic-cryptocurrency-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
@@ -136,6 +137,30 @@ import Boom1000 from '../../sass/icons/active-symbols/volatility/boom1000 index/
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 import Step from '../../sass/icons/active-symbols/volatility/step index/step index.svg';
+import JD10 from '../../sass/icons/active-symbols/volatility/jd10 index/ic-10-index.svg';
+import JD25 from '../../sass/icons/active-symbols/volatility/jd25 index/ic-25-index.svg';
+import JD50 from '../../sass/icons/active-symbols/volatility/jd50 index/ic-50-index.svg';
+import JD75 from '../../sass/icons/active-symbols/volatility/jd75 index/ic-75-index.svg';
+import JD100 from '../../sass/icons/active-symbols/volatility/jd100 index/ic-100-index.svg';
+
+/* Cryptocurrency */
+import BNBUSD from '../../sass/icons/active-symbols/cryptos/ic-bnbusd.svg';
+import BTCLTC from '../../sass/icons/active-symbols/cryptos/ic-btcltc.svg';
+import IOTUSD from '../../sass/icons/active-symbols/cryptos/ic-iotusd.svg';
+import NEOUSD from '../../sass/icons/active-symbols/cryptos/ic-neousd.svg';
+import OMGUSD from '../../sass/icons/active-symbols/cryptos/ic-omgusd.svg';
+import TRXUSD from '../../sass/icons/active-symbols/cryptos/ic-trxusd.svg';
+import XLMUSD from '../../sass/icons/active-symbols/cryptos/ic-xlmusd.svg';
+import XMRUSD from '../../sass/icons/active-symbols/cryptos/ic-xmrusd.svg';
+import ZECUSD from '../../sass/icons/active-symbols/cryptos/ic-zecusd.svg';
+import BTCETH from '../../sass/icons/active-symbols/cryptos/ic-btceth.svg';
+import DSHUSD from '../../sass/icons/active-symbols/cryptos/ic-dshusd.svg';
+import ETHUSD from '../../sass/icons/active-symbols/cryptos/ic-ethusd.svg';
+import BCHUSD from '../../sass/icons/active-symbols/cryptos/ic-bchusd.svg';
+import LTCUSD from '../../sass/icons/active-symbols/cryptos/ic-ltcusd.svg';
+import EOSUSD from '../../sass/icons/active-symbols/cryptos/ic-eosusd.svg';
+import XRPUSD from '../../sass/icons/active-symbols/cryptos/ic-xrpusd.svg';
+import BTCUSD from '../../sass/icons/active-symbols/cryptos/ic-btcusd.svg';
 
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
 import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
@@ -369,6 +394,7 @@ export const SymbolPlaceholderIcon = Wrapper(SymbolPlaceholder);
 export const CategoryIconMap = {
     active: Wrapper(Active),
     commodities: Wrapper(Commodities),
+    cryptocurrency: Wrapper(Cryptocurrency),
     favorite: Wrapper(Star),
     forex: Wrapper(Forex),
     indices: Wrapper(Indices),
@@ -482,6 +508,29 @@ export const ItemIconMap = {
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),
     stpRNG: Wrapper(Step),
+    JD10: Wrapper(JD10),
+    JD25: Wrapper(JD25),
+    JD50: Wrapper(JD50),
+    JD75: Wrapper(JD75),
+    JD100: Wrapper(JD100),
+    /* Cryptocurrency Indices */
+    cryBNBUSD: Wrapper(BNBUSD),
+    cryBTCLTC: Wrapper(BTCLTC),
+    cryIOTUSD: Wrapper(IOTUSD),
+    cryNEOUSD: Wrapper(NEOUSD),
+    cryOMGUSD: Wrapper(OMGUSD),
+    cryTRXUSD: Wrapper(TRXUSD),
+    cryBTCETH: Wrapper(BTCETH),
+    cryZECUSD: Wrapper(ZECUSD),
+    cryXMRUSD: Wrapper(XMRUSD),
+    cryXLMUSD: Wrapper(XLMUSD),
+    cryDSHUSD: Wrapper(DSHUSD),
+    cryETHUSD: Wrapper(ETHUSD),
+    cryBCHUSD: Wrapper(BCHUSD),
+    cryLTCUSD: Wrapper(LTCUSD),
+    cryEOSUSD: Wrapper(EOSUSD),
+    cryXRPUSD: Wrapper(XRPUSD),
+    cryBTCUSD: Wrapper(BTCUSD),
 };
 
 function createCompositeIcon(A: any, B: any, icId: any) {

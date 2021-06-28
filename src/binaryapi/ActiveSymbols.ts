@@ -5,7 +5,7 @@ import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/a
 import TradingTimes from './TradingTimes';
 import { TChanges, TChartParams } from 'src/types';
 
-const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index'];
+const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
 type TProcessedSymbolItem = {
     symbol: string;
