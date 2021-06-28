@@ -7,7 +7,7 @@
         "sourceMap": true,
         "removeComments": true,
         /* "outDir": "./dist", */
-        "rootDirs": ["./src"],
+        "rootDirs": ["./"],
         /* Checks */
         "strict": true,
 

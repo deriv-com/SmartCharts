@@ -2,7 +2,7 @@ import { observable, action, when } from 'mobx';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import { Languages } from '../Constant.js';
+import { Languages } from '../Constant';
 export default class ChartSettingStore {
     ChartSettingMenu: any;
     mainStore: any;

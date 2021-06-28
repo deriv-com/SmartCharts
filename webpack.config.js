@@ -29,6 +29,7 @@ const config = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
             chartiq: path.resolve(__dirname, `chartiq/${production ? 'production' : 'development'}/index.js`),
+            src: path.resolve(__dirname, 'src'),
         },
         extensions: ['.ts', '.tsx', '.js'],
     },
@@ -125,7 +126,7 @@ const config = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            t: [path.resolve(__dirname, './src/Translation.js'), 't'],
+            t: [path.resolve(__dirname, './src/Translation.ts'), 't'],
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
         new StyleLintPlugin(),
