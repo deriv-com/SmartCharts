@@ -1,6 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 
 export default class Stream extends EventEmitter {
+    _emitter: any;
     static get EVENT_STREAM() {
         return 'EVENT_STREAM';
     }
@@ -19,24 +20,24 @@ export default class Stream extends EventEmitter {
         this._emitter.emit(Stream.EVENT_NO_SUBSCRIBER);
     }
 
-    emitTick(data) {
+    emitTick(data: any) {
         this.emit(Stream.EVENT_STREAM, data);
     }
 
-    onNoSubscriber(callback) {
+    onNoSubscriber(callback: any) {
         this.on(Stream.EVENT_NO_SUBSCRIBER, callback);
     }
 
-    offNoSubscriber(callback) {
+    offNoSubscriber(callback: any) {
         this.off(Stream.EVENT_NO_SUBSCRIBER, callback);
     }
 
-    onStream(callback) {
+    onStream(callback: any) {
         this.subscriberCount++;
         this.on(Stream.EVENT_STREAM, callback);
     }
 
-    offStream(callback) {
+    offStream(callback: any) {
         this.subscriberCount--;
         this.on(Stream.EVENT_STREAM, callback);
         if (this.subscriberCount === 0) {

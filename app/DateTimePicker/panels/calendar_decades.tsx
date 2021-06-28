@@ -2,7 +2,12 @@
 import moment from 'moment';
 import React from 'react';
 
-export const CalendarDecades = ({ calendar_date, isPeriodDisabled, onClick, selected_date }) => {
+export const CalendarDecades = ({
+    calendar_date,
+    isPeriodDisabled,
+    onClick,
+    selected_date,
+}: any) => {
     const selected_year = moment.utc(selected_date).year();
     const moment_date = moment.utc(calendar_date);
 
@@ -16,18 +21,24 @@ export const CalendarDecades = ({ calendar_date, isPeriodDisabled, onClick, sele
     }
 
     return (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div className='calendar-decade-panel'>
             {decades.map((range, idx) => {
                 const [start_year, end_year] = range.split('-');
                 return (
+                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <span
                         key={idx}
                         className={`calendar-decade ${
+                            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'string' is not assignable to par... Remove this comment to see the full error message
                             isPeriodDisabled(moment_date.year(start_year), 'year') &&
+                            // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'string' is not assignable to par... Remove this comment to see the full error message
                             isPeriodDisabled(moment_date.year(end_year), 'year')
                                 ? 'disabled'
                                 : ''
-                        } ${start_year === selected_year ? 'active' : ''}`}
+                        } ${                        
+// @ts-expect-error ts-migrate(2367) FIXME: This condition will always return 'false' since th... Remove this comment to see the full error message
+start_year === selected_year ? 'active' : ''}`}
                         onClick={onClick.decade}
                         data-decade={range}
                     >

@@ -1,8 +1,17 @@
 import EventEmitter from 'event-emitter-es6';
+// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@binary-com/smartcharts' or it... Remove this comment to see the full error message
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+// @ts-expect-error ts-migrate(2306) FIXME: File '/Users/balakrishna/Documents/SmartCharts/app... Remove this comment to see the full error message
 import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
+    _bufferedRequests: any;
+    _connectionOpened: any;
+    _counterReqId: any;
+    _pendingRequests: any;
+    _pingTimer: any;
+    _url: any;
+    _websocket: any;
     static get EVENT_CONNECTION_CLOSE() {
         return 'CONNECTION_CLOSE';
     }
@@ -10,7 +19,11 @@ class ConnectionManager extends EventEmitter {
         return 'CONNECTION_REOPEN';
     }
 
-    constructor({ appId, endpoint, language }) {
+    constructor({
+        appId,
+        endpoint,
+        language,
+    }: any) {
         super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
@@ -21,7 +34,7 @@ class ConnectionManager extends EventEmitter {
 
     _initialize() {
         this._websocket = new RobustWebsocket(this._url, null, {
-            shouldReconnect(event /* , ws */) {
+            shouldReconnect(event: any /* , ws */) {
                 if (event.code === 1006 && event.type === 'close') {
                     // Server websocket disconnected; reset to restore connection
                     return 0;
@@ -49,11 +62,11 @@ class ConnectionManager extends EventEmitter {
         this._websocket.addEventListener('message', this._onmessage.bind(this));
     }
 
-    onOpened(callback) {
+    onOpened(callback: any) {
         this.on(ConnectionManager.EVENT_CONNECTION_REOPEN, callback);
     }
 
-    onClosed(callback) {
+    onClosed(callback: any) {
         this.on(ConnectionManager.EVENT_CONNECTION_CLOSE, callback);
     }
 
@@ -96,7 +109,7 @@ class ConnectionManager extends EventEmitter {
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
 
-    _onmessage(message) {
+    _onmessage(message: any) {
         const data = JSON.parse(message.data);
         const { req_id, msg_type } = data;
         if (this._pendingRequests[req_id]) {
@@ -106,7 +119,7 @@ class ConnectionManager extends EventEmitter {
         this.emit(msg_type, data);
     }
 
-    _timeoutRequest(req_id, timeout) {
+    _timeoutRequest(req_id: any, timeout: any) {
         setTimeout(() => {
             if (this._pendingRequests[req_id] && this._pendingRequests[req_id].isPending) {
                 this._pendingRequests[req_id].reject(new Error('Request Timeout'));
@@ -118,11 +131,12 @@ class ConnectionManager extends EventEmitter {
     _sendBufferedRequests() {
         while (this._bufferedRequests.length > 0) {
             const req = this._bufferedRequests.shift();
+            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
             this.send(req.data);
         }
     }
 
-    async send(data, timeout) {
+    async send(data: any, timeout: any) {
         const req = { ...data };
         req.req_id = req.req_id || this._counterReqId++;
 

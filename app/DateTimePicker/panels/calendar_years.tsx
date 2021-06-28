@@ -2,7 +2,12 @@
 import moment from 'moment';
 import React from 'react';
 
-export const CalendarYears = ({ calendar_date, isPeriodDisabled, onClick, selected_date }) => {
+export const CalendarYears = ({
+    calendar_date,
+    isPeriodDisabled,
+    onClick,
+    selected_date,
+}: any) => {
     const selected_year = moment.utc(selected_date).year();
     const moment_date = moment.utc(calendar_date);
     const current_year = moment_date.year();
@@ -11,8 +16,10 @@ export const CalendarYears = ({ calendar_date, isPeriodDisabled, onClick, select
         years.push(year);
     }
     return (
+        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div className='calendar-year-panel'>
             {years.map(year => (
+                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <span
                     key={year}
                     className={`calendar-year ${isPeriodDisabled(moment_date.year(year), 'year') ? 'disabled' : ''} ${

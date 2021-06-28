@@ -1,8 +1,8 @@
-function getLast(arr) {
+function getLast(arr: any) {
     return arr[arr.length - 1];
 }
 
-function binarySearch(arr, val, cmp = a => a) {
+function binarySearch(arr: any, val: any, cmp = (a: any) => a) {
     let start = 0;
     let end = arr.length - 1;
 
@@ -23,7 +23,7 @@ function binarySearch(arr, val, cmp = a => a) {
     return -1;
 }
 
-function mergeTicks(master, patch) {
+function mergeTicks(master: any, patch: any) {
     // detemine which comes first:
     let alpha, omega;
     if (+getLast(master.times) > +getLast(patch.times)) {
@@ -45,7 +45,7 @@ function mergeTicks(master, patch) {
     };
 }
 
-function mergeCandles(master, patch) {
+function mergeCandles(master: any, patch: any) {
     // detemine which comes first:
     let alpha, omega;
     let isPatchOmega = true;
@@ -57,7 +57,7 @@ function mergeCandles(master, patch) {
     }
 
     let alphaEnd, omegaStart;
-    const cmp = x => x.epoch;
+    const cmp = (x: any) => x.epoch;
     // To merge candle data; there *must* be an overlap, either
     // the first element in future patch has same epoch in past data
     // or last element in past patch has same epoch in future data
@@ -84,7 +84,7 @@ function mergeCandles(master, patch) {
     return alpha.slice(0, alphaEnd).concat(omega.slice(omegaStart, omega.length));
 }
 
-export function mergeTickHistory(master, patch) {
+export function mergeTickHistory(master: any, patch: any) {
     const merged = { ...master };
     if (master.candles) {
         merged.candles = mergeCandles(master.candles, patch.candles);

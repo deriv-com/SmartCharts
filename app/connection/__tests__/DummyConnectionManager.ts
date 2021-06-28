@@ -3,6 +3,7 @@ import sinon from 'sinon';
 import PendingPromise from '../../../src/utils/PendingPromise';
 
 export class DummyConnectionManager extends EventEmitter {
+    pendingRequest: any;
     constructor() {
         super({ emitDelay: 0 });
         this.send = sinon.fake(this.send.bind(this));
@@ -10,7 +11,7 @@ export class DummyConnectionManager extends EventEmitter {
 
     onOpened() {}
 
-    onClosed(cb) {
+    onClosed(cb: any) {
         this.on('close', cb);
     }
 
@@ -20,7 +21,7 @@ export class DummyConnectionManager extends EventEmitter {
 
     _response = null;
 
-    set response(val) {
+    set response(val: any) {
         if (!this._response && this.pendingRequest) {
             this.pendingRequest.resolve(val);
             this.pendingRequest = null;
@@ -29,8 +30,9 @@ export class DummyConnectionManager extends EventEmitter {
         this._response = val;
     }
 
-    send(request) {
+    send(request: any) {
         if (!this._response && !this.pendingRequest) {
+            // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
             this.pendingRequest = new PendingPromise();
             return this.pendingRequest;
         }
@@ -38,7 +40,7 @@ export class DummyConnectionManager extends EventEmitter {
         return Promise.resolve(this._response);
     }
 
-    emitTick(response) {
+    emitTick(response: any) {
         const { tick } = response;
         this.emit(tick ? 'tick' : 'ohlc', response);
     }
