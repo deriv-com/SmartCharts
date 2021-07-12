@@ -22,9 +22,6 @@
         "sourceMap": false,
         "instrument": false
     },
-    "publishConfig": {
-        "registry": "http://localhost:4873"
-    },
     "scripts": {
         "build": "rimraf dist && cross-env NODE_ENV=production webpack --mode=production --optimize-minimize --progress",
         "build:app": "cross-env BUILD_MODE='app' npm run build",
