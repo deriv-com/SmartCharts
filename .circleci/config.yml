@@ -11,8 +11,8 @@ commands:
           keys:
             - source-v3-{{ .Branch }}-{{ .Revision }}
             - source-v3-{{ .Branch }}-
-      - run: 
-          name: Fetch git tags 
+      - run:
+          name: Fetch git tags
           command: |
             mkdir -p ~/.ssh
             echo 'github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ== ' >> ~/.ssh/known_hosts
@@ -23,7 +23,7 @@ commands:
             fi
       - checkout
       - run:
-          name: Compress git objects 
+          name: Compress git objects
           command: git gc
       - save_cache:
           name: Git save cache
@@ -98,7 +98,7 @@ commands:
           name: Building docker image
           command: |
             docker build -t ${DOCKHUB_ORGANISATION}/binary-static-charts:<< parameters.docker_image_tag >> -t ${DOCKHUB_ORGANISATION}/binary-static-charts:<< parameters.docker_latest_image_tag >> .
-      - run: 
+      - run:
           name: Pushing Image to docker hub
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
@@ -114,7 +114,7 @@ commands:
         default: "charts-binary-com-staging"
     steps:
       - k8s/install-kubectl
-      - run: 
+      - run:
           name: Deploying to k8s cluster for service binary-charts
           command: |
             export NAMESPACE=<< parameters.k8s_namespace >>
@@ -134,14 +134,14 @@ commands:
 jobs:
   test:
     docker:
-      - image: circleci/node:12.13.0-stretch
+      - image: circleci/node:14.17.1
     steps:
       - git_checkout_from_cache
       - npm_install
       - test
   release_staging:
     docker:
-      - image: circleci/node:12.13.0-stretch
+      - image: circleci/node:14.17.1
     steps:
       - git_checkout_from_cache
       - npm_install
@@ -154,7 +154,7 @@ jobs:
       - notify_slack
   release_production:
     docker:
-      - image: circleci/node:12.13.0-stretch
+      - image: circleci/node:14.17.1
     steps:
       - git_checkout_from_cache
       - npm_install
@@ -165,7 +165,7 @@ jobs:
       - notify_slack
   release_aws_production:
     docker:
-      - image: circleci/node:12.13.0-stretch
+      - image: circleci/node:14.17.1
     steps:
       - git_checkout_from_cache
       - npm_install
