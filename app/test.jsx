@@ -202,6 +202,8 @@ const App = () => {
         };
     }, [layout]);
 
+    const [closed_market, setClosedMarket] = React.useState(null);
+    const [exclude_symbol, setExcludeSymbol] = React.useState(null);
     const [chartType, setChartType] = React.useState(memoizedValues.chartType);
     const [granularity, setGranularity] = React.useState(memoizedValues.granularity);
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
@@ -493,6 +495,78 @@ const App = () => {
     const onFeedCallTradingTime = evt => generateURL({ feedcall_tradingTimes: evt.currentTarget.checked });
     const onFeedCallActiveSymbols = evt => generateURL({ feedcall_activeSymbols: evt.currentTarget.checked });
 
+    const initial_data = React.useMemo(() => {
+        const data = {};
+
+        if (urlParams.initialdata_masterData === 'true') {
+            data.masterData = masterData();
+        }
+
+        if (urlParams.initialdata_tradingTimes === 'true') {
+            data.tradingTimes = MockTradingTime;
+        }
+
+        if (urlParams.initialdata_activeSymbols === 'true') {
+            data.activeSymbols = MockActiveSymbol;
+        }
+        return { ...data };
+    }, [urlParams]);
+
+    const chart_data = React.useMemo(() => {
+        const data = {};
+
+        if (urlParams.initialdata_masterData === 'true') {
+            data.masterData = masterData();
+        }
+
+        if (urlParams.initialdata_tradingTimes === 'true') {
+            data.tradingTimes = MockTradingTime;
+        }
+
+        if (urlParams.initialdata_activeSymbols === 'true') {
+            data.activeSymbols = MockActiveSymbol;
+        }
+
+        if (exclude_symbol) {
+            const CLONED_MockActiveSymbol = JSON.parse(JSON.stringify(MockActiveSymbol));
+            const exclude_obj = exclude_symbol.split(',');
+            if (exclude_obj && exclude_obj.length === 2) {
+                data.activeSymbols = CLONED_MockActiveSymbol.filter(
+                    item => !(item.market === exclude_obj[0] && item.submarket === exclude_obj[1])
+                );
+            } else if (exclude_obj && exclude_obj.length === 1) {
+                data.activeSymbols = CLONED_MockActiveSymbol.filter(item => !(item.market === exclude_obj[0]));
+            }
+        }
+
+        if (closed_market) {
+            const cloned_trading_mock_data = JSON.parse(JSON.stringify(MockTradingTime.trading_times));
+
+            if (closed_market === 'default') {
+                data.tradingTimes = cloned_trading_mock_data;
+            } else {
+                data.tradingTimes = {
+                    markets: cloned_trading_mock_data.markets.map(_market => {
+                        if (_market.name === closed_market) {
+                            _market.submarkets = [..._market.submarkets].map(_submarkets => {
+                                _submarkets.symbols = [..._submarkets.symbols].map(_symbol => {
+                                    _symbol.events.push({
+                                        dates: 'today',
+                                        descrip: 'close all',
+                                    });
+                                    return _symbol;
+                                });
+                                return _submarkets;
+                            });
+                        }
+                        return _market;
+                    }),
+                };
+            }
+        }
+        return { ...data };
+    }, [urlParams, closed_market, exclude_symbol]);
+
     const barriers = barrierType
         ? [
               {
@@ -510,7 +584,6 @@ const App = () => {
               },
           ]
         : [];
-
     return (
         <div className='test-container' style={{ diplay: 'block' }}>
             <div id='portal-node' className='portal-node' />
@@ -528,7 +601,8 @@ const App = () => {
                     enabledChartFooter={enableFooter}
                     topWidgets={renderTopWidgets}
                     settings={settings}
-                    initialData={initialData}
+                    initialData={initial_data}
+                    chartData={chart_data}
                     feedCall={feedCall}
                     requestAPI={requestAPI}
                     requestSubscribe={requestSubscribe}
@@ -616,6 +690,24 @@ const App = () => {
                     </select>
                 </div>
 
+                <div className='form-row'>
+                    <select onChange={el => setClosedMarket(el.target.value)}>
+                        <option value=''> -- No Closed Market -- </option>
+                        <option value='default'> Default </option>
+                        <option value='Forex'> Forex </option>
+                        <option value='Synthetic Indices'> Synthetic Indices </option>
+                    </select>
+                </div>
+                <div className='form-row'>
+                    <select onChange={el => setExcludeSymbol(el.target.value)}>
+                        <option value=''> -- No Exclude Symbol -- </option>
+                        <option value='default'> Default </option>
+                        <option value='forex,minor_pairs'> Forex - Minor pairs </option>
+                        <option value='forex,major_pairs'> Forex - Major pairs </option>
+                        <option value='synthetic_index'> Synthetic Index </option>
+                        <option value='cryptocurrency'> Cryptocurrency </option>
+                    </select>
+                </div>
                 <div className='form-row'>
                     <select onChange={onOpenMarket}>
                         <option value=''> -- Open Market -- </option>

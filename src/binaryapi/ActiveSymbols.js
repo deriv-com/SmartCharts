@@ -36,6 +36,12 @@ export default class ActiveSymbols {
             return;
         }
 
+        this.computeActiveSymbols(active_symbols);
+        this.symbolsPromise.resolve();
+        return this.activeSymbols;
+    }
+
+    @action.bound computeActiveSymbols(active_symbols) {
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
@@ -54,8 +60,6 @@ export default class ActiveSymbols {
                 this.changes = changes;
             })
         );
-        this.symbolsPromise.resolve();
-        return this.activeSymbols;
     }
 
     @computed get activeSymbols() {

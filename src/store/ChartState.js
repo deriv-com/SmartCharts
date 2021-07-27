@@ -39,6 +39,8 @@ class ChartState {
     @observable enableScroll = true;
     @observable enableZoom = true;
     @observable yAxisMargin = { top: 106, bottom: 64 };
+    tradingTimes = null;
+    activeSymbols = null;
     chartControlsWidgets;
     enabledChartFooter;
 
@@ -117,9 +119,27 @@ class ChartState {
         enableScroll = null,
         enableZoom = null,
         anchorChartToLeft = false,
+        chartData,
     }) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
+
+        if (
+            chartData?.tradingTimes &&
+            typeof chartData.tradingTimes === 'object' &&
+            JSON.stringify(chartData.tradingTimes) !== this.tradingTimes
+        ) {
+            this.mainStore.chart.tradingTimes?._calculatingTradingTime(chartData.tradingTimes);
+            this.tradingTimes = JSON.stringify(chartData.tradingTimes);
+        }
+        if (
+            chartData?.activeSymbols &&
+            typeof chartData.activeSymbols === 'object' &&
+            JSON.stringify(chartData.activeSymbols) !== this.activeSymbols
+        ) {
+            this.activeSymbols = JSON.stringify(chartData.activeSymbols);
+            this.mainStore.chart.activeSymbols?.computeActiveSymbols(chartData.activeSymbols);
+        }
 
         this.chartStatusListener = chartStatusListener;
         this.stateChangeListener = stateChangeListener;
