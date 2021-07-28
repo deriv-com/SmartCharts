@@ -4,7 +4,7 @@
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library.
 
-[![npm (scoped)](https://img.shields.io/npm/v/@binary-com/smartcharts.svg)](https://www.npmjs.com/package/@binary-com/smartcharts) ![node](https://img.shields.io/badge/node-%3E%3D12.3.0-blue.svg) [![Build Status](https://travis-ci.org/binary-com/SmartCharts.svg?branch=master)](https://travis-ci.org/binary-com/SmartCharts)
+[![npm (scoped)](https://img.shields.io/npm/v/@binary-com/smartcharts.svg)](https://www.npmjs.com/package/@deriv/deriv-chart) ![node](https://img.shields.io/badge/node-%3E%3D12.3.0-blue.svg) [![Build Status](https://travis-ci.org/binary-com/SmartCharts.svg?branch=master)](https://travis-ci.org/binary-com/SmartCharts)
 
 ## In this document:
 
@@ -75,26 +75,26 @@ You can install the library using one of the following commands:
 Using npm:
 
 ```bash
-$ npm install @binary-com/smartcharts
+$ npm install @deriv/deriv-chart
 ```
 
 Using yarn:
 
 ```bash
-$ yarn add @binary-com/smartcharts
+$ yarn add @deriv/deriv-chart
 ```
 
 **Important Note:** the license for the library is tied to the `binary.com` domain name; it will not work in github pages.
 
 You can add the library to your project using the following commands:
 
-    yarn add @binary-com/smartcharts      # Release
-    yarn add @binary-com/smartcharts@beta # Beta
+    yarn add @deriv/deriv-chart      # Release
+    yarn add @deriv/deriv-chart@beta # Beta
 
 You can refer to library usage inside `app/index.jsx`:
 
 ```jsx
-import { SmartChart } from '@binary-com/smartcharts';
+import { SmartChart } from '@deriv/deriv-chart';
 
 class App extends React.Component {
     render() {
@@ -121,7 +121,7 @@ Some important notes on your webpack.config.js (refer to `app/webpack.config.js`
 - smartcharts consist of a few chunks (which has filenames `*.smartcharts.*`), which it downloads asynchronously during runtime. Therefore, it needs to know where the library user places its chunks via the `setSmartChartsPublicPath` function:
 
 ```js
-import { setSmartChartsPublicPath } from "@binary-com/smartcharts";
+import { setSmartChartsPublicPath } from "@deriv/deriv-chart";
 
 // SmartCharts chunk are deployed to https://mysite.com/dist/*
 setSmartChartsPublicPath("/dist/");
@@ -131,8 +131,8 @@ We can use the `copy-webpack-plugin` webpack plugin to copy over SmartCharts chu
 
 ```js
 new CopyWebpackPlugin([
-  { from: "./node_modules/@binary-com/smartcharts/dist/*.smartcharts.*" },
-  { from: "./node_modules/@binary-com/smartcharts/dist/smartcharts.css" },
+  { from: "./node_modules/@deriv/deriv-chart/dist/*.smartcharts.*" },
+  { from: "./node_modules/@deriv/deriv-chart/dist/smartcharts.css" },
 ]);
 ```
 ### API
@@ -325,7 +325,7 @@ We offer library users full control on deciding which of the top widgets and cha
 For example, we want to remove all the chart control buttons, and for top widgets to just show the comparison list (refer `app/index.jsx`):
 
 ```jsx
-import { ChartMode, ToolbarWidget } from "@binary-com/smartcharts";
+import { ChartMode, ToolbarWidget } from "@deriv/deriv-chart";
 
 const renderTopWidgets = () => (
   <React.Fragment>
@@ -548,7 +548,7 @@ We organise the development in Trello. Here is the standard workflow of how a fe
 
 Some issues only show up for library users, so it is helpful to test the NPM package before deploying it to library users. You can do this by building the library directly into the node_modules directory of an app that uses the SmartCharts library. For example to test the library build on binary-static you can execute:
 
-    npm run watch '../binary-static/node_modules/@binary-com/smartcharts/dist'
+    npm run watch '../binary-static/node_modules/@deriv/deriv-chart/dist'
 
 Now each time you make any change, it will overwrite the SmartCharts library inside the `node_modules` folder.
 
