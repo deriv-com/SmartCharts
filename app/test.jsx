@@ -222,7 +222,7 @@ const App = () => {
     const [crosshairState, setCrosshairState] = React.useState(1);
     const [leftOffset, setLeftOffset] = React.useState();
     const [scrollToEpoch, setScrollToEpoch] = React.useState();
-    const [enableFooter, setEnableFooter] = React.useState(false);
+    const [enableFooter, setEnableFooter] = React.useState(true);
     const [enableScroll, setEnableScroll] = React.useState(false);
     const [enableZoom, setEnableZoom] = React.useState(false);
     const [enableNavigationWidget, setEnableNavigationWidget] = React.useState(false);
