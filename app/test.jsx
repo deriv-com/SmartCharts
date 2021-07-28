@@ -691,19 +691,24 @@ const App = () => {
                 </div>
 
                 <div className='form-row'>
+                    <strong>Closed market</strong>
                     <select onChange={el => setClosedMarket(el.target.value)}>
-                        <option value=''> -- No Closed Market -- </option>
                         <option value='default'> Default </option>
                         <option value='Forex'> Forex </option>
+                        <option value='Commodities'> Commodities </option>
+                        <option value='Stock Indices'> Stock Indices </option>
                         <option value='Synthetic Indices'> Synthetic Indices </option>
+                        <option value='Cryptocurrencies'> Cryptocurrencies </option>
                     </select>
                 </div>
                 <div className='form-row'>
+                    <strong>Exclude a market</strong>
                     <select onChange={el => setExcludeSymbol(el.target.value)}>
-                        <option value=''> -- No Exclude Symbol -- </option>
                         <option value='default'> Default </option>
                         <option value='forex,minor_pairs'> Forex - Minor pairs </option>
                         <option value='forex,major_pairs'> Forex - Major pairs </option>
+                        <option value='commodities'> Commodities </option>
+                        <option value='indices'> Stock Indices </option>
                         <option value='synthetic_index'> Synthetic Index </option>
                         <option value='cryptocurrency'> Cryptocurrency </option>
                     </select>
