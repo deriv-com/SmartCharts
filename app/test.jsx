@@ -705,12 +705,11 @@ const App = () => {
                     <strong>Exclude a market</strong>
                     <select onChange={el => setExcludeSymbol(el.target.value)}>
                         <option value='default'> Default </option>
-                        <option value='forex,minor_pairs'> Forex - Minor pairs </option>
-                        <option value='forex,major_pairs'> Forex - Major pairs </option>
+                        <option value='forex'> Forex </option>
                         <option value='commodities'> Commodities </option>
                         <option value='indices'> Stock Indices </option>
-                        <option value='synthetic_index'> Synthetic Index </option>
-                        <option value='cryptocurrency'> Cryptocurrency </option>
+                        <option value='synthetic_index'> Synthetic Indices </option>
+                        <option value='cryptocurrency'> Cryptocurrencies </option>
                     </select>
                 </div>
                 <div className='form-row'>
