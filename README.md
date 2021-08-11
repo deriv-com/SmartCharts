@@ -349,6 +349,8 @@ This creates conflicts in deciding which is the single source of truth. To circu
 />
 ```
 
+
+
 See available components and their props in [Customising Components](#customising-components).
 
 #### ChartTitle
