@@ -24,13 +24,16 @@ export default class ActiveSymbols {
         }
 
         this.isRetrievingSymbols = true;
-
         let active_symbols = [];
         if (this._params.initialData && !this.processedSymbols) {
             active_symbols = this._params.initialData;
         } else if (this._params.enable !== false) {
             const response = await this._api.getActiveSymbols();
             active_symbols = response.active_symbols;
+        } else if (this._params.chartData && this._params.enable === false) {
+            // Do not need to do anything, the chartData handle the staff
+            console.log('ActiveSymbols would render through chartData.');
+            return;
         } else {
             console.error('ActiveSymbols feed is not enable nor has initial data!');
             return;

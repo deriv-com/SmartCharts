@@ -648,6 +648,7 @@ class ChartStore {
             onSettingsChange,
             getMarketsOrder,
             initialData,
+            chartData,
             feedCall,
         } = props;
 
@@ -668,6 +669,7 @@ class ChartStore {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
                 initialData: initialData?.activeSymbols,
+                chartData: chartData?.activeSymbols,
             }));
 
         const { chartSetting } = this.mainStore;
