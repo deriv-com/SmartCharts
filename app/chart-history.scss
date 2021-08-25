@@ -1,45 +1,54 @@
 .ciq-chart-history {
     border-radius: $border-radius;
-    height: 30px;
     z-index: 41;
-    margin: 0.2em 0.8em;
     position: relative;
-    padding: 9px 8px 11px;
     top: 0px;
-    width: 353px;
     display: none;
+    padding: 8px;
     @include themify($themes) {
         background: themed('ChartHistoryBg');
-        border: solid 1px themed('ChartHistoryBorder');
     }
 
-    > strong {
-        font-family: 'Roboto';
-        font-size: 1.2em;
-        font-weight: bold;
-        font-style: normal;
-        line-height: normal;
-        letter-spacing: normal;
-        padding-top: 9px;
-        white-space: nowrap;
-        @include themify($themes) {
-            color: themed('ChartHistoryColor');
+    &--container {
+        display: flex;
+        background-color: #ffffff;
+        border-radius: $border-radius;
+        position: relative;
+        padding: 12px 8px;
+        justify-content: center;
+        align-items: center;
+
+        > strong {
+            font-family: 'IBM Plex Sans';
+            font-size: 1.4em;
+            font-weight: normal;
+            font-style: normal;
+            line-height: normal;
+            white-space: nowrap;
+            max-width: 92px;
+            @include themify($themes) {
+                color: themed('ChartHistoryColor');
+            }
         }
     }
     .datepicker-container,
     .time-picker {
         border-radius: $border-radius;
-        height: 30px;
+        height: 32px;
     }
     .datepicker-container {
-        margin-left: 8px;
+        margin-left: 6px;
 
         .datepicker-display-wrapper .datepicker-display {
-            max-width: 165px;
+            max-width: 94px;
+
+            &:focus-visible {
+                outline: none;
+            }
         }
     }
     .time-picker {
-        width: 80px;
+        width: 78px;
         margin-left: 8px;
 
         input {
@@ -78,8 +87,7 @@
     }
     .datepicker-container {
         .datepicker-display-wrapper .datepicker-display {
-            max-width: 160px;
-            padding: 4px 25px 4px 7px;
+            max-width: 94px;
         }
         .datepicker-calendar {
             > div.calendar {

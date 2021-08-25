@@ -35,6 +35,7 @@
         &:hover {
             @include themify($themes) {
                 border-color: themed('ChartHistoryPickerActiveBorder');
+                outline: none;
             }
         }
     }

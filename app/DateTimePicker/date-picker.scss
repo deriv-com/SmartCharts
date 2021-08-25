@@ -273,7 +273,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         font-size: 1.4em;
         line-height: 100%;
         vertical-align: middle;
-        padding: 4px 11px;
+        padding: 6px 8px;
         box-sizing: border-box;
         font-weight: 300;
         transition: border 0.25s;
@@ -310,16 +310,16 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     }
     .datepicker-display-wrapper {
         border-radius: $border-radius;
+        display: flex;
+        align-items: center;
         @include themify($themes) {
             background: themed('ChartHistoryPickerBg');
             border: 1px solid themed('ChartHistoryPickerBorder');
         }
 
         .date-picker-calendar-icon {
-            position: absolute;
-            right: 3px;
-            top: 3px;
             cursor: pointer;
+            padding-right: 9px;
 
             svg {
                 @include themify($themes) {

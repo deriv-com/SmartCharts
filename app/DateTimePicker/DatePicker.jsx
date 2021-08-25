@@ -19,7 +19,9 @@ const DatePickerInput = ({
     onClick,
     mode,
 }) => {
+    format = 'DD MMM YYYY';
     const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
+    console.log('input_value: ', input_value, 'format: ', format, 'value: ', value);
     return (
         <input
             id={id}
@@ -171,6 +173,8 @@ const DatePicker = React.memo(props => {
             </div>
         );
     }
+
+    console.log('datepicker-display value ', value);
 
     return (
         <div ref={mainRef} className={`datepicker-container ${is_datepicker_visible ? 'active' : ''}`}>

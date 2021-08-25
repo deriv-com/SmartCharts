@@ -19,6 +19,7 @@ $COLOR_LIGHT_GRAY   : #7f8397;
 $COLOR_LIGHT_GRAY_30: rgba($COLOR_LIGHT_GRAY, 0.3);
 $COLOR_LIGHT_GRAY_1 : #999cac;
 $COLOR_LIGHT_GRAY_2 : rgba($COLOR_LIGHT_GRAY_1, 0.32);
+$COLOR_LIGHT_GRAY_3 : rgb(250, 250, 251);
 $COLOR_LIGHT_BLACK_1: rgba($COLOR_BLACK, 0.8);
 $COLOR_LIGHT_BLACK_1_40: rgba($COLOR_BLACK, 0.4);
 $COLOR_LIGHT_BLACK_3: rgba($COLOR_BLACK, 0.16);
@@ -395,11 +396,11 @@ $themes: (
         LastdigitsMinBarBg: $COLOR_RED,
         LastdigitsBarText: $COLOR_LIGHT_GRAY,
         LastdigitsBarFooter: $COLOR_BLACK,
-        ChartHistoryBg: $COLOR_LIGHT_GRAY_1,
-        ChartHistoryColor: $COLOR_LIGHT_BLACK,
+        ChartHistoryBg: $COLOR_LIGHT_GRAY_3,
+        ChartHistoryColor: $color-black-1,
         ChartHistoryBorder: $COLOR_LIGHT_GRAY,
         ChartHistoryPickerBg: $COLOR_WHITE,
-        ChartHistoryPickerBorder: $COLOR_LIGHT_GRAY,
+        ChartHistoryPickerBorder: $color-grey-5,
         ChartHistoryPickerColor: $COLOR_LIGHT_BLACK,
         ChartHistoryPickerIcon: $COLOR_LIGHT_BLACK,
         ChartHistoryPickerActiveBorder: $COLOR_DARK_BLUE_5,
