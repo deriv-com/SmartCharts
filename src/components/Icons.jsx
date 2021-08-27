@@ -98,6 +98,7 @@ import NZD from '../../sass/icons/flags/nzd.svg';
 import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
+import XAU from '../../sass/icons/flags/xau.svg';
 
 import Portugal from '../../sass/icons/flags/portugal.svg';
 import Russia from '../../sass/icons/flags/russia.svg';
@@ -456,6 +457,7 @@ const FlagIconMap = {
     PLN: Wrapper(PLN),
     SEK: Wrapper(SEK),
     USD: Wrapper(USD),
+    XAU: Wrapper(XAU),
     HongKong: Wrapper(HongKong),
     Dutch: Wrapper(Dutch),
     German: Wrapper(German),
@@ -614,6 +616,7 @@ wld('AUD');
 wld('EUR');
 wld('GBP');
 wld('USD');
+wld('XAU');
 /* OTC Indicies */
 otc('Dutch', 'OTC_AEX');
 otc('GBP', 'OTC_FTSE');
