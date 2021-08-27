@@ -360,7 +360,7 @@ const App = () => (
 Here are the following components you can import:
 
 - Top widgets:
-  - `<ChartTitle enabled={true} onChange={(symbol) => {}} />`
+  - `<ChartTitle enabled={true} onChange={(symbol) => {}} open_market={null} />`
 - Chart controls:
   - `<CrosshairToggle enabled={true} />`
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
@@ -386,6 +386,11 @@ This creates conflicts in deciding which is the single source of truth. To circu
 
 ```jsx
 <ChartTitle
+  open_market={{
+    category: 'forex',
+    subcategory: 'minor-pairs',
+    market: 'frxAUDCAD'
+  }}
   onChange={(symbol) => {
     /* ...Pass to symbol prop in <SmartCharts /> */
   }}
@@ -400,6 +405,8 @@ See available components and their props in [Customising Components](#customisin
 | ------------ | --------------------------------------------------------------------------------------------------- |
 | onChange     | When symbol/market changes, this method call. `(symbol) => { }`                                     |
 | isNestedList | Change the theme of Dropdown, if set to `true` it shows a dropdown nested style. Default is `false` |
+| open_market | Sepecify the visible market on the market selector scroll. it accept `{category: '', subcategory: '', market: ''}` . Default is `null` |
+
 
 #### ToolbarWidget
 
