@@ -113,13 +113,18 @@ class TradingTimes {
             return;
         }
 
+        this._calculatingTradingTime(response.trading_times);
+    }
+
+    _calculatingTradingTime(raw_trading_time) {
+        if (!raw_trading_time) return;
         this._tradingTimesMap = {};
 
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
         const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
-        const { markets } = response.trading_times;
+        const { markets } = raw_trading_time;
         for (const market of markets) {
             const { submarkets } = market;
             for (const submarket of submarkets) {
@@ -203,6 +208,11 @@ class TradingTimes {
                     };
                 }
             }
+        }
+
+        const changed = this._updateMarketOpenClosed();
+        if (Object.keys(changed).length > 0) {
+            this._emitter.emit(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, changed);
         }
     }
 
