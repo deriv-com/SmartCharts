@@ -38,6 +38,9 @@
                 outline: none;
             }
         }
+        &:focus-visible {
+            outline: none;
+        }
     }
     .time-picker-dropdown {
         font-size: 1.4em;

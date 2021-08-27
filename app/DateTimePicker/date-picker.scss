@@ -317,6 +317,9 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             border: 1px solid themed('ChartHistoryPickerBorder');
         }
 
+        &:hover {
+            border-color: #2a3052;
+        }
         .date-picker-calendar-icon {
             cursor: pointer;
             padding-right: 9px;

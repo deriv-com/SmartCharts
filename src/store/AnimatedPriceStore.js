@@ -20,7 +20,7 @@ export default class AnimatedPriceStore {
             this.status = '';
             return;
         }
-        this.price = val;
+        this.price = (Math.round(val) * 100) / 100;
         this.oldPrice = this.price;
         this.isIncrease = isIncrease;
     }
