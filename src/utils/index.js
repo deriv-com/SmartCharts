@@ -42,14 +42,14 @@ export const getIntervalInSeconds = ({ timeUnit, interval }) => {
 };
 
 export function stableSort(arr, compare = (a, b) => a < b) {
-    const original = arr.slice(0);
+    const original = arr;
 
-    arr.sort((a, b) => {
+    const newArray = arr.slice(0).sort((a, b) => {
         const result = compare(a, b);
         return result === 0 ? original.indexOf(a) - original.indexOf(b) : result;
     });
 
-    return arr;
+    return newArray;
 }
 
 export function sameBar(bar1, bar2) {

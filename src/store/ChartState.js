@@ -83,7 +83,6 @@ class ChartState {
         this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
         this.granularity = this.chartStore.granularity;
-        this.stxx.maxMasterDataSize = this.chartStore.getMaxMasterDataSize(this.granularity);
     };
 
     @action.bound updateProps({

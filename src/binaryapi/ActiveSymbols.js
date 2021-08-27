@@ -77,9 +77,11 @@ export default class ActiveSymbols {
         const processedSymbols = [];
 
         // Stable sort is required to retain the order of the symbol name
-        stableSort(symbols, (a, b) => a.submarket_display_name.localeCompare(b.submarket_display_name));
+        const sortedSymbols = stableSort(symbols, (a, b) =>
+            a.submarket_display_name.localeCompare(b.submarket_display_name)
+        );
 
-        for (const s of symbols) {
+        for (const s of sortedSymbols) {
             processedSymbols.push({
                 symbol: s.symbol,
                 name: s.display_name,
