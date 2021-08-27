@@ -1,0 +1,45 @@
+
+.cq-dialog--indicator-prediction {
+    .sc-dialog {
+        width: 440px;
+        border-radius: 8px;
+    }
+}
+
+.cq-indicator-prediction {
+    padding: 24px;
+
+    strong {
+        font-style: normal;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 24px;
+        display: block;
+        margin-bottom: 24px;
+        @include themify ($themes) {
+            color: themed('DialogTabularText');
+        }
+    }
+    p {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 20px;
+        @include themify ($themes) {
+            color: themed('DialogBodyText');
+        }
+    }
+    &__footer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        .sc-btn {
+            margin-left: 8px;
+            padding: 10px 16px;
+        }
+        .sc-btn--outline-secondary {
+            border-width: 2px;
+        }
+    }
+}

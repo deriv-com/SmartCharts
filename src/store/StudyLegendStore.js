@@ -125,6 +125,10 @@ export default class StudyLegendStore {
         return (this.activeItems || []).filter(item => item.dataObject.sd.panel === 'chart');
     }
 
+    get hasPredictionIndicator() {
+        return (this.activeItems || []).filter(item => item.isPrediction).length > 0;
+    }
+
     get maxAllowedItem() {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }
@@ -449,6 +453,18 @@ export default class StudyLegendStore {
         this.activeItems = activeItems;
     }
 
+    @action.bound deletePredictionStudies() {
+        const stx = this.stx;
+        if (stx) {
+            (this.activeItems || [])
+                .filter(item => item.isPrediction)
+                .forEach(item => {
+                    this.deleteStudy(item.dataObject.sd);
+                });
+            setTimeout(this.updateIndicatorHeight, 20);
+        }
+    }
+
     @action.bound deleteAllStudies() {
         const stx = this.stx;
         if (stx) {
@@ -482,7 +498,12 @@ export default class StudyLegendStore {
     }
 
     @action.bound onInfoItem(study) {
-        this.infoItem = study;
+        this.infoItem = study
+            ? {
+                  ...study,
+                  disabledAddBtn: study.isPrediction && this.mainStore.timeperiod.isTick,
+              }
+            : study;
     }
 
     @action.bound updatePortalNode(portalNodeId) {
