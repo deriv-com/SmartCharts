@@ -56,13 +56,36 @@
             &--active {
                 #{ $self }__list__item {
                     height: 48px;
-                    padding: 4px 16px;
                     cursor: initial;
+
+                    &__box {
+                        padding: 4px 16px;
+                        height: 48px;
+                    }
                 }
             }
         }
         &--active {
             padding-right: 8px;
+        }
+        &--search {
+            .sc-scrollbar {
+                .sc-studies__category:first-child {
+                    .sc-studies__list {
+                        &__item {
+                            &:nth-child(1),
+                            &:nth-child(2) {
+                                .sc-tooltip__inner {
+                                    position: fixed;
+                                    left: auto;
+                                    top: auto;
+                                    transform: translateY(-100%) translateX(10%);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     &--empty {
@@ -105,39 +128,78 @@
     }
     &__list {
         &__item {
+            display: block;
             height: 40px;
-            display: flex;
-            margin-right: 4px;
-            border-radius: $border-radius;
-            box-sizing: border-box;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            position: relative;
 
-            &:hover {
-                @include themify($themes) {
-                    background: themed('IndicatorListItemHoverBg');
-                }
-
-                .ic-info {
-                    opacity: 1;
-                }
-            }
-            .info {
+            &__box {
+                height: 40px;
+                cursor: pointer;
+                position: relative;
                 display: flex;
-                justify-content: start;
+                margin-right: 4px;
+                border-radius: $border-radius;
+                box-sizing: border-box;
+                justify-content: space-between;
                 align-items: center;
-                width: 100%;
-                padding: 8px 0 8px 16px;
 
-                .ic-icon {
-                    margin-right: 16px;
+                &:hover {
+                    @include themify($themes) {
+                        background: themed('IndicatorListItemHoverBg');
+                    }
+
+                    .ic-info {
+                        opacity: 1;
+                    }
                 }
-                .text {
+                .info {
                     display: flex;
-                    flex-direction: column;
-                    padding-left: 16px;
+                    justify-content: start;
+                    align-items: center;
+                    width: 100%;
+                    padding: 8px 0 8px 16px;
+
+                    .ic-icon {
+                        margin-right: 16px;
+                    }
+                    .text {
+                        display: flex;
+                        flex-direction: column;
+                        padding-left: 16px;
+
+                        span {
+                            font-size: 14px;
+                            font-weight: normal;
+                            font-style: normal;
+                            line-height: 1.43;
+                            letter-spacing: normal;
+                            margin-right: 16px;
+                            @include themify($themes) {
+                                color: themed('IndicatorListItemText');
+                            }
+                        }
+                        small {
+                            display: block;
+                            font-size: 12px;
+                            font-weight: normal;
+                            font-style: normal;
+                            line-height: 1.5;
+                            letter-spacing: normal;
+                            margin-top: 2px;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            max-width: 170px;
+                            @include themify($themes) {
+                                color: themed('IndicatorListItemSubText');
+                            }
+                        }
+                    }
+                }
+                .detail {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center;
+                    padding: 0px;
 
                     span {
                         font-size: 14px;
@@ -145,64 +207,30 @@
                         font-style: normal;
                         line-height: 1.43;
                         letter-spacing: normal;
-                        margin-right: 16px;
-                        @include themify($themes) {
-                            color: themed('IndicatorListItemText');
-                        }
+                        text-align: right;
+                        margin-left: 8px;
                     }
-                    small {
-                        display: block;
-                        font-size: 12px;
-                        font-weight: normal;
-                        font-style: normal;
-                        line-height: 1.5;
-                        letter-spacing: normal;
-                        margin-top: 2px;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        max-width: 170px;
-                        @include themify($themes) {
-                            color: themed('IndicatorListItemSubText');
-                        }
-                    }
-                }
-            }
-            .detail {
-                display: flex;
-                justify-content: flex-end;
-                align-items: center;
-                padding: 0px;
-
-                span {
-                    font-size: 14px;
-                    font-weight: normal;
-                    font-style: normal;
-                    line-height: 1.43;
-                    letter-spacing: normal;
-                    text-align: right;
-                    margin-left: 8px;
-                }
-                .ic-icon {
-                    width: 16px;
-                    height: 16px;
-                    cursor: pointer;
-                    transition: none;
-
-                    svg {
+                    .ic-icon {
                         width: 16px;
                         height: 16px;
-                        @include themify($themes) {
-                            fill: themed('IndicatorListItemText');
+                        cursor: pointer;
+                        transition: none;
+
+                        svg {
+                            width: 16px;
+                            height: 16px;
+                            @include themify($themes) {
+                                fill: themed('IndicatorListItemText');
+                            }
+                        }
+                        &.ic-info {
+                            margin-right: 16px;
                         }
                     }
-                    &.ic-info {
-                        margin-right: 16px;
-                    }
                 }
-            }
-            .ic-info {
-                opacity: 0;
+                .ic-info {
+                    opacity: 0;
+                }
             }
             .sc-tooltip__inner {
                 width: 280px;
@@ -213,6 +241,12 @@
             &--disabled {
                 opacity: 0.3;
                 pointer-events: none;
+            }
+            &--disabled-prediction {
+                .info {
+                    opacity: 0.3;
+                    pointer-events: none;
+                }
             }
         }
     }
@@ -252,17 +286,35 @@
         &__content {
             margin: -20px -20px 0;
             padding: 0;
+
+            p {
+                padding: 16px 24px;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                margin: 0px;
+            }
         }
-        p {
-            font-size: 14px;
-            font-weight: normal;
-            font-style: normal;
-            line-height: 1.43;
-            letter-spacing: normal;
-            margin: 0px;
-        }
-        .btn {
+        &__footer {
             width: 100%;
+            position: relative;
+
+            .sc-btn {
+                width: 100%;
+
+                &:disabled {
+                    opacity: 0.32;
+                    pointer-events: none;
+                }
+            }
+            .sc-tooltip__inner {
+                width: 280px;
+                height: auto;
+                white-space: break-spaces;
+                text-align: center;
+            }
         }
     }
 }

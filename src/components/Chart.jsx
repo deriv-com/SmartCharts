@@ -49,6 +49,7 @@ const Chart = props => {
         chartId,
         DrawToolsSettingsDialog,
         StudySettingsDialog,
+        PredictionIndicatorDialog,
         isCandle,
         isSpline,
         isMobile = false,
@@ -147,13 +148,14 @@ const Chart = props => {
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
+                <PredictionIndicatorDialog />
                 <div id='smartcharts_modal' className='ciq-modal' />
             </div>
         </div>
     );
 };
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }) => ({
+export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader, timeperiod }) => ({
     chartId: chart.chartId,
     init: chart.init,
     destroy: chart.destroy,
@@ -171,4 +173,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     position: chartSetting.position,
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
     isLoading: loader.isActive,
+    PredictionIndicatorDialog: timeperiod.PredictionIndicatorDialog,
 }))(Chart);

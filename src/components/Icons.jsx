@@ -98,6 +98,7 @@ import NZD from '../../sass/icons/flags/nzd.svg';
 import PLN from '../../sass/icons/flags/pln.svg';
 import SEK from '../../sass/icons/flags/sek.svg';
 import USD from '../../sass/icons/flags/usd.svg';
+import XAU from '../../sass/icons/flags/xau.svg';
 
 import Portugal from '../../sass/icons/flags/portugal.svg';
 import Russia from '../../sass/icons/flags/russia.svg';
@@ -130,8 +131,12 @@ import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light
 import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
 import Vol1S75 from '../../sass/icons/active-symbols/volatility/1s75 index/light-75(1s) index.svg';
 import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
+import Vol1S200 from '../../sass/icons/active-symbols/volatility/1s200 index/ic-200-1s-index.svg';
+import Vol1S300 from '../../sass/icons/active-symbols/volatility/1s300 index/ic-300-1s-index.svg';
+import Crash300 from '../../sass/icons/active-symbols/volatility/crash300 index/crash300 index.svg';
 import Crash500 from '../../sass/icons/active-symbols/volatility/crash500 index/crash500 index.svg';
 import Crash1000 from '../../sass/icons/active-symbols/volatility/crash1000 index/crash1000 index.svg';
+import Boom300 from '../../sass/icons/active-symbols/volatility/boom300 index/boom300 index.svg';
 import Boom500 from '../../sass/icons/active-symbols/volatility/boom500 index/boom500 index.svg';
 import Boom1000 from '../../sass/icons/active-symbols/volatility/boom1000 index/boom1000 index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
@@ -142,6 +147,8 @@ import JD25 from '../../sass/icons/active-symbols/volatility/jd25 index/ic-25-in
 import JD50 from '../../sass/icons/active-symbols/volatility/jd50 index/ic-50-index.svg';
 import JD75 from '../../sass/icons/active-symbols/volatility/jd75 index/ic-75-index.svg';
 import JD100 from '../../sass/icons/active-symbols/volatility/jd100 index/ic-100-index.svg';
+import JD150 from '../../sass/icons/active-symbols/volatility/jd150 index/ic-150-index.svg';
+import JD200 from '../../sass/icons/active-symbols/volatility/jd200 index/ic-200-index.svg';
 
 /* Cryptocurrency */
 import BNBUSD from '../../sass/icons/active-symbols/cryptos/ic-bnbusd.svg';
@@ -450,6 +457,7 @@ const FlagIconMap = {
     PLN: Wrapper(PLN),
     SEK: Wrapper(SEK),
     USD: Wrapper(USD),
+    XAU: Wrapper(XAU),
     HongKong: Wrapper(HongKong),
     Dutch: Wrapper(Dutch),
     German: Wrapper(German),
@@ -501,8 +509,12 @@ export const ItemIconMap = {
     '1HZ50V': Wrapper(Vol1S50),
     '1HZ75V': Wrapper(Vol1S75),
     '1HZ100V': Wrapper(Vol1S100),
+    '1HZ200V': Wrapper(Vol1S200),
+    '1HZ300V': Wrapper(Vol1S300),
+    BOOM300N: Wrapper(Boom300),
     BOOM500: Wrapper(Boom500),
     BOOM1000: Wrapper(Boom1000),
+    CRASH300N: Wrapper(Crash300),
     CRASH500: Wrapper(Crash500),
     CRASH1000: Wrapper(Crash1000),
     RDBEAR: Wrapper(MarketBear),
@@ -513,6 +525,8 @@ export const ItemIconMap = {
     JD50: Wrapper(JD50),
     JD75: Wrapper(JD75),
     JD100: Wrapper(JD100),
+    JD150: Wrapper(JD150),
+    JD200: Wrapper(JD200),
     /* Cryptocurrency Indices */
     cryBNBUSD: Wrapper(BNBUSD),
     cryBTCLTC: Wrapper(BTCLTC),
@@ -602,6 +616,7 @@ wld('AUD');
 wld('EUR');
 wld('GBP');
 wld('USD');
+wld('XAU');
 /* OTC Indicies */
 otc('Dutch', 'OTC_AEX');
 otc('GBP', 'OTC_FTSE');

@@ -1,6 +1,6 @@
 {
-    "name": "@binary-com/smartcharts",
-    "version": "0.6.1",
+    "name": "@deriv/deriv-charts",
+    "version": "0.4.1",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
     "contributors": [
@@ -58,7 +58,7 @@
         "babel-plugin-transform-runtime": "^6.23.0",
         "chai": "^4.2.0",
         "chai-sinon": "^2.8.1",
-        "copy-webpack-plugin": "^6.0.1",
+        "copy-webpack-plugin": "^6.4.1",
         "cross-env": "^5.1.4",
         "css-hot-loader": "^1.4.4",
         "css-loader": "^3.2.0",
@@ -104,9 +104,7 @@
         "postcss-svgo": "^4.0.2",
         "prettier": "^2.1.2",
         "raw-loader": "^3.1.0",
-        "react": "^16.8.6",
-        "react-dom": "^16.8.6",
-        "react-transition-group": "^4.2.2",
+        "react-transition-group": "^4.4.1",
         "regenerator-runtime": "^0.13.3",
         "resize-observer-polyfill": "^1.5.1",
         "rimraf": "^2.6.3",
@@ -131,18 +129,14 @@
         "classnames": "^2.2.6",
         "event-emitter-es6": "^1.1.5",
         "lodash.debounce": "^4.0.8",
-        "moment": "^2.24.0",
-        "prop-types": "^15.7.2",
-        "react-tabs": "^3.0.0",
-        "url-search-params-polyfill": "^7.0.0"
-    },
-    "peerDependencies": {
-        "@babel/polyfill": "^7.0.0",
         "mobx": "^5.0.3",
         "mobx-react": "^5.1.2",
-        "react": "^16.4.0",
-        "react-dom": "^16.4.0",
-        "react-transition-group": "^2.5.0"
+        "moment": "^2.24.0",
+        "prop-types": "^15.7.2",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-tabs": "^3.0.0",
+        "url-search-params-polyfill": "^7.0.0"
     },
     "resolutions": {
         "js-yaml": "^3.13.1",

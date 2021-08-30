@@ -400,15 +400,6 @@ export default class CategoricalDisplayStore {
         if (!this.mainStore.chart.isMobile) {
             setTimeout(() => this.searchInput.current.focus(), 0);
         }
-
-        if (!this.mainStore.chart.isMobile) {
-            const categories = Object.keys(this.categoryElements);
-            const last_category = categories.pop();
-            const last_category_bottom_gap = this.height - (64 + categories.length * 40); // to make the last category height reach it's filter tab
-            if (this.categoryElements[last_category]) {
-                this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
-            }
-        }
     }
 
     connect = connect(() => ({
