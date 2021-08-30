@@ -792,6 +792,32 @@ export const MockActiveSymbol = [
         symbol: 'OTC_DJI',
         symbol_type: 'stockindex',
     },
+    {
+        allow_forward_starting: 0,
+        display_name: 'BTC/USD',
+        exchange_is_open: 1,
+        is_trading_suspended: 0,
+        market: 'cryptocurrency',
+        market_display_name: 'Cryptocurrencies',
+        pip: 0.001,
+        submarket: 'non_stable_coin',
+        submarket_display_name: 'Cryptocurrencies',
+        symbol: 'cryBTCUSD',
+        symbol_type: 'cryptocurrency',
+    },
+    {
+        allow_forward_starting: 0,
+        display_name: 'ETH/USD',
+        exchange_is_open: 1,
+        is_trading_suspended: 0,
+        market: 'cryptocurrency',
+        market_display_name: 'Cryptocurrencies',
+        pip: 0.00001,
+        submarket: 'non_stable_coin',
+        submarket_display_name: 'Cryptocurrencies',
+        symbol: 'cryETHUSD',
+        symbol_type: 'cryptocurrency',
+    },
 ];
 
 export const MockTradingTime = {
@@ -1580,6 +1606,30 @@ export const MockTradingTime = {
                                 events: [],
                                 name: 'Bull Market Index',
                                 symbol: 'RDBULL',
+                                times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                name: 'Cryptocurrencies',
+                submarkets: [
+                    {
+                        name: 'Cryptocurrencies',
+                        symbols: [
+                            {
+                                events: [],
+                                name: 'BTC/USD',
+                                symbol: 'cryBTCUSD',
+                                times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                            },
+                            {
+                                events: [],
+                                name: 'ETH/USD',
+                                symbol: 'cryETHUSD',
                                 times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' },
                                 trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },

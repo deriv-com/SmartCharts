@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import classNames from 'classnames';
 import NotificationBadge from './NotificationBadge.jsx';
 import Tooltip from './Tooltip.jsx';
 import Scroll from './Scroll.jsx';
@@ -14,6 +15,7 @@ import {
     BackIcon,
 } from './Icons.jsx';
 import '../../sass/components/_studylegend.scss';
+import { TooltipsContent } from '../Constant.js';
 
 const StudyIcon = ({ Icon, props }) => <Icon {...props} />;
 
@@ -33,33 +35,47 @@ const NoResultView = ({ text }) => (
     </div>
 );
 
-const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll }) => (
+const IndicatorList = ({ items, onSelectItem, onDeleteItem, onEditItem, onInfoItem, disableAll, isTick }) => (
     <div className='sc-studies__list'>
         {items.map(Item => (
-            <Tooltip
+            <div
                 key={`item--${Item.id}`}
-                className={`sc-studies__list__item ${disableAll && 'sc-studies__list__item--disabled'}`}
-                enabled={!!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30)}
-                content={`${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`}
+                className={classNames('sc-studies__list__item ', {
+                    'sc-studies__list__item--disabled': disableAll,
+                    'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
+                })}
             >
-                <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
-                    <StudyIcon Icon={Item.icon} />
-                    <div className='text'>
-                        <span>{Item.name}</span>
-                        {Item.bars && <small>({Item.bars})</small>}
+                <Tooltip
+                    className='sc-studies__list__item__box'
+                    enabled={
+                        !!((onEditItem || onDeleteItem) && Item.bars && Item.bars.length > 30) ||
+                        (Item.isPrediction && isTick)
+                    }
+                    content={
+                        Item.isPrediction && isTick
+                            ? TooltipsContent.predictionIndicator
+                            : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
+                    }
+                >
+                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
+                        <StudyIcon Icon={Item.icon} />
+                        <div className='text'>
+                            <span>{Item.name}</span>
+                            {Item.bars && <small>({Item.bars})</small>}
+                        </div>
                     </div>
-                </div>
-                <div className='detail'>
-                    {onInfoItem && <InfoCircleIcon className='ic-info' onClick={() => onInfoItem(Item)} />}
-                    {onEditItem && <SettingIcon onClick={() => onEditItem(Item.dataObject)} />}
-                    {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />}
-                </div>
-            </Tooltip>
+                    <div className='detail'>
+                        {onInfoItem && <InfoCircleIcon className='ic-info' onClick={() => onInfoItem(Item)} />}
+                        {onEditItem && <SettingIcon onClick={() => onEditItem(Item.dataObject)} />}
+                        {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />}
+                    </div>
+                </Tooltip>
+            </div>
         ))}
     </div>
 );
 
-const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll }) => (
+const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disableAll, isTick }) => (
     <Scroll autoHide>
         {categories.map(Category => (
             <div key={Category.id} className='sc-studies__category'>
@@ -70,6 +86,7 @@ const TabularDisplaySearchPanel = ({ categories, onSelectItem, onInfoItem, disab
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
                         disableAll={disableAll}
+                        isTick={isTick}
                     />
                 </div>
             </div>
@@ -109,6 +126,7 @@ const TabularDisplay = ({
     searchQuery,
     isMobile,
     maxAllowedItem,
+    isTick,
 }) => (
     <Tabs className='tabs--vertical' selectedIndex={selectedTab} onSelect={onSelectTab}>
         <TabList>
@@ -126,13 +144,14 @@ const TabularDisplay = ({
             ))}
         </TabList>
         <TabPanel key='panel--search'>
-            <div className='sc-studies__panel'>
+            <div className='sc-studies__panel sc-studies__panel--search'>
                 {searchedCategories.length ? (
                     <TabularDisplaySearchPanel
                         categories={searchedCategories}
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
                         disableAll={activeItems.length === (isMobile ? 2 : 5)}
+                        isTick={isTick}
                     />
                 ) : (
                     <NoResultView text={searchQuery} />
@@ -163,6 +182,7 @@ const TabularDisplay = ({
                         onInfoItem={onInfoItem}
                         items={Category.items}
                         disableAll={activeItems.length === maxAllowedItem}
+                        isTick={isTick}
                     />
                 </div>
             </TabPanel>
@@ -193,6 +213,7 @@ const StudyLegend = ({
     portalNodeId,
     updatePortalNode,
     maxAllowedItem,
+    isTick,
 }) => {
     updatePortalNode(portalNodeId);
     return (
@@ -228,16 +249,21 @@ const StudyLegend = ({
             <StudyMenu.Body>
                 {infoItem && (
                     <div className='sc-studies__info'>
-                        <Scroll autoHide height='360px' className='studies__info__content'>
+                        <Scroll autoHide height='360px' className='sc-studies__info__content'>
                             <p>{infoItem.description}</p>
                         </Scroll>
-                        <button
-                            type='button'
-                            className='sc-btn sc-btn--primary sc-btn--w100'
-                            onClick={() => onSelectItem(infoItem.id)}
-                        >
-                            {t.translate('Add')}
-                        </button>
+                        <div className='sc-studies__info__footer'>
+                            <Tooltip enabled={infoItem.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
+                                <button
+                                    type='button'
+                                    className='sc-btn sc-btn--primary sc-btn--w100'
+                                    onClick={() => onSelectItem(infoItem.id)}
+                                    disabled={infoItem.disabledAddBtn}
+                                >
+                                    {t.translate('Add')}
+                                </button>
+                            </Tooltip>
+                        </div>
                     </div>
                 )}
                 <TabularDisplay
@@ -254,13 +280,14 @@ const StudyLegend = ({
                     searchQuery={searchQuery}
                     isMobile={isMobile}
                     maxAllowedItem={maxAllowedItem}
+                    isTick={isTick}
                 />
             </StudyMenu.Body>
         </StudyMenu>
     );
 };
 
-export default connect(({ studies: st, chart }) => ({
+export default connect(({ studies: st, chart, timeperiod }) => ({
     isOpened: st.open,
     setOpen: st.setOpen,
     StudyMenu: st.StudyMenu,
@@ -282,4 +309,5 @@ export default connect(({ studies: st, chart }) => ({
     infoItem: st.infoItem,
     updatePortalNode: st.updatePortalNode,
     maxAllowedItem: st.maxAllowedItem,
+    isTick: timeperiod.isTick,
 }))(StudyLegend);

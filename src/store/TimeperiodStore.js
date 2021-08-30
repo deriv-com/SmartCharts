@@ -2,6 +2,8 @@ import { observable, action, when, reaction } from 'mobx';
 import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
 import ServerTime from '../utils/ServerTime';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
+import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
+import IndicatorPredictionDialog from '../components/IndicatorPredictionDialog.jsx';
 
 const UnitMap = {
     tick: 'T',
@@ -17,8 +19,15 @@ const TimeMap = {
 };
 
 export default class TimeperiodStore {
+    @observable portalNodeIdChanged;
+
     constructor(mainStore) {
         this.mainStore = mainStore;
+        this.predictionIndicator = new IndicatorPredictionDialogStore({
+            mainStore,
+        });
+        this.PredictionIndicatorDialog = this.predictionIndicator.connect(IndicatorPredictionDialog);
+
         this._serverTime = ServerTime.getInstance();
         when(() => this.context, this.onContextReady);
     }
@@ -41,6 +50,8 @@ export default class TimeperiodStore {
     @observable timeUnit = null;
     @observable interval = null;
     @observable preparingInterval = null;
+    @observable portalNodeIdChanged;
+
     onGranularityChange = () => null;
 
     remain = null;
@@ -163,8 +174,14 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setPreparingInterval(interval) {
-        this.preparingInterval = interval;
+    @action.bound changeGranularity(interval) {
+        if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
+            this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
+            this.predictionIndicator.setOpen(true);
+        } else {
+            this.preparingInterval = interval;
+            this.onGranularityChange(interval);
+        }
     }
 
     @action.bound updateDisplay() {
@@ -188,4 +205,8 @@ export default class TimeperiodStore {
         }
         return y;
     };
+
+    @action.bound updatePortalNode(portalNodeId) {
+        this.portalNodeIdChanged = portalNodeId;
+    }
 }
