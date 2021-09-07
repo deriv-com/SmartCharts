@@ -42,7 +42,7 @@ const ChartMode = ({ ChartTypeMenu, menuOpen, onChartType, onGranularity, Type, 
                         <ChartTypes newDesign onChange={onChartType} />
                     </div>
                     <div className='sc-chart-mode__section__item'>
-                        <Timeperiod newDesign onChange={onGranularity} />
+                        <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
                     </div>
                 </div>
             </ChartTypeMenu.Body>

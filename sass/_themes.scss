@@ -455,7 +455,9 @@ $themes: (
         FooterItemHoverBg: $color-grey-4,
         ChartStatus: $color-grey-2,
         ChartStatusOnline: $color-green-1,
-        ChartStatusOffline: $color-red-2
+        ChartStatusOffline: $color-red-2,
+        PredictionDialogTitle: $color-black-1,
+        PredictionDialogText: $color-black-1,
     ),
     dark: (
         DefaultMain:            $color-black,
@@ -766,7 +768,9 @@ $themes: (
         FooterItemHoverBg: $color-black-5,
         ChartStatus: $color-grey-2,
         ChartStatusOnline: $color-green-1,
-        ChartStatusOffline: $color-red-2
+        ChartStatusOffline: $color-red-2,
+        PredictionDialogTitle: $color-white,
+        PredictionDialogText: $color-white,
     ),
 );
 
