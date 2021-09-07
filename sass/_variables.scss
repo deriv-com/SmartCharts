@@ -82,3 +82,10 @@ $border-radius: 4px;
     border-left: $width solid transparent;
     border-right: $width solid transparent;
 }
+
+@mixin calendar-angle-toggle($symble-angle) {
+    content: $symble-angle;
+    font-family: system-ui;
+    font-size: xx-large;
+    font-weight: 200;
+}

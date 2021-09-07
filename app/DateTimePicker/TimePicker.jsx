@@ -251,7 +251,7 @@ const TimePicker = React.memo(props => {
                 findAvailabeTime(start_moment_clone);
             }
         }
-    }, [focus, is_open, minutes, prev_is_open, prev_value, start_date, handleChange, toggleDropDown]);
+    }, [focus, is_open, minutes, prev_is_open, prev_value, prev_focus, start_date, handleChange, toggleDropDown]);
 
     const prefix_class = 'time-picker';
     return (

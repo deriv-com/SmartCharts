@@ -17,24 +17,11 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         border: 1px solid themed('ChartHistoryPickerBorder');
     }
 
-    .calendar-input {
-        background: transparent;
-        margin: 0;
-        border: none;
-        outline: none;
-        width: 100%;
-        box-sizing: border-box;
-        font-size: 1.4em;
-        font-weight: 300;
-        height: 34px;
-        padding: 6px 10px;
-        @include themify($themes) {
-            color: themed('ChartHistoryPickerTopColor');
-        }
-
-        &[readonly] {
-            cursor: default;
-        }
+    .calendar-select {
+        display: flex;
+        justify-content: center;
+        width: 120px;
+        column-gap: 4px;
     }
     .calendar-footer {
         font-size: 1.4em;
@@ -62,10 +49,12 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     }
     .calendar-header {
         display: flex;
+        flex-direction: row;
         justify-content: center;
-        height: 32px;
-        line-height: 32px;
-        font-weight: 500;
+        align-items: center;
+        height: 52px;
+        line-height: 32px; //20px
+        font-weight: bold;
         @include themify($themes) {
             background: themed('ChartHistoryPickerHeaderBg');
             border-top: 1px solid themed('ChartHistoryPickerHeaderBorder');
@@ -77,7 +66,6 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         .calendar-select-year-btn,
         .calendar-select-decade-btn,
         .calendar-select-century-btn {
-            padding: 0 4px;
             cursor: pointer;
 
             &:hover {
@@ -94,7 +82,6 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         .calendar-prev-month-btn,
         .calendar-next-month-btn {
             position: absolute;
-            color: rgba(0, 0, 0, 0.45);
             padding: 0 5px;
             display: inline-block;
             line-height: 32px;
@@ -107,28 +94,28 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
                 left: 7%;
 
                 &:after {
-                    content: '\AB';
+                    @include calendar-angle-toggle('\AB');
                 }
             }
             &.calendar-next-year-btn {
                 right: 7%;
 
                 &:after {
-                    content: '\BB';
+                    @include calendar-angle-toggle('\BB');
                 }
             }
             &.calendar-prev-month-btn {
-                left: 14%;
+                left: 18%;
 
                 &:after {
-                    content: '\2039';
+                    @include calendar-angle-toggle('\2039');
                 }
             }
             &.calendar-next-month-btn {
-                right: 14%;
+                right: 18%;
 
                 &:after {
-                    content: '\203A';
+                    @include calendar-angle-toggle('\203A');
                 }
             }
         }

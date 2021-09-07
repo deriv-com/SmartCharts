@@ -54,7 +54,6 @@ const DatePicker = React.memo(props => {
         focus,
         format,
         is_nativepicker,
-        is_read_only,
         max_date,
         min_date,
         mode,
@@ -113,10 +112,6 @@ const DatePicker = React.memo(props => {
             updateDatePickerValue(_selected_date);
         }
         setIsDatepickerVisible(_is_datepicker_visible);
-    };
-
-    const onChangeInput = e => {
-        updateDatePickerValue(e.target.value, mode);
     };
 
     // TODO: handle cases where user inputs date before min_date and date after max_date
@@ -191,18 +186,7 @@ const DatePicker = React.memo(props => {
                 <CalendarIcon className='date-picker-calendar-icon' />
             </div>
             <div className={`datepicker-calendar ${is_datepicker_visible ? 'show' : ''}`}>
-                <Calendar ref={calendarRef} onSelect={onSelectCalendar} {...props}>
-                    <DatePickerInput
-                        class_name='calendar-input'
-                        mode={mode}
-                        name={name}
-                        format={format}
-                        onChange={onChangeInput}
-                        placeholder={t.translate(placeholder)}
-                        is_read_only={is_read_only || false}
-                        value={value}
-                    />
-                </Calendar>
+                <Calendar ref={calendarRef} onSelect={onSelectCalendar} {...props} />
             </div>
         </div>
     );
