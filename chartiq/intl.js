@@ -771,7 +771,7 @@
 				keyLocaleData = foundLocaleData[key],
 				// d. Let value be the result of calling the [[Get]] internal method of
 				//	  keyLocaleData with argument "0".
-				value = keyLocaleData['0'],
+				value = keyLocaleData ? keyLocaleData['0'] : '',
 				// e. Let supportedExtensionAddition be "".
 				supportedExtensionAddition = '',
 				// f. Let indexOf be the standard built-in function object defined in
