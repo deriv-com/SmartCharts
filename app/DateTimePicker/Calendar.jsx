@@ -1,6 +1,10 @@
 import moment from 'moment';
 import React from 'react';
+import { Wrapper } from '../../src/components/Icons.jsx';
+import CalendarICInfo from '../icons/ic-calendar-info.svg';
 import { CalendarDays, CalendarMonths, CalendarYears, CalendarDecades } from './panels/index';
+
+const CalendarIconInfo = Wrapper(CalendarICInfo);
 
 function CalendarButton({ children, className, is_hidden, label, onClick }) {
     return (
@@ -32,7 +36,8 @@ function CalendarFooter({ footer, has_today_btn, onClick }) {
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
             {has_today_btn && (
                 <CalendarButton className='calendar-footer-btn'>
-                    <span onClick={onClick}>{t.translate('Today')}</span>
+                    <span onClick={onClick}>{t.translate('Minimum duration is 1 day')}</span>
+                    <CalendarIconInfo className='calendar-footer-btn-icon-info' />
                 </CalendarButton>
             )}
         </div>

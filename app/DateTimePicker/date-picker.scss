@@ -14,7 +14,6 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     border-radius: $border-radius;
     @include themify($themes) {
         background: themed('ChartHistoryPickerBg');
-        border: 1px solid themed('ChartHistoryPickerBorder');
     }
 
     .calendar-select {
@@ -24,12 +23,12 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         column-gap: 4px;
     }
     .calendar-footer {
-        font-size: 1.4em;
+        font-size: 1.2rem;
         display: grid;
         align-items: center;
-        line-height: 38px;
-        padding: 0 8px;
-        font-weight: 500;
+        line-height: 18px;
+        font-weight: 400;
+        border-radius: 0 0 8px 8px;
         @include themify($themes) {
             background: themed('ChartHistoryPickerFooterBg');
             border-top: 1px solid themed('ChartHistoryPickerFooterBorder');
@@ -41,10 +40,20 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             margin: 0 -12px;
         }
         .calendar-footer-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            column-gap: 1.7rem;
+            padding: 1.6rem;
             cursor: pointer;
-            text-align: center;
-            border: none;
-            font-weight: bold;
+
+            &-icon-info {
+                svg {
+                    @include themify($themes) {
+                        fill: themed('ChartHistoryPickerActiveIcon');
+                    }
+                }
+            }
         }
     }
     .calendar-header {
@@ -53,11 +62,11 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         justify-content: center;
         align-items: center;
         height: 52px;
-        line-height: 32px; //20px
+        line-height: 32px;
         font-weight: bold;
+        border-radius: 8px 8px 0 0;
         @include themify($themes) {
             background: themed('ChartHistoryPickerHeaderBg');
-            border-top: 1px solid themed('ChartHistoryPickerHeaderBorder');
             border-bottom: 1px solid themed('ChartHistoryPickerHeaderBorder');
             color: themed('ChartHistoryPickerHeaderColor');
         }
@@ -91,33 +100,38 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             }
 
             &.calendar-prev-year-btn {
-                left: 7%;
+                left: 3%;
 
                 &:after {
                     @include calendar-angle-toggle('\AB');
                 }
             }
             &.calendar-next-year-btn {
-                right: 7%;
+                right: 3%;
 
                 &:after {
                     @include calendar-angle-toggle('\BB');
                 }
             }
             &.calendar-prev-month-btn {
-                left: 18%;
+                left: 15%;
 
                 &:after {
                     @include calendar-angle-toggle('\2039');
                 }
             }
             &.calendar-next-month-btn {
-                right: 18%;
+                right: 15%;
 
                 &:after {
                     @include calendar-angle-toggle('\203A');
                 }
             }
+        }
+    }
+    .calendar-panel {
+        @include themify($themes) {
+            background: themed('ChartHistoryPickerFooterBg');
         }
     }
     .calendar-date-panel,
@@ -127,8 +141,8 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     .calendar-century-panel {
         display: grid;
         grid-gap: 2px;
-        padding: 8px 12px;
-        height: 226px;
+        padding: 8px 20px;
+        height: 184px;
 
         &.calendar-date-panel {
             grid-template-columns: repeat(7, 1fr);
@@ -147,13 +161,12 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             align-self: center;
             cursor: pointer;
             margin: 0 auto;
-            border: 1px solid transparent;
             border-radius: 5px;
             padding: 0;
             text-align: center;
             background: transparent;
             transition: all 0.3s;
-            font-size: 1.4em;
+            font-size: 1.2rem;
             line-height: 24px;
             @include themify($themes) {
                 color: themed('ChartHistoryPickerBodyColor');
@@ -174,31 +187,19 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
                 font-size: 1.4em;
             }
             &-header {
-                line-height: 18px;
-                width: 33px;
-                padding: 6px 0;
+                font-size: 1.2rem;
+                line-height: 24px;
+                width: 24px;
                 text-align: center;
                 align-self: center;
-                font-weight: 500;
+                font-weight: 700;
+                margin: 0 auto;
                 @include themify($themes) {
                     color: themed('ChartHistoryPickerHeaderColor');
                 }
             }
             &.today {
-                font-weight: 400;
-                @include themify($themes) {
-                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
-                }
-
-                &.disabled {
-                    @include themify($themes) {
-                        color: themed('ChartHistoryPickerBodyDisableColor');
-                        border: 1px solid themed('ChartHistoryPickerBodyDisableBorder');
-                    }
-                }
-            }
-            &.active {
-                font-weight: 300;
+                font-weight: 700;
                 @include themify($themes) {
                     background: themed('ChartHistoryPickerBodyActiveBg');
                     color: themed('ChartHistoryPickerBodyActiveColor');
@@ -207,7 +208,19 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
                 &.disabled {
                     @include themify($themes) {
                         color: themed('ChartHistoryPickerBodyDisableColor');
-                        border: 1px solid themed('ChartHistoryPickerBodyDisableBorder');
+                    }
+                }
+            }
+            &.active {
+                font-weight: 700;
+                @include themify($themes) {
+                    background: themed('ChartHistoryPickerBodyActiveBg');
+                    color: themed('ChartHistoryPickerBodyActiveColor');
+                }
+
+                &.disabled {
+                    @include themify($themes) {
+                        color: themed('ChartHistoryPickerBodyDisableColor');
                     }
                 }
             }
@@ -220,7 +233,6 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             &:hover:not(.disabled) {
                 cursor: pointer;
                 @include themify($themes) {
-                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
                 }
             }
         }
@@ -369,7 +381,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         &.show > div.calendar {
             opacity: 1;
             z-index: 9;
-            top: calc(100% + 8px);
+            top: calc(100% + 26px);
             pointer-events: initial;
         }
     }
