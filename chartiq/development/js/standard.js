@@ -1998,7 +1998,7 @@ CIQ.Drawing.prototype.setPoint = function (point, x, y, chart) {
 		if (
 			this.name != "freeform" &&
 			!CIQ.ChartEngine.isDailyInterval(this.stx.layout.interval) &&
-			!d.getHours() &&
+			d && !d.getHours() &&
 			!d.getMinutes() &&
 			!d.getSeconds() &&
 			!d.getMilliseconds()
