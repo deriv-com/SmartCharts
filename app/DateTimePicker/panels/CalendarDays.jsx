@@ -6,6 +6,10 @@ function padLeft(nr, n, str) {
     return Array(n - String(nr).length + 1).join(str || '0') + nr;
 }
 
+function calcDayIndexFromMonday(dayIndex) {
+    return dayIndex === 0 ? 6 : dayIndex - 1;
+}
+
 const getDays = ({ calendar_date, date_format, max_date, min_date, start_date, onClick, selected_date }) => {
     const dates = [];
     const days = [];
@@ -14,8 +18,8 @@ const getDays = ({ calendar_date, date_format, max_date, min_date, start_date, o
     const num_of_days = moment_cur_date.daysInMonth() + 1;
     const moment_month_start = moment_cur_date.clone().startOf('month');
     const moment_month_end = moment_cur_date.clone().endOf('month');
-    const first_day = moment_month_start.day();
-    const last_day = moment_month_end.day();
+    const first_day = calcDayIndexFromMonday(moment_month_start.day()); // moment.js method '.day()' return index the day of the week, with Sunday as 0 and Saturday as 6.
+    const last_day = calcDayIndexFromMonday(moment_month_end.day());
     const moment_min_date = moment.utc(min_date);
     const moment_max_date = moment.utc(max_date);
     const moment_selected = moment.utc(selected_date);
@@ -62,7 +66,7 @@ const getDays = ({ calendar_date, date_format, max_date, min_date, start_date, o
     return days;
 };
 
-const week_headers = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+const week_headers = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 export const CalendarDays = props => {
     const days = getDays(props).map(day => day);

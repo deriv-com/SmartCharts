@@ -28,9 +28,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         align-items: center;
         line-height: 18px;
         font-weight: 400;
-        border-radius: 0 0 8px 8px;
         @include themify($themes) {
-            background: themed('ChartHistoryPickerFooterBg');
             border-top: 1px solid themed('ChartHistoryPickerFooterBorder');
             color: themed('ChartHistoryPickerFooterColor');
         }
@@ -44,7 +42,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             justify-content: space-between;
             align-items: center;
             column-gap: 1.7rem;
-            padding: 1.6rem;
+            padding: 1.4rem;
             cursor: pointer;
 
             &-icon-info {
@@ -64,9 +62,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         height: 52px;
         line-height: 32px;
         font-weight: bold;
-        border-radius: 8px 8px 0 0;
         @include themify($themes) {
-            background: themed('ChartHistoryPickerHeaderBg');
             border-bottom: 1px solid themed('ChartHistoryPickerHeaderBorder');
             color: themed('ChartHistoryPickerHeaderColor');
         }
@@ -140,12 +136,12 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
     .calendar-decade-panel,
     .calendar-century-panel {
         display: grid;
-        grid-gap: 2px;
+        grid-gap: 0.8rem 1.2rem;
         padding: 8px 20px;
-        height: 184px;
 
         &.calendar-date-panel {
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(7, 2.4rem);
+            grid-auto-rows: 2.4rem;
         }
         &.calendar-month-panel,
         &.calendar-year-panel,
@@ -173,7 +169,13 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             }
 
             &.calendar-date {
-                width: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                line-height: 1.25;
+                box-sizing: border-box;
+                width: 100%;
+                height: 100%;
                 @include themify($themes) {
                     color: themed('ChartHistoryPickerBodyColor');
                 }
@@ -188,12 +190,9 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             }
             &-header {
                 font-size: 1.2rem;
-                line-height: 24px;
-                width: 24px;
                 text-align: center;
                 align-self: center;
                 font-weight: 700;
-                margin: 0 auto;
                 @include themify($themes) {
                     color: themed('ChartHistoryPickerHeaderColor');
                 }
@@ -201,7 +200,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             &.today {
                 font-weight: 700;
                 @include themify($themes) {
-                    background: themed('ChartHistoryPickerBodyActiveBg');
+                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
                     color: themed('ChartHistoryPickerBodyActiveColor');
                 }
 
@@ -233,6 +232,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
             &:hover:not(.disabled) {
                 cursor: pointer;
                 @include themify($themes) {
+                    background: themed('ChartHistoryPickerBodyHoverBg');
                 }
             }
         }
