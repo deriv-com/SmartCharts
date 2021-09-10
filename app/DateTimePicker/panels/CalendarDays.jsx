@@ -1,4 +1,5 @@
 /* eslint-disable react/no-array-index-key */
+import classNames from 'classnames';
 import moment from 'moment';
 import React from 'react';
 
@@ -47,12 +48,17 @@ const getDays = ({ calendar_date, date_format, max_date, min_date, start_date, o
                 (moment_date.isBefore(moment_start_date) ||
                     moment_date.isAfter(moment_start_date.clone().add(1, 'day'))));
 
+        const is_other_month = moment_date.month() !== moment_cur_date.month();
+
         days.push(
             <span
                 key={date}
-                className={`calendar-date ${is_active && !is_disabled ? 'active' : ''} ${is_today ? 'today' : ''} ${
-                    is_disabled ? 'disabled' : ''
-                }`}
+                className={classNames('calendar-date', {
+                    active: is_active && !is_disabled,
+                    today: is_today,
+                    disabled: is_disabled,
+                    'other-month': is_other_month,
+                })}
                 onClick={e => {
                     onClick.date(e, is_disabled);
                 }}

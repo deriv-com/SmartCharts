@@ -144,12 +144,13 @@
         &.calendar-year-panel,
         &.calendar-decade-panel,
         &.calendar-century-panel {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(7.2rem, 1fr));
+            grid-auto-rows: minmax(4.2rem, auto);
         }
-        .calendar-date,
-        .calendar-month,
+        .calendar-decade,
         .calendar-year,
-        .calendar-decade {
+        .calendar-month,
+        .calendar-date {
             justify-content: center;
             align-self: center;
             cursor: pointer;
@@ -165,6 +166,9 @@
                 color: themed('ChartHistoryPickerBodyColor');
             }
 
+            &.calendar-decade,
+            &.calendar-year,
+            &.calendar-month,
             &.calendar-date {
                 display: flex;
                 justify-content: center;
@@ -177,13 +181,15 @@
                     color: themed('ChartHistoryPickerBodyColor');
                 }
             }
-            &.calendar-month,
-            &.calendar-year {
-                padding: 0 8px;
+            &.calendar-decade,
+            &.calendar-year,
+            &.calendar-month {
+                width: 5.6rem;
+                height: 3.2rem;
             }
             &.calendar-decade {
-                padding: 6px 4px;
-                font-size: 1.4em;
+                inline-size: auto;
+                padding: 0 4px;
             }
             &-header {
                 font-size: 1.2rem;
@@ -230,6 +236,11 @@
                 cursor: pointer;
                 @include themify($themes) {
                     background: themed('ChartHistoryPickerBodyHoverBg');
+                }
+            }
+            &.other-month {
+                @include themify($themes) {
+                    color: themed('ChartHistoryPickerBodyDisableColor');
                 }
             }
         }
@@ -314,7 +325,7 @@
         }
 
         &:hover {
-            border-color: #2a3052;
+            border-color: $COLOR_DARK_BLUE_5;
         }
         .date-picker-calendar-icon {
             cursor: pointer;
