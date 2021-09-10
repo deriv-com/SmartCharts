@@ -18,10 +18,9 @@ const DatePickerInput = ({
     onChange,
     onClick,
     mode,
+    display_format,
 }) => {
-    format = 'DD MMM YYYY';
-    const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
-    console.log('input_value: ', input_value, 'format: ', format, 'value: ', value);
+    const input_value = format ? moment(value, 'YYYY-MM-DD').format(display_format) : value;
     return (
         <input
             id={id}
@@ -62,6 +61,7 @@ const DatePicker = React.memo(props => {
         placeholder,
         start_date,
         value: props_value,
+        display_format,
     } = props;
 
     const [value, setValue] = useStateCallback(props_value || '');
@@ -169,8 +169,6 @@ const DatePicker = React.memo(props => {
         );
     }
 
-    console.log('datepicker-display value ', value);
-
     return (
         <div ref={mainRef} className={`datepicker-container ${is_datepicker_visible ? 'active' : ''}`}>
             <div className='datepicker-display-wrapper' onClick={handleVisibility}>
@@ -182,6 +180,7 @@ const DatePicker = React.memo(props => {
                     placeholder={t.translate(placeholder)}
                     is_read_only
                     value={value}
+                    display_format={display_format}
                 />
                 <CalendarIcon className='date-picker-calendar-icon' />
             </div>
@@ -191,5 +190,9 @@ const DatePicker = React.memo(props => {
         </div>
     );
 });
+
+DatePicker.defaultProps = {
+    display_format: 'DD MMM YYYY',
+};
 
 export default DatePicker;

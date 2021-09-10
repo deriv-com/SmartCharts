@@ -1,6 +1,3 @@
-$COLOR_BLUE: #2a3052;
-$COLOR_LIGHT_GRAY: #e9e9ed;
-
 .calendar {
     position: absolute;
     top: 0;
@@ -34,7 +31,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         }
 
         .calendar-footer-extra + .calendar-footer-btn {
-            border-top: 1px solid $COLOR_LIGHT_GRAY;
+            border-top: 1px solid $COLOR_LIGHT_GRAY_6;
             margin: 0 -12px;
         }
         .calendar-footer-btn {
@@ -258,11 +255,11 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         }
     }
     &:hover .datepicker-display {
-        border-color: $COLOR_BLUE;
+        border-color: $COLOR_DARK_BLUE_5;
     }
     .datepicker-display:focus + .datepicker-native-overlay {
         .datepicker-native-overlay__arrowhead .arrow-path {
-            fill: $COLOR_BLUE;
+            fill: $COLOR_DARK_BLUE_5;
         }
     }
     .datepicker-display,
@@ -336,7 +333,7 @@ $COLOR_LIGHT_GRAY: #e9e9ed;
         appearance: none;
 
         &:hover:not(:focus) {
-            border-color: $COLOR_LIGHT_GRAY;
+            border-color: $COLOR_LIGHT_GRAY_6;
         }
         &::-webkit-date-and-time-value {
             margin: 0;
