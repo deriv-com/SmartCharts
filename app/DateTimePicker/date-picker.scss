@@ -325,7 +325,7 @@
         }
 
         &:hover {
-            border-color: $COLOR_DARK_BLUE_5;
+            border-color: $COLOR_GREEN;
         }
         .date-picker-calendar-icon {
             cursor: pointer;
@@ -391,6 +391,7 @@
             z-index: 9;
             top: calc(100% + 26px);
             pointer-events: initial;
+            filter: drop-shadow(0px 0px 24px $color-light-grey) drop-shadow(0px 24px 24px $color-light-grey);
         }
     }
 }

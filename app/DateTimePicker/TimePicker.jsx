@@ -103,9 +103,6 @@ const TimePickerDropdown = React.memo(({ className, preClass, value, onChange, t
 
     return (
         <div className={`${preClass}-dropdown ${className}`}>
-            <div className={`${preClass}-panel`} onClick={toggle}>
-                <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
-            </div>
             <div className={`${preClass}-selector`}>
                 <div className={`${preClass}-hours`}>
                     <div className='list-title center-text'>
