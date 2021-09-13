@@ -3,6 +3,7 @@ import { drawCurrentPriceLine } from './currentHR';
 import { maintainHeadsUpHR } from './headsUpHR';
 import { plotterDrawText } from './plotterDrawText';
 import { overideMeasure } from './setMeasure';
+import { overrideCalculateAwesome } from './calculateAwesome';
 import { BackingStore } from './backingStore';
 
 const inject = option => {
@@ -11,6 +12,7 @@ const inject = option => {
     maintainHeadsUpHR();
     plotterDrawText();
     overideMeasure(option);
+    overrideCalculateAwesome();
     BackingStore();
 };
 
