@@ -376,7 +376,7 @@ class Feed {
                 this.granularity === 0 &&
                 !this._mainStore.state.isStaticChart &&
                 CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >=
-                    this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
+                    this._stx.chart.dataSet.slice(-1)[0]?.DT.valueOf()
             ) {
                 result = false;
             }
@@ -395,7 +395,8 @@ class Feed {
 
         if (
             this.endEpoch &&
-            CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
+            CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !==
+                this._stx.chart.dataSet.slice(-1)[0]?.DT.valueOf()
         ) {
             this._stx.updateChartData(
                 [
