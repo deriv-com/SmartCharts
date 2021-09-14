@@ -20,7 +20,7 @@
         column-gap: 4px;
     }
     .calendar-footer {
-        font-size: 1.2rem;
+        font-size: 12px;
         display: grid;
         align-items: center;
         line-height: 18px;
@@ -31,15 +31,15 @@
         }
 
         .calendar-footer-extra + .calendar-footer-btn {
-            border-top: 1px solid $COLOR_LIGHT_GRAY_6;
+            border-top: 1px solid $COLOR_LIGHT_GRAY-6;
             margin: 0 -12px;
         }
         .calendar-footer-btn {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            column-gap: 1.7rem;
-            padding: 1.4rem;
+            column-gap: 17px;
+            padding: 14px;
             cursor: pointer;
 
             &-icon-info {
@@ -133,19 +133,19 @@
     .calendar-decade-panel,
     .calendar-century-panel {
         display: grid;
-        grid-gap: 0.8rem 1.2rem;
+        grid-gap: 8px 12px;
         padding: 8px 20px;
 
         &.calendar-date-panel {
-            grid-template-columns: repeat(7, 2.4rem);
-            grid-auto-rows: 2.4rem;
+            grid-template-columns: repeat(7, 24px);
+            grid-auto-rows: 24px;
         }
         &.calendar-month-panel,
         &.calendar-year-panel,
         &.calendar-decade-panel,
         &.calendar-century-panel {
-            grid-template-columns: repeat(3, minmax(7.2rem, 1fr));
-            grid-auto-rows: minmax(4.2rem, auto);
+            grid-template-columns: repeat(3, minmax(72px, 1fr));
+            grid-auto-rows: minmax(42px, auto);
         }
         .calendar-decade,
         .calendar-year,
@@ -160,7 +160,7 @@
             text-align: center;
             background: transparent;
             transition: all 0.3s;
-            font-size: 1.2rem;
+            font-size: 12px;
             line-height: 24px;
             @include themify($themes) {
                 color: themed('ChartHistoryPickerBodyColor');
@@ -184,15 +184,15 @@
             &.calendar-decade,
             &.calendar-year,
             &.calendar-month {
-                width: 5.6rem;
-                height: 3.2rem;
+                width: 56px;
+                height: 32px;
             }
             &.calendar-decade {
                 inline-size: auto;
                 padding: 0 4px;
             }
             &-header {
-                font-size: 1.2rem;
+                font-size: 12px;
                 text-align: center;
                 align-self: center;
                 font-weight: 700;
@@ -344,7 +344,7 @@
         appearance: none;
 
         &:hover:not(:focus) {
-            border-color: $COLOR_LIGHT_GRAY_6;
+            border-color: $COLOR_LIGHT_GRAY-6;
         }
         &::-webkit-date-and-time-value {
             margin: 0;
@@ -391,7 +391,7 @@
             z-index: 9;
             top: calc(100% + 26px);
             pointer-events: initial;
-            filter: drop-shadow(0px 0px 24px $color-light-grey) drop-shadow(0px 24px 24px $color-light-grey);
+            filter: drop-shadow(0px 0px 24px $COLOR_LIGHT_GREY) drop-shadow(0px 24px 24px $COLOR_LIGHT_GREY);
         }
     }
 }

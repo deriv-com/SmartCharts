@@ -83,8 +83,8 @@ $border-radius: 4px;
     border-right: $width solid transparent;
 }
 
-@mixin calendar-angle-toggle($symble-angle) {
-    content: $symble-angle;
+@mixin calendar-angle-toggle($symbol-angle) {
+    content: $symbol-angle;
     font-family: system-ui;
     font-size: xx-large;
     font-weight: 200;
