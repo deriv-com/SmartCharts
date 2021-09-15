@@ -11452,7 +11452,7 @@ CIQ.ChartEngine.prototype.dateFromTick = function (
 	}
 
 	if (nativeDate) {
-		result = new Date(dt.getTime());
+		result = new Date(dt?.getTime());
 	} else {
 		result = CIQ.yyyymmddhhmmssmmm(dt).substr(0, 12);
 	}
