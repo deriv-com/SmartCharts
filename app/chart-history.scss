@@ -4,7 +4,7 @@
     position: relative;
     top: 0px;
     display: none;
-    padding: 8px;
+    padding: 0.8px;
     @include themify($themes) {
         background: themed('ChartHistoryBg');
     }
@@ -13,7 +13,7 @@
         display: flex;
         border-radius: $border-radius;
         position: relative;
-        padding: 12px 8px;
+        padding: 1.2rem 0.8rem;
         justify-content: center;
         align-items: center;
         width: calc(100% - 1%);
@@ -29,7 +29,7 @@
             font-style: normal;
             line-height: normal;
             white-space: nowrap;
-            max-width: 92px;
+            max-width: 9.2rem;
             @include themify($themes) {
                 color: themed('ChartHistoryColor');
             }
@@ -38,13 +38,13 @@
     .datepicker-container,
     .time-picker {
         border-radius: $border-radius;
-        height: 32px;
+        height: 3.2rem;
     }
     .datepicker-container {
-        margin-left: 6px;
+        margin-left: 0.6rem;
 
         .datepicker-display-wrapper .datepicker-display {
-            max-width: 94px;
+            max-width: 9.4rem;
 
             &:focus-visible {
                 outline: none;
@@ -52,8 +52,8 @@
         }
     }
     .time-picker {
-        width: 78px;
-        margin-left: 8px;
+        width: 7.8rem;
+        margin-left: 0.8rem;
 
         input {
             width: 100%;
@@ -91,7 +91,7 @@
     }
     .datepicker-container {
         .datepicker-display-wrapper .datepicker-display {
-            max-width: 94px;
+            max-width: 9.4rem;
         }
         .datepicker-calendar {
             > div.calendar {

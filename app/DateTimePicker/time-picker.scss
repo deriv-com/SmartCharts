@@ -49,7 +49,7 @@
         display: flex;
         flex-direction: column;
         opacity: 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.15);
         z-index: -9;
         transition: all 300ms ease;
         border-radius: $border-radius;
@@ -63,9 +63,9 @@
         &.active {
             opacity: 1;
             z-index: 9;
-            top: calc(100% + 26px);
+            top: calc(100% + 2.6rem);
             pointer-events: initial;
-            filter: drop-shadow(0px 0px 24px $COLOR_LIGHT_GREY) drop-shadow(0px 24px 24px $COLOR_LIGHT_GREY);
+            filter: drop-shadow(0 0 2.4rem $COLOR_LIGHT_GRAY_7) drop-shadow(0 2.4rem 2.4rem $COLOR_LIGHT_GRAY_7);
         }
         &.from-right {
             right: 0;
@@ -91,21 +91,21 @@
 
             .time-picker-hours {
                 border-radius: 0 0 0 $border-radius;
-                width: 136px;
+                width: 13.6rem;
                 @include themify($themes) {
-                    border-right: 1px solid themed('ChartHistoryPickerBorder');
+                    border-right: 0.1rem solid themed('ChartHistoryPickerBorder');
                 }
 
                 & .list-container {
-                    grid-template-columns: repeat(4, 24px);
+                    grid-template-columns: repeat(4, 2.4rem);
                 }
             }
             .time-picker-minutes {
-                width: 72px;
+                width: 7.2rem;
                 border-radius: 0 0 $border-radius;
 
                 & .list-container {
-                    grid-template-columns: repeat(2, 24px);
+                    grid-template-columns: repeat(2, 2.4rem);
                 }
             }
             .time-picker-hours,
@@ -115,7 +115,7 @@
                 text-align: center;
 
                 .list-title {
-                    padding: 8px 8px 0;
+                    padding: 0.8rem 0.8rem 0;
                     @include themify($themes) {
                         color: themed('ChartHistoryPickerHeaderColor');
                     }
@@ -125,10 +125,10 @@
                     }
                 }
                 .list-container {
-                    grid-auto-rows: 24px;
+                    grid-auto-rows: 2.4rem;
                     display: grid;
-                    grid-gap: 8px;
-                    padding: 8px;
+                    grid-gap: 0.8rem;
+                    padding: 0.8rem;
 
                     & .list-item {
                         display: flex;

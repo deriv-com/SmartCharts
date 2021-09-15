@@ -16,30 +16,30 @@
     .calendar-select {
         display: flex;
         justify-content: center;
-        width: 120px;
-        column-gap: 4px;
+        width: 12rem;
+        column-gap: 0.4rem;
     }
     .calendar-footer {
-        font-size: 12px;
+        font-size: 1.2rem;
         display: grid;
         align-items: center;
-        line-height: 18px;
+        line-height: 1.8rem;
         font-weight: 400;
         @include themify($themes) {
-            border-top: 1px solid themed('ChartHistoryPickerFooterBorder');
+            border-top: 0.1rem solid themed('ChartHistoryPickerFooterBorder');
             color: themed('ChartHistoryPickerFooterColor');
         }
 
         .calendar-footer-extra + .calendar-footer-btn {
-            border-top: 1px solid $COLOR_LIGHT_GRAY-6;
+            border-top: 0.1rem solid $COLOR_LIGHT_GRAY_6;
             margin: 0 -12px;
         }
         .calendar-footer-btn {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            column-gap: 17px;
-            padding: 14px;
+            column-gap: 1.7rem;
+            padding: 1.4rem;
             cursor: pointer;
 
             &-icon-info {
@@ -56,11 +56,11 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        height: 52px;
-        line-height: 32px;
+        height: 5.2rem;
+        line-height: 3.2rem;
         font-weight: bold;
         @include themify($themes) {
-            border-bottom: 1px solid themed('ChartHistoryPickerHeaderBorder');
+            border-bottom: 0.1rem solid themed('ChartHistoryPickerHeaderBorder');
             color: themed('ChartHistoryPickerHeaderColor');
         }
 
@@ -133,19 +133,19 @@
     .calendar-decade-panel,
     .calendar-century-panel {
         display: grid;
-        grid-gap: 8px 12px;
-        padding: 8px 20px;
+        grid-gap: 0.8rem 1.2rem;
+        padding: 0.8rem 2rem;
 
         &.calendar-date-panel {
-            grid-template-columns: repeat(7, 24px);
-            grid-auto-rows: 24px;
+            grid-template-columns: repeat(7, 2.4rem);
+            grid-auto-rows: 2.4rem;
         }
         &.calendar-month-panel,
         &.calendar-year-panel,
         &.calendar-decade-panel,
         &.calendar-century-panel {
-            grid-template-columns: repeat(3, minmax(72px, 1fr));
-            grid-auto-rows: minmax(42px, auto);
+            grid-template-columns: repeat(3, minmax(7.2rem, 1fr));
+            grid-auto-rows: minmax(4.2rem, auto);
         }
         .calendar-decade,
         .calendar-year,
@@ -155,13 +155,13 @@
             align-self: center;
             cursor: pointer;
             margin: 0 auto;
-            border-radius: 5px;
+            border-radius: 0.5rem;
             padding: 0;
             text-align: center;
             background: transparent;
             transition: all 0.3s;
-            font-size: 12px;
-            line-height: 24px;
+            font-size: 1.2rem;
+            line-height: 2.4rem;
             @include themify($themes) {
                 color: themed('ChartHistoryPickerBodyColor');
             }
@@ -184,15 +184,15 @@
             &.calendar-decade,
             &.calendar-year,
             &.calendar-month {
-                width: 56px;
-                height: 32px;
+                width: 5.6rem;
+                height: 3.2rem;
             }
             &.calendar-decade {
                 inline-size: auto;
-                padding: 0 4px;
+                padding: 0 0.4rem;
             }
             &-header {
-                font-size: 12px;
+                font-size: 1.2rem;
                 text-align: center;
                 align-self: center;
                 font-weight: 700;
@@ -203,7 +203,7 @@
             &.today {
                 font-weight: 700;
                 @include themify($themes) {
-                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
+                    border: 0.1rem solid themed('ChartHistoryPickerBodyActiveBorder');
                     color: themed('ChartHistoryPickerBodyActiveColor');
                 }
 
@@ -280,7 +280,7 @@
         font-size: 1.4em;
         line-height: 100%;
         vertical-align: middle;
-        padding: 6px 8px;
+        padding: 0.6rem 0.8rem;
         box-sizing: border-box;
         font-weight: 300;
         transition: border 0.25s;
@@ -329,7 +329,7 @@
         }
         .date-picker-calendar-icon {
             cursor: pointer;
-            padding-right: 9px;
+            padding-right: 0.9rem;
 
             svg {
                 @include themify($themes) {
@@ -344,7 +344,7 @@
         appearance: none;
 
         &:hover:not(:focus) {
-            border-color: $COLOR_LIGHT_GRAY-6;
+            border-color: $COLOR_LIGHT_GRAY_6;
         }
         &::-webkit-date-and-time-value {
             margin: 0;
@@ -389,9 +389,9 @@
         &.show > div.calendar {
             opacity: 1;
             z-index: 9;
-            top: calc(100% + 26px);
+            top: calc(100% + 2.6rem);
             pointer-events: initial;
-            filter: drop-shadow(0px 0px 24px $COLOR_LIGHT_GREY) drop-shadow(0px 24px 24px $COLOR_LIGHT_GREY);
+            filter: drop-shadow(0 0 2.4rem $COLOR_LIGHT_GRAY_7) drop-shadow(0 2.4rem 2.4rem $COLOR_LIGHT_GRAY_7);
         }
     }
 }
