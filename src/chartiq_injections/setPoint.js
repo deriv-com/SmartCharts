@@ -4,15 +4,17 @@ export const overrideSetPoint = () => {
         let tick = null;
         let date = null;
         if (typeof x === 'number') tick = x;
-        else if (x.length >= 8) date = x;
+        else if (x && x.length >= 8) date = x;
         else tick = Number(x);
 
         if (y || y === 0) this[`v${point}`] = y;
         let d;
         if (tick !== null) {
             d = this.stx.dateFromTick(tick, chart, true);
-            this[`tzo${point}`] = d.getTimezoneOffset();
-            this[`d${point}`] = CIQ.yyyymmddhhmmssmmm(d);
+            if (d) {
+                this[`tzo${point}`] = d.getTimezoneOffset();
+                this[`d${point}`] = CIQ.yyyymmddhhmmssmmm(d);
+            }
             this[`p${point}`] = [tick, y];
         } else if (date !== null) {
             d = CIQ.strToDateTime(date);
