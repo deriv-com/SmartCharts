@@ -21,15 +21,15 @@ export const overrideDateFromTick = () => {
             iter = this.standardMarketIterator(tickArray[0].DT);
             if (iter) dt = iter.previous(Math.abs(tick));
             else dt = tickArray[0].DT;
-        } else if (tick >= data_len) {
+        } else if (tick >= data_len && tickArray[data_len - 1]?.DT) {
             iter = this.standardMarketIterator(tickArray[data_len - 1].DT);
             if (iter) dt = iter.next(tick - (data_len - 1));
             else dt = tickArray[data_len - 1].DT;
         } else {
-            dt = tickArray[tick].DT;
+            dt = tickArray[tick].DT || new Date();
         }
 
-        if (nativeDate && dt) {
+        if (nativeDate) {
             result = new Date(dt.getTime());
         } else {
             result = CIQ.yyyymmddhhmmssmmm(dt).substr(0, 12);
