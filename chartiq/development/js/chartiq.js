@@ -19743,7 +19743,7 @@ CIQ.ChartEngine.XAxisLabel = function (hz, grid, text) {
  *
  */
 CIQ.ChartEngine.prototype.createXAxis = function (chart) {
-	if (chart.dataSegment.filter(ds => ds && ds.candleWidth || ds && ds.candleWidth === undefined).length <= 0) return null;
+	if (chart.dataSegment.length <= 0) return null;
 	if (chart.xAxis.noDraw) return null;
 	var arguments$ = [chart];
 	var axisRepresentation = this.runPrepend("createXAxis", arguments$);
