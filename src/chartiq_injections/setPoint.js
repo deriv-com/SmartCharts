@@ -1,7 +1,5 @@
 export const overrideSetPoint = () => {
-    // overriding to fix the 'Cannot read 'getSeconds'(or 'getMinutes') of undefined' error that appears
-    // when chart.dataSegment is an array of null data, e.g. [null, null, null, {candleWidth: null}],
-    // and when in such a case null is assigned to 'd' after the overriden dateFromTick() method returns null.
+    // overriding to prevent a console error that can appear when the value of 'd' is undefined.
     CIQ.Drawing.prototype.setPoint = function (point, x, y, chart) {
         let tick = null;
         let date = null;
