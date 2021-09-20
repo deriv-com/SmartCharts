@@ -144,9 +144,8 @@ class Feed {
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         const localDate = this._serverTime.getLocalDate();
-        if (suggestedStartDate > localDate) {
-            suggestedStartDate = localDate;
-        } else if (!this.startEpoch && suggestedStartDate > this.endEpoch) {
+        if (suggestedStartDate > localDate) suggestedStartDate = localDate;
+        if (!this.startEpoch && suggestedStartDate > this.endEpoch) {
             suggestedStartDate = CIQ.strToDateTime(getUTCDate(this.endEpoch - 1000));
         }
         const isComparisonChart = this._stx.chart.symbol !== symbol;
