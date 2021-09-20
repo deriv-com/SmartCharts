@@ -146,7 +146,7 @@ class Feed {
         const localDate = this._serverTime.getLocalDate();
         if (suggestedStartDate > localDate) suggestedStartDate = localDate;
         if (!this.startEpoch && suggestedStartDate > this.endEpoch) {
-            suggestedStartDate = CIQ.strToDateTime(getUTCDate(this.endEpoch - 1000));
+            suggestedStartDate = CIQ.strToDateTime(getUTCDate(this.endEpoch - 200000));
         }
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || Math.floor((suggestedStartDate / 1000) | 0);
