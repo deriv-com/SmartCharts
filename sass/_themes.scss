@@ -1,44 +1,8 @@
 /* stylelint-disable color-no-hex */
 /* stylelint-disable value-keyword-case */
-// Colours based on Zeplin style guide 28march 2019
-$color-white        : #ffffff;
-$color-black        : #000000;
-$COLOR_ORANGE       : #ff9933;
-$COLOR_SKY_BLUE     : #2196f3;
-$COLOR_GREEN_2      : #2d9f93;
-$COLOR_PURPLE       : #4f60ae;
-$COLOR_DARK_BLUE_1  : #0b0e18;
-$COLOR_DARK_BLUE_2  : #101320;
-$COLOR_DARK_BLUE_3  : #191c31;
-$COLOR_DARK_BLUE_4  : #202641;
-$COLOR_DARK_BLUE_5  : #2a3052; /* Brand Blue */
-$COLOR_DARK_GRAY_1  : #282a37;
-$COLOR_DARK_GRAY_2  : #303342;
-$COLOR_DARK_GRAY_3  : #555975;
-$COLOR_LIGHT_GRAY   : #7f8397;
-$COLOR_LIGHT_GRAY_30: rgba($COLOR_LIGHT_GRAY, 0.3);
-$COLOR_LIGHT_GRAY_1 : #999cac;
-$COLOR_LIGHT_GRAY_2 : rgba($COLOR_LIGHT_GRAY_1, 0.32);
-$COLOR_LIGHT_GRAY_3 : rgb(250, 250, 251);
-$COLOR_LIGHT_BLACK_1: rgba($color-black, 0.8);
-$COLOR_LIGHT_BLACK_1_40: rgba($color-black, 0.4);
-$COLOR_LIGHT_BLACK_3: rgba($color-black, 0.16);
-$COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
-$COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
-$COLOR_LIGHT_BLACK_4: rgba($color-black, 0.04);
-$COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
 
-//Legacy Colours. TODO: Check with design team, replace and remove these colours
-$COLOR_YELLOW       : #fef1cf;
 $COLOR_LIGHT_BLACK : #5c5c5c;
 $COLOR_BRANDBLUE_40: #aaacba;
-$COLOR_BRANDBLUE_95: #353b5b;
-$COLOR_BRANDBLUE_85: #4a4f6c;
-$COLOR_BRANDBLUE_75: #60647e;
-$COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
-
-$COLOR_GREEN: #85acb0;
-$COLOR_GREEN_1: #4bb4b3;
 
 /*****************************\
  *****************************
@@ -52,22 +16,22 @@ $color-black-3: #151717;
 $color-black-4: #1d1f20;
 $color-black-5: #242828;
 $color-black-6: #3e3e3e;
-$color-black-7: #000000b8;
+$color-black-7: #000000b8;//unused
 $color-black-8: #323738;
-$color-black-9: #0e0e0ef5;
-$color-black-10: #00000014;
-$color-black-11: #00000029;
-$color-black-12: #0000004d;
+$color-black-9: #0e0e0ef5;//unused
+$color-black-10: rgba(0, 0, 0, 0.8);
+$color-black-11: rgba(0, 0, 0, 0.16);
+$color-black-12: #0000004d;//unused
 $color-white: #ffffff;
-$color-white-1: #fffffff5;
-$color-white-2: #ffffff29;
+$color-white-1: #fffffff5;//unused
+$color-white-2: #ffffff29;//unused
 $color-red: #ff444f;
 $color-red-1: #ec3f3f;
 $color-red-2: #cc2e3d;
-$color-red-3: #a32430;
-$color-red-4: #d33636;
+$color-red-3: #a32430;//unused
+$color-red-4: #d33636;//unused
 $color-red-5: #eb3e48;
-$color-red-6: #ff444f14;
+$color-red-6: #ff444f14;//unused
 $color-red-7: #ff525c;
 $color-grey: #c2c2c2;
 $color-grey-1: #999999;
@@ -79,74 +43,42 @@ $color-grey-6: #d6d6d6;
 $color-grey-7: #6e6e6e;
 $color-green: #85acb0;
 $color-green-1: #4bb4b3;
-$color-green-2: #3d9494;
+$color-green-2: #3d9494;//unused
 $color-green-3: #00a79e;
-$color-green-4: #008079;
-$color-orange: #ff6444;
-$color-yellow: #ffad3a;
-$color-blue: #377cfc;
+$color-green-4: #008079;//unused
+$color-orange: #ff6444;//unused
+$color-yellow: #ffad3a;//unused
+$color-blue: #377cfc;//unused
 
 /* Preserve legacy variables */
 /* Primary */
-
-$color-black      : #000000;
-$COLOR_BLACK_2    : #1d1f20;
-$color-black-3    : #0e0e0e;
+$COLOR_BLACK      : #000000;
 $COLOR_GREEN_1    : #39b19d;
 $COLOR_GREEN_2    : #2d9f93;
-$COLOR_GREEN_3    : #21ce99;
-$COLOR_GREEN_4    : #00a79e;
-$COLOR_GREEN_5    : #4bb4b3;
 $COLOR_ORANGE     : #ff9933;
-$COLOR_DARK_ORANGE: #ff8802;
-$COLOR_PURPLE     : #4f60ae;
 $COLOR_RED        : #e31c4b;
-$COLOR_RED_2      : #cc2e3d;
-$COLOR_RED_3      : #ec3f3f;
-$COLOR_CORAL_RED  : #ff444f;
-$COLOR_SKY_BLUE   : #2196f3;
-$color-white      : #ffffff;
-$COLOR_BLUE       : #1c5ae3;
+
 // Light theme
-$COLOR_LIGHT_BLACK_1        : rgba(0, 0, 0, 0.8);
-$COLOR_LIGHT_BLACK_2        : rgba(0, 0, 0, 0.4);
-$COLOR_LIGHT_BLACK_3        : rgba(0, 0, 0, 0.16);
-$COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
-$COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
-$COLOR_LIGHT_BLACK_4        : rgba(0, 0, 0, 0.04);
 $COLOR_LIGHT_BLACK_4_SOLID  : #f4f4f6;
 $COLOR_LIGHT_GRAY_1         : #999cac;
 $COLOR_LIGHT_GRAY_2         : rgba(153, 156, 172, 0.32);
-$COLOR_LIGHT_GRAY_3         : #eaeced;
-$COLOR_LIGHT_GRAY_4         : #6e6e6e;
-$COLOR_LIGHT_GRAY_5         : #c2c2c2;
-$COLOR_LIGHT_GRAY_6          : #e9e9ed;
-$COLOR_LIGHT_GRAY_7: rgba(0, 0, 0, 0.08);
-$COLOR_LIGHT_GREEN_GRADIENT : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(0, 148, 117, 0.16));
-$COLOR_LIGHT_RED_GRADIENT   : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(227, 28, 75, 0.16));
-$COLOR_LIGHT_WHITE_GRADIENT : linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+$COLOR_LIGHT_GRAY_6         : #e9e9ed;
+$COLOR_LIGHT_GRAY_7         : rgba(0, 0, 0, 0.08);
+$COLOR_LIGHT_GRAY_8         : rgba(0, 0, 0, 0.15);
+$COLOR_LIGHT_GRAY_9         : rgba(0, 0, 0, 0.14);
 // Dark theme
-$COLOR_DARK_BLACK_GRADIENT : linear-gradient(to right, rgba(16, 19, 32, 1), rgba(16, 19, 32, 0));
-$COLOR_DARK_BLUE_1         : #0b0e18;
-$COLOR_DARK_BLUE_2         : #101320;
 $COLOR_DARK_BLUE_3         : #191c31;
-$COLOR_DARK_BLUE_4         : #202641;
 $COLOR_DARK_BLUE_5         : #2a3052;
-$COLOR_DARK_BLUE_6         : #555975;
 $COLOR_DARK_BLUE_7         : #7f8397;
 $COLOR_DARK_BLUE_8         : rgba(127, 131, 151, 0.3);
-$COLOR_DARK_GREEN_GRADIENT : linear-gradient(to top, rgba(16, 19, 32, 0), rgba(0, 148, 117, 0.16));
-$COLOR_DARK_RED_GRADIENT   : linear-gradient(to top, rgba(16, 19, 32, 0), rgba(227, 28, 75, 0.16));
-$COLOR_DARK_GRAY_1         : #282a37;
 $COLOR_DARK_GRAY_2         : #303342;
 $COLOR_DARK_GRAY_3         : #555975;
-$COLOR_DARK_GRAY_4         : #999999;
 
 $themes: (
     light: (
         DefaultMain: $color-white,
         DefaultBg:  $color-white,
-        DefaultText: $COLOR_LIGHT_GRAY,
+        DefaultText: $COLOR_DARK_BLUE_7,
         BtnDefaultBg: transparent,
         BtnDefaultText: $color-red,
         BtnDefaultHoverBg: rgba($color-red, 0.08),
@@ -167,12 +99,12 @@ $themes: (
         ScrollbarBg: $color-grey-5,
         NotificationBadgeBg: $color-red-1,
         NotificationBadgeText: $color-white,
-        DefaultBorder: $COLOR_LIGHT_GRAY,
+        DefaultBorder: $COLOR_DARK_BLUE_7,
         TooltipBg: $color-grey-5,
         TooltipText: $color-black-1,
         TooltipTextBg: transparent,
         TooltipShadow: transparent,
-        Loading: $color-black,
+        Loading: $COLOR_BLACK,
         ChartAreaBorder: $COLOR_LIGHT_GRAY_2,
         ChartBg: $color-white,
         ChartBorder: $COLOR_LIGHT_GRAY_1,
@@ -181,9 +113,9 @@ $themes: (
         ChartPanelActiveBg: $color-grey-4,
         ChartPanelText: $color-black-1,
         ChartCandleBg: $color-red,
-        ChartCandleBgClosed: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        ChartCandleBgClosed: $color-grey-6,
         ChartCandleText: $color-white,
-        ChartCandleTextClosed: $COLOR_LIGHT_BLACK_3,
+        ChartCandleTextClosed: $color-black-11,
         ChartGrid: $color-grey-2,
         ChartIndicateText: $color-grey-3,
         ChartIndicateDivide: $color-grey-5,
@@ -201,18 +133,18 @@ $themes: (
         ChartStickyInnerBg: $color-grey-5,
         ChartStickyInnerText: $color-black-1,
         MenuBg: $color-white,
-        MenuIcon: $COLOR_LIGHT_BLACK_1,
-        MenuText: $COLOR_LIGHT_BLACK_1,
+        MenuIcon: $color-black-10,
+        MenuText: $color-black-10,
         MenuBorder: $COLOR_LIGHT_GRAY_1,
         MenuHoverBg: $color-grey-4,
         MenuHoverIconBg: $COLOR_LIGHT_GRAY_1,
         MenuActiveBg: $color-white,
-        MenuActiveText: $COLOR_LIGHT_GRAY,
+        MenuActiveText: $COLOR_DARK_BLUE_7,
         MenuActiveIcon: $COLOR_DARK_BLUE_5,
         MenuActiveBorder: $color-red,
         ChartTitleBg: $color-white,
         ChartTitleSubBg: $color-grey-2,
-        ChartTitleText: $COLOR_LIGHT_BLACK_1,
+        ChartTitleText: $color-black-10,
         ChartTitleBorder: $color-white,
         ChartTitleArrow: $color-black-1,
         ChartTitlePriceText: $color-grey-1,
@@ -220,23 +152,23 @@ $themes: (
         ChartTitleHoverBorder: $color-grey-1,
         ChartTitleActiveBorder: $color-green,
         ChartTitleActiveShadow: $COLOR_LIGHT_GRAY_2,
-        ChartTitleActiveArrow: $COLOR_LIGHT_BLACK_1,
+        ChartTitleActiveArrow: $color-black-10,
         ChartControlBoxBorder: $color-grey-2,
         ListScroll: $color-black-1,
         ListLiBg: $color-white,
         ListLiText: $color-black-1,
         ListLiBorder: $color-grey-3,
         ListHoverLiBg: $color-grey-4,
-        ListActiveLiBg: $COLOR_LIGHT_BLACK_3,
+        ListActiveLiBg: $color-black-11,
         ListActiveLiText: $COLOR_DARK_BLUE_5,
-        ListActiveLiBorder: $COLOR_LIGHT_GRAY,
+        ListActiveLiBorder: $COLOR_DARK_BLUE_7,
         DialogBorder: $color-grey-2,
         DialogHeadBg: $color-white,
         DialogHeadText: $color-black-1,
         DialogHeadBorder: $COLOR_LIGHT_BLACK_4_SOLID,
         DialogHeadIcon: $color-black-1,
         DialogHeadIconHoverBg: $color-grey-4,
-        DialogHeadActiveBorder: $COLOR_LIGHT_GRAY,
+        DialogHeadActiveBorder: $COLOR_DARK_BLUE_7,
         DialogTabularBg: $color-grey-2,
         DialogTabularText: $color-black-1,
         DialogTabularHeadBg: $color-white,
@@ -249,18 +181,18 @@ $themes: (
         DialogBodyBg: $color-grey-2,
         DialogBodyText: $color-black-1,
         DialogFootBg: $color-white,
-        DialogFootText: $COLOR_LIGHT_BLACK_1,
+        DialogFootText: $color-black-10,
         DialogFootBorder: $color-grey-2,
         DialogFootIcon: $color-grey-1,
         DialogFootDeleteIcon: $color-black-1,
         DialogFootDeleteHoverBg: $color-grey-4,
         DialogFootResetText: $color-black-1,
         DialogFootCancelText: $color-red,
-        DialogSettingHeadText: $color-black,
+        DialogSettingHeadText: $COLOR_BLACK,
         DialogSettingBodyBg: $color-white,
         DialogSettingSectionDivider: $color-grey-2,
         DialogSettingSectionText: $color-black-1,
-        DialogOverlay: rgba($color-black, 0.72),
+        DialogOverlay: rgba($COLOR_BLACK, 0.72),
         ChartTypeBg: $color-white,
         ChartTypeText: $color-black-1,
         ChartTypeHoverBg: $color-grey-4,
@@ -282,7 +214,7 @@ $themes: (
         DrawToolsItemIcon: $color-black-1,
         DrawToolsHoverBg: $color-grey-4,
         ChartSettingText: $color-black-1,
-        ChartSettingIcon: $COLOR_LIGHT_GRAY,
+        ChartSettingIcon: $COLOR_DARK_BLUE_7,
         ChartSettingActiveIcon: $COLOR_DARK_BLUE_5,
         ChartSettingItemTitleText: $color-black-1,
         ChartSettingItemHoverBg: $color-grey-4,
@@ -306,7 +238,7 @@ $themes: (
         TemplateListItemHoverBg: $color-grey-4,
         ColorPickerBg: $color-white,
         ColorPickerShadow: $COLOR_LIGHT_GRAY_7,
-        ColorPickerBorder: $COLOR_LIGHT_GRAY,
+        ColorPickerBorder: $COLOR_DARK_BLUE_7,
         ColorPickerInputBorder: $color-grey-5,
         ColorPickerActiveBorder: $color-green,
         ColorPickerSubtitleText: $color-black-1,
@@ -348,7 +280,7 @@ $themes: (
         CatDisplayBorder: $color-white,
         CatDisplaySearchBg: $color-white,
         CatDisplaySearchIcon: $color-black-1,
-        CatDisplaySearchText: $COLOR_LIGHT_BLACK_3,
+        CatDisplaySearchText: $color-black-11,
         CatDisplaySearchBorder: $color-grey-5,
         CatDisplayActiveSearchText: $color-black-1,
         CatDisplayActiveSearchIcon: $color-black-1,
@@ -358,8 +290,8 @@ $themes: (
         CatDisplayHoverSearchIcon: $color-black-1,
         CatDisplayHoverSearchBorder: $color-grey-1,
         CatDisplayFilterBg: $color-grey-2,
-        CatDisplayFilterText: $COLOR_LIGHT_BLACK_1,
-        CatDisplayFilterIcon: $COLOR_LIGHT_GRAY,
+        CatDisplayFilterText: $color-black-10,
+        CatDisplayFilterIcon: $COLOR_DARK_BLUE_7,
         CatDisplayFilterBorder: $color-grey-2,
         CatDisplayFilterInputText: $color-white,
         CatDisplayActiveFilterBg: $color-white,
@@ -368,17 +300,17 @@ $themes: (
         CatDisplayActiveFilterBorder: $COLOR_RED,
         CatDisplayHoverFilterBg: $color-grey-4,
         CatDisplayCatTitleText: $color-black-1,
-        CatDisplayCatSubTitleText: $COLOR_LIGHT_GRAY,
+        CatDisplayCatSubTitleText: $COLOR_DARK_BLUE_7,
         CatDisplayCatContentBg: $color-white,
         CatDisplayCatContentBorder: $color-white,
         CatDisplayCatContentTitleBg: $color-white,
         CatDisplayCatContentTitleText: $color-grey-1,
         CatDisplayCatContentIcon: $color-black-1,
-        CatDisplayCatContentDisabled: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        CatDisplayCatContentDisabled: $color-grey-6,
         CatDisplayCatActiveContentBg: $color-grey-5,
         CatDisplayCatActiveContentText: $color-black-1,
         CatDisplayCatActiveContentIcon: $color-black-1,
-        CatDisplayActiveText: $COLOR_LIGHT_BLACK_1,
+        CatDisplayActiveText: $color-black-10,
         CatDisplayCatHoverContentBg: $color-grey-4,
         CatDisplayCatHoverContentText: $color-black-1,
         CatDisplayCatHoverContentIcon: $color-black-1,
@@ -396,26 +328,25 @@ $themes: (
         LastdigitsBarBg: $COLOR_LIGHT_GRAY_1,
         LastdigitsMaxBarBg: $COLOR_GREEN_2,
         LastdigitsMinBarBg: $COLOR_RED,
-        LastdigitsBarText: $COLOR_LIGHT_GRAY,
-        LastdigitsBarFooter: $color-black,
-        ChartHistoryBg: $COLOR_LIGHT_GRAY_3,
+        LastdigitsBarText: $COLOR_DARK_BLUE_7,
+        LastdigitsBarFooter: $COLOR_BLACK,
+        ChartHistoryBg: $color-grey-2,
         ChartHistoryBgContainer: $color-white,
         ChartHistoryColor: $color-black-1,
-        ChartHistoryBorder: $COLOR_LIGHT_GRAY,
         ChartHistoryPickerBg: $color-white,
         ChartHistoryPickerBorder: $color-grey-3,
         ChartHistoryPickerColor: $COLOR_LIGHT_BLACK,
         ChartHistoryPickerIcon: $COLOR_LIGHT_BLACK,
-        ChartHistoryPickerActiveBorder: $COLOR_GREEN,
+        ChartHistoryPickerActiveBorder: $color-green,
         ChartHistoryPickerActiveColor: $COLOR_LIGHT_BLACK,
         ChartHistoryPickerActiveIcon: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerTopColor: $COLOR_BRANDBLUE_40,
         ChartHistoryPickerHeaderBg: $color-white,
-        ChartHistoryPickerHeaderBorder: $COLOR_LIGHT_GRAY_3,
-        ChartHistoryPickerHeaderColor: $color-black,
+        ChartHistoryPickerHeaderBorder: $color-grey-2,
+        ChartHistoryPickerHeaderColor: $COLOR_BLACK,
         ChartHistoryPickerHeaderIcon: $color-black-1,
         ChartHistoryPickerFooterBg: $color-white,
-        ChartHistoryPickerFooterBorder: $COLOR_LIGHT_GRAY_3,
+        ChartHistoryPickerFooterBorder: $color-grey-2,
         ChartHistoryPickerFooterColor: $color-black-1,
         ChartHistoryPickerBodyColor: $color-black-1,
         ChartHistoryPickerBodyDisableColor: $color-grey-6,
@@ -426,8 +357,8 @@ $themes: (
         PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID,
         NavigationWidgetBg: $color-grey-2,
         NavigationWidgetColor: $color-black-1,
-        HighestLowestMarkerLabelBg: $COLOR_LIGHT_BLACK_3,
-        HighestLowestMarkerLabelText: $COLOR_LIGHT_BLACK_1,
+        HighestLowestMarkerLabelBg: $color-black-11,
+        HighestLowestMarkerLabelText: $color-black-10,
         HighestSpotColor: $COLOR_GREEN_1,
         ToolbarWidgetBg: $color-white,
         ToolbarWidgetBorder: $color-grey-2,
@@ -443,7 +374,7 @@ $themes: (
         IndicatorAddedBorder: $color-grey-6,
         IndicatorSearchBg: $color-white,
         IndicatorSearchBorder: $color-grey-5,
-        IndicatorSearchText: $COLOR_LIGHT_BLACK_3_SOLID_1,
+        IndicatorSearchText: $color-grey-6,
         IndicatorSearchIcon: $color-black-1,
         IndicatorSearchIconReset: $color-grey-1,
         IndicatorSearchHoverBorder: $color-grey-1,
@@ -491,7 +422,7 @@ $themes: (
         NotificationBadgeBg: $color-red-1,
         NotificationBadgeText: $color-white,
         Loading: $color-white,
-        ChartAreaBorder: $COLOR_LIGHT_GRAY_30,
+        ChartAreaBorder: $COLOR_DARK_BLUE_8,
         ChartBg: $color-black,
         ChartBorder: $color-white,
         ChartText: $color-grey-1,
@@ -501,7 +432,7 @@ $themes: (
         ChartCandleBg: $color-red,
         ChartCandleBgClosed: $COLOR_DARK_GRAY_2,
         ChartCandleText: $color-white,
-        ChartCandleTextClosed: $COLOR_LIGHT_GRAY_30,
+        ChartCandleTextClosed: $COLOR_DARK_BLUE_8,
         ChartGrid: $color-black-4,
         ChartIndicateText: $color-white,
         ChartIndicateDivide: $color-black-8,
@@ -573,7 +504,7 @@ $themes: (
         DialogSettingBodyBg: $color-black-3,
         DialogSettingSectionDivider: $color-black,
         DialogSettingSectionText: $color-white,
-        DialogOverlay: rgba($color-black, 0.72),
+        DialogOverlay: rgba($COLOR_BLACK, 0.72),
         ChartTypeBg: $color-black-3,
         ChartTypeText: $color-grey,
         ChartTypeHoverBg: $color-black-5,
@@ -688,7 +619,7 @@ $themes: (
         CatDisplayCatContentTitleBg: $COLOR_DARK_BLUE_5,
         CatDisplayCatContentTitleText: $color-grey-7,
         CatDisplayCatContentIcon: $color-grey-1,
-        CatDisplayCatContentDisabled: $COLOR_LIGHT_GRAY_30,
+        CatDisplayCatContentDisabled: $COLOR_DARK_BLUE_8,
         CatDisplayCatActiveContentBg: $color-black-8,
         CatDisplayCatActiveContentText: $color-white,
         CatDisplayCatActiveContentIcon: $color-grey-1,
@@ -710,17 +641,16 @@ $themes: (
         LastdigitsBarBg: $COLOR_DARK_GRAY_3,
         LastdigitsMaxBarBg: $COLOR_GREEN_1,
         LastdigitsMinBarBg: $COLOR_RED,
-        LastdigitsBarText: $COLOR_LIGHT_GRAY,
+        LastdigitsBarText: $COLOR_DARK_BLUE_7,
         LastdigitsBarFooter: $color-white,
         ChartHistoryBg: $color-black-3,
         ChartHistoryBgContainer: $color-black,
         ChartHistoryColor: $color-grey,
-        ChartHistoryBorder: $COLOR_BRANDBLUE_85,
         ChartHistoryPickerBg: $color-black-3,
         ChartHistoryPickerBorder: $color-black,
         ChartHistoryPickerColor: $color-white,
         ChartHistoryPickerIcon: $COLOR_BRANDBLUE_40,
-        ChartHistoryPickerActiveBorder: $COLOR_GREEN,
+        ChartHistoryPickerActiveBorder: $color-green,
         ChartHistoryPickerActiveColor: $color-white,
         ChartHistoryPickerActiveIcon: $color-white,
         ChartHistoryPickerTopColor: $COLOR_BRANDBLUE_40,
