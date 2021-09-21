@@ -3,14 +3,14 @@
     top: 0;
     left: 0;
     outline: 0;
-    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 2px 8px 0 $COLOR_LIGHT_BLACK_5;
     z-index: 999;
     font-size: 1.4em;
     box-sizing: border-box;
     width: 280px;
     border-radius: $border-radius;
     @include themify($themes) {
-        background: themed('ChartHistoryPickerBg');
+        background: themed('ChartHistoryPickerBgCalendar');
     }
 
     .calendar-select {
@@ -26,12 +26,12 @@
         line-height: 1.8rem;
         font-weight: 400;
         @include themify($themes) {
-            border-top: 0.1rem solid themed('ChartHistoryPickerFooterBorder');
+            border-top: 1px solid themed('ChartHistoryPickerFooterBorder');
             color: themed('ChartHistoryPickerFooterColor');
         }
 
         .calendar-footer-extra + .calendar-footer-btn {
-            border-top: 0.1rem solid $COLOR_LIGHT_GRAY_6;
+            border-top: 1px solid $COLOR_LIGHT_GRAY_6;
             margin: 0 -12px;
         }
         .calendar-footer-btn {
@@ -60,7 +60,7 @@
         line-height: 3.2rem;
         font-weight: bold;
         @include themify($themes) {
-            border-bottom: 0.1rem solid themed('ChartHistoryPickerHeaderBorder');
+            border-bottom: 1px solid themed('ChartHistoryPickerHeaderBorder');
             color: themed('ChartHistoryPickerHeaderColor');
         }
 
@@ -203,7 +203,7 @@
             &.today {
                 font-weight: 700;
                 @include themify($themes) {
-                    border: 0.1rem solid themed('ChartHistoryPickerBodyActiveBorder');
+                    border: 1px solid themed('ChartHistoryPickerBodyActiveBorder');
                     color: themed('ChartHistoryPickerBodyActiveColor');
                 }
 
@@ -391,7 +391,7 @@
             z-index: 9;
             top: calc(100% + 2.6rem);
             pointer-events: initial;
-            filter: drop-shadow(0 0 2.4rem $COLOR_LIGHT_GRAY_7) drop-shadow(0 2.4rem 2.4rem $COLOR_LIGHT_GRAY_7);
+            filter: drop-shadow(0 0 24px $COLOR_LIGHT_GRAY_7) drop-shadow(0 24px 24px $COLOR_LIGHT_GRAY_7);
         }
     }
 }

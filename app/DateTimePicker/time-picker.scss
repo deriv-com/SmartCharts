@@ -49,7 +49,7 @@
         display: flex;
         flex-direction: column;
         opacity: 0;
-        box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.15);
+        box-shadow: 0 2px 8px $COLOR_LIGHT_BLACK_6;
         z-index: -9;
         transition: all 300ms ease;
         border-radius: $border-radius;
@@ -65,7 +65,7 @@
             z-index: 9;
             top: calc(100% + 2.6rem);
             pointer-events: initial;
-            filter: drop-shadow(0 0 2.4rem $COLOR_LIGHT_GRAY_7) drop-shadow(0 2.4rem 2.4rem $COLOR_LIGHT_GRAY_7);
+            filter: drop-shadow(0 0 24px $COLOR_LIGHT_GRAY_7) drop-shadow(0 24px 24px $COLOR_LIGHT_GRAY_7);
         }
         &.from-right {
             right: 0;
@@ -93,7 +93,7 @@
                 border-radius: 0 0 0 $border-radius;
                 width: 13.6rem;
                 @include themify($themes) {
-                    border-right: 0.1rem solid themed('ChartHistoryPickerBorder');
+                    border-right: 1px solid themed('ChartHistoryPickerBorder');
                 }
 
                 & .list-container {
