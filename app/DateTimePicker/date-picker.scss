@@ -3,7 +3,7 @@
     top: 0;
     left: 0;
     outline: 0;
-    box-shadow: 0 2px 8px 0 $COLOR_LIGHT_GRAY_9;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.14);
     z-index: 999;
     font-size: 1.4em;
     box-sizing: border-box;
@@ -325,7 +325,7 @@
         }
 
         &:hover {
-            border-color: $color-green;
+            border-color: $COLOR_GREEN;
         }
         .date-picker-calendar-icon {
             cursor: pointer;
