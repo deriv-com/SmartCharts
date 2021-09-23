@@ -7,7 +7,7 @@ import Scroll from './Scroll';
 import { connect } from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
-import { TooltipsContent } from '../Constant.js';
+import { TooltipsContent } from '../Constant';
 
 const StudyIcon = ({ Icon, props }: { Icon: (props: any) => JSX.Element; props?: any }) => <Icon {...props} />;
 

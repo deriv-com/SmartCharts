@@ -2,7 +2,7 @@ import React from 'react';
 import { CategoryIconMap } from '../Icons';
 
 const FilterItemIcon = React.memo(({ categoryId }: any) => {
-    const CategoryIcon = CategoryIconMap[categoryId];
+    const CategoryIcon = CategoryIconMap[categoryId as keyof typeof CategoryIconMap];
     return CategoryIcon && <CategoryIcon className={`ic-${categoryId}`} />;
 });
 

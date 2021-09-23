@@ -1,4 +1,4 @@
-function browserDetect(rootEleId: any, SupportedBrowsers: any) {
+function browserDetect(rootEleId, SupportedBrowsers) {
     const cqRoot = document.getElementById(rootEleId);
     function detect() {
         if (typeof navigator !== 'undefined') {
@@ -9,7 +9,7 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
             }
             let detected =
                 browsers
-                    .map(function (browser: any) {
+                    .map(function (browser) {
                         const match = browser.rule.exec(userAgentString);
                         let version = match && match[1].split(/[._]/).slice(0, 3);
                         if (version && version.length < 3) {
@@ -37,9 +37,9 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
             return detected;
         }
     }
-    function detectOS(userAgentString: any) {
+    function detectOS(userAgentString) {
         const rules = getOperatingSystemRules();
-        const detected = rules.filter(function (os: any) {
+        const detected = rules.filter(function (os) {
             return os.rule && os.rule.test(userAgentString);
         })[0];
         return detected ? detected.name : null;
@@ -113,8 +113,8 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
             ],
         ]);
     }
-    function buildRules(ruleTuples: any) {
-        return ruleTuples.map(function (tuple: any) {
+    function buildRules(ruleTuples) {
+        return ruleTuples.map(function (tuple) {
             return {
                 name: tuple[0],
                 rule: tuple[1],
@@ -158,8 +158,8 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
     }
     window.onerror = function (message, source, lineno, colno, error) {
         if (
-            ((message as any).indexOf('[mobx] MobX 5+ requires Proxy objects') !== -1 ||
-                (message as any).indexOf('not supported browser') !== -1) &&
+            (message.indexOf('[mobx] MobX 5+ requires Proxy objects') !== -1 ||
+                message.indexOf('not supported browser') !== -1) &&
             cqRoot
         ) {
             renderNotSupported();

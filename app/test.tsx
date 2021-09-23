@@ -24,9 +24,9 @@ import './app.scss';
 import './test.scss';
 import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { ConnectionManager, StreamManager } from './connection';
-import Notification from './Notification.jsx';
-import ChartNotifier from './ChartNotifier.js';
-import ChartHistory from './ChartHistory.jsx';
+import Notification from './Notification';
+import ChartNotifier from './ChartNotifier';
+import ChartHistory from './ChartHistory';
 import NetworkMonitor from './connection/NetworkMonitor';
 import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
 

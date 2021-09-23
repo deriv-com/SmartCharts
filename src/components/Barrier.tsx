@@ -23,7 +23,7 @@ const Barrier = React.memo(
         isInitialized && (
             <div
                 className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
-                style={{ '--shade-color': shadeColor }}
+                style={{ '--shade-color': shadeColor } as any}
             >
                 <HighPriceLine
                     width={priceLabelWidth}

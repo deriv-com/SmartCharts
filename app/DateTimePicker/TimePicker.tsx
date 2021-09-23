@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import moment from 'moment';
 import React from 'react';
 import './time-picker.scss';
-import { Wrapper } from '../../src/components/Icons.jsx';
+import { Wrapper } from '../../src/components/Icons';
 import Time from '../icons/ic-time.svg';
 import { usePrevious } from '../../src/hooks';
 
@@ -146,7 +146,7 @@ const TimePickerDropdown = React.memo(({ className, preClass, value, onChange, t
         </div>
     );
 });
-const TimePicker = React.memo((props: any) => {
+const TimePicker = (props: any) => {
     const {
         disableFocus,
         onChange,
@@ -259,5 +259,5 @@ const TimePicker = React.memo((props: any) => {
             )}
         </div>
     );
-});
+};
 export default observer(TimePicker);

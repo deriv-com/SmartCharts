@@ -172,7 +172,7 @@ if (process.env.ANALYZE_BUNDLE) {
 }
 
 if (isApp) {
-    config.entry = path.resolve(__dirname, `./app/${appEntryFile}.jsx`);
+    config.entry = path.resolve(__dirname, `./app/${appEntryFile}.tsx`);
     config.plugins.push(
         new CopyWebpackPlugin({
             patterns: [
@@ -200,7 +200,9 @@ if (isApp) {
                     to: 'mobx.js',
                 },
                 {
-                    from: production ? './node_modules/mobx-react/index.min.js' : './node_modules/mobx-react/index.js',
+                    from: production
+                        ? './node_modules/mobx-react/dist/mobxreact.umd.production.min.js'
+                        : './node_modules/mobx-react/dist/mobxreact.umd.development.js',
                     to: 'mobx-react.js',
                 },
                 {

@@ -23,7 +23,7 @@ const EmptyCategory = React.memo(({ category }: any) => (
 ));
 
 const CategoryTitleLeft = React.memo(({ isNestedList, category }: any) => {
-    const CategoryIcon = CategoryIconMap[category.categoryId];
+    const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
         <span className='category-title-left'>
             {isNestedList ? CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} /> : ''}

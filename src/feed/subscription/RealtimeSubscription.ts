@@ -5,10 +5,6 @@ import Subscription from './Subscription';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
 class RealtimeSubscription extends Subscription {
-    _binaryApi: any;
-    _emitter: any;
-    _request: any;
-    _stx: any;
     _tickCallback: any;
 
     pause() {
@@ -36,7 +32,7 @@ class RealtimeSubscription extends Subscription {
 
     forget() {
         if (this._tickCallback) {
-            const { symbol, granularity } = this._request;
+            const { symbol, granularity } = this._request as any;
             this._binaryApi.forget({
                 symbol,
                 granularity,
