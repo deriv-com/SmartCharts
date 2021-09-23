@@ -6,15 +6,7 @@ function padLeft(nr: any, n: any, str: any) {
     return Array(n - String(nr).length + 1).join(str || '0') + nr;
 }
 
-const getDays = ({
-    calendar_date,
-    date_format,
-    max_date,
-    min_date,
-    start_date,
-    onClick,
-    selected_date,
-}: any) => {
+const getDays = ({ calendar_date, date_format, max_date, min_date, start_date, onClick, selected_date }: any) => {
     const dates = [];
     const days: any = [];
     const moment_today = moment().utc().startOf('day');
@@ -52,7 +44,6 @@ const getDays = ({
                     moment_date.isAfter(moment_start_date.clone().add(1, 'day'))));
 
         days.push(
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
             <span
                 key={date}
                 className={`calendar-date ${is_active && !is_disabled ? 'active' : ''} ${is_today ? 'today' : ''} ${
@@ -74,14 +65,11 @@ const getDays = ({
 const week_headers = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export const CalendarDays = (props: any) => {
-    // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'day' implicitly has an 'any' type.
-    const days = getDays(props).map(day => day);
+    const days = getDays(props).map((day: any) => day);
 
     return (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div className='calendar-date-panel'>
             {week_headers.map((item, idx) => (
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <span key={idx} className='calendar-date-header'>
                     {item}
                 </span>

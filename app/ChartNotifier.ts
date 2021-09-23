@@ -1,14 +1,12 @@
 export default class ChartNotifier {
-    messageCallback = null;
-    removeByCategoryCallback = null;
+    messageCallback: any = null;
+    removeByCategoryCallback: any = null;
 
     notify(message: any) {
-        // @ts-expect-error ts-migrate(2721) FIXME: Cannot invoke an object which is possibly 'null'.
         this.messageCallback(message);
     }
 
     removeByCategory(category: any) {
-        // @ts-expect-error ts-migrate(2721) FIXME: Cannot invoke an object which is possibly 'null'.
         this.removeByCategoryCallback(category);
     }
 

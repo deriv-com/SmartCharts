@@ -1606,16 +1606,13 @@ export function masterData() {
     for (let i = 1; i < 10; i++) {
         const old_price = mock_items[mock_items.length - 1].Close;
         const change = old_price * 0.02 * Math.random() - old_price * 0.01; // random between +/-1% of current price
-        // @ts-expect-error ts-migrate(2345) FIXME: Argument of type 'number' is not assignable to par... Remove this comment to see the full error message
-        const new_price = parseFloat(old_price + parseFloat(change.toFixed(2))).toFixed(4);
+        const new_price = parseFloat(`${old_price + parseFloat(change.toFixed(2))}`).toFixed(4);
         _date.setMinutes(_date.getMinutes() - i * 2, 0, 0);
         const item = {
             Date: _date.toISOString().slice(0, 19),
-            // @ts-expect-error ts-migrate(2362) FIXME: The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
-            Open: parseFloat(new_price - 10.5),
-            High: parseFloat(new_price + 15.5),
-            // @ts-expect-error ts-migrate(2362) FIXME: The left-hand side of an arithmetic operation must... Remove this comment to see the full error message
-            Low: parseFloat(new_price - 15),
+            Open: parseFloat(new_price) - 10.5,
+            High: parseFloat(new_price) + 15.5,
+            Low: parseFloat(new_price) - 15,
             Close: parseFloat(new_price),
         };
         mock_items.push(item);

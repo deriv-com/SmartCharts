@@ -4,11 +4,11 @@ import { mergeTickHistory } from './tickUtils';
 class StreamManager {
     MAX_CACHE_TICKS = 5000;
     _connection;
-    _streams = {};
-    _streamIds = {};
-    _tickHistoryCache = {};
-    _tickHistoryPromises = {};
-    _beingForgotten = {};
+    _streams: any = {};
+    _streamIds: any = {};
+    _tickHistoryCache: any = {};
+    _tickHistoryPromises: any = {};
+    _beingForgotten: any = {};
 
     constructor(connection: any) {
         this._connection = connection;
@@ -22,20 +22,15 @@ class StreamManager {
     _onTick(data: any) {
         const key = this._getKey(data.echo_req);
 
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (this._streams[key] && this._tickHistoryCache[key]) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._streamIds[key] = data[data.msg_type].id;
             this._cacheTick(key, data);
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._streams[key].emitTick(data);
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         } else if (this._beingForgotten[key] === undefined) {
             // There could be the possibility a stream could still enter even though
             // it is no longer in used. This is because we can't know the stream ID
             // from the initial response; we have to wait for the next tick to retrieve it.
             // In such scenario we need to forget these "orphaned" streams:
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._streamIds[key] = data[data.msg_type].id;
             this._forgetStream(key);
         }
@@ -46,7 +41,6 @@ class StreamManager {
         // It is not its responsibility to reestablish the streams upon reconnection.
         this._streamIds = {}; // set it to blank so that forget requests do not get called
         for (const key of Object.keys(this._streams)) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             if (this._streams[key].subscriberCount !== 0) {
                 this._forgetStream(key);
             }
@@ -57,19 +51,13 @@ class StreamManager {
         const key = this._getKey(data.echo_req);
         const cache = StreamManager.cloneTickHistoryResponse(data);
         if (cache) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._tickHistoryCache[key] = cache;
         }
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         delete this._tickHistoryPromises[key];
     }
 
-    _cacheTick(key: any, {
-        ohlc,
-        tick,
-    }: any) {
+    _cacheTick(key: any, { ohlc, tick }: any) {
         if (ohlc) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             const candles = this._tickHistoryCache[key].candles;
             const { close, open_time: epoch, high, low, open } = ohlc;
             const candle = {
@@ -89,7 +77,6 @@ class StreamManager {
                 }
             }
         } else if (tick) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             const { prices, times } = this._tickHistoryCache[key].history;
             const { quote: price, epoch: time } = tick;
             prices.push(price);
@@ -103,32 +90,23 @@ class StreamManager {
     }
 
     _forgetStream(key: any) {
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         const stream = this._streams[key];
         if (stream) {
             // Note that destroying a stream also removes all subscribed events
             stream.destroy();
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             delete this._streams[key];
         }
 
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (this._streamIds[key]) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             const id = this._streamIds[key];
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             this._beingForgotten[key] = true;
             this._connection.send({ forget: id }).then(() => {
-                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 delete this._beingForgotten[key];
-                // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
                 delete this._streamIds[key];
             });
         }
 
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         if (this._tickHistoryCache[key]) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             delete this._tickHistoryCache[key];
         }
     }
@@ -136,10 +114,8 @@ class StreamManager {
     _createNewStream(request: any) {
         const key = this._getKey(request);
         const stream = new Stream();
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         this._streams[key] = stream;
         const subscribePromise = this._connection.send(request);
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         this._tickHistoryPromises[key] = subscribePromise;
 
         subscribePromise
@@ -160,16 +136,13 @@ class StreamManager {
 
     async subscribe(request: any, callback: any) {
         const key = this._getKey(request);
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         let stream = this._streams[key];
         if (!stream) {
             stream = this._createNewStream(request);
         }
 
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         let tickHistoryResponse = this._tickHistoryCache[key];
         if (!tickHistoryResponse) {
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
             tickHistoryResponse = await this._tickHistoryPromises[key];
         }
 
@@ -197,25 +170,17 @@ class StreamManager {
 
     forget(request: any, callback: any) {
         const key = this._getKey(request);
-        // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
         const stream = this._streams[key];
         if (stream) {
             stream.offStream(callback);
         }
     }
 
-    _getKey({
-        ticks_history: symbol,
-        granularity,
-    }: any) {
+    _getKey({ ticks_history: symbol, granularity }: any) {
         return `${symbol}-${granularity || 0}`;
     }
 
-    static cloneTickHistoryResponse({
-        history,
-        candles,
-        ...others
-    }: any) {
+    static cloneTickHistoryResponse({ history, candles, ...others }: any) {
         let clone;
 
         if (history) {

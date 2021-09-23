@@ -32,8 +32,7 @@ export class DummyConnectionManager extends EventEmitter {
 
     send(request: any) {
         if (!this._response && !this.pendingRequest) {
-            // @ts-expect-error ts-migrate(7009) FIXME: 'new' expression, whose target lacks a construct s... Remove this comment to see the full error message
-            this.pendingRequest = new PendingPromise();
+            this.pendingRequest = PendingPromise();
             return this.pendingRequest;
         }
 

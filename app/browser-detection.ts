@@ -7,23 +7,30 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
             if (!userAgentString) {
                 return null;
             }
-            let detected = browsers
-                .map(function (browser: any) {
-                const match = browser.rule.exec(userAgentString);
-                let version = match && match[1].split(/[._]/).slice(0, 3);
-                if (version && version.length < 3) {
-                    version = version.concat(version.length == 1 ? [0, 0] : [0]);
-                }
-                return (match && {
-                    name: browser.name,
-                    version: version.join('.'),
-                });
-            })
-                .filter(Boolean)[0] || null;
+            let detected =
+                browsers
+                    .map(function (browser: any) {
+                        const match = browser.rule.exec(userAgentString);
+                        let version = match && match[1].split(/[._]/).slice(0, 3);
+                        if (version && version.length < 3) {
+                            version = version.concat(version.length == 1 ? [0, 0] : [0]);
+                        }
+                        return (
+                            match && {
+                                name: browser.name,
+                                version: version.join('.'),
+                            }
+                        );
+                    })
+                    .filter(Boolean)[0] || null;
             if (detected) {
                 detected.os = detectOS(userAgentString);
             }
-            if (/alexa|bot|crawl(er|ing)|facebookexternalhit|feedburner|google web preview|nagios|postrank|pingdom|slurp|spider|yahoo!|yandex/i.test(userAgentString)) {
+            if (
+                /alexa|bot|crawl(er|ing)|facebookexternalhit|feedburner|google web preview|nagios|postrank|pingdom|slurp|spider|yahoo!|yandex/i.test(
+                    userAgentString
+                )
+            ) {
                 detected = detected || {};
                 detected.bot = true;
             }
@@ -39,11 +46,13 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
     }
     function getNodeVersion() {
         const isNode = typeof process !== 'undefined' && process.version;
-        return (isNode && {
-            name: 'node',
-            version: process.version.slice(1),
-            os: process.platform,
-        });
+        return (
+            isNode && {
+                name: 'node',
+                version: process.version.slice(1),
+                os: process.platform,
+            }
+        );
     }
     function getBrowserRules() {
         return buildRules([
@@ -138,22 +147,21 @@ function browserDetect(rootEleId: any, SupportedBrowsers: any) {
         cqA.style.cssText =
             'background:#e98024;border-radius:4px;font-family:"Roboto";color:#fff;padding:10px;font-size:14px;font-weight:500;text-align:center;text-transform:uppercase;text-decoration:none;';
         cqNotSupported.appendChild(cqA);
-        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-        if (cqRoot.nextSibling) {
-            // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-            cqRoot.parentNode.insertBefore(cqNotSupported, cqRoot.nextSibling);
+        if (cqRoot && cqRoot.parentNode) {
+            if (cqRoot.nextSibling) {
+                cqRoot.parentNode.insertBefore(cqNotSupported, cqRoot.nextSibling);
+            } else {
+                cqRoot.parentNode.appendChild(cqNotSupported);
+            }
+            cqRoot.parentNode.removeChild(cqRoot);
         }
-        else {
-            // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-            cqRoot.parentNode.appendChild(cqNotSupported);
-        }
-        // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-        cqRoot.parentNode.removeChild(cqRoot);
     }
     window.onerror = function (message, source, lineno, colno, error) {
-        if (((message as any).indexOf('[mobx] MobX 5+ requires Proxy objects') !== -1 ||
-            (message as any).indexOf('not supported browser') !== -1) &&
-            cqRoot) {
+        if (
+            ((message as any).indexOf('[mobx] MobX 5+ requires Proxy objects') !== -1 ||
+                (message as any).indexOf('not supported browser') !== -1) &&
+            cqRoot
+        ) {
             renderNotSupported();
         }
     };

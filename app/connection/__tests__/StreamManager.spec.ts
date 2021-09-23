@@ -1,8 +1,8 @@
+// @ts-nocheck
 import chai, { expect } from 'chai';
 import { describe, it, beforeEach, afterEach } from 'mocha';
 import sinon from 'sinon';
-// @ts-expect-error ts-migrate(7016) FIXME: Could not find a declaration file for module 'chai... Remove this comment to see the full error message
-import sinonChai from 'chai-sinon';
+import sinonChai from 'sinon-chai';
 import StreamManager from '../StreamManager';
 import { dummyTickData, dummyOhlcData, dummyErrorResponse } from './dummyData';
 import { DummyConnectionManager } from './DummyConnectionManager';
@@ -75,7 +75,6 @@ describe('Test StreamManager (Tick)', function () {
             history: { prices },
         } = spy2.getCall(0).args[0];
         expect(prices.length).to.be.equal(16);
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         expect(prices[prices.length - 1]).to.be.equal(dummyTickData[2].tick.quote);
         expect(spy2).to.have.callCount(1);
         expect(dcm.send).to.have.callCount(1);
@@ -118,7 +117,6 @@ describe('Test StreamManager (Tick)', function () {
         await sm.subscribe(ohlcRequest, spy2);
         const { candles } = spy2.firstCall.args[0];
         expect(candles.length).to.be.equal(29);
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         expect(candles[candles.length - 1].close).to.be.equal(dummyOhlcData[4].ohlc.close);
     });
 
@@ -140,7 +138,6 @@ describe('Test StreamManager (Tick)', function () {
         const { candles: spy2Candles } = spy2.firstCall.args[0];
         expect(spy1Candles.length).to.be.equal(29); // Existing candles retrieved earlier should not be mutated
         expect(spy2Candles.length).to.be.equal(30);
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         expect(spy2Candles[spy2Candles.length - 1].close).to.be.equal(dummyOhlcData[8].ohlc.close);
     });
 
@@ -156,7 +153,6 @@ describe('Test StreamManager (Tick)', function () {
         await sm.subscribe(ohlcRequest, spy);
         const { candles } = spy.firstCall.args[0];
         expect(candles.length).to.be.equal(29);
-        // @ts-expect-error ts-migrate(2532) FIXME: Object is possibly 'undefined'.
         expect(candles[candles.length - 1].close).to.be.equal(dummyOhlcData[9].ohlc.close);
     });
 

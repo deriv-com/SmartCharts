@@ -1,7 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-// @ts-expect-error ts-migrate(2307) FIXME: Cannot find module '@binary-com/smartcharts' or it... Remove this comment to see the full error message
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
-// @ts-expect-error ts-migrate(2306) FIXME: File '/Users/balakrishna/Documents/SmartCharts/app... Remove this comment to see the full error message
 import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
@@ -19,11 +17,7 @@ class ConnectionManager extends EventEmitter {
         return 'CONNECTION_REOPEN';
     }
 
-    constructor({
-        appId,
-        endpoint,
-        language,
-    }: any) {
+    constructor({ appId, endpoint, language }: any) {
         super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
@@ -131,12 +125,11 @@ class ConnectionManager extends EventEmitter {
     _sendBufferedRequests() {
         while (this._bufferedRequests.length > 0) {
             const req = this._bufferedRequests.shift();
-            // @ts-expect-error ts-migrate(2554) FIXME: Expected 2 arguments, but got 1.
             this.send(req.data);
         }
     }
 
-    async send(data: any, timeout: any) {
+    async send(data: any, timeout?: any) {
         const req = { ...data };
         req.req_id = req.req_id || this._counterReqId++;
 

@@ -1,21 +1,12 @@
 import moment from 'moment';
 import React from 'react';
-// @ts-expect-error ts-migrate(2305) FIXME: Module '"./panels/index"' has no exported member '... Remove this comment to see the full error message
 import { CalendarDays, CalendarMonths, CalendarYears, CalendarDecades } from './panels/index';
 
-function CalendarButton({
-    children,
-    className,
-    is_hidden,
-    label,
-    onClick,
-}: any) {
+function CalendarButton({ children, className, is_hidden, label, onClick }: any) {
     return (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <React.Fragment>
             {!is_hidden && (
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-                <span type='button' className={className} onClick={onClick}>
+                <span className={className} onClick={onClick}>
                     {label}
                     {children}
                 </span>
@@ -26,34 +17,21 @@ function CalendarButton({
 
 function CalendarPanel(props: any) {
     const calendar_panel = {
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         date: <CalendarDays {...props} />,
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         month: <CalendarMonths {...props} />,
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         year: <CalendarYears {...props} />,
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         decade: <CalendarDecades {...props} />,
     };
 
-    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-    return <div className='calendar-panel'>{calendar_panel[props.calendar_view]}</div>;
+    return <div className='calendar-panel'>{calendar_panel[props.calendar_view as keyof typeof calendar_panel]}</div>;
 }
 
-function CalendarFooter({
-    footer,
-    has_today_btn,
-    onClick,
-}: any) {
+function CalendarFooter({ footer, has_today_btn, onClick }: any) {
     return (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div className='calendar-footer'>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
             {has_today_btn && (
-                // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                 <CalendarButton className='calendar-footer-btn'>
-                    {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                     <span onClick={onClick}>{t.translate('Today')}</span>
                 </CalendarButton>
             )}
@@ -61,13 +39,7 @@ function CalendarFooter({
     );
 }
 
-function CalendarHeader({
-    calendar_date,
-    isPeriodDisabled,
-    onClick,
-    onSelect,
-    calendar_view,
-}: any) {
+function CalendarHeader({ calendar_date, isPeriodDisabled, onClick, onSelect, calendar_view }: any) {
     const is_date_view = calendar_view === 'date';
     const is_month_view = calendar_view === 'month';
     const is_year_view = calendar_view === 'year';
@@ -96,16 +68,13 @@ function CalendarHeader({
     };
 
     return (
-        // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
         <div className='calendar-header'>
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <CalendarButton
                 className={`calendar-prev-year-btn ${
                     isPeriodDisabled(moment_date.clone().subtract(1, 'month'), 'month') ? 'hidden' : ''
                 }`}
                 onClick={onPreviousYearClick}
             />
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <CalendarButton
                 className={`calendar-prev-month-btn ${
                     isPeriodDisabled(moment_date.clone().subtract(1, 'month'), 'month') ? 'hidden' : ''
@@ -114,10 +83,8 @@ function CalendarHeader({
                 onClick={onClick.previousMonth}
             />
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <div className='calendar-select'>
                 {is_date_view && (
-                    // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
                     <CalendarButton
                         className='calendar-select-month-btn'
                         is_hidden={!is_date_view}
@@ -125,7 +92,6 @@ function CalendarHeader({
                         onClick={onSelect.month}
                     />
                 )}
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <CalendarButton className='calendar-select-year-btn' onClick={onSelectYearClick}>
                     {(is_date_view || is_month_view) && moment_date.year()}
                     {is_year_view &&
@@ -141,7 +107,6 @@ function CalendarHeader({
                 </CalendarButton>
             </div>
 
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <CalendarButton
                 className={`calendar-next-month-btn ${
                     isPeriodDisabled(moment_date.clone().add(1, 'month'), 'month') ? 'hidden' : ''
@@ -149,7 +114,6 @@ function CalendarHeader({
                 is_hidden={!is_date_view}
                 onClick={onClick.nextMonth}
             />
-            {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
             <CalendarButton
                 className={`calendar-next-year-btn ${
                     isPeriodDisabled(moment_date.clone().add(1, 'month'), 'month') ? 'hidden' : ''
@@ -164,23 +128,15 @@ const Calendar = React.forwardRef(
     (
         {
             children,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'footer' does not exist on type '{ childr... Remove this comment to see the full error message
             footer,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'has_today_btn' does not exist on type '{... Remove this comment to see the full error message
             has_today_btn,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'id' does not exist on type '{ children?:... Remove this comment to see the full error message
             id,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'date_format' does not exist on type '{ c... Remove this comment to see the full error message
             date_format = 'YYYY-MM-DD',
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'start_date' does not exist on type '{ ch... Remove this comment to see the full error message
             start_date,
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'max_date' does not exist on type '{ chil... Remove this comment to see the full error message
             max_date = moment().utc().add(120, 'y').format('YYYY-MM-DD'), // by default, max_date is set to 120 years after today
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'min_date' does not exist on type '{ chil... Remove this comment to see the full error message
             min_date = moment(0).utc().format('YYYY-MM-DD'), // by default, min_date is set to Unix Epoch (January 1st 1970)
-            // @ts-expect-error ts-migrate(2339) FIXME: Property 'onSelect' does not exist on type '{ chil... Remove this comment to see the full error message
             onSelect,
-        },
+        }: any,
         ref
     ) => {
         const [calendar_date, setCalendarDate] = React.useState(moment.utc(start_date).format(date_format));
@@ -296,7 +252,7 @@ const Calendar = React.forwardRef(
                 year: 'month',
                 decade: 'year',
             };
-            // @ts-expect-error ts-migrate(7052) FIXME: Element implicitly has an 'any' type because type ... Remove this comment to see the full error message
+            // @ts-ignore
             const date = moment
                 .utc(calendar_date, date_format)
                 [type === 'decade' ? 'year' : type](e.target.dataset[type].split('-')[0])
@@ -305,8 +261,7 @@ const Calendar = React.forwardRef(
             if (isPeriodDisabled(date, type)) return;
 
             setCalendarDate(date);
-            // @ts-expect-error ts-migrate(7053) FIXME: Element implicitly has an 'any' type because expre... Remove this comment to see the full error message
-            setCalendarView(view_map[type]);
+            setCalendarView(view_map[type as keyof typeof view_map]);
         };
 
         const setToday = () => {
@@ -328,10 +283,8 @@ const Calendar = React.forwardRef(
         };
 
         return (
-            // @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message
-            <div id={id} className='calendar' value={selected_date}>
+            <div id={id} className='calendar'>
                 {children}
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <CalendarHeader
                     calendar_date={calendar_date}
                     isPeriodDisabled={isPeriodDisabled}
@@ -339,7 +292,6 @@ const Calendar = React.forwardRef(
                     onSelect={calendarViews}
                     calendar_view={calendar_view}
                 />
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <CalendarPanel
                     calendar_date={calendar_date}
                     date_format={date_format}
@@ -351,7 +303,6 @@ const Calendar = React.forwardRef(
                     selected_date={selected_date}
                     calendar_view={calendar_view}
                 />
-                {/* @ts-expect-error ts-migrate(17004) FIXME: Cannot use JSX unless the '--jsx' flag is provided... Remove this comment to see the full error message */}
                 <CalendarFooter footer={footer} onClick={setToday} has_today_btn={has_today_btn} />
             </div>
         );
