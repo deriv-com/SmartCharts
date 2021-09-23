@@ -641,6 +641,7 @@ class ChartStore {
             onSettingsChange,
             getMarketsOrder,
             initialData,
+            chartData,
             feedCall,
         } = props;
         this.feedCall = feedCall || {};
@@ -659,6 +660,7 @@ class ChartStore {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
                 initialData: initialData?.activeSymbols,
+                chartData: chartData?.activeSymbols,
             }));
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
@@ -668,11 +670,11 @@ class ChartStore {
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
         const engineParams = {
-            maxMasterDataSize: this.getMaxMasterDataSize(this.granularity),
-            markerDelay: null,
-
+            maxMasterDataSize: 0, // cap size so tick_history requests do not become too large
+            maxDataSetSize: 0,
+            markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode?.querySelector('.chartContainer'),
-            controls: { chartControls: null },
+            controls: { chartControls: null }, // hide the default zoom buttons
             yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
@@ -863,14 +865,7 @@ class ChartStore {
             this.refreshChart();
         }
     };
-    getMaxMasterDataSize(granularity: TGranularity) {
-        let maxMasterDataSize = 5000;
-        // When granularity is 1 day
-        if (granularity === 86400) maxMasterDataSize = Math.floor(2.8 * 365);
-        // When granularity is 8 hours
-        else if (granularity === 28800) maxMasterDataSize = Math.floor(2.8 * 365 * 3);
-        return maxMasterDataSize;
-    }
+
     chartClosedOpenThemeChange(isChartClosed: boolean) {
         this.mainStore.state.setChartClosed(isChartClosed);
         this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
@@ -943,8 +938,6 @@ class ChartStore {
         let params;
         if (granularity !== undefined) {
             this.granularity = granularity;
-
-            this.stxx.maxMasterDataSize = this.getMaxMasterDataSize(this.granularity);
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
         if (params === undefined && symbolObj) {

@@ -61,14 +61,14 @@ export const getIntervalInSeconds = ({
 };
 
 export function stableSort<T>(arr: T[], compare: (a: T, b: T) => number) {
-    const original = arr.slice(0);
+    const original = arr;
 
-    arr.sort((a: T, b: T) => {
+    const newArray = arr.slice(0).sort((a: T, b: T) => {
         const result = compare(a, b);
         return result === 0 ? original.indexOf(a) - original.indexOf(b) : result;
     });
 
-    return arr;
+    return newArray;
 }
 
 export function sameBar(bar1: any, bar2: any) {

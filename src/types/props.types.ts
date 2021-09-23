@@ -19,6 +19,7 @@ export type TChartParams = {
         tradingTimes?: TradingTimesResponse;
         activeSymbols?: ActiveSymbols;
     };
+    chartData?: any;
 };
 
 export type TQuote = {

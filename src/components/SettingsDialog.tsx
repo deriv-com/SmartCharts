@@ -86,9 +86,9 @@ const SettingsPanelGroup = ({
         ),
         number: (item: any) => (
             <Slider
-                min={item.min || 1}
-                step={item.step || 1}
-                max={item.max || 100}
+                min={item.min ?? 1}
+                step={item.step ?? 1}
+                max={item.max ?? 100}
                 value={item.value}
                 onChange={(val: any) => onItemChange(item.id, val)}
             />

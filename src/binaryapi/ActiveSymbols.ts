@@ -69,11 +69,21 @@ export default class ActiveSymbols {
         } else if (this._params.enable !== false) {
             const response = (await this._api.getActiveSymbols()) as ActiveSymbolsResponse;
             active_symbols = response.active_symbols as TActiveSymbols;
+        } else if (this._params.chartData && this._params.enable === false) {
+            // Do not need to do anything, the chartData handle the staff
+            console.log('ActiveSymbols would render through chartData.');
+            return;
         } else {
             console.error('ActiveSymbols feed is not enable nor has initial data!');
             return;
         }
 
+        this.computeActiveSymbols(active_symbols);
+        this.symbolsPromise.resolve();
+        return this.activeSymbols;
+    }
+
+    @action.bound computeActiveSymbols(active_symbols: any) {
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
@@ -92,8 +102,6 @@ export default class ActiveSymbols {
                 this.changes = changes;
             })
         );
-        this.symbolsPromise.resolve();
-        return this.activeSymbols;
     }
 
     @computed get activeSymbols() {
@@ -115,9 +123,11 @@ export default class ActiveSymbols {
         const processedSymbols: TProcessedSymbols = [];
 
         // Stable sort is required to retain the order of the symbol name
-        stableSort(symbols, (a, b) => a.submarket_display_name.localeCompare(b.submarket_display_name));
+        const sortedSymbols = stableSort(symbols, (a, b) =>
+            a.submarket_display_name.localeCompare(b.submarket_display_name)
+        );
 
-        for (const s of symbols) {
+        for (const s of sortedSymbols) {
             processedSymbols.push({
                 symbol: s.symbol,
                 name: s.display_name,

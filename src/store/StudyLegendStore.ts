@@ -76,7 +76,7 @@ export default class StudyLegendStore {
     @observable
     filterText = '';
     @observable
-    activeItems = [];
+    activeItems: any = [];
     @observable
     infoItem = null;
     @observable
@@ -124,8 +124,13 @@ export default class StudyLegendStore {
             .filter(category => category.foundItems.length);
     }
     get chartActiveStudies() {
-        return (this.activeItems || []).filter(item => (item as any).dataObject.sd.panel === 'chart');
+        return (this.activeItems || []).filter((item: any) => item.dataObject.sd.panel === 'chart');
     }
+
+    get hasPredictionIndicator() {
+        return (this.activeItems || []).filter((item: any) => item.isPrediction).length > 0;
+    }
+
     get maxAllowedItem() {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }
@@ -429,8 +434,20 @@ export default class StudyLegendStore {
         });
         this.activeItems = activeItems;
     }
-    @action.bound
-    deleteAllStudies() {
+
+    @action.bound deletePredictionStudies() {
+        const stx = this.stx;
+        if (stx) {
+            (this.activeItems || [])
+                .filter((item: any) => item.isPrediction)
+                .forEach((item: any) => {
+                    this.deleteStudy(item.dataObject.sd);
+                });
+            setTimeout(this.updateIndicatorHeight, 20);
+        }
+    }
+
+    @action.bound deleteAllStudies() {
         const stx = this.stx;
         if (stx) {
             Object.keys(stx.layout.studies || []).forEach(id => {
@@ -461,9 +478,14 @@ export default class StudyLegendStore {
         this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
     }
-    @action.bound
-    onInfoItem(study: any) {
-        this.infoItem = study;
+
+    @action.bound onInfoItem(study: any) {
+        this.infoItem = study
+            ? {
+                  ...study,
+                  disabledAddBtn: study.isPrediction && this.mainStore.timeperiod.isTick,
+              }
+            : study;
     }
     @action.bound
     updatePortalNode(portalNodeId: any) {

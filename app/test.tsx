@@ -77,7 +77,7 @@ function getServerUrl() {
 }
 const parseQueryString = (query: any) => {
     const vars = query.split('&');
-    const query_string = {};
+    const query_string: any = {};
     for (let i = 0; i < vars.length; i++) {
         const pair = vars[i].split('=');
         const key = decodeURIComponent(pair[0]);
@@ -187,6 +187,9 @@ const App = () => {
             isChartTypeCandle,
         };
     }, [layout]);
+
+    const [closed_market, setClosedMarket] = React.useState<any>(null);
+    const [exclude_symbol, setExcludeSymbol] = React.useState<any>(null);
     const [chartType, setChartType] = React.useState(memoizedValues.chartType);
     const [granularity, setGranularity] = React.useState(memoizedValues.granularity);
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
@@ -205,7 +208,7 @@ const App = () => {
     const [crosshairState, setCrosshairState] = React.useState<any>(1);
     const [leftOffset, setLeftOffset] = React.useState<any>();
     const [scrollToEpoch, setScrollToEpoch] = React.useState<any>();
-    const [enableFooter, setEnableFooter] = React.useState(false);
+    const [enableFooter, setEnableFooter] = React.useState(true);
     const [enableScroll, setEnableScroll] = React.useState(false);
     const [enableZoom, setEnableZoom] = React.useState(false);
     const [enableNavigationWidget, setEnableNavigationWidget] = React.useState(false);
@@ -437,6 +440,79 @@ const App = () => {
     const onInitalDataMasterData = (evt: any) => generateURL({ initialdata_masterData: evt.currentTarget.checked });
     const onFeedCallTradingTime = (evt: any) => generateURL({ feedcall_tradingTimes: evt.currentTarget.checked });
     const onFeedCallActiveSymbols = (evt: any) => generateURL({ feedcall_activeSymbols: evt.currentTarget.checked });
+
+    const initial_data = React.useMemo(() => {
+        const data: any = {};
+
+        if (urlParams.initialdata_masterData === 'true') {
+            data.masterData = masterData();
+        }
+
+        if (urlParams.initialdata_tradingTimes === 'true') {
+            data.tradingTimes = MockTradingTime;
+        }
+
+        if (urlParams.initialdata_activeSymbols === 'true') {
+            data.activeSymbols = MockActiveSymbol;
+        }
+        return { ...data };
+    }, [urlParams]);
+
+    const chart_data = React.useMemo(() => {
+        const data: any = {};
+
+        if (urlParams.initialdata_masterData === 'true') {
+            data.masterData = masterData();
+        }
+
+        if (urlParams.initialdata_tradingTimes === 'true') {
+            data.tradingTimes = MockTradingTime;
+        }
+
+        if (urlParams.initialdata_activeSymbols === 'true') {
+            data.activeSymbols = MockActiveSymbol;
+        }
+
+        if (exclude_symbol) {
+            const CLONED_MockActiveSymbol = JSON.parse(JSON.stringify(MockActiveSymbol));
+            const exclude_obj = exclude_symbol.split(',');
+            if (exclude_obj && exclude_obj.length === 2) {
+                data.activeSymbols = CLONED_MockActiveSymbol.filter(
+                    (item: any) => !(item.market === exclude_obj[0] && item.submarket === exclude_obj[1])
+                );
+            } else if (exclude_obj && exclude_obj.length === 1) {
+                data.activeSymbols = CLONED_MockActiveSymbol.filter((item: any) => !(item.market === exclude_obj[0]));
+            }
+        }
+
+        if (closed_market) {
+            const cloned_trading_mock_data = JSON.parse(JSON.stringify(MockTradingTime.trading_times));
+
+            if (closed_market === 'default') {
+                data.tradingTimes = cloned_trading_mock_data;
+            } else {
+                data.tradingTimes = {
+                    markets: cloned_trading_mock_data.markets.map((_market: any) => {
+                        if (_market.name === closed_market) {
+                            _market.submarkets = [..._market.submarkets].map(_submarkets => {
+                                _submarkets.symbols = [..._submarkets.symbols].map(_symbol => {
+                                    _symbol.events.push({
+                                        dates: 'today',
+                                        descrip: 'close all',
+                                    });
+                                    return _symbol;
+                                });
+                                return _submarkets;
+                            });
+                        }
+                        return _market;
+                    }),
+                };
+            }
+        }
+        return { ...data };
+    }, [urlParams, closed_market, exclude_symbol]);
+
     const barriers = barrierType
         ? [
               {
@@ -471,7 +547,8 @@ const App = () => {
                     enabledChartFooter={enableFooter}
                     topWidgets={renderTopWidgets}
                     settings={settings}
-                    initialData={initialData}
+                    initialData={initial_data}
+                    chartData={chart_data}
                     feedCall={feedCall}
                     requestAPI={requestAPI}
                     requestSubscribe={requestSubscribe}
@@ -559,6 +636,28 @@ const App = () => {
                     </select>
                 </div>
 
+                <div className='form-row'>
+                    <strong>Closed market</strong>
+                    <select onChange={el => setClosedMarket(el.target.value)}>
+                        <option value='default'> Default </option>
+                        <option value='Forex'> Forex </option>
+                        <option value='Commodities'> Commodities </option>
+                        <option value='Stock Indices'> Stock Indices </option>
+                        <option value='Synthetic Indices'> Synthetic Indices </option>
+                        <option value='Cryptocurrencies'> Cryptocurrencies </option>
+                    </select>
+                </div>
+                <div className='form-row'>
+                    <strong>Exclude a market</strong>
+                    <select onChange={el => setExcludeSymbol(el.target.value)}>
+                        <option value='default'> Default </option>
+                        <option value='forex'> Forex </option>
+                        <option value='commodities'> Commodities </option>
+                        <option value='indices'> Stock Indices </option>
+                        <option value='synthetic_index'> Synthetic Indices </option>
+                        <option value='cryptocurrency'> Cryptocurrencies </option>
+                    </select>
+                </div>
                 <div className='form-row'>
                     <select onChange={onOpenMarket}>
                         <option value=''> -- Open Market -- </option>

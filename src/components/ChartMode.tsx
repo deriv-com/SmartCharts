@@ -57,7 +57,7 @@ const ChartMode: React.FC<TChartModeProps> = ({ onChartType, onGranularity, port
                         <ChartTypes newDesign onChange={onChartType} />
                     </div>
                     <div className='sc-chart-mode__section__item'>
-                        <Timeperiod newDesign onChange={onGranularity} />
+                        <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
                     </div>
                 </div>
             </ChartTypeMenu.Body>

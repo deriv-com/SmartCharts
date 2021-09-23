@@ -50,6 +50,7 @@ const Chart = (props: any) => {
         chartId,
         DrawToolsSettingsDialog,
         StudySettingsDialog,
+        PredictionIndicatorDialog,
         isCandle,
         isSpline,
         isMobile = false,
@@ -148,28 +149,32 @@ const Chart = (props: any) => {
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
+                <PredictionIndicatorDialog />
                 <div id='smartcharts_modal' className='ciq-modal' />
             </div>
         </div>
     );
 };
 
-export default connect(({ chart, drawTools, studies, chartSetting, chartType, state, loader }: TMainStore) => ({
-    chartId: chart.chartId,
-    init: chart.init,
-    destroy: chart.destroy,
-    StudySettingsDialog: studies.StudySettingsDialog,
-    DrawToolsSettingsDialog: drawTools.DrawToolsSettingsDialog,
-    AggregateChartSettingsDialog: chartType.AggregateChartSettingsDialog,
-    isCandle: chartType.isCandle,
-    isChartAvailable: chart.isChartAvailable,
-    isSpline: chartType.isSpline,
-    updateProps: state.updateProps,
-    chartContainerHeight: chart.chartContainerHeight,
-    containerWidth: chart.containerWidth,
-    isChartClosed: state.isChartClosed,
-    theme: chartSetting.theme,
-    position: chartSetting.position,
-    isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
-    isLoading: loader.isActive,
-}))(Chart);
+export default connect(
+    ({ chart, drawTools, studies, chartSetting, chartType, state, loader, timeperiod }: TMainStore) => ({
+        chartId: chart.chartId,
+        init: chart.init,
+        destroy: chart.destroy,
+        StudySettingsDialog: studies.StudySettingsDialog,
+        DrawToolsSettingsDialog: drawTools.DrawToolsSettingsDialog,
+        AggregateChartSettingsDialog: chartType.AggregateChartSettingsDialog,
+        isCandle: chartType.isCandle,
+        isChartAvailable: chart.isChartAvailable,
+        isSpline: chartType.isSpline,
+        updateProps: state.updateProps,
+        chartContainerHeight: chart.chartContainerHeight,
+        containerWidth: chart.containerWidth,
+        isChartClosed: state.isChartClosed,
+        theme: chartSetting.theme,
+        position: chartSetting.position,
+        isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
+        isLoading: loader.isActive,
+        PredictionIndicatorDialog: timeperiod.PredictionIndicatorDialog,
+    })
+)(Chart);

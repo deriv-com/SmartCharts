@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
@@ -9,86 +8,107 @@ import { InlineLoader } from './Loader';
 import { Intervals } from '../Constant';
 import '../../sass/components/_timeperiod.scss';
 
-type TTimeperiodProps = {
-    newDesign?: boolean;
-    onChange?: (granularity: number) => void;
+type TTimeperiodItemProps = {
+    category: typeof Intervals[0];
+    item: {
+        interval: number;
+        num: number;
+    };
+    onClick: (chart_type_id: string, key: string, inval: number) => void;
 };
 
-const Timeperiod: React.FC<TTimeperiodProps> = ({ onChange: onChangeFn, newDesign }) => {
+const enableLoader = (isLoading: boolean, inval: any, preparingInterval: number | null) =>
+    isLoading && inval === preparingInterval;
+const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
+    !isMobile && chartType_id !== 'mountain' && key === 'tick';
+
+const TimeperiodItem = React.memo(({ item, category, onClick }: TTimeperiodItemProps) => {
     const { timeperiod, chartType, loader } = useStores();
-
-    const { timeUnit, interval, updateProps, preparingInterval, setPreparingInterval, mainStore } = timeperiod;
+    const chartTypeId = chartType.type.id;
+    const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
     const isMobile = mainStore.chart.isMobile;
-    const { type } = chartType;
     const { isActive: isLoading } = loader;
-    const onChange = onChangeFn || timeperiod.onGranularityChange;
 
-    const onGranularityClick = (granularity: number) => {
-        onChange?.(granularity);
-    };
-    const onIntervalClick = (chartTypeId: string, key: string, inval: number) => {
-        if (key === 'tick' && chartTypeId !== 'mountain') {
+    const is_tick = React.useMemo(() => category.key === 'tick', [category]);
+    const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, preparingInterval), [
+        isLoading,
+        item,
+        preparingInterval,
+    ]);
+    const enable_tooltip = React.useMemo(() => enableTooltip(isMobile, category.key, chartTypeId), [
+        isMobile,
+        category.key,
+        chartTypeId,
+    ]);
+    const is_disabled = React.useMemo(() => is_tick && chartTypeId !== 'mountain', [is_tick, chartTypeId]);
+    const is_active = React.useMemo(
+        () =>
+            timeUnit === category.key &&
+            (((category.key === 'minute' || is_tick) && item.num === interval) ||
+                (category.key === 'hour' && typeof interval === 'number' && item.num === interval / 60) ||
+                (category.key === 'day' && item.num === 1)),
+        [is_tick, category, item, interval, timeUnit]
+    );
+
+    const handleClick = React.useCallback(() => onClick(chartTypeId, category.key, item.interval), [
+        chartTypeId,
+        category,
+        item,
+        onClick,
+    ]);
+
+    return (
+        <Tooltip
+            key={item.interval}
+            onClick={handleClick}
+            className={classNames('sc-interval__item', {
+                'sc-interval__item--active': is_active,
+                'sc-interval__item--disabled': is_disabled,
+                'pre-loading': is_loading,
+            })}
+            enabled={enable_tooltip}
+            content={t.translate('Available only for "Area" chart type.')}
+        >
+            <InlineLoader enabled={is_loading}>
+                <span>
+                    {item.num} {t.translate(item.num === 1 ? category.single : category.plural)}
+                </span>
+            </InlineLoader>
+        </Tooltip>
+    );
+});
+
+const Timeperiod = ({ portalNodeId }: { portalNodeId: string }) => {
+    const { timeperiod, chart } = useStores();
+
+    const { setGranularity: onChange, updateProps, changeGranularity, updatePortalNode } = timeperiod;
+
+    const onIntervalClick = (chart_type_id: string, key: string, inval: number) => {
+        if (key === 'tick' && chart_type_id !== 'mountain') {
             return;
         }
-        setPreparingInterval(inval);
-        onGranularityClick(inval);
+        changeGranularity(inval);
     };
-    const enableTooltip = (key: string) => type.id !== 'mountain' && !isMobile && key === 'tick';
-    const enableLoader = (inval: number) => isLoading && inval === preparingInterval;
-    const ItemClassName = (unit: string, time: number) => {
-        let className = 'sc-interval__item';
-
-        if (
-            timeUnit === unit &&
-            (((unit === 'minute' || unit === 'tick') && time === interval) ||
-                (unit === 'hour' && time === (interval as number) / 60) ||
-                (unit === 'day' && time === 1))
-        ) {
-            className += ' sc-interval__item--active';
-        } else if (unit === 'tick' && type.id !== 'mountain') {
-            className += ' sc-interval__item--disabled';
-        }
-
-        return className;
-    };
-
     React.useEffect(() => updateProps(onChange));
+    updatePortalNode(portalNodeId);
 
-    if (newDesign) {
-        return (
-            <div className='sc-interval'>
-                <div className='sc-interval__head'>
-                    <strong>{t.translate('Time interval')}</strong>
-                </div>
-                <div className='sc-interval__info'>
-                    {t.translate('Tick interval only available for "Area" Chart type.')}
-                </div>
-                <div className='sc-interval__content'>
-                    {Intervals.map(category =>
-                        category.items.map(item => (
-                            <Tooltip
-                                key={item.interval}
-                                onClick={() => onIntervalClick(type.id, category.key, item.interval)}
-                                className={classNames(ItemClassName(category.key, item.num), {
-                                    'pre-loading': enableLoader(item.interval),
-                                })}
-                                enabled={enableTooltip(category.key)}
-                                content={t.translate('Available only for "Area" chart type.')}
-                            >
-                                <InlineLoader enabled={enableLoader(item.interval)}>
-                                    <span>
-                                        {item.num} {t.translate(item.num === 1 ? category.single : category.plural)}
-                                    </span>
-                                </InlineLoader>
-                            </Tooltip>
-                        ))
-                    )}
-                </div>
+    return (
+        <div className='sc-interval'>
+            <div className='sc-interval__head'>
+                <strong>{t.translate('Time interval')}</strong>
             </div>
-        );
-    }
-
-    return null;
+            <div className='sc-interval__info'>
+                {t.translate('Tick interval only available for "Area" Chart type.')}
+            </div>
+            <div className='sc-interval__content'>
+                {Intervals.map(category =>
+                    category.items.map(item => (
+                        <TimeperiodItem key={item.interval} item={item} category={category} onClick={onIntervalClick} />
+                    ))
+                )}
+            </div>
+        </div>
+    );
 };
 
 export default observer(Timeperiod);
