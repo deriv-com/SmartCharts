@@ -6,9 +6,10 @@
     }
     .picker-time-icon {
         position: absolute;
-        top: 3px;
+        top: 4px;
         right: 2px;
         cursor: pointer;
+        padding-right: 0.8rem;
 
         svg {
             @include themify($themes) {
@@ -46,6 +47,7 @@
         font-size: 1.4em;
         position: absolute;
         top: 100%;
+        right: 0;
         display: flex;
         flex-direction: column;
         opacity: 0;

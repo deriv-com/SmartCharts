@@ -42,7 +42,7 @@ const ChartHistory = React.memo(({ onChange }) => {
     return (
         <div className='ciq-chart-history'>
             <div className='ciq-chart-history--container'>
-                <strong>{t.translate('Historical Data')}</strong>
+                <strong>{t.translate('Historical data')}</strong>
                 <DatePicker
                     placeholder={t.translate('select date')}
                     name='date'
