@@ -398,6 +398,7 @@ class Feed {
 
         if (
             this.endEpoch &&
+            this._stx.chart.dataSet.slice(-1)[0] &&
             CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
         ) {
             this._stx.updateChartData(
