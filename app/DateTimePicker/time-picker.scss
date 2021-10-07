@@ -4,38 +4,38 @@
     &.padding {
         padding: 16px;
     }
-    .picker-time-icon {
-        position: absolute;
-        top: 4px;
-        right: 2px;
-        cursor: pointer;
-        padding-right: 0.8rem;
+    span {
+        display: flex;
+        align-items: center;
 
-        svg {
-            @include themify($themes) {
-                fill: themed('ChartHistoryPickerIcon');
+        .picker-time-icon {
+            right: 2px;
+            cursor: pointer;
+            padding-right: 0.8rem;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('ChartHistoryPickerIcon');
+                }
             }
         }
     }
     #time-picker-input.time-picker-input {
-        height: 32px;
-        padding: 0 8px;
-        border-radius: $border-radius;
-        box-sizing: border-box;
+        font-family: 'IBM Plex Sans';
         font-size: 1.4em;
-        font-weight: 300;
+        font-weight: normal;
+        padding-left: 0.8rem;
+        box-sizing: border-box;
         margin: 0;
         cursor: pointer;
+        background: none;
         @include themify($themes) {
             color: themed('ChartHistoryPickerColor');
-            background: themed('ChartHistoryPickerBg');
-            border: 1px solid themed('ChartHistoryPickerBorder');
         }
 
         &.active,
         &:hover {
             @include themify($themes) {
-                border-color: themed('ChartHistoryPickerActiveBorder');
                 outline: none;
             }
         }

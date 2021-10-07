@@ -29,7 +29,7 @@
             font-style: normal;
             line-height: normal;
             white-space: nowrap;
-            max-width: 9.2rem;
+            width: 9.2rem;
             @include themify($themes) {
                 color: themed('ChartHistoryColor');
             }
@@ -38,13 +38,14 @@
     .datepicker-container,
     .time-picker {
         border-radius: $border-radius;
-        height: 3.2rem;
     }
     .datepicker-container {
         margin-left: 0.6rem;
 
         .datepicker-display-wrapper .datepicker-display {
             max-width: 9.4rem;
+            font-family: 'IBM Plex Sans';
+            font-weight: normal;
 
             &:focus-visible {
                 outline: none;
@@ -52,12 +53,21 @@
         }
     }
     .time-picker {
+        display: flex;
+        align-items: center;
         width: 7.8rem;
+        height: 32px;
         margin-left: 0.8rem;
+        box-sizing: border-box;
+        cursor: pointer;
+        @include themify($themes) {
+            border: 1px solid themed('ChartHistoryPickerActiveBorder');
+            background: themed('ChartHistoryPickerBg');
+        }
 
         input {
             width: 100%;
-            height: 30px !important;
+            border: none;
         }
     }
 }
@@ -78,30 +88,50 @@
 
     .time-picker {
         min-width: 72px;
+        height: 100%;
 
+        span {
+            display: flex;
+            align-items: center;
+            height: inherit;
+
+            .picker-time-icon {
+                position: inherit;
+            }
+        }
+        .time-picker-input {
+            border: none;
+        }
         .time-picker-dropdown {
-            bottom: calc(100% + 10px);
+            position: absolute;
             top: auto !important;
             right: 0px !important;
+            bottom: calc(100% + 24px);
+            transform: translate(-20%, 0);
 
             &.active {
-                bottom: calc(100% + 10px);
+                bottom: calc(100% + 24px);
             }
         }
     }
     .datepicker-container {
+        height: auto;
+
+        .datepicker-display-wrapper {
+            padding: 1.9rem 0;
+        }
         .datepicker-display-wrapper .datepicker-display {
             max-width: 9.4rem;
         }
         .datepicker-calendar {
             > div.calendar {
-                bottom: calc(100% - 8px);
                 top: auto !important;
-                right: -55px !important;
-                left: auto !important;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%, 0);
             }
             &.show > div.calendar {
-                bottom: calc(100% + 8px);
+                bottom: calc(100% + 24px);
             }
         }
     }
