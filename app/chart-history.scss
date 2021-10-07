@@ -61,10 +61,15 @@
         box-sizing: border-box;
         cursor: pointer;
         @include themify($themes) {
-            border: 1px solid themed('ChartHistoryPickerActiveBorder');
+            border: 1px solid themed('ChartHistoryPickerBorder');
             background: themed('ChartHistoryPickerBg');
         }
 
+        &.active {
+            @include themify($themes) {
+                border: 1px solid themed('ChartHistoryPickerActiveBorder');
+            }
+        }
         input {
             width: 100%;
             border: none;
@@ -111,6 +116,9 @@
 
             &.active {
                 bottom: calc(100% + 24px);
+                @include themify($themes) {
+                    border: 1px solid themed('ChartHistoryPickerDropdownBorder');
+                }
             }
         }
     }

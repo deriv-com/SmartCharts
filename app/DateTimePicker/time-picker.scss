@@ -58,8 +58,8 @@
         pointer-events: none;
         @include themify($themes) {
             color: themed('ChartHistoryPickerColor');
-            background: themed('ChartHistoryPickerBg');
-            border: 1px solid themed('ChartHistoryPickerBorder');
+            background: themed('ChartHistoryPickerDropdownBg');
+            border: 1px solid themed('ChartHistoryPickerDropdownBorder');
         }
 
         &.active {
@@ -95,7 +95,7 @@
                 border-radius: 0 0 0 $border-radius;
                 width: 13.6rem;
                 @include themify($themes) {
-                    border-right: 1px solid themed('ChartHistoryPickerBorder');
+                    border-right: 1px solid themed('ChartHistoryPickerDropdownBorder');
                 }
 
                 & .list-container {
