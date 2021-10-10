@@ -1,4 +1,4 @@
-import { observable, action, when } from 'mobx';
+import { observable, action, when, reaction } from 'mobx';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
@@ -10,6 +10,12 @@ export default class ChartSettingStore {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'setting' });
         this.ChartSettingMenu = this.menu.connect(Menu);
+        reaction(
+            () => this.language,
+            () => {
+                mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true);
+            }
+        );
         when(
             () => this.context,
             () => {
