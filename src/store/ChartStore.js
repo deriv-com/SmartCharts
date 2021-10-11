@@ -23,7 +23,6 @@ import DeleteIcon from '../../sass/icons/delete/ic-delete.svg';
 import DownIcon from '../../sass/icons/chart/ic-down.svg';
 import HomeIcon from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
-// import '../utils/raf';
 import { STATE } from '../Constant';
 
 class ChartStore {
@@ -764,7 +763,6 @@ class ChartStore {
         manageElement.textContent = t.translate('Right click to manage');
 
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
-        // stxx.chart.lockScroll = true;
 
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
@@ -938,7 +936,6 @@ class ChartStore {
          * Disable key press events for chart until we can get it not to
          * interfere with key presses outside the chart:
          */
-        // ChartStore.keystrokeHub.setActiveContext(this.context);
     }
 
     @action.bound onMouseLeave() {
@@ -947,7 +944,6 @@ class ChartStore {
          * Disable key press events for chart until we can get it not to
          * interfere with key presses outside the chart:
          */
-        // ChartStore.keystrokeHub.setActiveContext(null);
     }
 
     @action.bound updateCurrentActiveSymbol() {
@@ -962,7 +958,7 @@ class ChartStore {
         this.isChartAvailable = status;
     }
 
-    @action.bound changeSymbol(symbolObj, granularity) {
+    @action.bound changeSymbol(symbolObj, granularity, isLanguageChanged = false) {
         if (!this.stxx) return;
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols.getSymbolObj(symbolObj);
@@ -972,7 +968,8 @@ class ChartStore {
             isSymbolAvailable &&
             symbolObj.symbol === this.currentActiveSymbol.symbol &&
             granularity !== undefined &&
-            granularity === this.granularity
+            granularity === this.granularity &&
+            !isLanguageChanged
         ) {
             return;
         }

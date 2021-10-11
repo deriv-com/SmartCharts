@@ -13,7 +13,9 @@ export default class ChartSettingStore {
         reaction(
             () => this.language,
             () => {
-                mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true);
+                mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true).then(() => {
+                    mainStore?.chart?.changeSymbol?.(mainStore.state.symbol, mainStore.state.granularity, true);
+                });
             }
         );
         when(
