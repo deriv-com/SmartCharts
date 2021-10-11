@@ -135,7 +135,14 @@ class ChartStore {
         }
         this.stxx.resizeChart();
     };
-
+    @action.bound addDeleteElement = () => {
+        const deleteElement = this.stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
+        deleteElement.textContent = t.translate('Right click to delete');
+    };
+    @action.bound addManageElement = () => {
+        const manageElement = this.stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
+        manageElement.textContent = t.translate('Right click to manage');
+    };
     @action.bound resizeScreen() {
         if (!this.context) {
             return;
@@ -757,11 +764,8 @@ class ChartStore {
 
         ChartStore.chartCount += 1;
 
-        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
-        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
-        deleteElement.textContent = t.translate('Right click to delete');
-        manageElement.textContent = t.translate('Right click to manage');
-
+        this.addDeleteElement();
+        this.addManageElement();
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
 
         // connect chart to data
