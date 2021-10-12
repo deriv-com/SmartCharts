@@ -56,7 +56,6 @@ html, body {
     }
 
     &--screenshot {
-        .cq-symbol-select-btn .ic-icon,
         .cq-menu-dropdown,
         .sc-toolbar-widget,
         .sc-navigation-widget,
@@ -71,9 +70,6 @@ html, body {
         }
         .stx-panel-control {
             left: 5px;
-        }
-        .cq-symbol-select-btn .cq-symbol-info {
-            margin: 0 !important;
         }
         .sc-studies-list {
             .stx-btn-panel {

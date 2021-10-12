@@ -46,9 +46,47 @@ export default class ShareStore {
             // since react rerenders is not immediate, we use CIQ.appendClassName to
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea.classList.add('ciq-chart--screenshot');
+            // There is no html2canvas version able to render our svgs on a screenshot (tried 0.5.0-beta4 as well),
+            // the below workaround lets us temporarily replace svgs with imgs right before taking a screenshot:
+            const nodesToRecover = [];
+            const nodesToRemove = [];
+            const svgElem = this.screenshotArea.querySelectorAll('svg');
+            svgElem.forEach(node => {
+                const parentNode = node.parentNode;
+                const canvas = document.createElement('canvas');
+                const { width, height } = node.getBBox();
+                canvas.width = width;
+                canvas.height = height;
+                const context = canvas.getContext('2d');
+                const image = new Image();
+                image.src = node.querySelector('use').getAttribute('xlink:href');
+                image.onload = () => {
+                    context.drawImage(image, 0, 0);
+                    nodesToRecover.push({
+                        parent: parentNode,
+                        child: node,
+                    });
+                    parentNode.removeChild(node);
+                    nodesToRemove.push({
+                        parent: parentNode,
+                        child: canvas,
+                    });
+                    parentNode.appendChild(canvas);
+                };
+            });
+
             setTimeout(() => {
-                html2canvas.default(this.screenshotArea).then(canvas => this._onCanvasReady(canvas, newTab));
-            }, 0);
+                html2canvas.default(this.screenshotArea).then(canvas => {
+                    this._onCanvasReady(canvas, newTab);
+                    // replacing the added imgs back with svgs after downloading a taken screenshot:
+                    nodesToRemove.forEach(pair => {
+                        pair.parent.removeChild(pair.child);
+                    });
+                    nodesToRecover.forEach(pair => {
+                        pair.parent.appendChild(pair.child);
+                    });
+                });
+            }, 100);
         });
 
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
