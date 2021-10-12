@@ -56,11 +56,13 @@ html, body {
     }
 
     &--screenshot {
+        .calendar,
         .cq-menu-dropdown,
         .sc-toolbar-widget,
         .sc-navigation-widget,
         .stx_jump_today.home,
-        .stx-panel-control .stx-btn-panel {
+        .stx-panel-control .stx-btn-panel,
+        .time-picker-dropdown {
             /*
             There is a strange bug where dropdowns get displayed (partially)
             when html is being rendered to canvas. So we set this to manually
