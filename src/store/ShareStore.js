@@ -47,7 +47,7 @@ export default class ShareStore {
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea.classList.add('ciq-chart--screenshot');
             // There is no html2canvas version able to render our svgs on a screenshot (tried 0.5.0-beta4 as well),
-            // the below workaround lets us temporarily replace svgs with imgs right before taking a screenshot:
+            // the below workaround lets us temporarily replace svgs with imgs on canvas before taking a screenshot:
             const nodesToRecover = [];
             const nodesToRemove = [];
             const svgElem = this.screenshotArea.querySelectorAll('svg');
@@ -78,7 +78,7 @@ export default class ShareStore {
             setTimeout(() => {
                 html2canvas.default(this.screenshotArea).then(canvas => {
                     this._onCanvasReady(canvas, newTab);
-                    // replacing the added imgs back with svgs after downloading a taken screenshot:
+                    // replacing the added imgs on canvas back with svgs after downloading a screenshot:
                     nodesToRemove.forEach(pair => {
                         pair.parent.removeChild(pair.child);
                     });
