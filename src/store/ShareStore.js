@@ -50,23 +50,23 @@ export default class ShareStore {
             // the below workaround lets us temporarily replace svgs with imgs on canvas before taking a screenshot:
             const nodesToRecover = [];
             const nodesToRemove = [];
-            const svgElem = this.screenshotArea.querySelectorAll('svg');
-            svgElem.forEach(node => {
-                const parentNode = node.parentNode;
+            const svgIcons = this.screenshotArea.querySelectorAll('svg');
+            svgIcons.forEach(svg => {
+                const parentNode = svg.parentNode;
                 const canvas = document.createElement('canvas');
-                const { width, height } = node.getBBox();
+                const { width, height } = svg.getBBox();
                 canvas.width = width;
                 canvas.height = height;
                 const context = canvas.getContext('2d');
                 const image = new Image();
-                image.src = node.querySelector('use').getAttribute('xlink:href');
+                image.src = svg.querySelector('use').getAttribute('xlink:href');
                 image.onload = () => {
                     context.drawImage(image, 0, 0);
                     nodesToRecover.push({
                         parent: parentNode,
-                        child: node,
+                        child: svg,
                     });
-                    parentNode.removeChild(node);
+                    parentNode.removeChild(svg);
                     nodesToRemove.push({
                         parent: parentNode,
                         child: canvas,
