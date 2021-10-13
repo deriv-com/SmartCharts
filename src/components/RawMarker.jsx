@@ -7,7 +7,6 @@ const RawMarker = props => {
     const stx_ref = React.useRef(null);
     const injection_id_ref = React.useRef(null);
     const has_unmounted_before_injection_ref = React.useRef(false);
-    const canvas_height_ref = React.useRef(0);
     const last_epoch_array_ref = React.useRef();
     const date_array_ref = React.useRef();
     const props_ref = React.useRef();
@@ -127,13 +126,10 @@ const RawMarker = props => {
             });
             const prices = price_array.map(price => stx.pixelFromPrice(price * 1, chart.panel));
             const canvas = stx.chart.context.canvas;
-            if (canvas.style.height.indexOf(canvas.height) < 0) {
-                canvas_height_ref.current = canvas.height;
-            }
 
             draw_callback({
                 ctx: stx.chart.context,
-                canvas_height: canvas_height_ref.current,
+                canvas_height: canvas.height,
                 points,
                 prices,
             });
