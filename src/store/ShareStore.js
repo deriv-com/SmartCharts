@@ -54,8 +54,8 @@ export default class ShareStore {
             svgIcons.forEach(svg => {
                 const parentNode = svg.parentNode;
                 const canvas = document.createElement('canvas');
-                canvas.width = parentNode.offsetWidth;
-                canvas.height = parentNode.offsetHeight;
+                canvas.width = Number(getComputedStyle(svg).width.match(/[0-9]+/));
+                canvas.height = Number(getComputedStyle(svg).height.match(/[0-9]+/));
                 const context = canvas.getContext('2d');
                 const image = new Image();
                 image.src = svg.querySelector('use').getAttribute('xlink:href');
