@@ -86,7 +86,7 @@ export const drawCurrentPriceLine = () => {
                         pattern: 'dashed',
                         lineWidth: 1,
                         opacity: 0.8,
-                        globalCompositeOperation: 'destination-over',
+                        globalCompositeOperation: 'hard-light',
                     });
                 }
             }
