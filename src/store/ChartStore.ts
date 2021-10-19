@@ -1153,32 +1153,21 @@ class ChartStore {
         this.contextPromise = null;
         this.context = null;
     }
-    @action.bound
-    openFullscreen() {
-        const isInFullScreen =
-            (document.fullscreenElement && document.fullscreenElement !== null) ||
-            ((document as any).webkitFullscreenElement && (document as any).webkitFullscreenElement !== null) ||
-            ((document as any).mozFullScreenElement && (document as any).mozFullScreenElement !== null) ||
-            ((document as any).msFullscreenElement && (document as any).msFullscreenElement !== null);
-        const docElm = this.rootNode;
-        if (!isInFullScreen) {
-            if ((document as any).requestFullscreen) {
-                (document as any).requestFullscreen();
-            } else if ((document as any).mozRequestFullScreen) {
-                (document as any).mozRequestFullScreen();
-            } else if ((document as any).webkitRequestFullScreen) {
-                (document as any).webkitRequestFullScreen();
-            } else if ((document as any).msRequestFullscreen) {
-                (document as any).msRequestFullscreen();
-            }
-        } else if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if ((document as any).webkitExitFullscreen) {
-            (document as any).webkitExitFullscreen();
-        } else if ((document as any).mozCancelFullScreen) {
-            (document as any).mozCancelFullScreen();
-        } else if ((document as any).msExitFullscreen) {
-            (document as any).msExitFullscreen();
+
+    @action.bound openFullscreen() {
+        const fullscreen_map = {
+            element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
+            fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],
+            fnc_exit: ['exitFullscreen', 'webkitExitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen'],
+        };
+        const isInFullScreen = fullscreen_map.element.some(
+            fnc => (document as any)[fnc] && (document as any)[fnc] !== null
+        );
+        const el = isInFullScreen ? document : document.documentElement;
+        const fncToCall = fullscreen_map[isInFullScreen ? 'fnc_exit' : 'fnc_enter'].find(fnc => (el as any)[fnc]);
+
+        if (fncToCall) {
+            (el as any)[fncToCall]();
         }
     }
 }
