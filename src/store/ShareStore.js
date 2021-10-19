@@ -4,6 +4,9 @@ import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
+const is_firefox = navigator.userAgent.indexOf('Firefox') !== -1;
+const is_safari = navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1;
+
 export default class ShareStore {
     constructor(mainStore) {
         this.mainStore = mainStore;
@@ -57,20 +60,34 @@ export default class ShareStore {
                 canvas.width = Number(getComputedStyle(svg).width.match(/[0-9]+/));
                 canvas.height = Number(getComputedStyle(svg).height.match(/[0-9]+/));
                 const context = canvas.getContext('2d');
+                const rgbColor = getComputedStyle(svg).fill;
+                if (rgbColor) {
+                    const hexColorDigitPart = rgbColor
+                        .split(',')
+                        .map(item => Number(item.replace(/\D+/g, '')).toString(16).padStart(2, '0'))
+                        .join('');
+                    if (hexColorDigitPart > '333333') {
+                        context.fillStyle = getComputedStyle(svg).fill;
+                        context.fillRect(0, 0, canvas.width, canvas.height);
+                        context.globalCompositeOperation = 'destination-in';
+                    }
+                }
                 const image = new Image();
                 image.src = svg.querySelector('use').getAttribute('xlink:href');
                 image.onload = () => {
                     context.drawImage(image, 0, 0);
-                    nodesToRecover.push({
-                        parent: parentNode,
-                        child: svg,
-                    });
-                    parentNode.removeChild(svg);
-                    nodesToRemove.push({
-                        parent: parentNode,
-                        child: canvas,
-                    });
-                    parentNode.appendChild(canvas);
+                    if (!is_firefox && !is_safari) {
+                        nodesToRecover.push({
+                            parent: parentNode,
+                            child: svg,
+                        });
+                        parentNode.removeChild(svg);
+                        nodesToRemove.push({
+                            parent: parentNode,
+                            child: canvas,
+                        });
+                        parentNode.appendChild(canvas);
+                    }
                 };
             });
 
@@ -78,12 +95,14 @@ export default class ShareStore {
                 html2canvas.default(this.screenshotArea).then(canvas => {
                     this._onCanvasReady(canvas, newTab);
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
-                    nodesToRemove.forEach(pair => {
-                        pair.parent.removeChild(pair.child);
-                    });
-                    nodesToRecover.forEach(pair => {
-                        pair.parent.appendChild(pair.child);
-                    });
+                    if (!is_firefox && !is_safari) {
+                        nodesToRemove.forEach(pair => {
+                            pair.parent.removeChild(pair.child);
+                        });
+                        nodesToRecover.forEach(pair => {
+                            pair.parent.appendChild(pair.child);
+                        });
+                    }
                 });
             }, 100);
         });
