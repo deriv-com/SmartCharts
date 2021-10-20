@@ -87,7 +87,11 @@
         .cq-symbol-info {
             display: flex;
             flex-direction: column;
-            margin: 0 10px 0 20px;
+            margin: 0 0 0 20px;
+            @media (min-width: 768px) {
+                min-width: 15rem;
+                min-height: 4.2rem;
+            }
 
             .cq-market {
                 font-size: 1em;
@@ -114,6 +118,8 @@
             font-size: 1.6em;
             text-align: left;
             line-height: 24px;
+            width: auto;
+            padding-right: 1rem;
             @include themify($themes) {
                 color: themed('ChartTitleSymbolText');
             }
