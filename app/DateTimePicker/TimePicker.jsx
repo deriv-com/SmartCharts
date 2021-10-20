@@ -257,7 +257,7 @@ const TimePicker = React.memo(props => {
                 <input type='time' id={`${prefix_class}-input`} value={value} onChange={handleChange} name={name} />
             ) : (
                 <React.Fragment>
-                    <span onClick={toggleDropDown}>
+                    <span className='time-picker-container' onClick={toggleDropDown}>
                         <input
                             type='text'
                             readOnly

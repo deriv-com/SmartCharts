@@ -44,7 +44,7 @@
 
         .datepicker-display-wrapper .datepicker-display {
             max-width: 9.4rem;
-            font-family: 'IBM Plex Sans';
+            font-family: $base-font;
             font-weight: normal;
 
             &:focus-visible {
@@ -56,7 +56,7 @@
         display: flex;
         align-items: center;
         width: 7.8rem;
-        height: 32px;
+        height: 3.2rem;
         margin-left: 0.8rem;
         box-sizing: border-box;
         cursor: pointer;
@@ -95,7 +95,7 @@
         min-width: 72px;
         height: 100%;
 
-        span {
+        .time-picker-container {
             display: flex;
             align-items: center;
             height: inherit;
