@@ -1,12 +1,8 @@
 import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
-import { downloadFileInBrowser } from '../utils';
+import { downloadFileInBrowser, is_browser } from '../utils';
 import Menu from '../components/Menu.jsx';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
-
-const is_firefox = navigator.userAgent.indexOf('Firefox') !== -1;
-const is_safari = navigator.userAgent.indexOf('Safari') !== -1 && navigator.userAgent.indexOf('Chrome') === -1;
-const is_iOS = !!navigator.userAgent.match(/iPhone|iPad|iPod/i);
 
 export default class ShareStore {
     constructor(mainStore) {
@@ -39,7 +35,7 @@ export default class ShareStore {
 
     createNewTab() {
         // Create a new tab for older iOS browsers that don't support HTML5 download attribute
-        return is_iOS ? window.open() : null;
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? window.open() : null;
     }
 
     @action.bound downloadPNG() {
@@ -77,7 +73,7 @@ export default class ShareStore {
                 image.src = svg.querySelector('use').getAttribute('xlink:href');
                 image.onload = () => {
                     context.drawImage(image, 0, 0);
-                    if (!is_firefox && !is_safari) {
+                    if (!is_browser.Firefox() && !is_browser.Safari()) {
                         nodesToRecover.push({
                             parent: parentNode,
                             child: svg,
@@ -96,7 +92,7 @@ export default class ShareStore {
                 html2canvas.default(this.screenshotArea).then(canvas => {
                     this._onCanvasReady(canvas, newTab);
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
-                    if (!is_firefox && !is_safari) {
+                    if (!is_browser.Firefox() && !is_browser.Safari()) {
                         nodesToRemove.forEach(pair => {
                             pair.parent.removeChild(pair.child);
                         });
