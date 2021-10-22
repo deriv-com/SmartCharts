@@ -1,5 +1,6 @@
 import React from 'react';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import { getUTCDate } from '../utils';
 
 // Render given Components under stx-subholder.
@@ -25,7 +26,9 @@ import { getUTCDate } from '../utils';
 //  - the chart can have a zoom level, if `threshold` is provided
 //    the marker will only be shown if it's within that zoom threshold.
 
-const FastMarker = (props: any) => {
+const FastMarker: React.FC = (props: any) => {
+    const { chart: chartStore } = useStores();
+    const { contextPromise } = chartStore;
     const price_ref = React.useRef<number | null>(null);
     const date_ref = React.useRef<any>(null);
     const elem_ref = React.useRef<any>(null);
@@ -105,7 +108,7 @@ const FastMarker = (props: any) => {
 
     const setRef = (ref: any) => {
         elem_ref.current = ref;
-        const { markerRef, contextPromise } = props_ref.current;
+        const { markerRef } = props_ref.current;
 
         const data = ref
             ? {
@@ -119,13 +122,15 @@ const FastMarker = (props: any) => {
         }
 
         if (ref !== null) {
-            contextPromise.then((ctx: any) => {
-                ctx_ref.current = ctx;
-                stx_ref.current = ctx_ref.current.stx;
+            if (contextPromise) {
+                contextPromise.then((ctx: any) => {
+                    ctx_ref.current = ctx;
+                    stx_ref.current = ctx_ref.current.stx;
 
-                injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
-                updateCSS();
-            });
+                    injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
+                    updateCSS();
+                });
+            }
         } else if (injection_id_ref.current && stx_ref.current) {
             // remove the injection on unmount
             stx_ref.current.removeInjection(injection_id_ref.current);
@@ -143,6 +148,4 @@ const FastMarker = (props: any) => {
     );
 };
 
-export default connect(({ chart }: any) => ({
-    contextPromise: chart.contextPromise,
-}))(FastMarker);
+export default observer(FastMarker);

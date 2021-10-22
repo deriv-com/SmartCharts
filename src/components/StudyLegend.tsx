@@ -1,15 +1,16 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import NotificationBadge from './NotificationBadge';
 import Tooltip from './Tooltip';
 import Scroll from './Scroll';
-import { connect } from '../store/Connect';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
 import { TooltipsContent } from '../Constant';
 
-const StudyIcon = ({ Icon, props }: { Icon: (props: any) => JSX.Element; props?: any }) => <Icon {...props} />;
+const StudyIcon = ({ Icon, props }: { Icon: any; props?: any }) => <Icon {...props} />;
 
 const EmptyView = () => (
     <div className='sc-studies--empty'>
@@ -182,37 +183,37 @@ const TabularDisplay = ({
     </Tabs>
 );
 
-const StudyLegend = ({
-    isOpened,
-    setOpen,
-    StudyMenu,
-    menuOpen,
-    isMobile,
-    activeStudiesNo,
-    items,
-    searchedItems,
-    SearchInput,
-    searchQuery,
-    selectedTab,
-    onSelectTab,
-    onSelectItem,
-    onInfoItem,
-    activeItems,
-    deleteAll,
-    deleteStudy,
-    editStudy,
-    infoItem,
-    portalNodeId,
-    updatePortalNode,
-    maxAllowedItem,
-    isTick,
-}: any) => {
+const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
+    const { studies, chart, timeperiod } = useStores();
+
+    const {
+        menu,
+        StudyMenu,
+        deleteAllStudies: deleteAll,
+        items,
+        searchedItems,
+        SearchInput,
+        filterText: searchQuery,
+        selectedTab,
+        onSelectTab,
+        onSelectItem,
+        activeItems,
+        deleteStudy,
+        editStudy,
+        onInfoItem,
+        infoItem,
+        updatePortalNode,
+        maxAllowedItem,
+    } = studies;
+    const { isTick } = timeperiod;
+    const { isMobile } = chart;
+    const menuOpen = menu.open;
+    const activeStudiesNo = activeItems.length;
+
     updatePortalNode(portalNodeId);
     return (
         <StudyMenu
             className='sc-studies'
-            isOpened={isOpened}
-            setOpen={setOpen}
             isMobile={isMobile}
             title={t.translate('Indicators')}
             tooltip={t.translate('Indicators')}
@@ -242,15 +243,15 @@ const StudyLegend = ({
                 {infoItem && (
                     <div className='sc-studies__info'>
                         <Scroll autoHide height='360px' className='sc-studies__info__content'>
-                            <p>{infoItem.description}</p>
+                            <p>{infoItem?.description}</p>
                         </Scroll>
                         <div className='sc-studies__info__footer'>
-                            <Tooltip enabled={infoItem.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
+                            <Tooltip enabled={infoItem?.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
                                 <button
                                     type='button'
                                     className='sc-btn sc-btn--primary sc-btn--w100'
-                                    onClick={() => onSelectItem(infoItem.id)}
-                                    disabled={infoItem.disabledAddBtn}
+                                    onClick={() => onSelectItem(infoItem?.id)}
+                                    disabled={infoItem?.disabledAddBtn}
                                 >
                                     {t.translate('Add')}
                                 </button>
@@ -279,27 +280,4 @@ const StudyLegend = ({
     );
 };
 
-export default connect(({ studies: st, chart, timeperiod }: any) => ({
-    isOpened: st.open,
-    setOpen: st.setOpen,
-    StudyMenu: st.StudyMenu,
-    menuOpen: st.menu.open,
-    isMobile: chart.isMobile,
-    activeStudiesNo: st.activeItems.length,
-    deleteAll: st.deleteAllStudies,
-    items: st.items,
-    searchedItems: st.searchedItems,
-    SearchInput: st.SearchInput,
-    searchQuery: st.filterText,
-    selectedTab: st.selectedTab,
-    onSelectTab: st.onSelectTab,
-    onSelectItem: st.onSelectItem,
-    activeItems: st.activeItems,
-    deleteStudy: st.deleteStudy,
-    editStudy: st.editStudy,
-    onInfoItem: st.onInfoItem,
-    infoItem: st.infoItem,
-    updatePortalNode: st.updatePortalNode,
-    maxAllowedItem: st.maxAllowedItem,
-    isTick: timeperiod.isTick,
-}))(StudyLegend);
+export default observer(StudyLegend);

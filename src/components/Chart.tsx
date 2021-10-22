@@ -1,5 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import RenderInsideChart from './RenderInsideChart';
 import ChartTitle from './ChartTitle';
 import Loader from './Loader';
@@ -17,61 +19,53 @@ import './ui';
 import ChartControls from './ChartControls';
 import ChartFooter from './ChartFooter';
 import Crosshair from './Crosshair';
-import { connect } from '../store/Connect';
 import { initGA, logPageView } from '../utils/ga';
 import PaginationLoader from './PaginationLoader';
-import { TMainStore } from 'src/types';
 
-const Chart = (props: any) => {
+const Chart: React.FC = (props: any) => {
+    const { chart, drawTools, studies, chartSetting, chartType, state, loader, timeperiod } = useStores();
+
+    const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
+    const { StudySettingsDialog } = studies;
+    const { DrawToolsSettingsDialog } = drawTools;
+    const { AggregateChartSettingsDialog, isCandle, isSpline } = chartType;
+    const { updateProps, isChartClosed } = state;
+    const { theme, position, isHighestLowestMarkerEnabled } = chartSetting;
+    const { PredictionIndicatorDialog } = timeperiod;
+    const { isActive: isLoading } = loader;
+
     const rootRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
-        const { updateProps, init, ...otherProps } = props;
         initGA();
         logPageView();
-        updateProps(otherProps);
-        init(rootRef.current, otherProps);
+        updateProps(props);
+        init(rootRef.current, props);
 
         return () => {
-            props.destroy();
+            destroy();
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     React.useEffect(() => {
-        const { updateProps, init, ...otherProps } = props;
-        updateProps(otherProps);
+        updateProps(props);
     });
 
     const defaultTopWidgets = () => <ChartTitle />;
 
     const {
         id,
-        chartId,
-        DrawToolsSettingsDialog,
-        StudySettingsDialog,
-        PredictionIndicatorDialog,
-        isCandle,
-        isSpline,
         isMobile = false,
-        isChartAvailable,
-        isHighestLowestMarkerEnabled,
         barriers = [],
         children,
         chartControlsWidgets,
-        AggregateChartSettingsDialog,
         topWidgets,
-        chartContainerHeight,
-        containerWidth,
-        isChartClosed,
-        theme,
-        position,
         bottomWidgets,
         enabledChartFooter = true,
         enabledNavigationWidget = true,
         toolbarWidget,
         onCrosshairChange,
-        isLoading,
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;
@@ -156,25 +150,4 @@ const Chart = (props: any) => {
     );
 };
 
-export default connect(
-    ({ chart, drawTools, studies, chartSetting, chartType, state, loader, timeperiod }: TMainStore) => ({
-        chartId: chart.chartId,
-        init: chart.init,
-        destroy: chart.destroy,
-        StudySettingsDialog: studies.StudySettingsDialog,
-        DrawToolsSettingsDialog: drawTools.DrawToolsSettingsDialog,
-        AggregateChartSettingsDialog: chartType.AggregateChartSettingsDialog,
-        isCandle: chartType.isCandle,
-        isChartAvailable: chart.isChartAvailable,
-        isSpline: chartType.isSpline,
-        updateProps: state.updateProps,
-        chartContainerHeight: chart.chartContainerHeight,
-        containerWidth: chart.containerWidth,
-        isChartClosed: state.isChartClosed,
-        theme: chartSetting.theme,
-        position: chartSetting.position,
-        isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
-        isLoading: loader.isActive,
-        PredictionIndicatorDialog: timeperiod.PredictionIndicatorDialog,
-    })
-)(Chart);
+export default observer(Chart);

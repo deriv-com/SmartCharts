@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 
 export const InlineLoader = ({ children, className, enabled = true, ...props }: any) => (
     <div className={classNames('sc-inline-loader', className, { 'sc-inline-loader--enable': enabled })} {...props}>
@@ -16,14 +17,15 @@ export const InlineLoader = ({ children, className, enabled = true, ...props }: 
     </div>
 );
 
-const Loader = ({ isActive, currentState }: any) => (
-    <div className={classNames('sc-loader', { show: isActive })}>
-        <div className='sc-loader-spin' />
-        <div className='sc-loader-status'>{currentState}</div>
-    </div>
-);
+const Loader = () => {
+    const { loader } = useStores();
+    const { isActive, currentState } = loader;
+    return (
+        <div className={classNames('sc-loader', { show: isActive })}>
+            <div className='sc-loader-spin' />
+            <div className='sc-loader-status'>{currentState}</div>
+        </div>
+    );
+};
 
-export default connect(({ loader: l }) => ({
-    isActive: l.isActive,
-    currentState: l.currentState,
-}))(Loader);
+export default observer(Loader);

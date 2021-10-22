@@ -78,7 +78,7 @@ export default class StudyLegendStore {
     @observable
     activeItems: any = [];
     @observable
-    infoItem = null;
+    infoItem: any = null;
     @observable
     portalNodeIdChanged: any;
     onContextReady = () => {

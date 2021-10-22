@@ -1,31 +1,37 @@
 import React from 'react';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import { useStores } from 'src/store';
 import { getUTCDate } from '../utils';
 
 const RawMarker = (props: any) => {
-    const ctx_ref = React.useRef(null);
-    const stx_ref = React.useRef(null);
+    const { chart: chartStore } = useStores();
+    const { contextPromise } = chartStore;
+
+    const ctx_ref = React.useRef<any>(null);
+    const stx_ref = React.useRef<any>(null);
     const injection_id_ref = React.useRef(null);
     const has_unmounted_before_injection_ref = React.useRef(false);
     const canvas_height_ref = React.useRef(0);
-    const last_epoch_array_ref = React.useRef();
-    const date_array_ref = React.useRef();
-    const props_ref = React.useRef();
+    const last_epoch_array_ref = React.useRef<any>();
+    const date_array_ref = React.useRef<any>();
+    const props_ref = React.useRef<any>();
     props_ref.current = props;
-    const { contextPromise, shouldRedraw } = props;
+    const { shouldRedraw } = props;
 
     React.useEffect(() => {
-        contextPromise.then((ctx: any) => {
-            if (has_unmounted_before_injection_ref.current) {
-                return;
-            }
+        if (contextPromise) {
+            contextPromise.then((ctx: any) => {
+                if (has_unmounted_before_injection_ref.current) {
+                    return;
+                }
 
-            ctx_ref.current = ctx;
-            stx_ref.current = ctx_ref.current.stx;
+                ctx_ref.current = ctx;
+                stx_ref.current = ctx_ref.current.stx;
 
-            injection_id_ref.current = stx_ref.current.append('draw', draw);
-            draw();
-        });
+                injection_id_ref.current = stx_ref.current.append('draw', draw);
+                draw();
+            });
+        }
 
         return () => {
             if (injection_id_ref.current) {
@@ -40,7 +46,7 @@ const RawMarker = (props: any) => {
     }, [contextPromise]);
 
     React.useEffect(() => {
-        if (shouldRedraw) {
+        if (shouldRedraw && contextPromise) {
             contextPromise.then((ctx: any) => {
                 if (has_unmounted_before_injection_ref.current) {
                     return;
@@ -143,6 +149,4 @@ const RawMarker = (props: any) => {
     return null;
 };
 
-export default connect(({ chart }: any) => ({
-    contextPromise: chart.contextPromise,
-}))(RawMarker);
+export default observer(RawMarker);
