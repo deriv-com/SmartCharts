@@ -659,8 +659,8 @@ class ChartStore {
             (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
-                initialData: initialData?.activeSymbols,
-                chartData: chartData?.activeSymbols,
+                initialData,
+                chartData,
             }));
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);

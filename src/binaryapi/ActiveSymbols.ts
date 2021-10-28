@@ -1,9 +1,9 @@
 import { observable, action, computed, runInAction } from 'mobx';
+import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
+import { TChanges, TChartParams } from 'src/types';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
-import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
 import TradingTimes from './TradingTimes';
-import { TChanges, TChartParams } from 'src/types';
 
 const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
@@ -42,7 +42,7 @@ export default class ActiveSymbols {
     _api: any;
     _params: TChartParams;
     _tradingTimes: TradingTimes;
-    processedSymbols: TProcessedSymbols = [];
+    processedSymbols?: TProcessedSymbols;
     @observable changes: TChanges = {};
     @observable categorizedSymbols: TCategorizedSymbols = [];
     symbolMap: { [key: string]: TProcessedSymbolItem } = {};
@@ -88,7 +88,7 @@ export default class ActiveSymbols {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
         });
-        for (const symbolObj of this.processedSymbols) {
+        for (const symbolObj of this.processedSymbols || []) {
             this.symbolMap[symbolObj.symbol] = symbolObj;
         }
         this._tradingTimes.onMarketOpenCloseChanged(

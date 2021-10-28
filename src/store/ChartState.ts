@@ -1,5 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
+import { TGranularity } from 'src/types';
 import {
     createObjectFromLocalStorage,
     calculateTimeUnitInterval,
@@ -9,7 +10,6 @@ import {
 } from '../utils';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
-import { TGranularity } from 'src/types';
 import ChartStore from './ChartStore';
 
 class ChartState {
