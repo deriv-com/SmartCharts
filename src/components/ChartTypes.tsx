@@ -31,9 +31,9 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
 
     if (type === undefined) return null;
 
-    const onItemClick = (chartType: ChartType) => {
-        if (type.id !== chartType.id) {
-            onChange(chartType.id);
+    const onItemClick = (chart_type: ChartType) => {
+        if (type.id !== chart_type.id) {
+            onChange(chart_type.id);
         }
         setOpen(false);
     };
@@ -43,23 +43,23 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
     if (newDesign) {
         return (
             <div className='sc-chart-type'>
-                {types.map(chartType => {
-                    const Icon = chartType.icon;
+                {types.map(chart_type => {
+                    const Icon = chart_type.icon;
                     let className = 'sc-chart-type__item';
-                    className += chartType.active ? ' sc-chart-type__item--active' : '';
-                    className += chartType.disabled ? ' sc-chart-type__item--disabled' : '';
+                    className += chart_type.active ? ' sc-chart-type__item--active' : '';
+                    className += chart_type.disabled ? ' sc-chart-type__item--disabled' : '';
 
-                    const onClick = () => (chartType.disabled ? null : onItemClick(chartType));
+                    const onClick = () => (chart_type.disabled ? null : onItemClick(chart_type));
                     return (
                         <Tooltip
-                            key={chartType.id}
-                            enabled={chartType.disabled && !isMobile}
+                            key={chart_type.id}
+                            enabled={chart_type.disabled && !isMobile}
                             className={className}
                             content={t.translate('Available only for non-tick time intervals.')}
                             onClick={onClick}
                         >
                             <Icon />
-                            <span className='text'>{t.translate(chartType.text)}</span>
+                            <span className='text'>{t.translate(chart_type.text)}</span>
                         </Tooltip>
                     );
                 })}

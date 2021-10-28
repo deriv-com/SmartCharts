@@ -22,7 +22,7 @@ const enableLoader = (isLoading: boolean, inval: any, preparingInterval: number 
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
 
-const TimeperiodItem = React.memo(({ item, category, onClick }: TTimeperiodItemProps) => {
+const TimeperiodItemComponent: React.FC<TTimeperiodItemProps> = ({ item, category, onClick }) => {
     const { timeperiod, chartType, loader } = useStores();
     const chartTypeId = chartType.type.id;
     const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
@@ -76,12 +76,18 @@ const TimeperiodItem = React.memo(({ item, category, onClick }: TTimeperiodItemP
             </InlineLoader>
         </Tooltip>
     );
-});
+};
 
-const Timeperiod = ({ portalNodeId }: { portalNodeId: string }) => {
-    const { timeperiod, chart } = useStores();
+const TimeperiodItem = observer(TimeperiodItemComponent);
 
-    const { setGranularity: onChange, updateProps, changeGranularity, updatePortalNode } = timeperiod;
+type TTimeperiodProps = { portalNodeId: string; onChange: (granularity: number) => void };
+
+const Timeperiod: React.FC<TTimeperiodProps> = ({ portalNodeId, onChange }) => {
+    const { timeperiod } = useStores();
+
+    const { setGranularity, updateProps, changeGranularity, updatePortalNode } = timeperiod;
+
+    const onChangeGranularity = onChange || setGranularity;
 
     const onIntervalClick = (chart_type_id: string, key: string, inval: number) => {
         if (key === 'tick' && chart_type_id !== 'mountain') {
@@ -89,7 +95,7 @@ const Timeperiod = ({ portalNodeId }: { portalNodeId: string }) => {
         }
         changeGranularity(inval);
     };
-    React.useEffect(() => updateProps(onChange));
+    React.useEffect(() => updateProps(onChangeGranularity));
     updatePortalNode(portalNodeId);
 
     return (

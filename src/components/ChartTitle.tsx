@@ -12,6 +12,7 @@ type TChartTitleProps = {
     open?: boolean;
     open_market?: string;
     isNestedList?: boolean;
+    onChange: (x: string) => void;
 };
 
 const ChartTitle: React.FC<TChartTitleProps> = props => {
@@ -23,12 +24,13 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
         ChartTitleMenu,
         currentSymbol,
         MarketSelector,
-        setSymbol: onChange,
+        setSymbol,
         SymbolSelectButton,
         onMouseEnter,
         onMouseLeave,
         updateProps,
     } = chartTitle;
+    const onChange = props.onChange || setSymbol;
     const setMenuOpen = chartTitle.menu.setOpen;
 
     const { containerId, enabled, portalNodeId, searchInputClassName, open, open_market, isNestedList } = props;
