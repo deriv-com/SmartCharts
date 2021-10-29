@@ -6,6 +6,7 @@ import { ChartType } from 'src/types';
 import { SettingIcon } from './Icons';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
+import List from './List';
 
 type TTypeIcon = {
     Icon: (props: any) => JSX.Element;
@@ -23,7 +24,7 @@ type TChartTypesProps = {
 const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: onChangeFn }) => {
     const { chartType, chart } = useStores();
 
-    const { ChartTypeMenu, ChartTypeList, setTypeFromUI, showAggregateDialog, updateProps, types, type } = chartType;
+    const { ChartTypeMenu, listStore, setTypeFromUI, showAggregateDialog, updateProps, types, type } = chartType;
     const { menuOpen, setOpen } = chartType.menu;
     const { isMobile } = chart;
 
@@ -78,7 +79,7 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
             </ChartTypeMenu.Title>
             <ChartTypeMenu.Body>
                 <div className='body'>
-                    <ChartTypeList height={260} onItemClick={onItemClick}>
+                    <List height={260} store={listStore}>
                         {(T: any) => (
                             <>
                                 <span className='left'>
@@ -92,7 +93,7 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
                                 )}
                             </>
                         )}
-                    </ChartTypeList>
+                    </List>
                 </div>
             </ChartTypeMenu.Body>
         </ChartTypeMenu>

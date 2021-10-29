@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import Shade from './Shade';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
 
@@ -10,14 +11,14 @@ const Barrier = React.memo(
         foregroundColor = '#ffffff',
         HighPriceLine,
         LowPriceLine,
-        AboveShade,
-        BetweenShade,
-        BelowShade,
         hidePriceLines,
         lineStyle,
         isInitialized,
         priceLabelWidth,
         isSingleBarrier,
+        aboveShadeStore,
+        belowShadeStore,
+        betweenShadeStore,
         ...props
     }: any) =>
         isInitialized && (
@@ -41,9 +42,9 @@ const Barrier = React.memo(
                             foregroundColor={foregroundColor}
                             {...props}
                         />
-                        <AboveShade />
-                        <BetweenShade />
-                        <BelowShade />
+                        <Shade store={aboveShadeStore} />
+                        <Shade store={belowShadeStore} />
+                        <Shade store={betweenShadeStore} />
                     </>
                 )}
             </div>
@@ -54,9 +55,9 @@ export default connect(
     (store: any) => ({
         HighPriceLine: store.HighPriceLine,
         LowPriceLine: store.LowPriceLine,
-        AboveShade: store.AboveShade,
-        BetweenShade: store.BetweenShade,
-        BelowShade: store.BelowShade,
+        aboveShadeStore: store.aboveShadeStore,
+        belowShadeStore: store.belowShadeStore,
+        betweenShadeStore: store.betweenShadeStore,
         shadeColor: store.shadeColor,
         color: store.color,
         foregroundColor: store.foregroundColor,

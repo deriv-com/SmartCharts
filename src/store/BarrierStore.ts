@@ -1,16 +1,13 @@
 import { observable, action, computed } from 'mobx';
+import { TMainStore } from 'src/types';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLine from '../components/PriceLine';
-import Shade from '../components/Shade';
+
 import { isValidProp } from '../utils';
-import { TMainStore } from 'src/types';
 
 export default class BarrierStore {
-    AboveShade: any;
-    BelowShade: any;
-    BetweenShade: any;
     HighPriceLine: any;
     LowPriceLine: any;
     _high_barrier: any;
@@ -92,9 +89,6 @@ export default class BarrierStore {
         this.aboveShadeStore = new ShadeStore('top-shade');
         this.betweenShadeStore = new ShadeStore('between-shade');
         this.belowShadeStore = new ShadeStore('bottom-shade');
-        this.AboveShade = this.aboveShadeStore.connect(Shade);
-        this.BetweenShade = this.betweenShadeStore.connect(Shade);
-        this.BelowShade = this.belowShadeStore.connect(Shade);
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 

@@ -1,5 +1,4 @@
 import { action } from 'mobx';
-import { connect } from './Connect';
 
 export default class ListStore {
     getContext: any;
@@ -14,9 +13,4 @@ export default class ListStore {
     @action.bound onItemClick(idx: any, item: any) {
         this.onItemSelected(item);
     }
-
-    connect = connect(() => ({
-        items: this.getItems(),
-        onItemClick: this.onItemClick,
-    }));
 }

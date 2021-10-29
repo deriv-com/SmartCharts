@@ -1,13 +1,13 @@
 import { action, computed, observable, reaction, when } from 'mobx';
+import { ChartType, TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
-import List from '../components/List';
 import Menu from '../components/Menu';
 import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { ChartTypes } from '../Constant';
-import { ChartType, TMainStore } from 'src/types';
+
 const notCandles = [...ChartTypes].filter(t => !t.candleOnly).map(t => t.id);
 const aggregateCharts = [...ChartTypes].filter(t => (t as any).settingsOnClick);
 function getAggregates() {
@@ -79,7 +79,7 @@ export default class ChartTypeStore {
     ChartTypeMenu: any;
     aggregates: any;
     chartTypes: typeof ChartTypes = [];
-    list: any;
+    listStore: ListStore;
     mainStore: TMainStore;
     menu: any;
     settingsDialog: any;
@@ -87,7 +87,7 @@ export default class ChartTypeStore {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menu = new MenuStore(mainStore, { route: 'chart-type' });
-        this.list = new ListStore({
+        this.listStore = new ListStore({
             getContext: () => this.context,
             getItems: () => this.types,
         });
@@ -96,7 +96,6 @@ export default class ChartTypeStore {
             onChanged: (items: any) => this.updateAggregate(items),
         });
         this.ChartTypeMenu = this.menu.connect(Menu);
-        this.ChartTypeList = this.list.connect(List);
         this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
     @observable

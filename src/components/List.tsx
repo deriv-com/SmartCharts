@@ -1,22 +1,24 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
+import ListStore from 'src/store/ListStore';
 import Scroll from './Scroll';
 import '../../sass/components/_ciq-list.scss';
 
-type TListProps<T> = {
+type TListProps = {
     height: number;
-    items: T[];
-    onItemClick: (idx: number, item: T) => void;
     children: React.ReactNode;
+    store: ListStore;
 };
 
-const List = <T extends { id: string }>({ height, items, onItemClick, children }: TListProps<T>) => {
+const List: React.FC<TListProps> = ({ height, store, children }) => {
+    const { getItems, onItemClick } = store;
     const renderRow = typeof children === 'function' ? children : (item: any) => item.text;
-    // eslint-disable-next-line no-useless-concat
     const itemClassName = (it: any) =>
+        // eslint-disable-next-line no-useless-concat
         'ciq-list-item' + ` ${it.disabled ? 'disabled' : ''}` + ` ${it.active ? 'active' : ''}`;
     return (
         <Scroll className='ciq-list' autoHide height={height ? `${height}px` : ''}>
-            {items.map((it: T, idx: number) => (
+            {getItems().map((it: any, idx: number) => (
                 <div key={it.id} className={itemClassName(it)} onClick={() => onItemClick(idx, it)}>
                     {renderRow(it)}
                 </div>
@@ -25,4 +27,4 @@ const List = <T extends { id: string }>({ height, items, onItemClick, children }
     );
 };
 
-export default List;
+export default observer(List);

@@ -1,10 +1,13 @@
 import { observable } from 'mobx';
-import { connect } from './Connect';
 
 export default class ShadeStore {
     _div: any;
     @observable className = '';
     @observable visible = false;
+
+    constructor(className: any) {
+        this.className = className;
+    }
 
     setPosition = ({ top, bottom, right }: any) => {
         if (this._div) {
@@ -27,17 +30,7 @@ export default class ShadeStore {
         }
     };
 
-    constructor(className: any) {
-        this.className = className;
-    }
-
     setShadeRef = (ref: any) => {
         this._div = ref;
     };
-
-    connect = connect(() => ({
-        visible: this.visible,
-        className: this.className,
-        setShadeRef: this.setShadeRef,
-    }));
 }
