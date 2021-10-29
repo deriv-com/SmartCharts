@@ -3,13 +3,10 @@ import { TMainStore } from 'src/types';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
-import PriceLine from '../components/PriceLine';
 
 import { isValidProp } from '../utils';
 
 export default class BarrierStore {
-    HighPriceLine: any;
-    LowPriceLine: any;
     _high_barrier: any;
     _injectionId: any;
     _listenerId: any;
@@ -95,9 +92,6 @@ export default class BarrierStore {
         if (this.context && mainStore.chart.currentCloseQuote()) {
             this.init();
         }
-
-        this.HighPriceLine = this._high_barrier.connect(PriceLine);
-        this.LowPriceLine = this._low_barrier.connect(PriceLine);
 
         this.mainStore.chart._barriers.push(this);
     }

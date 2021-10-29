@@ -1,30 +1,35 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import PriceLineArrow from './PriceLineArrow';
 import PriceLineTitle from './PriceLineTitle';
 
-const PriceLine = ({
-    className,
-    draggable,
-    isDragging,
-    priceDisplay,
-    setDragLine,
-    visible,
+const PriceLine: React.FC<any> = ({
     lineStyle,
     color,
     foregroundColor,
     width,
-    title,
-    yAxiswidth,
-    offScreen,
-    hideBarrierLine,
     hideOffscreenBarrier,
-    hideOffscreenLine,
-    offScreenDirection,
     opacityOnOverlap,
-    isOverlapping,
-    init,
-}: any) => {
+    store,
+}) => {
+    const {
+        priceDisplay,
+        visible,
+        setDragLine,
+        className,
+        draggable,
+        isDragging,
+        init,
+        title,
+        yAxiswidth,
+        offScreen,
+        hideBarrierLine,
+        hideOffscreenLine,
+        offScreenDirection,
+        isOverlapping,
+    } = store;
+
     const showBarrier = React.useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
     const showBarrierDragLine = React.useMemo(
         () => !hideBarrierLine && (!hideOffscreenLine || !offScreen) && !isOverlapping,
@@ -36,32 +41,32 @@ const PriceLine = ({
         init();
     }, [init]);
 
+    if (!showBarrier) return null;
+
     return (
-        showBarrier && (
-            <div className='barrier-area' style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
-                <div
-                    className={classNames('chart-line', 'horizontal', className || '', {
-                        draggable,
-                        dragging: isDragging,
-                    })}
-                    style={{
-                        color: foregroundColor,
-                        backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00`,
-                    }}
-                >
-                    {showBarrierDragLine && <div className='drag-line' style={{ borderTopStyle: lineStyle }} />}
-                    <div className='draggable-area' />
-                    <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
-                        <div className='price'>{priceDisplay}</div>
-                        {offScreen && offScreenDirection && (
-                            <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
-                        )}
-                    </div>
-                    {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
+        <div className='barrier-area' style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
+            <div
+                className={classNames('chart-line', 'horizontal', className || '', {
+                    draggable,
+                    dragging: isDragging,
+                })}
+                style={{
+                    color: foregroundColor,
+                    backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00`,
+                }}
+            >
+                {showBarrierDragLine && <div className='drag-line' style={{ borderTopStyle: lineStyle }} />}
+                <div className='draggable-area' />
+                <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
+                    <div className='price'>{priceDisplay}</div>
+                    {offScreen && offScreenDirection && (
+                        <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
+                    )}
                 </div>
+                {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
             </div>
-        )
+        </div>
     );
 };
 
-export default PriceLine;
+export default observer(PriceLine);

@@ -1,9 +1,9 @@
 import { observable, action, computed, when } from 'mobx';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser } from '../utils';
 import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import { TMainStore } from 'src/types';
 
 export default class ShareStore {
     Dialog: any;

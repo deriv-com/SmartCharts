@@ -1,6 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
-import { connect } from './Connect';
 import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
@@ -293,22 +292,4 @@ export default class PriceLineStore {
 
         return false;
     }
-
-    connect = connect(() => ({
-        priceDisplay: this.priceDisplay,
-        visible: this.visible,
-        setDragLine: this.setDragLine,
-        className: this.className,
-        draggable: this.draggable,
-        isDragging: this.isDragging,
-        init: this.init,
-        title: this.title,
-        yAxiswidth: this.yAxiswidth,
-        offScreen: this.offScreen,
-        hideBarrierLine: this.hideBarrierLine,
-        hideOffscreenLine: this.hideOffscreenLine,
-        offScreenDirection: this.offScreenDirection,
-        isOverlapping: this.isOverlapping,
-        // zIndex: this.zIndex,
-    }));
 }

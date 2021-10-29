@@ -1,8 +1,8 @@
 import { computed, action, observable } from 'mobx';
+import { TMainStore } from 'src/types';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu';
-import { TMainStore } from 'src/types';
 
 export default class IndicatorPredictionDialogStore {
     @observable dialogPortalNodeId = null;

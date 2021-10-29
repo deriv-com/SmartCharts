@@ -1,5 +1,6 @@
 import { action, observable, reaction, computed } from 'mobx';
 import moment from 'moment';
+import { ActiveSymbolsItem, TChanges, TGranularity, TMainStore } from 'src/types';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import inject from '../chartiq_injections';
 import Context from '../components/ui/Context';
@@ -24,7 +25,6 @@ import HomeIcon from '../../sass/icons/navigation-widgets/ic-home.svg';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
 import { STATE } from '../Constant';
-import { ActiveSymbolsItem, TChanges, TGranularity, TMainStore } from 'src/types';
 import BarrierStore from './BarrierStore';
 class ChartStore {
     static keystrokeHub: KeystrokeHub;

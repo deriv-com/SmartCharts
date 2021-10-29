@@ -3,14 +3,15 @@ import classNames from 'classnames';
 import Shade from './Shade';
 import { connect } from '../store/Connect';
 import BarrierStore from '../store/BarrierStore';
+import PriceLine from './PriceLine';
 
 const Barrier = React.memo(
     ({
         shadeColor = '#39b19d',
         color = '#39b19d',
         foregroundColor = '#ffffff',
-        HighPriceLine,
-        LowPriceLine,
+        _high_barrier,
+        _low_barrier,
         hidePriceLines,
         lineStyle,
         isInitialized,
@@ -26,7 +27,8 @@ const Barrier = React.memo(
                 className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
                 style={{ '--shade-color': shadeColor } as any}
             >
-                <HighPriceLine
+                <PriceLine
+                    store={_high_barrier}
                     width={priceLabelWidth}
                     lineStyle={lineStyle}
                     color={color}
@@ -35,7 +37,8 @@ const Barrier = React.memo(
                 />
                 {!isSingleBarrier && (
                     <>
-                        <LowPriceLine
+                        <PriceLine
+                            store={_low_barrier}
                             width={priceLabelWidth}
                             lineStyle={lineStyle}
                             color={color}
@@ -53,8 +56,8 @@ const Barrier = React.memo(
 
 export default connect(
     (store: any) => ({
-        HighPriceLine: store.HighPriceLine,
-        LowPriceLine: store.LowPriceLine,
+        _high_barrier: store._high_barrier,
+        _low_barrier: store._low_barrier,
         aboveShadeStore: store.aboveShadeStore,
         belowShadeStore: store.belowShadeStore,
         betweenShadeStore: store.betweenShadeStore,

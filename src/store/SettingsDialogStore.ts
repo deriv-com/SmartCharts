@@ -1,8 +1,9 @@
 import { observable, action, computed, reaction } from 'mobx';
+import { TSettingsItemGroup, TSettingsItems } from 'src/types';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu';
-import { TSettingsItemGroup, TSettingsItems } from 'src/types';
+
 export default class SettingsDialogStore {
     SettingDialogMenu: any;
     getContext: any;
