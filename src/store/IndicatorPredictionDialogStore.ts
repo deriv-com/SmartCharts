@@ -1,6 +1,5 @@
 import { computed, action, observable } from 'mobx';
 import { TMainStore } from 'src/types';
-import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu';
 
@@ -39,11 +38,4 @@ export default class IndicatorPredictionDialogStore {
             this.handleCancel();
         }, 100);
     }
-
-    connect = connect(() => ({
-        onCancel: this.handleCancel,
-        onContinue: this.handleContinue,
-        Dialog: this.SettingDialogMenu,
-        dialogPortalNodeId: this.dialogPortalNodeId,
-    }));
 }

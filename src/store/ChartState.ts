@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { TGranularity } from 'src/types';
+import { TGranularity, TMainStore } from 'src/types';
 import {
     createObjectFromLocalStorage,
     calculateTimeUnitInterval,
@@ -16,7 +16,7 @@ class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio: any;
     isAnimationEnabled: any;
-    mainStore: any;
+    mainStore: TMainStore;
     margin: any;
     @observable granularity: TGranularity;
     @observable chartType: any;

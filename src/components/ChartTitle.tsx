@@ -12,7 +12,7 @@ type TChartTitleProps = {
     open?: boolean;
     open_market?: string;
     isNestedList?: boolean;
-    onChange: (x: string) => void;
+    onChange?: (x: string) => void;
 };
 
 const ChartTitle: React.FC<TChartTitleProps> = props => {

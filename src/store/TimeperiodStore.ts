@@ -24,14 +24,12 @@ export default class TimeperiodStore {
     mainStore: any;
     @observable portalNodeIdChanged: any;
     predictionIndicator: IndicatorPredictionDialogStore;
-    PredictionIndicatorDialog: any;
 
     constructor(mainStore: any) {
         this.mainStore = mainStore;
         this.predictionIndicator = new IndicatorPredictionDialogStore({
             mainStore,
         });
-        this.PredictionIndicatorDialog = this.predictionIndicator.connect(IndicatorPredictionDialog);
 
         this._serverTime = ServerTime.getInstance();
         when(() => this.context, this.onContextReady);

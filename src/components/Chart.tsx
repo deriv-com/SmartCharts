@@ -21,6 +21,7 @@ import ChartFooter from './ChartFooter';
 import Crosshair from './Crosshair';
 import { initGA, logPageView } from '../utils/ga';
 import PaginationLoader from './PaginationLoader';
+import IndicatorPredictionDialog from './IndicatorPredictionDialog';
 
 const Chart: React.FC = (props: any) => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader, timeperiod } = useStores();
@@ -31,7 +32,6 @@ const Chart: React.FC = (props: any) => {
     const { AggregateChartSettingsDialog, isCandle, isSpline } = chartType;
     const { updateProps, isChartClosed } = state;
     const { theme, position, isHighestLowestMarkerEnabled } = chartSetting;
-    const { PredictionIndicatorDialog } = timeperiod;
     const { isActive: isLoading } = loader;
 
     const rootRef = React.useRef<HTMLDivElement>(null);
@@ -143,7 +143,7 @@ const Chart: React.FC = (props: any) => {
                 <DrawToolsSettingsDialog />
                 <AggregateChartSettingsDialog />
                 <StudySettingsDialog />
-                <PredictionIndicatorDialog />
+                <IndicatorPredictionDialog />
                 <div id='smartcharts_modal' className='ciq-modal' />
             </div>
         </div>

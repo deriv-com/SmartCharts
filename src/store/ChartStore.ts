@@ -186,7 +186,7 @@ class ChartStore {
      * @returns {number} height: height of each active indicator in the bottom
      * @returns {number} percent: percent of height of an indicator compare to the chart heigh
      */
-    indicatorHeightRatio = (num: any) => {
+    indicatorHeightRatio = (num: number) => {
         let ratio = {};
         if (typeof this.stateStore.getIndicatorHeightRatio === 'function') {
             ratio = this.stateStore.getIndicatorHeightRatio(this.chartNode?.offsetHeight, num);
