@@ -1,8 +1,6 @@
 import { when } from 'mobx';
-import { patchPixelFromChart } from '../utils';
+import { is_browser, patchPixelFromChart } from '../utils';
 import { red as RED } from '../../sass/_themes.scss';
-
-const is_firefox = navigator.userAgent.search('Firefox') > 0;
 
 class CurrentSpotStore {
     constructor(mainStore) {
@@ -65,7 +63,7 @@ class CurrentSpotStore {
         }
 
         // glow is set by Animation.js
-        const glow = is_firefox ? 0 : progress;
+        const glow = is_browser.Firefox() ? 0 : progress;
 
         /** @type {CanvasRenderingContext2D} */
         const ctx = stx.chart.context;
