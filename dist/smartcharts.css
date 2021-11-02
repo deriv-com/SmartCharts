@@ -63,9 +63,8 @@ html,body{-ms-touch-action:none;margin:0px}
 .ciq-chart{height:auto;width:100%;z-index:4}
 .smartcharts-light .ciq-chart{background:#fff}
 .smartcharts-dark .ciq-chart{background:#0e0e0e}
-.ciq-chart--screenshot .cq-symbol-select-btn .ic-icon,.ciq-chart--screenshot .cq-menu-dropdown,.ciq-chart--screenshot .sc-toolbar-widget,.ciq-chart--screenshot .sc-navigation-widget,.ciq-chart--screenshot .stx_jump_today.home,.ciq-chart--screenshot .stx-panel-control .stx-btn-panel{display:none !important}
+.ciq-chart--screenshot .calendar,.ciq-chart--screenshot .cq-menu-dropdown,.ciq-chart--screenshot .sc-toolbar-widget,.ciq-chart--screenshot .sc-navigation-widget,.ciq-chart--screenshot .stx_jump_today.home,.ciq-chart--screenshot .stx-panel-control .stx-btn-panel,.ciq-chart--screenshot .time-picker-dropdown{display:none !important}
 .ciq-chart--screenshot .stx-panel-control{left:5px}
-.ciq-chart--screenshot .cq-symbol-select-btn .cq-symbol-info{margin:0 !important}
 .ciq-chart--screenshot .sc-studies-list .stx-btn-panel{display:none !important}
 .cq-chart-control-left .stx-panel-control{left:10px}
 .cq-chart-control-left .chartContainer{width:calc(100% - 100px);margin-left:100px}
