@@ -2,13 +2,13 @@ import { observable, action } from 'mobx';
 import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
-    className: any;
+    className = '';
     @observable price = '';
     @observable isIncrease = false;
     @observable status = '';
     oldPrice = '';
 
-    @action.bound setPrice(val: any, prevPrice: any) {
+    @action.bound setPrice(val: string, prevPrice: string) {
         const oldVal = prevPrice || +this.oldPrice;
         const newVal = +val;
         let isIncrease = false;
