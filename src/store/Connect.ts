@@ -10,21 +10,21 @@ type TStoredComponent = {
 type TStoredComponentProps = Readonly<TStoredComponent> & Readonly<{ children?: React.ReactNode; }>
 
 export type TStoredComponentChildProps = {
-    color?: string
-    draggable: boolean
-    hideBarrierLine?: boolean
-    hideOffscreenLine?: boolean
-    hidePriceLines: boolean
-    high: number
-    lineStyle?: string
-    low?: number
-    mainStore: TMainStore
-    onChange: () => typeof action
-    onChartBarrierChange: () => typeof action
-    relative: boolean
-    shade?: string
-    shadeColor?: string 
-    title?: string
+    color?: string;
+    draggable: boolean;
+    hideBarrierLine?: boolean;
+    hideOffscreenLine?: boolean;
+    hidePriceLines: boolean;
+    high: number;
+    lineStyle?: string;
+    low?: number;
+    mainStore: TMainStore;
+    onChange: () => typeof action;
+    onChartBarrierChange: () => typeof action;
+    relative: boolean;
+    shade?: string;
+    shadeColor?: string;
+    title?: string;
 }
 
 type TStoresToProps<S, I> = (store: S) => I;
