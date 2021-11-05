@@ -247,7 +247,7 @@ export default class PriceLineStore {
         return Math.round(top) | 0;
     };
 
-    // Mantually update the dop to improve performance.
+    // Mantually update the top to improve performance.
     // We don't pay for react reconciler and mobx observable tracking in animation frames.
     set top(v) {
         this.__top = v;

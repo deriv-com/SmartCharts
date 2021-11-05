@@ -1,6 +1,31 @@
 import React from 'react';
+import { action } from 'mobx';
 import { inject } from 'mobx-react';
 import { TMainStore } from '../types';
+
+export type TStoredComponentChildProps = {
+    color?: string
+    draggable: boolean
+    hideBarrierLine?: boolean
+    hideOffscreenLine?: boolean
+    hidePriceLines: boolean
+    high: number
+    lineStyle?: string
+    low?: number
+    mainStore: TMainStore
+    onChange: () => typeof action
+    onChartBarrierChange: () => typeof action
+    relative: boolean
+    shade?: string
+    shadeColor?: string 
+    title?: string
+}
+
+type TStoredComponent = {
+    mainStore: TMainStore;
+};
+
+type TStoredComponentProps = Readonly<TStoredComponent> & Readonly<{ children?: React.ReactNode; }>
 
 type TStoresToProps<S, I> = (store: S) => I;
 
@@ -13,7 +38,7 @@ type TReactComponent<P> =
 type StoreClass<T> = { new (mainStore: TMainStore): T };
 
 type BaseStore = {
-    updateProps?: (props: any) => any;
+    updateProps?: (props: TStoredComponentProps) => void;
     destructor?: () => void;
 };
 
@@ -21,7 +46,7 @@ function connectMainStore<Store, I>(
     mapperFunction: TStoresToProps<Store, I>
 ): <C>(WrappedComponent: TReactComponent<C>) => TReactComponent<Omit<C, keyof I>> {
     // Combine both stores and props, with props taking precedence
-    const mapStoresAndProps = (mainStore: Store, props: any /* , context */) => ({
+    const mapStoresAndProps = (mainStore: Store, props: I /* , context */) => ({
         ...mapperFunction(mainStore),
         ...props,
     });
@@ -33,17 +58,15 @@ function connectCustomStore<Store, I>(
     CustomStore: StoreClass<Store>
 ): <C>(WrappedComponent: TReactComponent<C>) => TReactComponent<Omit<C, keyof I>> {
     return <C>(WrappedComponent: TReactComponent<C>) => {
-        type TStoredComponent = {
-            mainStore: TMainStore;
-        };
         class StoredComponent extends React.Component<TStoredComponent> {
-            injectedComponent: any;
+            injectedComponent: TReactComponent<C>;
             store: Store & BaseStore;
-            constructor(props: any) {
+            static displayName: string;
+            constructor(props: TStoredComponentProps) {
                 super(props);
                 const { mainStore } = this.props;
                 this.store = new CustomStore(mainStore);
-                const mapStoresAndProps = (_mainStore: TMainStore, nextProps: any) => ({
+                const mapStoresAndProps = (_mainStore: TMainStore, nextProps: TStoredComponentProps) => ({
                     ...mapperFunction(this.store),
                     ...nextProps,
                 });
@@ -73,12 +96,12 @@ function connectCustomStore<Store, I>(
             (WrappedComponent.constructor && WrappedComponent.constructor.name) ||
             'Unknown';
 
-        (StoredComponent as any).displayName = `unbox-${wrappedDisplayName}`;
-        return (inject(mainStore => ({ mainStore }))(StoredComponent) as unknown) as TReactComponent<Omit<C, keyof I>>;
+        StoredComponent.displayName = `unbox-${wrappedDisplayName}`;
+        return inject(mainStore => ({ mainStore }))(StoredComponent as TReactComponent<unknown>) as TReactComponent<Omit<C, keyof I>>;
     };
 }
 // if store is not defined, main store is used
-export function connect<Store, I>(mapperFunction: TStoresToProps<Store, I>, CustomStore?: StoreClass<Store>) {
+export function connect<Store, I>(mapperFunction: TStoresToProps<Store, I>, CustomStore?: StoreClass<Store>): <C>(WrappedComponent: TReactComponent<C>) => TReactComponent<Omit<C, keyof I>> {
     if (CustomStore === undefined) {
         return connectMainStore<Store, I>(mapperFunction);
     }

@@ -8,7 +8,7 @@ export default class AnimatedPriceStore {
     @observable status = '';
     oldPrice = '';
 
-    @action.bound setPrice(val: string, prevPrice: string) {
+    @action.bound setPrice(val: string, prevPrice: string): void {
         const oldVal = prevPrice || +this.oldPrice;
         const newVal = +val;
         let isIncrease = false;
