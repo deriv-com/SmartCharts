@@ -3,6 +3,12 @@ import { action } from 'mobx';
 import { inject } from 'mobx-react';
 import { TMainStore } from '../types';
 
+type TStoredComponent = {
+    mainStore: TMainStore;
+};
+
+type TStoredComponentProps = Readonly<TStoredComponent> & Readonly<{ children?: React.ReactNode; }>
+
 export type TStoredComponentChildProps = {
     color?: string
     draggable: boolean
@@ -20,12 +26,6 @@ export type TStoredComponentChildProps = {
     shadeColor?: string 
     title?: string
 }
-
-type TStoredComponent = {
-    mainStore: TMainStore;
-};
-
-type TStoredComponentProps = Readonly<TStoredComponent> & Readonly<{ children?: React.ReactNode; }>
 
 type TStoresToProps<S, I> = (store: S) => I;
 
@@ -66,7 +66,7 @@ function connectCustomStore<Store, I>(
                 super(props);
                 const { mainStore } = this.props;
                 this.store = new CustomStore(mainStore);
-                const mapStoresAndProps = (_mainStore: TMainStore, nextProps: TStoredComponentProps) => ({
+                const mapStoresAndProps = (_mainStore: TMainStore, nextProps: TStoredComponentChildProps) => ({
                     ...mapperFunction(this.store),
                     ...nextProps,
                 });
