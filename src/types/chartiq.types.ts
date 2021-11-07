@@ -1,7 +1,5 @@
 import '../../chartiq/development/js/chartiq.js';
 
-export type TCIQChartEngine = typeof CIQ.ChartEngine;
-
 export type TCIQChartEngineChart = typeof CIQ.ChartEngine.Chart;
 
 export type TCIQAddEventListener<C> = {

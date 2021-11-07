@@ -1,6 +1,5 @@
 import { action, observable, when } from 'mobx';
-import { TMainStore, TCIQChartEngine } from '../types';
-import ChartState from './ChartState';
+import { TMainStore } from '../types';
 import Context from '../components/ui/Context';
 
 export default class BottomWidgetsContainerStore {
@@ -14,17 +13,17 @@ export default class BottomWidgetsContainerStore {
     get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx(): TCIQChartEngine {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
-    get state(): ChartState {
+    get state(): TMainStore["state"] {
         return this.mainStore.state;
     }
 
     constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
 
-        when(() => !!(this.context), this.initial);
+        when(() => !!this.context, this.initial);
     }
 
     initial = (): void => {

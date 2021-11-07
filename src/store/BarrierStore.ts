@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { TMainStore, TCIQAddEventListener, TCIQAppend, TCIQChartEngine, TCIQChartEngineChart } from 'src/types';
+import { TMainStore, TCIQAddEventListener, TCIQAppend, TCIQChartEngineChart } from 'src/types';
 import { TStoredComponentChildProps } from './Connect';
 import Context from '../components/ui/Context';
 import PriceLineStore from './PriceLineStore';
@@ -235,7 +235,7 @@ export default class BarrierStore {
     get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx(): TCIQChartEngine {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
     get chart(): TCIQChartEngineChart {
