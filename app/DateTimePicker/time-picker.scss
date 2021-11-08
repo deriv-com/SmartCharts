@@ -22,9 +22,7 @@
     }
     #time-picker-input.time-picker-input {
         font-family: $base-font;
-        font-size: 1.4em;
         font-weight: normal;
-        padding-left: 0.8rem;
         box-sizing: border-box;
         margin: 0;
         cursor: pointer;
@@ -166,4 +164,9 @@
             }
         }
     }
+}
+
+.smartcharts-desktop .time-picker-input {
+    font-size: 1.4em;
+    padding-left: 0.8rem;
 }
