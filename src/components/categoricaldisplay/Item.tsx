@@ -1,6 +1,20 @@
 import React from 'react';
 import { ItemIconMap, ActiveOptionsIconMap } from '../Icons';
 import Favorite from '../Favorite';
+import { TCategory, TCategoricalItem } from '../../types';
+
+export type TActiveItemProps = {
+    item: TCategoricalItem;
+    favoritesId: string;
+    activeOptions: any;
+};
+
+export type TNormalItemProps = {
+    onSelectItem?: (item: TCategory) => void;
+    item: TCategoricalItem;
+    disableAll: boolean,
+    favoritesId: string;
+};
 
 const Icon = React.memo(({ id }: any) => {
     if (!id || !ItemIconMap[id]) {

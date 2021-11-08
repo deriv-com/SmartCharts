@@ -1,6 +1,6 @@
 import { action, observable, when } from 'mobx';
-import { TMainStore } from '../types';
 import Context from '../components/ui/Context';
+import { TMainStore } from '../types';
 
 export default class BottomWidgetsContainerStore {
     mainStore: TMainStore;

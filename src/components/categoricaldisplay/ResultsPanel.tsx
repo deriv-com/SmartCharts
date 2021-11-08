@@ -1,9 +1,22 @@
 import React from 'react';
+import { IWrappedComponent } from 'mobx-react';
 import classNames from 'classnames';
 import { ArrowIcon, CategoryIconMap } from '../Icons';
+import { TCategory } from '../../types';
 import { stringToSlug } from '../../utils';
 
-function getItemCount(category: any) {
+export type TResultsPanelProps = {
+    filteredItems: Array<TCategory>;
+    onSelectItem?: (item: TCategory) => void;
+    getItemType: (categoryId: string) => IWrappedComponent<{ activeOptions: any; favoritesId: string; }> | IWrappedComponent<{ favoritesId: string; }>
+    setCategoryElement: (element: HTMLElement | null, id: string) => void;
+    activeHeadKey: null | string;
+    disableAll?: boolean;
+    isNestedList?: boolean;
+    handleTitleClick: (categoryId: string) => void;
+};
+
+function getItemCount(category: TCategory) {
     let count = 0;
     if (category.hasSubcategory) {
         for (const sub of category.data) {
@@ -117,7 +130,7 @@ const Category = ({
     </div>
 );
 
-export const ResultsPanel = ({
+export const ResultsPanel: React.FC<TResultsPanelProps> = ({
     filteredItems,
     onSelectItem,
     getItemType,
@@ -126,23 +139,26 @@ export const ResultsPanel = ({
     disableAll,
     isNestedList,
     handleTitleClick,
-}: any) =>
-    filteredItems.map((category: any) => {
-        const categoryItemCount = getItemCount(category);
-        return (
-            (categoryItemCount > 0 || category.emptyDescription) && (
-                <Category
-                    key={category.categoryId}
-                    Item={getItemType(category.categoryId)}
-                    category={category}
-                    categoryItemCount={categoryItemCount}
-                    setCategoryElement={setCategoryElement}
-                    onSelectItem={onSelectItem}
-                    activeHeadKey={activeHeadKey}
-                    disableAll={disableAll}
-                    isNestedList={isNestedList}
-                    handleTitleClick={handleTitleClick}
-                />
-            )
-        );
-    });
+}) => (
+    <>
+        {filteredItems.map((category: TCategory) => {
+            const categoryItemCount = getItemCount(category);
+            return (
+                (categoryItemCount > 0 || category.emptyDescription) && (
+                    <Category
+                        key={category.categoryId}
+                        Item={getItemType(category.categoryId)}
+                        category={category}
+                        categoryItemCount={categoryItemCount}
+                        setCategoryElement={setCategoryElement}
+                        onSelectItem={onSelectItem}
+                        activeHeadKey={activeHeadKey}
+                        disableAll={disableAll}
+                        isNestedList={isNestedList}
+                        handleTitleClick={handleTitleClick}
+                    />
+                )
+            );
+        })}
+    </>
+);
