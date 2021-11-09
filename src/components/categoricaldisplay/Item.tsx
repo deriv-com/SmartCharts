@@ -1,17 +1,17 @@
 import React from 'react';
 import { ItemIconMap, ActiveOptionsIconMap } from '../Icons';
 import Favorite from '../Favorite';
-import { TCategory, TCategoricalItem } from '../../types';
+import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem} from '../../binaryapi/ActiveSymbols';
 
 export type TActiveItemProps = {
-    item: TCategoricalItem;
+    item: TSubCategoryDataItem;
     favoritesId: string;
-    activeOptions: any;
+    activeOptions: any[];
 };
 
 export type TNormalItemProps = {
-    onSelectItem?: (item: TCategory) => void;
-    item: TCategoricalItem;
+    onSelectItem?: (item: TCategorizedSymbolItem<TSubCategory | string>) => void;
+    item: TSubCategoryDataItem;
     disableAll: boolean,
     favoritesId: string;
 };

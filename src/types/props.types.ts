@@ -71,35 +71,3 @@ export type TTradingTimesItem = {
     isClosedAllDay: boolean;
     isOpened?: boolean;
 };
-
-export type TSymbolObject = {
-    decimal_places: number;
-    exchange_is_open: boolean;
-    market: string;
-    market_display_name: string;
-    name: boolean;
-    submarket_display_name: string;
-    symbol: string;
-};
-
-export type TCategoricalItem = {
-    dataObject: TSymbolObject;
-    display: string;
-    enabled: boolean;
-    itemId: string;
-    selected: boolean;
-};
-
-export type TSubcategory = {
-    data: Array<TCategoricalItem>;
-    subcategoryName: string;
-};
-
-export type TCategory = {
-    active?: boolean;
-    categoryId: string;
-    categoryName: string;
-    data: Array<TSubcategory> | Array<string>;
-    emptyDescription?: string;
-    hasSubcategory: boolean;
-};

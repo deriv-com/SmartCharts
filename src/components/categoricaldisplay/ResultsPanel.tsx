@@ -2,13 +2,13 @@ import React from 'react';
 import { IWrappedComponent } from 'mobx-react';
 import classNames from 'classnames';
 import { ArrowIcon, CategoryIconMap } from '../Icons';
-import { TCategory } from '../../types';
 import { stringToSlug } from '../../utils';
+import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory} from '../../binaryapi/ActiveSymbols';
 
 export type TResultsPanelProps = {
-    filteredItems: Array<TCategory>;
-    onSelectItem?: (item: TCategory) => void;
-    getItemType: (categoryId: string) => IWrappedComponent<{ activeOptions: any; favoritesId: string; }> | IWrappedComponent<{ favoritesId: string; }>
+    filteredItems: TCategorizedSymbols;
+    onSelectItem?: (item: TCategorizedSymbolItem<TSubCategory | string>) => void;
+    getItemType: (categoryId: string) => IWrappedComponent<{ activeOptions: any[]; favoritesId: string; }> | IWrappedComponent<{ favoritesId: string; }>
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
     disableAll?: boolean;
@@ -16,7 +16,7 @@ export type TResultsPanelProps = {
     handleTitleClick: (categoryId: string) => void;
 };
 
-function getItemCount(category: TCategory) {
+function getItemCount(category: TCategorizedSymbolItem<TSubCategory>) {
     let count = 0;
     if (category.hasSubcategory) {
         for (const sub of category.data) {
@@ -141,7 +141,7 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
     handleTitleClick,
 }) => (
     <>
-        {filteredItems.map((category: TCategory) => {
+        {filteredItems.map((category: TCategorizedSymbolItem<TSubCategory>) => {
             const categoryItemCount = getItemCount(category);
             return (
                 (categoryItemCount > 0 || category.emptyDescription) && (

@@ -1,9 +1,9 @@
 import React from 'react';
 import { CategoryIconMap } from '../Icons';
-import { TCategory } from '../../types';
+import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory} from '../../binaryapi/ActiveSymbols';
 
 export type TFilterPanelProps = {
-    filteredItems: Array<TCategory>;
+    filteredItems: TCategorizedSymbols;
     handleFilterClick: (categoryId: string) => void;
     focusedCategoryKey: string | null;
     activeCategoryKey: string;
@@ -41,7 +41,7 @@ export const FilterPanel: React.FC<TFilterPanelProps> = ({
     isSearching,
 }) => (
     <div className='sc-mcd__filter'>
-        {filteredItems.map((category: TCategory) => (
+        {filteredItems.map((category: TCategorizedSymbolItem<TSubCategory>) => (
             <FilterItem
                 key={category.categoryId}
                 category={category}

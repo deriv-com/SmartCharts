@@ -7,7 +7,7 @@ export type TSearchInputProps = {
     placeholder: string;
     value: string;
     searchInput: React.RefObject<HTMLInputElement>;
-    searchInputClassName: string;
+    searchInputClassName?: string;
     onChange: (value: string) => void;
 };
 

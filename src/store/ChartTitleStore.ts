@@ -34,7 +34,7 @@ export default class ChartTitleStore {
             getCurrentActiveCategory: () => this.currentActiveCategory,
             getCurrentActiveSubCategory: () => this.currentActiveSubCategory,
             getCurrentActiveMarket: () => this.currentActiveMarket,
-            searchInputClassName: () => this.searchInputClassName,
+            searchInputClassName: this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
         this.ChartTitleMenu = this.menu.connect(Menu);
