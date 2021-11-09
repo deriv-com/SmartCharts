@@ -9,7 +9,7 @@
         background: themed('ChartHistoryBg');
     }
 
-    &--container {
+    &__container {
         display: flex;
         border-radius: $border-radius;
         position: relative;
@@ -86,7 +86,7 @@
     border: none;
     border-radius: 0;
 
-    &--container {
+    &__container {
         padding: 0.8rem;
         justify-content: space-between;
         column-gap: 0.8rem;
