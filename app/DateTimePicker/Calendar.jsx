@@ -30,13 +30,12 @@ function CalendarPanel(props) {
     return <div className='calendar-panel'>{calendar_panel[props.calendar_view]}</div>;
 }
 
-function CalendarFooter({ footer, has_today_btn, onClick }) {
+function CalendarFooter({ footer, has_today_btn }) {
     return (
         <div className='calendar-footer'>
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
             {has_today_btn && (
                 <CalendarButton className='calendar-footer-btn'>
-                    <span onClick={onClick}>{t.translate('Minimum duration is 1 day')}</span>
                     <CalendarIconInfo className='calendar-footer-btn-icon-info' />
                 </CalendarButton>
             )}
