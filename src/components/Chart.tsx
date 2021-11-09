@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
+import BarrierStore from 'src/store/BarrierStore';
+import MainStoreWrapper from 'src/store/MainStoreWrapper';
 import RenderInsideChart from './RenderInsideChart';
 import ChartTitle from './ChartTitle';
 import Loader from './Loader';
@@ -23,8 +25,21 @@ import { initGA, logPageView } from '../utils/ga';
 import PaginationLoader from './PaginationLoader';
 import IndicatorPredictionDialog from './IndicatorPredictionDialog';
 
-const Chart: React.FC = (props: any) => {
-    const { chart, drawTools, studies, chartSetting, chartType, state, loader, timeperiod } = useStores();
+type TChartProps = {
+    id: string;
+    barriers: any[];
+    enabledChartFooter?: boolean;
+    enabledNavigationWidget?: boolean;
+    isMobile?: boolean;
+    chartControlsWidgets?: React.FC;
+    topWidgets?: React.FC;
+    bottomWidgets?: React.FC;
+    toolbarWidget: React.FC;
+    onCrosshairChange: (x: any) => any;
+};
+
+const Chart: React.FC<TChartProps> = props => {
+    const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();
 
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
     const { StudySettingsDialog } = studies;
@@ -79,7 +94,7 @@ const Chart: React.FC = (props: any) => {
             className={classNames('smartcharts', `smartcharts-${theme}`, {
                 'smartcharts--navigation-widget': enabledNavigationWidget,
                 'smartcharts--loading': isLoading,
-                'smartcharts--has-markers': children && children.length,
+                'smartcharts--has-markers': children && (children as any).length,
                 [`smartcharts-${containerWidth}`]: !isMobile,
             })}
         >
@@ -99,11 +114,14 @@ const Chart: React.FC = (props: any) => {
                         <div className='ciq-chart-area'>
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
                                 <RenderInsideChart at='holder'>
-                                    {barriers.map((barr: any, idx: any) => (
-                                        <Barrier
+                                    {barriers.map((barr, idx) => (
+                                        <MainStoreWrapper
                                             key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
+                                            StoreClass={BarrierStore}
                                             {...barr}
-                                        />
+                                        >
+                                            {(store: BarrierStore) => <Barrier store={store} {...barr} />}
+                                        </MainStoreWrapper>
                                     ))}
                                 </RenderInsideChart>
                                 <RenderInsideChart at='subholder'>
@@ -122,7 +140,7 @@ const Chart: React.FC = (props: any) => {
                                     <Crosshair />
                                 </div>
                                 {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}
-                                {toolbarWidget && <ToolbarWidget />}
+                                {ToolbarWidget && <ToolbarWidget />}
                                 {!isChartAvailable && (
                                     <div className='cq-chart-unavailable'>
                                         {t.translate('Chart data is not available for this symbol.')}

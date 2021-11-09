@@ -7,13 +7,13 @@ import PendingPromise from '../utils/PendingPromise';
 import { isValidProp } from '../utils';
 
 export default class BarrierStore {
-    _high_barrier: any;
+    _high_barrier: PriceLineStore;
     _injectionId: any;
     _listenerId: any;
-    _low_barrier: any;
-    aboveShadeStore: any;
-    belowShadeStore: any;
-    betweenShadeStore: any;
+    _low_barrier: PriceLineStore;
+    aboveShadeStore: ShadeStore;
+    belowShadeStore: ShadeStore;
+    betweenShadeStore: ShadeStore;
     mainStore: TMainStore;
     title: any;
     static get SHADE_NONE_SINGLE() {
@@ -57,7 +57,7 @@ export default class BarrierStore {
     _shadeState: any;
 
     @computed get pip() {
-        return this.mainStore.chart.currentActiveSymbol?.decimal_places;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
     @computed get yAxisWidth() {
         return this.mainStore.chart.yAxiswidth;
@@ -110,8 +110,6 @@ export default class BarrierStore {
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
         this._low_barrier.price = price - distance;
-        this._high_barrier._updateTop();
-        this._low_barrier._updateTop();
         this._drawShadedArea();
     }
 
@@ -190,7 +188,7 @@ export default class BarrierStore {
         this._high_barrier.destructor();
         this._low_barrier.destructor();
 
-        const i = this.mainStore.chart._barriers.findIndex((b: any) => b === this);
+        const i = this.mainStore.chart._barriers.findIndex(b => b === this);
         if (i !== -1) {
             this.mainStore.chart._barriers.splice(i, 1);
         }
@@ -199,11 +197,11 @@ export default class BarrierStore {
     get high_barrier() {
         return this._high_barrier.price;
     }
-    get low_barrier() {
-        return this._low_barrier.price;
-    }
     set high_barrier(price) {
         this._high_barrier.price = price;
+    }
+    get low_barrier() {
+        return this._low_barrier.price;
     }
     set low_barrier(price) {
         this._low_barrier.price = price;

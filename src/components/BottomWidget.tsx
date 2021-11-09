@@ -6,7 +6,7 @@ import { useStores } from 'src/store';
 import LastDigitStats from './LastDigitStats';
 
 type TBottomWidgetProps = {
-    bottomWidgets: React.FC<{
+    bottomWidgets?: React.FC<{
         digits: number[];
         tick?: TickSpotData | null;
     }>;

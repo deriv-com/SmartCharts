@@ -1,11 +1,12 @@
 import { observable, action, reaction, computed } from 'mobx';
+import { TMainStore } from 'src/types';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ViewStore {
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
         this.ViewsMenu = this.menu.connect(Menu);
@@ -27,8 +28,8 @@ export default class ViewStore {
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
     ViewsMenu: any;
-    mainStore: any;
-    menu: any;
+    mainStore: TMainStore;
+    menu: MenuStore;
     @observable templateName = '';
     @observable currentRoute = 'main';
     @observable isInputActive = false;

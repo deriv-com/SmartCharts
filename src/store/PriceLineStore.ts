@@ -1,5 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
+import { TMainStore } from 'src/types';
 import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
@@ -16,7 +17,7 @@ export default class PriceLineStore {
     className: any;
     hideBarrierLine: any;
     hideOffscreenLine: any;
-    mainStore: any;
+    mainStore: TMainStore;
     opacityOnOverlap: any;
     showOffscreenArrows: any;
     _relative = false;
@@ -42,7 +43,7 @@ export default class PriceLineStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
         when(() => this.context, this.onContextReady);
@@ -274,8 +275,8 @@ export default class PriceLineStore {
     overlapCheck(top: any) {
         const { _barriers } = this.mainStore.chart;
 
-        const filtered_barriers = _barriers.filter((a: any) => a._high_barrier.price !== 0);
-        const current_barrier_idx = filtered_barriers.findIndex((b: any) => b._high_barrier === this);
+        const filtered_barriers = _barriers.filter(a => a._high_barrier.price !== 0);
+        const current_barrier_idx = filtered_barriers.findIndex(b => b._high_barrier === this);
 
         for (let i = 0; i < filtered_barriers.length; i++) {
             if (i === current_barrier_idx) {
