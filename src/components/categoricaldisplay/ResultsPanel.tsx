@@ -1,14 +1,14 @@
 import React from 'react';
-import { IWrappedComponent } from 'mobx-react';
 import classNames from 'classnames';
 import { ArrowIcon, CategoryIconMap } from '../Icons';
 import { stringToSlug } from '../../utils';
 import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory} from '../../binaryapi/ActiveSymbols';
+import { TReactComponent } from '../../store/Connect';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
     onSelectItem?: (item: TCategorizedSymbolItem<TSubCategory | string>) => void;
-    getItemType: (categoryId: string) => IWrappedComponent<{ activeOptions: any[]; favoritesId: string; }> | IWrappedComponent<{ favoritesId: string; }>
+    getItemType: (categoryId: string) => TReactComponent<{ activeOptions: any[] | undefined; favoritesId: string; }> | TReactComponent<{ favoritesId: string; }>;
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
     disableAll?: boolean;

@@ -1,9 +1,9 @@
 import React from 'react';
 import { action } from 'mobx';
-import { inject, IWrappedComponent } from 'mobx-react';
+import { inject } from 'mobx-react';
 import { TMainStore } from '../types';
 
-type TReactComponent<P> =
+export type TReactComponent<P> =
     | React.StatelessComponent<P>
     | React.ComponentClass<P>
     | React.ClassicComponentClass<P>
@@ -14,7 +14,7 @@ export type TStoredComponent = {
     children?: React.ReactNode;
 };
 
-export type TStoredComponentChildProps = {
+export type TStoredComponentProps = {
     color?: string;
     draggable: boolean;
     hideBarrierLine?: boolean;
@@ -43,19 +43,19 @@ type BaseStore = {
 
 function connectMainStore<Store, I>(
     mapperFunction: TStoresToProps<Store, I>
-): <C>(WrappedComponent: TReactComponent<C>) => IWrappedComponent<I> {
+): <C>(WrappedComponent: TReactComponent<C>) => TReactComponent<I> {
     // Combine both stores and props, with props taking precedence
     const mapStoresAndProps = (mainStore: Store, props: I /* , context */) => ({
         ...mapperFunction(mainStore),
         ...props,
     });
     return <C>(WrappedComponent: TReactComponent<C>) =>
-        (inject(mapStoresAndProps)(WrappedComponent) as IWrappedComponent<I>);
+        (inject(mapStoresAndProps)(WrappedComponent as TReactComponent<unknown>) as TReactComponent<I>);
 }
 function connectCustomStore<Store, I>(
     mapperFunction: TStoresToProps<Store, I>,
     CustomStore: StoreClass<Store>
-): <C>(WrappedComponent: TReactComponent<C>) => IWrappedComponent<I> {
+): <C>(WrappedComponent: TReactComponent<C>) => TReactComponent<I> {
     return <C>(WrappedComponent: TReactComponent<C>) => {
         class StoredComponent extends React.Component<TStoredComponent> {
             injectedComponent: TReactComponent<C>;
@@ -96,11 +96,11 @@ function connectCustomStore<Store, I>(
             'Unknown';
 
         StoredComponent.displayName = `unbox-${wrappedDisplayName}`;
-        return inject(mainStore => ({ mainStore }))(StoredComponent) as IWrappedComponent<I>;
+        return inject(mainStore => ({ mainStore }))(StoredComponent as TReactComponent<unknown>) as TReactComponent<I>;
     };
 }
 // if store is not defined, main store is used
-export function connect<Store, I>(mapperFunction: TStoresToProps<Store, I>, CustomStore?: StoreClass<Store>): <C>(WrappedComponent: TReactComponent<C>) => IWrappedComponent<I> {
+export function connect<Store, I>(mapperFunction: TStoresToProps<Store, I>, CustomStore?: StoreClass<Store>): <C>(WrappedComponent: TReactComponent<C>) => TReactComponent<I> {
     if (CustomStore === undefined) {
         return connectMainStore<Store, I>(mapperFunction);
     }

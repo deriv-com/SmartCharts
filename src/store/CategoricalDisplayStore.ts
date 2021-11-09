@@ -1,10 +1,9 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import { IWrappedComponent } from 'mobx-react';
-import { connect } from './Connect';
 import SearchInput, { TSearchInputProps } from '../components/SearchInput';
 import { NormalItem, ActiveItem, ResultsPanel, TResultsPanelProps, FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
 import { cloneCategories, cloneCategory } from '../utils';
+import { connect, TReactComponent } from './Connect';
 import Context from '../components/ui/Context';
 import { TMainStore } from '../types';
 import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory, TSubCategoryDataItem} from '../binaryapi/ActiveSymbols';
@@ -14,7 +13,7 @@ type TCategoricalDisplayStoreProps = {
     onSelectItem?: (item: TSubCategoryDataItem) => void;
     getIsShown: () => boolean;
     getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
-    activeOptions: any[];
+    activeOptions?: any[] | undefined;
     placeholderText: string;
     favoritesId: string;
     mainStore: TMainStore;
@@ -26,9 +25,9 @@ type TCategoricalDisplayStoreProps = {
 }
 
 export default class CategoricalDisplayStore {
-    FilterPanel: IWrappedComponent<TFilterPanelProps>;
-    ResultsPanel: IWrappedComponent<TResultsPanelProps>;
-    SearchInput: IWrappedComponent<TSearchInputProps>;
+    FilterPanel: TReactComponent<TFilterPanelProps>;
+    ResultsPanel: TReactComponent<TResultsPanelProps>;
+    SearchInput: TReactComponent<TSearchInputProps>;
     activeMarket?: string | null;
     activeSubCategory = '';
     categoryElements: {[id: string]: HTMLElement | null};

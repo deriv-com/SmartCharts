@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { TMainStore, TCIQAddEventListener, TCIQAppend, TCIQChartEngineChart } from 'src/types';
-import { TStoredComponentChildProps } from './Connect';
+import { TStoredComponentProps } from './Connect';
 import Context from '../components/ui/Context';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
@@ -136,7 +136,7 @@ export default class BarrierStore {
         showOffscreenArrows,
         isSingleBarrier,
         opacityOnOverlap,
-    }: BarrierStore & TStoredComponentChildProps): void {
+    }: BarrierStore & TStoredComponentProps): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
