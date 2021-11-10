@@ -69,6 +69,11 @@
                 border: 1px solid themed('ChartHistoryPickerActiveBorder');
             }
         }
+        &:hover {
+            @include themify($themes) {
+                border: 1px solid themed('ChartHistoryPickerActiveBorder');
+            }
+        }
         input {
             width: 100%;
             border: none;
