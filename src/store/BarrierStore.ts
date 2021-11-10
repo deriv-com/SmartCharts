@@ -1,12 +1,29 @@
 import { observable, action, computed } from 'mobx';
 import { TMainStore, TCIQAddEventListener, TCIQAppend, TCIQChartEngineChart } from 'src/types';
-import { TStoredComponentProps } from './Connect';
 import Context from '../components/ui/Context';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 
 import { isValidProp } from '../utils';
+
+type TUpdatePropsParams = {
+    color?: string;
+    draggable: boolean;
+    hideBarrierLine?: boolean;
+    hideOffscreenLine?: boolean;
+    hidePriceLines: boolean;
+    high: number;
+    lineStyle?: string;
+    low?: number;
+    mainStore: TMainStore;
+    onChange: () => typeof action;
+    onChartBarrierChange: () => typeof action;
+    relative: boolean;
+    shade?: string;
+    shadeColor?: string;
+    title?: string;
+}
 
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
@@ -136,7 +153,7 @@ export default class BarrierStore {
         showOffscreenArrows,
         isSingleBarrier,
         opacityOnOverlap,
-    }: BarrierStore & TStoredComponentProps): void {
+    }: BarrierStore & TUpdatePropsParams): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
