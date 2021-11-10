@@ -1,7 +1,6 @@
 import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import Menu, { TMenuProps } from '../components/Menu';
-import { TMainStore } from '../types';
 import { TReactComponent } from './Connect';
 
 export default class ChartModeStore {
