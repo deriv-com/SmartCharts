@@ -1,15 +1,15 @@
 import { observable, action, reaction, computed } from 'mobx';
-import { TMainStore } from 'src/types';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
+import MainStore from '.';
 import MenuStore from './MenuStore';
-import Menu from '../components/Menu';
+import Menu, { TMenuProps } from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ViewStore {
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.menu = new MenuStore(mainStore, { route: 'templates' });
-        this.ViewsMenu = this.menu.connect(Menu);
+        this.ViewsMenu = this.menu.connect<TMenuProps>(Menu as React.FC<TMenuProps>);
         reaction(
             () => this.menu.dialog.open,
             () => {
@@ -28,7 +28,7 @@ export default class ViewStore {
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
     ViewsMenu: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menu: MenuStore;
     @observable templateName = '';
     @observable currentRoute = 'main';

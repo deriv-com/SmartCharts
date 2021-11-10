@@ -1,22 +1,26 @@
 import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DebouncedFunc } from 'lodash';
 import { connect } from './Connect';
+import Context from '../components/ui/Context';
+import MainStore from '.';
 
-let activeDialog: any;
+let activeDialog: DialogStore | undefined;
 
 export default class DialogStore {
-    mainStore: any;
-    constructor(mainStore: any) {
+    mainStore: MainStore;
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(
-            () => this.context,
+            () => !!this.context,
             () => {
                 this.routingStore.registerDialog(this);
             }
         );
     }
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
     get routingStore() {
@@ -26,14 +30,14 @@ export default class DialogStore {
     @observable open = false;
     onClose = () => this.setOpen(false);
     setOpen = debounce(
-        (val: any) => {
+        (val: boolean) => {
             this.openDialog(val);
         },
         10,
         { leading: true, trailing: false }
     );
 
-    @action.bound openDialog(val: any) {
+    @action.bound openDialog(val: boolean) {
         if (this.open !== val) {
             this.open = val;
             if (this.open) {
@@ -57,7 +61,7 @@ export default class DialogStore {
         }
     }
 
-    handleClickOutside = (e: any) => {
+    handleClickOutside = (e: React.MouseEvent | Event | UIEvent) => {
         let isRightClick = false;
         if ('which' in e) {
             isRightClick = e.which === 3;
@@ -69,9 +73,9 @@ export default class DialogStore {
             this.onClose();
         }
     };
-    closeOnEscape = (e: any) => {
+    closeOnEscape = (e: React.KeyboardEvent | Event) => {
         const ESCAPE = 27;
-        if (e.keyCode === ESCAPE) {
+        if ((e as React.KeyboardEvent).keyCode === ESCAPE) {
             this.onClose();
         }
     };
@@ -86,13 +90,13 @@ export default class DialogStore {
         document.removeEventListener('keydown', this.closeOnEscape);
     }
 
-    @action.bound onContainerClick(e: any) {
+    @action.bound onContainerClick(e: React.MouseEvent) {
         /* TODO: why stopPropagation() is not working ಠ_ಠ */
         // e.stopPropagation();
         e.nativeEvent.isHandledByDialog = true;
     }
 
-    @action.bound updateCloseCallback(onClose: any) {
+    @action.bound updateCloseCallback(onClose: () => void | undefined) {
         if (onClose !== undefined) {
             this.onClose = onClose;
         }
@@ -107,3 +111,12 @@ export default class DialogStore {
         isMobile: this.mainStore.chart.isMobile,
     }));
 }
+
+export type TDialogStoreConnectedProps = {
+    open: boolean;
+    setOpen: DebouncedFunc<(val: boolean) => void>;
+    onClose: () => void | undefined;
+    updateCloseCallback: (onClose: () => void | undefined) => void;
+    onContainerClick: (e: React.MouseEvent) => void;
+    isMobile: boolean;
+};

@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 import { useConstructor } from 'src/hooks';
-import { TMainStore } from 'src/types';
-import { useStores } from '.';
+import MainStore, { useStores } from '.';
 
 type TStoreProps = {
     updateProps: (props: any) => void;
@@ -9,7 +8,7 @@ type TStoreProps = {
 };
 
 type TStoreClass = {
-    new (mainStore: TMainStore): TStoreProps;
+    new (mainStore: MainStore): TStoreProps;
 };
 
 type TConnectStoreWrapperProps = {

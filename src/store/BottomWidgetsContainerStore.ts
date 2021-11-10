@@ -1,9 +1,9 @@
 import { action, observable, when } from 'mobx';
 import Context from '../components/ui/Context';
-import { TMainStore } from '../types';
+import MainStore from '.';
 
 export default class BottomWidgetsContainerStore {
-    mainStore: TMainStore;
+    mainStore: MainStore;
     @observable bottom = 0;
     @observable isReadyToShow = false;
     @observable mainChartHeight = 0;
@@ -16,11 +16,11 @@ export default class BottomWidgetsContainerStore {
     get stx(): Context["stx"] {
         return this.context.stx;
     }
-    get state(): TMainStore["state"] {
+    get state(): MainStore["state"] {
         return this.mainStore.state;
     }
 
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
 
         when(() => !!this.context, this.initial);

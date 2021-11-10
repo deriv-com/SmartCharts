@@ -1,11 +1,12 @@
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
+import { TicksHistoryResponse } from '@deriv/api-types';
+import { TMainStore, TQuote } from 'src/types';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
-import { TicksHistoryResponse } from '@deriv/api-types';
-import { TMainStore, TQuote } from 'src/types';
+
 class Feed {
     _binaryApi: any;
     _connectionClosedDate: any;

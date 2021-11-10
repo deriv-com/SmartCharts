@@ -5,7 +5,7 @@ import { NormalItem, ActiveItem, ResultsPanel, TResultsPanelProps, FilterPanel, 
 import { cloneCategories, cloneCategory } from '../utils';
 import { connect, TReactComponent } from './Connect';
 import Context from '../components/ui/Context';
-import { TMainStore } from '../types';
+import MainStore from '.';
 import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory, TSubCategoryDataItem} from '../binaryapi/ActiveSymbols';
 
 type TCategoricalDisplayStoreProps = {
@@ -16,7 +16,7 @@ type TCategoricalDisplayStoreProps = {
     activeOptions?: any[] | undefined;
     placeholderText: string;
     favoritesId: string;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     id: string;
     getCurrentActiveCategory: () => string;
     getCurrentActiveSubCategory: () => string;
@@ -39,7 +39,7 @@ export default class CategoricalDisplayStore {
     getCurrentActiveSubCategory: () => string;
     id: string;
     isInit: boolean;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     onSelectItem?: (item: TSubCategoryDataItem) => void;
     pauseScrollSpy = false;
     searchInput: React.RefObject<HTMLInputElement>;
@@ -101,7 +101,7 @@ export default class CategoricalDisplayStore {
             return normalItem;
         };
 
-        this.ResultsPanel = connect<TMainStore, TResultsPanelProps>(() => ({
+        this.ResultsPanel = connect<MainStore, TResultsPanelProps>(() => ({
             filteredItems: this.filteredItems,
             setCategoryElement: this.setCategoryElement,
             getItemType,
@@ -111,7 +111,7 @@ export default class CategoricalDisplayStore {
             handleTitleClick: this.handleTitleClick,
         }))(ResultsPanel);
 
-        this.FilterPanel = connect<TMainStore, TFilterPanelProps>(({ chart }: TMainStore) => ({
+        this.FilterPanel = connect<MainStore, TFilterPanelProps>(({ chart }: MainStore) => ({
             isMobile: chart.isMobile,
             filteredItems: this.filteredItems,
             handleFilterClick: this.handleFilterClick,
@@ -120,7 +120,7 @@ export default class CategoricalDisplayStore {
             isSearching: this.filterText !== '',
         }))(FilterPanel);
 
-        this.SearchInput = connect<TMainStore, TSearchInputProps>(() => ({
+        this.SearchInput = connect<MainStore, TSearchInputProps>(() => ({
             placeholder: placeholderText,
             value: this.filterText,
             onChange: this.setFilterText,
@@ -143,7 +143,7 @@ export default class CategoricalDisplayStore {
     lastFilteredItems: TCategorizedSymbols = [];
     activeCategories: string[] = [];
 
-    get chart(): TMainStore["chart"] {
+    get chart(): MainStore["chart"] {
         return this.mainStore.chart;
     }
 

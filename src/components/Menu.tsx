@@ -6,36 +6,30 @@ import classNames from 'classnames';
 import MenuMobile from './MenuMobile';
 import Tooltip from './Tooltip';
 import { CloseIcon } from './Icons';
-import { TDialogProps } from './Dialog';
-import { TReactComponent } from '../store/Connect';
-import ChartStore from '../store/ChartStore';
+import { TMenuStoreConnectedProps } from '../store/MenuStore';
 
-export type TMenuProps = {
-    open: boolean;
-    dialogStatus?: boolean;
+export type TMenuProps = TMenuStoreConnectedProps & {
     className: string;
     children: React.ReactNode;
     title: string;
     tooltip?: boolean;
-    onTitleClick: () => void;
-    DropdownDialog: TReactComponent<Partial<TDialogProps | ChartStore> & { isFullscreen: TMenuProps['isFullscreen'] }>;
-    isMobile: boolean;
     isFullscreen: boolean;
     portalNodeId: string;
     enabled: boolean;
-    shouldRenderDialogs: boolean;
-    handleCloseDialog: () => void;
     onMouseEnter: () => void;
     onMouseLeave: () => void;
-    theme: string;
     enableTabular: boolean;
-    ready: boolean;
-    customHead: JSX.Element;
+    customHead: React.ReactElement;
     emptyMenu: boolean;
     modalMode: boolean;
 };
 
-const Menu = ({
+type TMenuAsObject = {
+    Body?: (props: TMenuProps) => React.ReactNode;
+    Title?: (props: TMenuProps) => React.ReactNode;
+}
+
+const Menu: React.FC<TMenuProps> | TMenuAsObject = ({
     open,
     dialogStatus,
     className,
@@ -58,7 +52,7 @@ const Menu = ({
     customHead,
     emptyMenu,
     modalMode,
-}: TMenuProps): React.ReactNode => {
+}) => {
     const onOverlayClick = (e: React.MouseEvent) => {
         if ((e.target as HTMLDivElement).className === 'cq-modal__overlay') {
             handleCloseDialog();

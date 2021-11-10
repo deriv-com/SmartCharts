@@ -1,12 +1,18 @@
 import { action, computed, reaction, observable } from 'mobx';
-import { connect } from './Connect';
-import DialogStore from './DialogStore';
-import Dialog from '../components/Dialog';
+import { connect, TReactComponent } from './Connect';
+import DialogStore, { TDialogStoreConnectedProps } from './DialogStore';
+import Dialog, { TDialogProps } from '../components/Dialog';
+import MainStore from '.';
+import ChartStore from './ChartStore';
+import Context from '../components/ui/Context';
+
+type TDropdownDialog = TReactComponent<Partial<TDialogProps | ChartStore> & { isFullscreen: boolean }>
+
 export default class MenuStore {
-    DropDownDialog: any;
-    dialog: any;
-    mainStore: any;
-    constructor(mainStore: any, options: any) {
+    DropDownDialog: (TReactComponent<TDialogProps & TDialogStoreConnectedProps>) | TDropdownDialog;
+    dialog: DialogStore;
+    mainStore: MainStore;
+    constructor(mainStore: MainStore, options: { route: string }) {
         this.mainStore = mainStore;
         this.dialog = new DialogStore(mainStore);
         reaction(
@@ -18,7 +24,7 @@ export default class MenuStore {
         }
         this.DropDownDialog = this.dialog.connect(Dialog);
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
     get routingStore() {
@@ -33,7 +39,7 @@ export default class MenuStore {
         return this.dialog.open;
     }
     @action.bound
-    setOpen(val: any) {
+    setOpen(val: boolean) {
         this.dialog.setOpen(val);
         /**
          *  Update the url hash by considering the dialog `route` and `open`
@@ -41,10 +47,10 @@ export default class MenuStore {
         this.routingStore.updateRoute(this.route, val);
     }
     blurInput() {
-        const stx = this.context.stx;
+        const stx: Context["stx"] = this.context.stx;
         setTimeout(this.handleDialogStatus, 300);
         if (this.open === false) {
-            (document.activeElement as any).blur();
+            (document.activeElement as HTMLElement).blur();
             stx.modalEnd();
         } else {
             stx.modalBegin();
@@ -57,7 +63,7 @@ export default class MenuStore {
         }
     }
     @action.bound
-    onTitleClick(e: any) {
+    onTitleClick (e: React.MouseEvent) {
         if (e) {
             e.stopPropagation();
         }
@@ -72,7 +78,7 @@ export default class MenuStore {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);
     }
-    connect = connect(({ chart: c, chartSetting }: any) => ({
+    connect = connect(({ chart: c, chartSetting }: MainStore) => ({
         ready: c.context,
         setOpen: this.setOpen,
         open: this.open,
@@ -85,3 +91,16 @@ export default class MenuStore {
         theme: chartSetting.theme,
     }));
 }
+
+export type TMenuStoreConnectedProps = {
+    ready: boolean;
+    setOpen: (val: boolean) => void;
+    open: boolean;
+    dialogStatus: boolean;
+    onTitleClick: (e: React.MouseEvent) => void;
+    handleCloseDialog: () => void;
+    DropdownDialog: TDropdownDialog;
+    isMobile: boolean;
+    shouldRenderDialogs: boolean;
+    theme: string;
+};

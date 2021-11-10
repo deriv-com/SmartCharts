@@ -1,6 +1,6 @@
 import { action, observable, reaction, computed } from 'mobx';
 import moment from 'moment';
-import { ActiveSymbolsItem, TChanges, TGranularity, TMainStore } from 'src/types';
+import { ActiveSymbolsItem, TChanges, TGranularity } from '../types';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import inject from '../chartiq_injections';
 import Context from '../components/ui/Context';
@@ -26,6 +26,8 @@ import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
 import { STATE } from '../Constant';
 import BarrierStore from './BarrierStore';
+import MainStore from '.';
+
 class ChartStore {
     static keystrokeHub: KeystrokeHub;
     static chartCount = 0;
@@ -33,9 +35,9 @@ class ChartStore {
     static activeSymbols: ActiveSymbols;
     chartId?: string;
     feed: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     resizeObserver?: ResizeObserver;
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
     }
     feedCall: { tradingTimes?: boolean; activeSymbols?: boolean } = {};

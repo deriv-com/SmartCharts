@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
-import { TMainStore } from 'src/types';
 import { getUTCDate, updatePropIfChanged } from '../utils';
+import MainStore from '.';
 // width here includes the size of the flag
 const MARKER_MAX_WIDTH = 150;
 export default class MarkerStore {
@@ -8,7 +8,7 @@ export default class MarkerStore {
     _listenerId: any;
     chart: any;
     chartStore: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     panel: any;
     stx: any;
     yAxis: any;
@@ -26,7 +26,7 @@ export default class MarkerStore {
     left: any;
     @observable
     bottom: any;
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         this.stx = this.mainStore.chart.context.stx;

@@ -1,5 +1,6 @@
 import { action, computed, observable, reaction, when } from 'mobx';
-import { ChartType, TMainStore } from 'src/types';
+import { ChartType } from 'src/types';
+import MainStore from '.';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -80,7 +81,7 @@ export default class ChartTypeStore {
     aggregates: any;
     chartTypes: typeof ChartTypes = [];
     listStore: ListStore;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menu: any;
     settingsDialog: any;
     constructor(mainStore: any) {

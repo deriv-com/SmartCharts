@@ -1,6 +1,7 @@
 import { observable, action, computed } from 'mobx';
-import { TMainStore, TCIQAddEventListener, TCIQAppend, TCIQChartEngineChart } from 'src/types';
+import { TCIQAddEventListener, TCIQAppend, TCIQChartEngineChart } from '../types';
 import Context from '../components/ui/Context';
+import MainStore from '.';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
@@ -15,7 +16,7 @@ type TUpdatePropsParams = {
     high: number;
     lineStyle?: string;
     low?: number;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     onChange: () => typeof action;
     onChartBarrierChange: () => typeof action;
     relative: boolean;
@@ -32,7 +33,7 @@ export default class BarrierStore {
     aboveShadeStore: ShadeStore;
     belowShadeStore: ShadeStore;
     betweenShadeStore: ShadeStore;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     title?: string;
     static get SHADE_NONE_SINGLE(): string {
         return 'SHADE_NONE_SINGLE';
@@ -84,7 +85,7 @@ export default class BarrierStore {
         return this.yAxisWidth + 1;
     }
 
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this._high_barrier = new PriceLineStore(this.mainStore);
         this._low_barrier = new PriceLineStore(this.mainStore);
