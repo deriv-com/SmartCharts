@@ -71,6 +71,7 @@ const Chart = props => {
         toolbarWidget,
         onCrosshairChange,
         isLoading,
+        historical,
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;
@@ -123,7 +124,13 @@ const Chart = props => {
                                 <div className='cq-top-ui-widgets'>
                                     <TopWidgets />
                                 </div>
-                                <div className='chartContainer' style={{ height: chartContainerHeight }}>
+                                <div
+                                    className='chartContainer'
+                                    style={{
+                                        height:
+                                            historical && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                    }}
+                                >
                                     <Crosshair />
                                 </div>
                                 {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}
@@ -174,4 +181,5 @@ export default connect(({ chart, drawTools, studies, chartSetting, chartType, st
     isHighestLowestMarkerEnabled: chartSetting.isHighestLowestMarkerEnabled,
     isLoading: loader.isActive,
     PredictionIndicatorDialog: timeperiod.PredictionIndicatorDialog,
+    historical: chartSetting.historical,
 }))(Chart);
