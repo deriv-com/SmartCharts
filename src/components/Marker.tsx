@@ -1,22 +1,24 @@
 import React from 'react';
 import classNames from 'classnames';
-import { connect } from '../store/Connect';
+import { observer } from 'mobx-react-lite';
+import connectStore from 'src/store/ConnectStore';
 import MarkerStore from '../store/MarkerStore';
 import '../../sass/components/_markers.scss';
 
-const Marker = ({ display, left, bottom, children, className }: any) => (
-    <div className={classNames('stx-marker', className)} style={{ display, left, bottom }}>
-        {children}
-    </div>
-);
+type TMarkerProps = {
+    store: MarkerStore;
+};
 
-export default connect(
-    (store: any) => ({
-        left: store.left,
-        bottom: store.bottom,
-        children: store.children,
-        className: store.className,
-        display: store.display,
-    }),
-    MarkerStore
-)(Marker);
+const Marker: React.FC<TMarkerProps> = ({ store, children }) => {
+    const { display, left, bottom, className } = store;
+
+    return (
+        <div className={classNames('stx-marker', className)} style={{ display, left, bottom }}>
+            {children}
+        </div>
+    );
+};
+
+const BarrierWrapper = connectStore(observer(Marker), MarkerStore);
+
+export default BarrierWrapper;

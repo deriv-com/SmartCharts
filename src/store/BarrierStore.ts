@@ -3,7 +3,6 @@ import { TMainStore } from 'src/types';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
-
 import { isValidProp } from '../utils';
 
 export default class BarrierStore {

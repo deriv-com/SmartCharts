@@ -12,12 +12,13 @@ type TStoreClass = {
     new (mainStore: TMainStore): TStoreProps;
 };
 
-type TMainStoreWrapperProps = {
+type TConnectStoreWrapperProps = {
     StoreClass: TStoreClass;
     children(store?: TStoreProps): ReactElement;
+    [x: string]: any;
 };
 
-const MainStoreWrapper: React.FC<TMainStoreWrapperProps> = ({ StoreClass, ...props }) => {
+const ConnectStoreWrapper: React.FC<TConnectStoreWrapperProps> = ({ StoreClass, ...props }) => {
     const store = useStores();
     const storeRef = React.useRef<TStoreProps>();
 
@@ -38,4 +39,18 @@ const MainStoreWrapper: React.FC<TMainStoreWrapperProps> = ({ StoreClass, ...pro
     return <React.Fragment>{props.children(storeRef.current)}</React.Fragment>;
 };
 
-export default MainStoreWrapper;
+const connectStore = (BaseComponent: React.FunctionComponent<any>, StoreClass: TStoreClass) => {
+    const Component: React.FC = ({ children, ...props }) => (
+        <ConnectStoreWrapper StoreClass={StoreClass} {...props}>
+            {(store: TStoreProps) => (
+                <BaseComponent store={store} {...props}>
+                    {children}
+                </BaseComponent>
+            )}
+        </ConnectStoreWrapper>
+    );
+
+    return Component;
+};
+
+export default connectStore;

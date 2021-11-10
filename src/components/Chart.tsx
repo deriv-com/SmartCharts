@@ -2,8 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
-import BarrierStore from 'src/store/BarrierStore';
-import MainStoreWrapper from 'src/store/MainStoreWrapper';
 import RenderInsideChart from './RenderInsideChart';
 import ChartTitle from './ChartTitle';
 import Loader from './Loader';
@@ -115,13 +113,10 @@ const Chart: React.FC<TChartProps> = props => {
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
                                 <RenderInsideChart at='holder'>
                                     {barriers.map((barr, idx) => (
-                                        <MainStoreWrapper
+                                        <Barrier
                                             key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
-                                            StoreClass={BarrierStore}
                                             {...barr}
-                                        >
-                                            {(store: BarrierStore) => <Barrier store={store} {...barr} />}
-                                        </MainStoreWrapper>
+                                        />
                                     ))}
                                 </RenderInsideChart>
                                 <RenderInsideChart at='subholder'>
