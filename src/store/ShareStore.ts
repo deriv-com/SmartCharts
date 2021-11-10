@@ -1,7 +1,7 @@
 import { observable, action, computed, when } from 'mobx';
 import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
-import { downloadFileInBrowser } from '../utils';
+import { downloadFileInBrowser, is_browser } from '../utils';
 import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
@@ -39,8 +39,8 @@ export default class ShareStore {
     @observable isLoadingPNG = false;
 
     createNewTab() {
-        // Create a new tab for browsers that doesn't support HTML5 download attribute
-        return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform) ? window.open() : null;
+        // Create a new tab for older iOS browsers that don't support HTML5 download attribute
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? window.open() : null;
     }
 
     @action.bound downloadPNG() {
@@ -52,9 +52,64 @@ export default class ShareStore {
             // since react rerenders is not immediate, we use CIQ.appendClassName to
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea?.classList.add('ciq-chart--screenshot');
+            // There is no html2canvas version able to render our svgs on a screenshot (tried 0.5.0-beta4 as well),
+            // the below workaround lets us temporarily replace svgs with imgs on canvas before taking a screenshot:
+            const nodesToRecover: any[] = [];
+            const nodesToRemove: any[] = [];
+            const svgIcons = this.screenshotArea?.querySelectorAll('svg') || [];
+            svgIcons.forEach(svg => {
+                const parentNode = svg.parentNode;
+                const canvas = document.createElement('canvas');
+                canvas.width = Number(getComputedStyle(svg).width.match(/[0-9]+/));
+                canvas.height = Number(getComputedStyle(svg).height.match(/[0-9]+/));
+                const context = canvas.getContext('2d');
+                const rgbColor = getComputedStyle(svg).fill;
+                if (rgbColor) {
+                    const hexColorDigitPart = rgbColor
+                        .split(',')
+                        .map(item => Number(item.replace(/\D+/g, '')).toString(16).padStart(2, '0'))
+                        .join('');
+                    if (context && hexColorDigitPart > '333333') {
+                        context.fillStyle = getComputedStyle(svg).fill;
+                        context.fillRect(0, 0, canvas.width, canvas.height);
+                        context.globalCompositeOperation = 'destination-in';
+                    }
+                }
+                const image = new Image();
+                image.src = svg.querySelector('use')?.getAttribute('xlink:href') || '';
+                image.onload = () => {
+                    if (context) {
+                        context.drawImage(image, 0, 0);
+                    }
+                    if (!is_browser.Firefox() && !is_browser.Safari()) {
+                        nodesToRecover.push({
+                            parent: parentNode,
+                            child: svg,
+                        });
+                        parentNode?.removeChild(svg);
+                        nodesToRemove.push({
+                            parent: parentNode,
+                            child: canvas,
+                        });
+                        parentNode?.appendChild(canvas);
+                    }
+                };
+            });
+
             setTimeout(() => {
-                html2canvas.default(this.screenshotArea).then((canvas: any) => this._onCanvasReady(canvas, newTab));
-            }, 0);
+                html2canvas.default(this.screenshotArea).then((canvas: any) => {
+                    this._onCanvasReady(canvas, newTab);
+                    // replacing the added imgs on canvas back with svgs after downloading a screenshot:
+                    if (!is_browser.Firefox() && !is_browser.Safari()) {
+                        nodesToRemove.forEach(pair => {
+                            pair.parent.removeChild(pair.child);
+                        });
+                        nodesToRecover.forEach(pair => {
+                            pair.parent.appendChild(pair.child);
+                        });
+                    }
+                });
+            }, 100);
         });
 
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');

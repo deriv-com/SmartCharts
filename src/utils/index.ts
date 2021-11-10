@@ -60,6 +60,18 @@ export const getIntervalInSeconds = ({
     return 0;
 };
 
+export const is_browser = {
+    Chrome: () =>
+        navigator.userAgent.indexOf('Chrome') !== -1 && !navigator.userAgent.match(/OPR|Opera|Chromium|Edg|Edge/i),
+    Chromium: () => navigator.userAgent.indexOf('Chromium') !== -1,
+    Edge: () => !!navigator.userAgent.match(/Edg|Edge/i) && !(document as any).documentMode,
+    Firefox: () => navigator.userAgent.indexOf('Firefox') !== -1 && navigator.userAgent.indexOf('Seamonkey') === -1,
+    IE: () => navigator.userAgent.match(/MSIE|Trident/i) || !!(document as any).documentMode,
+    Opera: () => !!navigator.userAgent.match(/OPR|Opera/i),
+    Safari: () => navigator.userAgent.indexOf('Safari') !== -1 && !navigator.userAgent.match(/Chrome|Chromium/i),
+    Seamonkey: () => navigator.userAgent.indexOf('Seamonkey') !== -1,
+};
+
 export function stableSort<T>(arr: T[], compare: (a: T, b: T) => number) {
     const original = arr;
 

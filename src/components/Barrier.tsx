@@ -1,80 +1,79 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
+import BarrierStore from 'src/store/BarrierStore';
 import Shade from './Shade';
-import { connect } from '../store/Connect';
-import BarrierStore from '../store/BarrierStore';
+
 import PriceLine from './PriceLine';
 
-const Barrier = React.memo(
-    ({
+type TBarrierProps = {
+    store: BarrierStore;
+};
+
+const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
+    const {
+        _high_barrier,
+        _low_barrier,
+        aboveShadeStore,
+        belowShadeStore,
+        betweenShadeStore,
         shadeColor = '#39b19d',
         color = '#39b19d',
         foregroundColor = '#ffffff',
-        _high_barrier,
-        _low_barrier,
+        hideBarrierLine,
+        hideOffscreenBarrier,
+        hideOffscreenLine,
         hidePriceLines,
         lineStyle,
         isInitialized,
         priceLabelWidth,
+        title,
         isSingleBarrier,
-        aboveShadeStore,
-        belowShadeStore,
-        betweenShadeStore,
-        ...props
-    }: any) =>
-        isInitialized && (
-            <div
-                className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
-                style={{ '--shade-color': shadeColor } as any}
-            >
-                <PriceLine
-                    store={_high_barrier}
-                    width={priceLabelWidth}
-                    lineStyle={lineStyle}
-                    color={color}
-                    foregroundColor={foregroundColor}
-                    {...props}
-                />
-                {!isSingleBarrier && (
-                    <>
-                        <PriceLine
-                            store={_low_barrier}
-                            width={priceLabelWidth}
-                            lineStyle={lineStyle}
-                            color={color}
-                            foregroundColor={foregroundColor}
-                            {...props}
-                        />
-                        <Shade store={aboveShadeStore} />
-                        <Shade store={belowShadeStore} />
-                        <Shade store={betweenShadeStore} />
-                    </>
-                )}
-            </div>
-        )
-);
+        opacityOnOverlap,
+    } = store;
 
-export default connect(
-    (store: any) => ({
-        _high_barrier: store._high_barrier,
-        _low_barrier: store._low_barrier,
-        aboveShadeStore: store.aboveShadeStore,
-        belowShadeStore: store.belowShadeStore,
-        betweenShadeStore: store.betweenShadeStore,
-        shadeColor: store.shadeColor,
-        color: store.color,
-        foregroundColor: store.foregroundColor,
-        hideBarrierLine: store.hideBarrierLine,
-        hideOffscreenBarrier: store.hideOffscreenBarrier,
-        hideOffscreenLine: store.hideOffscreenLine,
-        hidePriceLines: store.hidePriceLines,
-        lineStyle: store.lineStyle,
-        isInitialized: store.isInitialized,
-        destructor: store.destructor,
-        priceLabelWidth: store.priceLabelWidth,
-        title: store.title,
-        isSingleBarrier: store.isSingleBarrier,
-        opacityOnOverlap: store.opacityOnOverlap,
-    }),
-    BarrierStore
-)(Barrier);
+    if (!isInitialized) return null;
+
+    return (
+        <div
+            className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
+            style={{ '--shade-color': shadeColor } as any}
+        >
+            <PriceLine
+                store={_high_barrier}
+                width={priceLabelWidth}
+                lineStyle={lineStyle}
+                color={color}
+                foregroundColor={foregroundColor}
+                hideBarrierLine={hideBarrierLine}
+                hideOffscreenBarrier={hideOffscreenBarrier}
+                hideOffscreenLine={hideOffscreenLine}
+                title={title}
+                opacityOnOverlap={opacityOnOverlap}
+                {...props}
+            />
+            {!isSingleBarrier && (
+                <>
+                    <PriceLine
+                        store={_low_barrier}
+                        width={priceLabelWidth}
+                        lineStyle={lineStyle}
+                        color={color}
+                        foregroundColor={foregroundColor}
+                        hideBarrierLine={hideBarrierLine}
+                        hideOffscreenBarrier={hideOffscreenBarrier}
+                        hideOffscreenLine={hideOffscreenLine}
+                        title={title}
+                        opacityOnOverlap={opacityOnOverlap}
+                        {...props}
+                    />
+                    <Shade store={aboveShadeStore} />
+                    <Shade store={belowShadeStore} />
+                    <Shade store={betweenShadeStore} />
+                </>
+            )}
+        </div>
+    );
+};
+
+export default observer(Barrier);
