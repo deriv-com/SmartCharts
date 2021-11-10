@@ -2,13 +2,18 @@ import React from 'react';
 import classNames from 'classnames';
 import { ArrowIcon, CategoryIconMap } from '../Icons';
 import { stringToSlug } from '../../utils';
-import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory} from '../../binaryapi/ActiveSymbols';
+import { TActiveItemProps, TNormalItemProps } from './Item';
+import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory } from '../../binaryapi/ActiveSymbols';
 import { TReactComponent } from '../../store/Connect';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
     onSelectItem?: (item: TCategorizedSymbolItem<TSubCategory | string>) => void;
-    getItemType: (categoryId: string) => TReactComponent<{ activeOptions: any[] | undefined; favoritesId: string; }> | TReactComponent<{ favoritesId: string; }>;
+    getItemType: (
+        categoryId: string
+    ) =>
+        | TReactComponent<Pick<TActiveItemProps, 'activeOptions' | 'favoritesId'>>
+        | TReactComponent<Pick<TNormalItemProps, 'favoritesId'>>;
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
     disableAll?: boolean;
@@ -16,7 +21,7 @@ export type TResultsPanelProps = {
     handleTitleClick: (categoryId: string) => void;
 };
 
-function getItemCount(category: TCategorizedSymbolItem<TSubCategory>) {
+function getItemCount(category: TCategorizedSymbolItem) {
     let count = 0;
     if (category.hasSubcategory) {
         for (const sub of category.data) {
@@ -141,7 +146,7 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
     handleTitleClick,
 }) => (
     <>
-        {filteredItems.map((category: TCategorizedSymbolItem<TSubCategory>) => {
+        {filteredItems.map((category: TCategorizedSymbolItem) => {
             const categoryItemCount = getItemCount(category);
             return (
                 (categoryItemCount > 0 || category.emptyDescription) && (

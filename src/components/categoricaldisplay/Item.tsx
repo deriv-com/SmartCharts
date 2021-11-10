@@ -6,7 +6,7 @@ import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem} from '../..
 export type TActiveItemProps = {
     item: TSubCategoryDataItem;
     favoritesId: string;
-    activeOptions?: any[] | undefined;
+    activeOptions: any[] | undefined;
 };
 
 export type TNormalItemProps = {

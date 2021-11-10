@@ -221,7 +221,7 @@ export default class CategoricalDisplayStore {
 
             const favsCategoryItem = (favsCategory.data as TSubCategory[]).filter((favItem: TSubCategory) => typeof favItem !== 'string');
 
-            filteredItems.forEach((category: TCategorizedSymbolItem<TSubCategory | string>) => {
+            filteredItems.forEach((category: TCategorizedSymbolItem) => {
                 const foundItems = findFavItem(category);
                 (favsCategoryItem as TSubCategory[] & TSubCategoryDataItem[]).push(...foundItems);
             });

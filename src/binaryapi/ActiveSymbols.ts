@@ -32,7 +32,7 @@ export type TSubCategory = {
     data: TSubCategoryDataItem[];
 };
 
-export type TCategorizedSymbolItem<T extends (TSubCategory | string) | TSubCategory | string> = {
+export type TCategorizedSymbolItem<T = TSubCategory> = {
     categoryName: string;
     categoryId: string;
     hasSubcategory: boolean;
@@ -41,7 +41,7 @@ export type TCategorizedSymbolItem<T extends (TSubCategory | string) | TSubCateg
     emptyDescription?: string;
 };
 
-export type TCategorizedSymbols = TCategorizedSymbolItem<TSubCategory>[];
+export type TCategorizedSymbols = TCategorizedSymbolItem[];
 
 export default class ActiveSymbols {
     _api: any;
@@ -167,7 +167,7 @@ export default class ActiveSymbols {
             subcategoryName: d.submarket_display_name,
             data: [],
         });
-        const getCategory = (d: TProcessedSymbolItem): TCategorizedSymbolItem<TSubCategory> => ({
+        const getCategory = (d: TProcessedSymbolItem): TCategorizedSymbolItem => ({
             categoryName: d.market_display_name,
             categoryId: d.market,
             hasSubcategory: true,
