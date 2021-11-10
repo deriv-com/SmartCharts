@@ -1,35 +1,37 @@
 import { action, observable, when } from 'mobx';
+import Context from '../components/ui/Context';
+import { TMainStore } from '../types';
 
 export default class BottomWidgetsContainerStore {
-    mainStore: any;
+    mainStore: TMainStore;
     @observable bottom = 0;
     @observable isReadyToShow = false;
     @observable mainChartHeight = 0;
     @observable top = 0;
     @observable totalHeight = 0;
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
-    get state() {
+    get state(): TMainStore["state"] {
         return this.mainStore.state;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
 
-        when(() => this.context, this.initial);
+        when(() => !!this.context, this.initial);
     }
 
-    initial = () => {
+    initial = (): void => {
         this.stx.append('drawPanels', this.updateChartHeight);
         this.isReadyToShow = true;
     };
 
-    @action.bound updateChartHeight() {
+    @action.bound updateChartHeight(): void {
         this.mainChartHeight = this.stx.panels.chart.height;
         this.totalHeight = Object.keys(this.stx.panels).reduce(
             (acc, key) => acc + (this.stx.panels[key].hidden ? 0 : this.stx.panels[key].height),
@@ -44,7 +46,7 @@ export default class BottomWidgetsContainerStore {
         this.bottom = addedIndicatorsHeight || 30;
     }
 
-    updateChartMargin = (hasBottomWidget: any) => {
+    updateChartMargin = (hasBottomWidget: boolean): void => {
         if (this.context && this.stx) {
             const marginTop = this.state.yAxisMargin.top || 106;
             let marginBottom = this.state.yAxisMargin.bottom || 64;

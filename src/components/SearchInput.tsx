@@ -3,11 +3,11 @@ import classNames from 'classnames';
 import { CloseCircleIcon, SearchIcon } from './Icons';
 import '../../sass/components/_search.scss';
 
-type TSearchInputProps = {
+export type TSearchInputProps = {
     placeholder: string;
     value: string;
     searchInput: React.RefObject<HTMLInputElement>;
-    searchInputClassName: string;
+    searchInputClassName?: string;
     onChange: (value: string) => void;
 };
 

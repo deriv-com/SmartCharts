@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import { CloseIcon } from './Icons';
 import '../../sass/components/_dialog.scss';
 
-type TDialogProps = {
+export type TDialogProps = {
     className: string;
     enableTabular: boolean;
     title: string;

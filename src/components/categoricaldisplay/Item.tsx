@@ -1,6 +1,20 @@
 import React from 'react';
 import { ItemIconMap, ActiveOptionsIconMap } from '../Icons';
 import Favorite from '../Favorite';
+import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem} from '../../binaryapi/ActiveSymbols';
+
+export type TActiveItemProps = {
+    item: TSubCategoryDataItem;
+    favoritesId: string;
+    activeOptions: any[] | undefined;
+};
+
+export type TNormalItemProps = {
+    onSelectItem?: (item: TCategorizedSymbolItem<TSubCategory | string>) => void;
+    item: TSubCategoryDataItem;
+    disableAll: boolean,
+    favoritesId: string;
+};
 
 const Icon = React.memo(({ id }: any) => {
     if (!id || !ItemIconMap[id]) {

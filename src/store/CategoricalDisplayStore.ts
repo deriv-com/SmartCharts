@@ -1,30 +1,49 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import { connect } from './Connect';
-import SearchInput from '../components/SearchInput';
-import { NormalItem, ActiveItem, ResultsPanel, FilterPanel } from '../components/categoricaldisplay';
+import SearchInput, { TSearchInputProps } from '../components/SearchInput';
+import { NormalItem, ActiveItem, ResultsPanel, TResultsPanelProps, FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
 import { cloneCategories, cloneCategory } from '../utils';
+import { connect, TReactComponent } from './Connect';
+import Context from '../components/ui/Context';
+import { TMainStore } from '../types';
+import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory, TSubCategoryDataItem} from '../binaryapi/ActiveSymbols';
+
+type TCategoricalDisplayStoreProps = {
+    getCategoricalItems: () => TCategorizedSymbols;
+    onSelectItem?: (item: TSubCategoryDataItem) => void;
+    getIsShown: () => boolean;
+    getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
+    activeOptions?: any[] | undefined;
+    placeholderText: string;
+    favoritesId: string;
+    mainStore: TMainStore;
+    id: string;
+    getCurrentActiveCategory: () => string;
+    getCurrentActiveSubCategory: () => string;
+    getCurrentActiveMarket: () => (string | null);
+    searchInputClassName?: string;
+}
 
 export default class CategoricalDisplayStore {
-    FilterPanel: any;
-    ResultsPanel: any;
-    SearchInput: any;
-    activeMarket: any;
-    activeSubCategory: any;
-    categoryElements: any;
-    favoritesId: any;
-    getActiveCategory: any;
-    getCategoricalItems: any;
-    getCurrentActiveCategory: any;
-    getCurrentActiveMarket: any;
-    getCurrentActiveSubCategory: any;
-    id: any;
-    isInit: any;
-    mainStore: any;
-    onSelectItem: any;
-    pauseScrollSpy: any;
-    searchInput: any;
-    searchInputClassName: any;
+    FilterPanel: TReactComponent<TFilterPanelProps>;
+    ResultsPanel: TReactComponent<TResultsPanelProps>;
+    SearchInput: TReactComponent<TSearchInputProps>;
+    activeMarket?: string | null;
+    activeSubCategory = '';
+    categoryElements: {[id: string]: HTMLElement | null};
+    favoritesId: string;
+    getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
+    getCategoricalItems: () => TCategorizedSymbols;
+    getCurrentActiveCategory: () => string;
+    getCurrentActiveMarket: () => (string | null);
+    getCurrentActiveSubCategory: () => string;
+    id: string;
+    isInit: boolean;
+    mainStore: TMainStore;
+    onSelectItem?: (item: TSubCategoryDataItem) => void;
+    pauseScrollSpy = false;
+    searchInput: React.RefObject<HTMLInputElement>;
+    searchInputClassName?: string;
     constructor({
         getCategoricalItems,
         onSelectItem,
@@ -39,7 +58,7 @@ export default class CategoricalDisplayStore {
         getCurrentActiveSubCategory,
         getCurrentActiveMarket,
         searchInputClassName,
-    }: any) {
+    }: TCategoricalDisplayStoreProps) {
         reaction(
             () => getIsShown && getIsShown() && this.scrollPanel,
             () => {
@@ -74,7 +93,7 @@ export default class CategoricalDisplayStore {
             favoritesId,
         }))(ActiveItem);
 
-        const getItemType = (categoryId: any) => {
+        const getItemType = (categoryId: string): typeof activeItem | typeof normalItem => {
             if (categoryId === 'active' && this.getActiveCategory !== undefined) {
                 return activeItem;
             }
@@ -82,7 +101,7 @@ export default class CategoricalDisplayStore {
             return normalItem;
         };
 
-        this.ResultsPanel = connect(() => ({
+        this.ResultsPanel = connect<TMainStore, TResultsPanelProps>(() => ({
             filteredItems: this.filteredItems,
             setCategoryElement: this.setCategoryElement,
             getItemType,
@@ -92,7 +111,7 @@ export default class CategoricalDisplayStore {
             handleTitleClick: this.handleTitleClick,
         }))(ResultsPanel);
 
-        this.FilterPanel = connect(({ chart }: any) => ({
+        this.FilterPanel = connect<TMainStore, TFilterPanelProps>(({ chart }: TMainStore) => ({
             isMobile: chart.isMobile,
             filteredItems: this.filteredItems,
             handleFilterClick: this.handleFilterClick,
@@ -101,7 +120,7 @@ export default class CategoricalDisplayStore {
             isSearching: this.filterText !== '',
         }))(FilterPanel);
 
-        this.SearchInput = connect(() => ({
+        this.SearchInput = connect<TMainStore, TSearchInputProps>(() => ({
             placeholder: placeholderText,
             value: this.filterText,
             onChange: this.setFilterText,
@@ -114,29 +133,29 @@ export default class CategoricalDisplayStore {
     @observable scrollPanel?: HTMLElement;
     @observable filterText = '';
     @observable activeCategoryKey = '';
-    @observable focusedCategoryKey = null;
+    @observable focusedCategoryKey: string | null = null;
     @observable isScrollingDown = false;
-    @observable activeHeadKey?: any = undefined;
+    @observable activeHeadKey: string | null = '';
     @observable activeHeadTop: number | null = 0;
     @observable activeHeadOffset?: number = undefined;
     scrollTop?: number = undefined;
     isUserScrolling = true;
-    lastFilteredItems: any[] = [];
-    activeCategories: any[] = [];
+    lastFilteredItems: TCategorizedSymbols = [];
+    activeCategories: string[] = [];
 
-    get chart() {
+    get chart(): TMainStore["chart"] {
         return this.mainStore.chart;
     }
 
-    get context() {
+    get context(): Context {
         return this.chart.context;
     }
 
-    get height() {
-        return this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120);
+    get height(): number {
+        return this.chart.chartContainerHeight ? this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120) : 0;
     }
 
-    @action.bound init() {
+    @action.bound init(): void {
         this.isInit = true;
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -150,7 +169,7 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @computed get favoritesCategory() {
+    @computed get favoritesCategory(): TCategorizedSymbolItem<TSubCategory | string> {
         this.pauseScrollSpy = true;
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
@@ -166,31 +185,31 @@ export default class CategoricalDisplayStore {
         return favoritesCategory;
     }
 
-    @computed get filteredItems() {
+    @computed get filteredItems(): TCategorizedSymbols {
         let filteredItems = cloneCategories(this.getCategoricalItems());
-        const activeItmes = this.activeCategories.length
+        const activeItems = this.activeCategories.length
             ? this.activeCategories
             : [this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite'];
 
         for (const item of filteredItems) {
-            if (activeItmes.includes(item.categoryId)) {
+            if (activeItems.includes(item.categoryId)) {
                 item.active = true;
             }
         }
 
         if (this.favoritesId) {
             const favsCategory = { ...this.favoritesCategory };
-            const findFavItem = (category: any) => {
-                const foundItems: any = [];
-                if (category.hasSubcategory) {
-                    category.data.forEach((subcategory: any) => {
-                        const foundSubItems = findFavItem(subcategory);
+            const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
+                const foundItems: TSubCategoryDataItem[] = [];
+                if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
+                    category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                        const foundSubItems = findFavItem(subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory);
                         foundItems.push(...foundSubItems);
                     });
                 } else {
                     favsCategory.data.forEach(favItem => {
                         if (typeof favItem === 'string') {
-                            const itemObj = category.data.find((item: any) => item.itemId === favItem);
+                            const itemObj = (category as TSubCategory).data.find((item: TSubCategoryDataItem) => item.itemId === favItem);
                             if (itemObj) {
                                 foundItems.push(itemObj);
                             }
@@ -200,11 +219,11 @@ export default class CategoricalDisplayStore {
                 return foundItems;
             };
 
-            const favsCategoryItem = favsCategory.data.filter(favItem => typeof favItem !== 'string');
+            const favsCategoryItem = (favsCategory.data as TSubCategory[]).filter((favItem: TSubCategory) => typeof favItem !== 'string');
 
-            filteredItems.forEach(category => {
+            filteredItems.forEach((category: TCategorizedSymbolItem) => {
                 const foundItems = findFavItem(category);
-                favsCategoryItem.push(...foundItems);
+                (favsCategoryItem as TSubCategory[] & TSubCategoryDataItem[]).push(...foundItems);
             });
 
             favsCategory.data = favsCategoryItem.filter(favItem => favItem);
@@ -227,10 +246,10 @@ export default class CategoricalDisplayStore {
             .filter(x => x !== '')
             .map(b => b.toLowerCase().trim());
         // regex to check all separate words by comma, should exist in the string
-        const hasSearchString = (text: any) => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
-        const filterCategory = (c: any) => {
-            c.data = c.data.filter((item: any) =>
-                hasSearchString(item.display || (typeof item.dataObject === 'object' && item.dataObject.symbol))
+        const hasSearchString = (text: string) => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
+        const filterCategory = (c: TSubCategory) => {
+            c.data = c.data.filter((item: TSubCategoryDataItem) => 
+                hasSearchString(item.display || (typeof item.dataObject === 'object' ? item.dataObject.symbol : ''))
             );
             if (c.data.length) {
                 searchHasResult = true;
@@ -258,7 +277,7 @@ export default class CategoricalDisplayStore {
         return filteredItems;
     }
 
-    @action.bound updateScrollSpy() {
+    @action.bound updateScrollSpy(): void {
         if (this.pauseScrollSpy || !this.scrollPanel) {
             return;
         }
@@ -304,21 +323,21 @@ export default class CategoricalDisplayStore {
         this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
-    @action.bound scrollUp() {
+    @action.bound scrollUp(): void {
         this.isScrollingDown = false;
     }
 
-    @action.bound scrollDown() {
+    @action.bound scrollDown(): void {
         // This only affects when scrolling by mouse not by code
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
     }
 
-    @action.bound setCategoryElement(element: any, id: any) {
+    @action.bound setCategoryElement(element: HTMLElement | null, id: string): void {
         this.categoryElements[id] = element;
     }
 
-    @action.bound setFilterText(filterText: any) {
+    @action.bound setFilterText(filterText: string): void {
         this.filterText = filterText;
         this.isUserScrolling = false;
         this.updateScrollSpy();
@@ -327,7 +346,7 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound handleFilterClick(categoryId: any) {
+    @action.bound handleFilterClick(categoryId: string): void {
         const el = this.categoryElements[categoryId];
         const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
@@ -356,11 +375,11 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound setScrollPanel(element: any) {
+    @action.bound setScrollPanel(element: HTMLElement): void {
         this.scrollPanel = element;
     }
 
-    @action.bound handleTitleClick(categoryId: any) {
+    @action.bound handleTitleClick(categoryId: string): void {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
             if (item.categoryId === categoryId) {
@@ -380,7 +399,7 @@ export default class CategoricalDisplayStore {
         setTimeout(() => this.updateScrollSpy(), 0);
     }
 
-    @action.bound scrollToActiveSymbol() {
+    @action.bound scrollToActiveSymbol(): void {
         const activeItemCount = this.getActiveCategory ? this.getActiveCategory().data.length : 0;
         this.focusedCategoryKey = null;
         this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
@@ -423,7 +442,7 @@ export default class CategoricalDisplayStore {
             this.init();
         }
         if (!this.mainStore.chart.isMobile) {
-            setTimeout(() => this.searchInput.current.focus(), 0);
+            setTimeout(() => this.searchInput.current && this.searchInput.current.focus(), 0);
         }
 
         if (!this.mainStore.chart.isMobile) {
@@ -431,9 +450,8 @@ export default class CategoricalDisplayStore {
             const filtered_categories = categories.filter(item => this.categoryElements[item] !== null);
             const last_category = this.filteredItems?.slice(-1)[0].categoryId;
             const last_category_bottom_gap = this.height - (64 + (filtered_categories.length - 1) * 40); // to make the last category height reach it's filter tab
-            if (this.categoryElements[last_category]) {
-                this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
-            }
+            const last_category_element = this.categoryElements[last_category];
+            if (last_category_element) last_category_element.style.minHeight = `${last_category_bottom_gap}px`;
         }
     }
 

@@ -6,6 +6,34 @@ import classNames from 'classnames';
 import MenuMobile from './MenuMobile';
 import Tooltip from './Tooltip';
 import { CloseIcon } from './Icons';
+import { TDialogProps } from './Dialog';
+import { TReactComponent } from '../store/Connect';
+import ChartStore from '../store/ChartStore';
+
+export type TMenuProps = {
+    open: boolean;
+    dialogStatus?: boolean;
+    className: string;
+    children: React.ReactNode;
+    title: string;
+    tooltip?: boolean;
+    onTitleClick: () => void;
+    DropdownDialog: TReactComponent<Partial<TDialogProps | ChartStore> & { isFullscreen: TMenuProps['isFullscreen'] }>;
+    isMobile: boolean;
+    isFullscreen: boolean;
+    portalNodeId: string;
+    enabled: boolean;
+    shouldRenderDialogs: boolean;
+    handleCloseDialog: () => void;
+    onMouseEnter: () => void;
+    onMouseLeave: () => void;
+    theme: string;
+    enableTabular: boolean;
+    ready: boolean;
+    customHead: JSX.Element;
+    emptyMenu: boolean;
+    modalMode: boolean;
+};
 
 const Menu = ({
     open,
@@ -30,17 +58,17 @@ const Menu = ({
     customHead,
     emptyMenu,
     modalMode,
-}: any) => {
-    const onOverlayClick = (e: any) => {
-        if (e.target.className === 'cq-modal__overlay') {
+}: TMenuProps): React.ReactNode => {
+    const onOverlayClick = (e: React.MouseEvent) => {
+        if ((e.target as HTMLDivElement).className === 'cq-modal__overlay') {
             handleCloseDialog();
         }
     };
 
     if (!ready) return '';
 
-    const first = React.Children.map(children, (child: any, i: any) => (i === 0 ? child : null));
-    const rest = React.Children.map(children, (child: any, i: any) => (i !== 0 ? child : null));
+    const first = React.Children.map(children, (child: React.ReactNode, i: number) => (i === 0 ? child : null));
+    const rest = React.Children.map(children, (child: React.ReactNode, i: number) => (i !== 0 ? child : null));
     if (modalMode) {
         const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
         if (!portalNode) return '';
@@ -106,7 +134,7 @@ const Menu = ({
         );
     }
 
-    const oldDropdown = shouldRenderDialogs && (
+    const oldDropdown = shouldRenderDialogs ? (
         <DropdownDialog
             className={classNames('cq-menu-dropdown', {
                 'cq-menu-dropdown-enter-done': dialogStatus,
@@ -122,7 +150,7 @@ const Menu = ({
             )}
             {rest}
         </DropdownDialog>
-    );
+    ) : null;
 
     return (
         (enabled && (
@@ -156,7 +184,7 @@ const Menu = ({
     );
 };
 
-Menu.Title = ({ children }: any) => children;
-Menu.Body = ({ children }: any) => children;
+Menu.Title = ({ children }: TMenuProps) => children;
+Menu.Body = ({ children }: TMenuProps) => children;
 
 export default Menu;

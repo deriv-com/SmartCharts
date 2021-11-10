@@ -9,7 +9,7 @@ type TMenuMobileProps = {
     open: boolean;
     portalNodeId?: string;
     onClick: React.MouseEventHandler<HTMLDivElement>;
-    menu_element: React.ReactElement;
+    menu_element: React.ReactElement | null;
 };
 
 const MenuMobile: React.FC<TMenuMobileProps> = ({ className, menu_element, portalNodeId, open, onClick }) => {

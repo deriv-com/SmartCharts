@@ -19,24 +19,29 @@ type TProcessedSymbolItem = {
 
 type TProcessedSymbols = TProcessedSymbolItem[];
 
-type TCategorizedSymbolItem = {
-    categoryName: any;
-    categoryId: any;
-    hasSubcategory: boolean;
-    data: TSubCategory[];
-};
+export type TSubCategoryDataItem = {
+    enabled: boolean;
+    itemId: string;
+    display: string;
+    dataObject: TProcessedSymbolItem;
+    selected?: boolean;
+}
 
-type TCategorizedSymbols = TCategorizedSymbolItem[];
-
-type TSubCategory = {
+export type TSubCategory = {
     subcategoryName: string;
-    data: {
-        enabled: boolean;
-        itemId: string;
-        display: string;
-        dataObject: TProcessedSymbolItem;
-    }[];
+    data: TSubCategoryDataItem[];
 };
+
+export type TCategorizedSymbolItem<T = TSubCategory> = {
+    categoryName: string;
+    categoryId: string;
+    hasSubcategory: boolean;
+    data: T[];
+    active?: boolean;
+    emptyDescription?: string;
+};
+
+export type TCategorizedSymbols = TCategorizedSymbolItem[];
 
 export default class ActiveSymbols {
     _api: any;

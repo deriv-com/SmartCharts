@@ -1,40 +1,59 @@
 import { observable, action, computed } from 'mobx';
-import { TMainStore } from 'src/types';
+import { TMainStore, TCIQAddEventListener, TCIQAppend, TCIQChartEngineChart } from 'src/types';
+import Context from '../components/ui/Context';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
 import { isValidProp } from '../utils';
 
+type TUpdatePropsParams = {
+    color?: string;
+    draggable: boolean;
+    hideBarrierLine?: boolean;
+    hideOffscreenLine?: boolean;
+    hidePriceLines: boolean;
+    high: number;
+    lineStyle?: string;
+    low?: number;
+    mainStore: TMainStore;
+    onChange: () => typeof action;
+    onChartBarrierChange: () => typeof action;
+    relative: boolean;
+    shade?: string;
+    shadeColor?: string;
+    title?: string;
+}
+
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
-    _injectionId: any;
-    _listenerId: any;
+    _injectionId: TCIQAppend<() => void>;
+    _listenerId: TCIQAddEventListener<() => void>;
     _low_barrier: PriceLineStore;
     aboveShadeStore: ShadeStore;
     belowShadeStore: ShadeStore;
     betweenShadeStore: ShadeStore;
     mainStore: TMainStore;
-    title: any;
-    static get SHADE_NONE_SINGLE() {
+    title?: string;
+    static get SHADE_NONE_SINGLE(): string {
         return 'SHADE_NONE_SINGLE';
     }
-    static get SHADE_NONE_DOUBLE() {
+    static get SHADE_NONE_DOUBLE(): string {
         return 'SHADE_NONE_DOUBLE';
     }
-    static get SHADE_ABOVE() {
+    static get SHADE_ABOVE(): string {
         return 'SHADE_ABOVE';
     }
-    static get SHADE_BELOW() {
+    static get SHADE_BELOW(): string {
         return 'SHADE_BELOW';
     }
-    static get SHADE_BETWEEN() {
+    static get SHADE_BETWEEN(): string {
         return 'SHADE_BETWEEN';
     }
-    static get SHADE_OUTSIDE() {
+    static get SHADE_OUTSIDE(): string {
         return 'SHADE_OUTSIDE';
     }
 
-    static get BARRIER_CHANGED() {
+    static get BARRIER_CHANGED(): string {
         return 'BARRIER_CHANGED';
     }
 
@@ -45,7 +64,7 @@ export default class BarrierStore {
     @observable isTopShadeVisible = false;
     @observable isBottomShadeVisible = false;
     @observable hidePriceLines = false;
-    @observable lineStyle = undefined;
+    @observable lineStyle?: string;
     @observable isInitialized = false;
     @observable initializePromise = PendingPromise();
     @observable hideBarrierLine = false;
@@ -53,15 +72,15 @@ export default class BarrierStore {
     @observable hideOffscreenBarrier = false;
     @observable isSingleBarrier = false;
 
-    _shadeState: any;
+    _shadeState = '';
 
-    @computed get pip() {
+    @computed get pip(): number {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
-    @computed get yAxisWidth() {
+    @computed get yAxisWidth(): number {
         return this.mainStore.chart.yAxiswidth;
     }
-    @computed get priceLabelWidth() {
+    @computed get priceLabelWidth(): number {
         return this.yAxisWidth + 1;
     }
 
@@ -95,7 +114,7 @@ export default class BarrierStore {
         this.mainStore.chart._barriers.push(this);
     }
 
-    @action.bound init() {
+    @action.bound init(): void {
         this.isInitialized = true;
         this.initializePromise.resolve();
 
@@ -104,11 +123,13 @@ export default class BarrierStore {
         // this.setDefaultBarrier();
     }
 
-    setDefaultBarrier() {
+    setDefaultBarrier(): void {
         const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote().Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
         this._low_barrier.price = price - distance;
+        this._high_barrier._calculateTop();
+        this._low_barrier._calculateTop();
         this._drawShadedArea();
     }
 
@@ -131,7 +152,7 @@ export default class BarrierStore {
         showOffscreenArrows,
         isSingleBarrier,
         opacityOnOverlap,
-    }: any) {
+    }: BarrierStore & TUpdatePropsParams): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
@@ -155,7 +176,7 @@ export default class BarrierStore {
                 if (isValidProp(high)) {
                     this.high_barrier = high;
                 }
-                if (isValidProp(low)) {
+                if (low && isValidProp(low)) {
                     this.low_barrier = low;
                 }
                 if (onChange) {
@@ -180,35 +201,35 @@ export default class BarrierStore {
         }
     }
 
-    @action.bound destructor() {
+    @action.bound destructor(): void {
         if (!this.context) return;
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
         this._low_barrier.destructor();
 
-        const i = this.mainStore.chart._barriers.findIndex(b => b === this);
+        const i = this.mainStore.chart._barriers.findIndex((b: BarrierStore) => b === this);
         if (i !== -1) {
             this.mainStore.chart._barriers.splice(i, 1);
         }
     }
 
-    get high_barrier() {
+    get high_barrier(): number {
         return this._high_barrier.price;
     }
-    set high_barrier(price) {
+    set high_barrier(price: number) {
         this._high_barrier.price = price;
     }
-    get low_barrier() {
+    get low_barrier(): number {
         return this._low_barrier.price;
     }
-    set low_barrier(price) {
+    set low_barrier(price: number) {
         this._low_barrier.price = price;
     }
 
-    _setupConstrainBarrierPrices() {
+    _setupConstrainBarrierPrices(): void {
         // barrier 1 cannot go below barrier 2
-        this._high_barrier.priceConstrainer = (newPrice: any) => {
+        this._high_barrier.priceConstrainer = (newPrice: number) => {
             const nextPrice =
                 this._low_barrier.visible && newPrice < this._low_barrier.realPrice
                     ? this._high_barrier.realPrice
@@ -219,7 +240,7 @@ export default class BarrierStore {
         };
 
         // barrier 2 cannot go above barrier 1
-        this._low_barrier.priceConstrainer = (newPrice: any) => {
+        this._low_barrier.priceConstrainer = (newPrice: number) => {
             const nextPrice = newPrice > this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
 
             this.mainStore.chart.calculateYaxisWidth(nextPrice);
@@ -227,25 +248,25 @@ export default class BarrierStore {
         };
     }
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
-    get chart() {
+    get chart(): TCIQChartEngineChart {
         return this.stx.chart;
     }
 
-    _onBarrierChange: ((arg: any) => void) | null = null;
+    _onBarrierChange: ((arg: {high?: number, low?: number}) => void) | null = null;
 
-    set onBarrierChange(callback: any) {
+    set onBarrierChange(callback: () => typeof action) {
         if (this._onBarrierChange !== callback) {
             this._onBarrierChange = callback;
         }
     }
 
-    _fireOnBarrierChange = () => {
+    _fireOnBarrierChange = (): void => {
         const high = this._high_barrier.visible ? +this._high_barrier.price.toFixed(this.pip) : undefined;
         const low = this._low_barrier.visible ? +this._low_barrier.price.toFixed(this.pip) : undefined;
 
@@ -254,11 +275,11 @@ export default class BarrierStore {
         }
     };
 
-    get shadeState() {
+    get shadeState(): string {
         return this._shadeState;
     }
 
-    set shadeState(shadeState) {
+    set shadeState(shadeState: string) {
         if (this._shadeState === shadeState) {
             return;
         }
@@ -301,41 +322,41 @@ export default class BarrierStore {
         }
     }
 
-    get relative() {
+    get relative(): boolean {
         return this._high_barrier.relative;
     }
 
-    set relative(value) {
+    set relative(value: boolean) {
         this._high_barrier.relative = value;
         this._low_barrier.relative = value;
     }
 
-    get draggable() {
+    get draggable(): boolean {
         return this._high_barrier.draggable;
     }
 
-    set draggable(value) {
+    set draggable(value: boolean) {
         this._high_barrier.draggable = value;
         this._low_barrier.draggable = value;
     }
 
-    get showOffscreenArrows() {
+    get showOffscreenArrows(): boolean {
         return this._high_barrier.showOffscreenArrows;
     }
 
-    set showOffscreenArrows(value) {
+    set showOffscreenArrows(value: boolean) {
         this._high_barrier.showOffscreenArrows = value;
     }
 
-    get opacityOnOverlap() {
+    get opacityOnOverlap(): number {
         return this._high_barrier.opacityOnOverlap;
     }
 
-    set opacityOnOverlap(value) {
+    set opacityOnOverlap(value: number) {
         this._high_barrier.opacityOnOverlap = value;
     }
 
-    _drawShadedArea = () => {
+    _drawShadedArea = (): void => {
         if (!this.isInitialized) {
             return;
         }
@@ -356,11 +377,11 @@ export default class BarrierStore {
         }
     };
 
-    _isBarriersOffScreen() {
+    _isBarriersOffScreen(): boolean {
         return this._high_barrier.offScreen && this._low_barrier.offScreen;
     }
 
-    _shadeBetween() {
+    _shadeBetween(): void {
         this.betweenShadeStore.setPosition({
             top: this._high_barrier.top,
             bottom: this._low_barrier.top,
@@ -368,7 +389,7 @@ export default class BarrierStore {
         });
     }
 
-    _shadeBelow(barrier = this._high_barrier) {
+    _shadeBelow(barrier: PriceLineStore = this._high_barrier): void {
         this.belowShadeStore.setPosition({
             top: barrier.top,
             bottom: 0,
@@ -376,7 +397,7 @@ export default class BarrierStore {
         });
     }
 
-    _shadeAbove(barrier = this._high_barrier) {
+    _shadeAbove(barrier: PriceLineStore = this._high_barrier): void {
         this.aboveShadeStore.setPosition({
             top: 0,
             bottom: barrier.top,
@@ -384,7 +405,7 @@ export default class BarrierStore {
         });
     }
 
-    _shadeOutside() {
+    _shadeOutside(): void {
         this._shadeAbove(this._high_barrier);
         this._shadeBelow(this._low_barrier);
     }

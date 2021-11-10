@@ -1,6 +1,6 @@
 import CategoricalDisplay from './CategoricalDisplay';
-import { FilterPanel } from './FilterPanel';
-import { NormalItem, ActiveItem } from './Item';
-import { ResultsPanel } from './ResultsPanel';
+import { FilterPanel, TFilterPanelProps } from './FilterPanel';
+import { NormalItem, ActiveItem, TActiveItemProps, TNormalItemProps } from './Item';
+import { ResultsPanel, TResultsPanelProps } from './ResultsPanel';
 
-export { CategoricalDisplay, FilterPanel, NormalItem, ActiveItem, ResultsPanel };
+export { CategoricalDisplay, FilterPanel, TFilterPanelProps, NormalItem, TNormalItemProps, ActiveItem, TActiveItemProps, ResultsPanel, TResultsPanelProps };
