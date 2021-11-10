@@ -2,8 +2,8 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
 import BarrierStore from 'src/store/BarrierStore';
+import connectStore from 'src/store/ConnectStore';
 import Shade from './Shade';
-
 import PriceLine from './PriceLine';
 
 type TBarrierProps = {
@@ -76,4 +76,6 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
     );
 };
 
-export default observer(Barrier);
+const BarrierWrapper = connectStore(observer(Barrier), BarrierStore);
+
+export default BarrierWrapper;

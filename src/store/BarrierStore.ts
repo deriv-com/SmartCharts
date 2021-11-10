@@ -4,7 +4,6 @@ import Context from '../components/ui/Context';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 import PendingPromise from '../utils/PendingPromise';
-
 import { isValidProp } from '../utils';
 
 type TUpdatePropsParams = {
