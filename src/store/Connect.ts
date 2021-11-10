@@ -10,7 +10,7 @@ export type TReactComponent<P = TStoredComponent> =
     | React.StatelessComponent<P>
     | React.ComponentClass<P>
     | React.ClassicComponentClass<P>
-    | React.FC<P>
+    | React.FC<P>;
 
 type TStoresToProps<S, I> = (store: S) => I;
 
