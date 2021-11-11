@@ -2,12 +2,13 @@ import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
+import { TMainStore } from 'src/types';
 import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
-import { TMainStore } from 'src/types';
+import Menu from './Menu';
 
 type TViewItemProps = {
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
@@ -107,7 +108,6 @@ const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {
     const { view } = useStores();
 
     const {
-        ViewsMenu,
         sortedItems: views,
         routes: { main, overwrite },
         onChange,
@@ -123,26 +123,28 @@ const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {
         isInputActive,
         onFocus,
         onBlur,
+        menuStore,
     } = view;
 
-    const menuOpen = view.menu.dialog.open;
+    const menuOpen = menuStore.dialogStore.open;
 
     const isActive = isInputActive || templateName !== '';
 
     return (
-        <ViewsMenu
+        <Menu
+            store={menuStore}
             className='sc-views-menu'
             title={t.translate('Templates')}
             tooltip={t.translate('Templates')}
             modalMode
             portalNodeId={portalNodeId}
         >
-            <ViewsMenu.Title>
+            <Menu.Title>
                 <div className={classNames('sc-views__menu', { 'sc-views__menu--active': menuOpen })}>
                     <TemplateIcon />
                 </div>
-            </ViewsMenu.Title>
-            <ViewsMenu.Body>
+            </Menu.Title>
+            <Menu.Body>
                 <div className='sc-views'>
                     {currentRoute === 'new' ? (
                         <EmptyView onClick={onToggleNew} />
@@ -204,8 +206,8 @@ const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {
                         </React.Fragment>
                     )}
                 </div>
-            </ViewsMenu.Body>
-        </ViewsMenu>
+            </Menu.Body>
+        </Menu>
     );
 };
 

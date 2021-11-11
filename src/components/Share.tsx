@@ -5,6 +5,7 @@ import { useStores } from 'src/store';
 import { DownloadIcon, PngIcon, CsvIcon } from './Icons';
 import { InlineLoader } from './Loader';
 import '../../sass/components/_download.scss';
+import Menu from './Menu';
 
 type TShareProps = {
     portalNodeId?: string;
@@ -12,11 +13,12 @@ type TShareProps = {
 
 const Share: React.FC<TShareProps> = ({ portalNodeId }) => {
     const { share } = useStores();
-    const { Dialog, menu, downloadCSV, downloadPNG, isLoadingPNG } = share;
-    const { open: menuOpen } = menu.dialog;
+    const { menuStore, downloadCSV, downloadPNG, isLoadingPNG } = share;
+    const { open: menuOpen } = menuStore.dialogStore;
 
     return (
-        <Dialog
+        <Menu
+            store={menuStore}
             className='sc-download-menu'
             title={t.translate('Download')}
             tooltip={t.translate('Download')}
@@ -24,12 +26,12 @@ const Share: React.FC<TShareProps> = ({ portalNodeId }) => {
             isFullscreen
             portalNodeId={portalNodeId}
         >
-            <Dialog.Title>
+            <Menu.Title>
                 <div className={classNames('sc-download__menu', { 'sc-download__menu--active': menuOpen })}>
                     <DownloadIcon />
                 </div>
-            </Dialog.Title>
-            <Dialog.Body>
+            </Menu.Title>
+            <Menu.Body>
                 <div className='sc-download'>
                     <InlineLoader className='sc-download__item' onClick={downloadPNG} enabled={isLoadingPNG}>
                         <PngIcon />
@@ -40,8 +42,8 @@ const Share: React.FC<TShareProps> = ({ portalNodeId }) => {
                         <span className='sc-download__item__label'> {t.translate('CSV')}</span>
                     </div>
                 </div>
-            </Dialog.Body>
-        </Dialog>
+            </Menu.Body>
+        </Menu>
     );
 };
 

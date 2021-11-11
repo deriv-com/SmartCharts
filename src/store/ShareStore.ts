@@ -1,20 +1,17 @@
 import { observable, action, computed, when } from 'mobx';
-import MainStore from '.';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, is_browser } from '../utils';
-import Menu, { TMenuProps } from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ShareStore {
-    Dialog: any;
-    mainStore: MainStore;
-    menu: MenuStore;
+    mainStore: TMainStore;
+    menuStore: MenuStore;
     screenshotArea?: Element | null;
-    constructor(mainStore: MainStore) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route: 'download' });
+        this.menuStore = new MenuStore(mainStore, { route: 'download' });
         when(() => this.context, this.onContextReady);
-        this.Dialog = this.menu.connect(Menu as React.FC<TMenuProps>);
     }
 
     get context() {

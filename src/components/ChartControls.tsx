@@ -35,12 +35,12 @@ const ChartControls: React.FC<TChartControlsProps> = ({ widgets }) => {
     const { chart, chartType, studies, drawTools, view, share, chartSetting } = useStores();
     const { context, isMobile } = chart;
     const hasOpenMenu =
-        chartType.menu.open ||
-        studies.menu.open ||
-        drawTools.menu.open ||
-        view.menu.open ||
-        share.menu.open ||
-        chartSetting.menu.open;
+        chartType.menuStore.open ||
+        studies.menuStore.open ||
+        drawTools.menuStore.open ||
+        view.menuStore.open ||
+        share.menuStore.open ||
+        chartSetting.menuStore.open;
 
     const Controls = widgets || RenderDefaultControls;
 

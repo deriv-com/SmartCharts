@@ -1,15 +1,11 @@
-import MainStore from '.';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
-import Menu, { TMenuProps } from '../components/Menu';
-import { TReactComponent } from './Connect';
 
 export default class ChartModeStore {
-    ChartTypeMenu: TReactComponent<TMenuProps>;
-    mainStore: MainStore;
-    menu: MenuStore;
-    constructor(mainStore: MainStore) {
+    mainStore: TMainStore;
+    menuStore: MenuStore;
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route: 'chart-mode' });
-        this.ChartTypeMenu = this.menu.connect(Menu as React.FC<TMenuProps>);
+        this.menuStore = new MenuStore(mainStore, { route: 'chart-mode' });
     }
 }

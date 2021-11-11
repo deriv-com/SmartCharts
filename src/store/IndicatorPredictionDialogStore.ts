@@ -1,30 +1,27 @@
 import { computed, action, observable } from 'mobx';
-import MainStore from '.';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
-import Menu, { TMenuProps } from '../components/Menu';
 
 export default class IndicatorPredictionDialogStore {
-    @observable dialogPortalNodeId = null;
-    mainStore: MainStore;
-    menu: MenuStore;
+    @observable dialogPortalNodeId?: string;
+    mainStore: TMainStore;
+    menuStore: MenuStore;
     scrollPanel?: HTMLElement;
-    SettingDialogMenu: any;
 
-    constructor({ mainStore }: { mainStore: MainStore }) {
+    constructor({ mainStore }: { mainStore: TMainStore }) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route: 'indicator-setting' });
-        this.SettingDialogMenu = this.menu.connect(Menu as React.FC<TMenuProps>);
+        this.menuStore = new MenuStore(mainStore, { route: 'indicator-setting' });
     }
 
     @computed get open() {
-        return this.menu.open;
+        return this.menuStore.open;
     }
 
-    @action.bound setOpen(value: any) {
+    @action.bound setOpen(value: boolean) {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop = 0;
         }
-        return this.menu.setOpen(value);
+        return this.menuStore.setOpen(value);
     }
 
     @action.bound handleCancel() {

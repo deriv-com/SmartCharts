@@ -1,17 +1,15 @@
 import { observable, action, reaction, computed } from 'mobx';
+import { TMainStore } from 'src/types';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
-import MainStore from '.';
 import MenuStore from './MenuStore';
-import Menu, { TMenuProps } from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ViewStore {
-    constructor(mainStore: MainStore) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route: 'templates' });
-        this.ViewsMenu = this.menu.connect<TMenuProps>(Menu as React.FC<TMenuProps>);
+        this.menuStore = new MenuStore(mainStore, { route: 'templates' });
         reaction(
-            () => this.menu.dialog.open,
+            () => this.menuStore.dialogStore.open,
             () => {
                 if (ViewStore.views.length === 0) {
                     this.updateRoute('new');
@@ -19,7 +17,7 @@ export default class ViewStore {
                     this.updateRoute('main');
                 }
 
-                if (this.menu.dialog.open) {
+                if (this.menuStore.dialogStore.open) {
                     this.templateName = '';
                 }
             }
@@ -27,9 +25,8 @@ export default class ViewStore {
     }
 
     @observable static views = createObjectFromLocalStorage('cq-views') || [];
-    ViewsMenu: any;
-    mainStore: MainStore;
-    menu: MenuStore;
+    mainStore: TMainStore;
+    menuStore: MenuStore;
     @observable templateName = '';
     @observable currentRoute = 'main';
     @observable isInputActive = false;
@@ -105,7 +102,7 @@ export default class ViewStore {
         this.templateName = '';
     }
 
-    @action.bound remove(idx: any, e: any) {
+    @action.bound remove(idx: number, e: any) {
         ViewStore.views = this.sortedItems.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
@@ -158,7 +155,7 @@ export default class ViewStore {
             }
             this.mainStore.chartType.setType(chartType as string);
             this.mainStore.state.setChartType(chartType);
-            this.menu.setOpen(false);
+            this.menuStore.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
         setTimeout(importLayout, 100);

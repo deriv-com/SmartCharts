@@ -1,20 +1,19 @@
 import { action, computed, reaction, observable } from 'mobx';
 import { connect, TReactComponent } from './Connect';
-import DialogStore, { TDialogStoreConnectedProps } from './DialogStore';
-import Dialog, { TDialogProps } from '../components/Dialog';
-import MainStore from '.';
+import DialogStore from './DialogStore';
+import { TDialogProps } from '../components/Dialog';
+import { TMainStore } from '../types';
 import ChartStore from './ChartStore';
 import Context from '../components/ui/Context';
 
 type TDropdownDialog = TReactComponent<Partial<TDialogProps | ChartStore> & { isFullscreen: boolean }>
 
 export default class MenuStore {
-    DropDownDialog: (TReactComponent<TDialogProps & TDialogStoreConnectedProps>) | TDropdownDialog;
-    dialog: DialogStore;
-    mainStore: MainStore;
-    constructor(mainStore: MainStore, options: { route: string }) {
+    dialogStore: DialogStore;
+    mainStore: TMainStore;
+    constructor(mainStore: TMainStore, options: { route: string}) {
         this.mainStore = mainStore;
-        this.dialog = new DialogStore(mainStore);
+        this.dialogStore = new DialogStore(mainStore);
         reaction(
             () => this.open,
             () => this.blurInput()
@@ -22,7 +21,6 @@ export default class MenuStore {
         if (options && options.route) {
             this.route = options.route;
         }
-        this.DropDownDialog = this.dialog.connect(Dialog);
     }
     get context(): Context {
         return this.mainStore.chart.context;
@@ -36,11 +34,11 @@ export default class MenuStore {
     route = '';
     @computed
     get open() {
-        return this.dialog.open;
+        return this.dialogStore.open;
     }
     @action.bound
     setOpen(val: boolean) {
-        this.dialog.setOpen(val);
+        this.dialogStore.setOpen(val);
         /**
          *  Update the url hash by considering the dialog `route` and `open`
          */
@@ -78,14 +76,14 @@ export default class MenuStore {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);
     }
-    connect = connect(({ chart: c, chartSetting }: MainStore) => ({
+    connect = connect(({ chart: c, chartSetting }: TMainStore) => ({
         ready: c.context,
         setOpen: this.setOpen,
         open: this.open,
         dialogStatus: this.dialogStatus,
         onTitleClick: this.onTitleClick,
         handleCloseDialog: this.handleCloseDialog,
-        DropdownDialog: this.DropDownDialog,
+        dialogStore: this.dialogStore,
         isMobile: c.isMobile,
         shouldRenderDialogs: c.shouldRenderDialogs,
         theme: chartSetting.theme,

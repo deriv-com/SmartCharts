@@ -1,7 +1,8 @@
 import { action, reaction } from 'mobx';
+import { TMainStore } from 'src/types';
 
 export default class ToolbarWidgetStore {
-    mainStore: any;
+    mainStore: TMainStore;
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
@@ -9,25 +10,25 @@ export default class ToolbarWidgetStore {
         return this.mainStore.chart;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
 
         reaction(
             () => [
-                this.mainStore.chartMode.menu.open,
-                this.mainStore.drawTools.menu.open,
-                this.mainStore.studies.menu.open,
-                this.mainStore.share.menu.open,
-                this.mainStore.view.menu.open,
+                this.mainStore.chartMode.menuStore.open,
+                this.mainStore.drawTools.menuStore.open,
+                this.mainStore.studies.menuStore.open,
+                this.mainStore.share.menuStore.open,
+                this.mainStore.view.menuStore.open,
             ],
             () => {
                 // Check if all floating toolbar component dialog close
                 if (
-                    !this.mainStore.chartMode.menu.open &&
-                    !this.mainStore.drawTools.menu.open &&
-                    !this.mainStore.studies.menu.open &&
-                    !this.mainStore.share.menu.open &&
-                    !this.mainStore.view.menu.open
+                    !this.mainStore.chartMode.menuStore.open &&
+                    !this.mainStore.drawTools.menuStore.open &&
+                    !this.mainStore.studies.menuStore.open &&
+                    !this.mainStore.share.menuStore.open &&
+                    !this.mainStore.view.menuStore.open
                 ) {
                     this.onMouseLeave();
                 }

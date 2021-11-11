@@ -1,32 +1,28 @@
 import { observable, action, computed, when } from 'mobx';
-import MainStore from '.';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import Menu, { TMenuProps } from '../components/Menu';
-import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
 import { connect } from './Connect';
 import ServerTime from '../utils/ServerTime';
+import { TMainStore } from '../types';
 
 export default class ChartTitleStore {
-    ChartTitleMenu: any;
-    MarketSelector: any;
     SymbolSelectButton: any;
     animatedPrice: AnimatedPriceStore;
     categoricalDisplay: CategoricalDisplayStore;
-    mainStore: MainStore;
-    menu: MenuStore;
+    mainStore: TMainStore;
+    menuStore: MenuStore;
     serverTime: any;
-    constructor(mainStore: MainStore) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route: 'chart-title' });
+        this.menuStore = new MenuStore(mainStore, { route: 'chart-title' });
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
-            getIsShown: () => this.menu.open,
+            getIsShown: () => this.menuStore.open,
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
@@ -37,8 +33,6 @@ export default class ChartTitleStore {
             searchInputClassName: this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
-        this.ChartTitleMenu = this.menu.connect(Menu as React.FC<TMenuProps>);
-        this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
         const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
         const PriceDisplay = connect(() => ({
             isVisible: this.isVisible && this.isShowChartPrice,
@@ -194,7 +188,7 @@ export default class ChartTitleStore {
             this.openMarket = open_market;
         }
         if (open) {
-            this.menu.setOpen(true);
+            this.menuStore.setOpen(true);
         }
     }
 }

@@ -2,27 +2,28 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/store';
 import '../../sass/components/_indicator_prediction_dialog.scss';
+import Menu from './Menu';
 
 const IndicatorPredictionDialog: React.FC = () => {
     const { timeperiod } = useStores();
 
     const {
-        SettingDialogMenu: Dialog,
+        menuStore,
         dialogPortalNodeId,
         handleCancel: onCancel,
         handleContinue: onContinue,
     } = timeperiod.predictionIndicator;
 
     return (
-        <Dialog
+        <Menu
+            store={menuStore}
             className='cq-dialog--indicator-prediction'
             modalMode
             emptyMenu
-            enableOverlay // this temprary, we remove it when all menus convert to modal
             portalNodeId={dialogPortalNodeId}
         >
-            <Dialog.Title />
-            <Dialog.Body>
+            <Menu.Title />
+            <Menu.Body>
                 <div className='cq-indicator-prediction'>
                     <strong>{t.translate('Are you sure?')}</strong>
                     <p>
@@ -39,8 +40,8 @@ const IndicatorPredictionDialog: React.FC = () => {
                         </button>
                     </div>
                 </div>
-            </Dialog.Body>
-        </Dialog>
+            </Menu.Body>
+        </Menu>
     );
 };
 

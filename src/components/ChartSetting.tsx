@@ -19,6 +19,7 @@ import {
     SettingHighestLowestMap,
 } from './Icons';
 import '../../sass/components/_chart-setting.scss';
+import Menu from './Menu';
 
 type ChartSettingsItemProps = {
     title: string;
@@ -54,8 +55,7 @@ const ChartSettingItem: React.FC<ChartSettingsItemProps> = ({
 const ChartSetting: React.FC = () => {
     const { chartSetting } = useStores();
     const {
-        ChartSettingMenu,
-        menu,
+        menuStore,
         countdown,
         historical,
         isHighestLowestMarkerEnabled,
@@ -69,17 +69,23 @@ const ChartSetting: React.FC = () => {
         toggleHighestLowestMarker,
     } = chartSetting;
 
-    const menuOpen = menu.dialog.open;
+    const menuOpen = menuStore.dialogStore.open;
 
     return (
-        <ChartSettingMenu className='sc-chart-setting' title={t.translate('Platform settings')} enableTabular modalMode>
-            <ChartSettingMenu.Title>
+        <Menu
+            store={menuStore}
+            className='sc-chart-setting'
+            title={t.translate('Platform settings')}
+            enableTabular
+            modalMode
+        >
+            <Menu.Title>
                 <SettingIcon
                     className={classNames('ic-icon-with-sub', { active: menuOpen })}
                     tooltip-title={t.translate('Settings')}
                 />
-            </ChartSettingMenu.Title>
-            <ChartSettingMenu.Body>
+            </Menu.Title>
+            <Menu.Body>
                 <Tabs className='tabs--vertical'>
                     <TabList>
                         <Tab key='theme'>
@@ -176,8 +182,8 @@ const ChartSetting: React.FC = () => {
                         </div>
                     </TabPanel>
                 </Tabs>
-            </ChartSettingMenu.Body>
-        </ChartSettingMenu>
+            </Menu.Body>
+        </Menu>
     );
 };
 

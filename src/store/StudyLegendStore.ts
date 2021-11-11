@@ -1,10 +1,10 @@
 import React from 'react';
 import { observable, action, when, reaction } from 'mobx';
+import { TMainStore } from 'src/types';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog';
-import Menu from '../components/Menu';
 import SearchInput from '../components/SearchInput';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { getIndicatorsTree, ExcludedStudies } from '../Constant';
@@ -12,6 +12,7 @@ import { prepareIndicatorName, renderSVGString } from '../utils';
 import { IndicatorCatTrendLightIcon, IndicatorCatTrendDarkIcon } from '../components/Icons';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
+
 // TODO:
 // import StudyInfo from '../study-info';
 const updateFieldHeading = (heading: string, type: string) => {
@@ -26,28 +27,26 @@ const updateFieldHeading = (heading: string, type: string) => {
 };
 export default class StudyLegendStore {
     SearchInput: any;
-    StudyMenu: any;
     StudySettingsDialog: any;
     activeStudies: any;
     excludedStudies: any;
     hasReachedLimits: any;
     helper: any;
-    mainStore: any;
-    menu: any;
+    mainStore: TMainStore;
+    menuStore: MenuStore;
     searchInput: any;
     settingsDialog: any;
     constructor(mainStore: any) {
         this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route: 'indicators' });
+        this.menuStore = new MenuStore(mainStore, { route: 'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper.sd),
             favoritesId: 'indicators',
             onChanged: (items: any) => this.updateStudy(this.helper.sd, items),
         });
-        this.StudyMenu = this.menu.connect(Menu);
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
         this.searchInput = React.createRef();
         this.SearchInput = connect(() => ({
@@ -58,9 +57,9 @@ export default class StudyLegendStore {
             searchInputClassName: 'searchInputClassName',
         }))(SearchInput);
         reaction(
-            () => this.menu.open,
+            () => this.menuStore.open,
             () => {
-                if (!this.menu.open) {
+                if (!this.menuStore.open) {
                     this.setFilterText('');
                 }
                 setTimeout(() => {

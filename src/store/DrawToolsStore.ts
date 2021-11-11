@@ -1,8 +1,7 @@
 import { action, reaction, when, observable, computed } from 'mobx';
-import MainStore from '.';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
-import Menu from '../components/Menu';
 import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { formatCamelCase } from '../utils';
@@ -25,16 +24,14 @@ type TDrawingObject = {
 };
 
 export default class DrawToolsStore {
-    DrawToolsMenu: any;
     DrawToolsSettingsDialog: any;
     _pervDrawingObjectCount: any;
-    mainStore: MainStore;
-    menu: any;
-    settingsDialog: any;
-    constructor(mainStore: MainStore) {
+    mainStore: TMainStore;
+    menuStore: MenuStore;
+    settingsDialog: SettingsDialogStore;
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route: 'draw-tool' });
-        this.DrawToolsMenu = this.menu.connect(Menu);
+        this.menuStore = new MenuStore(mainStore, { route: 'draw-tool' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: this.onDeleted,
@@ -43,7 +40,7 @@ export default class DrawToolsStore {
         this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
         when(() => this.context, this.onContextReady);
         reaction(
-            () => this.menu.open,
+            () => this.menuStore.open,
             () => {
                 this.computeActiveDrawTools();
                 this.noTool();
@@ -136,7 +133,7 @@ export default class DrawToolsStore {
     }
     noTool = () => {
         const count = this.stx.drawingObjects.length;
-        if ((this.menu.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
+        if ((this.menuStore.open && this.context) || (!this.isContinuous && this._pervDrawingObjectCount !== count)) {
             this.stx.changeVectorType('');
             this.drawingFinished();
         }
@@ -179,7 +176,7 @@ export default class DrawToolsStore {
         if (id === 'continuous') {
             this.isContinuous = true;
         }
-        this.menu.setOpen(false);
+        this.menuStore.setOpen(false);
     }
     @action.bound
     onChanged(items: any) {

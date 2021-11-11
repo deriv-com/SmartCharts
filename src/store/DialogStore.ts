@@ -2,15 +2,14 @@ import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DebouncedFunc } from 'lodash';
-import { connect } from './Connect';
 import Context from '../components/ui/Context';
-import MainStore from '.';
+import { TMainStore } from '../types';
 
 let activeDialog: DialogStore | undefined;
 
 export default class DialogStore {
-    mainStore: MainStore;
-    constructor(mainStore: MainStore) {
+    mainStore: TMainStore;
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         when(
             () => !!this.context,
@@ -101,15 +100,6 @@ export default class DialogStore {
             this.onClose = onClose;
         }
     }
-
-    connect = connect(() => ({
-        open: this.open,
-        setOpen: this.setOpen,
-        onClose: this.onClose,
-        updateCloseCallback: this.updateCloseCallback,
-        onContainerClick: this.onContainerClick,
-        isMobile: this.mainStore.chart.isMobile,
-    }));
 }
 
 export type TDialogStoreConnectedProps = {

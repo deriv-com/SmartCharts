@@ -7,6 +7,7 @@ import { SettingIcon } from './Icons';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
 import List from './List';
+import Menu from './Menu';
 
 type TTypeIcon = {
     Icon: (props: any) => JSX.Element;
@@ -24,8 +25,8 @@ type TChartTypesProps = {
 const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: onChangeFn }) => {
     const { chartType, chart } = useStores();
 
-    const { ChartTypeMenu, listStore, setTypeFromUI, showAggregateDialog, updateProps, types, type } = chartType;
-    const { menuOpen, setOpen } = chartType.menu;
+    const { listStore, setTypeFromUI, showAggregateDialog, updateProps, types, type, menuStore } = chartType;
+    const { open: menuOpen, setOpen } = chartType.menuStore;
     const { isMobile } = chart;
 
     const onChange = onChangeFn || setTypeFromUI;
@@ -69,15 +70,20 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
     }
 
     return (
-        <ChartTypeMenu className='ciq-display ciq-chart-types' enabled={enabled} title={t.translate('Chart types')}>
-            <ChartTypeMenu.Title>
+        <Menu
+            store={menuStore}
+            className='ciq-display ciq-chart-types'
+            enabled={enabled}
+            title={t.translate('Chart types')}
+        >
+            <Menu.Title>
                 <TypeIcon
                     Icon={type.icon}
                     className={`ic-icon-with-sub ${menuOpen ? 'active' : ''}`}
                     tooltip-title={t.translate(type.text)}
                 />
-            </ChartTypeMenu.Title>
-            <ChartTypeMenu.Body>
+            </Menu.Title>
+            <Menu.Body>
                 <div className='body'>
                     <List height={260} store={listStore}>
                         {(T: any) => (
@@ -95,8 +101,8 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
                         )}
                     </List>
                 </div>
-            </ChartTypeMenu.Body>
-        </ChartTypeMenu>
+            </Menu.Body>
+        </Menu>
     );
 };
 

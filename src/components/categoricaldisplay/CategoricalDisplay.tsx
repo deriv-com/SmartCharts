@@ -1,22 +1,32 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
+import CategoricalDisplayStore from 'src/store/CategoricalDisplayStore';
 import Scroll from '../Scroll';
 import '../../../sass/components/_categorical-display.scss';
 
-const CategoricalDisplay = ({
-    onSelectItem,
-    setFilterText,
-    updateScrollSpy,
-    setScrollPanel,
-    ResultsPanel,
-    FilterPanel,
-    height,
+type TCategoricalDisplay = {
+    store: CategoricalDisplayStore;
+    searchInputClassName?: string;
+    isNestedList?: boolean;
+    id?: string;
+    onSelectItem: (item: any) => void;
+    disableAll?: boolean;
+};
+
+const CategoricalDisplay: React.FC<TCategoricalDisplay> = ({
+    store,
     id,
-    SearchInput,
     searchInputClassName,
     disableAll,
     isNestedList,
-    isMobile,
-}: any) => {
+    onSelectItem: onSelectItemProp,
+}) => {
+    const { updateScrollSpy, setScrollPanel, ResultsPanel, FilterPanel, SearchInput, setFilterText, height } = store;
+
+    const onSelectItem = onSelectItemProp || store.onSelectItem;
+
+    const { isMobile } = store.chart;
+
     const innerPanel = (
         <ResultsPanel
             onSelectItem={(item: any) => {
@@ -28,6 +38,7 @@ const CategoricalDisplay = ({
             isNestedList={isNestedList}
         />
     );
+
     return (
         <div className={`sc-mcd ${isNestedList ? 'sc-mcd--nested' : ''}`} style={{ height }} id={id}>
             {!isMobile && (
@@ -56,4 +67,4 @@ const CategoricalDisplay = ({
     );
 };
 
-export default CategoricalDisplay;
+export default observer(CategoricalDisplay);

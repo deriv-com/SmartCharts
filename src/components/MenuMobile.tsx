@@ -5,7 +5,7 @@ import { useStores } from 'src/store';
 import '../../sass/components/_menu-dropdown.scss';
 
 type TMenuMobileProps = {
-    className: string;
+    className?: string;
     open: boolean;
     portalNodeId?: string;
     onClick: React.MouseEventHandler<HTMLDivElement>;
