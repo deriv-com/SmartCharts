@@ -1,6 +1,6 @@
 import React from 'react';
 import { observable, action, when, reaction } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -32,7 +32,7 @@ export default class StudyLegendStore {
     excludedStudies: any;
     hasReachedLimits: any;
     helper: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     searchInput: any;
     settingsDialog: any;

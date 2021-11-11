@@ -3,13 +3,13 @@ import debounce from 'lodash.debounce';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DebouncedFunc } from 'lodash';
 import Context from '../components/ui/Context';
-import { TMainStore } from '../types';
+import MainStore from '.';
 
 let activeDialog: DialogStore | undefined;
 
 export default class DialogStore {
-    mainStore: TMainStore;
-    constructor(mainStore: TMainStore) {
+    mainStore: MainStore;
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(
             () => !!this.context,

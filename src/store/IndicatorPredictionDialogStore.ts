@@ -1,14 +1,14 @@
 import { computed, action, observable } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 import MenuStore from './MenuStore';
 
 export default class IndicatorPredictionDialogStore {
     @observable dialogPortalNodeId?: string;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     scrollPanel?: HTMLElement;
 
-    constructor({ mainStore }: { mainStore: TMainStore }) {
+    constructor({ mainStore }: { mainStore: MainStore }) {
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'indicator-setting' });
     }

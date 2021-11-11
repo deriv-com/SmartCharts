@@ -2,7 +2,7 @@ import { action, computed, reaction, observable } from 'mobx';
 import { connect, TReactComponent } from './Connect';
 import DialogStore from './DialogStore';
 import { TDialogProps } from '../components/Dialog';
-import { TMainStore } from '../types';
+import MainStore from '.';
 import ChartStore from './ChartStore';
 import Context from '../components/ui/Context';
 
@@ -10,8 +10,8 @@ type TDropdownDialog = TReactComponent<Partial<TDialogProps | ChartStore> & { is
 
 export default class MenuStore {
     dialogStore: DialogStore;
-    mainStore: TMainStore;
-    constructor(mainStore: TMainStore, options: { route: string}) {
+    mainStore: MainStore;
+    constructor(mainStore: MainStore, options: { route: string}) {
         this.mainStore = mainStore;
         this.dialogStore = new DialogStore(mainStore);
         reaction(
@@ -76,7 +76,7 @@ export default class MenuStore {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);
     }
-    connect = connect(({ chart: c, chartSetting }: TMainStore) => ({
+    connect = connect(({ chart: c, chartSetting }: MainStore) => ({
         ready: c.context,
         setOpen: this.setOpen,
         open: this.open,

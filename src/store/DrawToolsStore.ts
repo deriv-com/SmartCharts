@@ -1,5 +1,5 @@
 import { action, reaction, when, observable, computed } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog';
@@ -26,10 +26,10 @@ type TDrawingObject = {
 export default class DrawToolsStore {
     DrawToolsSettingsDialog: any;
     _pervDrawingObjectCount: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'draw-tool' });
         this.settingsDialog = new SettingsDialogStore({
