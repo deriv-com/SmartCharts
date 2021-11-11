@@ -2,7 +2,6 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
 import { connect } from './Connect';
@@ -10,7 +9,6 @@ import ServerTime from '../utils/ServerTime';
 import { TMainStore } from '../types';
 
 export default class ChartTitleStore {
-    MarketSelector: any;
     SymbolSelectButton: any;
     animatedPrice: AnimatedPriceStore;
     categoricalDisplay: CategoricalDisplayStore;
@@ -35,7 +33,6 @@ export default class ChartTitleStore {
             searchInputClassName: this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
-        this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
         const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
         const PriceDisplay = connect(() => ({
             isVisible: this.isVisible && this.isShowChartPrice,

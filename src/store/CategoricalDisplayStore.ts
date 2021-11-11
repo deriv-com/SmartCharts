@@ -1,12 +1,24 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
 import SearchInput, { TSearchInputProps } from '../components/SearchInput';
-import { NormalItem, ActiveItem, ResultsPanel, TResultsPanelProps, FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
+import {
+    NormalItem,
+    ActiveItem,
+    ResultsPanel,
+    TResultsPanelProps,
+    FilterPanel,
+    TFilterPanelProps,
+} from '../components/categoricaldisplay';
 import { cloneCategories, cloneCategory } from '../utils';
 import { connect, TReactComponent } from './Connect';
 import Context from '../components/ui/Context';
 import { TMainStore } from '../types';
-import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory, TSubCategoryDataItem} from '../binaryapi/ActiveSymbols';
+import {
+    TCategorizedSymbolItem,
+    TCategorizedSymbols,
+    TSubCategory,
+    TSubCategoryDataItem,
+} from '../binaryapi/ActiveSymbols';
 
 type TCategoricalDisplayStoreProps = {
     getCategoricalItems: () => TCategorizedSymbols;
@@ -20,9 +32,9 @@ type TCategoricalDisplayStoreProps = {
     id: string;
     getCurrentActiveCategory: () => string;
     getCurrentActiveSubCategory: () => string;
-    getCurrentActiveMarket: () => (string | null);
+    getCurrentActiveMarket: () => string | null;
     searchInputClassName?: string;
-}
+};
 
 export default class CategoricalDisplayStore {
     FilterPanel: TReactComponent<TFilterPanelProps>;
@@ -30,12 +42,12 @@ export default class CategoricalDisplayStore {
     SearchInput: TReactComponent<TSearchInputProps>;
     activeMarket?: string | null;
     activeSubCategory = '';
-    categoryElements: {[id: string]: HTMLElement | null};
+    categoryElements: { [id: string]: HTMLElement | null };
     favoritesId: string;
     getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
     getCategoricalItems: () => TCategorizedSymbols;
     getCurrentActiveCategory: () => string;
-    getCurrentActiveMarket: () => (string | null);
+    getCurrentActiveMarket: () => string | null;
     getCurrentActiveSubCategory: () => string;
     id: string;
     isInit: boolean;
@@ -130,7 +142,7 @@ export default class CategoricalDisplayStore {
     }
 
     @observable isShown = false;
-    @observable scrollPanel?: HTMLElement;
+    @observable scrollPanel?: HTMLElement | null;
     @observable filterText = '';
     @observable activeCategoryKey = '';
     @observable focusedCategoryKey: string | null = null;
@@ -143,7 +155,7 @@ export default class CategoricalDisplayStore {
     lastFilteredItems: TCategorizedSymbols = [];
     activeCategories: string[] = [];
 
-    get chart(): TMainStore["chart"] {
+    get chart(): TMainStore['chart'] {
         return this.mainStore.chart;
     }
 
@@ -203,13 +215,17 @@ export default class CategoricalDisplayStore {
                 const foundItems: TSubCategoryDataItem[] = [];
                 if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
-                        const foundSubItems = findFavItem(subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory);
+                        const foundSubItems = findFavItem(
+                            subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                        );
                         foundItems.push(...foundSubItems);
                     });
                 } else {
                     favsCategory.data.forEach(favItem => {
                         if (typeof favItem === 'string') {
-                            const itemObj = (category as TSubCategory).data.find((item: TSubCategoryDataItem) => item.itemId === favItem);
+                            const itemObj = (category as TSubCategory).data.find(
+                                (item: TSubCategoryDataItem) => item.itemId === favItem
+                            );
                             if (itemObj) {
                                 foundItems.push(itemObj);
                             }
@@ -219,7 +235,9 @@ export default class CategoricalDisplayStore {
                 return foundItems;
             };
 
-            const favsCategoryItem = (favsCategory.data as TSubCategory[]).filter((favItem: TSubCategory) => typeof favItem !== 'string');
+            const favsCategoryItem = (favsCategory.data as TSubCategory[]).filter(
+                (favItem: TSubCategory) => typeof favItem !== 'string'
+            );
 
             filteredItems.forEach((category: TCategorizedSymbolItem) => {
                 const foundItems = findFavItem(category);
@@ -248,7 +266,7 @@ export default class CategoricalDisplayStore {
         // regex to check all separate words by comma, should exist in the string
         const hasSearchString = (text: string) => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
         const filterCategory = (c: TSubCategory) => {
-            c.data = c.data.filter((item: TSubCategoryDataItem) => 
+            c.data = c.data.filter((item: TSubCategoryDataItem) =>
                 hasSearchString(item.display || (typeof item.dataObject === 'object' ? item.dataObject.symbol : ''))
             );
             if (c.data.length) {
@@ -375,7 +393,7 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound setScrollPanel(element: HTMLElement): void {
+    @action.bound setScrollPanel(element: HTMLElement | null): void {
         this.scrollPanel = element;
     }
 
@@ -454,21 +472,4 @@ export default class CategoricalDisplayStore {
             if (last_category_element) last_category_element.style.minHeight = `${last_category_bottom_gap}px`;
         }
     }
-
-    connect = connect(() => ({
-        filteredItems: this.filteredItems,
-        updateScrollSpy: this.updateScrollSpy,
-        setScrollPanel: this.setScrollPanel,
-        isScrollingDown: this.isScrollingDown,
-        handleTitleClick: this.handleTitleClick,
-        scrollUp: this.scrollUp,
-        scrollDown: this.scrollDown,
-        onSelectItem: this.onSelectItem,
-        ResultsPanel: this.ResultsPanel,
-        FilterPanel: this.FilterPanel,
-        SearchInput: this.SearchInput,
-        setFilterText: this.setFilterText,
-        height: this.height,
-        isMobile: this.chart.isMobile,
-    }));
 }

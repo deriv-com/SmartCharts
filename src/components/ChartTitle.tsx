@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import '../../sass/components/_chart-title.scss';
 import Menu from './Menu';
+import { CategoricalDisplay } from './categoricaldisplay';
 
 type TChartTitleProps = {
     containerId?: string;
@@ -24,7 +25,7 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
     const {
         menuStore,
         currentSymbol,
-        MarketSelector,
+        categoricalDisplay,
         setSymbol,
         SymbolSelectButton,
         onMouseEnter,
@@ -61,8 +62,8 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
                 <SymbolSelectButton />
             </Menu.Title>
             <Menu.Body>
-                <MarketSelector
-                    portalNodeId={portalNodeId}
+                <CategoricalDisplay
+                    store={categoricalDisplay}
                     isNestedList={isNestedList}
                     searchInputClassName={searchInputClassName}
                     onSelectItem={(x: any) => {
