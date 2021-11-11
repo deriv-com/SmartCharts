@@ -15,6 +15,7 @@ import {
 } from './Form';
 import { DeleteIcon } from './Icons';
 import '../../sass/components/_settings-dialog.scss';
+import Menu from './Menu';
 
 type TSettingsPanelItem = {
     group?: string;
@@ -182,24 +183,24 @@ const SettingsDialog = ({
     onResetClick,
     onItemChange,
     onItemDelete,
-    SettingDialogMenu,
+    menuStore,
     theme,
     close,
     setScrollPanel,
     dialogPortalNodeId,
     freezeScroll,
 }: any) => (
-    <SettingDialogMenu
+    <Menu
+        store={menuStore}
         className='cq-modal--settings'
         title={title}
         modalMode
         enableTabular={showTabs}
         emptyMenu
-        enableOverlay // this temprary, we remove it when all menus convert to modal
         portalNodeId={dialogPortalNodeId}
     >
-        <SettingDialogMenu.Title />
-        <SettingDialogMenu.Body>
+        <Menu.Title />
+        <Menu.Body>
             <div className='cq-chart-settings'>
                 {showTabs ? (
                     <Tabs className='tabs--vertical'>
@@ -233,7 +234,7 @@ const SettingsDialog = ({
                     </>
                 )}
             </div>
-        </SettingDialogMenu.Body>
-    </SettingDialogMenu>
+        </Menu.Body>
+    </Menu>
 );
 export default SettingsDialog;

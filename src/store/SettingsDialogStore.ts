@@ -1,14 +1,12 @@
 import { observable, action, computed, reaction } from 'mobx';
-import { TSettingsItemGroup, TSettingsItems } from 'src/types';
+import { TMainStore, TSettingsItemGroup, TSettingsItems } from 'src/types';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
-import Menu from '../components/Menu';
 
 export default class SettingsDialogStore {
-    SettingDialogMenu: any;
     getContext: any;
-    mainStore: any;
-    menu: any;
+    mainStore: TMainStore;
+    menuStore: MenuStore;
     onChanged: any;
     onDeleted: any;
     onItemActive: any;
@@ -39,8 +37,7 @@ export default class SettingsDialogStore {
         this.getContext = getContext;
         this.onChanged = onChanged;
         this.onDeleted = onDeleted;
-        this.menu = new MenuStore(mainStore, { route: 'indicator-setting' });
-        this.SettingDialogMenu = this.menu.connect(Menu);
+        this.menuStore = new MenuStore(mainStore, { route: 'indicator-setting' });
         reaction(
             () => this.open,
             () => {
@@ -72,7 +69,7 @@ export default class SettingsDialogStore {
     }
     @computed
     get open() {
-        return this.menu.open;
+        return this.menuStore.open;
     }
     checkDropdownOpen = () => {
         let freezeScroll = false;
@@ -94,7 +91,7 @@ export default class SettingsDialogStore {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop = 0;
         }
-        return this.menu.setOpen(value);
+        return this.menuStore.setOpen(value);
     }
     @action.bound
     onResetClick() {
@@ -104,7 +101,7 @@ export default class SettingsDialogStore {
     }
     @action.bound
     onItemDelete() {
-        this.menu.setOpen(false);
+        this.menuStore.setOpen(false);
         if (this.onDeleted) this.onDeleted();
     }
     @action.bound
@@ -172,11 +169,11 @@ export default class SettingsDialogStore {
         onItemChange: this.onItemChange,
         onItemActive: this.onItemActive,
         onItemDelete: this.onItemDelete,
-        SettingDialogMenu: this.SettingDialogMenu,
+        menuStore: this.menuStore,
         open: this.open,
         theme: this.theme,
         setScrollPanel: this.setScrollPanel,
-        close: this.menu.handleCloseDialog,
+        close: this.menuStore.handleCloseDialog,
         dialogPortalNodeId: this.dialogPortalNodeId,
         freezeScroll: this.freezeScroll,
     }));

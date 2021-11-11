@@ -3,7 +3,6 @@ import { ChartType, TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
-import Menu from '../components/Menu';
 import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { ChartTypes } from '../Constant';
@@ -76,17 +75,16 @@ function getAggregates() {
 export default class ChartTypeStore {
     AggregateChartSettingsDialog: any;
     ChartTypeList: any;
-    ChartTypeMenu: any;
     aggregates: any;
     chartTypes: typeof ChartTypes = [];
     listStore: ListStore;
     mainStore: TMainStore;
-    menu: any;
+    menuStore: MenuStore;
     settingsDialog: any;
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route: 'chart-type' });
+        this.menuStore = new MenuStore(mainStore, { route: 'chart-type' });
         this.listStore = new ListStore({
             getContext: () => this.context,
             getItems: () => this.types,
@@ -95,7 +93,6 @@ export default class ChartTypeStore {
             mainStore,
             onChanged: (items: any) => this.updateAggregate(items),
         });
-        this.ChartTypeMenu = this.menu.connect(Menu);
         this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
     @observable

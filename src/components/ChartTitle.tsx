@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import '../../sass/components/_chart-title.scss';
+import Menu from './Menu';
 
 type TChartTitleProps = {
     containerId?: string;
@@ -21,7 +22,7 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
 
     const { theme } = chartSetting;
     const {
-        ChartTitleMenu,
+        menuStore,
         currentSymbol,
         MarketSelector,
         setSymbol,
@@ -31,7 +32,7 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
         updateProps,
     } = chartTitle;
     const onChange = props.onChange || setSymbol;
-    const setMenuOpen = chartTitle.menu.setOpen;
+    const setMenuOpen = menuStore.setOpen;
 
     const { containerId, enabled, portalNodeId, searchInputClassName, open, open_market, isNestedList } = props;
 
@@ -46,7 +47,8 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
     }
 
     const ChartTitleContainer = (
-        <ChartTitleMenu
+        <Menu
+            store={menuStore}
             enabled={enabled}
             className='cq-chart-title stx-show cq-symbols-display'
             isFullscreen
@@ -55,10 +57,10 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            <ChartTitleMenu.Title>
+            <Menu.Title>
                 <SymbolSelectButton />
-            </ChartTitleMenu.Title>
-            <ChartTitleMenu.Body>
+            </Menu.Title>
+            <Menu.Body>
                 <MarketSelector
                     portalNodeId={portalNodeId}
                     isNestedList={isNestedList}
@@ -70,8 +72,8 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
                         setMenuOpen(false);
                     }}
                 />
-            </ChartTitleMenu.Body>
-        </ChartTitleMenu>
+            </Menu.Body>
+        </Menu>
     );
 
     if (containerId) {

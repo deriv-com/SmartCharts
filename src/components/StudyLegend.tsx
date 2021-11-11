@@ -9,6 +9,7 @@ import Scroll from './Scroll';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
 import { TooltipsContent } from '../Constant';
+import Menu from './Menu';
 
 const StudyIcon = ({ Icon, props }: { Icon: any; props?: any }) => <Icon {...props} />;
 
@@ -187,8 +188,7 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
     const { studies, chart, timeperiod } = useStores();
 
     const {
-        menu,
-        StudyMenu,
+        menuStore,
         deleteAllStudies: deleteAll,
         items,
         searchedItems,
@@ -207,14 +207,14 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
     } = studies;
     const { isTick } = timeperiod;
     const { isMobile } = chart;
-    const menuOpen = menu.open;
+    const menuOpen = menuStore.open;
     const activeStudiesNo = activeItems.length;
 
     updatePortalNode(portalNodeId);
     return (
-        <StudyMenu
+        <Menu
+            store={menuStore}
             className='sc-studies'
-            isMobile={isMobile}
             title={t.translate('Indicators')}
             tooltip={t.translate('Indicators')}
             modalMode
@@ -233,13 +233,13 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
                 )
             }
         >
-            <StudyMenu.Title>
+            <Menu.Title>
                 <div className={`sc-studies__menu ${menuOpen ? 'sc-studies__menu--active' : ''}`}>
                     <IndicatorIcon />
                     <NotificationBadge notificationCount={activeStudiesNo} />
                 </div>
-            </StudyMenu.Title>
-            <StudyMenu.Body>
+            </Menu.Title>
+            <Menu.Body>
                 {infoItem && (
                     <div className='sc-studies__info'>
                         <Scroll autoHide height='360px' className='sc-studies__info__content'>
@@ -275,8 +275,8 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
                     maxAllowedItem={maxAllowedItem}
                     isTick={isTick}
                 />
-            </StudyMenu.Body>
-        </StudyMenu>
+            </Menu.Body>
+        </Menu>
     );
 };
 

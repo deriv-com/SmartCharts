@@ -1,66 +1,60 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { observer } from 'mobx-react-lite';
 import { CSSTransition } from 'react-transition-group';
-
 import classNames from 'classnames';
+import MenuStore from 'src/store/MenuStore';
+import { useStores } from 'src/store';
 import MenuMobile from './MenuMobile';
 import Tooltip from './Tooltip';
 import { CloseIcon } from './Icons';
-import { TDialogProps } from './Dialog';
-import { TReactComponent } from '../store/Connect';
-import ChartStore from '../store/ChartStore';
 
-export type TMenuProps = {
-    open: boolean;
-    dialogStatus?: boolean;
-    className: string;
-    children: React.ReactNode;
-    title: string;
-    tooltip?: boolean;
-    onTitleClick: () => void;
-    DropdownDialog: TReactComponent<Partial<TDialogProps | ChartStore> & { isFullscreen: TMenuProps['isFullscreen'] }>;
-    isMobile: boolean;
-    isFullscreen: boolean;
-    portalNodeId: string;
-    enabled: boolean;
-    shouldRenderDialogs: boolean;
-    handleCloseDialog: () => void;
-    onMouseEnter: () => void;
-    onMouseLeave: () => void;
-    theme: string;
-    enableTabular: boolean;
-    ready: boolean;
-    customHead: JSX.Element;
-    emptyMenu: boolean;
-    modalMode: boolean;
+type TMenuProps = {
+    store: MenuStore;
+    className?: string;
+    title?: string;
+    isFullscreen?: boolean;
+    portalNodeId?: string;
+    enabled?: boolean;
+    tooltip?: React.ReactNode;
+    emptyMenu?: boolean;
+    modalMode?: boolean;
+    onMouseEnter?: React.MouseEventHandler<HTMLDivElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
+    enableTabular?: boolean;
+    customHead?: React.ReactElement;
 };
 
-const Menu = ({
-    open,
-    dialogStatus,
+type TMenuFC = React.FunctionComponent<TMenuProps> & {
+    Title: React.FC;
+    Body: React.FC;
+};
+
+const Menu: React.FC<TMenuProps> = ({
+    store,
     className,
     children,
     title,
     tooltip,
-    onTitleClick,
-    DropdownDialog,
-    isMobile,
     isFullscreen,
     portalNodeId,
     enabled = true,
-    shouldRenderDialogs,
-    handleCloseDialog,
     onMouseEnter,
     onMouseLeave,
-    theme,
     enableTabular,
-    ready,
     customHead,
     emptyMenu,
     modalMode,
-}: TMenuProps): React.ReactNode => {
-    const onOverlayClick = (e: React.MouseEvent) => {
-        if ((e.target as HTMLDivElement).className === 'cq-modal__overlay') {
+}) => {
+    const { open, dialogStatus, onTitleClick, handleCloseDialog, DropDownDialog } = store;
+
+    const { chartSetting, chart } = useStores();
+
+    const { theme } = chartSetting;
+    const { shouldRenderDialogs, isMobile, context: ready } = chart;
+
+    const onOverlayClick: React.MouseEventHandler<HTMLDivElement> = e => {
+        if (e.currentTarget.className === 'cq-modal__overlay') {
             handleCloseDialog();
         }
     };
@@ -69,6 +63,7 @@ const Menu = ({
 
     const first = React.Children.map(children, (child: React.ReactNode, i: number) => (i === 0 ? child : null));
     const rest = React.Children.map(children, (child: React.ReactNode, i: number) => (i !== 0 ? child : null));
+
     if (modalMode) {
         const portalNode = document.getElementById(portalNodeId || 'smartcharts_modal');
         if (!portalNode) return '';
@@ -88,7 +83,7 @@ const Menu = ({
                     >
                         <div className='cq-modal__overlay' onClick={onOverlayClick}>
                             <CSSTransition appear in={dialogStatus} timeout={300} classNames='sc-dialog' unmountOnExit>
-                                <DropdownDialog
+                                <DropDownDialog
                                     isMobile={isMobile}
                                     isFullscreen={isFullscreen}
                                     title={title}
@@ -97,7 +92,7 @@ const Menu = ({
                                     customHead={customHead}
                                 >
                                     {rest}
-                                </DropdownDialog>
+                                </DropDownDialog>
                             </CSSTransition>
                         </div>
                     </div>
@@ -118,7 +113,7 @@ const Menu = ({
                     'ciq-disabled': !enabled,
                 })}
                 content={tooltip}
-                enabled={tooltip}
+                enabled={!!tooltip}
                 position='right'
             >
                 <div
@@ -135,7 +130,7 @@ const Menu = ({
     }
 
     const oldDropdown = shouldRenderDialogs ? (
-        <DropdownDialog
+        <DropDownDialog
             className={classNames('cq-menu-dropdown', {
                 'cq-menu-dropdown-enter-done': dialogStatus,
             })}
@@ -149,7 +144,7 @@ const Menu = ({
                 </div>
             )}
             {rest}
-        </DropdownDialog>
+        </DropDownDialog>
     ) : null;
 
     return (
@@ -184,7 +179,13 @@ const Menu = ({
     );
 };
 
-Menu.Title = ({ children }: TMenuProps) => children;
-Menu.Body = ({ children }: TMenuProps) => children;
+const ObservedMenu = observer(Menu) as TMenuFC;
 
-export default Menu;
+const MenuSubComponent: React.FC = ({ children }) => {
+    return <React.Fragment>{children}</React.Fragment>;
+};
+
+ObservedMenu.Title = MenuSubComponent;
+ObservedMenu.Body = MenuSubComponent;
+
+export default ObservedMenu;

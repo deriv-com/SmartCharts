@@ -4,11 +4,12 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { TMainStore } from 'src/types';
+import { useStores } from 'src/store';
 import Scroll from './Scroll';
 import NotificationBadge from './NotificationBadge';
 import { DrawToolIcon, ActiveIcon, DeleteIcon, SettingIcon, EmptyStateIcon } from './Icons';
 import '../../sass/components/_draw_tools.scss';
-import { useStores } from 'src/store';
+import Menu from './Menu';
 
 type TActivePanelViewProps = {
     enabled: boolean;
@@ -21,7 +22,7 @@ const ActivePanelView: React.FC<TActivePanelViewProps> = ({ enabled, children })
             <p>{t.translate('You have no active drawings yet.')}</p>
         </div>
     ) : (
-        <React.Fragment>{children ? children : null}</React.Fragment>
+        <React.Fragment>{children}</React.Fragment>
     );
 
 type InfoProps = {
@@ -112,20 +113,21 @@ const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {
     const {
         clearAll,
         selectTool,
-        DrawToolsMenu,
         drawToolsItems,
         activeToolsNo: activeDrawToolsItemsNo,
         activeToolsGroup: activeDrawToolsGroup,
         onDeleted: onDelete,
         onSetting,
         updatePortalNode,
+        menuStore,
     } = drawTools;
 
-    const menuOpen = drawTools.menu.open;
+    const menuOpen = menuStore.open;
 
     updatePortalNode(portalNodeId);
     return (
-        <DrawToolsMenu
+        <Menu
+            store={menuStore}
             className='sc-dtools'
             title={t.translate('Drawing tools')}
             tooltip={t.translate('Drawing tools')}
@@ -133,14 +135,14 @@ const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {
             enableTabular
             portalNodeId={portalNodeId}
         >
-            <DrawToolsMenu.Title>
+            <Menu.Title>
                 <div className={classNames('sc-dtools__menu', { 'sc-dtools__menu--active': menuOpen })}>
                     <DrawToolIcon />
                     <NotificationBadge notificationCount={activeDrawToolsItemsNo} />
                 </div>
-            </DrawToolsMenu.Title>
+            </Menu.Title>
 
-            <DrawToolsMenu.Body>
+            <Menu.Body>
                 <Tabs className='tabs--vertical'>
                     <TabList>
                         <Tab>
@@ -183,8 +185,8 @@ const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {
                         </div>
                     </TabPanel>
                 </Tabs>
-            </DrawToolsMenu.Body>
-        </DrawToolsMenu>
+            </Menu.Body>
+        </Menu>
     );
 };
 

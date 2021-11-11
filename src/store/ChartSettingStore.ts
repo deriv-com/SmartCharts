@@ -1,17 +1,15 @@
 import { observable, action, when } from 'mobx';
+import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
-import Menu from '../components/Menu';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { Languages } from '../Constant';
 export default class ChartSettingStore {
-    ChartSettingMenu: any;
-    mainStore: any;
-    menu: any;
-    constructor(mainStore: any) {
+    mainStore: TMainStore;
+    menuStore: MenuStore;
+    constructor(mainStore: TMainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
-        this.menu = new MenuStore(mainStore, { route: 'setting' });
-        this.ChartSettingMenu = this.menu.connect(Menu);
+        this.menuStore = new MenuStore(mainStore, { route: 'setting' });
         when(
             () => this.context,
             () => {
@@ -159,7 +157,7 @@ export default class ChartSettingStore {
         setTimeout(() => {
             this.mainStore.chart.resizeScreen();
         }, 10);
-        this.menu.setOpen(false);
+        this.menuStore.setOpen(false);
     }
     @action.bound
     showCountdown(value: any) {

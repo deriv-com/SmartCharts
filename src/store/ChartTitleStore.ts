@@ -2,7 +2,6 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import Menu from '../components/Menu';
 import { CategoricalDisplay } from '../components/categoricaldisplay';
 import AnimatedPrice from '../components/AnimatedPrice';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
@@ -11,22 +10,21 @@ import ServerTime from '../utils/ServerTime';
 import { TMainStore } from '../types';
 
 export default class ChartTitleStore {
-    ChartTitleMenu: any;
     MarketSelector: any;
     SymbolSelectButton: any;
     animatedPrice: AnimatedPriceStore;
     categoricalDisplay: CategoricalDisplayStore;
     mainStore: TMainStore;
-    menu: MenuStore;
+    menuStore: MenuStore;
     serverTime: any;
     constructor(mainStore: any) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
-        this.menu = new MenuStore(mainStore, { route: 'chart-title' });
+        this.menuStore = new MenuStore(mainStore, { route: 'chart-title' });
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
             getCategoricalItems: () => this.mainStore.chart.categorizedSymbols,
-            getIsShown: () => this.menu.open,
+            getIsShown: () => this.menuStore.open,
             placeholderText: t.translate('Search...'),
             favoritesId: 'chartTitle&Comparison',
             mainStore,
@@ -37,7 +35,6 @@ export default class ChartTitleStore {
             searchInputClassName: this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
-        this.ChartTitleMenu = this.menu.connect(Menu);
         this.MarketSelector = this.categoricalDisplay.connect(CategoricalDisplay);
         const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
         const PriceDisplay = connect(() => ({
@@ -194,7 +191,7 @@ export default class ChartTitleStore {
             this.openMarket = open_market;
         }
         if (open) {
-            this.menu.setOpen(true);
+            this.menuStore.setOpen(true);
         }
     }
 }
