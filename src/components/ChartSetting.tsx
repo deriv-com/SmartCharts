@@ -69,7 +69,7 @@ const ChartSetting: React.FC = () => {
         toggleHighestLowestMarker,
     } = chartSetting;
 
-    const menuOpen = menuStore.dialog.open;
+    const menuOpen = menuStore.dialogStore.open;
 
     return (
         <Menu

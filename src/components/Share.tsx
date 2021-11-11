@@ -14,7 +14,7 @@ type TShareProps = {
 const Share: React.FC<TShareProps> = ({ portalNodeId }) => {
     const { share } = useStores();
     const { menuStore, downloadCSV, downloadPNG, isLoadingPNG } = share;
-    const { open: menuOpen } = menuStore.dialog;
+    const { open: menuOpen } = menuStore.dialogStore;
 
     return (
         <Menu

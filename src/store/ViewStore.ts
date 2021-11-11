@@ -9,7 +9,7 @@ export default class ViewStore {
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'templates' });
         reaction(
-            () => this.menuStore.dialog.open,
+            () => this.menuStore.dialogStore.open,
             () => {
                 if (ViewStore.views.length === 0) {
                     this.updateRoute('new');
@@ -17,7 +17,7 @@ export default class ViewStore {
                     this.updateRoute('main');
                 }
 
-                if (this.menuStore.dialog.open) {
+                if (this.menuStore.dialogStore.open) {
                     this.templateName = '';
                 }
             }

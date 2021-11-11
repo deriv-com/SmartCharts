@@ -1,12 +1,12 @@
 import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
-import { connect } from './Connect';
+import { TMainStore } from 'src/types';
 
 let activeDialog: any;
 
 export default class DialogStore {
-    mainStore: any;
-    constructor(mainStore: any) {
+    mainStore: TMainStore;
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         when(
             () => this.context,
@@ -97,13 +97,4 @@ export default class DialogStore {
             this.onClose = onClose;
         }
     }
-
-    connect = connect(() => ({
-        open: this.open,
-        setOpen: this.setOpen,
-        onClose: this.onClose,
-        updateCloseCallback: this.updateCloseCallback,
-        onContainerClick: this.onContainerClick,
-        isMobile: this.mainStore.chart.isMobile,
-    }));
 }

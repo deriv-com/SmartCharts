@@ -1,14 +1,14 @@
 import { action, computed, reaction, observable } from 'mobx';
+import { TMainStore } from 'src/types';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
-import Dialog from '../components/Dialog';
+
 export default class MenuStore {
-    DropDownDialog: any;
-    dialog: any;
-    mainStore: any;
-    constructor(mainStore: any, options: any) {
+    dialogStore: DialogStore;
+    mainStore: TMainStore;
+    constructor(mainStore: TMainStore, options: any) {
         this.mainStore = mainStore;
-        this.dialog = new DialogStore(mainStore);
+        this.dialogStore = new DialogStore(mainStore);
         reaction(
             () => this.open,
             () => this.blurInput()
@@ -16,7 +16,6 @@ export default class MenuStore {
         if (options && options.route) {
             this.route = options.route;
         }
-        this.DropDownDialog = this.dialog.connect(Dialog);
     }
     get context() {
         return this.mainStore.chart.context;
@@ -30,11 +29,11 @@ export default class MenuStore {
     route = '';
     @computed
     get open() {
-        return this.dialog.open;
+        return this.dialogStore.open;
     }
     @action.bound
-    setOpen(val: any) {
-        this.dialog.setOpen(val);
+    setOpen(val: boolean) {
+        this.dialogStore.setOpen(val);
         /**
          *  Update the url hash by considering the dialog `route` and `open`
          */
@@ -79,7 +78,7 @@ export default class MenuStore {
         dialogStatus: this.dialogStatus,
         onTitleClick: this.onTitleClick,
         handleCloseDialog: this.handleCloseDialog,
-        DropdownDialog: this.DropDownDialog,
+        dialogStore: this.dialogStore,
         isMobile: c.isMobile,
         shouldRenderDialogs: c.shouldRenderDialogs,
         theme: chartSetting.theme,

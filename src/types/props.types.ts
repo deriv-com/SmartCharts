@@ -53,7 +53,7 @@ export type TSettingsItems = {
     title: string;
     value: string;
     defaultValue: string;
-    subtitle: string;
+    subtitle?: string;
 };
 
 export type TOpenClose = { date: string; open: Date; close: Date };

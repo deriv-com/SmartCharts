@@ -17,7 +17,7 @@ export default class ChartTitleStore {
     mainStore: TMainStore;
     menuStore: MenuStore;
     serverTime: any;
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-title' });

@@ -2,7 +2,6 @@ import { action, reaction, when, observable, computed } from 'mobx';
 import { TMainStore } from 'src/types';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
-import Menu from '../components/Menu';
 import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { formatCamelCase } from '../utils';
@@ -29,7 +28,7 @@ export default class DrawToolsStore {
     _pervDrawingObjectCount: any;
     mainStore: TMainStore;
     menuStore: MenuStore;
-    settingsDialog: any;
+    settingsDialog: SettingsDialogStore;
     constructor(mainStore: TMainStore) {
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'draw-tool' });

@@ -1,29 +1,29 @@
 import React, { useEffect } from 'react';
-
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
+import DialogStore from 'src/store/DialogStore';
 import { CloseIcon } from './Icons';
 import '../../sass/components/_dialog.scss';
 
 export type TDialogProps = {
-    className: string;
-    enableTabular: boolean;
-    title: string;
-    onContainerClick: React.MouseEventHandler<HTMLDivElement>;
-    handleCloseDialog: React.MouseEventHandler<HTMLDivElement>;
-    customHead: React.ReactElement;
-    updateCloseCallback: (fn: React.MouseEventHandler<HTMLDivElement>) => void;
+    store: DialogStore;
+    className?: string;
+    enableTabular?: boolean;
+    title?: string;
+    handleCloseDialog?: React.MouseEventHandler<HTMLDivElement>;
+    customHead?: React.ReactElement;
 };
 
 const Dialog: React.FC<TDialogProps> = ({
+    store,
     children,
-    onContainerClick,
     className = '',
     title,
     customHead,
     enableTabular = false,
     handleCloseDialog,
-    updateCloseCallback,
 }) => {
+    const { updateCloseCallback, onContainerClick } = store;
     useEffect(() => updateCloseCallback(handleCloseDialog));
     return (
         <div
@@ -44,4 +44,4 @@ const Dialog: React.FC<TDialogProps> = ({
     );
 };
 
-export default Dialog;
+export default observer(Dialog);

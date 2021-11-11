@@ -126,7 +126,7 @@ const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {
         menuStore,
     } = view;
 
-    const menuOpen = menuStore.dialog.open;
+    const menuOpen = menuStore.dialogStore.open;
 
     const isActive = isInputActive || templateName !== '';
 
