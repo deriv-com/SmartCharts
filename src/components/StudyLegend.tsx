@@ -10,6 +10,7 @@ import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, Inf
 import '../../sass/components/_studylegend.scss';
 import { TooltipsContent } from '../Constant';
 import Menu from './Menu';
+import SearchInput from './SearchInput';
 
 const StudyIcon = ({ Icon, props }: { Icon: any; props?: any }) => <Icon {...props} />;
 
@@ -192,7 +193,6 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
         deleteAllStudies: deleteAll,
         items,
         searchedItems,
-        SearchInput,
         filterText: searchQuery,
         selectedTab,
         onSelectTab,
@@ -204,6 +204,8 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
         infoItem,
         updatePortalNode,
         maxAllowedItem,
+        setFilterText,
+        searchInput,
     } = studies;
     const { isTick } = timeperiod;
     const { isMobile } = chart;
@@ -228,7 +230,13 @@ const StudyLegend: React.FC<any> = ({ portalNodeId }) => {
                     </div>
                 ) : (
                     <div className='sc-dialog__head--search'>
-                        <SearchInput />
+                        <SearchInput
+                            placeholder={t.translate('Search')}
+                            searchInputClassName='searchInputClassName'
+                            value={searchQuery}
+                            onChange={setFilterText}
+                            searchInput={searchInput}
+                        />
                     </div>
                 )
             }

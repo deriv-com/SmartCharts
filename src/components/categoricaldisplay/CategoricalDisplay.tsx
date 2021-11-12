@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import CategoricalDisplayStore from 'src/store/CategoricalDisplayStore';
 import Scroll from '../Scroll';
 import '../../../sass/components/_categorical-display.scss';
+import SearchInput from '../SearchInput';
 
 type TCategoricalDisplay = {
     store: CategoricalDisplayStore;
@@ -21,7 +22,17 @@ const CategoricalDisplay: React.FC<TCategoricalDisplay> = ({
     isNestedList,
     onSelectItem: onSelectItemProp,
 }) => {
-    const { updateScrollSpy, setScrollPanel, ResultsPanel, FilterPanel, SearchInput, setFilterText, height } = store;
+    const {
+        updateScrollSpy,
+        setScrollPanel,
+        ResultsPanel,
+        FilterPanel,
+        setFilterText,
+        searchInput,
+        height,
+        filterText,
+        placeholderText,
+    } = store;
 
     const onSelectItem = onSelectItemProp || store.onSelectItem;
 
@@ -49,7 +60,13 @@ const CategoricalDisplay: React.FC<TCategoricalDisplay> = ({
             )}
             <div className='sc-mcd__content'>
                 <div className='sc-mcd__content__head'>
-                    <SearchInput searchInputClassName={searchInputClassName} />
+                    <SearchInput
+                        placeholder={placeholderText}
+                        searchInputClassName={searchInputClassName}
+                        value={filterText}
+                        onChange={setFilterText}
+                        searchInput={searchInput}
+                    />
                 </div>
                 <div className='sc-mcd__content__body'>
                     {isMobile ? (

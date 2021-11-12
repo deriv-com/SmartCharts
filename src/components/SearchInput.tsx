@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
 import { CloseCircleIcon, SearchIcon } from './Icons';
 import '../../sass/components/_search.scss';
 
@@ -23,7 +24,7 @@ const SearchInput: React.FC<TSearchInputProps> = ({
             className={searchInputClassName}
             value={value}
             ref={searchInput}
-            onChange={(e: any) => onChange(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
             type='text'
             spellCheck='false'
             autoComplete='off'
@@ -36,4 +37,4 @@ const SearchInput: React.FC<TSearchInputProps> = ({
     </div>
 );
 
-export default SearchInput;
+export default observer(SearchInput);

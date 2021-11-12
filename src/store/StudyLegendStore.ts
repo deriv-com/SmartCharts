@@ -1,11 +1,9 @@
 import React from 'react';
 import { observable, action, when, reaction } from 'mobx';
 import { TMainStore } from 'src/types';
-import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import SettingsDialog from '../components/SettingsDialog';
-import SearchInput from '../components/SearchInput';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { getIndicatorsTree, ExcludedStudies } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
@@ -26,7 +24,6 @@ const updateFieldHeading = (heading: string, type: string) => {
     return heading;
 };
 export default class StudyLegendStore {
-    SearchInput: any;
     StudySettingsDialog: any;
     activeStudies: any;
     excludedStudies: any;
@@ -36,7 +33,7 @@ export default class StudyLegendStore {
     menuStore: MenuStore;
     searchInput: any;
     settingsDialog: any;
-    constructor(mainStore: any) {
+    constructor(mainStore: TMainStore) {
         this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
@@ -49,13 +46,6 @@ export default class StudyLegendStore {
         });
         this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
         this.searchInput = React.createRef();
-        this.SearchInput = connect(() => ({
-            placeholder: t.translate('Search'),
-            value: this.filterText,
-            onChange: this.setFilterText,
-            searchInput: this.searchInput,
-            searchInputClassName: 'searchInputClassName',
-        }))(SearchInput);
         reaction(
             () => this.menuStore.open,
             () => {

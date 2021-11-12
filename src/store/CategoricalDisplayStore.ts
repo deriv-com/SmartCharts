@@ -1,6 +1,5 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import SearchInput, { TSearchInputProps } from '../components/SearchInput';
 import {
     NormalItem,
     ActiveItem,
@@ -39,7 +38,6 @@ type TCategoricalDisplayStoreProps = {
 export default class CategoricalDisplayStore {
     FilterPanel: TReactComponent<TFilterPanelProps>;
     ResultsPanel: TReactComponent<TResultsPanelProps>;
-    SearchInput: TReactComponent<TSearchInputProps>;
     activeMarket?: string | null;
     activeSubCategory = '';
     categoryElements: { [id: string]: HTMLElement | null };
@@ -56,6 +54,8 @@ export default class CategoricalDisplayStore {
     pauseScrollSpy = false;
     searchInput: React.RefObject<HTMLInputElement>;
     searchInputClassName?: string;
+    placeholderText: string;
+
     constructor({
         getCategoricalItems,
         onSelectItem,
@@ -95,6 +95,7 @@ export default class CategoricalDisplayStore {
         this.isInit = false;
         this.searchInput = React.createRef();
         this.searchInputClassName = searchInputClassName;
+        this.placeholderText = placeholderText;
 
         const normalItem = connect(() => ({
             favoritesId,
@@ -131,14 +132,6 @@ export default class CategoricalDisplayStore {
             focusedCategoryKey: this.focusedCategoryKey,
             isSearching: this.filterText !== '',
         }))(FilterPanel);
-
-        this.SearchInput = connect<TMainStore, TSearchInputProps>(() => ({
-            placeholder: placeholderText,
-            value: this.filterText,
-            onChange: this.setFilterText,
-            searchInput: this.searchInput,
-            searchInputClassName: this.searchInputClassName,
-        }))(SearchInput);
     }
 
     @observable isShown = false;
