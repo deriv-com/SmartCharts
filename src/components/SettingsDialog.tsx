@@ -1,5 +1,6 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import SettingsDialogStore from 'src/store/SettingsDialogStore';
 import 'react-tabs/style/react-tabs.css';
 import Scroll from './Scroll';
 import {
@@ -174,67 +175,76 @@ const DoneButton = ({ onClick }: any) => (
     </button>
 );
 
-const SettingsDialog = ({
-    itemGroups,
-    title,
-    formClassname,
-    description,
-    showTabs,
-    onResetClick,
-    onItemChange,
-    onItemDelete,
-    menuStore,
-    theme,
-    close,
-    setScrollPanel,
-    dialogPortalNodeId,
-    freezeScroll,
-}: any) => (
-    <Menu
-        store={menuStore}
-        className='cq-modal--settings'
-        title={title}
-        modalMode
-        enableTabular={showTabs}
-        emptyMenu
-        portalNodeId={dialogPortalNodeId}
-    >
-        <Menu.Title />
-        <Menu.Body>
-            <div className='cq-chart-settings'>
-                {showTabs ? (
-                    <Tabs className='tabs--vertical'>
-                        <TabList>
-                            <Tab>Settings</Tab>
-                            <Tab>Description</Tab>
-                        </TabList>
-                        <TabPanel>
+type TSettingsDialogProps = {
+    store: SettingsDialogStore;
+};
+
+const SettingsDialog: React.FC<TSettingsDialogProps> = ({ store }) => {
+    const {
+        itemGroups,
+        title,
+        formClassname,
+        description,
+        showTabs,
+        onResetClick,
+        onItemChange,
+        onItemDelete,
+        menuStore,
+        theme,
+        setScrollPanel,
+        dialogPortalNodeId,
+        freezeScroll,
+    } = store;
+
+    const close = menuStore.handleCloseDialog;
+
+    return (
+        <Menu
+            store={menuStore}
+            className='cq-modal--settings'
+            title={title}
+            modalMode
+            enableTabular={showTabs}
+            emptyMenu
+            portalNodeId={dialogPortalNodeId}
+        >
+            <Menu.Title />
+            <Menu.Body>
+                <div className='cq-chart-settings'>
+                    {showTabs ? (
+                        <Tabs className='tabs--vertical'>
+                            <TabList>
+                                <Tab>Settings</Tab>
+                                <Tab>Description</Tab>
+                            </TabList>
+                            <TabPanel>
+                                <SettingsPanel
+                                    itemGroups={itemGroups}
+                                    theme={theme}
+                                    onItemChange={onItemChange}
+                                    setScrollPanel={setScrollPanel}
+                                    freezeScroll={freezeScroll}
+                                />
+                                <Footer onReset={onResetClick} onDone={close} />
+                            </TabPanel>
+                            <TabPanel>{description}</TabPanel>
+                        </Tabs>
+                    ) : (
+                        <>
                             <SettingsPanel
                                 itemGroups={itemGroups}
                                 theme={theme}
                                 onItemChange={onItemChange}
                                 setScrollPanel={setScrollPanel}
                                 freezeScroll={freezeScroll}
+                                formClassname={formClassname}
                             />
-                            <Footer onReset={onResetClick} onDone={close} />
-                        </TabPanel>
-                        <TabPanel>{description}</TabPanel>
-                    </Tabs>
-                ) : (
-                    <>
-                        <SettingsPanel
-                            itemGroups={itemGroups}
-                            theme={theme}
-                            onItemChange={onItemChange}
-                            setScrollPanel={setScrollPanel}
-                            freezeScroll={freezeScroll}
-                            formClassname={formClassname}
-                        />
-                        <Footer onDelete={onItemDelete} onReset={onResetClick} onDone={close} />
-                    </>
-                )}
-            </div>
-        </Menu.Body>
-    </Menu>
-);
+                            <Footer onDelete={onItemDelete} onReset={onResetClick} onDone={close} />
+                        </>
+                    )}
+                </div>
+            </Menu.Body>
+        </Menu>
+    );
+};
 export default SettingsDialog;

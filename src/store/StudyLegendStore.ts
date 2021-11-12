@@ -3,7 +3,6 @@ import { observable, action, when, reaction } from 'mobx';
 import MainStore from '.';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
-import SettingsDialog from '../components/SettingsDialog';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { getIndicatorsTree, ExcludedStudies } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
@@ -24,7 +23,6 @@ const updateFieldHeading = (heading: string, type: string) => {
     return heading;
 };
 export default class StudyLegendStore {
-    StudySettingsDialog: any;
     activeStudies: any;
     excludedStudies: any;
     hasReachedLimits: any;
@@ -44,7 +42,6 @@ export default class StudyLegendStore {
             favoritesId: 'indicators',
             onChanged: (items: any) => this.updateStudy(this.helper.sd, items),
         });
-        this.StudySettingsDialog = this.settingsDialog.connect(SettingsDialog);
         this.searchInput = React.createRef();
         reaction(
             () => this.menuStore.open,

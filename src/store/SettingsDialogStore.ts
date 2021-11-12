@@ -1,6 +1,5 @@
 import { observable, action, computed, reaction } from 'mobx';
 import { TSettingsItemGroup, TSettingsItems } from 'src/types';
-import { connect } from './Connect';
 import MenuStore from './MenuStore';
 import MainStore from '.';
 
@@ -30,7 +29,7 @@ export default class SettingsDialogStore {
     @observable
     scrollPanel?: HTMLElement;
     @observable
-    dialogPortalNodeId = null;
+    dialogPortalNodeId?: string;
     @observable
     freezeScroll = false;
     constructor({ mainStore, getContext, onChanged, onDeleted }: any) {
@@ -159,23 +158,4 @@ export default class SettingsDialogStore {
     setScrollPanel(element: any) {
         this.scrollPanel = element;
     }
-    connect = connect(() => ({
-        items: this.items,
-        itemGroups: this.itemGroups,
-        title: this.title,
-        formClassname: this.formClassname,
-        description: this.description,
-        showTabs: this.showTabs,
-        onResetClick: this.onResetClick,
-        onItemChange: this.onItemChange,
-        onItemActive: this.onItemActive,
-        onItemDelete: this.onItemDelete,
-        menuStore: this.menuStore,
-        open: this.open,
-        theme: this.theme,
-        setScrollPanel: this.setScrollPanel,
-        close: this.menuStore.handleCloseDialog,
-        dialogPortalNodeId: this.dialogPortalNodeId,
-        freezeScroll: this.freezeScroll,
-    }));
 }

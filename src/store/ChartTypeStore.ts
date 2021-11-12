@@ -74,14 +74,13 @@ function getAggregates() {
     };
 }
 export default class ChartTypeStore {
-    AggregateChartSettingsDialog: any;
     ChartTypeList: any;
     aggregates: any;
     chartTypes: typeof ChartTypes = [];
     listStore: ListStore;
     mainStore: MainStore;
     menuStore: MenuStore;
-    settingsDialog: any;
+    settingsDialog: SettingsDialogStore;
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
@@ -94,7 +93,6 @@ export default class ChartTypeStore {
             mainStore,
             onChanged: (items: any) => this.updateAggregate(items),
         });
-        this.AggregateChartSettingsDialog = this.settingsDialog.connect(SettingsDialog);
     }
     @observable
     type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;

@@ -24,7 +24,6 @@ type TDrawingObject = {
 };
 
 export default class DrawToolsStore {
-    DrawToolsSettingsDialog: any;
     _pervDrawingObjectCount: any;
     mainStore: MainStore;
     menuStore: MenuStore;
@@ -37,7 +36,6 @@ export default class DrawToolsStore {
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
-        this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
         when(() => this.context, this.onContextReady);
         reaction(
             () => this.menuStore.open,

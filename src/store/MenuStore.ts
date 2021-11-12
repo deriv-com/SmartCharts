@@ -1,5 +1,4 @@
 import { action, computed, reaction, observable } from 'mobx';
-import { connect } from './Connect';
 import DialogStore from './DialogStore';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -7,7 +6,7 @@ import Context from '../components/ui/Context';
 export default class MenuStore {
     dialogStore: DialogStore;
     mainStore: MainStore;
-    constructor(mainStore: MainStore, options: { route: string}) {
+    constructor(mainStore: MainStore, options: { route: string }) {
         this.mainStore = mainStore;
         this.dialogStore = new DialogStore(mainStore);
         reaction(
@@ -41,7 +40,7 @@ export default class MenuStore {
         this.routingStore.updateRoute(this.route, val);
     }
     blurInput() {
-        const stx: Context["stx"] = this.context.stx;
+        const stx: Context['stx'] = this.context.stx;
         setTimeout(this.handleDialogStatus, 300);
         if (this.open === false) {
             (document.activeElement as HTMLElement).blur();
@@ -57,7 +56,7 @@ export default class MenuStore {
         }
     }
     @action.bound
-    onTitleClick (e: React.MouseEvent) {
+    onTitleClick(e: React.MouseEvent) {
         if (e) {
             e.stopPropagation();
         }
@@ -72,16 +71,4 @@ export default class MenuStore {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);
     }
-    connect = connect(({ chart: c, chartSetting }: MainStore) => ({
-        ready: c.context,
-        setOpen: this.setOpen,
-        open: this.open,
-        dialogStatus: this.dialogStatus,
-        onTitleClick: this.onTitleClick,
-        handleCloseDialog: this.handleCloseDialog,
-        dialogStore: this.dialogStore,
-        isMobile: c.isMobile,
-        shouldRenderDialogs: c.shouldRenderDialogs,
-        theme: chartSetting.theme,
-    }));
 }

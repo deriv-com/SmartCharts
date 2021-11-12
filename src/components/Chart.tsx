@@ -22,6 +22,7 @@ import Crosshair from './Crosshair';
 import { initGA, logPageView } from '../utils/ga';
 import PaginationLoader from './PaginationLoader';
 import IndicatorPredictionDialog from './IndicatorPredictionDialog';
+import SettingsDialog from './SettingsDialog';
 
 type TChartProps = {
     id: string;
@@ -40,9 +41,9 @@ const Chart: React.FC<TChartProps> = props => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();
 
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
-    const { StudySettingsDialog } = studies;
-    const { DrawToolsSettingsDialog } = drawTools;
-    const { AggregateChartSettingsDialog, isCandle, isSpline } = chartType;
+    const { settingsDialog: studiesSettingsDialog } = studies;
+    const { settingsDialog: drawToolsSettingsDialog } = drawTools;
+    const { settingsDialog: chartTypeSettingsDialog, isCandle, isSpline } = chartType;
     const { updateProps, isChartClosed } = state;
     const { theme, position, isHighestLowestMarkerEnabled } = chartSetting;
     const { isActive: isLoading } = loader;
@@ -153,9 +154,9 @@ const Chart: React.FC<TChartProps> = props => {
                         </div>
                     </div>
                 </div>
-                <DrawToolsSettingsDialog />
-                <AggregateChartSettingsDialog />
-                <StudySettingsDialog />
+                <SettingsDialog store={drawToolsSettingsDialog} />
+                <SettingsDialog store={chartTypeSettingsDialog} />
+                <SettingsDialog store={studiesSettingsDialog} />
                 <IndicatorPredictionDialog />
                 <div id='smartcharts_modal' className='ciq-modal' />
             </div>

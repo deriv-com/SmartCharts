@@ -25,7 +25,7 @@ export type TSubCategoryDataItem = {
     display: string;
     dataObject: TProcessedSymbolItem;
     selected?: boolean;
-}
+};
 
 export type TSubCategory = {
     subcategoryName: string;
@@ -39,6 +39,7 @@ export type TCategorizedSymbolItem<T = TSubCategory> = {
     data: T[];
     active?: boolean;
     emptyDescription?: string;
+    categorySubtitle?: string;
 };
 
 export type TCategorizedSymbols = TCategorizedSymbolItem[];
