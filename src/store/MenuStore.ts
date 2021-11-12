@@ -1,12 +1,8 @@
 import { action, computed, reaction, observable } from 'mobx';
-import { connect, TReactComponent } from './Connect';
+import { connect } from './Connect';
 import DialogStore from './DialogStore';
-import { TDialogProps } from '../components/Dialog';
 import MainStore from '.';
-import ChartStore from './ChartStore';
 import Context from '../components/ui/Context';
-
-type TDropdownDialog = TReactComponent<Partial<TDialogProps | ChartStore> & { isFullscreen: boolean }>
 
 export default class MenuStore {
     dialogStore: DialogStore;
@@ -89,16 +85,3 @@ export default class MenuStore {
         theme: chartSetting.theme,
     }));
 }
-
-export type TMenuStoreConnectedProps = {
-    ready: boolean;
-    setOpen: (val: boolean) => void;
-    open: boolean;
-    dialogStatus: boolean;
-    onTitleClick: (e: React.MouseEvent) => void;
-    handleCloseDialog: () => void;
-    DropdownDialog: TDropdownDialog;
-    isMobile: boolean;
-    shouldRenderDialogs: boolean;
-    theme: string;
-};

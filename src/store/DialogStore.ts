@@ -1,7 +1,5 @@
 import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DebouncedFunc } from 'lodash';
 import Context from '../components/ui/Context';
 import MainStore from '.';
 
@@ -101,12 +99,3 @@ export default class DialogStore {
         }
     }
 }
-
-export type TDialogStoreConnectedProps = {
-    open: boolean;
-    setOpen: DebouncedFunc<(val: boolean) => void>;
-    onClose: () => void | undefined;
-    updateCloseCallback: (onClose: () => void | undefined) => void;
-    onContainerClick: (e: React.MouseEvent) => void;
-    isMobile: boolean;
-};
