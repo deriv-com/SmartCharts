@@ -1,6 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
@@ -17,7 +17,7 @@ export default class PriceLineStore {
     className: any;
     hideBarrierLine: any;
     hideOffscreenLine: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     opacityOnOverlap: any;
     showOffscreenArrows: any;
     _relative = false;
@@ -43,7 +43,7 @@ export default class PriceLineStore {
         return this.mainStore.chart.currentActiveSymbol.decimal_places;
     }
 
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
         when(() => this.context, this.onContextReady);

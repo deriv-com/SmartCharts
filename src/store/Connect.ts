@@ -1,9 +1,9 @@
 import React from 'react';
 import { inject, IWrappedComponent } from 'mobx-react';
-import { TMainStore } from '../types';
+import MainStore from '.';
 
 export type TStoredComponent = {
-    mainStore: TMainStore;
+    mainStore: MainStore;
 };
 
 export type TReactComponent<P = TStoredComponent> =
@@ -14,7 +14,7 @@ export type TReactComponent<P = TStoredComponent> =
 
 type TStoresToProps<S, I> = (store: S) => I;
 
-type StoreClass<T> = { new (mainStore: TMainStore): T };
+type StoreClass<T> = { new (mainStore: MainStore): T };
 
 type BaseStore = {
     updateProps?: (props: TStoredComponent) => void;

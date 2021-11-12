@@ -1,8 +1,8 @@
 import { action, when, computed, reaction, observable } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 
 export default class NavigationWidgetStore {
-    mainStore: TMainStore;
+    mainStore: MainStore;
     @observable mouse_in = false;
     get chart() {
         return this.mainStore.chart;
@@ -17,7 +17,7 @@ export default class NavigationWidgetStore {
         return this.chart.stxx;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(() => this.mainStore.chart.context, this.onContextReady);
         reaction(() => this.crosshairStore.state, this.onCrosshairChange);

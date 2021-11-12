@@ -1,11 +1,12 @@
 import { observable, action, computed, reaction } from 'mobx';
-import { TMainStore, TSettingsItemGroup, TSettingsItems } from 'src/types';
+import { TSettingsItemGroup, TSettingsItems } from 'src/types';
 import { connect } from './Connect';
 import MenuStore from './MenuStore';
+import MainStore from '.';
 
 export default class SettingsDialogStore {
     getContext: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     onChanged: any;
     onDeleted: any;

@@ -1,14 +1,14 @@
 import { observable, action, computed, when } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 import MenuStore from './MenuStore';
 import { downloadFileInBrowser, is_browser } from '../utils';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ShareStore {
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     screenshotArea?: Element | null;
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'download' });
         when(() => this.context, this.onContextReady);

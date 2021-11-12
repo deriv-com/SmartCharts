@@ -6,16 +6,16 @@ import AnimatedPrice from '../components/AnimatedPrice';
 import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
 import { connect } from './Connect';
 import ServerTime from '../utils/ServerTime';
-import { TMainStore } from '../types';
+import MainStore from '.';
 
 export default class ChartTitleStore {
     SymbolSelectButton: any;
     animatedPrice: AnimatedPriceStore;
     categoricalDisplay: CategoricalDisplayStore;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     serverTime: any;
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-title' });

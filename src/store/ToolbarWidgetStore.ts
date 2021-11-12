@@ -1,8 +1,8 @@
 import { action, reaction } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 
 export default class ToolbarWidgetStore {
-    mainStore: TMainStore;
+    mainStore: MainStore;
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
@@ -10,7 +10,7 @@ export default class ToolbarWidgetStore {
         return this.mainStore.chart;
     }
 
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
 
         reaction(
