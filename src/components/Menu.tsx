@@ -54,7 +54,7 @@ const Menu: React.FC<TMenuProps> = ({
     const { shouldRenderDialogs, isMobile, context: ready } = chart;
 
     const onOverlayClick: React.MouseEventHandler<HTMLDivElement> = e => {
-        if (e.currentTarget.className === 'cq-modal__overlay') {
+        if ((e.target as HTMLDivElement).className === 'cq-modal__overlay') {
             handleCloseDialog();
         }
     };
