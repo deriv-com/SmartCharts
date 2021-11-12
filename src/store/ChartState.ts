@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { TGranularity, TMainStore } from 'src/types';
+import { TGranularity } from 'src/types';
 import {
     createObjectFromLocalStorage,
     calculateTimeUnitInterval,
@@ -11,12 +11,13 @@ import {
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
 import ChartStore from './ChartStore';
+import MainStore from '.';
 
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio: any;
     isAnimationEnabled: any;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     margin: any;
     @observable granularity: TGranularity;
     @observable chartType: any;
@@ -77,7 +78,7 @@ class ChartState {
         return this.chartStore.rootElement;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => this.context, this.onContextReady);

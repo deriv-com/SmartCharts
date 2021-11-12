@@ -1,11 +1,12 @@
 import { TickSpotData, TicksStreamResponse } from '@deriv/api-types';
 import { observable, action, computed, when } from 'mobx';
-import { TMainStore, TBar } from '../types';
+import MainStore from '.';
+import { TBar } from '../types';
 
 export default class LastDigitStatsStore {
-    mainStore: TMainStore;
+    mainStore: MainStore;
 
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         // since last digits stats is going to be rendered in deriv-app
         // we always keep track of the last digit stats.

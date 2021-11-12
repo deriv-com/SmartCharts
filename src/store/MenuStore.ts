@@ -1,12 +1,13 @@
 import { action, computed, reaction, observable } from 'mobx';
-import { TMainStore } from 'src/types';
 import { connect } from './Connect';
 import DialogStore from './DialogStore';
+import MainStore from '.';
+import Context from '../components/ui/Context';
 
 export default class MenuStore {
     dialogStore: DialogStore;
-    mainStore: TMainStore;
-    constructor(mainStore: TMainStore, options: any) {
+    mainStore: MainStore;
+    constructor(mainStore: MainStore, options: { route: string}) {
         this.mainStore = mainStore;
         this.dialogStore = new DialogStore(mainStore);
         reaction(
@@ -17,7 +18,7 @@ export default class MenuStore {
             this.route = options.route;
         }
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
     get routingStore() {
@@ -40,10 +41,10 @@ export default class MenuStore {
         this.routingStore.updateRoute(this.route, val);
     }
     blurInput() {
-        const stx = this.context.stx;
+        const stx: Context["stx"] = this.context.stx;
         setTimeout(this.handleDialogStatus, 300);
         if (this.open === false) {
-            (document.activeElement as any).blur();
+            (document.activeElement as HTMLElement).blur();
             stx.modalEnd();
         } else {
             stx.modalBegin();
@@ -56,7 +57,7 @@ export default class MenuStore {
         }
     }
     @action.bound
-    onTitleClick(e: any) {
+    onTitleClick (e: React.MouseEvent) {
         if (e) {
             e.stopPropagation();
         }
@@ -71,7 +72,7 @@ export default class MenuStore {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);
     }
-    connect = connect(({ chart: c, chartSetting }: any) => ({
+    connect = connect(({ chart: c, chartSetting }: MainStore) => ({
         ready: c.context,
         setOpen: this.setOpen,
         open: this.open,

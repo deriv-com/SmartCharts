@@ -1,12 +1,12 @@
 import { observable, action, when } from 'mobx';
-import { TMainStore } from 'src/types';
+import MainStore from '.';
 import MenuStore from './MenuStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { Languages } from '../Constant';
 export default class ChartSettingStore {
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'setting' });

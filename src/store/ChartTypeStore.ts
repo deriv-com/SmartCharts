@@ -1,5 +1,6 @@
 import { action, computed, observable, reaction, when } from 'mobx';
-import { ChartType, TMainStore } from 'src/types';
+import { ChartType } from 'src/types';
+import MainStore from '.';
 import MenuStore from './MenuStore';
 import ListStore from './ListStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -78,10 +79,10 @@ export default class ChartTypeStore {
     aggregates: any;
     chartTypes: typeof ChartTypes = [];
     listStore: ListStore;
-    mainStore: TMainStore;
+    mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: any;
-    constructor(mainStore: TMainStore) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(() => this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-type' });
