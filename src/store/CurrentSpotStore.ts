@@ -1,21 +1,23 @@
 import { when } from 'mobx';
 import { is_browser, patchPixelFromChart } from '../utils';
 import { red as RED } from '../../sass/_themes.scss';
+import MainStore from '.';
+import Context from '../components/ui/Context';
 
 class CurrentSpotStore {
-    mainStore: any;
-    constructor(mainStore: any) {
+    mainStore: MainStore;
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
-    get state() {
+    get state(): MainStore["state"] {
         return this.mainStore.state;
     }
 
@@ -28,7 +30,7 @@ class CurrentSpotStore {
         if (this.state.endEpoch) {
             return;
         }
-        const stx = this.stx;
+        const stx: Context["stx"] = this.stx;
         const chart = stx.chart;
         let len = chart.dataSet.length;
         if (!len) {
@@ -67,7 +69,7 @@ class CurrentSpotStore {
         const glow = is_browser.Firefox() ? 0 : progress;
 
         /** @type {CanvasRenderingContext2D} */
-        const ctx = stx.chart.context;
+        const ctx: MainStore["chart"]["context"] = stx.chart.context;
         ctx.save();
         if (glow) {
             ctx.shadowBlur = (glow * 35 + 4) | 0;

@@ -24,7 +24,7 @@ export default class ScrollStore {
         if (this.isHover) this.isHover = false;
     }
 
-    @action.bound setScrollPanel(element: any) {
+    @action.bound setScrollPanel(element: HTMLElement) {
         if (!this.scrollPanel) this.scrollPanel = element;
     }
 }

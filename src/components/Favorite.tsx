@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { FavoriteIcon } from './Icons';
 import FavoriteStore from '../store/FavoriteStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
+import { TCustomEvent } from '../types';
 
 type TFavoriteProps = {
     category: string;
@@ -14,10 +15,9 @@ const Favorite: React.FC<TFavoriteProps> = ({ category, id }) => {
     const [is_favorite, setFavorite] = React.useState(false);
 
     const onClick = React.useCallback(
-        (e: React.MouseEvent<HTMLButtonElement>) => {
+        (e: React.MouseEvent<HTMLButtonElement> | TCustomEvent) => {
             e.stopPropagation();
-            // @ts-ignore
-            e.nativeEvent.isHandledByDialog = true; // prevent close dialog
+            (e as TCustomEvent).nativeEvent.isHandledByDialog = true; // prevent close dialog
             store.toggleFavorite(category, id);
         },
         [store, category, id]

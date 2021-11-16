@@ -1,7 +1,8 @@
 import { TickSpotData, TicksStreamResponse } from '@deriv/api-types';
 import { observable, action, computed, when } from 'mobx';
+import Context from 'src/components/ui/Context';
 import MainStore from '.';
-import { TBar } from '../types';
+import { TBar, TQuote } from '../types';
 
 export default class LastDigitStatsStore {
     mainStore: MainStore;
@@ -11,7 +12,7 @@ export default class LastDigitStatsStore {
         // since last digits stats is going to be rendered in deriv-app
         // we always keep track of the last digit stats.
         when(
-            () => this.context,
+            () => !!this.context,
             () => {
                 this.lastSymbol = this.marketDisplayName;
                 this.updateLastDigitStats();
@@ -26,16 +27,16 @@ export default class LastDigitStatsStore {
             }
         );
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context['stx'] {
         return this.context.stx;
     }
     count = 1000;
     digits: number[] = [];
-    latestData: any[] = [];
-    lastSymbol: any = null;
+    latestData: string[] = [];
+    lastSymbol = '';
     @observable
     bars: TBar[] = [];
     // api tick
@@ -46,14 +47,14 @@ export default class LastDigitStatsStore {
     }
     @computed
     get decimalPlaces() {
-        return (this.mainStore.chart.currentActiveSymbol?.decimal_places as number) || 2;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places || 2;
     }
     @computed
     get isVisible() {
         return this.mainStore.state.showLastDigitStats;
     }
     @computed
-    get marketDisplayName() {
+    get marketDisplayName(): string {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
     }
     @computed
@@ -73,7 +74,7 @@ export default class LastDigitStatsStore {
         if (this.stx.masterData && this.stx.masterData.length >= this.count) {
             this.latestData = this.stx.masterData
                 .slice(-this.count)
-                .map((x: any) => x.Close.toFixed(this.decimalPlaces));
+                .map((x: TQuote) => x.Close.toFixed(this.decimalPlaces));
         } else {
             const tickHistory = await this.api?.getTickHistory({
                 symbol: this.mainStore.chart.currentActiveSymbol.symbol,
@@ -84,7 +85,7 @@ export default class LastDigitStatsStore {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.latestData.forEach(price => {
             const lastDigit = (+price).toFixed(this.decimalPlaces).slice(-1);
-            this.digits[(lastDigit as unknown) as number]++;
+            this.digits[+lastDigit]++;
         });
         this.updateBars();
     }
@@ -97,12 +98,12 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.updateLastDigitStats();
         } else if (this.latestData.length) {
-            const firstDigit = (+this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
+            const firstDigit = (Number(this.latestData.shift())).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
-            this.latestData.push(+price);
-            this.digits[(lastDigit as unknown) as number]++;
-            this.digits[(firstDigit as unknown) as number]--;
+            this.latestData.push(price);
+            this.digits[+lastDigit]++;
+            this.digits[+firstDigit]--;
             this.updateBars();
         }
     }

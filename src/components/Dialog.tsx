@@ -10,7 +10,7 @@ export type TDialogProps = {
     className?: string;
     enableTabular?: boolean;
     title?: string;
-    handleCloseDialog?: React.MouseEventHandler<HTMLDivElement>;
+    handleCloseDialog: () => void | undefined;
     customHead?: React.ReactElement;
 };
 

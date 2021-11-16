@@ -1,7 +1,8 @@
 import { action, observable, reaction, computed } from 'mobx';
 import moment from 'moment';
-import { ActiveSymbolsItem, TChanges, TGranularity } from '../types';
+import { TChanges, TGranularity } from '../types';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
+import { TProcessedSymbolItem } from '../binaryapi/ActiveSymbols';
 import inject from '../chartiq_injections';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
@@ -64,7 +65,7 @@ class ChartStore {
     @observable
     context: any = null;
     @observable
-    currentActiveSymbol?: ActiveSymbolsItem | null;
+    currentActiveSymbol?: TProcessedSymbolItem | null;
     @observable
     isChartAvailable = true;
     @observable

@@ -1,8 +1,11 @@
+import { ChangeEvent } from 'react';
 import { observable, action, reaction, computed } from 'mobx';
 import MainStore from '.';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import MenuStore from './MenuStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
+import Context from '../components/ui/Context';
+import { TCustomEvent } from '../types';
 
 export default class ViewStore {
     constructor(mainStore: MainStore) {
@@ -37,10 +40,10 @@ export default class ViewStore {
         overwrite: () => this.overwrite(),
     };
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
     get loader() {
@@ -55,14 +58,14 @@ export default class ViewStore {
         CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
     }
 
-    @action.bound onChange(e: any) {
+    @action.bound onChange(e: ChangeEvent<HTMLInputElement>) {
         if (this.currentRoute === 'overwrite') {
             return;
         }
         this.templateName = e.target.value;
     }
 
-    @action.bound onSubmit(e: any) {
+    @action.bound onSubmit(e: KeyboardEvent) {
         if (e.keyCode === 13) {
             this.saveViews();
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Save Template');
@@ -74,12 +77,12 @@ export default class ViewStore {
         this.updateRoute('main');
     }
 
-    @action.bound updateRoute(name: any) {
+    @action.bound updateRoute(name: string) {
         this.currentRoute = name;
     }
 
     @action.bound saveViews() {
-        if (ViewStore.views.some((x: any) => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
+        if (ViewStore.views.some((x: {[key: string]: string}) => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
@@ -93,7 +96,7 @@ export default class ViewStore {
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
         const templateIndex = ViewStore.views.findIndex(
-            (x: any) => x.name.toLowerCase() === this.templateName.toLowerCase()
+            (x: {[key: string]: string}) => x.name.toLowerCase() === this.templateName.toLowerCase()
         );
         ViewStore.views[templateIndex].layout = layout;
         ViewStore.views[templateIndex].name = this.templateName.trim();
@@ -102,7 +105,7 @@ export default class ViewStore {
         this.templateName = '';
     }
 
-    @action.bound remove(idx: number, e: any) {
+    @action.bound remove(idx: number, e: TCustomEvent) {
         ViewStore.views = this.sortedItems.filter((x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
@@ -116,7 +119,7 @@ export default class ViewStore {
         this.updateRoute('new');
     }
 
-    @action.bound applyLayout(idx: any, e: any) {
+    @action.bound applyLayout(idx: number, e: TCustomEvent) {
         if (e.nativeEvent.is_item_removed) {
             return;
         }
@@ -165,7 +168,7 @@ export default class ViewStore {
         this.updateRoute('main');
     }
 
-    @action.bound inputRef(ref: any) {
+    @action.bound inputRef(ref: HTMLElement) {
         if (ref) {
             ref.focus();
             this.isInputActive = true;

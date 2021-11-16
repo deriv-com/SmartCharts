@@ -3,7 +3,6 @@ import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils
 import ServerTime from '../utils/ServerTime';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
-import IndicatorPredictionDialog from '../components/IndicatorPredictionDialog';
 
 const UnitMap = {
     tick: 'T',

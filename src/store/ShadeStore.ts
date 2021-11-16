@@ -1,15 +1,15 @@
 import { observable } from 'mobx';
 
 export default class ShadeStore {
-    _div: any;
+    _div: HTMLElement | null = null;
     @observable className = '';
     @observable visible = false;
 
-    constructor(className: any) {
+    constructor(className: string) {
         this.className = className;
     }
 
-    setPosition = ({ top, bottom, right }: any) => {
+    setPosition = ({ top, bottom, right }: {[key: string]: number}) => {
         if (this._div) {
             let pos = null;
             if (bottom && top) {
@@ -26,11 +26,11 @@ export default class ShadeStore {
                 pos = `translate(${-right}px, ${top + 120}px)`;
             }
 
-            this._div.style.transform = pos;
+            this._div.style.transform = pos as string;
         }
     };
 
-    setShadeRef = (ref: any) => {
+    setShadeRef = (ref: HTMLElement | null) => {
         this._div = ref;
     };
 }

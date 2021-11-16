@@ -7,7 +7,7 @@ import TradingTimes from './TradingTimes';
 
 const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
-type TProcessedSymbolItem = {
+export type TProcessedSymbolItem = {
     symbol: string;
     name: string;
     market: string;
