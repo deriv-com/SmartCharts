@@ -3141,7 +3141,7 @@ CIQ.resizeObserver = function (element, listener, resizeHandle, timeout) {
 		}
 	} else {
 		if (resizeHandle) {
-			if (typeof ResizeObserver !== "undefined" && typeof resizeHandle.disconnect === 'function' ) {
+			if (typeof ResizeObserver !== "undefined") {
 				resizeHandle.disconnect();
 			} else {
 				clearInterval(resizeHandle);
