@@ -6,7 +6,7 @@ import Scroll from '../Scroll';
 import '../../../sass/components/_categorical-display.scss';
 import SearchInput from '../SearchInput';
 import { ResultsPanel } from './ResultsPanel';
-import { ActiveItem, NormalItem } from './Item';
+import { NormalItem } from './Item';
 
 type TCategoricalDisplayProps = {
     store: CategoricalDisplayStore;
@@ -15,24 +15,6 @@ type TCategoricalDisplayProps = {
     id?: string;
     onSelectItem?: (item: TProcessedSymbolItem) => void;
     disableAll?: boolean;
-};
-
-export type TItemTypeProps = {
-    getActiveCategory: CategoricalDisplayStore['getActiveCategory'];
-    categoryId?: string;
-    item: TSubCategoryDataItem;
-    favoritesId: string;
-    onSelectItem?: TCategoricalDisplayProps['onSelectItem'];
-    disableAll?: boolean;
-};
-
-const ItemType: React.FC<TItemTypeProps> = ({ getActiveCategory, categoryId, ...props }) => {
-    if (categoryId === 'active' && getActiveCategory !== undefined) {
-        console.log('ActiveItem');
-        return <ActiveItem {...props} />;
-    }
-
-    return <NormalItem {...props} />;
 };
 
 const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
@@ -56,7 +38,6 @@ const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
         filteredItems,
         setCategoryElement,
         activeHeadKey,
-        getActiveCategory,
         favoritesId,
     } = store;
 
@@ -76,9 +57,8 @@ const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
             filteredItems={filteredItems}
             setCategoryElement={setCategoryElement}
             activeHeadKey={activeHeadKey}
-            ItemType={ItemType}
+            ItemType={NormalItem}
             favoritesId={favoritesId}
-            getActiveCategory={getActiveCategory}
         />
     );
 

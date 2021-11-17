@@ -23,7 +23,6 @@ export type TResultsPanelProps = {
     isNestedList?: boolean;
     handleTitleClick: (categoryId: string) => void;
     favoritesId: string;
-    getActiveCategory: CategoricalDisplayStore['getActiveCategory'];
 };
 
 export type TCategoryProps = {
@@ -37,7 +36,6 @@ export type TCategoryProps = {
     ItemType: TResultsPanelProps['ItemType'];
     category: TCategorizedSymbolItem<TSubCategory | TSubCategoryDataItem>;
     favoritesId: string;
-    getActiveCategory: CategoricalDisplayStore['getActiveCategory'];
 };
 
 function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
@@ -99,7 +97,6 @@ const Category: React.FC<TCategoryProps> = ({
     isNestedList,
     handleTitleClick,
     favoritesId,
-    getActiveCategory,
 }) => (
     <div
         className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
@@ -136,7 +133,6 @@ const Category: React.FC<TCategoryProps> = ({
                                   disableAll={disableAll}
                                   categoryId={category.categoryId}
                                   favoritesId={favoritesId}
-                                  getActiveCategory={getActiveCategory}
                               />
                           ))}
                       </div>
@@ -154,7 +150,6 @@ const Category: React.FC<TCategoryProps> = ({
                               disableAll={disableAll}
                               categoryId={category.categoryId}
                               favoritesId={favoritesId}
-                              getActiveCategory={getActiveCategory}
                           />
                       ))}
                   </div>
@@ -173,7 +168,6 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
     isNestedList,
     handleTitleClick,
     favoritesId,
-    getActiveCategory,
 }) => (
     <>
         {filteredItems.map((category: TCategorizedSymbolItem) => {
@@ -192,7 +186,6 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
                         isNestedList={isNestedList}
                         handleTitleClick={handleTitleClick}
                         favoritesId={favoritesId}
-                        getActiveCategory={getActiveCategory}
                     />
                 )
             );

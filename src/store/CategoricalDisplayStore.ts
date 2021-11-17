@@ -17,7 +17,6 @@ type TCategoricalDisplayStoreProps = {
     getCategoricalItems: () => TCategorizedSymbols;
     onSelectItem?: (item: TProcessedSymbolItem) => void;
     getIsShown: () => boolean;
-    getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
     placeholderText: string;
     favoritesId: string;
     mainStore: MainStore;
@@ -34,7 +33,6 @@ export default class CategoricalDisplayStore {
     activeSubCategory = '';
     categoryElements: { [id: string]: HTMLElement | null };
     favoritesId: string;
-    getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
     getCategoricalItems: () => TCategorizedSymbols;
     getCurrentActiveCategory: () => string;
     getCurrentActiveMarket: () => string | null;
@@ -52,7 +50,6 @@ export default class CategoricalDisplayStore {
         getCategoricalItems,
         onSelectItem,
         getIsShown,
-        getActiveCategory,
         placeholderText,
         favoritesId,
         mainStore,
@@ -75,7 +72,6 @@ export default class CategoricalDisplayStore {
         );
         this.getCategoricalItems = getCategoricalItems;
         this.onSelectItem = onSelectItem;
-        this.getActiveCategory = getActiveCategory;
         this.favoritesId = favoritesId;
         this.id = id;
         this.categoryElements = {};
@@ -201,11 +197,6 @@ export default class CategoricalDisplayStore {
 
             favsCategory.data = favsCategoryItem.filter(favItem => favItem);
             filteredItems.unshift(favsCategory);
-        }
-
-        if (this.getActiveCategory) {
-            const activeCategory = cloneCategory(this.getActiveCategory());
-            filteredItems.unshift(activeCategory);
         }
 
         if (this.filterText === '') {
@@ -366,7 +357,6 @@ export default class CategoricalDisplayStore {
     }
 
     @action.bound scrollToActiveSymbol(): void {
-        const activeItemCount = this.getActiveCategory ? this.getActiveCategory().data.length : 0;
         this.focusedCategoryKey = null;
         this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
         this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
@@ -384,11 +374,7 @@ export default class CategoricalDisplayStore {
         this.isUserScrolling = false;
 
         if (this.scrollPanel) {
-            if (activeItemCount) {
-                this.activeCategoryKey = 'active';
-                this.activeHeadKey = null;
-                if (this.scrollPanel) this.scrollPanel.scrollTop = 0;
-            } else if (el && this.scrollPanel) {
+            if (el && this.scrollPanel) {
                 this.scrollPanel.scrollTop = el.offsetTop;
                 if (el_active_market) {
                     const topOffset = this.mainStore.chart.isMobile ? 100 : 40;

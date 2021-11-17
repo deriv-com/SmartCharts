@@ -53,12 +53,3 @@ const NormalItemComponent: React.FC<TNormalItemProps> = ({ onSelectItem, item, f
 );
 
 export const NormalItem = React.memo(NormalItemComponent);
-
-export const ActiveItem: React.FC<TActiveItemProps> = ({ item, favoritesId }) => (
-    <div className='sc-active-item'>
-        <ItemName item={item} />
-        <div className='sc-mcd__item__detail'>
-            <Favorite category={favoritesId} id={item.itemId} />
-        </div>
-    </div>
-);
