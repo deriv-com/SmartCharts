@@ -8,9 +8,9 @@ function loadFavorites() {
         return;
     }
 
-    const favorites: { [x: string]: any } = {};
+    const favorites: { [x: string]: { [x: string]: boolean} } = {};
     for (const categoryName in local) {
-        const category: { [x: string]: any } = {};
+        const category: { [x: string]: boolean } = {};
         for (const id of local[categoryName]) {
             category[id] = true;
         }
@@ -32,7 +32,7 @@ class FavoriteStore {
 
     static instance: FavoriteStore;
 
-    _emitter: any;
+    _emitter: EventEmitter;
 
     static getInstance() {
         if (!FavoriteStore.instance) {
@@ -46,19 +46,19 @@ class FavoriteStore {
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
 
-    onFavoriteUpdate(callback: any) {
+    onFavoriteUpdate(callback: EventListener) {
         this._emitter.on(FavoriteStore.EVENT_FAVORITES_UPDATE, callback);
     }
 
-    offFavoriteUpdate(callback: any) {
+    offFavoriteUpdate(callback: EventListener) {
         this._emitter.off(FavoriteStore.EVENT_FAVORITES_UPDATE, callback);
     }
 
-    @action.bound isFavorite(category: any, id: any) {
+    @action.bound isFavorite(category: string, id: string) {
         return id in this.favoritesMap[category];
     }
 
-    @action.bound toggleFavorite(category: any, id: any) {
+    @action.bound toggleFavorite(category: string, id: string) {
         const cat = this.favoritesMap[category];
         if (cat[id]) {
             delete cat[id];
@@ -71,7 +71,7 @@ class FavoriteStore {
     }
 
     saveFavorites() {
-        const favorites: { [x: string]: any } = {};
+        const favorites: { [x: string]: string[] } = {};
         for (const categoryName in this.favoritesMap) {
             const category = [];
             for (const id in this.favoritesMap[categoryName]) {

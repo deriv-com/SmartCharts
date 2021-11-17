@@ -42,7 +42,7 @@ export default class ToolbarWidgetStore {
         // Hide the indicator tooltip
         const chartNode = this.chartStore.chartNode;
         if (chartNode) {
-            chartNode.querySelector('.stx_sticky').style.display = 'none';
+            (chartNode.querySelector('.stx_sticky') as HTMLElement).style.display = 'none';
         }
     }
 

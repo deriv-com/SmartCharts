@@ -11,3 +11,12 @@ export type TCIQAppend<C> = {
     method: string;
     func: C;
 };
+
+export type TCustomEvent = Event & {
+    displacementY: number;
+    isHandledByDialog: boolean;
+    nativeEvent: {
+        isHandledByDialog: boolean;
+        is_item_removed: boolean;
+    }
+};

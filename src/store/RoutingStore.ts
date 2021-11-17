@@ -1,10 +1,12 @@
 import { action } from 'mobx';
+import MainStore from '.';
+import DialogStore from './DialogStore';
 
-const allDialogs: any = [];
+const allDialogs: DialogStore[] = [];
 
 export default class RoutingStore {
-    mainStore: any;
-    constructor(mainStore: any) {
+    mainStore: MainStore;
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
     }
 
@@ -21,7 +23,7 @@ export default class RoutingStore {
         );
     }
 
-    @action.bound updateRoute(route: any, dialogStatus: any) {
+    @action.bound updateRoute(route: string, dialogStatus: boolean) {
         const enableRouting = this.mainStore.chart.enableRouting;
         if (enableRouting && dialogStatus && route) {
             window.history.replaceState({ urlPath: '#' }, '', '#');
@@ -31,11 +33,11 @@ export default class RoutingStore {
         }
     }
 
-    @action.bound registerDialog(dialogStore: any) {
+    @action.bound registerDialog(dialogStore: DialogStore) {
         allDialogs.push(dialogStore);
     }
 
     @action.bound closeAll() {
-        allDialogs.forEach((m: any) => m.setOpen(false));
+        allDialogs.forEach((m: DialogStore) => m.setOpen(false));
     }
 }

@@ -1,11 +1,13 @@
 import { observable, when, action } from 'mobx';
+import Context from 'src/components/ui/Context';
+import MainStore from '.';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
 
 export default class ChartSizeStore {
-    mainStore: any;
-    @observable stx: any;
+    mainStore: MainStore;
+    @observable stx: Context["stx"];
 
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         when(() => this.mainStore.chart.context, this.onContextReady);
     }

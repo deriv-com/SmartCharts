@@ -1,10 +1,12 @@
 import { action, when, computed, reaction, observable } from 'mobx';
+import { TQuote } from 'src/types';
 import MainStore from '.';
+import ChartStore from './ChartStore';
 
 export default class NavigationWidgetStore {
     mainStore: MainStore;
     @observable mouse_in = false;
-    get chart() {
+    get chart(): ChartStore {
         return this.mainStore.chart;
     }
     get stateStore() {
@@ -13,7 +15,7 @@ export default class NavigationWidgetStore {
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
-    get stxx() {
+    get stxx(): ChartStore["stxx"] {
         return this.chart.stxx;
     }
 
@@ -47,7 +49,7 @@ export default class NavigationWidgetStore {
     }
 
     @action.bound onScale() {
-        let point: any = null;
+        let point: TQuote | null = null;
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
 
