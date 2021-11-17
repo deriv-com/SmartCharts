@@ -1,5 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
+import Context from 'src/components/ui/Context';
+import { TCIQAppend, TCustomEvent } from 'src/types';
 import MainStore from '.';
 import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
@@ -7,19 +9,19 @@ const LINE_OFFSET_HEIGHT = 4;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
 
 export default class PriceLineStore {
-    __top: any;
-    _emitter: any;
-    _initialPosition: any;
-    _injectionId: any;
-    _line: any;
-    _priceConstrainer: any;
-    _startDragPrice: any;
-    className: any;
-    hideBarrierLine: any;
-    hideOffscreenLine: any;
+    __top = 0;
+    _emitter: EventEmitter;
+    _initialPosition?: number;
+    _injectionId?: TCIQAppend<() => void>;
+    _line?: HTMLElement;
+    _priceConstrainer: number | ((val: number) => number) = 0;
+    _startDragPrice = 0;
+    className?: string;
+    hideBarrierLine?: boolean;
+    hideOffscreenLine?: boolean;
     mainStore: MainStore;
-    opacityOnOverlap: any;
-    showOffscreenArrows: any;
+    opacityOnOverlap = 0;
+    showOffscreenArrows = false;
     _relative = false;
     @observable draggable = true;
     @observable isDragging = false;
@@ -29,45 +31,45 @@ export default class PriceLineStore {
     // @observable zIndex;
     @observable offScreen = false;
     // @observable uncentered = false;
-    @observable title: any;
-    @observable isOverlapping: any;
-    @observable offScreenDirection: any;
+    @observable title?: string;
+    @observable isOverlapping = false;
+    @observable offScreenDirection: string | null = null;
 
-    set zIndex(value: any) {
-        if (this._line) {
-            this._line.style.zIndex = value;
+    set zIndex(value: string | number | null) {
+        if (this._line && value) {
+            this._line.style.zIndex = value.toString();
         }
     }
 
     @computed get pip() {
-        return this.mainStore.chart.currentActiveSymbol.decimal_places;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places  as number;
     }
 
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
 
     destructor() {
         this.stx.removeInjection(this._injectionId);
     }
 
-    onContextReady = () => {
+    onContextReady = () => {        
         this._injectionId = this.stx.append('draw', this._draw);
     };
 
     init = () => {
-        const exitIfNotisDraggable = (e: any, callback: any) => {
+        const exitIfNotisDraggable = (e: TCustomEvent, callback: (event: TCustomEvent) => void) => {
             if (this.visible && this.draggable) {
                 callback.call(this, e);
             }
         };
         CIQ.safeDrag(
             this._line,
-            (e: any) => exitIfNotisDraggable(e, this._startDrag),
-            (e: any) => exitIfNotisDraggable(e, this._dragLine),
-            (e: any) => exitIfNotisDraggable(e, this._endDrag)
+            (e: TCustomEvent) => exitIfNotisDraggable(e, this._startDrag),
+            (e: TCustomEvent) => exitIfNotisDraggable(e, this._dragLine),
+            (e: TCustomEvent) => exitIfNotisDraggable(e, this._endDrag)
         );
     };
 
@@ -117,11 +119,11 @@ export default class PriceLineStore {
         this.price = this._price + currentPrice;
     }
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
 
-    get stx() {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
 
@@ -129,7 +131,7 @@ export default class PriceLineStore {
         return this.stx.chart;
     }
 
-    set priceConstrainer(value: any) {
+    set priceConstrainer(value: number | ((val: number) => number)) {
         this._priceConstrainer = value;
     }
 
@@ -141,7 +143,7 @@ export default class PriceLineStore {
         return this.mainStore.chart.yAxiswidth;
     }
 
-    @action.bound setDragLine(el: any) {
+    @action.bound setDragLine(el: HTMLElement) {
         this._line = el;
         if (this._line) {
             this._draw();
@@ -168,15 +170,15 @@ export default class PriceLineStore {
         this._startDragPrice = this._price;
     }
 
-    @action.bound _dragLine(e: any) {
+    @action.bound _dragLine(e: TCustomEvent) {
         if (!this._line) {
             return;
         }
-        const newTop = this._initialPosition + e.displacementY;
-        const newCenter = newTop + LINE_OFFSET_HEIGHT_HALF;
-        let newPrice = this._priceFromLocation(newCenter);
+        const newTop = this._initialPosition && this._initialPosition + e.displacementY;
+        const newCenter = newTop && newTop + LINE_OFFSET_HEIGHT_HALF;
+        let newPrice = newCenter && this._priceFromLocation(newCenter);
 
-        if (this._priceConstrainer) {
+        if (typeof this._priceConstrainer === 'function') {
             newPrice = this._priceConstrainer(newPrice);
         }
         if (this.relative) {
@@ -195,11 +197,11 @@ export default class PriceLineStore {
         }
     }
 
-    _locationFromPrice(p: any) {
+    _locationFromPrice(p: number) {
         return this.stx.pixelFromPrice(p, this.chart.panel) - this.chart.panel.top;
     }
 
-    _priceFromLocation(y: any) {
+    _priceFromLocation(y: number) {
         const price = this.stx.valueFromPixel(y + this.chart.panel.top, this.chart.panel);
 
         return price;
@@ -252,7 +254,9 @@ export default class PriceLineStore {
     // We don't pay for react reconciler and mobx observable tracking in animation frames.
     set top(v) {
         this.__top = v;
-        this._line.style.transform = `translateY(${this.top - 13}px)`;
+        if (this._line) {
+            this._line.style.transform = `translateY(${this.top - 13}px)`;
+        }
     }
     get top() {
         return this.__top;
@@ -260,19 +264,19 @@ export default class PriceLineStore {
 
     _draw = () => {
         if (this.visible && this._line) {
-            this.top = this._calculateTop();
+            this.top = this._calculateTop() as number;
         }
     };
 
-    onPriceChanged(callback: any) {
+    onPriceChanged(callback: EventListener) {
         this._emitter.on(PriceLineStore.EVENT_PRICE_CHANGED, callback);
     }
 
-    onDragReleased(callback: any) {
+    onDragReleased(callback: EventListener) {
         this._emitter.on(PriceLineStore.EVENT_DRAG_RELEASED, callback);
     }
 
-    overlapCheck(top: any) {
+    overlapCheck(top: number) {
         const { _barriers } = this.mainStore.chart;
 
         const filtered_barriers = _barriers.filter(a => a._high_barrier.price !== 0);
@@ -284,9 +288,9 @@ export default class PriceLineStore {
             }
 
             const barrier = filtered_barriers[i];
-            const diffTop = Math.abs(barrier._high_barrier.top - top);
+            const diffTop = barrier._high_barrier.top && Math.abs(barrier._high_barrier.top - top);
 
-            if (diffTop < 25) {
+            if (diffTop && diffTop < 25) {
                 return true;
             }
         }

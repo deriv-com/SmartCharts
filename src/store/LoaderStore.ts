@@ -2,8 +2,8 @@ import { observable, action } from 'mobx';
 
 export default class LoaderStore {
     @observable isActive = false;
-    @observable currentState = false;
-    states: any = {};
+    @observable currentState: string | boolean = false;
+    states: {[key: string]: string | boolean} = {};
 
     constructor() {
         this.states = {
@@ -14,7 +14,7 @@ export default class LoaderStore {
         };
     }
 
-    @action.bound setState(state: any) {
+    @action.bound setState(state: string) {
         if (!this.states[state]) {
             console.error('Wrong state requested!');
             return;

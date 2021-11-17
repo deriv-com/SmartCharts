@@ -2,6 +2,7 @@ import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
 import Context from '../components/ui/Context';
 import MainStore from '.';
+import { TCustomEvent } from '../types';
 
 let activeDialog: DialogStore | undefined;
 
@@ -58,7 +59,7 @@ export default class DialogStore {
         }
     }
 
-    handleClickOutside = (e: React.MouseEvent | Event | UIEvent) => {
+    handleClickOutside = (e: React.MouseEvent | Event | UIEvent | TCustomEvent) => {
         let isRightClick = false;
         if ('which' in e) {
             isRightClick = e.which === 3;
@@ -66,7 +67,7 @@ export default class DialogStore {
             isRightClick = e.button === 2;
         }
 
-        if (!e.isHandledByDialog && !isRightClick) {
+        if (!(e as TCustomEvent).isHandledByDialog && !isRightClick) {
             this.onClose();
         }
     };
@@ -87,10 +88,10 @@ export default class DialogStore {
         document.removeEventListener('keydown', this.closeOnEscape);
     }
 
-    @action.bound onContainerClick(e: React.MouseEvent) {
+    @action.bound onContainerClick(e: React.MouseEvent | TCustomEvent) {
         /* TODO: why stopPropagation() is not working ಠ_ಠ */
         // e.stopPropagation();
-        e.nativeEvent.isHandledByDialog = true;
+        (e as TCustomEvent).nativeEvent.isHandledByDialog = true;
     }
 
     @action.bound updateCloseCallback(onClose: () => void | undefined) {
