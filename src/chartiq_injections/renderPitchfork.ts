@@ -1,6 +1,6 @@
 export const overrideRenderPitchfork = () => {
     // overriding the method to avoid error in case this.p0 or this.p1 is undefined or null.
-    CIQ.Drawing.pitchfork.prototype.render = function (context) {
+    CIQ.Drawing.pitchfork.prototype.render = function (context: any) {
         const panel = this.stx.panels[this.panelName];
         if (!panel || !this.p0 || !this.p1) return;
         const stx = this.stx;

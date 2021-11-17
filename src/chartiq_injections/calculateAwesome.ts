@@ -1,6 +1,6 @@
 export const overrideCalculateAwesome = () => {
     // Adding zoomOut() to the method in order to load more quotes for Awesome Oscillator when less than 34 quotes.
-    CIQ.Studies.calculateAwesomeOscillator = function (stx, sd) {
+    CIQ.Studies.calculateAwesomeOscillator = function (stx: any, sd: any) {
         const quotes = sd.chart.scrubbed;
         if (quotes.length <= 33) {
             stx.zoomOut(null, 1.33);
