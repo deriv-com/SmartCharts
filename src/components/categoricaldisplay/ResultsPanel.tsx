@@ -1,29 +1,48 @@
 import React from 'react';
 import classNames from 'classnames';
+import CategoricalDisplayStore from 'src/store/CategoricalDisplayStore';
 import { ArrowIcon, CategoryIconMap } from '../Icons';
 import { stringToSlug } from '../../utils';
-import { TActiveItemProps, TNormalItemProps } from './Item';
-import { TCategorizedSymbolItem, TCategorizedSymbols, TSubCategory } from '../../binaryapi/ActiveSymbols';
-import { TReactComponent } from '../../store/Connect';
+import {
+    TCategorizedSymbolItem,
+    TCategorizedSymbols,
+    TProcessedSymbolItem,
+    TSubCategory,
+    TSubCategoryData,
+    TSubCategoryDataItem,
+} from '../../binaryapi/ActiveSymbols';
+import { TItemTypeProps } from './CategoricalDisplay';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
-    onSelectItem?: (item: TCategorizedSymbolItem<TSubCategory | string>) => void;
-    getItemType: (
-        categoryId: string
-    ) =>
-        | TReactComponent<Pick<TActiveItemProps, 'activeOptions' | 'favoritesId'>>
-        | TReactComponent<Pick<TNormalItemProps, 'favoritesId'>>;
+    onSelectItem?: (item: TProcessedSymbolItem) => void;
+    ItemType: React.FC<TItemTypeProps>;
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
     disableAll?: boolean;
     isNestedList?: boolean;
     handleTitleClick: (categoryId: string) => void;
+    favoritesId: string;
+    getActiveCategory: CategoricalDisplayStore['getActiveCategory'];
 };
 
-function getItemCount(category: TCategorizedSymbolItem) {
+export type TCategoryProps = {
+    handleTitleClick: TResultsPanelProps['handleTitleClick'];
+    disableAll: TResultsPanelProps['disableAll'];
+    isNestedList: TResultsPanelProps['isNestedList'];
+    activeHeadKey: TResultsPanelProps['activeHeadKey'];
+    onSelectItem: TResultsPanelProps['onSelectItem'];
+    categoryItemCount: number;
+    setCategoryElement: TResultsPanelProps['setCategoryElement'];
+    ItemType: TResultsPanelProps['ItemType'];
+    category: TCategorizedSymbolItem<TSubCategory | TSubCategoryDataItem>;
+    favoritesId: string;
+    getActiveCategory: CategoricalDisplayStore['getActiveCategory'];
+};
+
+function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
     let count = 0;
-    if (category.hasSubcategory) {
+    if ('categoryName' in category && category.hasSubcategory) {
         for (const sub of category.data) {
             count += sub.data.length;
         }
@@ -69,23 +88,25 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
     </div>
 );
 
-const Category = ({
+const Category: React.FC<TCategoryProps> = ({
     category,
     categoryItemCount,
-    Item,
+    ItemType,
     setCategoryElement,
     onSelectItem,
     activeHeadKey,
     disableAll,
     isNestedList,
     handleTitleClick,
-}: any) => (
+    favoritesId,
+    getActiveCategory,
+}) => (
     <div
         className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
             'sc-mcd__category--has-subtitle': category.categorySubtitle,
             'sc-mcd__category--active': category.active,
         })}
-        ref={(el: any) => setCategoryElement(el, category.categoryId)}
+        ref={el => setCategoryElement(el, category.categoryId)}
     >
         {(isNestedList || !category.hasSubcategory) && (
             <CategoryTitle
@@ -96,37 +117,44 @@ const Category = ({
             />
         )}
         {category.hasSubcategory
-            ? category.data.map(
-                  (subcategory: any) =>
-                      getItemCount(subcategory) > 0 && (
-                          <div
-                              className={classNames(
-                                  'sc-mcd__category__content',
-                                  `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
-                                  'sc-mcd__category__content--has-subcategory'
-                              )}
-                              key={subcategory.subcategoryName}
-                          >
-                              <div className='subcategory'>{t.translate(subcategory.subcategoryName)}</div>
-                              {subcategory.data.map((item: any) => (
-                                  <Item
-                                      key={item.display}
-                                      item={item}
-                                      onSelectItem={onSelectItem}
-                                      disableAll={disableAll}
-                                  />
-                              ))}
-                          </div>
-                      )
+            ? (category.data as TSubCategory[]).map(subcategory =>
+                  getItemCount(subcategory) > 0 ? (
+                      <div
+                          className={classNames(
+                              'sc-mcd__category__content',
+                              `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
+                              'sc-mcd__category__content--has-subcategory'
+                          )}
+                          key={subcategory.subcategoryName}
+                      >
+                          <div className='subcategory'>{t.translate(subcategory.subcategoryName)}</div>
+                          {subcategory.data.map(item => (
+                              <ItemType
+                                  key={item.display}
+                                  item={item}
+                                  onSelectItem={onSelectItem}
+                                  disableAll={disableAll}
+                                  categoryId={category.categoryId}
+                                  favoritesId={favoritesId}
+                                  getActiveCategory={getActiveCategory}
+                              />
+                          ))}
+                      </div>
+                  ) : (
+                      <React.Fragment />
+                  )
               )
             : category.data.length > 0 && (
                   <div className='sc-mcd__category__content'>
-                      {category.data.map((item: any, idx: any) => (
-                          <Item
+                      {(category.data as TSubCategoryData).map((item, idx) => (
+                          <ItemType
                               key={`${item.display}-${idx}`} // eslint-disable-line react/no-array-index-key
                               item={item}
                               onSelectItem={onSelectItem}
                               disableAll={disableAll}
+                              categoryId={category.categoryId}
+                              favoritesId={favoritesId}
+                              getActiveCategory={getActiveCategory}
                           />
                       ))}
                   </div>
@@ -138,12 +166,14 @@ const Category = ({
 export const ResultsPanel: React.FC<TResultsPanelProps> = ({
     filteredItems,
     onSelectItem,
-    getItemType,
+    ItemType,
     setCategoryElement,
     activeHeadKey,
     disableAll,
     isNestedList,
     handleTitleClick,
+    favoritesId,
+    getActiveCategory,
 }) => (
     <>
         {filteredItems.map((category: TCategorizedSymbolItem) => {
@@ -152,7 +182,7 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
                 (categoryItemCount > 0 || category.emptyDescription) && (
                     <Category
                         key={category.categoryId}
-                        Item={getItemType(category.categoryId)}
+                        ItemType={ItemType}
                         category={category}
                         categoryItemCount={categoryItemCount}
                         setCategoryElement={setCategoryElement}
@@ -161,6 +191,8 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
                         disableAll={disableAll}
                         isNestedList={isNestedList}
                         handleTitleClick={handleTitleClick}
+                        favoritesId={favoritesId}
+                        getActiveCategory={getActiveCategory}
                     />
                 )
             );

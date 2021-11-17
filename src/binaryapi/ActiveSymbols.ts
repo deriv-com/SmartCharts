@@ -7,7 +7,7 @@ import TradingTimes from './TradingTimes';
 
 const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
-type TProcessedSymbolItem = {
+export type TProcessedSymbolItem = {
     symbol: string;
     name: string;
     market: string;
@@ -26,6 +26,8 @@ export type TSubCategoryDataItem = {
     dataObject: TProcessedSymbolItem;
     selected?: boolean;
 };
+
+export type TSubCategoryData = TSubCategoryDataItem[];
 
 export type TSubCategory = {
     subcategoryName: string;
@@ -89,7 +91,7 @@ export default class ActiveSymbols {
         return this.activeSymbols;
     }
 
-    @action.bound computeActiveSymbols(active_symbols: any) {
+    @action.bound computeActiveSymbols(active_symbols: TActiveSymbols) {
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
@@ -162,7 +164,7 @@ export default class ActiveSymbols {
     }
 
     _categorizeActiveSymbols(activeSymbols: TProcessedSymbols): TCategorizedSymbols {
-        const categorizedSymbols = [];
+        const categorizedSymbols: TCategorizedSymbols = [];
         const first = activeSymbols[0];
         const getSubcategory = (d: TProcessedSymbolItem): TSubCategory => ({
             subcategoryName: d.submarket_display_name,

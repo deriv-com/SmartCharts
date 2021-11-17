@@ -1,20 +1,41 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import CategoricalDisplayStore from 'src/store/CategoricalDisplayStore';
+import { TProcessedSymbolItem, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
 import Scroll from '../Scroll';
 import '../../../sass/components/_categorical-display.scss';
 import SearchInput from '../SearchInput';
+import { ResultsPanel } from './ResultsPanel';
+import { ActiveItem, NormalItem } from './Item';
 
-type TCategoricalDisplay = {
+type TCategoricalDisplayProps = {
     store: CategoricalDisplayStore;
     searchInputClassName?: string;
     isNestedList?: boolean;
     id?: string;
-    onSelectItem: (item: any) => void;
+    onSelectItem?: (item: TProcessedSymbolItem) => void;
     disableAll?: boolean;
 };
 
-const CategoricalDisplay: React.FC<TCategoricalDisplay> = ({
+export type TItemTypeProps = {
+    getActiveCategory: CategoricalDisplayStore['getActiveCategory'];
+    categoryId?: string;
+    item: TSubCategoryDataItem;
+    favoritesId: string;
+    onSelectItem?: TCategoricalDisplayProps['onSelectItem'];
+    disableAll?: boolean;
+};
+
+const ItemType: React.FC<TItemTypeProps> = ({ getActiveCategory, categoryId, ...props }) => {
+    if (categoryId === 'active' && getActiveCategory !== undefined) {
+        console.log('ActiveItem');
+        return <ActiveItem {...props} />;
+    }
+
+    return <NormalItem {...props} />;
+};
+
+const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
     store,
     id,
     searchInputClassName,
@@ -25,13 +46,18 @@ const CategoricalDisplay: React.FC<TCategoricalDisplay> = ({
     const {
         updateScrollSpy,
         setScrollPanel,
-        ResultsPanel,
         FilterPanel,
         setFilterText,
         searchInput,
         height,
         filterText,
         placeholderText,
+        handleTitleClick,
+        filteredItems,
+        setCategoryElement,
+        activeHeadKey,
+        getActiveCategory,
+        favoritesId,
     } = store;
 
     const onSelectItem = onSelectItemProp || store.onSelectItem;
@@ -40,13 +66,19 @@ const CategoricalDisplay: React.FC<TCategoricalDisplay> = ({
 
     const innerPanel = (
         <ResultsPanel
-            onSelectItem={(item: any) => {
-                onSelectItem(item);
+            onSelectItem={(item: TProcessedSymbolItem) => {
+                onSelectItem?.(item);
                 setFilterText('');
             }}
-            id={id}
             disableAll={disableAll}
             isNestedList={isNestedList}
+            handleTitleClick={handleTitleClick}
+            filteredItems={filteredItems}
+            setCategoryElement={setCategoryElement}
+            activeHeadKey={activeHeadKey}
+            ItemType={ItemType}
+            favoritesId={favoritesId}
+            getActiveCategory={getActiveCategory}
         />
     );
 

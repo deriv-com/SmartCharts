@@ -1,13 +1,6 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import {
-    NormalItem,
-    ActiveItem,
-    ResultsPanel,
-    TResultsPanelProps,
-    FilterPanel,
-    TFilterPanelProps,
-} from '../components/categoricaldisplay';
+import { FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
 import { cloneCategories, cloneCategory } from '../utils';
 import { connect, TReactComponent } from './Connect';
 import Context from '../components/ui/Context';
@@ -15,16 +8,16 @@ import MainStore from '.';
 import {
     TCategorizedSymbolItem,
     TCategorizedSymbols,
+    TProcessedSymbolItem,
     TSubCategory,
     TSubCategoryDataItem,
 } from '../binaryapi/ActiveSymbols';
 
 type TCategoricalDisplayStoreProps = {
     getCategoricalItems: () => TCategorizedSymbols;
-    onSelectItem?: (item: TSubCategoryDataItem) => void;
+    onSelectItem?: (item: TProcessedSymbolItem) => void;
     getIsShown: () => boolean;
     getActiveCategory?: () => TCategorizedSymbolItem<TSubCategory | string>;
-    activeOptions?: any[] | undefined;
     placeholderText: string;
     favoritesId: string;
     mainStore: MainStore;
@@ -37,7 +30,6 @@ type TCategoricalDisplayStoreProps = {
 
 export default class CategoricalDisplayStore {
     FilterPanel: TReactComponent<TFilterPanelProps>;
-    ResultsPanel: TReactComponent<TResultsPanelProps>;
     activeMarket?: string | null;
     activeSubCategory = '';
     categoryElements: { [id: string]: HTMLElement | null };
@@ -50,7 +42,7 @@ export default class CategoricalDisplayStore {
     id: string;
     isInit: boolean;
     mainStore: MainStore;
-    onSelectItem?: (item: TSubCategoryDataItem) => void;
+    onSelectItem?: (item: TProcessedSymbolItem) => void;
     pauseScrollSpy = false;
     searchInput: React.RefObject<HTMLInputElement>;
     searchInputClassName?: string;
@@ -61,7 +53,6 @@ export default class CategoricalDisplayStore {
         onSelectItem,
         getIsShown,
         getActiveCategory,
-        activeOptions,
         placeholderText,
         favoritesId,
         mainStore,
@@ -97,33 +88,6 @@ export default class CategoricalDisplayStore {
         this.searchInputClassName = searchInputClassName;
         this.placeholderText = placeholderText;
 
-        const normalItem = connect(() => ({
-            favoritesId,
-        }))(NormalItem);
-
-        const activeItem = connect(() => ({
-            activeOptions,
-            favoritesId,
-        }))(ActiveItem);
-
-        const getItemType = (categoryId: string): typeof activeItem | typeof normalItem => {
-            if (categoryId === 'active' && this.getActiveCategory !== undefined) {
-                return activeItem;
-            }
-
-            return normalItem;
-        };
-
-        this.ResultsPanel = connect<MainStore, TResultsPanelProps>(() => ({
-            filteredItems: this.filteredItems,
-            setCategoryElement: this.setCategoryElement,
-            getItemType,
-            activeHeadTop: this.activeHeadTop,
-            activeHeadKey: this.activeHeadKey,
-            activeHeadOffset: this.activeHeadOffset,
-            handleTitleClick: this.handleTitleClick,
-        }))(ResultsPanel);
-
         this.FilterPanel = connect<MainStore, TFilterPanelProps>(({ chart }: MainStore) => ({
             isMobile: chart.isMobile,
             filteredItems: this.filteredItems,
@@ -141,8 +105,6 @@ export default class CategoricalDisplayStore {
     @observable focusedCategoryKey: string | null = null;
     @observable isScrollingDown = false;
     @observable activeHeadKey: string | null = '';
-    @observable activeHeadTop: number | null = 0;
-    @observable activeHeadOffset?: number = undefined;
     scrollTop?: number = undefined;
     isUserScrolling = true;
     lastFilteredItems: TCategorizedSymbols = [];
@@ -299,7 +261,6 @@ export default class CategoricalDisplayStore {
         // hits: 40px for title hight + 4px for content bottom border
         const categoryTitleHeight = 44;
         const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
-        let activeHeadTop = 0;
         let activeMenuId = null;
 
         for (const category of this.filteredItems) {
@@ -314,8 +275,6 @@ export default class CategoricalDisplayStore {
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
                 activeMenuId = category.categoryId;
-                const categorySwitchPoint = r.height + top - categoryTitleHeight;
-                activeHeadTop = categorySwitchPoint < 0 ? categorySwitchPoint : 0;
             }
         }
 
@@ -326,11 +285,8 @@ export default class CategoricalDisplayStore {
             this.scrollDown();
         }
 
-        const offsetTop = this.scrollPanel.getBoundingClientRect().top - window.scrollY;
-        this.activeHeadOffset = this.chart.isMobile ? offsetTop : 0;
         this.scrollTop = scrollTop;
         this.focusedCategoryKey = activeMenuId || this.filteredItems[0].categoryId;
-        this.activeHeadTop = activeHeadTop;
         this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
@@ -406,7 +362,6 @@ export default class CategoricalDisplayStore {
             }
         }
 
-        this.activeHeadTop = null;
         setTimeout(() => this.updateScrollSpy(), 0);
     }
 
@@ -425,7 +380,6 @@ export default class CategoricalDisplayStore {
         const el_active_market: HTMLElement | null | undefined = this.scrollPanel?.querySelector(activeMarketClassName);
 
         this.activeHeadKey = this.activeCategoryKey || null;
-        this.activeHeadTop = 0;
         this.pauseScrollSpy = true;
         this.isUserScrolling = false;
 

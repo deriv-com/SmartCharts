@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
+import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import '../../sass/components/_chart-title.scss';
 import Menu from './Menu';
 import { CategoricalDisplay } from './categoricaldisplay';
@@ -66,7 +67,7 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
                     store={categoricalDisplay}
                     isNestedList={isNestedList}
                     searchInputClassName={searchInputClassName}
-                    onSelectItem={(x: any) => {
+                    onSelectItem={(x: TProcessedSymbolItem) => {
                         if (x.symbol !== currentSymbol.symbol) {
                             onChange(x.symbol);
                         }
