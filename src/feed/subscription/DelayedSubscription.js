@@ -22,7 +22,7 @@ class DelayedSubscription extends Subscription {
         const response = await this._binaryApi.getTickHistory(tickHistoryRequest);
         const quotes = this._processHistoryResponse(response);
         this._startTimer();
-        return quotes;
+        return { quotes, response };
     }
 
     forget() {

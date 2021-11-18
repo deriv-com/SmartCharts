@@ -15,9 +15,9 @@ class Subscription {
     }
 
     async initialFetch() {
-        const quotes = await this._startSubscribe(this._request);
+        const quotes_and_response = await this._startSubscribe(this._request);
 
-        return quotes;
+        return quotes_and_response;
     }
 
     pause() {}
@@ -29,9 +29,9 @@ class Subscription {
                 start: this.lastStreamEpoch,
             };
 
-            const quotes = await this._startSubscribe(tickHistoryRequest);
+            const quotes_and_response = await this._startSubscribe(tickHistoryRequest);
 
-            return quotes;
+            return quotes_and_response;
         }
     }
 
