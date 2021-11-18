@@ -1,17 +1,17 @@
+import { action, computed, observable, reaction } from 'mobx';
 import React from 'react';
-import { action, observable, computed, reaction } from 'mobx';
-import { FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
-import { cloneCategories, cloneCategory } from '../utils';
-import { connect, TReactComponent } from './Connect';
-import Context from '../components/ui/Context';
 import MainStore from '.';
 import {
     TCategorizedSymbolItem,
     TCategorizedSymbols,
     TProcessedSymbolItem,
     TSubCategory,
-    TSubCategoryDataItem,
+    TSubCategoryDataItem
 } from '../binaryapi/ActiveSymbols';
+import { FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
+import Context from '../components/ui/Context';
+import { cloneCategories } from '../utils';
+import { connect, TReactComponent } from './Connect';
 
 type TCategoricalDisplayStoreProps = {
     getCategoricalItems: () => TCategorizedSymbols;

@@ -131,8 +131,7 @@ export default class TimeperiodStore {
             }
         };
 
-        const isCountdownChart = !this.mainStore.chartType.isAggregateChart;
-        const hasCountdown = this.mainStore.chartSetting.countdown && !this.isTick && isCountdownChart;
+        const hasCountdown = this.mainStore.chartSetting.countdown && !this.isTick;
 
         if (hasCountdown) {
             if (!this._injectionId) {

@@ -81,7 +81,7 @@ export default class ChartSettingStore {
                     this.languages.every(x => activeLanguages.indexOf((x as TLanguage).key.toUpperCase()) !== -1))
             )
         ) {
-            this.updateActiveLanguage(activeLanguages as string[]);
+            this.updateActiveLanguage(activeLanguages as Array<string>);
         }
         if (theme !== undefined) {
             this.setTheme(theme);
@@ -119,7 +119,7 @@ export default class ChartSettingStore {
         }
     }
     @action.bound
-    updateActiveLanguage(activeLanguages: string[]) {
+    updateActiveLanguage(activeLanguages: Array<string>) {
         if (activeLanguages) {
             this.languages = activeLanguages
                 .map((lngKey: string) => Languages.find((lng: TLanguage) => lng.key.toUpperCase() === lngKey) || '')

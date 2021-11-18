@@ -1,15 +1,15 @@
 import { action, computed, observable, reaction, when } from 'mobx';
+import Context from 'src/components/ui/Context';
 import { ChartType } from 'src/types';
 import MainStore from '.';
-import MenuStore from './MenuStore';
-import ListStore from './ListStore';
-import SettingsDialogStore from './SettingsDialogStore';
-import SettingsDialog from '../components/SettingsDialog';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import { ChartTypes } from '../Constant';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
+import ListStore from './ListStore';
+import MenuStore from './MenuStore';
+import SettingsDialogStore from './SettingsDialogStore';
 
 const notCandles = [...ChartTypes].filter(t => !t.candleOnly).map(t => t.id);
-const aggregateCharts = [...ChartTypes].filter(t => (t as any).settingsOnClick);
+
 function getAggregates() {
     return {
         heikinashi: true,
@@ -76,14 +76,14 @@ function getAggregates() {
 export default class ChartTypeStore {
     ChartTypeList: any;
     aggregates: any;
-    chartTypes: typeof ChartTypes = [];
+    chartTypes: Array<ChartType> = [];
     listStore: ListStore;
     mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-type' });
         this.listStore = new ListStore({
             getContext: () => this.context,
@@ -97,7 +97,7 @@ export default class ChartTypeStore {
     @observable
     type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
     onChartTypeChanged: any;
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
     get stx() {
@@ -111,9 +111,6 @@ export default class ChartTypeStore {
     }
     get isSpline() {
         return this.type.id === 'spline';
-    }
-    get isAggregateChart() {
-        return !!aggregateCharts.find(t => t.id === this.stx.layout.aggregationType);
     }
     onContextReady = () => {
         this.aggregates = getAggregates();
@@ -187,7 +184,7 @@ export default class ChartTypeStore {
             const defaultValue = this.stx.chart.defaultChartStyleConfig[id];
             return {
                 id: name,
-                value: value != undefined ? value : defaultValue,
+                value: value !== undefined ? value : defaultValue,
                 defaultValue,
                 ...agg,
             };
