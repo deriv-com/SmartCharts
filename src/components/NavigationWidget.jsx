@@ -16,9 +16,16 @@ const NavigationWidget = ({
     onMouseLeave,
     isScaledOneOne,
     onCrosshairChange,
+    historical,
 }) =>
     context ? (
-        <div className='sc-navigation-widget' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <div
+            className={classNames('sc-navigation-widget', {
+                'sc-navigation-widget__item--indent': historical,
+            })}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+        >
             <div
                 className={classNames('sc-navigation-widget__item', 'sc-navigation-widget__item--scale', {
                     'sc-navigation-widget__item--hidden': !enableScale,
@@ -36,7 +43,7 @@ const NavigationWidget = ({
         </div>
     ) : null;
 
-export default connect(({ chart, chartSize, navigationWidget }) => ({
+export default connect(({ chart, chartSize, navigationWidget, chartSetting: s }) => ({
     context: chart.context,
     isScaledOneOne: chart.isScaledOneOne,
     zoomIn: chartSize.zoomIn,
@@ -45,4 +52,5 @@ export default connect(({ chart, chartSize, navigationWidget }) => ({
     enableScale: navigationWidget.enableScale,
     onMouseEnter: navigationWidget.onMouseEnter,
     onMouseLeave: navigationWidget.onMouseLeave,
+    historical: s.historical,
 }))(NavigationWidget);
