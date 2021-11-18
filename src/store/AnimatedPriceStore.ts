@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
     className = '';

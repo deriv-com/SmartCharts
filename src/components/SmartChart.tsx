@@ -1,12 +1,15 @@
 import React from 'react';
-import { Provider } from 'mobx-react';
+import { useStores, getContext } from 'src/store';
 import Chart from './Chart';
-import { useStores } from 'src/store';
 
-const SmartChart = ({ children, ...props }: any) => {
+const SmartChart: React.FC<any> = ({ children, ...props }) => {
     const store = useStores();
+    const context = getContext();
+
+    const Provider = context.Provider;
+
     return (
-        <Provider {...store}>
+        <Provider value={store}>
             <Chart {...props}>{children}</Chart>
         </Provider>
     );

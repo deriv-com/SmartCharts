@@ -59,9 +59,10 @@ let stores_context: React.Context<TMainStore>;
 export const initContext = (): void => {
     if (!stores_context) {
         const root_store = new MainStore();
-
         stores_context = React.createContext<TMainStore>(root_store);
     }
 };
+
+export const getContext = () => stores_context;
 
 export const useStores = (): TMainStore => React.useContext(stores_context);
