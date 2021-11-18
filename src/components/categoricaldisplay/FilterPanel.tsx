@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react-lite';
 import { CategoryIconMap } from '../Icons';
 import { TCategorizedSymbolItem, TCategorizedSymbols } from '../../binaryapi/ActiveSymbols';
 
@@ -33,7 +34,7 @@ const FilterItem = React.memo(
     }
 );
 
-export const FilterPanel: React.FC<TFilterPanelProps> = ({
+const FilterPanel: React.FC<TFilterPanelProps> = ({
     filteredItems,
     handleFilterClick,
     focusedCategoryKey,
@@ -53,3 +54,5 @@ export const FilterPanel: React.FC<TFilterPanelProps> = ({
         ))}
     </div>
 );
+
+export default observer(FilterPanel);

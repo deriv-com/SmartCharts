@@ -1,12 +1,13 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import CategoricalDisplayStore from 'src/store/CategoricalDisplayStore';
-import { TProcessedSymbolItem, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
+import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import Scroll from '../Scroll';
 import '../../../sass/components/_categorical-display.scss';
 import SearchInput from '../SearchInput';
-import { ResultsPanel } from './ResultsPanel';
-import { NormalItem } from './Item';
+import ResultsPanel from './ResultsPanel';
+import NormalItem from './Item';
+import FilterPanel from './FilterPanel';
 
 type TCategoricalDisplayProps = {
     store: CategoricalDisplayStore;
@@ -28,7 +29,6 @@ const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
     const {
         updateScrollSpy,
         setScrollPanel,
-        FilterPanel,
         setFilterText,
         searchInput,
         height,
@@ -39,6 +39,9 @@ const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
         setCategoryElement,
         activeHeadKey,
         favoritesId,
+        handleFilterClick,
+        focusedCategoryKey,
+        activeCategoryKey,
     } = store;
 
     const onSelectItem = onSelectItemProp || store.onSelectItem;
@@ -67,7 +70,17 @@ const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
             {!isMobile && (
                 <div className='sc-mcd__tabs'>
                     <div className='sc-mcd__tabs__head'>{t.translate('Markets')}</div>
-                    <div className='sc-mcd__tabs__body'>{!isNestedList && <FilterPanel />}</div>
+                    <div className='sc-mcd__tabs__body'>
+                        {!isNestedList && (
+                            <FilterPanel
+                                filteredItems={filteredItems}
+                                handleFilterClick={handleFilterClick}
+                                activeCategoryKey={activeCategoryKey}
+                                focusedCategoryKey={focusedCategoryKey}
+                                isSearching={filterText !== ''}
+                            />
+                        )}
+                    </div>
                 </div>
             )}
             <div className='sc-mcd__content'>

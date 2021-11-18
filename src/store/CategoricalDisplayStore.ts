@@ -1,8 +1,6 @@
 import React from 'react';
 import { action, observable, computed, reaction } from 'mobx';
-import { FilterPanel, TFilterPanelProps } from '../components/categoricaldisplay';
-import { cloneCategories, cloneCategory } from '../utils';
-import { connect, TReactComponent } from './Connect';
+import { cloneCategories } from '../utils';
 import Context from '../components/ui/Context';
 import MainStore from '.';
 import {
@@ -28,7 +26,6 @@ type TCategoricalDisplayStoreProps = {
 };
 
 export default class CategoricalDisplayStore {
-    FilterPanel: TReactComponent<TFilterPanelProps>;
     activeMarket?: string | null;
     activeSubCategory = '';
     categoryElements: { [id: string]: HTMLElement | null };
@@ -83,15 +80,6 @@ export default class CategoricalDisplayStore {
         this.searchInput = React.createRef();
         this.searchInputClassName = searchInputClassName;
         this.placeholderText = placeholderText;
-
-        this.FilterPanel = connect<MainStore, TFilterPanelProps>(({ chart }: MainStore) => ({
-            isMobile: chart.isMobile,
-            filteredItems: this.filteredItems,
-            handleFilterClick: this.handleFilterClick,
-            activeCategoryKey: this.activeCategoryKey,
-            focusedCategoryKey: this.focusedCategoryKey,
-            isSearching: this.filterText !== '',
-        }))(FilterPanel);
     }
 
     @observable isShown = false;

@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import CategoricalDisplayStore from 'src/store/CategoricalDisplayStore';
 import { ArrowIcon, CategoryIconMap } from '../Icons';
 import { stringToSlug } from '../../utils';
 import {
@@ -11,12 +10,12 @@ import {
     TSubCategoryData,
     TSubCategoryDataItem,
 } from '../../binaryapi/ActiveSymbols';
-import { TItemTypeProps } from './CategoricalDisplay';
+import { TNormalItemProps } from './Item';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
     onSelectItem?: (item: TProcessedSymbolItem) => void;
-    ItemType: React.FC<TItemTypeProps>;
+    ItemType: React.FC<TNormalItemProps>;
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
     disableAll?: boolean;
@@ -114,8 +113,9 @@ const Category: React.FC<TCategoryProps> = ({
             />
         )}
         {category.hasSubcategory
-            ? (category.data as TSubCategory[]).map(subcategory =>
-                  getItemCount(subcategory) > 0 ? (
+            ? (category.data as TSubCategory[])
+                  .filter(subcategory => getItemCount(subcategory) > 0)
+                  .map(subcategory => (
                       <div
                           className={classNames(
                               'sc-mcd__category__content',
@@ -131,15 +131,11 @@ const Category: React.FC<TCategoryProps> = ({
                                   item={item}
                                   onSelectItem={onSelectItem}
                                   disableAll={disableAll}
-                                  categoryId={category.categoryId}
                                   favoritesId={favoritesId}
                               />
                           ))}
                       </div>
-                  ) : (
-                      <React.Fragment />
-                  )
-              )
+                  ))
             : category.data.length > 0 && (
                   <div className='sc-mcd__category__content'>
                       {(category.data as TSubCategoryData).map((item, idx) => (
@@ -148,7 +144,6 @@ const Category: React.FC<TCategoryProps> = ({
                               item={item}
                               onSelectItem={onSelectItem}
                               disableAll={disableAll}
-                              categoryId={category.categoryId}
                               favoritesId={favoritesId}
                           />
                       ))}
@@ -158,7 +153,7 @@ const Category: React.FC<TCategoryProps> = ({
     </div>
 );
 
-export const ResultsPanel: React.FC<TResultsPanelProps> = ({
+const ResultsPanel: React.FC<TResultsPanelProps> = ({
     filteredItems,
     onSelectItem,
     ItemType,
@@ -192,3 +187,5 @@ export const ResultsPanel: React.FC<TResultsPanelProps> = ({
         })}
     </>
 );
+
+export default ResultsPanel;

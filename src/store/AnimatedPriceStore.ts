@@ -25,11 +25,4 @@ export default class AnimatedPriceStore {
         this.oldPrice = this.price;
         this.isIncrease = isIncrease;
     }
-
-    connect = connect(() => ({
-        price: this.price,
-        isIncrease: this.isIncrease,
-        status: this.status,
-        className: this.className,
-    }));
 }
