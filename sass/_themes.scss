@@ -500,7 +500,7 @@ $themes: (
         ChartGrid: $color-black-4,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $color-black-8,
-        ChartMountainBorder: rgba($COLOR_WHITE, 1),
+        ChartMountainBorder: $color-green,
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
         ChartMountainClosedBorder: rgba($COLOR_WHITE, 0.32),
