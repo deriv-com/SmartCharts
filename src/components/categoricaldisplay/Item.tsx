@@ -8,10 +8,9 @@ export type TBaseItemProps = {
     favoritesId: string;
 };
 
-export type TActiveItemProps = TBaseItemProps;
-
 export type TNormalItemProps = TBaseItemProps & {
     onSelectItem?: (item: TProcessedSymbolItem) => void;
+    disableAll?: boolean;
 };
 
 const Icon = React.memo(({ id }: { id: string }) => {
@@ -42,7 +41,7 @@ const ItemDetail = React.memo(
     )
 );
 
-const NormalItemComponent: React.FC<TNormalItemProps> = ({ onSelectItem, item, favoritesId }) => (
+const NormalItemBase: React.FC<TNormalItemProps> = ({ onSelectItem, item, favoritesId }) => (
     <div
         className={`sc-mcd__item sc-mcd__item--${item.itemId} ${item.selected ? 'sc-mcd__item--selected ' : ''}`}
         onClick={() => item.enabled && onSelectItem?.(item.dataObject)}
@@ -52,4 +51,6 @@ const NormalItemComponent: React.FC<TNormalItemProps> = ({ onSelectItem, item, f
     </div>
 );
 
-export const NormalItem = React.memo(NormalItemComponent);
+const NormalItem = React.memo(NormalItemBase);
+
+export default NormalItem;

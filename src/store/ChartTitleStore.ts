@@ -2,14 +2,10 @@ import { observable, action, computed, when } from 'mobx';
 import MenuStore from './MenuStore';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import AnimatedPrice from '../components/AnimatedPrice';
-import { ChartPrice, SymbolSelectButton } from '../components/SymbolSelectButton';
-import { connect } from './Connect';
 import ServerTime from '../utils/ServerTime';
 import MainStore from '.';
 
 export default class ChartTitleStore {
-    SymbolSelectButton: any;
     animatedPrice: AnimatedPriceStore;
     categoricalDisplay: CategoricalDisplayStore;
     mainStore: MainStore;
@@ -33,20 +29,6 @@ export default class ChartTitleStore {
             searchInputClassName: this.searchInputClassName,
         });
         this.serverTime = ServerTime.getInstance();
-        const SpotPrice = this.animatedPrice.connect(AnimatedPrice);
-        const PriceDisplay = connect(() => ({
-            isVisible: this.isVisible && this.isShowChartPrice,
-            status: this.animatedPrice.status,
-            todayChange: this.todayChange,
-            todayChangePercent: this.todayChangePercent,
-            SpotPrice,
-        }))(ChartPrice);
-        this.SymbolSelectButton = connect(() => ({
-            symbol: this.currentSymbol,
-            ChartPrice: PriceDisplay,
-            isSymbolOpen: this.isSymbolOpen,
-            symbolOpenTime: this.symbolOpenTime,
-        }))(SymbolSelectButton);
     }
     @observable
     todayChange: string | null = null;

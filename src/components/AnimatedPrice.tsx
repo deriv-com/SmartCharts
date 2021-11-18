@@ -1,10 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
+import AnimatedPriceStore from 'src/store/AnimatedPriceStore';
 
 type TAnimatedPriceProps = {
-    isIncrease: boolean;
-    price: string;
-    className: string;
+    isIncrease: AnimatedPriceStore['isIncrease'];
+    price: AnimatedPriceStore['price'];
+    className: AnimatedPriceStore['className'];
+    status: AnimatedPriceStore['status'];
 };
 
 const AnimatedPrice: React.FC<TAnimatedPriceProps> = ({ isIncrease, price, className }) => (

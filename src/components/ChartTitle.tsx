@@ -6,6 +6,7 @@ import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import '../../sass/components/_chart-title.scss';
 import Menu from './Menu';
 import { CategoricalDisplay } from './categoricaldisplay';
+import { SymbolSelectButton } from './SymbolSelectButton';
 
 type TChartTitleProps = {
     containerId?: string;
@@ -28,7 +29,6 @@ const ChartTitle: React.FC<TChartTitleProps> = props => {
         currentSymbol,
         categoricalDisplay,
         setSymbol,
-        SymbolSelectButton,
         onMouseEnter,
         onMouseLeave,
         updateProps,

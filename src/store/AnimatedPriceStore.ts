@@ -1,5 +1,4 @@
 import { observable, action } from 'mobx';
-import { connect } from './Connect';
 
 export default class AnimatedPriceStore {
     className = '';
@@ -25,11 +24,4 @@ export default class AnimatedPriceStore {
         this.oldPrice = this.price;
         this.isIncrease = isIncrease;
     }
-
-    connect = connect(() => ({
-        price: this.price,
-        isIncrease: this.isIncrease,
-        status: this.status,
-        className: this.className,
-    }));
 }

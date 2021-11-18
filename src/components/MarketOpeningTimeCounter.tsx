@@ -1,15 +1,18 @@
 import React from 'react';
+import ChartTitleStore from 'src/store/ChartTitleStore';
 import { displayMilliseconds } from '../utils/index';
 import ServerTime from '../utils/ServerTime';
 
-export const MarketOpeningTimeCounter = ({ symbolOpenTime }: any) => {
+type TMarketOpeningTimeCounterProps = {
+    symbolOpenTime: ChartTitleStore['symbolOpenTime'];
+};
+
+export const MarketOpeningTimeCounter: React.FC<TMarketOpeningTimeCounterProps> = ({ symbolOpenTime }) => {
     const [time, setTime] = React.useState(0);
 
     const timeUntilOpenTime = React.useMemo(() => {
         let output = null;
-        const {
-            symbolOpenTime: { openTime },
-        } = symbolOpenTime || {};
+        const { openTime } = symbolOpenTime || {};
         if (openTime) {
             output = displayMilliseconds(openTime.getTime() - time);
         }
