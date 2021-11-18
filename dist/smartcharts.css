@@ -172,7 +172,7 @@ html,body{-ms-touch-action:none;margin:0px}
 .stx_colored_mountain_chart{background-color:rgba(163,102,255,0.5);color:rgba(163,102,255,0.01);width:2px;padding:4px}
 .stx_mountain_chart{width:1px}
 .smartcharts-light .stx_mountain_chart{border:#85acb0;background-color:rgba(133,172,176,0.16);color:rgba(255,255,255,0)}
-.smartcharts-dark .stx_mountain_chart{border:#fff;background-color:rgba(255,255,255,0.36);color:rgba(16,19,32,0)}
+.smartcharts-dark .stx_mountain_chart{border:#85acb0;background-color:rgba(255,255,255,0.36);color:rgba(16,19,32,0)}
 .stx_histogram_down{color:#f95454}
 .smartcharts-light .stx_histogram_down{border-left-color:#999cac}
 .smartcharts-dark .stx_histogram_down{border-left-color:#fff}
