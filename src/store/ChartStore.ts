@@ -1,33 +1,28 @@
-import { action, observable, reaction, computed } from 'mobx';
+import { action, computed, observable, reaction } from 'mobx';
 import moment from 'moment';
-import { TChanges, TGranularity } from '../types';
+import MainStore from '.';
+import DownIcon from '../../sass/icons/chart/ic-down.svg';
+import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
+import ResizeIcon from '../../sass/icons/chart/resize-icon.svg';
+import DeleteIcon from '../../sass/icons/delete/ic-delete.svg';
+import EditIcon from '../../sass/icons/edit/ic-edit.svg';
+import HomeIcon from '../../sass/icons/navigation-widgets/ic-home.svg';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { TProcessedSymbolItem } from '../binaryapi/ActiveSymbols';
 import inject from '../chartiq_injections';
+import animateChart from '../components/ui/Animation';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
-import animateChart from '../components/ui/Animation';
-import { Feed } from '../feed';
-import plotSpline from '../SplinePlotter';
-import {
-    calculateTimeUnitInterval,
-    getUTCDate,
-    cloneCategories,
-    prepareIndicatorName,
-    createObjectFromLocalStorage,
-    renderSVGString,
-} from '../utils';
-import PendingPromise from '../utils/PendingPromise';
-import ResizeIcon from '../../sass/icons/chart/resize-icon.svg';
-import EditIcon from '../../sass/icons/edit/ic-edit.svg';
-import DeleteIcon from '../../sass/icons/delete/ic-delete.svg';
-import DownIcon from '../../sass/icons/chart/ic-down.svg';
-import HomeIcon from '../../sass/icons/navigation-widgets/ic-home.svg';
-import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 // import '../utils/raf';
 import { STATE } from '../Constant';
+import { Feed } from '../feed';
+import plotSpline from '../SplinePlotter';
+import { TChanges, TGranularity } from '../types';
+import {
+    calculateTimeUnitInterval, cloneCategories, createObjectFromLocalStorage, getUTCDate, prepareIndicatorName, renderSVGString
+} from '../utils';
+import PendingPromise from '../utils/PendingPromise';
 import BarrierStore from './BarrierStore';
-import MainStore from '.';
 
 class ChartStore {
     static keystrokeHub: KeystrokeHub;
@@ -44,7 +39,7 @@ class ChartStore {
     feedCall: { tradingTimes?: boolean; activeSymbols?: boolean } = {};
     RANGE_PADDING_PX = 125;
     contextPromise: ReturnType<typeof PendingPromise> | null = PendingPromise();
-    rootNode: HTMLElement | null = null;
+    rootNode: (HTMLElement & { CIQ: typeof CIQ }) | null = null;
     stxx: any = null;
     api: BinaryAPI | null = null;
     defaults = {
@@ -129,7 +124,7 @@ class ChartStore {
         }
         return currentQuote;
     };
-    updateHeight(position?: any) {
+    updateHeight(position?: string) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;
         // TODO use constant here for chartcontrol height
@@ -209,7 +204,7 @@ class ChartStore {
         }
         return ratio;
     };
-    init = (rootNode: any, props: any) => {
+    init = (rootNode: (HTMLElement & { CIQ: typeof CIQ }) | null, props: any) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
@@ -254,7 +249,7 @@ class ChartStore {
         }
     };
     @action.bound
-    _initChart(rootNode: any, props: any) {
+    _initChart(rootNode: (HTMLElement & { CIQ: typeof CIQ }) | null, props: any) {
         const _self = this;
         // Add custom injections to the CIQ
         inject({
@@ -359,7 +354,7 @@ class ChartStore {
                     maintainWhitespace: params,
                 };
             }
-            function resetPanelZooms(stx: any) {
+            function resetPanelZooms(stx: Context['stx']) {
                 for (const p in stx.panels) {
                     const yAxes = stx.panels[p].yaxisLHS.concat(stx.panels[p].yaxisRHS);
                     for (let a = 0; a < yAxes.length; a++) stx.calculateYAxisMargins(yAxes[a]);

@@ -1,6 +1,6 @@
 import { action, computed, observable, reaction, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { ChartType } from 'src/types';
+import { ChartType, TSettingsItem } from 'src/types';
 import MainStore from '.';
 import { ChartTypes } from '../Constant';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
@@ -8,9 +8,26 @@ import ListStore from './ListStore';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
+type TInputs = {
+    id: string;
+    title: string;
+    type: string;
+    max?: number;
+    step?: number;
+    min?: number;
+};
+
+type TAggregate = {
+    title: string;
+    inputs: Array<TInputs>;
+};
+type TAggregates = {
+    [key: string]: TAggregate | boolean;
+};
+
 const notCandles = [...ChartTypes].filter(t => !t.candleOnly).map(t => t.id);
 
-function getAggregates() {
+function getAggregates(): TAggregates {
     return {
         heikinashi: true,
         kagi: {
@@ -74,8 +91,7 @@ function getAggregates() {
     };
 }
 export default class ChartTypeStore {
-    ChartTypeList: any;
-    aggregates: any;
+    aggregates?: TAggregates;
     chartTypes: Array<ChartType> = [];
     listStore: ListStore;
     mainStore: MainStore;
@@ -91,12 +107,12 @@ export default class ChartTypeStore {
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            onChanged: (items: any) => this.updateAggregate(items),
+            onChanged: (items: TSettingsItem[]) => this.updateAggregate(items),
         });
     }
     @observable
     type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
-    onChartTypeChanged: any;
+    onChartTypeChanged?: () => typeof action;
     get context(): Context {
         return this.mainStore.chart.context;
     }
@@ -126,7 +142,7 @@ export default class ChartTypeStore {
         );
     };
     @action.bound
-    setTypeFromUI(type: string | ChartType) {
+    setTypeFromUI(type: ChartType | string) {
         if (this.chartTypeProp !== undefined) {
             console.error(
                 'Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />'
@@ -136,7 +152,7 @@ export default class ChartTypeStore {
         this.setType(type);
     }
     @action.bound
-    setType(type: string | ChartType) {
+    setType(type: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (!type) {
             type = 'mountain';
@@ -154,7 +170,7 @@ export default class ChartTypeStore {
         } else {
             this.stx.chart.tension = 0;
             delete this.stx.layout.tension;
-            if (this.aggregates[type.id]) {
+            if (this.aggregates?.[type.id]) {
                 // Set baseline.userLevel to false so chart won't move up after AggregationType set.
                 this.stx.chart.baseline.userLevel = false;
                 this.stx.setAggregationType(type.id);
@@ -167,7 +183,7 @@ export default class ChartTypeStore {
         this.type = type;
     }
     @action.bound
-    updateProps(onChange: any) {
+    updateProps(onChange: () => typeof action) {
         this.onChartTypeChanged = onChange;
     }
     @action.bound
@@ -175,9 +191,9 @@ export default class ChartTypeStore {
         if (aggregateId !== this.type.id) {
             this.setType(aggregateId);
         }
-        const aggregate = this.aggregates[aggregateId];
-        this.settingsDialog.title = aggregate.title;
-        const inputs = aggregate.inputs.map(({ id, ...agg }: any) => {
+        const aggregate = this.aggregates?.[aggregateId];
+        this.settingsDialog.title = (aggregate as TAggregate).title;
+        const inputs = (aggregate as TAggregate).inputs.map(({ id, ...agg }: TInputs) => {
             const name = id === 'box' || id === 'reversal' ? `pandf.${id}` : id;
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, name);
             const value = tuple.obj[tuple.member];
@@ -192,7 +208,7 @@ export default class ChartTypeStore {
         this.settingsDialog.items = inputs;
         this.settingsDialog.setOpen(true);
     }
-    updateAggregate = (items: any) => {
+    updateAggregate = (items: TSettingsItem[]) => {
         for (const { id, value } of items) {
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);
             tuple.obj[tuple.member] = value;
@@ -214,17 +230,17 @@ export default class ChartTypeStore {
         }));
     }
     @action.bound
-    setChartTypeFromLayout(layout: any) {
+    setChartTypeFromLayout(layout: typeof CIQ.UI.Layout) {
         const chartType = this.getChartTypeFromLayout(layout);
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.type = this.chartTypes[typeIdx];
     }
-    getChartTypeFromLayout(layout: any) {
+    getChartTypeFromLayout(layout: typeof CIQ.UI.Layout) {
         let chartType;
         if (layout.tension) {
             // We assume that if tension is set, spline is enabled
             chartType = 'spline';
-        } else if (this.aggregates[layout.aggregationType]) {
+        } else if (this.aggregates?.[layout.aggregationType]) {
             chartType = layout.aggregationType;
         } else {
             chartType = layout.chartType;
@@ -233,7 +249,7 @@ export default class ChartTypeStore {
     }
     isTypeCandle(type: ChartType | string) {
         if (typeof type === 'string') {
-            type = this.types.find((t: any) => t.id === type) as ChartType;
+            type = this.types.find(t => t.id === type) as ChartType;
         }
         return notCandles.indexOf(type.id) === -1;
     }

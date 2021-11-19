@@ -2,11 +2,11 @@ import { action } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { ChartType } from 'src/types';
 
-export type TListStoreProps = {
+type TListStoreProps = {
     getContext: () => Context;
     getItems: () => ChartType[];
     onItemSelected?: (item: ChartType) => void;
-}
+};
 
 export default class ListStore {
     getContext: () => Context;

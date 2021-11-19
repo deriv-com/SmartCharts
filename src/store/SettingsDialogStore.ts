@@ -1,17 +1,24 @@
-import { observable, action, computed, reaction } from 'mobx';
-import { TSettingsItemGroup, TSettingsItems } from 'src/types';
-import MenuStore from './MenuStore';
+import { action, computed, observable, reaction } from 'mobx';
+import { TSettingsItem, TSettingsItemGroup } from 'src/types';
 import MainStore from '.';
+import Context from '../components/ui/Context';
+import MenuStore from './MenuStore';
+
+type TSettingsDialogStoreProps = {
+    mainStore: MainStore;
+    onChanged: (items: TSettingsItem[]) => void;
+    getContext?: (stx: typeof CIQ.ChartEngine) => Context;
+    onDeleted?: () => void;
+};
 
 export default class SettingsDialogStore {
-    getContext: any;
+    getContext?: (stx: typeof CIQ.ChartEngine) => Context;
     mainStore: MainStore;
     menuStore: MenuStore;
-    onChanged: any;
-    onDeleted: any;
-    onItemActive: any;
+    onChanged: (items: TSettingsItem[]) => void;
+    onDeleted?: () => void;
     @observable
-    items: TSettingsItems[] = []; // [{id: '', title: '', value: ''}]
+    items: TSettingsItem[] = []; // [{id: '', title: '', value: ''}]
     @observable
     title = '';
     @observable
@@ -32,7 +39,7 @@ export default class SettingsDialogStore {
     dialogPortalNodeId?: string;
     @observable
     freezeScroll = false;
-    constructor({ mainStore, getContext, onChanged, onDeleted }: any) {
+    constructor({ mainStore, getContext, onChanged, onDeleted }: TSettingsDialogStoreProps) {
         this.mainStore = mainStore;
         this.getContext = getContext;
         this.onChanged = onChanged;
@@ -48,7 +55,7 @@ export default class SettingsDialogStore {
                 this.scrollPanel.addEventListener('click', () => {
                     this.setFreezeScroll(false);
                 });
-                dropdowns.forEach((dropdown: any) => {
+                dropdowns.forEach((dropdown: Element) => {
                     dropdown.addEventListener('click', () => setTimeout(() => this.checkDropdownOpen(), 50));
                 });
                 this.setFreezeScroll(false);
@@ -58,10 +65,10 @@ export default class SettingsDialogStore {
             }
         );
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context['stx'] {
         return this.context.stx;
     }
     get theme() {
@@ -77,17 +84,17 @@ export default class SettingsDialogStore {
             return;
         }
         const dropdowns = this.scrollPanel.querySelectorAll('.sc-color-picker, .sc-dropdown');
-        dropdowns.forEach((dropdown: any) => {
+        dropdowns.forEach((dropdown: Element) => {
             if (dropdown.className.indexOf('active') !== -1) freezeScroll = true;
         });
         this.setFreezeScroll(freezeScroll);
     };
     @action.bound
-    setFreezeScroll(status: any) {
+    setFreezeScroll(status: boolean) {
         this.freezeScroll = status;
     }
     @action.bound
-    setOpen(value: any) {
+    setOpen(value: boolean) {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop = 0;
         }
@@ -105,17 +112,17 @@ export default class SettingsDialogStore {
         if (this.onDeleted) this.onDeleted();
     }
     @action.bound
-    onItemChange(id: any, newValue: any) {
-        const item = this.items.find(x => (x as any).id === id);
-        if (item && (item as any).value !== newValue) {
-            (item as any).value = newValue;
+    onItemChange(id: string, newValue: string) {
+        const item = this.items.find(x => x.id === id);
+        if (item && item.value !== newValue) {
+            item.value = newValue;
             this.items = this.items.slice(0); // force array update
             this.onChanged(this.items);
         }
     }
     @computed
     get itemGroups() {
-        const restGroup: TSettingsItems[] = [];
+        const restGroup: TSettingsItem[] = [];
         const groups: TSettingsItemGroup[] = [];
         groups.push({
             key: '%K',
@@ -155,7 +162,7 @@ export default class SettingsDialogStore {
         return groups;
     }
     @action.bound
-    setScrollPanel(element: any) {
+    setScrollPanel(element: HTMLElement) {
         this.scrollPanel = element;
     }
 }

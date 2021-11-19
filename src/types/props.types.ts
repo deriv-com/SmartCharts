@@ -45,10 +45,10 @@ export type TChanges = {
 
 export type TSettingsItemGroup = {
     key: string;
-    fields: TSettingsItems[];
+    fields: TSettingsItem[];
 };
 
-export type TSettingsItems = {
+export type TSettingsItem = {
     id: string;
     title: string;
     value: string;
