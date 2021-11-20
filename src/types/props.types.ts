@@ -30,6 +30,8 @@ export type TQuote = {
     Close: number;
     tick?: TicksStreamResponse['tick'];
     ohlc?: OHLCStreamResponse['ohlc'];
+    DT?: Date;
+    prevClose?: number;
 };
 
 export interface IPendingPromise<Response> extends Promise<Response> {

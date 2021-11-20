@@ -19,7 +19,12 @@ import { Feed } from '../feed';
 import plotSpline from '../SplinePlotter';
 import { TChanges, TGranularity } from '../types';
 import {
-    calculateTimeUnitInterval, cloneCategories, createObjectFromLocalStorage, getUTCDate, prepareIndicatorName, renderSVGString
+    calculateTimeUnitInterval,
+    cloneCategories,
+    createObjectFromLocalStorage,
+    getUTCDate,
+    prepareIndicatorName,
+    renderSVGString,
 } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import BarrierStore from './BarrierStore';
@@ -919,7 +924,7 @@ class ChartStore {
         this.isChartAvailable = status;
     }
     @action.bound
-    changeSymbol(symbolObj: any, granularity?: TGranularity) {
+    changeSymbol(symbolObj: TProcessedSymbolItem | string | undefined, granularity?: TGranularity) {
         if (!this.stxx) return;
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols?.getSymbolObj(symbolObj);
@@ -927,7 +932,7 @@ class ChartStore {
         const isSymbolAvailable = symbolObj && this.currentActiveSymbol;
         if (
             isSymbolAvailable &&
-            symbolObj.symbol === this.currentActiveSymbol?.symbol &&
+            symbolObj?.symbol === this.currentActiveSymbol?.symbol &&
             granularity !== undefined &&
             granularity === this.granularity
         ) {
