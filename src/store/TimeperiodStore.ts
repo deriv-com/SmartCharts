@@ -1,7 +1,10 @@
-import { observable, action, when, reaction } from 'mobx';
-import { getTimeUnit, getIntervalInSeconds, displayMilliseconds } from '../utils';
+import { action, observable, reaction, when } from 'mobx';
+import Context from 'src/components/ui/Context';
+import { TCIQAppend, TGranularity } from 'src/types';
+import MainStore from '.';
+import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
 
 const UnitMap = {
@@ -18,23 +21,23 @@ const TimeMap = {
 };
 
 export default class TimeperiodStore {
-    _injectionId: any;
-    _serverTime: any;
-    mainStore: any;
-    @observable portalNodeIdChanged: any;
+    _injectionId?: TCIQAppend<() => void>;
+    _serverTime: ReturnType<typeof ServerTime.getInstance>;
+    mainStore: MainStore;
+    @observable portalNodeIdChanged = '';
     predictionIndicator: IndicatorPredictionDialogStore;
 
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.predictionIndicator = new IndicatorPredictionDialogStore({
             mainStore,
         });
 
         this._serverTime = ServerTime.getInstance();
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
     get loader() {
@@ -55,7 +58,7 @@ export default class TimeperiodStore {
     @observable interval: string | number | null = null;
     @observable preparingInterval: number | null = null;
 
-    onGranularityChange = (x: any) => null;
+    onGranularityChange: (x: TGranularity | number) => (void | null) = () => null;
 
     remain: string | null = null;
 
@@ -158,7 +161,7 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setGranularity(granularity: number) {
+    @action.bound setGranularity(granularity: TGranularity) {
         if (this.mainStore.state.granularity !== undefined) {
             console.error(
                 'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
@@ -166,11 +169,11 @@ export default class TimeperiodStore {
             return;
         }
 
-        logEvent(LogCategories.ChartControl, LogActions.Interval, granularity.toString());
+        logEvent(LogCategories.ChartControl, LogActions.Interval, granularity?.toString());
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound updateProps(onChange: any) {
+    @action.bound updateProps(onChange: (granularity: TGranularity | number) => void) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
         }
