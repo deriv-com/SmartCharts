@@ -4,6 +4,11 @@ import Context from 'src/components/ui/Context';
 import MainStore from '.';
 import ChartStore from './ChartStore';
 
+type TFeedOnPaginationParams = {
+    start: number;
+    end: number | 'latest';
+}
+
 export type TRefData = {
     setPosition: ({ epoch, price }: { [key: string]: number; }) => void;
     div: HTMLDivElement;
@@ -13,7 +18,7 @@ class PaginationLoaderStore {
     mainStore: MainStore;
     ref: TRefData | null = null;
     @observable isOnPagination = false;
-    paginationEndEpoch: number | null = null;
+    paginationEndEpoch: number | 'latest' | null = null;
 
     get feed(): ChartStore['feed'] {
         return this.mainStore.chart.feed;
@@ -60,7 +65,7 @@ class PaginationLoaderStore {
         this.isOnPagination = state;
     }
 
-    @action.bound setOnPagination = ({ end }: { end: number }) => {
+    @action.bound setOnPagination = ({ end }: TFeedOnPaginationParams) => {
         this.isOnPagination = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 
