@@ -1,6 +1,7 @@
-import React from 'react';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
 import { useStores } from 'src/store';
+import { TRefData } from 'src/store/PaginationLoaderStore';
 import { getUTCDate } from '../utils';
 
 // Render given Components under stx-subholder.
@@ -26,7 +27,15 @@ import { getUTCDate } from '../utils';
 //  - the chart can have a zoom level, if `threshold` is provided
 //    the marker will only be shown if it's within that zoom threshold.
 
-const FastMarker: React.FC = (props: any) => {
+type TFastMarkerProps = {
+    markerRef: (ref: TRefData | null) => void;
+    threshold?: number;
+    className: string;
+    offsetTop?: number;
+    offsetLeft?: number;
+}
+
+const FastMarker: React.FC<TFastMarkerProps> = (props) => {
     const { chart: chartStore } = useStores();
     const { contextPromise } = chartStore;
     const price_ref = React.useRef<number | null>(null);
@@ -63,7 +72,7 @@ const FastMarker: React.FC = (props: any) => {
             left = 0,
             show = true;
 
-        const threshold = +props_ref.current.threshold || 0;
+        const threshold = Number(props_ref.current.threshold) || 0;
         show = !threshold || stx.layout.candleWidth >= threshold;
 
         if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
@@ -106,7 +115,7 @@ const FastMarker: React.FC = (props: any) => {
         elem.style.visibility = show ? 'visible' : 'hidden';
     };
 
-    const setRef = (ref: any) => {
+    const setRef = (ref: HTMLDivElement | null) => {
         elem_ref.current = ref;
         const { markerRef } = props_ref.current;
 

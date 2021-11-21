@@ -4,14 +4,14 @@ import Context from 'src/components/ui/Context';
 import MainStore from '.';
 import ChartStore from './ChartStore';
 
-type TRef = {
-    setPosition: (args: { [key: string]: number | null }) => void;
-    div: HTMLElement | null;
+export type TRefData = {
+    setPosition: ({ epoch, price }: { [key: string]: number; }) => void;
+    div: HTMLDivElement;
 };
 
 class PaginationLoaderStore {
     mainStore: MainStore;
-    ref: TRef | null = null;
+    ref: TRefData | null = null;
     @observable isOnPagination = false;
     paginationEndEpoch: number | null = null;
 
@@ -49,10 +49,10 @@ class PaginationLoaderStore {
         return false; // continue swiping
     };
 
-    setRef = (ref: TRef) => {
+    setRef = (ref: TRefData | null) => {
         this.ref = ref;
         if (this.ref !== null) {
-            this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
+            this.ref.setPosition({ epoch: Number(this.paginationEndEpoch), price: 0 });
         }
     };
 
@@ -65,7 +65,7 @@ class PaginationLoaderStore {
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 
         if (this.ref) {
-            this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
+            this.ref.setPosition({ epoch: Number(this.paginationEndEpoch), price: 0 });
         }
     };
 }
