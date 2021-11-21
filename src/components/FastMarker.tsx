@@ -38,7 +38,7 @@ const FastMarker: React.FC = (props: any) => {
     const props_ref = React.useRef(props);
     props_ref.current = props;
 
-    const setPosition = ({ epoch, price }: any) => {
+    const setPosition = ({ epoch, price }: {[key: string]: number}) => {
         price_ref.current = +price || null;
         date_ref.current = CIQ.strToDateTime(getUTCDate(epoch));
         updateCSS();
