@@ -56,17 +56,17 @@ class HighestLowestStore {
         }
     };
 
-    setHighestRef = (ref: TRefData) => {
+    setHighestRef = (ref: TRefData | null) => {
         this.highestRef = ref;
         if (ref !== null) {
-            this.highestRef.value = ref.div.querySelector('.spot__value');
+            (this.highestRef as TRefData).value = ref.div.querySelector('.spot__value');
         }
     };
-    setLowestRef = (ref: TRefData) => {
+    setLowestRef = (ref: TRefData | null) => {
         this.lowestRef = ref;
 
         if (ref !== null) {
-            this.lowestRef.value = ref.div.querySelector('.spot__value');
+            (this.lowestRef as TRefData).value = ref.div.querySelector('.spot__value');
         }
     };
 

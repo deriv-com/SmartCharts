@@ -12,7 +12,7 @@ type TFeedOnPaginationParams = {
 export type TRefData = {
     setPosition: ({ epoch, price }: { [key: string]: number | null }) => void;
     div: HTMLDivElement;
-    value?: HTMLElement | null;
+    value?: Element | null;
 };
 
 class PaginationLoaderStore {
