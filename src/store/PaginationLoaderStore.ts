@@ -7,11 +7,12 @@ import ChartStore from './ChartStore';
 type TFeedOnPaginationParams = {
     start: number;
     end: number | 'latest';
-}
+};
 
 export type TRefData = {
-    setPosition: ({ epoch, price }: { [key: string]: number; }) => void;
+    setPosition: ({ epoch, price }: { [key: string]: number | null }) => void;
     div: HTMLDivElement;
+    value?: HTMLElement | null;
 };
 
 class PaginationLoaderStore {
