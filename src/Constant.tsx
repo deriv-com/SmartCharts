@@ -43,7 +43,14 @@ import {
     TypeHollowIcon,
     TypeOhlcIcon,
 } from './components/Icons';
-import { TDrawTools } from './store/DrawToolsStore';
+
+type TDrawTools = {
+    [key: string]: {
+        id: string;
+        text: string;
+        icon: (props: unknown) => JSX.Element;
+    };
+};
 
 export const drawTools: TDrawTools = {
     channel: { id: 'channel', text: t.translate('Channel [num]'), icon: DrawToolsChannelIcon },

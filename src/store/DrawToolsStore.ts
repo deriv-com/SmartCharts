@@ -18,7 +18,6 @@ type TDrawingParameters = {
     pattern: string;
     penDown: boolean;
 };
-
 type TRepositioner = {
     action: string;
     p0: number[];
@@ -26,28 +25,13 @@ type TRepositioner = {
     tick: number;
     value: number;
 };
-
-type TDrawToolsGroup = {
-    key: string;
-    name: string;
-    items: TUnitedDrawingObject[];
-};
-
-export type TDrawTools = {
-    [key: string]: TDrawTool;
-};
-
-type TDrawTool = {
-    id: string;
-    text: string;
-    icon: (props: unknown) => JSX.Element;
-};
-
-type TUnitedDrawingObject = TCommonDrawingParams & {
+type TDrawingObject = {
     abort: () => void;
     adjust: () => void;
     axisLabel: boolean;
     bars?: number | null;
+    color: string;
+    d0: string;
     d0B?: string;
     d1?: string;
     d1B?: string;
@@ -59,36 +43,36 @@ type TUnitedDrawingObject = TCommonDrawingParams & {
     icon?: (props: unknown) => JSX.Element;
     id?: string;
     index?: number;
+    lineWidth: number;
+    name: string;
     num?: string | number;
+    p0: number[];
+    p1: number[];
     p2?: number[];
+    panelName: string;
     parameters?: TDrawingParameters;
+    pattern: string;
     penDown?: boolean;
     pixelX?: number[];
     pixelY?: number[];
     prefix?: string;
     rays?: number[][][];
+    repositioner: TRepositioner | null;
+    stx: typeof CIQ.ChartEngine;
     text?: string;
+    tzo0: number;
     tzo1?: number;
     tzo2?: number;
+    v0: number;
     v0B?: number;
     v1?: number;
     v1B?: number;
     v2?: number;
 };
-
-type TCommonDrawingParams = {
-    color: string;
-    d0: string;
-    lineWidth: number;
+type TDrawToolsGroup = {
+    key: string;
     name: string;
-    p0: number[];
-    p1: number[];
-    panelName: string;
-    pattern: string;
-    repositioner: TRepositioner | null;
-    stx: typeof CIQ.ChartEngine;
-    tzo0: number;
-    v0: number;
+    items: TDrawingObject[];
 };
 
 export default class DrawToolsStore {
@@ -125,7 +109,7 @@ export default class DrawToolsStore {
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
-    activeDrawing: TUnitedDrawingObject | null = null;
+    activeDrawing: TDrawingObject | null = null;
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
     @observable
@@ -151,11 +135,11 @@ export default class DrawToolsStore {
         return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
     }
     @action.bound
-    onRightClickDrawing(drawing: TUnitedDrawingObject) {
+    onRightClickDrawing(drawing: TDrawingObject) {
         this.showDrawToolDialog(drawing);
         return true;
     }
-    showDrawToolDialog(drawing: TUnitedDrawingObject) {
+    showDrawToolDialog(drawing: TDrawingObject) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
@@ -179,7 +163,7 @@ export default class DrawToolsStore {
             .map(key => ({
                 id: key,
                 title: formatCamelCase(key),
-                value: drawing[key as keyof TUnitedDrawingObject],
+                value: drawing[key as keyof TDrawingObject],
                 defaultValue: parameters[key],
                 type: typeMap[key as keyof typeof typeMap],
             }));
@@ -205,11 +189,11 @@ export default class DrawToolsStore {
         }
         this._pervDrawingObjectCount = count;
     };
-    findComputedDrawing = (drawing: TUnitedDrawingObject) => {
+    findComputedDrawing = (drawing: TDrawingObject) => {
         const group = this.activeToolsGroup.find(drawGroup => drawGroup.key === drawing.name);
         if (group) {
             const drawingItem = group.items.find(
-                (item: TUnitedDrawingObject) =>
+                (item: TDrawingObject) =>
                     item.v0 === drawing.v0 && item.v1 === drawing.v1 && item.d0 === drawing.d0 && item.d1 === drawing.d1
             );
             if (drawingItem) {
@@ -247,10 +231,10 @@ export default class DrawToolsStore {
     @action.bound
     onChanged(items: TSettingsItem[]) {
         for (const item of items) {
-            (this.activeDrawing as TUnitedDrawingObject & { [key: string]: string })[item.id] = item.value;
+            (this.activeDrawing as TDrawingObject & { [key: string]: string })[item.id] = item.value;
         }
-        (this.activeDrawing as TUnitedDrawingObject).highlighted = false;
-        (this.activeDrawing as TUnitedDrawingObject).adjust();
+        (this.activeDrawing as TDrawingObject).highlighted = false;
+        (this.activeDrawing as TDrawingObject).adjust();
         this.mainStore.state.saveDrawings();
     }
     @action.bound
@@ -282,7 +266,7 @@ export default class DrawToolsStore {
         const groups: {
             [key: string]: TDrawToolsGroup;
         } = {};
-        this.stx.drawingObjects.forEach((item: TUnitedDrawingObject, indx: number) => {
+        this.stx.drawingObjects.forEach((item: TDrawingObject, indx: number) => {
             item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;
             item.bars =
