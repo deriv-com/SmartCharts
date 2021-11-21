@@ -1,30 +1,98 @@
-import { action, reaction, when, observable, computed } from 'mobx';
+import { action, computed, observable, reaction, when } from 'mobx';
+import Context from 'src/components/ui/Context';
+import { TSettingsItem } from 'src/types';
 import MainStore from '.';
+import { drawTools } from '../Constant';
+import { formatCamelCase } from '../utils';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
-import SettingsDialog from '../components/SettingsDialog';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import { formatCamelCase } from '../utils';
-import { drawTools } from '../Constant';
+
+type TDrawingParameters = {
+    extendLeft: boolean;
+    fibs: { level: number; color: string; parameters: unknown; display?: boolean }[];
+    printLevels: boolean;
+    printValues: boolean;
+    timezone: { color: string; parameters: { pattern: string; opacity: number; lineWidth: number } };
+    trend: { color: string; parameters: unknown };
+    pattern: string;
+    penDown: boolean;
+};
+
+type TRepositioner = {
+    action: string;
+    p0: number[];
+    p1: number[];
+    tick: number;
+    value: number;
+};
 
 type TDrawToolsGroup = {
     key: string;
     name: string;
-    items: TDrawingObject[];
+    items: TUnitedDrawingObject[];
 };
 
-type TDrawingObject = {
-    name: string;
-    p0: any[];
-    p1: any[];
-    num: string | number;
-    bars: number | null;
+export type TDrawTools = {
+    [key: string]: TDrawTool;
+};
+
+type TDrawTool = {
+    id: string;
     text: string;
-    index: number;
+    icon: (props: unknown) => JSX.Element;
+};
+
+type TUnitedDrawingObject = TCommonDrawingParams & {
+    abort: () => void;
+    adjust: () => void;
+    axisLabel: boolean;
+    bars?: number | null;
+    d0B?: string;
+    d1?: string;
+    d1B?: string;
+    d2?: string;
+    dragToDraw?: boolean;
+    field?: string | null;
+    fillColor?: string;
+    highlighted: boolean;
+    icon?: (props: unknown) => JSX.Element;
+    id?: string;
+    index?: number;
+    num?: string | number;
+    p2?: number[];
+    parameters?: TDrawingParameters;
+    penDown?: boolean;
+    pixelX?: number[];
+    pixelY?: number[];
+    prefix?: string;
+    rays?: number[][][];
+    text?: string;
+    tzo1?: number;
+    tzo2?: number;
+    v0B?: number;
+    v1?: number;
+    v1B?: number;
+    v2?: number;
+};
+
+type TCommonDrawingParams = {
+    color: string;
+    d0: string;
+    lineWidth: number;
+    name: string;
+    p0: number[];
+    p1: number[];
+    panelName: string;
+    pattern: string;
+    repositioner: TRepositioner | null;
+    stx: typeof CIQ.ChartEngine;
+    tzo0: number;
+    v0: number;
 };
 
 export default class DrawToolsStore {
-    _pervDrawingObjectCount: any;
+    _pervDrawingObjectCount = 0;
     mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
@@ -36,7 +104,7 @@ export default class DrawToolsStore {
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
         reaction(
             () => this.menuStore.open,
             () => {
@@ -45,10 +113,10 @@ export default class DrawToolsStore {
             }
         );
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context['stx'] {
         return this.context.stx;
     }
     get stateStore() {
@@ -57,20 +125,20 @@ export default class DrawToolsStore {
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
-    activeDrawing: any = null;
+    activeDrawing: TUnitedDrawingObject | null = null;
     isContinuous = false;
-    drawToolsItems = Object.keys(drawTools).map(key => (drawTools as any)[key]);
+    drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
     @observable
     activeToolsGroup: TDrawToolsGroup[] = [];
     @observable
-    portalNodeIdChanged: any;
+    portalNodeIdChanged = '';
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
         this.stx.addEventListener('drawing', this.noTool);
         this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
     };
-    closeOnEscape = (e: any) => {
+    closeOnEscape = (e: KeyboardEvent) => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
             this.stx.changeVectorType('');
@@ -83,11 +151,11 @@ export default class DrawToolsStore {
         return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
     }
     @action.bound
-    onRightClickDrawing(drawing: any) {
+    onRightClickDrawing(drawing: TUnitedDrawingObject) {
         this.showDrawToolDialog(drawing);
         return true;
     }
-    showDrawToolDialog(drawing: any) {
+    showDrawToolDialog(drawing: TUnitedDrawingObject) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
@@ -111,7 +179,7 @@ export default class DrawToolsStore {
             .map(key => ({
                 id: key,
                 title: formatCamelCase(key),
-                value: drawing[key],
+                value: drawing[key as keyof TUnitedDrawingObject],
                 defaultValue: parameters[key],
                 type: typeMap[key as keyof typeof typeMap],
             }));
@@ -137,11 +205,11 @@ export default class DrawToolsStore {
         }
         this._pervDrawingObjectCount = count;
     };
-    findComputedDrawing = (drawing: any) => {
-        const group = this.activeToolsGroup.find(drawGroup => (drawGroup as any).key === drawing.name);
+    findComputedDrawing = (drawing: TUnitedDrawingObject) => {
+        const group = this.activeToolsGroup.find(drawGroup => drawGroup.key === drawing.name);
         if (group) {
-            const drawingItem = (group as any).items.find(
-                (item: any) =>
+            const drawingItem = group.items.find(
+                (item: TUnitedDrawingObject) =>
                     item.v0 === drawing.v0 && item.v1 === drawing.v1 && item.d0 === drawing.d0 && item.d1 === drawing.d1
             );
             if (drawingItem) {
@@ -165,7 +233,7 @@ export default class DrawToolsStore {
         this.computeActiveDrawTools();
     }
     @action.bound
-    selectTool(id: any) {
+    selectTool(id: string) {
         this.isContinuous = false;
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
         const stx = this.context.stx;
@@ -177,29 +245,29 @@ export default class DrawToolsStore {
         this.menuStore.setOpen(false);
     }
     @action.bound
-    onChanged(items: any) {
+    onChanged(items: TSettingsItem[]) {
         for (const item of items) {
-            this.activeDrawing[item.id] = item.value;
+            (this.activeDrawing as TUnitedDrawingObject & { [key: string]: string })[item.id] = item.value;
         }
-        this.activeDrawing.highlighted = false;
-        this.activeDrawing.adjust();
+        (this.activeDrawing as TUnitedDrawingObject).highlighted = false;
+        (this.activeDrawing as TUnitedDrawingObject).adjust();
         this.mainStore.state.saveDrawings();
     }
     @action.bound
-    onDeleted(indx: any) {
+    onDeleted(indx: number | undefined) {
         if (indx === undefined && !this.activeDrawing) {
             return;
         }
         if (indx !== undefined && indx >= 0 && this.stx.drawingObjects[indx]) {
             this.activeDrawing = this.stx.drawingObjects[indx];
         }
-        logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);
+        logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing?.name}`);
         this.stx.removeDrawing(this.activeDrawing);
         this.activeDrawing = null;
         this.computeActiveDrawTools();
     }
     @action.bound
-    onSetting(indx: any) {
+    onSetting(indx: number) {
         if (!this.stx.drawingObjects[indx]) {
             return;
         }
@@ -214,8 +282,8 @@ export default class DrawToolsStore {
         const groups: {
             [key: string]: TDrawToolsGroup;
         } = {};
-        this.stx.drawingObjects.forEach((item: TDrawingObject, indx: number) => {
-            item = (drawTools as any)[item.name] ? { ...item, ...(drawTools as any)[item.name] } : item;
+        this.stx.drawingObjects.forEach((item: TUnitedDrawingObject, indx: number) => {
+            item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;
             item.bars =
                 ignoreBarType.indexOf(item.name) === -1 ? Math.abs(Math.floor(item.p1[0] - item.p0[0])) + 1 : null;
@@ -230,7 +298,7 @@ export default class DrawToolsStore {
                 item.text = groups[item.name].name;
                 groups[item.name].items.push(item);
             } else {
-                const group_name = (drawTools as any)[item.name] ? (drawTools as any)[item.name].text : item.name;
+                const group_name = drawTools[item.name] ? drawTools[item.name].text : item.name;
                 item.text = group_name;
                 groups[item.name] = {
                     key: item.name,

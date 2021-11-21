@@ -8,7 +8,8 @@ type TSettingsDialogStoreProps = {
     mainStore: MainStore;
     onChanged: (items: TSettingsItem[]) => void;
     getContext?: (stx: typeof CIQ.ChartEngine) => Context;
-    onDeleted?: () => void;
+    onDeleted?: (indx?: number) => void;
+    favoritesId?: string;
 };
 
 export default class SettingsDialogStore {
