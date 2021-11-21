@@ -201,9 +201,9 @@ if (isApp) {
                 },
                 {
                     from: production
-                        ? './node_modules/mobx-react/dist/mobxreact.umd.production.min.js'
-                        : './node_modules/mobx-react/dist/mobxreact.umd.development.js',
-                    to: 'mobx-react.js',
+                        ? './node_modules/mobx-react-lite/dist/mobxreactlite.umd.production.min.js'
+                        : './node_modules/mobx-react-lite/dist/mobxreactlite.umd.development.js',
+                    to: 'mobx-react-lite.js',
                 },
                 {
                     from: production
