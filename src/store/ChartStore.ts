@@ -32,7 +32,7 @@ import BarrierStore from './BarrierStore';
 type TRatio = {
     height: number;
     percent: number;
-}
+};
 
 class ChartStore {
     static keystrokeHub: KeystrokeHub;
@@ -1068,7 +1068,7 @@ class ChartStore {
         return y;
     };
     @action.bound
-    setYaxisWidth = (width: any) => {
+    setYaxisWidth = (width?: number) => {
         this.yAxiswidth = width || this.yAxiswidth;
 
         this.stxx.chart.yAxis.width = width || this.yAxiswidth;

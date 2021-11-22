@@ -52,6 +52,21 @@ type TDrawTools = {
     };
 };
 
+export type TIndicatorItem = {
+    description: string;
+    icon: (props: unknown) => JSX.Element;
+    id: string;
+    isPrediction?: boolean;
+    name: string;
+};
+
+export type TIndicatorsTree = {
+    icon: (props: unknown) => JSX.Element;
+    name: string;
+    id: string;
+    items: TIndicatorItem[];
+};
+
 export const drawTools: TDrawTools = {
     channel: { id: 'channel', text: t.translate('Channel [num]'), icon: DrawToolsChannelIcon },
     segment: { id: 'continuous', text: t.translate('Continuous [num]'), icon: DrawToolsContinuousIcon },
@@ -64,7 +79,7 @@ export const drawTools: TDrawTools = {
     vertical: { id: 'vertical', text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
 };
 
-export const getIndicatorsTree = () => [
+export const getIndicatorsTree = (): TIndicatorsTree[] => [
     {
         id: 'momentum',
         name: t.translate('Momentum'),

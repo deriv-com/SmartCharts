@@ -1,15 +1,86 @@
 import { action, observable, reaction, when } from 'mobx';
 import React from 'react';
+import Context from 'src/components/ui/Context';
 import { TSettingsItem } from 'src/types';
 import MainStore from '.';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
-import { ExcludedStudies, getIndicatorsTree } from '../Constant';
+import { ExcludedStudies, getIndicatorsTree, TIndicatorItem, TIndicatorsTree } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
+
+type THelperInput = {
+    defaultInput: number;
+    heading: string;
+    name: string;
+    type: string;
+    value: number;
+    options?: { [key: string]: string } | null;
+};
+
+type THelperOutput = {
+    color: string;
+    defaultOutput: string;
+    heading: string;
+    name: string;
+};
+
+type THelperParameter = {
+    color: string;
+    value: string;
+    defaultColor: string;
+    defaultValue: string;
+    heading: string;
+    name: string;
+};
+
+type TValueObject = {
+    [key: string]: string;
+};
+
+export type TStudyItems = {
+    category: string;
+    defaultValue: string | number | TValueObject;
+    id: string;
+    min?: number;
+    options?: { [key: string]: string } | null;
+    step?: number;
+    title: string;
+    type: string;
+    value: string | number | TValueObject;
+};
+
+type TActiveItem = {
+    bars: string;
+    dataObject: {
+        inputs: {
+            Field: string;
+            Offset: number;
+            Period: number;
+            Type: string;
+            display: string;
+            id: string;
+        };
+        outputs: {
+            MA: string;
+        };
+        parameters: {
+            chartName: string;
+            editMode: boolean;
+            panelName: string;
+        };
+        sd: typeof CIQ.Studies.StudyDescriptor;
+        stx: typeof CIQ.ChartEngine;
+    };
+    description: string;
+    icon: (props: unknown) => JSX.Element;
+    id: string;
+    name: string;
+    isPrediction?: boolean;
+};
 
 // TODO:
 // import StudyInfo from '../study-info';
@@ -24,18 +95,18 @@ const updateFieldHeading = (heading: string, type: string) => {
     return heading;
 };
 export default class StudyLegendStore {
-    activeStudies: any;
-    excludedStudies: any;
-    hasReachedLimits: any;
-    helper: any;
+    activeStudies?: typeof CIQ.Studies.StudyDescriptor;
+    excludedStudies: { [key: string]: boolean };
+    hasReachedLimits?: boolean;
+    helper: typeof CIQ.UI.Helper;
     mainStore: MainStore;
     menuStore: MenuStore;
-    searchInput: any;
-    settingsDialog: any;
+    searchInput: React.RefObject<HTMLInputElement>;
+    settingsDialog: SettingsDialogStore;
     constructor(mainStore: MainStore) {
         this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
@@ -56,18 +127,18 @@ export default class StudyLegendStore {
             }
         );
     }
-    previousStudies: any = {};
-    searchInputClassName: any;
+    previousStudies: { [key: string]: typeof CIQ.Studies.StudyDescriptor } = {};
+    searchInputClassName?: string;
     @observable
     selectedTab = 1;
     @observable
     filterText = '';
     @observable
-    activeItems: any = [];
+    activeItems: TActiveItem[] = [];
     @observable
-    infoItem: any = null;
+    infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
     @observable
-    portalNodeIdChanged: any;
+    portalNodeIdChanged = '';
     onContextReady = () => {
         this.stx.addEventListener('studyOverlayEdit', this.editStudy);
         this.stx.addEventListener('studyPanelEdit', this.editStudy);
@@ -79,10 +150,10 @@ export default class StudyLegendStore {
         this.stx.append('panelClose', this.onStudyRemoved);
         this.renderLegend();
     };
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context['stx'] {
         return this.context.stx;
     }
     get indicatorRatio() {
@@ -101,21 +172,22 @@ export default class StudyLegendStore {
         });
     }
     get searchedItems() {
-        return [...(getIndicatorsTree() as any)]
+        return [...getIndicatorsTree()]
             .map(category => {
-                category.foundItems = category.items.filter(
-                    (item: any) => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
+                (category as TIndicatorsTree & { foundItems: TIndicatorItem[] }).foundItems = category.items.filter(
+                    (item: TIndicatorItem) =>
+                        item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
                 );
                 return category;
             })
-            .filter(category => category.foundItems.length);
+            .filter(category => (category as TIndicatorsTree & { foundItems: TIndicatorItem[] }).foundItems.length);
     }
     get chartActiveStudies() {
-        return (this.activeItems || []).filter((item: any) => item.dataObject.sd.panel === 'chart');
+        return (this.activeItems || []).filter((item: TActiveItem) => item.dataObject.sd.panel === 'chart');
     }
 
     get hasPredictionIndicator() {
-        return (this.activeItems || []).filter((item: any) => item.isPrediction).length > 0;
+        return (this.activeItems || []).filter((item: TActiveItem) => item.isPrediction).length > 0;
     }
 
     get maxAllowedItem() {
@@ -136,7 +208,7 @@ export default class StudyLegendStore {
         }
     }
     @action.bound
-    onSelectItem(item: any) {
+    onSelectItem(item: string) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
         if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
@@ -173,16 +245,16 @@ export default class StudyLegendStore {
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
     @action.bound
-    updateProps({ searchInputClassName }: any) {
+    updateProps({ searchInputClassName }: { searchInputClassName?: string }) {
         this.searchInputClassName = searchInputClassName;
     }
     @action.bound
-    editStudy(study: any) {
+    editStudy(study: typeof CIQ.Studies.StudyDescriptor) {
         const helper = new CIQ.Studies.DialogHelper(study);
         this.helper = helper;
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${helper.name}`);
         const attributes = helper.attributes;
-        const inputs = helper.inputs.map((inp: any) => ({
+        const inputs = helper.inputs.map((inp: THelperInput) => ({
             id: inp.name,
             title: t.translate(inp.heading),
             value: inp.value,
@@ -193,7 +265,7 @@ export default class StudyLegendStore {
             ...attributes[inp.name],
             category: 'inputs',
         }));
-        const outputs = helper.outputs.map((out: any) => ({
+        const outputs = helper.outputs.map((out: THelperOutput) => ({
             id: out.name,
             title: t.translate(updateFieldHeading(out.heading, study.sd.type)),
             defaultValue: out.defaultOutput,
@@ -201,7 +273,7 @@ export default class StudyLegendStore {
             type: 'colorpicker',
             category: 'outputs',
         }));
-        const parameters = helper.parameters.map((par: any) => {
+        const parameters = helper.parameters.map((par: THelperParameter) => {
             const shared = {
                 title: t.translate(par.heading),
                 ...attributes[par.name],
@@ -233,7 +305,7 @@ export default class StudyLegendStore {
             }
             throw new Error('Unrecognised parameter!');
         });
-        this.settingsDialog.id = study.sd.type;
+        (this.settingsDialog as SettingsDialogStore & { id: string }).id = study.sd.type;
         this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
         this.settingsDialog.title = study.sd.libraryEntry.name;
         this.settingsDialog.formTitle = t.translate('Result');
@@ -246,7 +318,7 @@ export default class StudyLegendStore {
         this.settingsDialog.setOpen(true);
     }
     @action.bound
-    deleteStudy(study: any) {
+    deleteStudy(study: typeof CIQ.Studies.StudyDescriptor) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
         if (!study.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
@@ -259,13 +331,14 @@ export default class StudyLegendStore {
         }
     }
     @action.bound
-    updateStudy(study: any, items: any) {
-        const updates: { [x: string]: any } = {};
-        for (const { id, category, value, type } of items) {
+    updateStudy(study: typeof CIQ.Studies.StudyDescriptor, items: TSettingsItem[]) {
+        const updates: { [key: string]: { [key: string]: string } } = {};
+        for (const { id, category, value, type } of items as TStudyItems[]) {
             let isChanged;
             if (type === 'numbercolorpicker') {
                 isChanged =
-                    study[category][`${id}Color`] !== value.Color || study[category][`${id}Value`] !== value.Value;
+                    study[category][`${id}Color`] !== (value as TValueObject).Color ||
+                    study[category][`${id}Value`] !== (value as TValueObject).Value;
             } else {
                 isChanged = study[category][id] !== value;
             }
@@ -273,10 +346,10 @@ export default class StudyLegendStore {
                 updates[category] = updates[category] || {};
                 if (typeof value === 'object') {
                     for (const suffix in value) {
-                        updates[category][`${id}${suffix}`] = value[suffix];
+                        updates[category][`${id}${suffix}`] = (value as TValueObject)[suffix];
                     }
                 } else {
-                    updates[category][id] = value;
+                    updates[category][id] = value as string;
                 }
             }
         }
@@ -287,7 +360,7 @@ export default class StudyLegendStore {
         this.changeStudyPanelTitle(this.helper.sd);
         this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
     }
-    changeStudyPanelTitle(sd: any) {
+    changeStudyPanelTitle(sd: typeof CIQ.Studies.StudyDescriptor) {
         // Remove numbers from the end of indicator titles in mobile
         if (this.mainStore.chart.isMobile) {
             this.stx.panels[sd.panel].display = sd.type;
@@ -366,7 +439,10 @@ export default class StudyLegendStore {
             if (panelObj.solo.style.display !== 'none') {
                 const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
                 const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== (soloIcon as any).id) {
+                if (
+                    InnerSoloPanel.querySelector('svg').getAttribute('id') !==
+                    (soloIcon as React.FC & { id: string }).id
+                ) {
                     InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
                 }
             }
@@ -386,28 +462,30 @@ export default class StudyLegendStore {
     };
     @action.bound
     setReachedLimit() {
-        const hasReachedLimit = this.activeStudies.data.length >= 5;
+        const hasReachedLimit = this.activeStudies?.data.length >= 5;
         this.hasReachedLimits = hasReachedLimit;
     }
     @action.bound
     updateActiveStudies() {
         const stx = this.stx;
-        const activeItems: any = [];
+        const activeItems: TActiveItem[] = [];
         Object.keys(stx.layout.studies || []).forEach(id => {
             const sd = stx.layout.studies[id];
             if (sd.customLegend) {
                 return;
             }
-            const studyObjCategory = getIndicatorsTree().find((category: any) =>
-                category.items.find((item: any) => item.id === sd.type)
+            const studyObjCategory = getIndicatorsTree().find((category: TIndicatorsTree) =>
+                category.items.find((item: TIndicatorItem) => item.id === sd.type)
             );
-            const studyObj = (studyObjCategory as any).items.find((item: any) => item.id === sd.type);
+            const studyObj = (studyObjCategory as TIndicatorsTree).items.find(
+                (item: TIndicatorItem) => item.id === sd.type
+            );
             if (studyObj) {
                 const nameObj = prepareIndicatorName(sd.name);
                 activeItems.push({
                     ...studyObj,
                     id: sd.inputs.id,
-                    bars: nameObj.bars,
+                    bars: nameObj.bars || '',
                     name: nameObj.name,
                     dataObject: {
                         stx,
@@ -426,8 +504,8 @@ export default class StudyLegendStore {
         const stx = this.stx;
         if (stx) {
             (this.activeItems || [])
-                .filter((item: any) => item.isPrediction)
-                .forEach((item: any) => {
+                .filter((item: TActiveItem) => item.isPrediction)
+                .forEach((item: TActiveItem) => {
                     this.deleteStudy(item.dataObject.sd);
                 });
             setTimeout(this.updateIndicatorHeight, 20);
@@ -455,18 +533,18 @@ export default class StudyLegendStore {
         setTimeout(this.updateIndicatorHeight, 20);
     }
     @action.bound
-    onSelectTab(tabIndex: any) {
+    onSelectTab(tabIndex: number) {
         this.setFilterText('');
         this.selectedTab = tabIndex;
         this.onInfoItem(null);
     }
     @action.bound
-    setFilterText(filterText: any) {
+    setFilterText(filterText: string) {
         this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
     }
 
-    @action.bound onInfoItem(study: any) {
+    @action.bound onInfoItem(study: TActiveItem | null) {
         this.infoItem = study
             ? {
                   ...study,
@@ -475,7 +553,7 @@ export default class StudyLegendStore {
             : study;
     }
     @action.bound
-    updatePortalNode(portalNodeId: any) {
+    updatePortalNode(portalNodeId: string) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }
