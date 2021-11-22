@@ -144,7 +144,10 @@ class Feed {
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         const localDate = this._serverTime.getLocalDate();
-        suggestedStartDate = suggestedStartDate > localDate ? localDate : suggestedStartDate;
+        if (suggestedStartDate > localDate) suggestedStartDate = localDate;
+        if (!this.startEpoch && suggestedStartDate > this.endEpoch) {
+            suggestedStartDate = CIQ.strToDateTime(getUTCDate(this.endEpoch - 200000));
+        }
         const isComparisonChart = this._stx.chart.symbol !== symbol;
         let start = this.startEpoch || Math.floor((suggestedStartDate / 1000) | 0);
         start = this.margin && this.startEpoch ? start - this.margin : start;
@@ -199,8 +202,9 @@ class Feed {
                 if (!isComparisonChart) {
                     this.unsubscribeAll();
                 }
-
-                quotes = await subscription.initialFetch();
+                const { quotes: new_quotes, response } = await subscription.initialFetch();
+                quotes = new_quotes;
+                this._mainStore.lastDigitStats.updateLastDigitStats(response);
             } catch (error) {
                 const { message: text } = error;
                 this._mainStore.notifier.notify({
@@ -395,6 +399,7 @@ class Feed {
 
         if (
             this.endEpoch &&
+            this._stx.chart.dataSet.slice(-1)[0] &&
             CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
         ) {
             this._stx.updateChartData(
@@ -536,7 +541,7 @@ class Feed {
     _resumeStream(key) {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
-        this._activeStreams[key].resume().then(quotes => {
+        this._activeStreams[key].resume().then(({ quotes }) => {
             if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });

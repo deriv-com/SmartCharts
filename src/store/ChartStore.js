@@ -654,6 +654,7 @@ class ChartStore {
             onSettingsChange,
             getMarketsOrder,
             initialData,
+            chartData,
             feedCall,
         } = props;
 
@@ -674,6 +675,7 @@ class ChartStore {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
                 initialData: initialData?.activeSymbols,
+                chartData: chartData?.activeSymbols,
             }));
 
         const { chartSetting } = this.mainStore;
@@ -685,7 +687,8 @@ class ChartStore {
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
         const engineParams = {
-            maxMasterDataSize: this.getMaxMasterDataSize(this.granularity), // cap size so tick_history requests do not become too large
+            maxMasterDataSize: 0, // cap size so tick_history requests do not become too large
+            maxDataSetSize: 0,
             markerDelay: null, // disable 25ms delay for placement of markers
             container: this.rootNode.querySelector('.chartContainer'),
             controls: { chartControls: null }, // hide the default zoom buttons
@@ -903,15 +906,6 @@ class ChartStore {
         }
     };
 
-    getMaxMasterDataSize(granularity) {
-        let maxMasterDataSize = 5000;
-        // When granularity is 1 day
-        if (granularity === 86400) maxMasterDataSize = Math.floor(2.8 * 365);
-        // When granularity is 8 hours
-        else if (granularity === 28800) maxMasterDataSize = Math.floor(2.8 * 365 * 3);
-        return maxMasterDataSize;
-    }
-
     chartClosedOpenThemeChange(isChartClosed) {
         this.mainStore.state.setChartClosed(isChartClosed);
         this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
@@ -981,7 +975,6 @@ class ChartStore {
         let params;
         if (granularity !== undefined) {
             this.granularity = granularity;
-            this.stxx.maxMasterDataSize = this.getMaxMasterDataSize(this.granularity);
             params = { periodicity: calculateTimeUnitInterval(granularity) };
         }
 
@@ -1197,31 +1190,17 @@ class ChartStore {
     }
 
     @action.bound openFullscreen() {
-        const isInFullScreen =
-            (document.fullscreenElement && document.fullscreenElement !== null) ||
-            (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
-            (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
-            (document.msFullscreenElement && document.msFullscreenElement !== null);
+        const fullscreen_map = {
+            element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
+            fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],
+            fnc_exit: ['exitFullscreen', 'webkitExitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen'],
+        };
+        const isInFullScreen = fullscreen_map.element.some(fnc => document[fnc] && document[fnc] !== null);
+        const el = isInFullScreen ? document : document.documentElement;
+        const fncToCall = fullscreen_map[isInFullScreen ? 'fnc_exit' : 'fnc_enter'].find(fnc => el[fnc]);
 
-        const docElm = this.rootNode;
-        if (!isInFullScreen) {
-            if (docElm.requestFullscreen) {
-                docElm.requestFullscreen();
-            } else if (docElm.mozRequestFullScreen) {
-                docElm.mozRequestFullScreen();
-            } else if (docElm.webkitRequestFullScreen) {
-                docElm.webkitRequestFullScreen();
-            } else if (docElm.msRequestFullscreen) {
-                docElm.msRequestFullscreen();
-            }
-        } else if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
+        if (fncToCall) {
+            el[fncToCall]();
         }
     }
 }

@@ -257,7 +257,7 @@ export default class CategoricalDisplayStore {
             if (!el) {
                 return;
             }
-            const gap_top = Object.keys(this.categoryElements).indexOf(category.categoryId) * 40;
+            const gap_top = this.filteredItems.indexOf(category) * 40;
 
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop - gap_top;
@@ -365,10 +365,9 @@ export default class CategoricalDisplayStore {
         this.activeMarket = this.getCurrentActiveMarket ? this.getCurrentActiveMarket() : '';
         const el = this.categoryElements[this.activeCategoryKey];
         const activeSubCategoryClassName = `.sc-mcd__category--${this.activeCategoryKey}  .sc-mcd__category__content--${this.activeSubCategory}`;
-        const el_active_sub_category = this.scrollPanel.querySelector(activeSubCategoryClassName);
-
+        const el_active_sub_category = this.scrollPanel?.querySelector(activeSubCategoryClassName);
         const activeMarketClassName = `${activeSubCategoryClassName} .sc-mcd__item--${this.activeMarket}`;
-        const el_active_market = this.scrollPanel.querySelector(activeMarketClassName);
+        const el_active_market = this.scrollPanel?.querySelector(activeMarketClassName);
 
         this.activeHeadKey = this.activeCategoryKey || null;
         this.activeHeadTop = 0;
@@ -378,8 +377,8 @@ export default class CategoricalDisplayStore {
         if (activeItemCount) {
             this.activeCategoryKey = 'active';
             this.activeHeadKey = null;
-            this.scrollPanel.scrollTop = 0;
-        } else if (el) {
+            if (this.scrollPanel) this.scrollPanel.scrollTop = 0;
+        } else if (el && this.scrollPanel) {
             this.scrollPanel.scrollTop = el.offsetTop;
             if (el_active_market) {
                 const topOffset = this.mainStore.chart.isMobile ? 100 : 40;
@@ -402,8 +401,9 @@ export default class CategoricalDisplayStore {
 
         if (!this.mainStore.chart.isMobile) {
             const categories = Object.keys(this.categoryElements);
-            const last_category = categories.pop();
-            const last_category_bottom_gap = this.height - (64 + categories.length * 40); // to make the last category height reach it's filter tab
+            const filtered_categories = categories.filter(item => this.categoryElements[item] !== null);
+            const last_category = this.filteredItems?.slice(-1)[0].categoryId;
+            const last_category_bottom_gap = this.height - (64 + (filtered_categories.length - 1) * 40); // to make the last category height reach it's filter tab
             if (this.categoryElements[last_category]) {
                 this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
             }

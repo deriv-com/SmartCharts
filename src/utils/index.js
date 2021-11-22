@@ -41,15 +41,27 @@ export const getIntervalInSeconds = ({ timeUnit, interval }) => {
     return unit * interv;
 };
 
-export function stableSort(arr, compare = (a, b) => a < b) {
-    const original = arr.slice(0);
+export const is_browser = {
+    Chrome: () =>
+        navigator.userAgent.indexOf('Chrome') !== -1 && !navigator.userAgent.match(/OPR|Opera|Chromium|Edg|Edge/i),
+    Chromium: () => navigator.userAgent.indexOf('Chromium') !== -1,
+    Edge: () => !!navigator.userAgent.match(/Edg|Edge/i) && !document.documentMode,
+    Firefox: () => navigator.userAgent.indexOf('Firefox') !== -1 && navigator.userAgent.indexOf('Seamonkey') === -1,
+    IE: () => navigator.userAgent.match(/MSIE|Trident/i) || !!document.documentMode,
+    Opera: () => !!navigator.userAgent.match(/OPR|Opera/i),
+    Safari: () => navigator.userAgent.indexOf('Safari') !== -1 && !navigator.userAgent.match(/Chrome|Chromium/i),
+    Seamonkey: () => navigator.userAgent.indexOf('Seamonkey') !== -1,
+};
 
-    arr.sort((a, b) => {
+export function stableSort(arr, compare = (a, b) => a < b) {
+    const original = arr;
+
+    const newArray = arr.slice(0).sort((a, b) => {
         const result = compare(a, b);
         return result === 0 ? original.indexOf(a) - original.indexOf(b) : result;
     });
 
-    return arr;
+    return newArray;
 }
 
 export function sameBar(bar1, bar2) {

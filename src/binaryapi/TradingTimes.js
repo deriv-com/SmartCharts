@@ -113,19 +113,24 @@ class TradingTimes {
             return;
         }
 
+        this._calculatingTradingTime(response.trading_times);
+    }
+
+    _calculatingTradingTime(raw_trading_time) {
+        if (!raw_trading_time) return;
         this._tradingTimesMap = {};
 
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
         const getUTCDate = hour => new Date(`${dateStr}${hour}Z`);
 
-        const { markets } = response.trading_times;
+        const { markets } = raw_trading_time;
         for (const market of markets) {
             const { submarkets } = market;
             for (const submarket of submarkets) {
                 const { symbols } = submarket;
                 for (const symbolObj of symbols) {
-                    const { events, times, symbol, feed_license, delay_amount } = symbolObj;
+                    const { events, feed_license, delay_amount, times, trading_days, symbol } = symbolObj;
                     const { open, close } = times;
                     let isClosedToday = false;
                     const holidays = [];
@@ -175,7 +180,8 @@ class TradingTimes {
                                 // Special date
                             } else if (/^\d{4}-\d{2}-\d{2}$/.test(event.date)) {
                                 holidays.push(event.date);
-                            } else if (event.date === 'today') {
+                            }
+                            if (trading_days.every(day => day !== DaysOfWeek[now.getDay()].slice(0, 3))) {
                                 isClosedToday = true;
                             }
                         });
@@ -203,6 +209,11 @@ class TradingTimes {
                     };
                 }
             }
+        }
+
+        const changed = this._updateMarketOpenClosed();
+        if (Object.keys(changed).length > 0) {
+            this._emitter.emit(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, changed);
         }
     }
 
