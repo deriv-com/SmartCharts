@@ -94,7 +94,7 @@ export default class DialogStore {
         (e as TCustomEvent).nativeEvent.isHandledByDialog = true;
     }
 
-    @action.bound updateCloseCallback(onClose: () => void | undefined) {
+    @action.bound updateCloseCallback(onClose: (() => void) | undefined) {
         if (onClose !== undefined) {
             this.onClose = onClose;
         }

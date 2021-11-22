@@ -10,7 +10,7 @@ export type TDialogProps = {
     className?: string;
     enableTabular?: boolean;
     title?: string;
-    handleCloseDialog: () => void | undefined;
+    handleCloseDialog?: () => void;
     customHead?: React.ReactElement;
 };
 
