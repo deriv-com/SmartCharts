@@ -338,66 +338,68 @@ export default class StudyLegendStore {
     }
 
     handleDrawPanels = () => {
-        const panelsLen = Object.keys(this.stx.panels).length;
-        Object.keys(this.stx.panels).forEach((id, index) => {
-            if (index === 0) {
-                return;
-            }
-
-            const panelObj = this.stx.panels[id];
-            if (this.mainStore.chart.isMobile) {
-                if (panelObj.up.className.indexOf('show') !== -1) {
-                    panelObj.up.className = 'stx-btn-panel';
-                }
-                if (panelObj.down.className.indexOf('show') !== -1) {
-                    panelObj.down.className = 'stx-btn-panel';
-                }
-                if (panelObj.solo.className.indexOf('show') !== -1) {
-                    panelObj.solo.className = 'stx-btn-panel';
-                }
-                if (panelObj.close.className.indexOf('show') !== -1) {
-                    panelObj.close.className = 'stx-btn-panel';
-                }
-            }
-            const sd = this.stx.layout.studies[id];
-            const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
-            if (sd) {
-                const nameObj = prepareIndicatorName(sd.name);
-                if (nameObj.name.trim() !== sd.name.trim()) {
-                    panelObj.title.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
+        if (this.stx) {
+            const panelsLen = Object.keys(this.stx.panels).length;
+            Object.keys(this.stx.panels).forEach((id, index) => {
+                if (index === 0) {
+                    return;
                 }
 
-                // Regarding the ChartIQ.js, codes under Line 34217, edit function
-                // not mapped, this is a force to map edit function for indicators
-                if (sd.editFunction && panelObj && !panelObj.editFunction) {
-                    this.stx.setPanelEdit(panelObj, sd.editFunction);
+                const panelObj = this.stx.panels[id];
+                if (this.mainStore.chart.isMobile) {
+                    if (panelObj.up.className.indexOf('show') !== -1) {
+                        panelObj.up.className = 'stx-btn-panel';
+                    }
+                    if (panelObj.down.className.indexOf('show') !== -1) {
+                        panelObj.down.className = 'stx-btn-panel';
+                    }
+                    if (panelObj.solo.className.indexOf('show') !== -1) {
+                        panelObj.solo.className = 'stx-btn-panel';
+                    }
+                    if (panelObj.close.className.indexOf('show') !== -1) {
+                        panelObj.close.className = 'stx-btn-panel';
+                    }
                 }
-            }
+                const sd = this.stx.layout.studies[id];
+                const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
+                if (sd) {
+                    const nameObj = prepareIndicatorName(sd.name);
+                    if (nameObj.name.trim() !== sd.name.trim()) {
+                        panelObj.title.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
+                    }
 
-            if (index === 1 || isSolo) {
-                // Hide the up arrow from first indicator to prevent user
-                // from moving the indicator panel above the main chart
-                panelObj.up.style.display = 'none';
-            }
-
-            if (index === panelsLen - 1 || isSolo) {
-                panelObj.down.style.display = 'none';
-            }
-
-            // Mean chart + 1 indicator
-            if (panelsLen === 2) {
-                panelObj.solo.style.display = 'none';
-            }
-
-            // Updating Max/Min icon
-            if (panelObj.solo.style.display !== 'none') {
-                const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
-                const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
-                    InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
+                    // Regarding the ChartIQ.js, codes under Line 34217, edit function
+                    // not mapped, this is a force to map edit function for indicators
+                    if (sd.editFunction && panelObj && !panelObj.editFunction) {
+                        this.stx.setPanelEdit(panelObj, sd.editFunction);
+                    }
                 }
-            }
-        });
+
+                if (index === 1 || isSolo) {
+                    // Hide the up arrow from first indicator to prevent user
+                    // from moving the indicator panel above the main chart
+                    panelObj.up.style.display = 'none';
+                }
+
+                if (index === panelsLen - 1 || isSolo) {
+                    panelObj.down.style.display = 'none';
+                }
+
+                // Mean chart + 1 indicator
+                if (panelsLen === 2) {
+                    panelObj.solo.style.display = 'none';
+                }
+
+                // Updating Max/Min icon
+                if (panelObj.solo.style.display !== 'none') {
+                    const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
+                    const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
+                    if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
+                        InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
+                    }
+                }
+            });
+        }
     };
 
     /**

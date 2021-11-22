@@ -58,7 +58,7 @@ export default class DrawToolsStore {
 
     closeOnEscape = e => {
         const ESCAPE = 27;
-        if (e.keyCode === ESCAPE) {
+        if (e.keyCode === ESCAPE && this.stx) {
             this.stx.changeVectorType('');
             this.drawingFinished();
         }
