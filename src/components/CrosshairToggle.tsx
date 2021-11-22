@@ -5,7 +5,7 @@ import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons
 import { Toggle } from './Form';
 
 type TCrosshairToggleProps = {
-    onChange?: any;
+    onChange?: () => void;
     isVisible?: boolean;
 };
 

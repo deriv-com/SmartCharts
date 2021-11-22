@@ -1,13 +1,56 @@
-import { action, observable, when, computed } from 'mobx';
-import { sameBar } from '../utils';
+import { action, computed, observable, when } from 'mobx';
+import Context from 'src/components/ui/Context';
+import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
+import { sameBar } from '../utils';
+
+type TDupMap = {
+    [key: string]: number;
+};
+
+type TRow = {
+    name: string;
+    value: string;
+};
+
+type TUpdateTooltipPositionParams = {
+    left: number;
+    top: number;
+    rows: TRow[] | null;
+};
+
+type TBarData = {
+    Ask?: number;
+    Bid?: number;
+    Close: number;
+    DT: Date;
+    Date: string;
+    High?: number;
+    Low?: number;
+    Open?: number;
+    atr: number;
+    cache: { Close: number };
+    candleWidth: number | null;
+    chartJustAdvanced?: boolean;
+    displayDate: Date;
+    'hl/2': number;
+    'hlc/3': number;
+    'hlcc/4': number;
+    iqPrevClose: number;
+    'ohlc/4': number;
+    ratio: number;
+    tick: number;
+    tickAnimationProgress?: number;
+    trueRange: number;
+};
+
 const MAX_TOOLTIP_WIDTH = 315;
 class CrosshairStore {
-    mainStore: any;
-    prev_arrow: any;
-    constructor(mainStore: any) {
+    mainStore: MainStore;
+    prev_arrow?: string;
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
     @computed
     get activeSymbol() {
@@ -15,28 +58,28 @@ class CrosshairStore {
     }
     @computed
     get decimalPlaces() {
-        return this.activeSymbol.decimal_places;
+        return this.activeSymbol?.decimal_places;
     }
-    get showOhl() {
+    get showOhl(): boolean {
         return this.stx.layout.timeUnit !== 'second';
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context['stx'] {
         return this.context.stx;
     }
     get isChartReady() {
         return this.mainStore.state.isChartReady;
     }
     @observable
-    state = 2;
+    state: number | null = 2;
     node = null;
     lastBar = {};
     showChange = false;
     showSeries = true;
     showStudies = true;
-    onCrosshairChanged = (x: any) => null;
+    onCrosshairChanged: (state?: number | null) => void | null = () => null;
     onContextReady = () => {
         const storedState = this.stx.layout.crosshair;
         const state = typeof storedState !== 'number' ? 2 : storedState;
@@ -65,15 +108,15 @@ class CrosshairStore {
     }
     @action.bound
     toggleState() {
-        const state = (this.state + 1) % 3;
+        const state = (Number(this.state) + 1) % 3;
         this.setCrosshairState(state);
     }
     @action.bound
-    updateProps(onChange: any) {
+    updateProps(onChange?: () => void) {
         this.onCrosshairChanged = onChange || (() => null);
     }
     @action.bound
-    setCrosshairState(state: any) {
+    setCrosshairState(state: number | null) {
         if (!this.context) {
             return;
         }
@@ -152,9 +195,9 @@ class CrosshairStore {
             rows,
         });
     };
-    calculateRows(data: any) {
+    calculateRows(data: TBarData) {
         const { stx } = this;
-        const dupMap: { [x: string]: any } = {};
+        const dupMap = {} as TDupMap;
         const fields = [];
         {
             // Access main chart panel and yAxis in this scope:
@@ -198,15 +241,15 @@ class CrosshairStore {
                 }
                 for (let id = 0; id < rendererToDisplay.seriesParams.length; id++) {
                     const seriesParams = rendererToDisplay.seriesParams[id];
-                    if (seriesParams.display === this.activeSymbol.symbol) {
-                        const display = this.activeSymbol.name;
+                    if (seriesParams.display === this.activeSymbol?.symbol) {
+                        const display = this.activeSymbol?.name;
                         fields.push({
                             member: 'Close',
                             display,
                             panel,
                             yAxis,
                         });
-                        dupMap[display] = 1;
+                        dupMap[display as string] = 1;
                     } else {
                         // if a series has a symbol and a field then it maybe a object chain
                         let sKey = seriesParams.symbol;
@@ -349,14 +392,14 @@ class CrosshairStore {
         }
         return rows;
     }
-    updateVisibility = (visible: any) => {
+    updateVisibility = (visible: boolean) => {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
         if (this.state === 2 && visible) crosshair.classList.add('active');
         else if (this.state === 2) crosshair.classList.remove('active');
     };
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
-    updateTooltipPosition({ top, left, rows }: any) {
+    updateTooltipPosition({ top, left, rows }: TUpdateTooltipPositionParams) {
         const crosshair = this.stx.container.querySelector('.cq-crosshair');
         crosshair.style.transform = `translate(${left}px, ${top}px)`;
         const tooltipRightLimit = this.mainStore.state.crosshairTooltipLeftAllow || MAX_TOOLTIP_WIDTH;
@@ -371,7 +414,7 @@ class CrosshairStore {
             const content = crosshair.querySelector('.cq-crosshair-content');
             content.innerHTML = rows
                 .map(
-                    (r: any) => `
+                    (r: TRow) => `
                 <div class="row">
                     <span>${r.name !== 'DT' ? r.name : r.value}</span>
                     <span>${r.name !== 'DT' ? r.value : ''}</span>

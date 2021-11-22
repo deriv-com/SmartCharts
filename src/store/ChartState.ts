@@ -41,7 +41,7 @@ class ChartState {
     @observable hasReachedEndOfData = false;
     @observable prevChartType: any;
     @observable isChartScrollingToEpoch = false;
-    @observable crosshairState = 1;
+    @observable crosshairState: number | null = 1;
     @observable crosshairTooltipLeftAllow = null;
     @observable maxTick: any;
     @observable enableScroll = true;
@@ -395,7 +395,7 @@ class ChartState {
         this.granularity = granularity === null ? undefined : granularity;
     }
 
-    @action.bound setChartType(chartType: any) {
+    @action.bound setChartType(chartType: string) {
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);
@@ -610,7 +610,7 @@ class ChartState {
         this.stxx.clearDrawings();
 
         // TODO: use constant
-        this.mainStore.crosshair.onChange(2);
+        this.mainStore.crosshair.onCrosshairChanged(2);
     }
 
     exportLayout() {

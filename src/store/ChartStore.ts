@@ -29,6 +29,11 @@ import {
 import PendingPromise from '../utils/PendingPromise';
 import BarrierStore from './BarrierStore';
 
+type TRatio = {
+    height: number;
+    percent: number;
+}
+
 class ChartStore {
     static keystrokeHub: KeystrokeHub;
     static chartCount = 0;
@@ -190,11 +195,11 @@ class ChartStore {
      * @returns {number} percent: percent of height of an indicator compare to the chart heigh
      */
     indicatorHeightRatio = (num: number) => {
-        let ratio = {};
+        let ratio = {} as TRatio;
         if (typeof this.stateStore.getIndicatorHeightRatio === 'function') {
             ratio = this.stateStore.getIndicatorHeightRatio(this.chartNode?.offsetHeight, num);
         }
-        if (this.chartNode && (!ratio || !(ratio as any).height || !(ratio as any).percent)) {
+        if (this.chartNode && (!ratio || !ratio.height || !ratio.percent)) {
             const chartHeight = this.chartNode.offsetHeight;
             const isSmallScreen = chartHeight < 780;
             const denominator = num >= 5 ? num : num + 1;
@@ -217,8 +222,7 @@ class ChartStore {
         if ((window as any).CIQ) {
             this._initChart(rootNode, props);
         } else {
-            // @ts-ignore
-            import(/* webpackChunkName: "chartiq" */ 'chartiq').then(
+            import(/* webpackChunkName: "chartiq" */ 'chartiq' as string).then(
                 action(({ CIQ, SplinePlotter }) => {
                     CIQ.ChartEngine.htmlControls.baselineHandle = `<div class="stx-baseline-handle" style="display: none;">${renderSVGString(
                         ResizeIcon
