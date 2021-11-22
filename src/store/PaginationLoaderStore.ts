@@ -1,25 +1,39 @@
 import { action, observable, when } from 'mobx';
 import React from 'react';
+import Context from 'src/components/ui/Context';
+import MainStore from '.';
+import ChartStore from './ChartStore';
+
+type TFeedOnPaginationParams = {
+    start: number;
+    end: number | 'latest';
+};
+
+export type TRefData = {
+    setPosition: ({ epoch, price }: { [key: string]: number | null }) => void;
+    div: HTMLDivElement;
+    value?: Element | null;
+};
 
 class PaginationLoaderStore {
-    mainStore: any;
-    ref: any;
+    mainStore: MainStore;
+    ref: TRefData | null = null;
     @observable isOnPagination = false;
-    paginationEndEpoch = null;
+    paginationEndEpoch: number | 'latest' | null = null;
 
-    get feed() {
+    get feed(): ChartStore['feed'] {
         return this.mainStore.chart.feed;
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): ChartStore['stxx'] {
         return this.mainStore.chart.stxx;
     }
 
-    constructor(mainStore: any) {
+    constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
 
     onContextReady = () => {
@@ -41,23 +55,23 @@ class PaginationLoaderStore {
         return false; // continue swiping
     };
 
-    setRef = (ref: any) => {
+    setRef = (ref: TRefData | null) => {
         this.ref = ref;
         if (this.ref !== null) {
-            this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
+            this.ref.setPosition({ epoch: Number(this.paginationEndEpoch), price: 0 });
         }
     };
 
-    @action.bound updateOnPagination(state: any) {
+    @action.bound updateOnPagination(state: boolean) {
         this.isOnPagination = state;
     }
 
-    @action.bound setOnPagination = ({ end }: any) => {
+    @action.bound setOnPagination = ({ end }: TFeedOnPaginationParams) => {
         this.isOnPagination = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 
         if (this.ref) {
-            this.ref.setPosition({ epoch: this.paginationEndEpoch, price: 0 });
+            this.ref.setPosition({ epoch: Number(this.paginationEndEpoch), price: 0 });
         }
     };
 }

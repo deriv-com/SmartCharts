@@ -8,18 +8,22 @@
  * @constructor
  */
 class Context {
-    advertised: any;
-    loader: any;
-    params: any;
-    stx: any;
-    topNode: any;
-    constructor(stx: any, topNode: any, params?: any) {
+    advertised: typeof CIQ.UI.Layout;
+    loader: typeof CIQ.UI.Loader;
+    params?: { [key: string]: unknown };
+    stx: typeof CIQ.ChartEngine;
+    topNode: (HTMLElement & { CIQ: typeof CIQ }) | null;
+    constructor(
+        stx: typeof CIQ.ChartEngine,
+        topNode: (HTMLElement & { CIQ: typeof CIQ }) | null,
+        params?: { [key: string]: unknown }
+    ) {
         this.params = params || {};
         this.stx = stx;
         this.topNode = topNode;
         const storage = Context.assembleContext(topNode);
         this.advertised = {};
-        topNode.CIQ.UI.context = this;
+        (topNode as HTMLElement & { CIQ: typeof CIQ }).CIQ.UI.context = this;
         // Search through all of the components that have registered themselves. Call setContext() on each
         // so that they can get their context. This usually initializes and makes the component active.
         for (let i = 0; i < storage.Components.length; i++) {
@@ -35,17 +39,17 @@ class Context {
      * @returns {object} The storage object
      * @private
      */
-    static assembleContext(contextElement: any) {
-        if (!contextElement.CIQ) {
+    static assembleContext(contextElement: (HTMLElement & { CIQ: typeof CIQ }) | null) {
+        if (contextElement && !contextElement.CIQ) {
             contextElement.CIQ = {};
         } // claim our namespace
-        if (!contextElement.CIQ.UI) {
+        if (contextElement && !contextElement.CIQ.UI) {
             contextElement.CIQ.UI = {};
         }
-        if (!contextElement.CIQ.UI.Components) {
+        if (contextElement && !contextElement.CIQ.UI.Components) {
             contextElement.CIQ.UI.Components = [];
         }
-        return contextElement.CIQ.UI;
+        return contextElement?.CIQ.UI;
     }
 
     /**
@@ -54,7 +58,7 @@ class Context {
      * @param {string} helperName The helperName of the element. For instance "Loader"
      * @memberof CIQ.UI.Context
      */
-    advertiseAs(uiHelper: any, helperName: any) {
+    advertiseAs(uiHelper: typeof CIQ.UI.Helper, helperName: string) {
         this.advertised[helperName] = uiHelper;
     }
 
@@ -66,7 +70,7 @@ class Context {
      * @memberof CIQ.UI.Context
      * @private
      */
-    getAdvertised(helperName: any) {
+    getAdvertised(helperName: string) {
         return this.advertised[helperName];
     }
 
@@ -75,7 +79,7 @@ class Context {
      * @param {CIQ.UI.Loader} loader Loader instance
      * @memberof CIQ.UI.Context
      */
-    setLoader(loader: any) {
+    setLoader(loader: typeof CIQ.UI.Loader) {
         this.loader = loader;
     }
 
@@ -84,7 +88,7 @@ class Context {
      * @return {Boolean} true if in modal mode
      * @memberof CIQ.UI.Context
      */
-    isModal() {
+    isModal(): boolean {
         return this.stx.openDialog !== '';
     }
 }

@@ -1,14 +1,15 @@
+import { action, observable, reaction, when } from 'mobx';
 import React from 'react';
-import { observable, action, when, reaction } from 'mobx';
+import { TSettingsItem } from 'src/types';
 import MainStore from '.';
-import MenuStore from './MenuStore';
-import SettingsDialogStore from './SettingsDialogStore';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import { getIndicatorsTree, ExcludedStudies } from '../Constant';
-import { prepareIndicatorName, renderSVGString } from '../utils';
-import { IndicatorCatTrendLightIcon, IndicatorCatTrendDarkIcon } from '../components/Icons';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
+import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
+import { ExcludedStudies, getIndicatorsTree } from '../Constant';
+import { prepareIndicatorName, renderSVGString } from '../utils';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
+import MenuStore from './MenuStore';
+import SettingsDialogStore from './SettingsDialogStore';
 
 // TODO:
 // import StudyInfo from '../study-info';
@@ -40,7 +41,7 @@ export default class StudyLegendStore {
             mainStore,
             onDeleted: () => this.deleteStudy(this.helper.sd),
             favoritesId: 'indicators',
-            onChanged: (items: any) => this.updateStudy(this.helper.sd, items),
+            onChanged: (items: TSettingsItem[]) => this.updateStudy(this.helper.sd, items),
         });
         this.searchInput = React.createRef();
         reaction(

@@ -30,7 +30,7 @@ export type TTradingTimesSymbol = {
     symbol: string;
     times: { close: string[]; open: string[]; settlement: string };
     trading_days: string[];
-    feed_license?: any;
+    feed_license?: string;
     delay_amount?: number;
 };
 

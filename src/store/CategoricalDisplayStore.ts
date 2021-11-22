@@ -1,5 +1,5 @@
+import { action, computed, observable, reaction } from 'mobx';
 import React from 'react';
-import { action, observable, computed, reaction } from 'mobx';
 import { cloneCategories } from '../utils';
 import Context from '../components/ui/Context';
 import MainStore from '.';
@@ -237,8 +237,6 @@ export default class CategoricalDisplayStore {
             return;
         }
 
-        // hits: 40px for title hight + 4px for content bottom border
-        const categoryTitleHeight = 44;
         const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
         let activeMenuId = null;
 

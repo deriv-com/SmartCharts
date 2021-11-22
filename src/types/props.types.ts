@@ -30,6 +30,8 @@ export type TQuote = {
     Close: number;
     tick?: TicksStreamResponse['tick'];
     ohlc?: OHLCStreamResponse['ohlc'];
+    DT?: Date;
+    prevClose?: number;
 };
 
 export interface IPendingPromise<Response> extends Promise<Response> {
@@ -45,10 +47,10 @@ export type TChanges = {
 
 export type TSettingsItemGroup = {
     key: string;
-    fields: TSettingsItems[];
+    fields: TSettingsItem[];
 };
 
-export type TSettingsItems = {
+export type TSettingsItem = {
     id: string;
     title: string;
     value: string;
