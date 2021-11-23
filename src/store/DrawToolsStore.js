@@ -59,7 +59,7 @@ export default class DrawToolsStore {
     closeOnEscape = e => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
-            this.stx.changeVectorType('');
+            this.stx?.changeVectorType('');
             this.drawingFinished();
         }
     };
