@@ -37,7 +37,7 @@ export default class TimeperiodStore {
         when(() => !!this.context, this.onContextReady);
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get loader() {
@@ -58,12 +58,12 @@ export default class TimeperiodStore {
     @observable interval: string | number | null = null;
     @observable preparingInterval: number | null = null;
 
-    onGranularityChange: (x: TGranularity | number) => (void | null) = () => null;
+    onGranularityChange: (x: TGranularity | number) => void | null = () => null;
 
     remain: string | null = null;
 
     onContextReady = () => {
-        const { timeUnit, interval } = this.context.stx.layout;
+        const { timeUnit, interval } = this.context?.stx.layout;
         this.timeUnit = getTimeUnit({ timeUnit, interval });
         this.interval = interval;
 
@@ -81,7 +81,7 @@ export default class TimeperiodStore {
             this.updateCountdown.bind(this)
         );
 
-        this.context.stx.addEventListener('newChart', this.updateDisplay);
+        this.context?.stx.addEventListener('newChart', this.updateDisplay);
 
         reaction(
             () => this.mainStore.state.granularity,
@@ -126,7 +126,7 @@ export default class TimeperiodStore {
                     const chartInterval = getIntervalInSeconds(stx.layout) * 1000;
                     const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
 
-                    if (this.context.stx) {
+                    if (this.context?.stx) {
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
                         stx.draw();
                     }
@@ -197,7 +197,7 @@ export default class TimeperiodStore {
     }
 
     remainLabelY = () => {
-        const stx = this.context.stx;
+        const stx = this.context?.stx;
         const topPos = 36;
         const labelHeight = 24;
         const bottomPos = 66;

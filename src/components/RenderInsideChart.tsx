@@ -1,7 +1,8 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
+import Context from './ui/Context';
 import { createElement } from './ui/utils';
 
 const inChartPrefix = 'cq-inchart-';
@@ -19,16 +20,16 @@ const RenderInsideChart: React.FC<TRenderInsideChartProps> = ({ at = 'holder', c
 
     const [container, setContainer] = React.useState<HTMLElement>();
     React.useEffect(() => {
-        contextPromise?.then((context: any) => {
+        contextPromise?.then((context: Context) => {
             const nodeName = `${inChartPrefix}${at}`;
             // reuse existing node when possible:
-            let elem = context.topNode.querySelector(`.${nodeName}`);
+            let elem = context.topNode?.querySelector(`.${nodeName}`);
             if (!elem) {
-                elem = createElement(`<div class="${nodeName}"></div>`);
+                elem = createElement(`<div class="${nodeName}"></div>`) as HTMLElement;
                 context.stx.chart.panel[at].appendChild(elem);
             }
 
-            setContainer(elem);
+            setContainer(elem as HTMLElement);
         });
     }, [at, contextPromise]);
 

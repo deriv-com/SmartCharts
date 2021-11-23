@@ -1,5 +1,5 @@
 import { TickSpotData, TicksStreamResponse } from '@deriv/api-types';
-import { observable, action, computed, when } from 'mobx';
+import { action, computed, observable, when } from 'mobx';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
 import { TBar, TQuote } from '../types';
@@ -17,8 +17,8 @@ export default class LastDigitStatsStore {
                 this.lastSymbol = this.marketDisplayName;
                 this.updateLastDigitStats();
                 // TODO: call onMasterDataUpdate on symobl change.
-                this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
-                this.mainStore.chart.feed.onMasterDataReinitialize(() => {
+                this.mainStore.chart.feed?.onMasterDataUpdate(this.onMasterDataUpdate);
+                this.mainStore.chart.feed?.onMasterDataReinitialize(() => {
                     if (this.context && this.mainStore.chart.feed) {
                         this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
                         this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
@@ -27,11 +27,11 @@ export default class LastDigitStatsStore {
             }
         );
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): Context['stx'] {
-        return this.context.stx;
+        return this.context?.stx;
     }
     count = 1000;
     digits: number[] = [];
@@ -98,7 +98,7 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.updateLastDigitStats();
         } else if (this.latestData.length) {
-            const firstDigit = (Number(this.latestData.shift())).toFixed(this.decimalPlaces).slice(-1);
+            const firstDigit = Number(this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
             this.latestData.push(+price);

@@ -46,7 +46,7 @@ export default class ChartTitleStore {
     get chart() {
         return this.mainStore.chart;
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get crosshairStore() {
@@ -107,7 +107,7 @@ export default class ChartTitleStore {
         return null;
     }
     onContextReady = () => {
-        this.chart.feed.onMasterDataUpdate(this.update);
+        this.chart.feed?.onMasterDataUpdate(this.update);
         this.update();
         this.tradingTimes?.onMarketOpenCloseChanged(
             action((changes: TChanges) => {

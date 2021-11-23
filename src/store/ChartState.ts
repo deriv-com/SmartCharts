@@ -1,17 +1,17 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
 import { TGranularity } from 'src/types';
+import MainStore from '.';
+import Theme from '../../sass/_themes.scss';
+import { STATE } from '../Constant';
 import {
-    createObjectFromLocalStorage,
-    calculateTimeUnitInterval,
     calculateGranularity,
+    calculateTimeUnitInterval,
+    createObjectFromLocalStorage,
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
-import Theme from '../../sass/_themes.scss';
-import { STATE } from '../Constant';
 import ChartStore from './ChartStore';
-import MainStore from '.';
 
 class ChartState {
     chartStore: ChartStore;
@@ -21,8 +21,8 @@ class ChartState {
     margin: any;
     @observable granularity: TGranularity;
     @observable chartType: any;
-    @observable startEpoch: any;
-    @observable endEpoch: any;
+    @observable startEpoch?: number;
+    @observable endEpoch?: number;
     @observable symbol?: string;
     @observable isConnectionOpened = false;
     @observable isChartReady = false;
@@ -81,7 +81,7 @@ class ChartState {
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
 
     @action.bound onContextReady = () => {
@@ -591,8 +591,8 @@ class ChartState {
             this.stxx.draw();
             this.setIsChartScrollingToEpoch(false);
         }
-        this.mainStore.chart.feed.offMasterDataReinitialize(this.scrollChartToLeft);
-        this.mainStore.chart.feed.offMasterDataUpdate(this.scrollChartToLeft);
+        this.mainStore.chart.feed?.offMasterDataReinitialize(this.scrollChartToLeft);
+        this.mainStore.chart.feed?.offMasterDataUpdate(this.scrollChartToLeft);
     };
 
     cleanChart() {

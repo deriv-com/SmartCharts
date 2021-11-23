@@ -1,7 +1,5 @@
 import { action, computed, observable, reaction } from 'mobx';
 import React from 'react';
-import { cloneCategories } from '../utils';
-import Context from '../components/ui/Context';
 import MainStore from '.';
 import {
     TCategorizedSymbolItem,
@@ -10,6 +8,8 @@ import {
     TSubCategory,
     TSubCategoryDataItem,
 } from '../binaryapi/ActiveSymbols';
+import Context from '../components/ui/Context';
+import { cloneCategories } from '../utils';
 
 type TCategoricalDisplayStoreProps = {
     getCategoricalItems: () => TCategorizedSymbols;
@@ -98,7 +98,7 @@ export default class CategoricalDisplayStore {
         return this.mainStore.chart;
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.chart.context;
     }
 

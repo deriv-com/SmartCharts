@@ -148,11 +148,11 @@ export default class StudyLegendStore {
         this.stx.append('panelClose', this.onStudyRemoved);
         this.renderLegend();
     };
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): Context['stx'] {
-        return this.context.stx;
+        return this.context?.stx;
     }
     get indicatorRatio() {
         return this.mainStore.chart;

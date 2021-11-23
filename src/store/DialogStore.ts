@@ -1,7 +1,7 @@
-import { observable, action, when } from 'mobx';
 import debounce from 'lodash.debounce';
-import Context from '../components/ui/Context';
+import { action, observable, when } from 'mobx';
 import MainStore from '.';
+import Context from '../components/ui/Context';
 import { TCustomEvent } from '../types';
 
 let activeDialog: DialogStore | undefined;
@@ -18,7 +18,7 @@ export default class DialogStore {
         );
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get routingStore() {

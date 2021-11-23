@@ -113,11 +113,11 @@ export default class ChartTypeStore {
     @observable
     type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
     onChartTypeChanged?: (chartType?: string) => typeof action;
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx() {
-        return this.context.stx;
+        return this.context?.stx;
     }
     get chartTypeProp() {
         return this.mainStore.state.chartType;

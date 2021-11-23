@@ -1,11 +1,11 @@
-import { observable, action, computed } from 'mobx';
-import { TCIQAddEventListener, TCIQAppend } from '../types';
-import Context from '../components/ui/Context';
+import { action, computed, observable } from 'mobx';
 import MainStore from '.';
+import Context from '../components/ui/Context';
+import { TCIQAddEventListener, TCIQAppend } from '../types';
+import { isValidProp } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
-import PendingPromise from '../utils/PendingPromise';
-import { isValidProp } from '../utils';
 
 type TUpdatePropsParams = {
     color?: string;
@@ -23,7 +23,7 @@ type TUpdatePropsParams = {
     shade?: string;
     shadeColor?: string;
     title?: string;
-}
+};
 
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
@@ -125,10 +125,10 @@ export default class BarrierStore {
     }
 
     setDefaultBarrier(): void {
-        const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote().Close;
+        const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote()?.Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
-        this._low_barrier.price = price - distance;
+        this._low_barrier.price = Number(price) - distance;
         this._high_barrier._calculateTop();
         this._low_barrier._calculateTop();
         this._drawShadedArea();
@@ -249,17 +249,17 @@ export default class BarrierStore {
         };
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context["stx"] {
-        return this.context.stx;
+    get stx(): Context['stx'] {
+        return this.context?.stx;
     }
     get chart(): typeof CIQ.ChartEngine.Chart {
         return this.stx.chart;
     }
 
-    _onBarrierChange: ((arg: {high?: number, low?: number}) => void) | null = null;
+    _onBarrierChange: ((arg: { high?: number; low?: number }) => void) | null = null;
 
     set onBarrierChange(callback: () => typeof action) {
         if (this._onBarrierChange !== callback) {

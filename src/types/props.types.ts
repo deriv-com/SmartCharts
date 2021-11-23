@@ -1,7 +1,11 @@
 import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse } from '@deriv/api-types';
+import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
+import BarrierStore from 'src/store/BarrierStore';
+import { TSettings } from 'src/store/ChartSettingStore';
+import { TNotification } from 'src/store/Notifier';
+import { TGranularity } from '.';
 import { OHLCStreamResponse } from './api.types';
-import { TMainStore } from './stores.types';
 
 export type TBar = {
     height: number;
@@ -11,15 +15,53 @@ export type TBar = {
 export type ChartType = typeof ChartTypes[0];
 
 export type TChartParams = {
-    enable?: boolean;
-    shouldFetchTradingTimes?: TMainStore['state']['shouldFetchTradingTimes'];
+    requestAPI: BinaryAPI['requestAPI'];
+    requestSubscribe: BinaryAPI['requestSubscribe'];
+    requestForget: BinaryAPI['requestForget'];
+    requestForgetStream?: BinaryAPI['requestForgetStream'];
+    id?: string;
     getMarketsOrder?: (active_symbols: ActiveSymbols) => string[];
+    getIndicatorHeightRatio?: (chart_height: number, indicator_count: number) => { height: number; percent: number };
+    symbol?: string;
     initialData?: {
         masterData?: TQuote[];
         tradingTimes?: TradingTimesResponse;
         activeSymbols?: ActiveSymbols;
-    };
-    chartData?: any;
+    } & TradingTimesResponse;
+    feedCall?: { activeSymbols: boolean; tradingTimes: boolean };
+    granularity?: TGranularity;
+    chartType?: string;
+    startEpoch?: number;
+    endEpoch?: number;
+    chartControlsWidgets?: React.FC | null;
+    topWidgets?: React.FC;
+    bottomWidgets?: React.FC;
+    toolbarWidget?: React.FC;
+    isMobile?: boolean;
+    onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void;
+    stateChangeListener?: (state: string, option?: string) => void;
+    settings?: TSettings;
+    barriers?: BarrierStore[];
+    enableRouting?: boolean;
+    enable?: boolean;
+    isConnectionOpened?: boolean;
+    onMessage: (message: TNotification) => void;
+    isAnimationEnabled?: boolean;
+    showLastDigitStats?: boolean;
+    scrollToEpoch?: number | null;
+    scrollToEpochOffset?: number;
+    clearChart?: () => void;
+    onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
+    importedLayout?: typeof CIQ.UI.Layout;
+    shouldFetchTradingTimes?: boolean;
+    maxTick?: number;
+    crosshair?: number;
+    crosshairTooltipLeftAllow?: number | null;
+    zoom?: number;
+    yAxisMargin?: { bottom: number; top: number };
+    enableScroll?: boolean;
+    enableZoom?: boolean;
+    chartData?: React.FC;
 };
 
 export type TQuote = {
@@ -62,7 +104,7 @@ export type TOpenClose = { date: string; open: Date; close: Date };
 export type TTimes = { open: Date; close: Date };
 
 export type TTradingTimesItem = {
-    feed_license: string;
+    feed_license?: string;
     isClosedToday: boolean;
     holidays: string[];
     closes_early: TOpenClose[];

@@ -1,7 +1,8 @@
-import React from 'react';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
 import { useStores } from 'src/store';
 import { getUTCDate } from '../utils';
+import Context from './ui/Context';
 
 const RawMarker = (props: any) => {
     const { chart: chartStore } = useStores();
@@ -20,7 +21,7 @@ const RawMarker = (props: any) => {
 
     React.useEffect(() => {
         if (contextPromise) {
-            contextPromise.then((ctx: any) => {
+            contextPromise.then((ctx: Context) => {
                 if (has_unmounted_before_injection_ref.current) {
                     return;
                 }
@@ -47,7 +48,7 @@ const RawMarker = (props: any) => {
 
     React.useEffect(() => {
         if (shouldRedraw && contextPromise) {
-            contextPromise.then((ctx: any) => {
+            contextPromise.then((ctx: Context) => {
                 if (has_unmounted_before_injection_ref.current) {
                     return;
                 }

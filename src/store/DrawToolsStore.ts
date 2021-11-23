@@ -97,11 +97,11 @@ export default class DrawToolsStore {
             }
         );
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): Context['stx'] {
-        return this.context.stx;
+        return this.context?.stx;
     }
     get stateStore() {
         return this.mainStore.state;
@@ -220,7 +220,7 @@ export default class DrawToolsStore {
     selectTool(id: string) {
         this.isContinuous = false;
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
-        const stx = this.context.stx;
+        const stx = this.context?.stx;
         stx.clearMeasure(); // TODO remove this line
         stx.changeVectorType(id);
         if (id === 'continuous') {

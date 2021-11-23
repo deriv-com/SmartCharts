@@ -63,11 +63,11 @@ class CrosshairStore {
     get showOhl(): boolean {
         return this.stx.layout.timeUnit !== 'second';
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): Context['stx'] {
-        return this.context.stx;
+        return this.context?.stx;
     }
     get isChartReady() {
         return this.mainStore.state.isChartReady;

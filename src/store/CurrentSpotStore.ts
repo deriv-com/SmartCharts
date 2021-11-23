@@ -11,13 +11,13 @@ class CurrentSpotStore {
         when(() => !!this.context, this.onContextReady);
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context["stx"] {
-        return this.context.stx;
+    get stx(): Context['stx'] {
+        return this.context?.stx;
     }
-    get state(): MainStore["state"] {
+    get state(): MainStore['state'] {
         return this.mainStore.state;
     }
 
@@ -30,7 +30,7 @@ class CurrentSpotStore {
         if (this.state.endEpoch) {
             return;
         }
-        const stx: Context["stx"] = this.stx;
+        const stx: Context['stx'] = this.stx;
         const chart = stx.chart;
         let len = chart.dataSet.length;
         if (!len) {

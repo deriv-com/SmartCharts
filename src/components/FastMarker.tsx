@@ -3,6 +3,7 @@ import React from 'react';
 import { useStores } from 'src/store';
 import { TRefData } from 'src/store/PaginationLoaderStore';
 import { getUTCDate } from '../utils';
+import Context from './ui/Context';
 
 // Render given Components under stx-subholder.
 // This component is used to position a marker on the chart.
@@ -33,9 +34,9 @@ type TFastMarkerProps = {
     className: string;
     offsetTop?: number;
     offsetLeft?: number;
-}
+};
 
-const FastMarker: React.FC<TFastMarkerProps> = (props) => {
+const FastMarker: React.FC<TFastMarkerProps> = props => {
     const { chart: chartStore } = useStores();
     const { contextPromise } = chartStore;
     const price_ref = React.useRef<number | null>(null);
@@ -47,7 +48,7 @@ const FastMarker: React.FC<TFastMarkerProps> = (props) => {
     const props_ref = React.useRef(props);
     props_ref.current = props;
 
-    const setPosition = ({ epoch, price }: {[key: string]: number | null}) => {
+    const setPosition = ({ epoch, price }: { [key: string]: number | null }) => {
         price_ref.current = Number(price) || null;
         date_ref.current = CIQ.strToDateTime(getUTCDate(Number(epoch)));
         updateCSS();
@@ -132,7 +133,7 @@ const FastMarker: React.FC<TFastMarkerProps> = (props) => {
 
         if (ref !== null) {
             if (contextPromise) {
-                contextPromise.then((ctx: any) => {
+                contextPromise.then((ctx: Context) => {
                     ctx_ref.current = ctx;
                     stx_ref.current = ctx_ref.current.stx;
 

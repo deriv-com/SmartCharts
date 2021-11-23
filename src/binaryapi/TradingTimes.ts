@@ -1,13 +1,13 @@
 import EventEmitter from 'event-emitter-es6';
-import ServerTime from '../utils/ServerTime';
-import PendingPromise from '../utils/PendingPromise';
 import { TChartParams, TError, TOpenClose, TTradingTimesItem, TTradingTimesSymbol } from 'src/types';
+import PendingPromise from '../utils/PendingPromise';
+import ServerTime from '../utils/ServerTime';
 
 const DaysOfWeek = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'];
 class TradingTimes {
     _api: any;
     _emitter: any;
-    _params: TChartParams;
+    _params: Partial<TChartParams>;
     _serverTime: ServerTime;
     _shouldFetchTradingTimes: any;
     _tradingTimesMap?: { [key: string]: TTradingTimesItem };
@@ -22,7 +22,7 @@ class TradingTimes {
     isInitialized = false;
     tradingTimesPromise = PendingPromise();
     timeUpdateCallback: any;
-    constructor(api: any, params?: TChartParams) {
+    constructor(api: any, params?: Partial<TChartParams>) {
         this._params = params || {};
         this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || true;
         this._api = api;
