@@ -95,9 +95,7 @@ const updateFieldHeading = (heading: string, type: string) => {
     return heading;
 };
 export default class StudyLegendStore {
-    activeStudies?: typeof CIQ.Studies.StudyDescriptor;
     excludedStudies: { [key: string]: boolean };
-    hasReachedLimits?: boolean;
     helper: typeof CIQ.UI.Helper;
     mainStore: MainStore;
     menuStore: MenuStore;
@@ -460,11 +458,6 @@ export default class StudyLegendStore {
         // All traces can be removed after new design for studies
         this.updateStyle();
     };
-    @action.bound
-    setReachedLimit() {
-        const hasReachedLimit = this.activeStudies?.data.length >= 5;
-        this.hasReachedLimits = hasReachedLimit;
-    }
     @action.bound
     updateActiveStudies() {
         const stx = this.stx;
