@@ -41,7 +41,7 @@ type TValueObject = {
     [key: string]: string;
 };
 
-export type TStudyItems = {
+type TStudyItems = {
     category: string;
     defaultValue: string | number | TValueObject;
     id: string;

@@ -1,31 +1,34 @@
-import { observable, action, computed } from 'mobx';
-import { getUTCDate, updatePropIfChanged } from '../utils';
+import { action, computed, observable } from 'mobx';
+import Context from 'src/components/ui/Context';
+import { TCIQAddEventListener, TCIQAppend } from 'src/types';
 import MainStore from '.';
+import { getUTCDate, updatePropIfChanged } from '../utils';
+import ChartStore from './ChartStore';
 // width here includes the size of the flag
 const MARKER_MAX_WIDTH = 150;
 export default class MarkerStore {
-    _injectionId: any;
-    _listenerId: any;
-    chart: any;
-    chartStore: any;
+    _injectionId: TCIQAppend<() => void> | null;
+    _listenerId: TCIQAddEventListener<() => void> | null;
+    chart: typeof CIQ.ChartEngine.Chart;
+    chartStore: ChartStore;
     mainStore: MainStore;
-    panel: any;
-    stx: any;
-    yAxis: any;
+    panel: typeof CIQ.ChartEngine.Panel;
+    stx: Context['stx'];
+    yAxis: typeof CIQ.ChartEngine.YAxis;
     yPositioner = 'value';
     xPositioner = 'epoch';
-    tick: any;
-    isDistantFuture: any;
-    className: any;
-    children: any;
-    x: any;
-    y: any;
+    tick: number | null = null;
+    isDistantFuture?: boolean;
+    className?: string;
+    children: React.ReactNode;
+    x?: number | Date;
+    y?: number;
     @observable
-    display: any;
+    display?: string;
     @observable
-    left: any;
+    left?: string | number;
     @observable
-    bottom: any;
+    bottom?: number;
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
@@ -59,7 +62,7 @@ export default class MarkerStore {
         this._listenerId = null;
     }
     @action.bound
-    updateProps({ children, className, y, yPositioner, x, xPositioner }: any) {
+    updateProps({ children, className, y, yPositioner, x, xPositioner }: MarkerStore) {
         this.className = className;
         this.children = children;
         let isUpdateMarkerTickRequired = false;
@@ -93,8 +96,8 @@ export default class MarkerStore {
         if (this.isDistantFuture && this.chart.xaxis && this.chart.xaxis.length > 0) {
             const dummyMarker = this.getDummyMarker();
             this.stx.futureTickIfDisplayed(dummyMarker);
-            if ((dummyMarker as any).tick) {
-                this.tick = (dummyMarker as any).tick;
+            if (dummyMarker.tick) {
+                this.tick = dummyMarker.tick;
                 this.isDistantFuture = false;
             }
         }
@@ -112,6 +115,7 @@ export default class MarkerStore {
             if (
                 dummyMarker.params.xPositioner === 'date' &&
                 !this.isDistantFuture &&
+                this.tick &&
                 this.stx.masterData[this.tick] &&
                 this.stx.masterData[this.tick].DT.valueOf() !== dummyMarker.params.x.valueOf()
             ) {
@@ -138,19 +142,19 @@ export default class MarkerStore {
                 this.stx.createDataSet();
                 // this.tick += 1;
                 this.stx.setMarkerTick(dummyMarker);
-                this.tick = (dummyMarker as any).tick;
+                this.tick = dummyMarker.tick;
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
                 }
             }
             if (this.xPositioner === 'bar' && this.x) {
                 if (this.x < this.chart.xaxis.length) {
-                    const xaxis = this.chart.xaxis[this.x];
+                    const xaxis = this.chart.xaxis[this.x as number];
                     if (xaxis) quote = xaxis.data;
                 }
                 left = this.stx.pixelFromBar(this.x, this.chart);
             } else {
-                if (this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
+                if (this.tick && this.tick < this.stx.chart.dataSet.length) quote = this.stx.chart.dataSet[this.tick];
                 left = this.stx.pixelFromTick(this.tick, this.chart) - this.chart.left;
             }
             if (!quote) quote = this.stx.chart.dataSet[this.stx.chart.dataSet.length - 1]; // Future ticks based off the value of the current quote
@@ -217,12 +221,12 @@ export default class MarkerStore {
     updateMarkerTick() {
         const dummyMarker = this.getDummyMarker();
         this.stx.setMarkerTick(dummyMarker);
-        this.tick = (dummyMarker as any).tick;
-        if ((dummyMarker.params as any).future) {
+        this.tick = dummyMarker.tick;
+        if (dummyMarker.params.future) {
             this.isDistantFuture = true;
             if (this.chart.xaxis && this.chart.xaxis.length) {
                 this.stx.futureTickIfDisplayed(dummyMarker);
-                this.tick = (dummyMarker as any).tick;
+                this.tick = dummyMarker.tick;
                 if (this.tick !== null) {
                     this.isDistantFuture = false;
                 }
@@ -248,7 +252,7 @@ export default class MarkerStore {
             );
             this.stx.createDataSet();
             this.stx.setMarkerTick(dummyMarker);
-            this.tick = (dummyMarker as any).tick;
+            this.tick = dummyMarker.tick;
             if (this.tick !== null) {
                 if (this.yPositioner !== 'value' && this.yPositioner !== 'on_candle' && this.yPositioner !== 'top') {
                     this.yPositioner = 'none';
@@ -260,12 +264,12 @@ export default class MarkerStore {
         }
     }
     // ChartIQ's marker functions wants markers. Let's give them markers.
-    getDummyMarker() {
+    getDummyMarker(): typeof CIQ.Marker {
         let x = this.x;
         let xPositioner = this.xPositioner;
         if (this.xPositioner === 'epoch') {
             xPositioner = 'date';
-            x = CIQ.strToDateTime(getUTCDate(x));
+            x = CIQ.strToDateTime(getUTCDate(Number(x)));
         }
         return {
             chart: this.chart,

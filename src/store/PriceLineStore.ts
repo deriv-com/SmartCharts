@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TCIQAppend, TCIQChartEngineChart, TCustomEvent } from 'src/types';
+import { TCIQAppend, TCustomEvent } from 'src/types';
 import MainStore from '.';
 import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
@@ -127,7 +127,7 @@ export default class PriceLineStore {
         return this.context.stx;
     }
 
-    get chart(): TCIQChartEngineChart {
+    get chart(): typeof CIQ.ChartEngine.Chart {
         return this.stx.chart;
     }
 

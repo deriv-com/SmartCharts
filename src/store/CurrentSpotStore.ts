@@ -1,5 +1,4 @@
 import { when } from 'mobx';
-import { TCIQChartEngineChart } from 'src/types';
 import MainStore from '.';
 import { red as RED } from '../../sass/_themes.scss';
 import Context from '../components/ui/Context';
@@ -70,7 +69,7 @@ class CurrentSpotStore {
         const glow = is_browser.Firefox() ? 0 : progress;
 
         /** @type {CanvasRenderingContext2D} */
-        const ctx: TCIQChartEngineChart["context"] = stx.chart.context;
+        const ctx: CanvasRenderingContext2D = stx.chart.context;
         ctx.save();
         if (glow) {
             ctx.shadowBlur = (glow * 35 + 4) | 0;
