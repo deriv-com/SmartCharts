@@ -35,12 +35,9 @@
             margin: 0 -12px;
         }
         .calendar-footer-btn {
-            display: flex;
-            justify-content: end;
-            align-items: center;
-            column-gap: 1.7rem;
             padding: 1.4rem;
             cursor: pointer;
+            margin-left: auto;
 
             &-icon-info {
                 svg {
