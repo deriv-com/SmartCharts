@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { action, computed, observable, reaction } from 'mobx';
 import moment from 'moment';
