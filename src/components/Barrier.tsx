@@ -6,7 +6,7 @@ import connectStore from 'src/store/ConnectStore';
 import PriceLine from './PriceLine';
 import Shade from './Shade';
 
-type TBarrierProps = {
+export type TBarrierProps = {
     store: BarrierStore;
 };
 
@@ -76,6 +76,6 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
     );
 };
 
-const BarrierWrapper = connectStore(observer(Barrier), BarrierStore);
+const BarrierWrapper = connectStore<TBarrierProps>(observer(Barrier), BarrierStore);
 
 export default BarrierWrapper;

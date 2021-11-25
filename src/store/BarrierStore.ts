@@ -7,7 +7,7 @@ import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
 
-type TUpdatePropsParams = {
+export type TUpdatePropsParams = BarrierStore & {
     color?: string;
     draggable: boolean;
     hideBarrierLine?: boolean;
@@ -153,7 +153,7 @@ export default class BarrierStore {
         showOffscreenArrows,
         isSingleBarrier,
         opacityOnOverlap,
-    }: BarrierStore & TUpdatePropsParams): void {
+    }: TUpdatePropsParams): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
