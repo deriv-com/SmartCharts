@@ -27,7 +27,7 @@ class RealtimeSubscription extends Subscription {
         const quotes = this._processHistoryResponse(response);
         this._tickCallback = processTickHistory;
 
-        return quotes;
+        return { quotes, response };
     }
 
     forget() {

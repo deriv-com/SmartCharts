@@ -10,6 +10,7 @@ import { overrideRenderGartley } from './renderGartley';
 import { overrideRenderPitchfork } from './renderPitchfork';
 import { overrideRenderRectangle } from './renderRectangle';
 import { overrideRenderSegment } from './renderSegment';
+import { overrideResizeObserver } from './resizeObserver';
 import { BackingStore } from './backingStore';
 
 const inject = (option: any) => {
@@ -25,6 +26,7 @@ const inject = (option: any) => {
     overrideRenderPitchfork();
     overrideRenderRectangle();
     overrideRenderSegment();
+    overrideResizeObserver();
     BackingStore();
 };
 

@@ -15,7 +15,6 @@ export default class LastDigitStatsStore {
             () => !!this.context,
             () => {
                 this.lastSymbol = this.marketDisplayName;
-                this.updateLastDigitStats();
                 // TODO: call onMasterDataUpdate on symobl change.
                 this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
                 this.mainStore.chart.feed.onMasterDataReinitialize(() => {
@@ -61,8 +60,8 @@ export default class LastDigitStatsStore {
     get shouldMinimiseLastDigits() {
         return this.mainStore.state.shouldMinimiseLastDigits;
     }
-    @action.bound
-    async updateLastDigitStats() {
+
+    @action.bound async updateLastDigitStats(response = {}) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.digits = [];
         this.bars = [];
@@ -76,10 +75,12 @@ export default class LastDigitStatsStore {
                 .slice(-this.count)
                 .map((x: TQuote) => x.Close.toFixed(this.decimalPlaces));
         } else {
-            const tickHistory = await this.api?.getTickHistory({
-                symbol: this.mainStore.chart.currentActiveSymbol.symbol,
-                count: this.count,
-            });
+            const tickHistory =
+                response ||
+                (await this.api?.getTickHistory({
+                    symbol: this.mainStore.chart.currentActiveSymbol.symbol,
+                    count: this.count,
+                }));
             this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
         }
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
@@ -98,7 +99,7 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.updateLastDigitStats();
         } else if (this.latestData.length) {
-            const firstDigit = (Number(this.latestData.shift())).toFixed(this.decimalPlaces).slice(-1);
+            const firstDigit = Number(this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
             this.latestData.push(price);
