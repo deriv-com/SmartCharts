@@ -1,24 +1,25 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 
-import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
 import { useStores } from 'src/store';
+import { TGranularity } from 'src/types';
+import '../../sass/components/_chart-mode.scss';
 import ChartTypes from './ChartTypes';
-import Timeperiod from './Timeperiod';
 import {
     TypeAreaGrayscaleIcon,
     TypeCandleGrayscaleIcon,
     TypeHollowGrayscaleIcon,
     TypeOhlcGrayscaleIcon,
 } from './Icons';
-import '../../sass/components/_chart-mode.scss';
 import Menu from './Menu';
+import Timeperiod from './Timeperiod';
 
 type TChartModeProps = {
     portalNodeId: string;
     onChartType: any;
-    onGranularity: (granularity: number) => void;
+    onGranularity: (granularity?: TGranularity) => void;
 };
 
 const TypeMap = {

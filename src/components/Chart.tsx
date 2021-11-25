@@ -4,6 +4,7 @@ import React from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
 import BarrierStore from 'src/store/BarrierStore';
+import ChartState, { TAdditionalChartProps } from 'src/store/ChartState';
 import { TChartParams } from 'src/types';
 /* css + scss */
 import '../../sass/main.scss';
@@ -24,18 +25,20 @@ import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
 import './ui';
 
-export type TChartProps = TChartParams & {
-    id: string;
-    barriers: BarrierStore[];
-    enabledChartFooter?: boolean;
-    enabledNavigationWidget?: boolean;
-    isMobile?: boolean;
-    chartControlsWidgets?: React.FC;
-    topWidgets?: React.FC;
-    bottomWidgets?: React.FC;
-    toolbarWidget: React.FC;
-    onCrosshairChange: (state?: number | null) => void | null;
-};
+export type TChartProps = TChartParams &
+    ChartState &
+    TAdditionalChartProps & {
+        id: string;
+        barriers: BarrierStore[];
+        enabledChartFooter?: boolean;
+        enabledNavigationWidget?: boolean;
+        isMobile?: boolean;
+        chartControlsWidgets?: React.FC;
+        topWidgets?: React.FC;
+        bottomWidgets?: React.FC;
+        toolbarWidget: React.FC;
+        onCrosshairChange: (state?: number | null) => void | null;
+    };
 
 const Chart: React.FC<TChartProps> = props => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();

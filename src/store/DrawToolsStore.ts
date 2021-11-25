@@ -115,7 +115,7 @@ export default class DrawToolsStore {
     @observable
     activeToolsGroup: TDrawToolsGroup[] = [];
     @observable
-    portalNodeIdChanged = '';
+    portalNodeIdChanged?: string;
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
@@ -296,7 +296,7 @@ export default class DrawToolsStore {
         this.activeToolsGroup = Object.values(groups).sort((a, b) => a.items.length - b.items.length);
     }
     @action.bound
-    updatePortalNode(portalNodeId: string) {
+    updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }

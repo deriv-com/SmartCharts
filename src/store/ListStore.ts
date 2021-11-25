@@ -18,7 +18,7 @@ export default class ListStore {
         this.onItemSelected = onItemSelected;
     }
 
-    @action.bound onItemClick(idx: number, item: ChartType) {
+    @action.bound onItemClick(_idx: number, item: ChartType) {
         if (this.onItemSelected) this.onItemSelected(item);
     }
 }

@@ -1,10 +1,10 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
+import React, { CSSProperties } from 'react';
 import BarrierStore from 'src/store/BarrierStore';
 import connectStore from 'src/store/ConnectStore';
-import Shade from './Shade';
 import PriceLine from './PriceLine';
+import Shade from './Shade';
 
 type TBarrierProps = {
     store: BarrierStore;
@@ -37,7 +37,7 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
     return (
         <div
             className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
-            style={{ '--shade-color': shadeColor } as any}
+            style={{ '--shade-color': shadeColor } as CSSProperties}
         >
             <PriceLine
                 store={_high_barrier}

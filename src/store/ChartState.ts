@@ -14,7 +14,7 @@ import {
 import { TSettings } from './ChartSettingStore';
 import ChartStore, { TRatio } from './ChartStore';
 
-type TAdditionalChartProps = {
+export type TAdditionalChartProps = {
     networkStatus: {
         tooltip: string;
         class: string;

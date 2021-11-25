@@ -32,11 +32,11 @@ export default class MarkerStore {
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
-        this.stx = this.mainStore.chart.context.stx;
+        this.stx = this.mainStore.chart.context?.stx;
         this.chart = this.stx.chart;
         this.panel = this.chart.panel;
         this.yAxis = this.panel.yAxis;
-        this.mainStore.chart.feed.onPagination(this.updateMarkerTick);
+        this.mainStore.chart.feed?.onPagination(this.updateMarkerTick);
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updateMarkerTick);
     }

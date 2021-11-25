@@ -1,8 +1,8 @@
-import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { ZoomInIcon, ZoomOutIcon } from './Icons';
-import '../../sass/components/_chart-size.scss';
+import React from 'react';
 import { useStores } from 'src/store';
+import '../../sass/components/_chart-size.scss';
+import { ZoomInIcon, ZoomOutIcon } from './Icons';
 
 const ChartSize: React.FC = () => {
     const { chartSize } = useStores();

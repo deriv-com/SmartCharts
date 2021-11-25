@@ -1,24 +1,24 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { TMainStore } from 'src/types';
+import React from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useStores } from 'src/store';
+import { TLanguage } from 'src/store/ChartSettingStore';
+import { TMainStore } from 'src/types';
+import '../../sass/components/_chart-setting.scss';
 import { FormGroup, SwitchIcon } from './Form';
 import {
-    SettingIcon,
-    LanguageIcon,
-    ThemeIcon,
     ChartIcon,
-    ThemeLightIcon,
-    ThemeDarkIcon,
+    LanguageIcon,
     SettingCountdownMap,
-    SettingHistoricalMap,
     SettingHighestLowestMap,
+    SettingHistoricalMap,
+    SettingIcon,
+    ThemeDarkIcon,
+    ThemeIcon,
+    ThemeLightIcon,
 } from './Icons';
-import '../../sass/components/_chart-setting.scss';
 import Menu from './Menu';
 
 type ChartSettingsItemProps = {
@@ -128,12 +128,13 @@ const ChartSetting: React.FC = () => {
                     <TabPanel>
                         <div className='sc-chart-setting__panel'>
                             <FormGroup title={t.translate('Select language')} type='language'>
-                                {languages.map(language => (
+                                {(languages as Array<TLanguage>).map(language => (
                                     <div
                                         key={language.key}
                                         onClick={() => setLanguage(language.key)}
                                         className={classNames('form__group__item', {
-                                            'form__group__item--active': selectedLanguage?.key === language.key,
+                                            'form__group__item--active':
+                                                (selectedLanguage as TLanguage)?.key === language.key,
                                         })}
                                     >
                                         {language.icon}

@@ -18,7 +18,7 @@ export type TSettings = {
     activeLanguages?: Array<string | TLanguage>;
 };
 
-type TLanguage = {
+export type TLanguage = {
     key: string;
     name: string;
     icon: JSX.Element;
@@ -138,7 +138,7 @@ export default class ChartSettingStore {
         }
     }
     @action.bound
-    setLanguage(lng: string | TLanguage) {
+    setLanguage(lng: string) {
         if (!this.languages.length) {
             return;
         }

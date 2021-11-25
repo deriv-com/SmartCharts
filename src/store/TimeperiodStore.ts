@@ -24,7 +24,7 @@ export default class TimeperiodStore {
     _injectionId?: TCIQAppend<() => void>;
     _serverTime: ReturnType<typeof ServerTime.getInstance>;
     mainStore: MainStore;
-    @observable portalNodeIdChanged = '';
+    @observable portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
 
     constructor(mainStore: MainStore) {
@@ -58,7 +58,7 @@ export default class TimeperiodStore {
     @observable interval: string | number | null = null;
     @observable preparingInterval: number | null = null;
 
-    onGranularityChange: (x: TGranularity | number) => void | null = () => null;
+    onGranularityChange: (granularity?: TGranularity) => void | null = () => null;
 
     remain: string | null = null;
 
@@ -161,7 +161,7 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setGranularity(granularity: TGranularity) {
+    @action.bound setGranularity(granularity?: TGranularity) {
         if (this.mainStore.state.granularity !== undefined) {
             console.error(
                 'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
@@ -173,18 +173,18 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound updateProps(onChange: (granularity: TGranularity | number) => void) {
+    @action.bound updateProps(onChange: (granularity?: TGranularity) => void) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
         }
     }
 
-    @action.bound changeGranularity(interval: number) {
+    @action.bound changeGranularity(interval: TGranularity) {
         if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
             this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
         } else {
-            this.preparingInterval = interval;
+            this.preparingInterval = interval as number;
             this.onGranularityChange(interval);
         }
     }
@@ -211,7 +211,7 @@ export default class TimeperiodStore {
         return y;
     };
 
-    @action.bound updatePortalNode(portalNodeId: string) {
+    @action.bound updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }
