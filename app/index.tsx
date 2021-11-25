@@ -255,7 +255,7 @@ const App = () => {
             networkStatus={networkStatus}
             shouldFetchTradingTimes
             enabledChartFooter
-            getIndicatorHeightRatio={(chart_height: any, indicator_count: any) => {
+            getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
                 const isSmallScreen = chart_height < 780;
                 const denominator = indicator_count >= 5 ? indicator_count : indicator_count + 1;
                 const reservedHeight = isMobile ? 100 : 320;

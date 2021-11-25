@@ -1,5 +1,5 @@
 import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse } from '@deriv/api-types';
-import { BinaryAPI } from 'src/binaryapi';
+import { BinaryAPI, TradingTimes } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
 import BarrierStore from 'src/store/BarrierStore';
 import { TSettings } from 'src/store/ChartSettingStore';
@@ -39,7 +39,7 @@ export type TChartParams = {
     toolbarWidget?: React.FC;
     isMobile?: boolean;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void;
-    stateChangeListener?: (state: string, option?: string) => void;
+    stateChangeListener?: (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
     settings?: TSettings;
     barriers?: BarrierStore[];
     enableRouting?: boolean;
@@ -59,9 +59,9 @@ export type TChartParams = {
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;
     yAxisMargin?: { bottom: number; top: number };
-    enableScroll?: boolean;
-    enableZoom?: boolean;
-    chartData?: React.FC;
+    enableScroll?: boolean | null;
+    enableZoom?: boolean | null;
+    chartData?: { activeSymbols: ActiveSymbols; tradingTimes: TradingTimes };
 };
 
 export type TQuote = {
@@ -78,7 +78,7 @@ export type TQuote = {
 
 export interface IPendingPromise<Response> extends Promise<Response> {
     resolve: (res?: Response) => void;
-    reject: (error?: any) => void;
+    reject: (error?: Error) => void;
     isPending: boolean;
     data: any;
 }

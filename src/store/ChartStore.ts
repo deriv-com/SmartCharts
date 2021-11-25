@@ -36,7 +36,7 @@ type TDefaults = {
     granularity: TGranularity;
     chartType: string;
 };
-type TRatio = {
+export type TRatio = {
     height: number;
     percent: number;
 };
@@ -1120,7 +1120,7 @@ class ChartStore {
             }
         );
     }
-    remainLabelY = () => {
+    remainLabelY = (): number => {
         const stx = this.context?.stx;
         const topPos = 36;
         const labelHeight = 24;
@@ -1151,12 +1151,12 @@ class ChartStore {
         if (!this.chartNode) return;
 
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
-        const elapsedSeconds = (Number(endEpoch) || Number(startEpoch)) - (Number(startEpoch) || Number(endEpoch));
+        const elapsedSeconds = Number(endEpoch || startEpoch) - Number(startEpoch || endEpoch);
         const epochPadding = (elapsedSeconds / paddingRatio) | 0;
         if (startEpoch || endEpoch) {
             const dtLeft = startEpoch ? CIQ.strToDateTime(getUTCDate(startEpoch - epochPadding)) : undefined;
             const dtRight = endEpoch ? CIQ.strToDateTime(getUTCDate(endEpoch + epochPadding)) : undefined;
-            const periodicity = calculateTimeUnitInterval(this.granularity as number);
+            const periodicity = calculateTimeUnitInterval(this.granularity);
             range = {
                 dtLeft,
                 dtRight,

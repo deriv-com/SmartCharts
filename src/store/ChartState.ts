@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { TGranularity } from 'src/types';
+import { TChartParams, TGranularity, TQuote } from 'src/types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -11,48 +11,68 @@ import {
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
-import ChartStore from './ChartStore';
+import { TSettings } from './ChartSettingStore';
+import ChartStore, { TRatio } from './ChartStore';
+
+type TAdditionalChartProps = {
+    networkStatus: {
+        tooltip: string;
+        class: string;
+    };
+    anchorChartToLeft: boolean;
+};
+
+type TScrollListenerParamsData = {
+    grab: boolean;
+    panel: typeof CIQ.ChartEngine.Panel;
+    stx: typeof CIQ.ChartEngine;
+    x: number;
+    y: number;
+};
 
 class ChartState {
     chartStore: ChartStore;
-    getIndicatorHeightRatio: any;
-    isAnimationEnabled: any;
+    getIndicatorHeightRatio?: (offsetHeight: number | undefined, num: number) => TRatio;
+    isAnimationEnabled?: boolean;
     mainStore: MainStore;
-    margin: any;
+    margin?: number;
     @observable granularity: TGranularity;
-    @observable chartType: any;
+    @observable chartType?: string;
     @observable startEpoch?: number;
     @observable endEpoch?: number;
     @observable symbol?: string;
     @observable isConnectionOpened = false;
     @observable isChartReady = false;
-    @observable chartStatusListener: any;
-    @observable stateChangeListener: any;
-    @observable settings: any;
+    @observable chartStatusListener?: (isChartReady: boolean) => boolean;
+    @observable stateChangeListener?: (
+        state: string,
+        option?: { symbol: string | undefined; isClosed: boolean }
+    ) => void;
+    @observable settings?: TSettings;
     @observable showLastDigitStats = false;
-    @observable scrollToEpoch: any;
-    @observable onExportLayout: any;
-    @observable clearChart: any;
+    @observable scrollToEpoch?: number | null;
+    @observable onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
+    @observable clearChart?: () => void;
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
     @observable isStaticChart = false;
     @observable shouldFetchTradingTimes = true;
-    @observable refreshActiveSymbols: any;
+    @observable refreshActiveSymbols?: boolean;
     @observable hasReachedEndOfData = false;
-    @observable prevChartType: any;
+    @observable prevChartType?: string;
     @observable isChartScrollingToEpoch = false;
     @observable crosshairState: number | null = 1;
     @observable crosshairTooltipLeftAllow = null;
-    @observable maxTick: any;
-    @observable enableScroll = true;
-    @observable enableZoom = true;
+    @observable maxTick?: number;
+    @observable enableScroll: boolean | null = true;
+    @observable enableZoom: boolean | null = true;
     @observable yAxisMargin = { top: 106, bottom: 64 };
     tradingTimes: string | null = null;
     activeSymbols: string | null = null;
-    chartControlsWidgets: any;
-    enabledChartFooter: any;
+    chartControlsWidgets?: React.FC | null;
+    enabledChartFooter?: boolean;
 
-    get stxx() {
+    get stxx(): ChartStore['stxx'] {
         return this.chartStore.stxx;
     }
     get context() {
@@ -127,7 +147,7 @@ class ChartState {
         enableZoom = null,
         anchorChartToLeft = false,
         chartData,
-    }: any) {
+    }: TChartParams & ChartState & TAdditionalChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
@@ -327,7 +347,7 @@ class ChartState {
         this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
 
         if (this.rootElement) {
-            (this.rootElement?.querySelector('.chartContainer') as any).style.backgroundColor =
+            (this.rootElement?.querySelector('.chartContainer') as HTMLElement).style.backgroundColor =
                 Theme[`${theme}_chart_bg`];
         }
         // change chart colors to grey if the current market is closed and it is not a static chart
@@ -362,13 +382,13 @@ class ChartState {
         this.stxx.draw();
     }
 
-    @action.bound stateChange(tag: any, option?: any) {
+    @action.bound stateChange(tag: string, option?: { symbol: string | undefined; isClosed: boolean }) {
         if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
             this.stateChangeListener(tag, option);
         }
     }
 
-    @action.bound setChartIsReady(isChartReady: any) {
+    @action.bound setChartIsReady(isChartReady: boolean) {
         if (this.isChartReady !== isChartReady) {
             this.isChartReady = isChartReady;
 
@@ -383,7 +403,7 @@ class ChartState {
         }
     }
 
-    @action.bound setChartGranularity(granularity: any) {
+    @action.bound setChartGranularity(granularity: TGranularity) {
         const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
         const isChartTypeCandle =
             this.mainStore.chartType.isCandle ||
@@ -395,14 +415,14 @@ class ChartState {
         this.granularity = granularity === null ? undefined : granularity;
     }
 
-    @action.bound setChartType(chartType: string) {
+    @action.bound setChartType(chartType: string | undefined) {
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);
         }
     }
 
-    @action.bound setShouldMinimiseLastDigit(status: any) {
+    @action.bound setShouldMinimiseLastDigit(status: boolean) {
         this.shouldMinimiseLastDigits = status;
     }
 
@@ -534,15 +554,16 @@ class ChartState {
         }
     }
 
-    scrollChartToLeft = (leftTick?: any, force?: any) => {
+    scrollChartToLeft = (leftTick?: TQuote | null, force?: boolean) => {
         if (!this.stxx?.chart) return;
 
-        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT));
+        const scrollToEpoch = this.scrollToEpoch || (leftTick && getUTCEpoch(leftTick.DT as Date));
         this.stxx.chart.entryTick = null;
 
         if (this.scrollToEpoch && !this.startEpoch && !force) {
             const startEntry = this.stxx.chart.dataSet.find(
-                (entry: any) => entry.DT.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch)).valueOf()
+                (entry: TQuote) =>
+                    entry.DT?.valueOf() === CIQ.strToDateTime(getUTCDate(Number(scrollToEpoch))).valueOf()
             );
 
             if (startEntry) {
@@ -571,7 +592,7 @@ class ChartState {
         } else if ((scrollToEpoch && this.startEpoch) || force) {
             // scale 1:1 happen
             this.stxx.chart.lockScroll = true;
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch));
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(Number(this.startEpoch || scrollToEpoch)));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
@@ -626,7 +647,7 @@ class ChartState {
         this.onExportLayout(currentLayout);
     }
 
-    scrollListener({ grab }: any) {
+    scrollListener({ grab }: TScrollListenerParamsData) {
         if (grab && this.stxx.chart.lockScroll) {
             this.stxx.chart.lockScroll = false;
         }
