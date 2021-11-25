@@ -191,9 +191,11 @@ class Feed {
                 if (!isComparisonChart) {
                     this.unsubscribeAll();
                 }
-                quotes = await subscription.initialFetch();
+                const { quotes: new_quotes, response } = await subscription.initialFetch();
+                quotes = new_quotes;
+                this._mainStore.lastDigitStats.updateLastDigitStats(response);
             } catch (error) {
-                const { message: text } = error;
+                const { message: text } = error as any;
                 this._mainStore.notifier.notify({
                     text,
                     type: 'error',
@@ -484,7 +486,7 @@ class Feed {
     _resumeStream(key: string) {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
-        this._activeStreams[key].resume().then((quotes: any) => {
+        this._activeStreams[key].resume().then(({ quotes }: { quotes: any }) => {
             if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });

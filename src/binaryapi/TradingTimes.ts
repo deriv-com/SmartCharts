@@ -121,7 +121,14 @@ class TradingTimes {
             for (const submarket of submarkets) {
                 const { symbols = [] } = submarket;
                 for (const symbolObj of symbols) {
-                    const { events, times, symbol, feed_license, delay_amount } = symbolObj as TTradingTimesSymbol;
+                    const {
+                        events,
+                        feed_license,
+                        delay_amount,
+                        times,
+                        trading_days,
+                        symbol,
+                    } = symbolObj as TTradingTimesSymbol;
                     const { open, close } = times;
                     let isClosedToday = false;
                     const holidays: string[] = [];
@@ -170,7 +177,8 @@ class TradingTimes {
                                 // Special date
                             } else if (/^\d{4}-\d{2}-\d{2}$/.test(event.date)) {
                                 holidays.push(event.date);
-                            } else if (event.date === 'today') {
+                            }
+                            if (trading_days.every(day => day !== DaysOfWeek[now.getDay()].slice(0, 3))) {
                                 isClosedToday = true;
                             }
                         });
