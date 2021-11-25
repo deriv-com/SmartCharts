@@ -1,19 +1,22 @@
-import { observable, action, computed, when } from 'mobx';
-import MenuStore from './MenuStore';
+import { action, computed, observable, when } from 'mobx';
+import { TChartTitleProps, TOpenMarket } from 'src/components/ChartTitle';
+import Context from 'src/components/ui/Context';
+import { TChanges, TQuote, TTimes } from 'src/types';
+import MainStore from '.';
+import ServerTime from '../utils/ServerTime';
 import AnimatedPriceStore from './AnimatedPriceStore';
 import CategoricalDisplayStore from './CategoricalDisplayStore';
-import ServerTime from '../utils/ServerTime';
-import MainStore from '.';
+import MenuStore from './MenuStore';
 
 export default class ChartTitleStore {
     animatedPrice: AnimatedPriceStore;
     categoricalDisplay: CategoricalDisplayStore;
     mainStore: MainStore;
     menuStore: MenuStore;
-    serverTime: any;
+    serverTime: ReturnType<typeof ServerTime.getInstance>;
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-title' });
         this.animatedPrice = new AnimatedPriceStore();
         this.categoricalDisplay = new CategoricalDisplayStore({
@@ -39,11 +42,11 @@ export default class ChartTitleStore {
     @observable
     openMarket = {};
     enableShowPrice = false;
-    searchInputClassName: any;
+    searchInputClassName?: string;
     get chart() {
         return this.mainStore.chart;
     }
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
     get crosshairStore() {
@@ -76,7 +79,7 @@ export default class ChartTitleStore {
                 ? this.tradingTimes._tradingTimesMap[this.currentSymbol.symbol].times
                 : [];
         const now = this.serverTime.getLocalDate().getTime();
-        let openTime = times ? times.find((time: any) => time.open.getTime() > now) : null;
+        let openTime = times ? times.find((time: TTimes) => time.open.getTime() > now) : null;
         if (!(openTime instanceof Date)) {
             openTime = null;
         }
@@ -84,22 +87,22 @@ export default class ChartTitleStore {
     }
     @computed
     get currentActiveCategory() {
-        if ((this.openMarket as any).category) {
-            return (this.openMarket as any).category;
+        if ((this.openMarket as TOpenMarket).category) {
+            return (this.openMarket as TOpenMarket).category;
         }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
     }
     @computed
     get currentActiveSubCategory() {
-        if ((this.openMarket as any).subcategory) {
-            return (this.openMarket as any).subcategory;
+        if ((this.openMarket as TOpenMarket).subcategory) {
+            return (this.openMarket as TOpenMarket).subcategory;
         }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '';
     }
     @computed
     get currentActiveMarket() {
-        if ((this.openMarket as any).market) {
-            return (this.openMarket as any).market;
+        if ((this.openMarket as TOpenMarket).market) {
+            return (this.openMarket as TOpenMarket).market;
         }
         return null;
     }
@@ -107,7 +110,7 @@ export default class ChartTitleStore {
         this.chart.feed.onMasterDataUpdate(this.update);
         this.update();
         this.tradingTimes?.onMarketOpenCloseChanged(
-            action((changes: any) => {
+            action((changes: TChanges) => {
                 for (const symbol in changes) {
                     if (this.currentSymbol?.symbol === symbol) {
                         this.currentSymbol.exchange_is_open = changes[symbol];
@@ -117,7 +120,7 @@ export default class ChartTitleStore {
         );
     };
     @action.bound
-    setSymbol(symbolObj: any) {
+    setSymbol(symbolObj: string) {
         if (this.mainStore.state.symbol !== undefined) {
             console.error(
                 'Changing symbol does nothing because symbol prop is being set. Consider overriding the onChange prop in <ChartTitle />'
@@ -127,7 +130,7 @@ export default class ChartTitleStore {
         this.chart.changeSymbol(symbolObj);
     }
     @action.bound
-    update(quote?: any) {
+    update(quote?: TQuote) {
         if (!this.currentSymbol) {
             return;
         }
@@ -135,10 +138,10 @@ export default class ChartTitleStore {
         if (!isVisible) {
             return;
         }
-        let currentPrice = quote.Close;
+        let currentPrice = quote?.Close;
         if (currentPrice) {
-            currentPrice = currentPrice.toFixed(this.decimalPlaces);
-            const oldPrice = quote.prevClose || this.animatedPrice.price;
+            currentPrice = +currentPrice.toFixed(this.decimalPlaces);
+            const oldPrice = quote?.prevClose || this.animatedPrice.price;
             this.animatedPrice.setPrice(currentPrice, oldPrice);
             if (oldPrice) {
                 this.todayChange = Math.abs(currentPrice - oldPrice).toFixed(this.decimalPlaces);
@@ -155,7 +158,7 @@ export default class ChartTitleStore {
             this.enableShowPrice = true;
             return;
         }
-        this.isVisible = isVisible;
+        this.isVisible = isVisible as boolean;
     }
     onMouseEnter = () => this.crosshairStore.updateVisibility(false);
     onMouseLeave = () => this.crosshairStore.updateVisibility(true);
@@ -165,7 +168,7 @@ export default class ChartTitleStore {
         this.enableShowPrice = false;
     }
     @action.bound
-    updateProps({ open_market, open }: any) {
+    updateProps({ open_market, open }: TChartTitleProps) {
         if (open_market) {
             this.openMarket = open_market;
         }

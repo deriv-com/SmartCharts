@@ -1,8 +1,15 @@
-import { observable, action, computed, when } from 'mobx';
+import { action, computed, observable, when } from 'mobx';
+import Context from 'src/components/ui/Context';
+import { TQuote } from 'src/types';
 import MainStore from '.';
-import MenuStore from './MenuStore';
 import { downloadFileInBrowser, is_browser } from '../utils';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
+import MenuStore from './MenuStore';
+
+type TNodeToManipulate = {
+    parent: ParentNode | null;
+    child: HTMLElement | SVGSVGElement;
+}
 
 export default class ShareStore {
     mainStore: MainStore;
@@ -11,13 +18,13 @@ export default class ShareStore {
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'download' });
-        when(() => this.context, this.onContextReady);
+        when(() => !!this.context, this.onContextReady);
     }
 
-    get context() {
+    get context(): Context {
         return this.mainStore.chart.context;
     }
-    get stx() {
+    get stx(): Context["stx"] {
         return this.context.stx;
     }
 
@@ -44,15 +51,14 @@ export default class ShareStore {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
-        // @ts-ignore
-        import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js').then(html2canvas => {
+        import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js' as string).then(html2canvas => {
             // since react rerenders is not immediate, we use CIQ.appendClassName to
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea?.classList.add('ciq-chart--screenshot');
             // There is no html2canvas version able to render our svgs on a screenshot (tried 0.5.0-beta4 as well),
             // the below workaround lets us temporarily replace svgs with imgs on canvas before taking a screenshot:
-            const nodesToRecover: any[] = [];
-            const nodesToRemove: any[] = [];
+            const nodesToRecover: TNodeToManipulate[] = [];
+            const nodesToRemove: TNodeToManipulate[] = [];
             const svgIcons = this.screenshotArea?.querySelectorAll('svg') || [];
             svgIcons.forEach(svg => {
                 const parentNode = svg.parentNode;
@@ -94,15 +100,15 @@ export default class ShareStore {
             });
 
             setTimeout(() => {
-                html2canvas.default(this.screenshotArea).then((canvas: any) => {
+                html2canvas.default(this.screenshotArea).then((canvas: HTMLCanvasElement) => {
                     this._onCanvasReady(canvas, newTab);
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
                     if (!is_browser.Firefox() && !is_browser.Safari()) {
                         nodesToRemove.forEach(pair => {
-                            pair.parent.removeChild(pair.child);
+                            pair.parent?.removeChild(pair.child);
                         });
                         nodesToRecover.forEach(pair => {
-                            pair.parent.appendChild(pair.child);
+                            pair.parent?.appendChild(pair.child);
                         });
                     }
                 });
@@ -112,7 +118,7 @@ export default class ShareStore {
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 
-    @action.bound _onCanvasReady(canvas: any, newTab: any) {
+    @action.bound _onCanvasReady(canvas: HTMLCanvasElement, newTab: Window | null) {
         const content = canvas.toDataURL('image/png');
         downloadFileInBrowser(`${new Date().toUTCString()}.png`, content, 'image/png;', newTab);
         this.isLoadingPNG = false;
@@ -129,7 +135,7 @@ export default class ShareStore {
                 ? this.stx.masterData
                 : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
 
-        allowableItems.forEach(({ DT, Open, High, Low, Close }: any) => {
+        allowableItems.forEach(({ DT, Open, High, Low, Close }: Required<TQuote>) => {
             const year = DT.getFullYear();
             const month = DT.getMonth() + 1; // months from 1-12
             const day = DT.getDate();

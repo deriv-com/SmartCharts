@@ -9,42 +9,50 @@ import {
     DrawToolsRectangleIcon,
     DrawToolsTrendIcon,
     DrawToolsVerticalIcon,
+    FlagIcons,
+    IndicatorAdxIcon,
+    IndicatorAlligatorIcon,
+    IndicatorAroonIcon,
+    IndicatorAveragesIcon,
+    IndicatorAwesomeOscillatorIcon,
+    IndicatorBollingerIcon,
+    IndicatorCatAveragesIcon,
     IndicatorCatMomentumIcon,
+    IndicatorCatOtherIcon,
     IndicatorCatTrendLightIcon,
     IndicatorCatVolatilityIcon,
-    IndicatorCatAveragesIcon,
-    IndicatorCatOtherIcon,
-    IndicatorAwesomeOscillatorIcon,
+    IndicatorCommodityChannelIndexIcon,
+    IndicatorDonchianIcon,
     IndicatorDTrendedIcon,
+    IndicatorEnvelopeIcon,
+    IndicatorFractalChaosIcon,
     IndicatorGatorIcon,
+    IndicatorIchimokuIcon,
     IndicatorMacdIcon,
+    IndicatorParabolicIcon,
+    IndicatorRainbowIcon,
     IndicatorRateChangeIcon,
     IndicatorRSIIcon,
-    IndicatorStochasticOscillatorIcon,
     IndicatorStochasticMomentumIcon,
+    IndicatorStochasticOscillatorIcon,
     IndicatorWilliamPercentIcon,
-    IndicatorAroonIcon,
-    IndicatorAdxIcon,
-    IndicatorCommodityChannelIndexIcon,
-    IndicatorIchimokuIcon,
-    IndicatorParabolicIcon,
     IndicatorZigZagIcon,
-    IndicatorBollingerIcon,
-    IndicatorDonchianIcon,
-    IndicatorAveragesIcon,
-    IndicatorEnvelopeIcon,
-    IndicatorAlligatorIcon,
-    IndicatorFractalChaosIcon,
-    IndicatorRainbowIcon,
     // Chart Types
     TypeAreaIcon,
     TypeCandleIcon,
     TypeHollowIcon,
     TypeOhlcIcon,
-    FlagIcons,
 } from './components/Icons';
 
-export const drawTools = {
+type TDrawTools = {
+    [key: string]: {
+        id: string;
+        text: string;
+        icon: (props: unknown) => JSX.Element;
+    };
+};
+
+export const drawTools: TDrawTools = {
     channel: { id: 'channel', text: t.translate('Channel [num]'), icon: DrawToolsChannelIcon },
     segment: { id: 'continuous', text: t.translate('Continuous [num]'), icon: DrawToolsContinuousIcon },
     fibfan: { id: 'fibfan', text: t.translate('Fib Fan [num]'), icon: DrawToolsFibonaccifanIcon },

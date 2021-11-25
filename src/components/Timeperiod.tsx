@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
 import { useStores } from 'src/store';
-import Tooltip from './Tooltip';
-import { InlineLoader } from './Loader';
-import { Intervals } from '../Constant';
+import { TGranularity } from 'src/types';
 import '../../sass/components/_timeperiod.scss';
+import { Intervals } from '../Constant';
+import { InlineLoader } from './Loader';
+import Tooltip from './Tooltip';
 
 type TTimeperiodItemProps = {
     category: typeof Intervals[0];
@@ -17,7 +18,7 @@ type TTimeperiodItemProps = {
     onClick: (chart_type_id: string, key: string, inval: number) => void;
 };
 
-const enableLoader = (isLoading: boolean, inval: any, preparingInterval: number | null) =>
+const enableLoader = (isLoading: boolean, inval: number, preparingInterval: number | null) =>
     isLoading && inval === preparingInterval;
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
@@ -80,7 +81,7 @@ const TimeperiodItemComponent: React.FC<TTimeperiodItemProps> = ({ item, categor
 
 const TimeperiodItem = observer(TimeperiodItemComponent);
 
-type TTimeperiodProps = { portalNodeId: string; onChange: (granularity: number) => void };
+type TTimeperiodProps = { portalNodeId: string; onChange: (granularity: TGranularity | number) => void };
 
 const Timeperiod: React.FC<TTimeperiodProps> = ({ portalNodeId, onChange }) => {
     const { timeperiod } = useStores();

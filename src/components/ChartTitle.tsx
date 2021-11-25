@@ -8,13 +8,19 @@ import Menu from './Menu';
 import { CategoricalDisplay } from './categoricaldisplay';
 import { SymbolSelectButton } from './SymbolSelectButton';
 
-type TChartTitleProps = {
+export type TOpenMarket = {
+    category: string;
+    subcategory: string;
+    market: string;
+}
+
+export type TChartTitleProps = {
     containerId?: string;
     enabled?: boolean;
     portalNodeId?: string;
     searchInputClassName?: string;
     open?: boolean;
-    open_market?: string;
+    open_market: TOpenMarket | null;
     isNestedList?: boolean;
     onChange?: (x: string) => void;
 };

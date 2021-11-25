@@ -34,7 +34,7 @@ export default class LastDigitStatsStore {
     }
     count = 1000;
     digits: number[] = [];
-    latestData: string[] = [];
+    latestData: number[] = [];
     lastSymbol = '';
     @observable
     bars: TBar[] = [];
@@ -91,7 +91,7 @@ export default class LastDigitStatsStore {
         this.updateBars();
     }
     @action.bound
-    onMasterDataUpdate({ Close, tick }: TicksStreamResponse & { Close: string }) {
+    onMasterDataUpdate({ Close, tick }: TicksStreamResponse & { Close: number }) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.lastTick = tick;
         if (this.marketDisplayName !== this.lastSymbol) {
@@ -102,7 +102,7 @@ export default class LastDigitStatsStore {
             const firstDigit = Number(this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
-            this.latestData.push(price);
+            this.latestData.push(+price);
             this.digits[+lastDigit]++;
             this.digits[+firstDigit]--;
             this.updateBars();

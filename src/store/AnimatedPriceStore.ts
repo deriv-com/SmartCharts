@@ -2,12 +2,12 @@ import { observable, action } from 'mobx';
 
 export default class AnimatedPriceStore {
     className = '';
-    @observable price = '';
+    @observable price = 0;
     @observable isIncrease = false;
     @observable status = '';
-    oldPrice = '';
+    oldPrice = 0;
 
-    @action.bound setPrice(val: string, prevPrice: string): void {
+    @action.bound setPrice(val: number, prevPrice: number): void {
         const oldVal = prevPrice || +this.oldPrice;
         const newVal = +val;
         let isIncrease = false;
