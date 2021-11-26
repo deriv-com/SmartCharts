@@ -12,7 +12,7 @@ export type TBar = {
     cName: string;
 };
 
-export type ChartType = typeof ChartTypes[0];
+export type ChartType = typeof ChartTypes[0] & { active?: boolean; disabled?: boolean };
 
 export type TChartParams = {
     requestAPI: BinaryAPI['requestAPI'];

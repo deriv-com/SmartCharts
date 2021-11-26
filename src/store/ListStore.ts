@@ -8,6 +8,10 @@ type TListStoreProps = {
     onItemSelected?: (item: ChartType) => void;
 };
 
+type TgetItems = TListStoreProps['getItems'];
+
+export type TListItem = ReturnType<TgetItems>[0];
+
 export default class ListStore {
     getContext: () => Context | null;
     getItems: () => ChartType[];

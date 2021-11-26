@@ -1,20 +1,28 @@
+export type TNotification = {
+    text: string;
+    type?: 'info' | 'warning' | 'success' | 'error' | 'warning';
+    category: string;
+};
+
+export type TMessageCallback = (message: TNotification) => void;
+export type TRemoveByCategoryCallback = (category: string) => void;
 export default class ChartNotifier {
-    messageCallback: any = null;
-    removeByCategoryCallback: any = null;
+    messageCallback: TMessageCallback | null = null;
+    removeByCategoryCallback: TRemoveByCategoryCallback | null = null;
 
-    notify(message: any) {
-        this.messageCallback(message);
+    notify(message: TNotification) {
+        this.messageCallback?.(message);
     }
 
-    removeByCategory(category: any) {
-        this.removeByCategoryCallback(category);
+    removeByCategory(category: string) {
+        this.removeByCategoryCallback?.(category);
     }
 
-    onMessage(callback: any) {
+    onMessage(callback: TMessageCallback) {
         this.messageCallback = callback;
     }
 
-    onRemoveByCategory(callback: any) {
+    onRemoveByCategory(callback: TRemoveByCategoryCallback) {
         this.removeByCategoryCallback = callback;
     }
 }

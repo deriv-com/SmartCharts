@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import moment from 'moment';
 import DatePicker from './DateTimePicker/DatePicker';
 import TimePicker from './DateTimePicker/TimePicker';
 import './chart-history.scss';
 
-const ChartHistory = React.memo(({ onChange }: any) => {
+type TChartHistoryProps = {
+    onChange: (date: string) => void;
+};
+
+const ChartHistory: React.FC<TChartHistoryProps> = React.memo(({ onChange }) => {
     const [date, setDate] = React.useState(moment().format('YYYY/MM/DD'));
     const [focusOnDate, setFocusOnDate] = React.useState(false);
     const [focusOnTime, setFocusOnTime] = React.useState(false);
@@ -14,7 +18,7 @@ const ChartHistory = React.memo(({ onChange }: any) => {
         setFocusOnDate(true);
     }, []);
 
-    const onChangeDate = ({ target }: any) => {
+    const onChangeDate = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const new_date = target.value;
         setDate(new_date);
         setFocusOnDate(false);
@@ -22,7 +26,7 @@ const ChartHistory = React.memo(({ onChange }: any) => {
         updateStore(new_date, time);
     };
 
-    const onChangeTime = ({ target }: any) => {
+    const onChangeTime = ({ target }: ChangeEvent<HTMLInputElement>) => {
         const new_time = target.value;
         setTime(new_time);
         setFocusOnDate(false);
@@ -35,7 +39,7 @@ const ChartHistory = React.memo(({ onChange }: any) => {
         setFocusOnTime(false);
     };
 
-    const updateStore = (new_date: any, new_time: any) => {
+    const updateStore = (new_date: string, new_time: string) => {
         onChange(`${new_date} ${new_time}`);
     };
 

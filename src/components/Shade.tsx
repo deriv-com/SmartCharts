@@ -1,8 +1,13 @@
 import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
+import ShadeStore from 'src/store/ShadeStore';
 
-const Shade = ({ store }: any) => {
+type TShadeProps = {
+    store: ShadeStore;
+};
+
+const Shade: React.FC<TShadeProps> = ({ store }) => {
     const { visible, className, setShadeRef } = store;
 
     return (
