@@ -1,22 +1,23 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import SettingsDialogStore from 'src/store/SettingsDialogStore';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import Scroll from './Scroll';
+import SettingsDialogStore from 'src/store/SettingsDialogStore';
+import '../../sass/components/_settings-dialog.scss';
 import {
-    FormGroup,
-    Switch,
-    NumericInput,
     ColorPicker,
-    Slider,
-    Pattern,
     DropDown,
-    NumberColorPicker,
     FontSetting,
+    FormGroup,
+    NumberColorPicker,
+    NumericInput,
+    Pattern,
+    Slider,
+    Switch,
 } from './Form';
 import { DeleteIcon } from './Icons';
-import '../../sass/components/_settings-dialog.scss';
 import Menu from './Menu';
+import Scroll from './Scroll';
 
 type TSettingsPanelItem = {
     group?: string;
@@ -247,4 +248,4 @@ const SettingsDialog: React.FC<TSettingsDialogProps> = ({ store }) => {
         </Menu>
     );
 };
-export default SettingsDialog;
+export default observer(SettingsDialog);

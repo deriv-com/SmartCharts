@@ -1,11 +1,11 @@
-import { ChangeEvent } from 'react';
-import { observable, action, reaction, computed } from 'mobx';
+import { action, computed, observable, reaction } from 'mobx';
+import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
-import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
-import MenuStore from './MenuStore';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
 import Context from '../components/ui/Context';
-import { TCustomEvent } from '../types';
+import { TCustomEvent, TGranularity } from '../types';
+import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
+import MenuStore from './MenuStore';
 
 export default class ViewStore {
     constructor(mainStore: MainStore) {
@@ -40,11 +40,11 @@ export default class ViewStore {
         overwrite: () => this.overwrite(),
     };
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context["stx"] {
-        return this.context.stx;
+    get stx(): Context['stx'] {
+        return this.context?.stx;
     }
     get loader() {
         return this.mainStore.loader;
@@ -65,7 +65,7 @@ export default class ViewStore {
         this.templateName = e.target.value;
     }
 
-    @action.bound onSubmit(e: KeyboardEvent) {
+    @action.bound onSubmit(e: KeyboardEvent<HTMLInputElement>) {
         if (e.keyCode === 13) {
             this.saveViews();
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Save Template');
@@ -82,7 +82,11 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (ViewStore.views.some((x: {[key: string]: string}) => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
+        if (
+            ViewStore.views.some(
+                (x: { [key: string]: string }) => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim()
+            )
+        ) {
             this.updateRoute('overwrite');
         } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
@@ -96,7 +100,7 @@ export default class ViewStore {
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
         const templateIndex = ViewStore.views.findIndex(
-            (x: {[key: string]: string}) => x.name.toLowerCase() === this.templateName.toLowerCase()
+            (x: { [key: string]: string }) => x.name.toLowerCase() === this.templateName.toLowerCase()
         );
         ViewStore.views[templateIndex].layout = layout;
         ViewStore.views[templateIndex].name = this.templateName.trim();
@@ -106,7 +110,7 @@ export default class ViewStore {
     }
 
     @action.bound remove(idx: number, e: TCustomEvent) {
-        ViewStore.views = this.sortedItems.filter((x, index) => idx !== index);
+        ViewStore.views = this.sortedItems.filter((_x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         ViewStore.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');
@@ -128,7 +132,7 @@ export default class ViewStore {
         }
         this.mainStore.state.setChartIsReady(false);
         const stx = this.stx;
-        const granularity = getIntervalInSeconds(ViewStore.views[idx].layout);
+        const granularity = getIntervalInSeconds(ViewStore.views[idx].layout) as TGranularity;
 
         this.mainStore.timeperiod.onGranularityChange(granularity);
         const importLayout = () => {
@@ -168,7 +172,7 @@ export default class ViewStore {
         this.updateRoute('main');
     }
 
-    @action.bound inputRef(ref: HTMLElement) {
+    @action.bound inputRef(ref: HTMLElement | null) {
         if (ref) {
             ref.focus();
             this.isInputActive = true;

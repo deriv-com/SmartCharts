@@ -27,7 +27,7 @@ const TimeperiodItemComponent: React.FC<TTimeperiodItemProps> = ({ item, categor
     const { timeperiod, chartType, loader } = useStores();
     const chartTypeId = chartType.type.id;
     const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
-    const isMobile = mainStore.chart.isMobile;
+    const isMobile = mainStore.chart.isMobile as boolean;
     const { isActive: isLoading } = loader;
 
     const is_tick = React.useMemo(() => category.key === 'tick', [category]);
@@ -81,7 +81,7 @@ const TimeperiodItemComponent: React.FC<TTimeperiodItemProps> = ({ item, categor
 
 const TimeperiodItem = observer(TimeperiodItemComponent);
 
-type TTimeperiodProps = { portalNodeId: string; onChange: (granularity: TGranularity | number) => void };
+type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGranularity) => void; newDesign?: boolean };
 
 const Timeperiod: React.FC<TTimeperiodProps> = ({ portalNodeId, onChange }) => {
     const { timeperiod } = useStores();
@@ -94,7 +94,7 @@ const Timeperiod: React.FC<TTimeperiodProps> = ({ portalNodeId, onChange }) => {
         if (key === 'tick' && chart_type_id !== 'mountain') {
             return;
         }
-        changeGranularity(inval);
+        changeGranularity(inval as TGranularity);
     };
     React.useEffect(() => updateProps(onChangeGranularity));
     updatePortalNode(portalNodeId);

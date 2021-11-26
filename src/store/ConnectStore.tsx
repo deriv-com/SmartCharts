@@ -1,32 +1,36 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
+import { TBarrierProps } from 'src/components/Barrier';
+import { TMarkerProps } from 'src/components/Marker';
 import { useConstructor } from 'src/hooks';
-import MainStore, { useStores } from '.';
+import TMainStore, { useStores } from '.';
+import { TUpdatePropsParams } from './BarrierStore';
+import MarkerStore from './MarkerStore';
 
-type TStoreProps = {
-    updateProps: (props: any) => void;
-    destructor: () => void;
-};
+type TWrappedComponentsProps = TBarrierProps | TMarkerProps;
 
 type TStoreClass = {
-    new (mainStore: MainStore): TStoreProps;
+    new (mainStore: TMainStore): TWrappedComponentsProps['store'];
 };
 
-type TConnectStoreWrapperProps = {
-    StoreClass: TStoreClass;
-    children(store?: TStoreProps): ReactElement;
-    [x: string]: any;
-};
+type TConnectStoreWrapperProps = TUpdatePropsParams &
+    MarkerStore & {
+        StoreClass: TStoreClass;
+        children: (store?: TWrappedComponentsProps['store']) => JSX.Element;
+        [x: string]: unknown;
+    };
 
-const ConnectStoreWrapper: React.FC<TConnectStoreWrapperProps> = ({ StoreClass, ...props }) => {
+const ConnectStoreWrapper: React.FC<
+    Partial<TConnectStoreWrapperProps> & Required<Pick<TConnectStoreWrapperProps, 'StoreClass' | 'children'>>
+> = ({ StoreClass, ...props }) => {
     const store = useStores();
-    const storeRef = React.useRef<TStoreProps>();
+    const storeRef = React.useRef<TWrappedComponentsProps['store']>();
 
     useConstructor(() => {
         storeRef.current = new StoreClass(store);
     });
 
     React.useEffect(() => {
-        storeRef.current?.updateProps?.(props);
+        storeRef.current?.updateProps?.(props as TConnectStoreWrapperProps);
     });
 
     React.useEffect(() => {
@@ -38,12 +42,12 @@ const ConnectStoreWrapper: React.FC<TConnectStoreWrapperProps> = ({ StoreClass, 
     return <React.Fragment>{props.children(storeRef.current)}</React.Fragment>;
 };
 
-const connectStore = (BaseComponent: React.FunctionComponent<any>, StoreClass: TStoreClass) => {
-    const Component: React.FC = ({ children, ...props }) => (
+const connectStore = <P,>(BaseComponent: React.FC<P>, StoreClass: TStoreClass) => {
+    const Component: React.FC<unknown> = ({ children, ...props }) => (
         <ConnectStoreWrapper StoreClass={StoreClass} {...props}>
-            {(store: TStoreProps) => (
-                <BaseComponent store={store} {...props}>
-                    {children}
+            {store => (
+                <BaseComponent store={store} {...(props as P)}>
+                    {children as React.ReactElement}
                 </BaseComponent>
             )}
         </ConnectStoreWrapper>

@@ -24,7 +24,7 @@ class PaginationLoaderStore {
     get feed(): ChartStore['feed'] {
         return this.mainStore.chart.feed;
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): ChartStore['stxx'] {
@@ -37,8 +37,8 @@ class PaginationLoaderStore {
     }
 
     onContextReady = () => {
-        this.feed.onStartPagination(this.setOnPagination);
-        this.feed.onPagination(this.setOnPagination);
+        this.feed?.onStartPagination(this.setOnPagination);
+        this.feed?.onPagination(this.setOnPagination);
 
         // this injection will slows down the swiping and mouse wheel operations
         // by ignoring requests that are too close from one another or

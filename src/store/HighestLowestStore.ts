@@ -18,7 +18,7 @@ class HighestLowestStore {
     get feed(): ChartStore['feed'] {
         return this.mainStore.chart.feed;
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): ChartStore['stxx'] {

@@ -1,5 +1,5 @@
 import { TickSpotData, TicksStreamResponse } from '@deriv/api-types';
-import { observable, action, computed, when } from 'mobx';
+import { action, computed, observable, when } from 'mobx';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
 import { TBar, TQuote } from '../types';
@@ -16,8 +16,8 @@ export default class LastDigitStatsStore {
             () => {
                 this.lastSymbol = this.marketDisplayName;
                 // TODO: call onMasterDataUpdate on symobl change.
-                this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
-                this.mainStore.chart.feed.onMasterDataReinitialize(() => {
+                this.mainStore.chart.feed?.onMasterDataUpdate(this.onMasterDataUpdate);
+                this.mainStore.chart.feed?.onMasterDataReinitialize(() => {
                     if (this.context && this.mainStore.chart.feed) {
                         this.mainStore.chart.feed.offMasterDataUpdate(this.onMasterDataUpdate);
                         this.mainStore.chart.feed.onMasterDataUpdate(this.onMasterDataUpdate);
@@ -26,11 +26,11 @@ export default class LastDigitStatsStore {
             }
         );
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get stx(): Context['stx'] {
-        return this.context.stx;
+        return this.context?.stx;
     }
     count = 1000;
     digits: number[] = [];

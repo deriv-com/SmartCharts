@@ -1,4 +1,4 @@
-import { action, when, computed, reaction, observable } from 'mobx';
+import { action, computed, observable, reaction, when } from 'mobx';
 import { TQuote } from 'src/types';
 import MainStore from '.';
 import ChartStore from './ChartStore';
@@ -15,13 +15,13 @@ export default class NavigationWidgetStore {
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
-    get stxx(): ChartStore["stxx"] {
+    get stxx(): ChartStore['stxx'] {
         return this.chart.stxx;
     }
 
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-        when(() => this.mainStore.chart.context, this.onContextReady);
+        when(() => !!this.mainStore.chart.context, this.onContextReady);
         reaction(() => this.crosshairStore.state, this.onCrosshairChange);
     }
 

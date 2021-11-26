@@ -1,7 +1,7 @@
-import { action, computed, reaction, observable } from 'mobx';
-import DialogStore from './DialogStore';
+import { action, computed, observable, reaction } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
+import DialogStore from './DialogStore';
 
 export default class MenuStore {
     dialogStore: DialogStore;
@@ -17,7 +17,7 @@ export default class MenuStore {
             this.route = options.route;
         }
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
     get routingStore() {
@@ -40,7 +40,7 @@ export default class MenuStore {
         this.routingStore.updateRoute(this.route, val);
     }
     blurInput() {
-        const stx: Context['stx'] = this.context.stx;
+        const stx: Context['stx'] = this.context?.stx;
         setTimeout(this.handleDialogStatus, 300);
         if (this.open === false) {
             (document.activeElement as HTMLElement).blur();

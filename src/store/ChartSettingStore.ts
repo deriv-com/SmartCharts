@@ -1,26 +1,28 @@
-import { observable, action, when } from 'mobx';
+import { action, observable, when } from 'mobx';
 import MainStore from '.';
-import MenuStore from './MenuStore';
-import { logEvent, LogCategories, LogActions } from '../utils/ga';
-import { Languages } from '../Constant';
 import Context from '../components/ui/Context';
+import { Languages } from '../Constant';
+import { LogActions, LogCategories, logEvent } from '../utils/ga';
+import MenuStore from './MenuStore';
 
-type TSettings = {
-    countdown: boolean
-    historical: boolean
-    language: string
-    position: string
-    isAutoScale: boolean
-    isHighestLowestMarkerEnabled: boolean
-    theme: string
-    activeLanguages: Array<string | TLanguage>
-}
+export type TSettings = {
+    countdown: boolean;
+    historical?: boolean;
+    lang?: string;
+    language?: string;
+    position: string;
+    enabledNavigationWidget?: boolean;
+    isAutoScale?: boolean;
+    isHighestLowestMarkerEnabled: boolean;
+    theme: string;
+    activeLanguages?: Array<string | TLanguage>;
+};
 
-type TLanguage = {
-    key: string
-    name: string
-    icon: JSX.Element
-}
+export type TLanguage = {
+    key: string;
+    name: string;
+    icon: JSX.Element;
+};
 
 export default class ChartSettingStore {
     mainStore: MainStore;
@@ -36,17 +38,17 @@ export default class ChartSettingStore {
             }
         );
     }
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context["stx"] {
-        return this.context.stx;
+    get stx(): Context['stx'] {
+        return this.context?.stx;
     }
     languages: Array<TLanguage | string> = [];
     defaultLanguage = {} as TLanguage | string;
-    onSettingsChange?: (newSettings: Omit<TSettings, "activeLanguages">) => void = undefined;
+    onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void = undefined;
     @observable
-    language: TLanguage | string = "";
+    language: TLanguage | string = '';
     @observable
     position = 'bottom';
     @observable
@@ -59,7 +61,7 @@ export default class ChartSettingStore {
     isAutoScale = true;
     @observable
     isHighestLowestMarkerEnabled = true;
-    setSettings(settings: TSettings) {
+    setSettings(settings?: TSettings) {
         if (settings === undefined) {
             return;
         }
@@ -75,7 +77,8 @@ export default class ChartSettingStore {
         } = settings;
         if (
             !(
-                (!activeLanguages && Languages.every((x: TLanguage) => this.languages.find(y => (y as TLanguage).key === x.key))) ||
+                (!activeLanguages &&
+                    Languages.every((x: TLanguage) => this.languages.find(y => (y as TLanguage).key === x.key))) ||
                 (activeLanguages &&
                     this.languages.length === activeLanguages.length &&
                     this.languages.every(x => activeLanguages.indexOf((x as TLanguage).key.toUpperCase()) !== -1))
@@ -123,16 +126,19 @@ export default class ChartSettingStore {
         if (activeLanguages) {
             this.languages = activeLanguages
                 .map((lngKey: string) => Languages.find((lng: TLanguage) => lng.key.toUpperCase() === lngKey) || '')
-                .filter((x) => x);
+                .filter(x => x);
         } else this.languages = Languages;
         // set default language as the first item of active languages or Eng
         this.defaultLanguage = this.languages[0] as TLanguage;
-        if ((this.language && !this.languages.find(x => (x as TLanguage).key === (this.language as TLanguage)?.key)) || !this.language) {
+        if (
+            (this.language && !this.languages.find(x => (x as TLanguage).key === (this.language as TLanguage)?.key)) ||
+            !this.language
+        ) {
             this.setLanguage((this.languages[0] as TLanguage).key);
         }
     }
     @action.bound
-    setLanguage(lng: string | TLanguage) {
+    setLanguage(lng: string) {
         if (!this.languages.length) {
             return;
         }
@@ -141,7 +147,11 @@ export default class ChartSettingStore {
         }
         this.language = this.languages.find(item => (item as TLanguage).key === lng) || this.defaultLanguage;
         t.setLanguage((this.language as TLanguage).key);
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${(this.language as TLanguage)?.key}`);
+        logEvent(
+            LogCategories.ChartControl,
+            LogActions.ChartSetting,
+            `Change language to ${(this.language as TLanguage)?.key}`
+        );
         this.saveSetting();
     }
     @action.bound

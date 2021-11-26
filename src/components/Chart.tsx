@@ -1,41 +1,44 @@
-import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
+import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
-import RenderInsideChart from './RenderInsideChart';
-import ChartTitle from './ChartTitle';
-import Loader from './Loader';
+import BarrierStore from 'src/store/BarrierStore';
+import ChartState, { TAdditionalChartProps } from 'src/store/ChartState';
+import { TChartParams } from 'src/types';
+/* css + scss */
+import '../../sass/main.scss';
+import { initGA, logPageView } from '../utils/ga';
 import Barrier from './Barrier';
 import BottomWidget from './BottomWidget';
 import BottomWidgetsContainer from './BottomWidgetsContainer';
-import NavigationWidget from './NavigationWidget';
-import HighestLowestMarker from './HighestLowestMarker';
-/* css + scss */
-import '../../sass/main.scss';
-import 'react-tabs/style/react-tabs.css';
-
-import './ui';
-
 import ChartControls from './ChartControls';
 import ChartFooter from './ChartFooter';
+import ChartTitle from './ChartTitle';
 import Crosshair from './Crosshair';
-import { initGA, logPageView } from '../utils/ga';
-import PaginationLoader from './PaginationLoader';
+import HighestLowestMarker from './HighestLowestMarker';
 import IndicatorPredictionDialog from './IndicatorPredictionDialog';
+import Loader from './Loader';
+import NavigationWidget from './NavigationWidget';
+import PaginationLoader from './PaginationLoader';
+import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
+import './ui';
 
-type TChartProps = {
-    id: string;
-    barriers: any[];
-    enabledChartFooter?: boolean;
-    enabledNavigationWidget?: boolean;
-    isMobile?: boolean;
-    chartControlsWidgets?: React.FC;
-    topWidgets?: React.FC;
-    bottomWidgets?: React.FC;
-    toolbarWidget: React.FC;
-    onCrosshairChange: (x: any) => any;
-};
+export type TChartProps = TChartParams &
+    ChartState &
+    TAdditionalChartProps & {
+        id: string;
+        barriers: BarrierStore[];
+        enabledChartFooter?: boolean;
+        enabledNavigationWidget?: boolean;
+        isMobile?: boolean;
+        chartControlsWidgets?: React.FC;
+        topWidgets?: React.FC;
+        bottomWidgets?: React.FC;
+        toolbarWidget: React.FC;
+        onCrosshairChange: (state?: number | null) => void | null;
+    };
 
 const Chart: React.FC<TChartProps> = props => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();
@@ -93,7 +96,7 @@ const Chart: React.FC<TChartProps> = props => {
             className={classNames('smartcharts', `smartcharts-${theme}`, {
                 'smartcharts--navigation-widget': enabledNavigationWidget,
                 'smartcharts--loading': isLoading,
-                'smartcharts--has-markers': children && (children as any).length,
+                'smartcharts--has-markers': children && (children as NodeList).length,
                 [`smartcharts-${containerWidth}`]: !isMobile,
             })}
         >

@@ -47,7 +47,7 @@ export const getIntervalInSeconds = ({
         unit = 1;
     }
 
-    if (unit != undefined && interv != undefined) {
+    if (unit !== undefined && interv !== undefined) {
         if (typeof unit === 'string') {
             unit = Number(unit);
         }
@@ -161,13 +161,13 @@ export function updatePropIfChanged(source: any, props: any, onChanged: any) {
     }
 }
 
-export function calculateTimeUnitInterval(granularity: number) {
+export function calculateTimeUnitInterval(granularity: number | undefined) {
     let interval = 1;
     let timeUnit = 'second';
 
     if (granularity === 86400) {
         timeUnit = 'day';
-    } else if (granularity > 59) {
+    } else if (granularity && granularity > 59) {
         interval = granularity / 60;
         timeUnit = 'minute';
     }

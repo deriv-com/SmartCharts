@@ -1,7 +1,7 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TCIQAppend, TCIQChartEngineChart, TCustomEvent } from 'src/types';
+import { TCIQAppend, TCustomEvent } from 'src/types';
 import MainStore from '.';
 import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
@@ -42,7 +42,7 @@ export default class PriceLineStore {
     }
 
     @computed get pip() {
-        return this.mainStore.chart.currentActiveSymbol?.decimal_places  as number;
+        return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
 
     constructor(mainStore: MainStore) {
@@ -55,7 +55,7 @@ export default class PriceLineStore {
         this.stx.removeInjection(this._injectionId);
     }
 
-    onContextReady = () => {        
+    onContextReady = () => {
         this._injectionId = this.stx.append('draw', this._draw);
     };
 
@@ -119,15 +119,15 @@ export default class PriceLineStore {
         this.price = this._price + currentPrice;
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
 
-    get stx(): Context["stx"] {
-        return this.context.stx;
+    get stx(): Context['stx'] {
+        return this.context?.stx;
     }
 
-    get chart(): TCIQChartEngineChart {
+    get chart(): typeof CIQ.ChartEngine.Chart {
         return this.stx.chart;
     }
 
@@ -136,7 +136,7 @@ export default class PriceLineStore {
     }
 
     get realPrice(): number {
-        return this.relative ? this.mainStore.chart.currentCloseQuote().Close + this._price : this._price;
+        return this.relative ? Number(this.mainStore.chart.currentCloseQuote()?.Close) + this._price : this._price;
     }
 
     get yAxiswidth() {
@@ -182,7 +182,7 @@ export default class PriceLineStore {
             newPrice = this._priceConstrainer(newPrice);
         }
         if (this.relative) {
-            newPrice -= this.mainStore.chart.currentCloseQuote().Close;
+            newPrice -= Number(this.mainStore.chart.currentCloseQuote()?.Close);
         }
 
         this.price = newPrice;

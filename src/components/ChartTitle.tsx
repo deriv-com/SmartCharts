@@ -1,18 +1,18 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { observer } from 'mobx-react-lite';
-import { useStores } from 'src/store';
 import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
+import { useStores } from 'src/store';
 import '../../sass/components/_chart-title.scss';
-import Menu from './Menu';
 import { CategoricalDisplay } from './categoricaldisplay';
+import Menu from './Menu';
 import { SymbolSelectButton } from './SymbolSelectButton';
 
 export type TOpenMarket = {
     category: string;
     subcategory: string;
     market: string;
-}
+};
 
 export type TChartTitleProps = {
     containerId?: string;
@@ -20,7 +20,7 @@ export type TChartTitleProps = {
     portalNodeId?: string;
     searchInputClassName?: string;
     open?: boolean;
-    open_market: TOpenMarket | null;
+    open_market?: TOpenMarket | null;
     isNestedList?: boolean;
     onChange?: (x: string) => void;
 };

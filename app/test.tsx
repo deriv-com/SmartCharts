@@ -1,34 +1,34 @@
 import {
-    // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
-    SmartChart,
     ChartMode,
-    StudyLegend,
-    Views,
-    DrawTools,
+    ChartTitle,
     createObjectFromLocalStorage,
+    DrawTools,
+    LogActions,
+    LogCategories,
+    logEvent,
+    Marker,
     setSmartChartsPublicPath,
     Share,
-    ChartTitle,
-    logEvent,
-    LogCategories,
-    LogActions,
-    Marker,
+    SmartChart,
+    StudyLegend,
     ToolbarWidget,
+    Views,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+import { configure } from 'mobx';
+import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import moment from 'moment';
+import { TNotification } from 'src/store/Notifier';
 import 'url-search-params-polyfill';
-import { configure } from 'mobx';
 import './app.scss';
-import './test.scss';
-import whyDidYouRender from '@welldone-software/why-did-you-render';
-import { ConnectionManager, StreamManager } from './connection';
-import Notification from './Notification';
-import ChartNotifier from './ChartNotifier';
 import ChartHistory from './ChartHistory';
+import ChartNotifier from './ChartNotifier';
+import { ConnectionManager, StreamManager } from './connection';
 import NetworkMonitor from './connection/NetworkMonitor';
-import { MockActiveSymbol, MockTradingTime, masterData } from './initialData';
+import { masterData, MockActiveSymbol, MockTradingTime } from './initialData';
+import Notification from './Notification';
+import './test.scss';
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
@@ -314,7 +314,7 @@ const App = () => {
         ),
         [isChartTypeCandle]
     );
-    const onMessage = (e: any) => notifier.notify(e);
+    const onMessage = (e: TNotification) => notifier.notify(e);
     const onPriceLineDisableChange = (evt: any) => setHidePriceLines(evt.target.checked);
     const onShadeColorChange = (evt: any) => setShadeColor(evt.target.value);
     const onColorChange = (evt: any) => setColor(evt.target.value);

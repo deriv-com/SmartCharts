@@ -3,13 +3,13 @@ import Context from 'src/components/ui/Context';
 import { ChartType } from 'src/types';
 
 type TListStoreProps = {
-    getContext: () => Context;
+    getContext: () => Context | null;
     getItems: () => ChartType[];
     onItemSelected?: (item: ChartType) => void;
 };
 
 export default class ListStore {
-    getContext: () => Context;
+    getContext: () => Context | null;
     getItems: () => ChartType[];
     onItemSelected?: (item: ChartType) => void;
     constructor({ getContext, getItems, onItemSelected }: TListStoreProps) {
@@ -18,7 +18,7 @@ export default class ListStore {
         this.onItemSelected = onItemSelected;
     }
 
-    @action.bound onItemClick(idx: number, item: ChartType) {
+    @action.bound onItemClick(_idx: number, item: ChartType) {
         if (this.onItemSelected) this.onItemSelected(item);
     }
 }

@@ -1,15 +1,14 @@
-import React from 'react';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { TMainStore } from 'src/types';
+import React from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useStores } from 'src/store';
-import Scroll from './Scroll';
-import NotificationBadge from './NotificationBadge';
-import { DrawToolIcon, ActiveIcon, DeleteIcon, SettingIcon, EmptyStateIcon } from './Icons';
+import { TMainStore } from 'src/types';
 import '../../sass/components/_draw_tools.scss';
+import { ActiveIcon, DeleteIcon, DrawToolIcon, EmptyStateIcon, SettingIcon } from './Icons';
 import Menu from './Menu';
+import NotificationBadge from './NotificationBadge';
+import Scroll from './Scroll';
 
 type TActivePanelViewProps = {
     enabled: boolean;
@@ -104,7 +103,7 @@ const ActiveDrawToolsList: React.FC<TActiveDrawToolsListProps> = ({ activeDrawTo
 );
 
 type DrawToolsProps = {
-    portalNodeId: string;
+    portalNodeId?: string;
 };
 
 const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {

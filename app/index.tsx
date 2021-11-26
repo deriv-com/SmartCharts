@@ -1,33 +1,33 @@
 import {
-    // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
-    SmartChart,
-    StudyLegend,
-    Views,
     ChartMode,
-    DrawTools,
     ChartSetting,
+    ChartTitle,
     createObjectFromLocalStorage,
+    DrawTools,
+    LogActions,
+    LogCategories,
+    logEvent,
+    Marker,
     setSmartChartsPublicPath,
     Share,
-    ChartTitle,
-    logEvent,
-    LogCategories,
-    LogActions,
-    Marker,
+    SmartChart,
+    StudyLegend,
     ToolbarWidget,
+    Views,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+import { configure } from 'mobx';
+import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import moment from 'moment';
+import { TNotification } from 'src/store/Notifier';
 import 'url-search-params-polyfill';
-import { configure } from 'mobx';
 import './app.scss';
-import whyDidYouRender from '@welldone-software/why-did-you-render';
-import { ConnectionManager, StreamManager } from './connection';
-import Notification from './Notification';
-import ChartNotifier from './ChartNotifier';
 import ChartHistory from './ChartHistory';
+import ChartNotifier from './ChartNotifier';
+import { ConnectionManager, StreamManager } from './connection';
 import NetworkMonitor from './connection/NetworkMonitor';
+import Notification from './Notification';
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
@@ -218,7 +218,7 @@ const App = () => {
             </ToolbarWidget>
         );
     }, []);
-    const onMessage = (e: any) => {
+    const onMessage = (e: TNotification) => {
         notifier.notify(e);
     };
     const getIsChartReady = (isChartReady: any) => isChartReady;
@@ -255,7 +255,7 @@ const App = () => {
             networkStatus={networkStatus}
             shouldFetchTradingTimes
             enabledChartFooter
-            getIndicatorHeightRatio={(chart_height: any, indicator_count: any) => {
+            getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
                 const isSmallScreen = chart_height < 780;
                 const denominator = indicator_count >= 5 ? indicator_count : indicator_count + 1;
                 const reservedHeight = isMobile ? 100 : 320;

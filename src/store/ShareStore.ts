@@ -9,7 +9,7 @@ import MenuStore from './MenuStore';
 type TNodeToManipulate = {
     parent: ParentNode | null;
     child: HTMLElement | SVGSVGElement;
-}
+};
 
 export default class ShareStore {
     mainStore: MainStore;
@@ -21,11 +21,11 @@ export default class ShareStore {
         when(() => !!this.context, this.onContextReady);
     }
 
-    get context(): Context {
+    get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context["stx"] {
-        return this.context.stx;
+    get stx(): Context['stx'] {
+        return this.context?.stx;
     }
 
     @computed get timeUnit() {
@@ -175,6 +175,6 @@ export default class ShareStore {
     }
 
     onContextReady = () => {
-        this.screenshotArea = (this.context.topNode as HTMLElement).querySelector('.ciq-chart');
+        this.screenshotArea = (this.context?.topNode as HTMLElement).querySelector('.ciq-chart');
     };
 }
