@@ -837,7 +837,7 @@ class ChartStore {
                     stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                     stxx.container.addEventListener('mouseleave', this.onMouseLeave);
 
-                    this.contextPromise.resolve(this.context);
+                    this.contextPromise?.resolve?.(this.context);
                     this.resizeScreen();
 
                     reaction(
