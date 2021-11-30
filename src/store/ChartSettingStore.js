@@ -12,7 +12,7 @@ export default class ChartSettingStore {
         this.ChartSettingMenu = this.menu.connect(Menu);
         // below reaction is updating the symbols and those elements that are not updating automatically on language change.
         reaction(
-            () => this.language,
+            () => this?.language?.key,
             () => {
                 mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true).then(() => {
                     mainStore?.chart?.changeSymbol?.(mainStore.state.symbol, mainStore.state.granularity, true);
