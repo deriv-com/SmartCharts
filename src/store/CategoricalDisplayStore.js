@@ -247,6 +247,15 @@ export default class CategoricalDisplayStore {
             return;
         }
 
+        if (!this.mainStore.chart.isMobile) {
+            const categories = Object.keys(this.categoryElements);
+            const last_category = categories.pop();
+            const last_category_bottom_gap = this.height - (64 + categories.length * 40); // to make the last category height reach it's filter tab
+            if (this.categoryElements[last_category]) {
+                this.categoryElements[last_category].style.minHeight = `${last_category_bottom_gap}px`;
+            }
+        }
+
         // hits: 40px for title hight + 4px for content bottom border
         const categoryTitleHeight = 44;
         const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
