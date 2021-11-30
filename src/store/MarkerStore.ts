@@ -269,7 +269,7 @@ export default class MarkerStore {
         let xPositioner = this.xPositioner;
         if (this.xPositioner === 'epoch') {
             xPositioner = 'date';
-            x = CIQ.strToDateTime(getUTCDate(Number(x)));
+            x = CIQ.strToDateTime(getUTCDate(x as number));
         }
         return {
             chart: this.chart,
