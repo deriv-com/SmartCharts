@@ -99,7 +99,7 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.updateLastDigitStats();
         } else if (this.latestData.length) {
-            const firstDigit = Number(this.latestData.shift()).toFixed(this.decimalPlaces).slice(-1);
+            const firstDigit = (this.latestData.shift() as number).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
             this.latestData.push(+price);

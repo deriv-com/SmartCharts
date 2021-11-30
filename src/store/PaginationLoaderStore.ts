@@ -58,7 +58,7 @@ class PaginationLoaderStore {
     setRef = (ref: TRefData | null) => {
         this.ref = ref;
         if (this.ref !== null) {
-            this.ref.setPosition({ epoch: Number(this.paginationEndEpoch), price: 0 });
+            this.ref.setPosition({ epoch: this.paginationEndEpoch as number, price: 0 });
         }
     };
 
@@ -71,7 +71,7 @@ class PaginationLoaderStore {
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 
         if (this.ref) {
-            this.ref.setPosition({ epoch: Number(this.paginationEndEpoch), price: 0 });
+            this.ref.setPosition({ epoch: this.paginationEndEpoch as number, price: 0 });
         }
     };
 }

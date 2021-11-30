@@ -128,7 +128,7 @@ export default class BarrierStore {
         const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote()?.Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
-        this._low_barrier.price = Number(price) - distance;
+        this._low_barrier.price = price as number - distance;
         this._high_barrier._calculateTop();
         this._low_barrier._calculateTop();
         this._drawShadedArea();

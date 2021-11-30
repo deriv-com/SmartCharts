@@ -1046,7 +1046,7 @@ class ChartStore {
     updateYaxisWidth = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
             if (this.currentCloseQuote() && this.currentCloseQuote()?.Close) {
-                this.calculateYaxisWidth(Number(this.currentCloseQuote()?.Close));
+                this.calculateYaxisWidth(this.currentCloseQuote()?.Close as number);
             }
         }
     };
@@ -1151,7 +1151,7 @@ class ChartStore {
         if (!this.chartNode) return;
 
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
-        const elapsedSeconds = Number(endEpoch || startEpoch) - Number(startEpoch || endEpoch);
+        const elapsedSeconds = (endEpoch || startEpoch as number) - (startEpoch || endEpoch as number);
         const epochPadding = (elapsedSeconds / paddingRatio) | 0;
         if (startEpoch || endEpoch) {
             const dtLeft = startEpoch ? CIQ.strToDateTime(getUTCDate(startEpoch - epochPadding)) : undefined;

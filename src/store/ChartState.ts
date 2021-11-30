@@ -563,7 +563,7 @@ class ChartState {
         if (this.scrollToEpoch && !this.startEpoch && !force) {
             const startEntry = this.stxx.chart.dataSet.find(
                 (entry: TQuote) =>
-                    entry.DT?.valueOf() === CIQ.strToDateTime(getUTCDate(Number(scrollToEpoch))).valueOf()
+                    entry.DT?.valueOf() === CIQ.strToDateTime(getUTCDate(scrollToEpoch as number)).valueOf()
             );
 
             if (startEntry) {
@@ -592,7 +592,7 @@ class ChartState {
         } else if ((scrollToEpoch && this.startEpoch) || force) {
             // scale 1:1 happen
             this.stxx.chart.lockScroll = true;
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(Number(this.startEpoch || scrollToEpoch)));
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch as number));
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);

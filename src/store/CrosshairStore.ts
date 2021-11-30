@@ -108,7 +108,7 @@ class CrosshairStore {
     }
     @action.bound
     toggleState() {
-        const state = (Number(this.state) + 1) % 3;
+        const state = (this.state as number + 1) % 3;
         this.setCrosshairState(state);
     }
     @action.bound
