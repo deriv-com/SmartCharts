@@ -186,28 +186,7 @@ export default class ChartTypeStore {
     updateProps(onChange: () => typeof action) {
         this.onChartTypeChanged = onChange;
     }
-    @action.bound
-    showAggregateDialog(aggregateId: string) {
-        if (aggregateId !== this.type.id) {
-            this.setType(aggregateId);
-        }
-        const aggregate = this.aggregates?.[aggregateId];
-        this.settingsDialog.title = (aggregate as TAggregate).title;
-        const inputs = (aggregate as TAggregate).inputs.map(({ id, ...agg }: TInputs) => {
-            const name = id === 'box' || id === 'reversal' ? `pandf.${id}` : id;
-            const tuple = CIQ.deriveFromObjectChain(this.stx.layout, name);
-            const value = tuple.obj[tuple.member];
-            const defaultValue = this.stx.chart.defaultChartStyleConfig[id];
-            return {
-                id: name,
-                value: value !== undefined ? value : defaultValue,
-                defaultValue,
-                ...agg,
-            };
-        });
-        this.settingsDialog.items = inputs;
-        this.settingsDialog.setOpen(true);
-    }
+
     updateAggregate = (items: TSettingsItem[]) => {
         for (const { id, value } of items) {
             const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);

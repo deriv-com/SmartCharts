@@ -37,6 +37,22 @@ export type TCategoryProps = {
     favoritesId: string;
 };
 
+type TEmptyCategoryProps = {
+    category: TCategoryProps['category'];
+};
+
+type TCategoryTitleLeftProps = {
+    isNestedList: boolean;
+    category: TCategoryProps['category'];
+};
+
+type TCategoryTitleProps = {
+    isNestedList: boolean;
+    category: TCategoryProps['category'];
+    handleTitleClick: TCategoryProps['handleTitleClick'];
+    activeHeadKey: TCategoryProps['activeHeadKey'];
+};
+
 function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
     let count = 0;
     if ('categoryName' in category && category.hasSubcategory) {
@@ -50,13 +66,13 @@ function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
     return count;
 }
 
-const EmptyCategory = React.memo(({ category }: any) => (
+const EmptyCategory: React.FC<TEmptyCategoryProps> = React.memo(({ category }) => (
     <div className='sc-mcd__category__content'>
         <div className='empty-category'>{t.translate(category.emptyDescription)}</div>
     </div>
 ));
 
-const CategoryTitleLeft = React.memo(({ isNestedList, category }: any) => {
+const CategoryTitleLeft: React.FC<TCategoryTitleLeftProps> = React.memo(({ isNestedList, category }) => {
     const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
         <span className='category-title-left'>
@@ -66,7 +82,7 @@ const CategoryTitleLeft = React.memo(({ isNestedList, category }: any) => {
     );
 });
 
-const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick }: any) => (
+const CategoryTitle: React.FC<TCategoryTitleProps> = ({ category, activeHeadKey, isNestedList, handleTitleClick }) => (
     <div
         className={classNames('sc-mcd__category__head', {
             'has-subtitle': category.categorySubtitle,
@@ -108,7 +124,7 @@ const Category: React.FC<TCategoryProps> = ({
             <CategoryTitle
                 category={category}
                 activeHeadKey={activeHeadKey}
-                isNestedList={isNestedList}
+                isNestedList={!!isNestedList}
                 handleTitleClick={handleTitleClick}
             />
         )}

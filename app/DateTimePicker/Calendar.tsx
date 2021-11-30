@@ -2,7 +2,70 @@ import moment from 'moment';
 import React from 'react';
 import { CalendarDays, CalendarMonths, CalendarYears, CalendarDecades } from './panels/index';
 
-function CalendarButton({ children, className, is_hidden, label, onClick }: any) {
+type TCalendarButtonProps = {
+    className: string;
+    is_hidden?: boolean;
+    label?: string;
+    onClick?: React.MouseEventHandler;
+};
+
+type TCalendarProps = {
+    footer: React.ReactElement;
+    has_today_btn: boolean;
+    id: string;
+    date_format: string;
+    start_date: number;
+    max_date: string;
+    min_date: string;
+    onSelect: (date: string, is_datepicker_visible?: boolean) => void;
+};
+
+type TCalendarFooterProps = {
+    has_today_btn: boolean;
+    onClick?: React.MouseEventHandler;
+    footer: React.ReactElement;
+};
+
+type TCalendarPanelProps = {
+    calendar_view: string;
+    selected_date: string;
+    onClick: {
+        date: (e: React.SyntheticEvent<HTMLElement>, is_disabled: boolean) => void;
+        month: (e: React.SyntheticEvent<HTMLElement>) => void;
+        year: (e: React.SyntheticEvent<HTMLElement>) => void;
+        decade: (e: React.SyntheticEvent<HTMLElement>) => void;
+    };
+    date_format: string;
+    max_date: string;
+    min_date: string;
+    start_date: number;
+    calendar_date: string;
+    isPeriodDisabled: (date: moment.Moment, unit: moment.unitOfTime.StartOf) => boolean;
+};
+
+type TCalendarHeaderProps = {
+    calendar_date: string;
+    isPeriodDisabled: TCalendarPanelProps['isPeriodDisabled'];
+    onClick: {
+        nextMonth: () => void;
+        previousMonth: () => void;
+        nextYear: () => void;
+        previousYear: () => void;
+        nextDecade: () => void;
+        previousDecade: () => void;
+        nextCentury: () => void;
+        previousCentury: () => void;
+    };
+    onSelect: {
+        date: () => void;
+        month: () => void;
+        year: () => void;
+        decade: () => void;
+    };
+    calendar_view: string;
+};
+
+const CalendarButton: React.FC<TCalendarButtonProps> = ({ children, className, is_hidden, label, onClick }) => {
     return (
         <React.Fragment>
             {!is_hidden && (
@@ -13,9 +76,9 @@ function CalendarButton({ children, className, is_hidden, label, onClick }: any)
             )}
         </React.Fragment>
     );
-}
+};
 
-function CalendarPanel(props: any) {
+const CalendarPanel: React.FC<TCalendarPanelProps> = props => {
     const calendar_panel = {
         date: <CalendarDays {...props} />,
         month: <CalendarMonths {...props} />,
@@ -24,9 +87,9 @@ function CalendarPanel(props: any) {
     };
 
     return <div className='calendar-panel'>{calendar_panel[props.calendar_view as keyof typeof calendar_panel]}</div>;
-}
+};
 
-function CalendarFooter({ footer, has_today_btn, onClick }: any) {
+const CalendarFooter: React.FC<TCalendarFooterProps> = ({ footer, has_today_btn, onClick }) => {
     return (
         <div className='calendar-footer'>
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
@@ -37,9 +100,15 @@ function CalendarFooter({ footer, has_today_btn, onClick }: any) {
             )}
         </div>
     );
-}
+};
 
-function CalendarHeader({ calendar_date, isPeriodDisabled, onClick, onSelect, calendar_view }: any) {
+const CalendarHeader: React.FC<TCalendarHeaderProps> = ({
+    calendar_date,
+    isPeriodDisabled,
+    onClick,
+    onSelect,
+    calendar_view,
+}) => {
     const is_date_view = calendar_view === 'date';
     const is_month_view = calendar_view === 'month';
     const is_year_view = calendar_view === 'year';
@@ -122,9 +191,9 @@ function CalendarHeader({ calendar_date, isPeriodDisabled, onClick, onSelect, ca
             />
         </div>
     );
-}
+};
 
-const Calendar = React.forwardRef(
+const Calendar: React.FC<TCalendarProps> = React.forwardRef(
     (
         {
             children,
@@ -136,7 +205,7 @@ const Calendar = React.forwardRef(
             max_date = moment().utc().add(120, 'y').format('YYYY-MM-DD'), // by default, max_date is set to 120 years after today
             min_date = moment(0).utc().format('YYYY-MM-DD'), // by default, min_date is set to Unix Epoch (January 1st 1970)
             onSelect,
-        }: any,
+        },
         ref
     ) => {
         const [calendar_date, setCalendarDate] = React.useState(moment.utc(start_date).format(date_format));
@@ -178,16 +247,16 @@ const Calendar = React.forwardRef(
 
         // selects a day, a month, a year, or a decade
         const panelSelectors = {
-            date: (e: any, is_disabled: any) => {
+            date: (e: React.SyntheticEvent<HTMLElement>, is_disabled: boolean) => {
                 updateSelectedDate(e, is_disabled);
             },
-            month: (e: any) => {
+            month: (e: React.SyntheticEvent<HTMLElement>) => {
                 updateSelected(e, 'month');
             },
-            year: (e: any) => {
+            year: (e: React.SyntheticEvent<HTMLElement>) => {
                 updateSelected(e, 'year');
             },
-            decade: (e: any) => {
+            decade: (e: React.SyntheticEvent<HTMLElement>) => {
                 updateSelected(e, 'decade');
             },
         };
@@ -208,7 +277,7 @@ const Calendar = React.forwardRef(
             },
         };
 
-        const navigateTo = (value: any, unit: any, is_add: any) => {
+        const navigateTo = (value: number, unit: moment.unitOfTime.DurationConstructor, is_add: boolean) => {
             let new_date = moment
                 .utc(calendar_date, date_format)
                 [is_add ? 'add' : 'subtract'](value, unit)
@@ -223,7 +292,11 @@ const Calendar = React.forwardRef(
             setCalendarDate(moment.utc(new_date, date_format).format(date_format)); // formatted date
         };
 
-        const updateSelectedDate = (e: any, is_disabled: any) => {
+        const updateSelectedDate = (e: React.SyntheticEvent<HTMLElement>, is_disabled: boolean) => {
+            if (!(e.target instanceof HTMLButtonElement)) {
+                return;
+            }
+
             if (is_disabled) {
                 return;
             }
@@ -246,19 +319,26 @@ const Calendar = React.forwardRef(
             }
         };
 
-        const updateSelected = (e: any, type: any) => {
+        const updateSelected = (e: React.SyntheticEvent<HTMLElement>, type: 'month' | 'year' | 'decade') => {
+            if (!(e.target instanceof HTMLButtonElement)) {
+                return;
+            }
+
             const view_map = {
                 month: 'date',
                 year: 'month',
                 decade: 'year',
             };
-            // @ts-ignore
-            const date = moment
-                .utc(calendar_date, date_format)
-                [type === 'decade' ? 'year' : type](e.target.dataset[type].split('-')[0])
-                .format(date_format);
 
-            if (isPeriodDisabled(date, type)) return;
+            const text = e.target.dataset?.[type]?.split('-')[0] || '';
+
+            const moment_date = moment
+                .utc(calendar_date, date_format)
+                [type === 'decade' ? 'year' : type](text) as moment.Moment;
+
+            const date = moment_date.format(date_format);
+
+            if (isPeriodDisabled(date, type === 'decade' ? null : type)) return;
 
             setCalendarDate(date);
             setCalendarView(view_map[type as keyof typeof view_map]);
@@ -276,7 +356,7 @@ const Calendar = React.forwardRef(
             }
         };
 
-        const isPeriodDisabled = (date: any, unit: any) => {
+        const isPeriodDisabled = (date: moment.Moment | string, unit: moment.unitOfTime.StartOf) => {
             const start_of_period = moment.utc(date).startOf(unit);
             const end_of_period = moment.utc(date).endOf(unit);
             return end_of_period.isBefore(moment.utc(min_date)) || start_of_period.isAfter(moment.utc(max_date));

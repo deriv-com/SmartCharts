@@ -42,6 +42,8 @@ export type TCategorizedSymbolItem<T = TSubCategory> = {
     active?: boolean;
     emptyDescription?: string;
     categorySubtitle?: string;
+    categoryNamePostfixShowIfActive?: string;
+    categoryNamePostfix?: string;
 };
 
 export type TCategorizedSymbols = TCategorizedSymbolItem[];

@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import moment from 'moment';
 import React from 'react';
+import { TCalendarViewProps } from '../calendar.props';
 
 const getMonthHeaders = () => ({
     Jan: t.translate('Jan'),
@@ -17,7 +18,12 @@ const getMonthHeaders = () => ({
     Dec: t.translate('Dec'),
 });
 
-export const CalendarMonths = ({ calendar_date, isPeriodDisabled, onClick, selected_date }: any) => {
+export const CalendarMonths: React.FC<TCalendarViewProps> = ({
+    calendar_date,
+    isPeriodDisabled,
+    onClick,
+    selected_date,
+}) => {
     const moment_date = moment.utc(calendar_date);
     const selected_month = moment.utc(selected_date).month();
     const month_headers = getMonthHeaders();

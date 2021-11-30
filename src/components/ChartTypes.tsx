@@ -3,7 +3,7 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import { ChartType } from 'src/types';
-import { SettingIcon } from './Icons';
+import { TListItem } from 'src/store/ListStore';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
 import List from './List';
@@ -18,14 +18,14 @@ const TypeIcon: React.FC<TTypeIcon> = ({ Icon, ...props }) => <Icon {...props} /
 
 type TChartTypesProps = {
     enabled?: boolean;
-    newDesign?: any;
+    newDesign?: boolean;
     onChange?: any;
 };
 
 const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: onChangeFn }) => {
     const { chartType, chart } = useStores();
 
-    const { listStore, setTypeFromUI, showAggregateDialog, updateProps, types, type, menuStore } = chartType;
+    const { listStore, setTypeFromUI, updateProps, types, type, menuStore } = chartType;
     const { open: menuOpen, setOpen } = chartType.menuStore;
     const { isMobile } = chart;
 
@@ -86,17 +86,12 @@ const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: 
             <Menu.Body>
                 <div className='body'>
                     <List height={260} store={listStore}>
-                        {(T: any) => (
+                        {(T: TListItem) => (
                             <>
                                 <span className='left'>
                                     <TypeIcon Icon={type.icon} className={`margin ${T.active ? 'active' : ''}`} />
                                     <span className='ciq-icon-text'>{T.text}</span>
                                 </span>
-                                {T.settingsOnClick && (
-                                    <span className='ciq-aggregate-setting' onClick={() => showAggregateDialog(T.id)}>
-                                        <SettingIcon />
-                                    </span>
-                                )}
                             </>
                         )}
                     </List>
