@@ -37,6 +37,7 @@ function connectCustomStore(mapperFunction, CustomStore) {
             componentWillUnmount() {
                 if (this.store.destructor) {
                     this.store.destructor();
+                    this.store.mainStore.drawTools.destructor();
                 }
             }
 

@@ -144,6 +144,10 @@ export default class DrawToolsStore {
         return null;
     };
 
+    destructor() {
+        document.removeEventListener('keydown', this.closeOnEscape, false);
+    }
+
     @action.bound drawingFinished() {
         this.computeActiveDrawTools();
         if (this.stateStore) {
