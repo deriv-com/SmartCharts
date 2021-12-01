@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import moment from 'moment';
 import DatePicker from './DateTimePicker/DatePicker';
 import TimePicker from './DateTimePicker/TimePicker';
@@ -26,8 +26,8 @@ const ChartHistory: React.FC<TChartHistoryProps> = React.memo(({ onChange }) => 
         updateStore(new_date, time);
     };
 
-    const onChangeTime = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        const new_time = target.value;
+    const onChangeTime = (value: string) => {
+        const new_time = value;
         setTime(new_time);
         setFocusOnDate(false);
         setFocusOnTime(false);
@@ -63,7 +63,6 @@ const ChartHistory: React.FC<TChartHistoryProps> = React.memo(({ onChange }) => 
                 name='time'
                 focus={focusOnTime}
                 disableFocus={onDisableFocus}
-                is_clearable
                 start_date={moment(date, 'YYYY/MM/DD').valueOf() / 1000}
                 value={time}
                 onChange={onChangeTime}

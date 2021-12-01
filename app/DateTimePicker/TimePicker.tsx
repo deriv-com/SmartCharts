@@ -10,6 +10,28 @@ import { Wrapper } from '../../src/components/Icons';
 import Time from '../icons/ic-time.svg';
 import { usePrevious } from '../../src/hooks';
 
+type TimePickerDropdownProps = {
+    className: string;
+    preClass: string;
+    value: string;
+    onChange: (value: string) => void;
+    toggle: () => void;
+    start_date: number;
+};
+
+type TTimerPickerProps = {
+    start_date: number;
+    is_nativepicker?: boolean;
+    focus: boolean;
+    name: string;
+    is_align_right?: boolean;
+    padding?: boolean;
+    placeholder: string;
+    disableFocus: () => void;
+    onChange: (value: string) => void;
+    value: string;
+};
+
 const TimeIcon = Wrapper(Time);
 const isSessionAvailable = (
     compare_moment = moment().utc(),
@@ -24,146 +46,148 @@ const isSessionAvailable = (
     return end_time - compare_moment.valueOf() > 0 && compare_moment.valueOf() - start_time > 0;
 };
 
-const TimePickerDropdown = React.memo(({ className, preClass, value, onChange, toggle, start_date }: any) => {
-    const [is_hour_selected, setIsHourSelected] = React.useState(false);
-    const [is_minute_selected, setIsMinuteSelected] = React.useState(false);
-    const [last_updated_type, setLastUpdatedType] = React.useState(null);
-    const [hours] = React.useState([...Array(24).keys()].map(a => `0${a}`.slice(-2)));
-    const [minutes] = React.useState([...Array(12).keys()].map(a => `0${a * 5}`.slice(-2)));
-    const prevClassName = usePrevious(className);
-    React.useEffect(() => {
-        if (is_hour_selected && is_minute_selected) {
-            resetValues();
-            toggle();
-        }
-        if (!prevClassName && className === 'active') {
-            resetValues();
-        }
-        if (last_updated_type) {
-            setLastUpdatedType(null);
-        }
-    }, [className, is_hour_selected, is_minute_selected, last_updated_type, prevClassName, toggle]);
-    const selectOption = (type: any, new_value: any, is_enabled = true) => {
-        if (is_enabled) {
-            const [prev_hour, prev_minute] = (value || '00:00').split(':');
-            const start_moment = moment(start_date * 1000 || undefined);
-            const start_moment_clone = start_moment.clone().minute(0).second(0);
-            if ((type === 'h' && new_value !== prev_hour) || (type === 'm' && new_value !== prev_minute)) {
-                setLastUpdatedType(type);
-                if (type === 'h') {
-                    setIsHourSelected(true);
-                } else {
-                    setIsMinuteSelected(true);
-                }
-                let selected_time = `${type === 'h' ? new_value : prev_hour}:${type === 'm' ? new_value : prev_minute}`;
-                let desire_time = start_moment_clone
-                    .hour(type === 'h' ? new_value : prev_hour)
-                    .minute(type === 'm' ? new_value : prev_minute);
-                let last_available_min;
-                if (type === 'h' && !isSessionAvailable(desire_time)) {
-                    minutes.forEach(min => {
-                        desire_time = start_moment_clone.hour(new_value).minute(parseInt(min));
-                        if (isSessionAvailable(desire_time)) {
-                            last_available_min = min;
-                        }
-                    });
-                    if (last_available_min) {
-                        selected_time = `${new_value}:${last_available_min}`;
-                    }
-                }
-                onChange(selected_time);
-            } else {
+const TimePickerDropdown: React.FC<TimePickerDropdownProps> = React.memo(
+    ({ className, preClass, value, onChange, toggle, start_date }) => {
+        const [is_hour_selected, setIsHourSelected] = React.useState(false);
+        const [is_minute_selected, setIsMinuteSelected] = React.useState(false);
+        const [last_updated_type, setLastUpdatedType] = React.useState<string | null>(null);
+        const [hours] = React.useState([...Array(24).keys()].map(a => `0${a}`.slice(-2)));
+        const [minutes] = React.useState([...Array(12).keys()].map(a => `0${a * 5}`.slice(-2)));
+        const prevClassName = usePrevious(className);
+        React.useEffect(() => {
+            if (is_hour_selected && is_minute_selected) {
+                resetValues();
                 toggle();
             }
+            if (!prevClassName && className === 'active') {
+                resetValues();
+            }
+            if (last_updated_type) {
+                setLastUpdatedType(null);
+            }
+        }, [className, is_hour_selected, is_minute_selected, last_updated_type, prevClassName, toggle]);
+        const selectOption = (type: string, new_value: string, is_enabled = true) => {
+            if (is_enabled) {
+                const [prev_hour, prev_minute] = (value || '00:00').split(':');
+                const start_moment = moment(start_date * 1000 || undefined);
+                const start_moment_clone = start_moment.clone().minute(0).second(0);
+                if ((type === 'h' && new_value !== prev_hour) || (type === 'm' && new_value !== prev_minute)) {
+                    setLastUpdatedType(type);
+                    if (type === 'h') {
+                        setIsHourSelected(true);
+                    } else {
+                        setIsMinuteSelected(true);
+                    }
+                    let selected_time = `${type === 'h' ? new_value : prev_hour}:${
+                        type === 'm' ? new_value : prev_minute
+                    }`;
+                    let desire_time = start_moment_clone
+                        .hour(Number(type === 'h' ? new_value : prev_hour))
+                        .minute(Number(type === 'm' ? new_value : prev_minute));
+                    let last_available_min;
+                    if (type === 'h' && !isSessionAvailable(desire_time)) {
+                        minutes.forEach(min => {
+                            desire_time = start_moment_clone.hour(Number(new_value)).minute(parseInt(min));
+                            if (isSessionAvailable(desire_time)) {
+                                last_available_min = min;
+                            }
+                        });
+                        if (last_available_min) {
+                            selected_time = `${new_value}:${last_available_min}`;
+                        }
+                    }
+                    onChange(selected_time);
+                } else {
+                    toggle();
+                }
+            }
+        };
+        const resetValues = () => {
+            setIsHourSelected(false);
+            setIsMinuteSelected(false);
+        };
+        const start_moment = moment(start_date * 1000 || undefined);
+        const start_moment_clone = start_moment.clone().minute(0).second(0);
+        const end_moment = moment().utc();
+        let [hour, minute] = ['00', '00'];
+        if (value.match(/^([0-9]|[0-1][0-9]|2[0-3]):([0-9]|[0-5][0-9])(:([0-9]|[0-5][0-9]))?$/)) {
+            [hour, minute] = value.split(':');
         }
-    };
-    const resetValues = () => {
-        setIsHourSelected(false);
-        setIsMinuteSelected(false);
-    };
-    const start_moment = moment(start_date * 1000 || undefined);
-    const start_moment_clone = start_moment.clone().minute(0).second(0);
-    const end_moment = moment().utc();
-    let [hour, minute] = ['00', '00'];
-    if (value.match(/^([0-9]|[0-1][0-9]|2[0-3]):([0-9]|[0-5][0-9])(:([0-9]|[0-5][0-9]))?$/)) {
-        [hour, minute] = value.split(':');
+        return (
+            <div className={`${preClass}-dropdown ${className}`}>
+                <div className={`${preClass}-panel`} onClick={toggle}>
+                    <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
+                </div>
+                <div className={`${preClass}-selector`}>
+                    <div className={`${preClass}-hours`}>
+                        <div className='list-title center-text'>
+                            <strong>{t.translate('Hour')}</strong>
+                        </div>
+                        <div className='list-container'>
+                            {hours.map((h, key) => {
+                                start_moment_clone.hour(parseInt(h));
+                                const is_enabled = isSessionAvailable(start_moment_clone, end_moment, true);
+                                return (
+                                    <div
+                                        className={`list-item${hour === h ? ' selected' : ''}${
+                                            is_enabled ? '' : ' disabled'
+                                        }`}
+                                        key={key}
+                                        onClick={() => {
+                                            selectOption('h', h, is_enabled);
+                                        }}
+                                    >
+                                        {h}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                    <div className={`${preClass}-minutes`}>
+                        <div className='list-title center-text'>
+                            <strong>{t.translate('Minute')}</strong>
+                        </div>
+                        <div className='list-container'>
+                            {minutes.map((mm, key) => {
+                                start_moment_clone.hour(parseInt(hour)).minute(parseInt(mm));
+                                const is_enabled = isSessionAvailable(start_moment_clone, end_moment);
+                                return (
+                                    <div
+                                        className={`list-item${minute === mm ? ' selected' : ''}${
+                                            is_enabled ? '' : ' disabled'
+                                        }`}
+                                        key={key}
+                                        onClick={() => {
+                                            selectOption('m', mm, is_enabled);
+                                        }}
+                                    >
+                                        {mm}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     }
-    return (
-        <div className={`${preClass}-dropdown ${className}`}>
-            <div className={`${preClass}-panel`} onClick={toggle}>
-                <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
-            </div>
-            <div className={`${preClass}-selector`}>
-                <div className={`${preClass}-hours`}>
-                    <div className='list-title center-text'>
-                        <strong>{t.translate('Hour')}</strong>
-                    </div>
-                    <div className='list-container'>
-                        {hours.map((h, key) => {
-                            start_moment_clone.hour(parseInt(h));
-                            const is_enabled = isSessionAvailable(start_moment_clone, end_moment, true);
-                            return (
-                                <div
-                                    className={`list-item${hour === h ? ' selected' : ''}${
-                                        is_enabled ? '' : ' disabled'
-                                    }`}
-                                    key={key}
-                                    onClick={() => {
-                                        selectOption('h', h, is_enabled);
-                                    }}
-                                >
-                                    {h}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-                <div className={`${preClass}-minutes`}>
-                    <div className='list-title center-text'>
-                        <strong>{t.translate('Minute')}</strong>
-                    </div>
-                    <div className='list-container'>
-                        {minutes.map((mm, key) => {
-                            start_moment_clone.hour(parseInt(hour)).minute(parseInt(mm));
-                            const is_enabled = isSessionAvailable(start_moment_clone, end_moment);
-                            return (
-                                <div
-                                    className={`list-item${minute === mm ? ' selected' : ''}${
-                                        is_enabled ? '' : ' disabled'
-                                    }`}
-                                    key={key}
-                                    onClick={() => {
-                                        selectOption('m', mm, is_enabled);
-                                    }}
-                                >
-                                    {mm}
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-});
-const TimePicker = (props: any) => {
+);
+const TimePicker: React.FC<TTimerPickerProps> = props => {
     const {
         disableFocus,
         onChange,
         start_date,
         is_nativepicker,
-        is_clearable,
         focus,
         name,
         is_align_right,
         padding,
         placeholder,
-        sessions,
     } = props;
     const [is_open, setIsOpen] = React.useState(false);
     const [value, setValue] = React.useState('00:00');
     const [minutes] = React.useState([...Array(12).keys()].map(a => `0${a * 5}`.slice(-2)));
-    const wrapper_ref = React.useRef<any>(null);
+    const wrapper_ref = React.useRef<HTMLDivElement>(null);
     const prev_value = usePrevious(value);
     const prev_focus = usePrevious(focus);
     const prev_is_open = usePrevious(is_open);
@@ -195,10 +219,10 @@ const TimePicker = (props: any) => {
             const new_value = typeof arg === 'object' ? arg.target.value : arg;
             setValue(new_value);
             if (new_value !== (props as any).value && onChange) {
-                onChange({ target: { name, value: new_value } });
+                onChange(new_value);
             }
         },
-        [name, onChange, (props as any).value]
+        [name, onChange, props.value]
     );
     React.useEffect(() => {
         const findAvailabeTime = (start_moment_clone: any) => {
@@ -252,8 +276,6 @@ const TimePicker = (props: any) => {
                         preClass={prefix_class}
                         start_date={start_date}
                         value={value}
-                        sessions={sessions}
-                        is_clearable={is_clearable}
                     />
                 </React.Fragment>
             )}
