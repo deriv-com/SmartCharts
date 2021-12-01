@@ -10,20 +10,26 @@ type TCalendarButtonProps = {
 };
 
 type TCalendarProps = {
-    footer: React.ReactElement;
+    footer?: React.ReactElement;
     has_today_btn: boolean;
-    id: string;
-    date_format: string;
-    start_date: number;
+    id?: string;
+    date_format?: string;
+    start_date?: number;
     max_date: string;
     min_date: string;
     onSelect: (date: string, is_datepicker_visible?: boolean) => void;
+    ref?: React.Ref<TCalendarRefProps>;
+};
+
+export type TCalendarRefProps = {
+    setCalendarDate: React.Dispatch<React.SetStateAction<string>>;
+    setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
 };
 
 type TCalendarFooterProps = {
     has_today_btn: boolean;
     onClick?: React.MouseEventHandler;
-    footer: React.ReactElement;
+    footer?: React.ReactElement;
 };
 
 type TCalendarPanelProps = {
@@ -38,7 +44,7 @@ type TCalendarPanelProps = {
     date_format: string;
     max_date: string;
     min_date: string;
-    start_date: number;
+    start_date?: number;
     calendar_date: string;
     isPeriodDisabled: (date: moment.Moment, unit: moment.unitOfTime.StartOf) => boolean;
 };
@@ -193,7 +199,7 @@ const CalendarHeader: React.FC<TCalendarHeaderProps> = ({
     );
 };
 
-const Calendar: React.FC<TCalendarProps> = React.forwardRef(
+const Calendar: React.FC<TCalendarProps> = React.forwardRef<TCalendarRefProps, TCalendarProps>(
     (
         {
             children,
@@ -293,7 +299,7 @@ const Calendar: React.FC<TCalendarProps> = React.forwardRef(
         };
 
         const updateSelectedDate = (e: React.SyntheticEvent<HTMLElement>, is_disabled: boolean) => {
-            if (!(e.target instanceof HTMLButtonElement)) {
+            if (!(e.target instanceof HTMLElement)) {
                 return;
             }
 
@@ -320,7 +326,7 @@ const Calendar: React.FC<TCalendarProps> = React.forwardRef(
         };
 
         const updateSelected = (e: React.SyntheticEvent<HTMLElement>, type: 'month' | 'year' | 'decade') => {
-            if (!(e.target instanceof HTMLButtonElement)) {
+            if (!(e.target instanceof HTMLElement)) {
                 return;
             }
 
@@ -389,4 +395,4 @@ const Calendar: React.FC<TCalendarProps> = React.forwardRef(
     }
 );
 
-export default React.memo(Calendar);
+export default Calendar;

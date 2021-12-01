@@ -1,13 +1,44 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import moment from 'moment';
-import Calendar from './Calendar';
+import Calendar, { TCalendarRefProps } from './Calendar';
 import './date-picker.scss';
 import { Wrapper } from '../../src/components/Icons';
 import CalendarIC from '../icons/ic-calendar.svg';
 import { usePrevious, useStateCallback } from '../../src/hooks';
 
+type TDatePickerInputProps = {
+    value: string;
+    format: string;
+    id?: string;
+    name: string;
+    class_name: string;
+    is_read_only: boolean;
+    placeholder: string;
+    onChange?: React.ChangeEventHandler;
+    onClick?: React.MouseEventHandler;
+    mode?: string;
+};
+
+type TDatePickerProps = {
+    date_format?: string;
+    disableFocus: () => void;
+    focus: boolean;
+    format: string;
+    max_date: string;
+    min_date: string;
+    name: string;
+    placeholder: string;
+    value: string;
+    has_today_btn: boolean;
+    onChange?: (value: string) => void;
+    start_date?: number;
+    is_nativepicker?: boolean;
+    is_read_only?: boolean;
+    mode?: string;
+};
+
 const CalendarIcon = Wrapper(CalendarIC);
-const DatePickerInput = ({
+const DatePickerInput: React.FC<TDatePickerInputProps> = ({
     value,
     format,
     id,
@@ -18,7 +49,7 @@ const DatePickerInput = ({
     onChange,
     onClick,
     mode,
-}: any) => {
+}) => {
     const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
     return (
         <input
@@ -40,11 +71,11 @@ const formatDate = (date: any, date_format = 'YYYY-MM-DD') =>
  * @param  {String} date   the date to calculate number of days from today
  * @return {Number} an integer of the number of days
  */
-const daysFromTodayTo = (date: any) => {
+const daysFromTodayTo = (date: string): string => {
     const diff = moment(date).utc().diff(moment().utc(), 'days');
-    return !date || diff < 0 ? '' : diff + 1;
+    return !date || diff < 0 ? '' : (diff + 1).toString();
 };
-const DatePicker = React.memo((props: any) => {
+const DatePicker: React.FC<TDatePickerProps> = React.memo(props => {
     const {
         date_format,
         disableFocus,
@@ -60,11 +91,12 @@ const DatePicker = React.memo((props: any) => {
         placeholder,
         start_date,
         value: props_value,
+        has_today_btn,
     } = props;
-    const [value, setValue] = useStateCallback(props_value || '');
+    const [value, setValue] = useStateCallback<string>(props_value || '');
     const [is_datepicker_visible, setIsDatepickerVisible] = React.useState(focus || false);
     const mainRef = React.useRef(null);
-    const calendarRef = React.useRef<any>(null);
+    const calendarRef = React.useRef<TCalendarRefProps>(null);
     const prev_focus = usePrevious(focus);
     const onClickOutside = React.useCallback(
         e => {
@@ -91,7 +123,7 @@ const DatePicker = React.memo((props: any) => {
     const handleVisibility = () => {
         setIsDatepickerVisible(!is_datepicker_visible);
     };
-    const onSelectCalendar = (selected_date: any, _is_datepicker_visible?: any) => {
+    const onSelectCalendar = (selected_date: string, _is_datepicker_visible: boolean = false) => {
         let _selected_date = selected_date;
         if (!moment.utc(_selected_date).isValid) {
             _selected_date = '';
@@ -103,11 +135,11 @@ const DatePicker = React.memo((props: any) => {
         }
         setIsDatepickerVisible(_is_datepicker_visible);
     };
-    const onChangeInput = (e: any) => {
+    const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
         updateDatePickerValue(e.target.value, mode);
     };
     // TODO: handle cases where user inputs date before min_date and date after max_date
-    const updateDatePickerValue = (_value: any, _mode?: any) => {
+    const updateDatePickerValue = (_value: string, _mode?: string) => {
         setValue(_value, updateStore);
         // update Calendar
         const new_date = _mode === 'duration' ? moment.utc().add(_value, 'days').format(date_format) : _value;
@@ -123,9 +155,9 @@ const DatePicker = React.memo((props: any) => {
         }
     };
     // update MobX store
-    const updateStore = (_value: any) => {
+    const updateStore = (_value: string) => {
         if (typeof onChange === 'function') {
-            onChange({ target: { name, value: _value } });
+            onChange(value);
         }
     };
     if (is_nativepicker) {
@@ -144,7 +176,7 @@ const DatePicker = React.memo((props: any) => {
                         // https://github.com/facebook/react/issues/8938
                         const target = e.nativeEvent.target;
                         function iosClearDefault() {
-                            (target as any).defaultValue = '';
+                            (target as HTMLInputElement).defaultValue = '';
                         }
                         window.setTimeout(iosClearDefault, 0);
                         onSelectCalendar(e.target.value);
@@ -172,7 +204,15 @@ const DatePicker = React.memo((props: any) => {
                 <CalendarIcon className='date-picker-calendar-icon' />
             </div>
             <div className={`datepicker-calendar ${is_datepicker_visible ? 'show' : ''}`}>
-                <Calendar ref={calendarRef} onSelect={onSelectCalendar} {...props}>
+                <Calendar
+                    ref={calendarRef}
+                    onSelect={onSelectCalendar}
+                    max_date={max_date}
+                    min_date={min_date}
+                    date_format={date_format}
+                    has_today_btn={has_today_btn}
+                    start_date={start_date}
+                >
                     <DatePickerInput
                         class_name='calendar-input'
                         mode={mode}

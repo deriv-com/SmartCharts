@@ -4,7 +4,7 @@ import React from 'react';
 
 type TCalendarProps = {
     date_format: string;
-    start_date: number;
+    start_date?: number;
     max_date: string;
     min_date: string;
     calendar_date: string;
@@ -53,7 +53,10 @@ const getDays = ({
         dates.push(moment_month_end.clone().add(i, 'day').format(date_format));
     }
 
-    const moment_start_date = moment.unix(start_date).utc().startOf('day');
+    const moment_start_date = moment
+        .unix(start_date || 0)
+        .utc()
+        .startOf('day');
     dates.map(date => {
         const moment_date = moment.utc(date).startOf('day');
         const is_active = selected_date && moment_date.isSame(moment_selected);

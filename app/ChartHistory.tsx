@@ -18,8 +18,8 @@ const ChartHistory: React.FC<TChartHistoryProps> = React.memo(({ onChange }) => 
         setFocusOnDate(true);
     }, []);
 
-    const onChangeDate = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        const new_date = target.value;
+    const onChangeDate = (value: string) => {
+        const new_date = value;
         setDate(new_date);
         setFocusOnDate(false);
         setFocusOnTime(true);
@@ -55,8 +55,8 @@ const ChartHistory: React.FC<TChartHistoryProps> = React.memo(({ onChange }) => 
                 has_today_btn
                 value={date}
                 onChange={onChangeDate}
-                min_date={moment.utc().subtract(1, 'years').toDate()}
-                max_date={moment.utc().toDate()}
+                min_date={moment.utc().subtract(1, 'years').toDate().toString()}
+                max_date={moment.utc().toDate().toString()}
             />
             <TimePicker
                 placeholder='time'

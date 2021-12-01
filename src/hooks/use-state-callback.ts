@@ -1,19 +1,20 @@
 import React from 'react';
-// this hook mimics this.setState({ state: value, ... }, () => callbackFunc());
-export const useStateCallback = (initial_state: any) => {
-    const [state, setState] = React.useState(initial_state);
-    const callbackRef = React.useRef<any>(null); // a mutable ref to store existing callback
 
-    const setStateCallback = (current_state: any, cb: any) => {
-        callbackRef.current = cb; // store the passed callback to the ref
+type TCallbackType<T> = ((value: T) => void) | null;
+// this hook mimics this.setState({ state: value, ... }, () => callbackFunc());
+export const useStateCallback = <T>(initial_state: T): [T, (current_state: T, cb: TCallbackType<T>) => void] => {
+    const [state, setState] = React.useState<T>(initial_state);
+    const callbackRef = React.useRef<TCallbackType<T>>(null);
+
+    const setStateCallback = (current_state: T, cb: TCallbackType<T>) => {
+        callbackRef.current = cb;
         setState(current_state);
     };
 
     React.useEffect(() => {
-        // callback ref current is null on initial render, so we only execute callback on state
         if (callbackRef.current) {
             callbackRef.current(state);
-            callbackRef.current = null; // we need to reset the callback after execution
+            callbackRef.current = null;
         }
     }, [state]);
 
