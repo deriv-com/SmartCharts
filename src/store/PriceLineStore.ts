@@ -136,7 +136,7 @@ export default class PriceLineStore {
     }
 
     get realPrice(): number {
-        return this.relative ? Number(this.mainStore.chart.currentCloseQuote()?.Close) + this._price : this._price;
+        return this.relative ? this.mainStore.chart.currentCloseQuote()?.Close as number + this._price : this._price;
     }
 
     get yAxiswidth() {
@@ -182,7 +182,7 @@ export default class PriceLineStore {
             newPrice = this._priceConstrainer(newPrice);
         }
         if (this.relative) {
-            newPrice -= Number(this.mainStore.chart.currentCloseQuote()?.Close);
+            newPrice -= this.mainStore.chart.currentCloseQuote()?.Close as number;
         }
 
         this.price = newPrice;
