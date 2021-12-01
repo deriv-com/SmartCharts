@@ -1,4 +1,4 @@
-import { action, reaction, when, observable, computed } from 'mobx';
+import { action, reaction, observable, computed } from 'mobx';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 import Menu from '../components/Menu.jsx';
@@ -19,7 +19,17 @@ export default class DrawToolsStore {
         });
         this.DrawToolsSettingsDialog = this.settingsDialog.connect(SettingsDialog);
 
-        when(() => this.context, this.onContextReady);
+        reaction(
+            () => this.context,
+            () => {
+                if (this.context) {
+                    this.onContextReady();
+                } else {
+                    this.destructor();
+                }
+            }
+        );
+
         reaction(
             () => this.menu.open,
             () => {
