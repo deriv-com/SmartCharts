@@ -1182,7 +1182,7 @@ class ChartStore {
             this.stxx.destroy();
             this.stxx = null;
         }
-
+        this.mainStore.drawTools.destructor();
         this.currentActiveSymbol = null;
         this.contextPromise = null;
         this.context = null;
