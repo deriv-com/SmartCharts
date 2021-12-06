@@ -1132,7 +1132,7 @@ CIQ.ChartEngine.prototype.drawingClick = function (panel, x, y) {
 						"stx_crosshair_drawing",
 						"stx_crosshair"
 					);
-				}else{
+				} else {
 					this.controls.crossX.classList.toString().replace(/.+/gm,
 						"stx_crosshair"
 					);
@@ -1142,7 +1142,7 @@ CIQ.ChartEngine.prototype.drawingClick = function (panel, x, y) {
 						"stx_crosshair_drawing",
 						"stx_crosshair"
 					);
-				}else{
+				} else {
 					this.controls.crossY.classList.toString().replace(/.+/gm,
 						"stx_crosshair"
 					);
