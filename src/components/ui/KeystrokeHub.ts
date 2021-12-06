@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 import Helper from './Helper';
 import Keystroke, { TKeystrokeProps } from './Keystroke';
-import { claims } from '.';
+import Context from './Context';
 /**
  * UI Helper for capturing and handling keystrokes. A helper or ContextTag can
  * "claim" keystrokes and intercept them, otherwise the keystrokes will be handled
@@ -14,12 +14,14 @@ import { claims } from '.';
  * @name CIQ.UI.KeyboardShortcuts
  * @constructor
  */
+
+type TParams = { cb: (key: string | number, hub: KeystrokeHub) => boolean };
 class KeystrokeHub extends Helper {
     static instance: KeystrokeHub | null = null;
     capsLock = false;
     keystroke: Keystroke;
-    params: any;
-    constructor(node: HTMLElement, context: any, params: { cb: (key: string, hub: KeystrokeHub) => boolean }) {
+    params: TParams;
+    constructor(node: HTMLElement, context: Context, params: TParams) {
         super(node, context);
         this.node = node;
         this.context = context;
@@ -113,41 +115,10 @@ class KeystrokeHub extends Helper {
      * @param {CIQ.UI.Context} context The context
      * @memberof CIQ.UI.KeystrokeHub
      */
-    setActiveContext(context: any) {
+    setActiveContext(context: Context) {
         this.context = context;
     }
-    /**
-     * @param hub
-     * @param key
-     * @param e Event
-     * @param keystroke
-     * @memberof CIQ.UI.KeystrokeHub
-     * @private
-     */
-    processKeyStrokeClaims(hub: KeystrokeHub, key: string | number, e: any, keystroke: any) {
-        for (let i = claims.length - 1; i > -1; i--) {
-            const helper = claims[i].helper;
-            const response = helper.keyStroke(hub, key, e, keystroke);
-            if (response) {
-                if (!response.allowDefault) {
-                    e.preventDefault();
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-    addClaim(helper: any) {
-        claims.push({ helper });
-    }
-    removeClaim(helper: any) {
-        for (let i = 0; i < claims.length; i++) {
-            if ((claims[i] as any).helper === helper) {
-                claims.splice(i, 1);
-                return;
-            }
-        }
-    }
+
     /**
      * Handles keystrokes
      * @param  {object} obj Event object
@@ -182,11 +153,6 @@ class KeystrokeHub extends Helper {
                 break;
             default:
                 break;
-        }
-        if (!CIQ.ChartEngine.drawingLine) {
-            if (this.processKeyStrokeClaims(this, key, e, keystroke)) {
-                return;
-            }
         }
         if (key !== 'escape') {
             if (this.context.isModal()) {
