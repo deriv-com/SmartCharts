@@ -7,12 +7,16 @@ import { TNotification } from 'src/store/Notifier';
 import { TGranularity } from '.';
 import { OHLCStreamResponse } from './api.types';
 
+export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
+    ? ElementType
+    : never;
+
 export type TBar = {
     height: number;
     cName: string;
 };
 
-export type ChartType = typeof ChartTypes[0] & { active?: boolean; disabled?: boolean };
+export type ChartType = ArrayElement<typeof ChartTypes> & { active?: boolean; disabled?: boolean };
 
 export type TChartParams = {
     requestAPI: BinaryAPI['requestAPI'];

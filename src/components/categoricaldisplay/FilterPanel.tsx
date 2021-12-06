@@ -11,13 +11,21 @@ export type TFilterPanelProps = {
     isSearching: boolean;
 };
 
+type TFilterItemProps = {
+    focusedCategoryKey: string | null;
+    activeCategoryKey: string;
+    handleFilterClick: (categoryId: string) => void;
+    isSearching: boolean;
+    category: TCategorizedSymbolItem;
+};
+
 const FilterItemIcon = React.memo(({ categoryId }: { categoryId: string }) => {
     const CategoryIcon = CategoryIconMap[categoryId as keyof typeof CategoryIconMap];
     return CategoryIcon && <CategoryIcon className={`ic-${categoryId}`} />;
 });
 
-const FilterItem = React.memo(
-    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }: any) => {
+const FilterItem: React.FC<TFilterItemProps> = React.memo(
+    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }) => {
         const isActive =
             focusedCategoryKey && focusedCategoryKey.length
                 ? focusedCategoryKey === category.categoryId
@@ -25,7 +33,7 @@ const FilterItem = React.memo(
         return (
             <div
                 className={`sc-mcd__filter__item ${isActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
-                onClick={e => handleFilterClick(category.categoryId, e)}
+                onClick={() => handleFilterClick(category.categoryId)}
             >
                 <FilterItemIcon categoryId={category.categoryId} />
                 {t.translate(category.categoryName)}

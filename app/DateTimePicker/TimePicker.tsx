@@ -218,18 +218,18 @@ const TimePicker: React.FC<TTimerPickerProps> = props => {
             // To handle nativepicker;
             const new_value = typeof arg === 'object' ? arg.target.value : arg;
             setValue(new_value);
-            if (new_value !== (props as any).value && onChange) {
+            if (new_value !== props.value && onChange) {
                 onChange(new_value);
             }
         },
         [name, onChange, props.value]
     );
     React.useEffect(() => {
-        const findAvailabeTime = (start_moment_clone: any) => {
+        const findAvailabeTime = (start_moment_clone: moment.Moment) => {
             let last_available_min, desire_time;
             const hour = moment().utc().format('HH');
             minutes.forEach(min => {
-                desire_time = start_moment_clone.hour(hour).minute(min);
+                desire_time = start_moment_clone.hour(+hour).minute(+min);
                 if (isSessionAvailable(desire_time)) {
                     last_available_min = min;
                 }

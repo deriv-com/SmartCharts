@@ -32,7 +32,7 @@ class Keystroke {
     downValue = '';
     implementAndroidWorkaround = false;
     key?: string | number | null;
-    node: any;
+    node: HTMLElement;
     shift = false;
 
     constructor(node: HTMLElement, cb: TKeystrokeCallback) {
@@ -51,7 +51,7 @@ class Keystroke {
     // examining the value of an input box before (keydown) and after (keyup) and identifying what changed
     // Note that CIQ.isAndroid is false when the user requests "desktop site" and so some input boxes won't work
     // in that situation. There is no workaround other than to always treat 229 as a false value (it is a swedish character)
-    androidWorkaroundKeyup(e: React.KeyboardEvent<HTMLInputElement>) {
+    androidWorkaroundKeyup(e: KeyboardEvent) {
         const newValue = (e.target as HTMLInputElement).value;
         let key;
         if (newValue.length > this.downValue.length) {
@@ -73,7 +73,7 @@ class Keystroke {
     // before the input field is updated, we save any key that has been handled by these in this.key
     // but we don't process the stroke until the keyup event is fired. This ensures that our handlers
     // will always have the right key (capitalized) and that input field value will be up to date.
-    keyup = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    keyup = (e: KeyboardEvent) => {
         const key = e.which;
         if (this.implementAndroidWorkaround) {
             this.androidWorkaroundKeyup(e);
@@ -105,7 +105,7 @@ class Keystroke {
         }
     };
 
-    keydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    keydown = (e: KeyboardEvent) => {
         this.downValue = (e.target as HTMLInputElement).value;
         if (this.noKeyCapture) {
             return;
@@ -194,7 +194,7 @@ class Keystroke {
      * @memberof CIQ.UI.Keystroke
      * @param e
      */
-    keypress = (e: React.KeyboardEvent) => {
+    keypress = (e: KeyboardEvent) => {
         if (this.noKeyCapture) {
             return;
         }

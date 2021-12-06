@@ -1,16 +1,30 @@
+import {
+    Candles,
+    History,
+    TicksHistoryRequest,
+    TicksHistoryResponse,
+    TickSpotData,
+    TicksStreamResponse,
+} from '@deriv/api-types';
+import { ArrayElement, OHLCStreamResponse } from 'src/types';
+import ConnectionManager from './ConnectionManager';
 import Stream from './Stream';
 import { mergeTickHistory } from './tickUtils';
 
 class StreamManager {
     MAX_CACHE_TICKS = 5000;
-    _connection;
-    _streams: any = {};
-    _streamIds: any = {};
-    _tickHistoryCache: any = {};
-    _tickHistoryPromises: any = {};
-    _beingForgotten: any = {};
+    _connection: ConnectionManager;
+    _streams: {
+        [key: string]: Stream;
+    } = {};
+    _streamIds: {
+        [key: string]: string | undefined;
+    } = {};
+    _tickHistoryCache: { [key: string]: TicksHistoryResponse } = {};
+    _tickHistoryPromises: { [key: string]: Promise<TicksHistoryResponse> } = {};
+    _beingForgotten: { [key: string]: boolean } = {};
 
-    constructor(connection: any) {
+    constructor(connection: ConnectionManager) {
         this._connection = connection;
 
         for (const msgType of ['tick', 'ohlc']) {
@@ -19,11 +33,11 @@ class StreamManager {
         this._connection.onClosed(this._onConnectionClosed.bind(this));
     }
 
-    _onTick(data: any) {
-        const key = this._getKey(data.echo_req);
+    _onTick(data: TicksStreamResponse) {
+        const key = this._getKey((data.echo_req as unknown) as TicksHistoryRequest);
 
         if (this._streams[key] && this._tickHistoryCache[key]) {
-            this._streamIds[key] = data[data.msg_type].id;
+            this._streamIds[key] = data[data.msg_type]?.id;
             this._cacheTick(key, data);
             this._streams[key].emitTick(data);
         } else if (this._beingForgotten[key] === undefined) {
@@ -31,7 +45,7 @@ class StreamManager {
             // it is no longer in used. This is because we can't know the stream ID
             // from the initial response; we have to wait for the next tick to retrieve it.
             // In such scenario we need to forget these "orphaned" streams:
-            this._streamIds[key] = data[data.msg_type].id;
+            this._streamIds[key] = data[data.msg_type]?.id;
             this._forgetStream(key);
         }
     }
@@ -47,8 +61,8 @@ class StreamManager {
         }
     }
 
-    _onReceiveTickHistory(data: any) {
-        const key = this._getKey(data.echo_req);
+    _onReceiveTickHistory(data: TicksHistoryResponse) {
+        const key = this._getKey((data.echo_req as unknown) as TicksHistoryRequest);
         const cache = StreamManager.cloneTickHistoryResponse(data);
         if (cache) {
             this._tickHistoryCache[key] = cache;
@@ -56,18 +70,20 @@ class StreamManager {
         delete this._tickHistoryPromises[key];
     }
 
-    _cacheTick(key: any, { ohlc, tick }: any) {
-        if (ohlc) {
-            const candles = this._tickHistoryCache[key].candles;
+    _cacheTick(key: string, response: TicksStreamResponse | OHLCStreamResponse) {
+        if ('ohlc' in response) {
+            const { ohlc } = response as OHLCStreamResponse;
+            const candles = this._tickHistoryCache[key].candles as Candles;
             const { close, open_time: epoch, high, low, open } = ohlc;
-            const candle = {
-                close,
-                high,
-                low,
-                open,
+            const candle: ArrayElement<Candles> = {
+                close: (close as unknown) as number,
+                high: (high as unknown) as number,
+                low: (low as unknown) as number,
+                open: (open as unknown) as number,
                 epoch,
             };
-            if (candles[candles.length - 1] && +candles[candles.length - 1].epoch === +candle.epoch) {
+            const lastCandle = candles[candles.length - 1] as Required<Candles[0]>;
+            if (lastCandle && candle.epoch && +lastCandle.epoch === +candle.epoch) {
                 candles[candles.length - 1] = candle;
             } else {
                 candles.push(candle);
@@ -76,9 +92,13 @@ class StreamManager {
                     candles.shift();
                 }
             }
-        } else if (tick) {
-            const { prices, times } = this._tickHistoryCache[key].history;
-            const { quote: price, epoch: time } = tick;
+        } else if ('tick' in response) {
+            const { tick } = response;
+            const history = this._tickHistoryCache[key].history;
+
+            const { prices, times } = history as Required<History>;
+            const { quote: price, epoch: time } = tick as Required<TickSpotData>;
+
             prices.push(price);
             times.push(time);
 
@@ -89,7 +109,7 @@ class StreamManager {
         }
     }
 
-    _forgetStream(key: any) {
+    _forgetStream(key: string) {
         const stream = this._streams[key];
         if (stream) {
             // Note that destroying a stream also removes all subscribed events
@@ -111,7 +131,7 @@ class StreamManager {
         }
     }
 
-    _createNewStream(request: any) {
+    _createNewStream(request: TicksHistoryRequest) {
         const key = this._getKey(request);
         const stream = new Stream();
         this._streams[key] = stream;
@@ -119,7 +139,7 @@ class StreamManager {
         this._tickHistoryPromises[key] = subscribePromise;
 
         subscribePromise
-            .then((response: any) => {
+            .then((response: TicksHistoryResponse) => {
                 this._onReceiveTickHistory(response);
                 if (response.error) {
                     this._forgetStream(key);
@@ -134,7 +154,7 @@ class StreamManager {
         return stream;
     }
 
-    async subscribe(request: any, callback: any) {
+    async subscribe(request: TicksHistoryRequest, callback: (response: TicksHistoryResponse) => void) {
         const key = this._getKey(request);
         let stream = this._streams[key];
         if (!stream) {
@@ -146,13 +166,13 @@ class StreamManager {
             tickHistoryResponse = await this._tickHistoryPromises[key];
         }
 
-        const responseStart = tickHistoryResponse.echo_req.start;
-        if (responseStart > request.start) {
+        const responseStart = ((tickHistoryResponse.echo_req as unknown) as TicksHistoryRequest).start;
+        if (responseStart && request.start && responseStart > request.start) {
             // request needs more data
             const patchRequest = { ...request };
             delete patchRequest.subscribe;
-            const { history, candles } = tickHistoryResponse;
-            patchRequest.end = history ? +history.times[0] : candles[0].epoch;
+            const { history, candles } = tickHistoryResponse as Required<TicksHistoryResponse>;
+            patchRequest.end = String(history && history.times?.[0] ? +history.times[0] : candles[0].epoch || '');
             const patch = await this._connection.send(patchRequest);
             tickHistoryResponse = mergeTickHistory(tickHistoryResponse, patch);
         }
@@ -168,7 +188,7 @@ class StreamManager {
         stream.onStream(callback);
     }
 
-    forget(request: any, callback: any) {
+    forget(request: TicksHistoryRequest, callback: (response: TicksHistoryResponse) => void) {
         const key = this._getKey(request);
         const stream = this._streams[key];
         if (stream) {
@@ -176,15 +196,15 @@ class StreamManager {
         }
     }
 
-    _getKey({ ticks_history: symbol, granularity }: any) {
+    _getKey({ ticks_history: symbol, granularity }: TicksHistoryRequest) {
         return `${symbol}-${granularity || 0}`;
     }
 
-    static cloneTickHistoryResponse({ history, candles, ...others }: any) {
-        let clone;
+    static cloneTickHistoryResponse({ history, candles, ...others }: TicksHistoryResponse) {
+        let clone: TicksHistoryResponse | null = null;
 
         if (history) {
-            const { prices, times } = history;
+            const { prices, times } = history as Required<History>;
             clone = {
                 ...others,
                 history: {
@@ -196,7 +216,7 @@ class StreamManager {
             clone = { ...others, candles: candles.slice(0) };
         }
 
-        return clone;
+        return clone as TicksHistoryResponse;
     }
 }
 

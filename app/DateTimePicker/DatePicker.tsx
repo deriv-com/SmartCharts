@@ -64,7 +64,7 @@ const DatePickerInput: React.FC<TDatePickerInputProps> = ({
         />
     );
 };
-const formatDate = (date: any, date_format = 'YYYY-MM-DD') =>
+const formatDate = (date: string, date_format = 'YYYY-MM-DD') =>
     moment(date || undefined, date_format).format(date_format);
 /**
  * return the number of days from today to date specified
@@ -95,12 +95,12 @@ const DatePicker: React.FC<TDatePickerProps> = React.memo(props => {
     } = props;
     const [value, setValue] = useStateCallback<string>(props_value || '');
     const [is_datepicker_visible, setIsDatepickerVisible] = React.useState(focus || false);
-    const mainRef = React.useRef(null);
+    const mainRef = React.useRef<HTMLDivElement>(null);
     const calendarRef = React.useRef<TCalendarRefProps>(null);
     const prev_focus = usePrevious(focus);
     const onClickOutside = React.useCallback(
         e => {
-            if (!(mainRef.current as any)?.contains(e.target) && is_datepicker_visible) {
+            if (!mainRef.current?.contains(e.target) && is_datepicker_visible) {
                 setIsDatepickerVisible(false);
                 if (disableFocus) {
                     disableFocus();
