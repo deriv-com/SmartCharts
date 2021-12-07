@@ -1127,26 +1127,14 @@ CIQ.ChartEngine.prototype.drawingClick = function (panel, x, y) {
 				this.adjustDrawings();
 				this.draw();
 				this.changeOccurred("vector");
-				if(typeof this.controls.crossX.classList === 'string'){
-					this.controls.crossX.classList.replace(
-						"stx_crosshair_drawing",
-						"stx_crosshair"
-					);
-				} else {
-					this.controls.crossX.classList.toString().replace(/.+/gm,
-						"stx_crosshair"
-					);
-				}
-				if(typeof this.controls.crossY.classList === 'string'){
-					this.controls.crossY.classList.replace(
-						"stx_crosshair_drawing",
-						"stx_crosshair"
-					);
-				} else {
-					this.controls.crossY.classList.toString().replace(/.+/gm,
-						"stx_crosshair"
-					);
-				}
+				this.controls.crossX.classList.replace(
+					"stx_crosshair_drawing",
+					"stx_crosshair"
+				);
+				this.controls.crossY.classList.replace(
+					"stx_crosshair_drawing",
+					"stx_crosshair"
+				);
 			}
 		} else {
 			this.changeOccurred("drawing");
