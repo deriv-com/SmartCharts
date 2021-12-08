@@ -1,8 +1,11 @@
-function getLast(arr: any) {
+import { Candles, History, TicksHistoryResponse } from '@deriv/api-types';
+import { ArrayElement } from 'src/types';
+
+function getLast<T>(arr: T[]) {
     return arr[arr.length - 1];
 }
 
-function binarySearch(arr: any, val: any, cmp = (a: any) => a) {
+function binarySearch<T>(arr: T[], val: T, cmp: (item: T) => T | number = item => item) {
     let start = 0;
     let end = arr.length - 1;
 
@@ -23,7 +26,7 @@ function binarySearch(arr: any, val: any, cmp = (a: any) => a) {
     return -1;
 }
 
-function mergeTicks(master: any, patch: any) {
+function mergeTicks(master: Required<History>, patch: Required<History>) {
     // detemine which comes first:
     let alpha, omega;
     if (+getLast(master.times) > +getLast(patch.times)) {
@@ -32,7 +35,7 @@ function mergeTicks(master: any, patch: any) {
         [alpha, omega] = [master, patch];
     }
 
-    const intersect = binarySearch(alpha.times, omega.times[0]);
+    const intersect = binarySearch<number>(alpha.times, omega.times[0]);
     if (intersect === -1) {
         throw new Error('Cannot merge tick data with no overlaps!');
     }
@@ -45,11 +48,14 @@ function mergeTicks(master: any, patch: any) {
     };
 }
 
-function mergeCandles(master: any, patch: any) {
+function mergeCandles(master: Required<Candles>, patch: Required<Candles>) {
     // detemine which comes first:
     let alpha, omega;
     let isPatchOmega = true;
-    if (getLast(master).epoch > getLast(patch).epoch) {
+    if (
+        (getLast(master) as Required<ArrayElement<Candles>>).epoch >
+        (getLast(patch) as Required<ArrayElement<Candles>>).epoch
+    ) {
         [alpha, omega] = [patch, master];
         isPatchOmega = false;
     } else {
@@ -57,13 +63,13 @@ function mergeCandles(master: any, patch: any) {
     }
 
     let alphaEnd, omegaStart;
-    const cmp = (x: any) => x.epoch;
+    const cmp = (x: ArrayElement<Candles>) => x.epoch as number;
     // To merge candle data; there *must* be an overlap, either
     // the first element in future patch has same epoch in past data
     // or last element in past patch has same epoch in future data
-    let intersect = binarySearch(alpha, omega[0], cmp);
+    let intersect = binarySearch<ArrayElement<Candles>>(alpha, omega[0], cmp);
     if (intersect === -1) {
-        intersect = binarySearch(omega, getLast(alpha), cmp);
+        intersect = binarySearch<ArrayElement<Candles>>(omega, getLast(alpha), cmp);
         if (intersect === -1) {
             throw new Error('Candle data cannot be merged!');
         }
@@ -84,12 +90,12 @@ function mergeCandles(master: any, patch: any) {
     return alpha.slice(0, alphaEnd).concat(omega.slice(omegaStart, omega.length));
 }
 
-export function mergeTickHistory(master: any, patch: any) {
+export function mergeTickHistory(master: Required<TicksHistoryResponse>, patch: Required<TicksHistoryResponse>) {
     const merged = { ...master };
     if (master.candles) {
-        merged.candles = mergeCandles(master.candles, patch.candles);
+        merged.candles = mergeCandles(master.candles as Required<Candles>, patch.candles as Required<Candles>);
     } else {
-        merged.history = mergeTicks(master.history, patch.history);
+        merged.history = mergeTicks(master.history as Required<History>, patch.history as Required<History>);
     }
 
     return merged;

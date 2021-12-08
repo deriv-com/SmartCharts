@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/sort-comp,react/no-multi-comp */
-import React from 'react';
+import React, { ChangeEvent, PropsWithChildren } from 'react';
 import debounce from 'lodash.debounce';
 
 import classNames from 'classnames';
+import { ArrayElement } from 'src/types';
 import Scroll from './Scroll';
 import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon, CheckboxIcon, CheckboxActiveIcon } from './Icons';
 import '../../sass/components/_form.scss';
@@ -11,6 +12,90 @@ import '../../sass/components/_form.scss';
 type TFormGroupProps = {
     title?: string | null;
     type?: string;
+};
+
+type TFontSettingProps = {
+    onChange: (object: { [x: string]: string | undefined }) => void;
+    value: {
+        [x: string]: string;
+    };
+};
+
+type TColorPickerProps = {
+    subtitle: string;
+    theme: string;
+    color: string;
+    setColor: (color: string) => void;
+};
+
+type TSwitchProps = {
+    value: string;
+    onChange: (value: boolean) => void;
+};
+
+type TSliderProps = {
+    min: number;
+    max: number;
+    value: number;
+    step: number;
+    onChange: (value: string) => void;
+};
+
+type TCheckboxProps = {
+    id: string;
+    label: string;
+    checked: boolean;
+    disabled?: boolean;
+    onChange: (checked: boolean) => void;
+};
+
+type TNumericInputProps = {
+    subtitle: string;
+    onChange: (value: string | number) => void;
+    min?: number;
+    max?: number;
+    step?: number;
+    value: string;
+};
+
+type TNumberColorPickerProps = {
+    value: {
+        Value: string;
+        Color: string;
+    };
+    theme: string;
+    onChange: (item: { Value: string; Color: string }) => void;
+};
+
+type TDropDownProps<T> = {
+    subtitle?: string;
+    rows: T[];
+    value?: T | React.ReactElement;
+    onRowClick: (value: T) => void;
+    className?: string;
+    children(data: T): React.ReactElement;
+};
+
+type TToogleProps = {
+    className?: string;
+    active?: boolean;
+    onChange: (value: boolean) => void;
+};
+
+type TSwitchIconProps = {
+    id: string;
+    label: string;
+    value: boolean;
+    onChange: (checked: boolean) => void;
+    noramIcon: (props: { className: string }) => JSX.Element;
+    activeIcon: (props: { className: string }) => JSX.Element;
+};
+
+type TPatterProps = {
+    pattern: string;
+    subtitle: string;
+    lineWidth: string;
+    onChange: (value: { width: number; pattern: string }) => void;
 };
 
 export const FormGroup: React.FC<TFormGroupProps> = ({ title, type, children }) => (
@@ -23,14 +108,6 @@ export const FormGroup: React.FC<TFormGroupProps> = ({ title, type, children }) 
         <div className='form__control'>{children}</div>
     </div>
 );
-
-type TCheckboxProps = {
-    id: string;
-    label: string;
-    checked: boolean;
-    disabled?: boolean;
-    onChange: (checked: boolean) => void;
-};
 
 export const Checkbox: React.FC<TCheckboxProps> = ({ id, label, checked, disabled, onChange }) => (
     <span onClick={() => onChange(!checked)}>
@@ -50,14 +127,17 @@ export const Checkbox: React.FC<TCheckboxProps> = ({ id, label, checked, disable
     </span>
 );
 
-export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }: any) => {
+export const Slider: React.FC<TSliderProps> = ({ min = 1, max = 10, step = 1, value, onChange }) => {
     const activeWidth = React.useMemo(() => {
         const barWidth = 238; // css hardcode
         const width = Math.round((barWidth * (value - min)) / (max - min));
         return width < 0 ? 0 : width;
     }, [value, min, max]);
 
-    const handleChange = React.useCallback((el: any) => onChange(el.currentTarget.value), [onChange]);
+    const handleChange = React.useCallback(
+        (el: ChangeEvent<HTMLInputElement>) => onChange((el.currentTarget as HTMLInputElement).value),
+        [onChange]
+    );
 
     return (
         <div className='sc-slider'>
@@ -71,7 +151,9 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }: any) =>
     );
 };
 
-export const DropDown = ({ subtitle, rows, children, value, onRowClick, className }: any) => {
+export const DropDown = <T extends number | string | object>(props: PropsWithChildren<TDropDownProps<T>>) => {
+    const { subtitle, rows, children, value, onRowClick, className } = props;
+
     const [open, setOpen] = React.useState(false);
     const [top, setTop] = React.useState<number | undefined>(0);
     const [left, setLeft] = React.useState<number | undefined>(0);
@@ -84,10 +166,10 @@ export const DropDown = ({ subtitle, rows, children, value, onRowClick, classNam
         setTop(!open ? bounding?.top : undefined);
         setLeft(!open ? bounding?.left : undefined);
         setWidth(bounding?.width);
-        setOpen((prevState: any) => !prevState);
+        setOpen(prevState => !prevState);
     }, [open, innerRef]);
     const handleClose = React.useCallback(
-        (e: any) => {
+        (e: MouseEvent) => {
             if (e.target !== innerTitleRef.current) {
                 setOpen(false);
                 setTop(0);
@@ -120,7 +202,7 @@ export const DropDown = ({ subtitle, rows, children, value, onRowClick, classNam
                 <ArrowIcon />
             </div>
             <Scroll autoHide height={`${open ? '200px' : '1px'}`} className={classNames('dropdown', { active: open })}>
-                {rows.map((row: any, idx: any) => (
+                {rows.map((row, idx) => (
                     <div
                         key={idx} // eslint-disable-line react/no-array-index-key
                         className={classNames('row', { 'row--selected': row === value })}
@@ -134,7 +216,7 @@ export const DropDown = ({ subtitle, rows, children, value, onRowClick, classNam
     );
 };
 
-export const Pattern = ({ pattern, subtitle, lineWidth, onChange, onActive }: any) => {
+export const Pattern: React.FC<TPatterProps> = ({ pattern, subtitle, lineWidth, onChange }) => {
     const patterns = [
         { width: 1, pattern: 'solid' },
         { width: 3, pattern: 'solid' },
@@ -151,8 +233,13 @@ export const Pattern = ({ pattern, subtitle, lineWidth, onChange, onActive }: an
         pattern !== 'none' ? <span className={`option ${pattern}-${lineWidth}`} /> : <span className='none'>None</span>;
 
     return (
-        <DropDown rows={patterns} value={getValue()} onActive={onActive} onRowClick={onChange} subtitle={subtitle}>
-            {(p: any) =>
+        <DropDown<ArrayElement<typeof patterns>>
+            rows={patterns}
+            value={getValue()}
+            onRowClick={onChange}
+            subtitle={subtitle}
+        >
+            {p =>
                 p.pattern !== 'none' ? (
                     <span className={`option ${p.pattern}-${p.width}`} />
                 ) : (
@@ -163,7 +250,7 @@ export const Pattern = ({ pattern, subtitle, lineWidth, onChange, onActive }: an
     );
 };
 
-export const ColorPicker = ({ subtitle, color, theme, setColor }: any) => {
+export const ColorPicker: React.FC<TColorPickerProps> = ({ subtitle, color, theme, setColor }) => {
     const colorMap = [
         [
             '#ffffff',
@@ -279,10 +366,10 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }: any) => {
         setTop(!open ? bounding?.top : undefined);
         setLeft(!open ? bounding?.left : undefined);
         setWidth(bounding?.width);
-        setOpen((prevState: any) => !prevState);
+        setOpen(prevState => !prevState);
     }, [open, innerRef]);
     const handleClose = React.useCallback(
-        (e: any) => {
+        (e: MouseEvent) => {
             if (e.target !== innerTitleRef.current) {
                 setOpen(false);
                 setTop(0);
@@ -328,27 +415,13 @@ export const ColorPicker = ({ subtitle, color, theme, setColor }: any) => {
     );
 };
 
-export const Switch = ({ value, onChange }: any) => (
+export const Switch: React.FC<TSwitchProps> = ({ value, onChange }) => (
     <div className={`sc-switch ${value ? 'on' : 'off'}`} onClick={() => onChange(!value)}>
         <div className='handle' />
     </div>
 );
 
-export const SwitchIcon = ({
-    id,
-    label,
-    value,
-    onChange,
-    noramIcon,
-    activeIcon,
-}: {
-    id: string;
-    label: string;
-    value: boolean;
-    onChange: (checked: boolean) => void;
-    noramIcon: (props: any) => JSX.Element;
-    activeIcon: (props: any) => JSX.Element;
-}) => {
+export const SwitchIcon: React.FC<TSwitchIconProps> = ({ id, label, value, onChange, noramIcon, activeIcon }) => {
     const Icon = value ? activeIcon : noramIcon;
     return (
         <div className='sc-switch-icon'>
@@ -361,18 +434,18 @@ export const SwitchIcon = ({
 };
 
 // NumericInput fires onChange on Enter or onBlur
-export const NumericInput = ({ subtitle, onChange, min, max, step, value }: any) => {
-    const [innerValue, setInnerValue] = React.useState('');
+export const NumericInput: React.FC<TNumericInputProps> = ({ subtitle, onChange, min, max, step, value }) => {
+    const [innerValue, setInnerValue] = React.useState<number | string>('');
 
     const handleFireOnChange = debounce(
         () => {
-            const setAndChange = (val: any) => {
+            const setAndChange = (val: number) => {
                 setInnerValue(val);
                 onChange(val);
             };
-            if (max !== undefined && innerValue > max) {
+            if (max !== undefined && +innerValue > max) {
                 setAndChange(max);
-            } else if (min !== undefined && innerValue < min) {
+            } else if (min !== undefined && +innerValue < min) {
                 setAndChange(min);
             } else {
                 onChange(innerValue);
@@ -382,12 +455,12 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: any)
         { leading: true, trailing: false }
     );
 
-    const handleUpdateValue = (e: any) => {
+    const handleUpdateValue = (e: ChangeEvent<HTMLInputElement>) => {
         e.persist();
         setInnerValue(e.target.value);
     };
 
-    const handleFireOnEnter = (e: any) => {
+    const handleFireOnEnter: React.KeyboardEventHandler = e => {
         if (['e', '+', 'E'].includes(e.key)) {
             e.preventDefault();
         }
@@ -397,11 +470,11 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: any)
     };
 
     const onIncrease = () => {
-        setInnerValue((prevState: any) => prevState + 1);
+        setInnerValue(prevState => +prevState + 1);
         handleFireOnChange();
     };
     const onDecrease = () => {
-        setInnerValue((prevState: any) => (prevState - 1) as any);
+        setInnerValue(prevState => +prevState - 1);
         handleFireOnChange();
     };
 
@@ -434,42 +507,41 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: any)
     );
 };
 
-export const NumberColorPicker = ({ value, theme, onChange, onActive }: any) => {
+export const NumberColorPicker: React.FC<TNumberColorPickerProps> = ({ value, theme, onChange }) => {
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
     const { Value, Color } = value;
-    const onValueChange = (v: any) => onChange({ Color, Value: v });
-    const onColorChange = (c: any) => onChange({ Color: c, Value });
+    const onValueChange = (v: string) => onChange({ Color, Value: v });
+    const onColorChange = (c: string) => onChange({ Color: c, Value });
 
     return (
         <span className='sc-numbercolorpicker'>
-            <NumericInput value={Value} subtitle={t.translate('Size')} onChange={(val: any) => onValueChange(val)} />
+            <NumericInput value={Value} subtitle={t.translate('Size')} onChange={val => onValueChange(val as string)} />
             <ColorPicker
                 color={Color}
                 theme={theme}
-                onActive={onActive}
                 subtitle={t.translate('Color')}
-                setColor={(val: any) => onColorChange(val)}
+                setColor={val => onColorChange(val)}
             />
         </span>
     );
 };
 
-export const Toggle = ({ className, children, active, onChange }: any) => (
+export const Toggle: React.FC<TToogleProps> = ({ className, children, active, onChange }) => (
     <div onClick={() => onChange(!active)} className={`${className || ''} ${active ? 'active' : ''} sc-toggle`}>
         {children}
     </div>
 );
 
-export const FontSetting = ({ onChange, value }: any) => {
+export const FontSetting: React.FC<TFontSettingProps> = ({ onChange, value }) => {
     const families = ['Default', 'Helvetica', 'Courier', 'Garamond', 'Palatino', 'Times New Roman'];
     const fontSizes = [8, 10, 12, 13, 14, 16, 20, 28, 36, 48, 64];
 
-    const fireChange = (change: any) => onChange({ ...value, ...change });
-    const onFontFamilyChange = (family: any) => fireChange({ family });
-    const onFontSizeChange = (size: any) => fireChange({ size: `${size}px` });
-    const onBoldChange = (isBold: any) => fireChange({ weight: isBold ? 'bold' : undefined });
-    const onItalicChange = (isItalic: any) => fireChange({ style: isItalic ? 'italic' : undefined });
+    const fireChange = (change: { [x: string]: string | undefined }) => onChange({ ...value, ...change });
+    const onFontFamilyChange = (family: string) => fireChange({ family });
+    const onFontSizeChange = (size: number) => fireChange({ size: `${size}px` });
+    const onBoldChange = (isBold: boolean) => fireChange({ weight: isBold ? 'bold' : undefined });
+    const onItalicChange = (isItalic: boolean) => fireChange({ style: isItalic ? 'italic' : undefined });
     const { family, style, weight, size } = value;
 
     return (
@@ -484,21 +556,11 @@ export const FontSetting = ({ onChange, value }: any) => {
                     <i>i</i>
                 </div>
             </Toggle>
-            <DropDown
-                className='sc-changefontsize'
-                rows={fontSizes}
-                title={size || '13px'}
-                onRowClick={onFontSizeChange}
-            >
-                {(p: any) => <span className='option'>{p}</span>}
+            <DropDown<number> className='sc-changefontsize' rows={fontSizes} onRowClick={onFontSizeChange}>
+                {p => <span className='option'>{p}</span>}
             </DropDown>
-            <DropDown
-                className='sc-changefontfamily'
-                rows={families}
-                title={family || families[0]}
-                onRowClick={onFontFamilyChange}
-            >
-                {(p: any) => <span className='option'>{p}</span>}
+            <DropDown<string> className='sc-changefontfamily' rows={families} onRowClick={onFontFamilyChange}>
+                {p => <span className='option'>{p}</span>}
             </DropDown>
         </span>
     );
