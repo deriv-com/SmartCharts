@@ -3,7 +3,7 @@ import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import SettingsDialogStore from 'src/store/SettingsDialogStore';
-import { TSettingsItem, TSettingsItemGroup } from 'src/types';
+import { TObject, TSettingsItem, TSettingsItemGroup } from 'src/types';
 import '../../sass/components/_settings-dialog.scss';
 import {
     ColorPicker,
@@ -33,14 +33,14 @@ type TSettingsPanelProps = {
     formClassname?: string;
     setScrollPanel?: ((ref: HTMLDivElement) => void) | undefined;
     itemGroups: TSettingsItemGroup[];
-    onItemChange: (id: string, value: string | number | boolean | object) => void;
+    onItemChange: (id: string, value: string | number | boolean | TObject) => void;
 };
 
 type TSettingsPanelGroupProps = {
     title: string;
     theme: string;
     items: TSettingsItem[];
-    onItemChange: (id: string, value: string | number | boolean | object) => void;
+    onItemChange: (id: string, value: string | number | boolean | TObject) => void;
 };
 
 type TDoneButtonProps = {

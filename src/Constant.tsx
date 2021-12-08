@@ -48,23 +48,48 @@ type TDrawTools = {
     [key: string]: {
         id: string;
         text: string;
-        icon: (props: unknown) => JSX.Element;
+        icon: React.FC;
     };
 };
 
 export type TIndicatorItem = {
     description: string;
-    icon: (props: unknown) => JSX.Element;
+    icon: React.FC;
     id: string;
     isPrediction?: boolean;
     name: string;
 };
 
+export type TActiveItem = TIndicatorItem & {
+    bars: string;
+    dataObject: {
+        inputs: {
+            Field: string;
+            Offset: number;
+            Period: number;
+            Type: string;
+            display: string;
+            id: string;
+        };
+        outputs: {
+            MA: string;
+        };
+        parameters: {
+            chartName: string;
+            editMode: boolean;
+            panelName: string;
+        };
+        sd: typeof CIQ.Studies.StudyDescriptor;
+        stx: typeof CIQ.ChartEngine;
+    };
+};
+
 export type TIndicatorsTree = {
-    icon: (props: unknown) => JSX.Element;
+    icon: React.FC;
     name: string;
     id: string;
     items: TIndicatorItem[];
+    foundItems?: TActiveItem[];
 };
 
 export const drawTools: TDrawTools = {

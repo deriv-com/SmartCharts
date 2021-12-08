@@ -1,5 +1,5 @@
 import { action, computed, observable, reaction } from 'mobx';
-import { TSettingsItem, TSettingsItemGroup } from 'src/types';
+import { TObject, TSettingsItem, TSettingsItemGroup } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
@@ -113,7 +113,7 @@ export default class SettingsDialogStore {
         if (this.onDeleted) this.onDeleted();
     }
     @action.bound
-    onItemChange(id: string, newValue: string | number | boolean | object) {
+    onItemChange(id: string, newValue: string | number | boolean | TObject) {
         const item = this.items.find(x => x.id === id);
         if (item && item.value !== newValue) {
             item.value = newValue;

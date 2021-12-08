@@ -11,6 +11,10 @@ export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType exten
     ? ElementType
     : never;
 
+export type TObject = {
+    [key: string]: any;
+};
+
 export type TBar = {
     height: number;
     cName: string;
@@ -99,7 +103,7 @@ export type TSettingsItemGroup = {
 export type TSettingsItem = {
     id: string;
     title: string;
-    value: string | number | boolean | object;
+    value: string | number | boolean | TObject;
     defaultValue: string;
     type: string;
     subtitle?: string;

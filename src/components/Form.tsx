@@ -4,7 +4,7 @@ import React, { ChangeEvent, PropsWithChildren } from 'react';
 import debounce from 'lodash.debounce';
 
 import classNames from 'classnames';
-import { ArrayElement } from 'src/types';
+import { ArrayElement, TObject } from 'src/types';
 import Scroll from './Scroll';
 import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon, CheckboxIcon, CheckboxActiveIcon } from './Icons';
 import '../../sass/components/_form.scss';
@@ -87,8 +87,8 @@ type TSwitchIconProps = {
     label: string;
     value: boolean;
     onChange: (checked: boolean) => void;
-    noramIcon: (props: { className: string }) => JSX.Element;
-    activeIcon: (props: { className: string }) => JSX.Element;
+    noramIcon: React.FC<{ className: string }>;
+    activeIcon: React.FC<{ className: string }>;
 };
 
 type TPatterProps = {
@@ -151,7 +151,7 @@ export const Slider: React.FC<TSliderProps> = ({ min = 1, max = 10, step = 1, va
     );
 };
 
-export const DropDown = <T extends number | string | object>(props: PropsWithChildren<TDropDownProps<T>>) => {
+export const DropDown = <T extends number | string | TObject>(props: PropsWithChildren<TDropDownProps<T>>) => {
     const { subtitle, rows, children, value, onRowClick, className } = props;
 
     const [open, setOpen] = React.useState(false);

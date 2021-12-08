@@ -6,7 +6,7 @@ import MainStore from '.';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
-import { ExcludedStudies, getIndicatorsTree, TIndicatorItem, TIndicatorsTree } from '../Constant';
+import { ExcludedStudies, getIndicatorsTree, TActiveItem, TIndicatorsTree } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -51,35 +51,6 @@ type TStudyItems = {
     title: string;
     type: string;
     value: string | number | TValueObject;
-};
-
-type TActiveItem = {
-    bars: string;
-    dataObject: {
-        inputs: {
-            Field: string;
-            Offset: number;
-            Period: number;
-            Type: string;
-            display: string;
-            id: string;
-        };
-        outputs: {
-            MA: string;
-        };
-        parameters: {
-            chartName: string;
-            editMode: boolean;
-            panelName: string;
-        };
-        sd: typeof CIQ.Studies.StudyDescriptor;
-        stx: typeof CIQ.ChartEngine;
-    };
-    description: string;
-    icon: (props: unknown) => JSX.Element;
-    id: string;
-    name: string;
-    isPrediction?: boolean;
 };
 
 // TODO:
@@ -172,13 +143,12 @@ export default class StudyLegendStore {
     get searchedItems() {
         return [...getIndicatorsTree()]
             .map(category => {
-                (category as TIndicatorsTree & { foundItems: TIndicatorItem[] }).foundItems = category.items.filter(
-                    (item: TIndicatorItem) =>
-                        item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
-                );
+                category.foundItems = (category.items.filter(
+                    item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
+                ) as unknown) as TActiveItem[];
                 return category;
             })
-            .filter(category => (category as TIndicatorsTree & { foundItems: TIndicatorItem[] }).foundItems.length);
+            .filter(category => category.foundItems?.length);
     }
     get chartActiveStudies() {
         return (this.activeItems || []).filter((item: TActiveItem) => item.dataObject.sd.panel === 'chart');
@@ -247,7 +217,7 @@ export default class StudyLegendStore {
         this.searchInputClassName = searchInputClassName;
     }
     @action.bound
-    editStudy(study: typeof CIQ.Studies.StudyDescriptor) {
+    editStudy(study: TActiveItem['dataObject']) {
         const helper = new CIQ.Studies.DialogHelper(study);
         this.helper = helper;
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${helper.name}`);
@@ -316,7 +286,7 @@ export default class StudyLegendStore {
         this.settingsDialog.setOpen(true);
     }
     @action.bound
-    deleteStudy(study: typeof CIQ.Studies.StudyDescriptor) {
+    deleteStudy(study: TActiveItem['dataObject']['sd']) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
         if (!study.permanent) {
             // Need to run this in the nextTick because the study legend can be removed by this click
@@ -467,12 +437,10 @@ export default class StudyLegendStore {
             if (sd.customLegend) {
                 return;
             }
-            const studyObjCategory = getIndicatorsTree().find((category: TIndicatorsTree) =>
-                category.items.find((item: TIndicatorItem) => item.id === sd.type)
+            const studyObjCategory = getIndicatorsTree().find(category =>
+                category.items.find(item => item.id === sd.type)
             );
-            const studyObj = (studyObjCategory as TIndicatorsTree).items.find(
-                (item: TIndicatorItem) => item.id === sd.type
-            );
+            const studyObj = (studyObjCategory as TIndicatorsTree).items.find(item => item.id === sd.type);
             if (studyObj) {
                 const nameObj = prepareIndicatorName(sd.name);
                 activeItems.push({
