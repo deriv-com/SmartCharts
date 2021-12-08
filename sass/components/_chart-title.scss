@@ -7,6 +7,8 @@
     &.ciq-menu.ciq-enabled {
         .cq-menu-btn > .cq-symbol-select-btn {
             cursor: pointer;
+            display: flex;
+            justify-content: space-between;
 
             > .ic-icon.cq-symbol-dropdown {
                 display: block;
@@ -62,6 +64,10 @@
             color: themed('ChartTitleText');
         }
 
+        &__container {
+            display: flex;
+            justify-content: space-between;
+        }
         &:hover {
             @include themify($themes) {
                 border: solid 1px themed('ChartTitleHoverBorder');

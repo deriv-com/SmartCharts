@@ -202,8 +202,9 @@ class Feed {
                 if (!isComparisonChart) {
                     this.unsubscribeAll();
                 }
-
-                quotes = await subscription.initialFetch();
+                const { quotes: new_quotes, response } = await subscription.initialFetch();
+                quotes = new_quotes;
+                this._mainStore.lastDigitStats.updateLastDigitStats(response);
             } catch (error) {
                 const { message: text } = error;
                 this._mainStore.notifier.notify({
@@ -379,7 +380,7 @@ class Feed {
                 this.granularity === 0 &&
                 !this._mainStore.state.isStaticChart &&
                 CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >=
-                    this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
+                    this._stx.chart.dataSet.slice(-1)[0]?.DT.valueOf()
             ) {
                 result = false;
             }
@@ -540,7 +541,7 @@ class Feed {
     _resumeStream(key) {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
-        this._activeStreams[key].resume().then(quotes => {
+        this._activeStreams[key].resume().then(({ quotes }) => {
             if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });

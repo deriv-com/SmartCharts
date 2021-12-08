@@ -27,6 +27,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -42,6 +43,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -57,6 +59,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -72,6 +75,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -87,6 +91,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -102,6 +107,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -117,6 +123,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -132,6 +139,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -147,6 +155,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -162,6 +171,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -177,6 +187,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -192,6 +203,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -207,6 +219,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -222,6 +235,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -242,6 +256,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -257,6 +272,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -272,6 +288,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -287,6 +304,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -302,6 +320,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -317,6 +336,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -332,6 +352,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -347,6 +368,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -362,6 +384,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -377,6 +400,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -392,6 +416,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -407,6 +432,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -422,6 +448,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -437,6 +464,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -452,6 +480,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -472,6 +501,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -487,6 +517,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -502,6 +533,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -517,6 +549,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -539,6 +572,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '09:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 10,
@@ -560,6 +594,7 @@ const friday_trading_times = {
                                     open: ['03:45:00'],
                                     settlement: '13:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 60,
@@ -572,6 +607,7 @@ const friday_trading_times = {
                                     open: ['01:30:00', '05:00:00'],
                                     settlement: '10:40:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -593,6 +629,7 @@ const friday_trading_times = {
                                     open: ['00:00:00', '03:30:00'],
                                     settlement: '09:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -605,6 +642,7 @@ const friday_trading_times = {
                                     open: ['01:00:00'],
                                     settlement: '12:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -620,6 +658,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -630,6 +669,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -640,6 +680,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -652,6 +693,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -664,6 +706,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '21:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -676,6 +719,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '17:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 30,
@@ -693,6 +737,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '17:50:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -705,6 +750,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:20:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -727,6 +773,7 @@ const friday_trading_times = {
                                     open: ['13:30:00'],
                                     settlement: '22:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -749,6 +796,7 @@ const friday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'],
                             },
                         ],
                     },
@@ -764,6 +812,7 @@ const friday_trading_times = {
                                     open: ['00:00:00', '07:30:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -774,6 +823,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -784,6 +834,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '21:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -794,6 +845,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -804,6 +856,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -814,6 +867,7 @@ const friday_trading_times = {
                                     open: ['01:30:00', '05:00:00'],
                                     settlement: '10:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -833,6 +887,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -843,6 +898,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '19:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -853,6 +909,7 @@ const friday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -868,6 +925,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -883,6 +941,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -898,6 +957,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -913,6 +973,7 @@ const friday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -942,6 +1003,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -961,6 +1023,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -980,6 +1043,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -999,6 +1063,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1019,6 +1084,7 @@ const friday_trading_times = {
                                     open: ['07:15:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1039,6 +1105,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -1049,6 +1116,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -1059,6 +1127,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -1069,6 +1138,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -1079,6 +1149,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -1094,6 +1165,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -1104,6 +1176,7 @@ const friday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -1140,6 +1213,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1155,6 +1229,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1170,6 +1245,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1185,6 +1261,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1200,6 +1277,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1215,6 +1293,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1230,6 +1309,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1245,6 +1325,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1260,6 +1341,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1275,6 +1357,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1290,6 +1373,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1305,6 +1389,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1320,6 +1405,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1335,6 +1421,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1355,6 +1442,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1370,6 +1458,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1385,6 +1474,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1400,6 +1490,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1415,6 +1506,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1430,6 +1522,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1445,6 +1538,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1460,6 +1554,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1475,6 +1570,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1490,6 +1586,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1505,6 +1602,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1520,6 +1618,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1535,6 +1634,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1550,6 +1650,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1565,6 +1666,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1585,6 +1687,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1600,6 +1703,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1615,6 +1719,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1630,6 +1735,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1652,6 +1758,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 10,
@@ -1673,6 +1780,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 60,
@@ -1690,6 +1798,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -1711,6 +1820,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -1723,6 +1833,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1738,6 +1849,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1748,6 +1860,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1758,6 +1871,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -1770,6 +1884,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -1782,6 +1897,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -1794,6 +1910,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 30,
@@ -1811,6 +1928,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -1823,6 +1941,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1845,6 +1964,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -1867,6 +1987,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'],
                             },
                         ],
                     },
@@ -1882,6 +2003,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1892,6 +2014,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1902,6 +2025,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1912,6 +2036,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1922,6 +2047,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1937,6 +2063,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1956,6 +2083,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1966,6 +2094,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -1976,6 +2105,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -1991,6 +2121,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2006,6 +2137,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2021,6 +2153,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2036,6 +2169,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2065,6 +2199,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2084,6 +2219,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2103,6 +2239,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2122,6 +2259,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2142,6 +2280,7 @@ const saturday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2162,6 +2301,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -2172,6 +2312,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -2182,6 +2323,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -2192,6 +2334,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -2202,6 +2345,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -2217,6 +2361,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -2227,6 +2372,7 @@ const saturday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -2263,6 +2409,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2278,6 +2425,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2293,6 +2441,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2308,6 +2457,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2323,6 +2473,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2338,6 +2489,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2353,6 +2505,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2368,6 +2521,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2383,6 +2537,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2398,6 +2553,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2413,6 +2569,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2428,6 +2585,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2443,6 +2601,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2458,6 +2617,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2478,6 +2638,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2493,6 +2654,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2508,6 +2670,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2523,6 +2686,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2538,6 +2702,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2553,6 +2718,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2568,6 +2734,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2583,6 +2750,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2598,6 +2766,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2613,6 +2782,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2628,6 +2798,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2643,6 +2814,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2658,6 +2830,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2673,6 +2846,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2688,6 +2862,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2708,6 +2883,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2723,6 +2899,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2738,6 +2915,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -2753,6 +2931,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2775,6 +2954,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 10,
@@ -2796,6 +2976,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 60,
@@ -2813,6 +2994,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -2834,6 +3016,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -2846,6 +3029,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2861,6 +3045,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -2871,6 +3056,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -2881,6 +3067,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -2893,6 +3080,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -2905,6 +3093,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -2917,6 +3106,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 30,
@@ -2934,6 +3124,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -2946,6 +3137,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2968,6 +3160,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -2990,6 +3183,7 @@ const sunday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '12:45:00',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'],
                             },
                         ],
                     },
@@ -3005,6 +3199,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3015,6 +3210,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3025,6 +3221,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3035,6 +3232,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3045,6 +3243,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3060,6 +3259,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3079,6 +3279,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3089,6 +3290,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3099,6 +3301,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3114,6 +3317,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3129,6 +3333,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3144,6 +3349,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3159,6 +3365,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3188,6 +3395,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3207,6 +3415,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3226,6 +3435,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3245,6 +3455,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3265,6 +3476,7 @@ const sunday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3285,6 +3497,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -3295,6 +3508,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -3305,6 +3519,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -3315,6 +3530,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -3325,6 +3541,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -3340,6 +3557,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -3350,6 +3568,7 @@ const sunday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -3386,6 +3605,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3401,6 +3621,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3416,6 +3637,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3431,6 +3653,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3446,6 +3669,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3461,6 +3685,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3476,6 +3701,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3491,6 +3717,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3506,6 +3733,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3521,6 +3749,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3536,6 +3765,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3551,6 +3781,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3566,6 +3797,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3581,6 +3813,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3601,6 +3834,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3616,6 +3850,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3631,6 +3866,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3646,6 +3882,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3661,6 +3898,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3676,6 +3914,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3691,6 +3930,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3706,6 +3946,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3721,6 +3962,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3736,6 +3978,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3751,6 +3994,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3766,6 +4010,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3781,6 +4026,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3796,6 +4042,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3811,6 +4058,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3831,6 +4079,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3846,6 +4095,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3861,6 +4111,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -3876,6 +4127,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3898,6 +4150,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '09:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 10,
@@ -3919,6 +4172,7 @@ const monday_trading_times = {
                                     open: ['03:45:00'],
                                     settlement: '13:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 60,
@@ -3936,6 +4190,7 @@ const monday_trading_times = {
                                     open: ['01:30:00', '05:00:00'],
                                     settlement: '10:40:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -3957,6 +4212,7 @@ const monday_trading_times = {
                                     open: ['00:00:00', '03:30:00'],
                                     settlement: '09:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -3969,6 +4225,7 @@ const monday_trading_times = {
                                     open: ['01:00:00'],
                                     settlement: '12:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -3984,6 +4241,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -3994,6 +4252,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4004,6 +4263,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -4016,6 +4276,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -4028,6 +4289,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '21:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 15,
@@ -4040,6 +4302,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '17:30:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 30,
@@ -4057,6 +4320,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '17:50:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 delay_amount: 1440,
@@ -4069,6 +4333,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:20:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -4091,6 +4356,7 @@ const monday_trading_times = {
                                     open: ['13:30:00'],
                                     settlement: '22:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -4113,6 +4379,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '12:45:00',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu'],
                             },
                         ],
                     },
@@ -4128,6 +4395,7 @@ const monday_trading_times = {
                                     open: ['00:00:00', '07:30:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4138,6 +4406,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4148,6 +4417,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '21:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4158,6 +4428,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4168,6 +4439,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4183,6 +4455,7 @@ const monday_trading_times = {
                                     open: ['01:30:00', '05:00:00'],
                                     settlement: '10:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4202,6 +4475,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4212,6 +4486,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '19:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [],
@@ -4222,6 +4497,7 @@ const monday_trading_times = {
                                     open: ['07:00:00'],
                                     settlement: '18:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4237,6 +4513,7 @@ const monday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4252,6 +4529,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4267,6 +4545,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4282,6 +4561,7 @@ const monday_trading_times = {
                                     open: ['06:00:00'],
                                     settlement: '22:00:00',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -4311,6 +4591,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4330,6 +4611,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4349,6 +4631,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                             {
                                 events: [
@@ -4368,6 +4651,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -4388,6 +4672,7 @@ const monday_trading_times = {
                                     open: ['--'],
                                     settlement: '--',
                                 },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
                         ],
                     },
@@ -4408,6 +4693,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -4418,6 +4704,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -4428,6 +4715,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -4438,6 +4726,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -4448,6 +4737,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },
@@ -4463,6 +4753,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                             {
                                 events: [],
@@ -4473,6 +4764,7 @@ const monday_trading_times = {
                                     open: ['00:00:00'],
                                     settlement: '23:59:59',
                                 },
+                                trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                             },
                         ],
                     },

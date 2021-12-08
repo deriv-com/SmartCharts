@@ -467,6 +467,8 @@ $themes: (
         PredictionDialogTitle: $color-black-1,
         PredictionDialogText: $color-black-1,
         ChartHistoryPickerBgCalendar: $color-white,
+        ChartHistoricalMarker: $color-grey-5,
+        ChartHistoricalMarkerFont: $color-black-1,
     ),
     dark: (
         DefaultMain:            $color-black,
@@ -511,7 +513,7 @@ $themes: (
         ChartGrid: $color-black-4,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $color-black-8,
-        ChartMountainBorder: rgba($COLOR_WHITE, 1),
+        ChartMountainBorder: $color-green,
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
         ChartMountainClosedBorder: rgba($COLOR_WHITE, 0.32),
@@ -784,6 +786,8 @@ $themes: (
         PredictionDialogTitle: $color-white,
         PredictionDialogText: $color-white,
         ChartHistoryPickerBgCalendar: $color-black-3,
+        ChartHistoricalMarker: $color-black-8,
+        ChartHistoricalMarkerFont: $color-grey,
     ),
 );
 
