@@ -2,17 +2,35 @@ import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
-import { TMainStore } from 'src/types';
+import { ArrayElement, TCustomEvent, TMainStore } from 'src/types';
 import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
 import Menu from './Menu';
+import { TViews } from 'src/store/ViewStore';
 
 type TViewItemProps = {
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
-    view: any;
+    view: ArrayElement<TViews>;
+    remove: (event: React.MouseEvent<HTMLElement>) => void;
+};
+
+type TViewsProps = {
+    portalNodeId?: string;
+};
+
+type TOverwriteViewProps = {
+    templateName: TMainStore['view']['templateName'];
+    onCancel: TMainStore['view']['routes']['main'];
+    onOverwrite: TMainStore['view']['routes']['overwrite'];
+};
+
+type TActiveListViewProps = {
+    removeAll: TMainStore['view']['removeAll'];
+    views: TMainStore['view']['sortedItems'];
+    applyLayout: TMainStore['view']['applyLayout'];
     remove: TMainStore['view']['remove'];
 };
 
@@ -39,12 +57,6 @@ const EmptyView = ({ onClick }: { onClick: (event: React.MouseEvent<HTMLElement>
     </div>
 );
 
-type TOverwriteViewProps = {
-    templateName: TMainStore['view']['templateName'];
-    onCancel: TMainStore['view']['routes']['main'];
-    onOverwrite: TMainStore['view']['routes']['overwrite'];
-};
-
 const OverwriteView: React.FC<TOverwriteViewProps> = ({ templateName, onCancel, onOverwrite }) => (
     <div className='sc-views--overwrite'>
         <div className='sc-views--overwrite__content'>
@@ -66,13 +78,6 @@ const OverwriteView: React.FC<TOverwriteViewProps> = ({ templateName, onCancel, 
     </div>
 );
 
-type TActiveListViewProps = {
-    removeAll: TMainStore['view']['removeAll'];
-    views: TMainStore['view']['sortedItems'];
-    applyLayout: TMainStore['view']['applyLayout'];
-    remove: TMainStore['view']['remove'];
-};
-
 const ActiveListView: React.FC<TActiveListViewProps> = ({ views, removeAll, applyLayout, remove }) => {
     if (!views.length) return null;
 
@@ -86,22 +91,18 @@ const ActiveListView: React.FC<TActiveListViewProps> = ({ views, removeAll, appl
             </div>
             <div className='sc-views__views__content'>
                 <div className='sc-views__views__list'>
-                    {views.map((view: any, i: any) => (
+                    {views.map((view, i) => (
                         <ViewItem
                             view={view}
                             key={view.name}
-                            onClick={(e: any) => applyLayout(i, e)}
-                            remove={(e: any) => remove(i, e)}
+                            onClick={e => applyLayout(i, e as TCustomEvent)}
+                            remove={e => remove(i, e as TCustomEvent)}
                         />
                     ))}
                 </div>
             </div>
         </div>
     );
-};
-
-type TViewsProps = {
-    portalNodeId?: string;
 };
 
 const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {

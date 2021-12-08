@@ -10,11 +10,11 @@ export type TCIQAppend<C> = {
     func: C;
 };
 
-export type TCustomEvent = Event & {
+export type TCustomEvent = React.MouseEvent<HTMLElement> & {
     displacementY: number;
     isHandledByDialog: boolean;
     nativeEvent: {
         isHandledByDialog: boolean;
         is_item_removed: boolean;
-    }
+    };
 };

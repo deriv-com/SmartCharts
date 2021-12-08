@@ -7,6 +7,15 @@ import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
+export type TViews = {
+    name: string;
+    layout: {
+        chartType: string;
+        tension: number;
+        timeUnit?: string | number;
+        interval?: string | number;
+    };
+}[];
 export default class ViewStore {
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
@@ -27,7 +36,7 @@ export default class ViewStore {
         );
     }
 
-    @observable static views = createObjectFromLocalStorage('cq-views') || [];
+    @observable static views: TViews = createObjectFromLocalStorage('cq-views') || [];
     mainStore: MainStore;
     menuStore: MenuStore;
     @observable templateName = '';
@@ -82,11 +91,7 @@ export default class ViewStore {
     }
 
     @action.bound saveViews() {
-        if (
-            ViewStore.views.some(
-                (x: { [key: string]: string }) => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim()
-            )
-        ) {
+        if (ViewStore.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
@@ -99,9 +104,7 @@ export default class ViewStore {
 
     @action.bound overwrite() {
         const layout = this.stx.exportLayout();
-        const templateIndex = ViewStore.views.findIndex(
-            (x: { [key: string]: string }) => x.name.toLowerCase() === this.templateName.toLowerCase()
-        );
+        const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         ViewStore.views[templateIndex].layout = layout;
         ViewStore.views[templateIndex].name = this.templateName.trim();
         ViewStore.updateLocalStorage();
