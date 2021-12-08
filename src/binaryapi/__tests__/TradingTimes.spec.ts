@@ -39,7 +39,7 @@ describe('TradingTimes test', async function () {
         expect(this.tt.getDelayedMinutes('R_50')).to.be.equal(0);
     });
 
-    it('Unlicensed feed will also be marked as closed', function (this: any) {
+    it('Unlicensed feed will also be marked as closed', function () {
         for (const s of unlicensedSymbols) {
             expect(this.tt.isMarketOpened(s)).to.be.false;
         }

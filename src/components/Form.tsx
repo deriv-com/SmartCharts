@@ -50,7 +50,7 @@ type TCheckboxProps = {
 };
 
 type TNumericInputProps = {
-    subtitle: string;
+    subtitle?: string;
     onChange: (value: string | number) => void;
     min?: number;
     max?: number;
@@ -73,7 +73,7 @@ type TDropDownProps<T> = {
     value?: T | React.ReactElement;
     onRowClick: (value: T) => void;
     className?: string;
-    children(data: T): React.ReactElement;
+    children(data: T): React.ReactElement | string;
 };
 
 type TToogleProps = {
@@ -542,7 +542,7 @@ export const FontSetting: React.FC<TFontSettingProps> = ({ onChange, value }) =>
     const onFontSizeChange = (size: number) => fireChange({ size: `${size}px` });
     const onBoldChange = (isBold: boolean) => fireChange({ weight: isBold ? 'bold' : undefined });
     const onItalicChange = (isItalic: boolean) => fireChange({ style: isItalic ? 'italic' : undefined });
-    const { family, style, weight, size } = value;
+    const { style, weight } = value;
 
     return (
         <span className='sc-fontsetting'>

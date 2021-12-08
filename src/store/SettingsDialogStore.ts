@@ -113,7 +113,7 @@ export default class SettingsDialogStore {
         if (this.onDeleted) this.onDeleted();
     }
     @action.bound
-    onItemChange(id: string, newValue: string) {
+    onItemChange(id: string, newValue: string | number | boolean | object) {
         const item = this.items.find(x => x.id === id);
         if (item && item.value !== newValue) {
             item.value = newValue;

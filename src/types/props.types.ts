@@ -99,9 +99,16 @@ export type TSettingsItemGroup = {
 export type TSettingsItem = {
     id: string;
     title: string;
-    value: string;
+    value: string | number | boolean | object;
     defaultValue: string;
+    type: string;
     subtitle?: string;
+    min?: number;
+    max?: number;
+    step?: number;
+    options?: {
+        [x: string]: string;
+    };
 };
 
 export type TOpenClose = { date: string; open: Date; close: Date };

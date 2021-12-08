@@ -3,6 +3,7 @@ import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import SettingsDialogStore from 'src/store/SettingsDialogStore';
+import { TSettingsItem, TSettingsItemGroup } from 'src/types';
 import '../../sass/components/_settings-dialog.scss';
 import {
     ColorPicker,
@@ -26,6 +27,40 @@ type TSettingsPanelItem = {
     Field: React.ReactChild;
 };
 
+type TSettingsPanelProps = {
+    freezeScroll?: boolean;
+    theme: string;
+    formClassname?: string;
+    setScrollPanel?: ((ref: HTMLDivElement) => void) | undefined;
+    itemGroups: TSettingsItemGroup[];
+    onItemChange: (id: string, value: string | number | boolean | object) => void;
+};
+
+type TSettingsPanelGroupProps = {
+    title: string;
+    theme: string;
+    items: TSettingsItem[];
+    onItemChange: (id: string, value: string | number | boolean | object) => void;
+};
+
+type TDoneButtonProps = {
+    onClick: React.MouseEventHandler;
+};
+
+type TResetButtonProps = {
+    onClick: React.MouseEventHandler;
+};
+
+type TFooterProps = {
+    onDelete?: React.MouseEventHandler;
+    onReset: React.MouseEventHandler;
+    onDone: React.MouseEventHandler;
+};
+
+type TSettingsDialogProps = {
+    store: SettingsDialogStore;
+};
+
 const SettingsPanelItem: React.FC<TSettingsPanelItem> = ({ group, title, type, Field }) => (
     <FormGroup
         title={
@@ -44,73 +79,91 @@ const SettingsPanelItem: React.FC<TSettingsPanelItem> = ({ group, title, type, F
     </FormGroup>
 );
 
-const SettingsPanelGroup = ({
+const SettingsPanelGroup: React.FC<TSettingsPanelGroupProps> = ({
     title,
-
     // [{ id, title, value, defaultValue, type }]
     items,
-
     theme,
     onItemChange,
-}: any) => {
+}) => {
     const renderMap = {
-        switch: (item: any) => <Switch value={item.value} onChange={(v: any) => onItemChange(item.id, v)} />,
-        colorpicker: (item: any) => (
+        switch: (item: TSettingsItem) => (
+            <Switch value={item.value as string} onChange={v => onItemChange(item.id, v)} />
+        ),
+        colorpicker: (item: TSettingsItem) => (
             <ColorPicker
                 theme={theme}
-                color={item.value}
+                color={item.value as string}
                 subtitle={item.subtitle || item.title}
-                setColor={(value: any) => onItemChange(item.id, value)}
+                setColor={value => onItemChange(item.id, value)}
             />
         ),
-        pattern: (item: any) => {
-            const lineWidth = items.find((it: any) => it.id === 'lineWidth').value;
+        pattern: (item: TSettingsItem) => {
+            const lineWidth = items.find(it => it.id === 'lineWidth')?.value;
             return (
                 <Pattern
-                    pattern={item.value}
-                    lineWidth={lineWidth}
+                    pattern={item.value as string}
+                    lineWidth={lineWidth as string}
                     subtitle={item.title}
-                    onChange={(v: any) => {
+                    onChange={v => {
                         onItemChange('pattern', v.pattern);
                         onItemChange('lineWidth', v.width);
                     }}
                 />
             );
         },
-        select: (item: any) => (
-            <DropDown
-                rows={Object.keys(item.options)}
-                value={item.value}
+        select: (item: TSettingsItem) => (
+            <DropDown<string>
+                rows={Object.keys(item.options || {})}
+                value={item.value as string}
                 subtitle={item.subtitle || item.title}
-                onRowClick={(value: any) => onItemChange(item.id, value)}
+                onRowClick={value => onItemChange(item.id, value)}
             >
-                {(row: any) => row}
+                {row => row}
             </DropDown>
         ),
-        number: (item: any) => (
+        number: (item: TSettingsItem) => (
             <Slider
                 min={item.min ?? 1}
                 step={item.step ?? 1}
                 max={item.max ?? 100}
-                value={item.value}
-                onChange={(val: any) => onItemChange(item.id, val)}
+                value={(item.value as unknown) as number}
+                onChange={val => onItemChange(item.id, val)}
             />
         ),
-        numericinput: (item: any) => (
+        numericinput: (item: TSettingsItem) => (
             <span className='ciq-num-input'>
                 <NumericInput
-                    value={item.value}
-                    onChange={(val: any) => onItemChange(item.id, val)}
+                    value={item.value as string}
+                    onChange={val => onItemChange(item.id, val)}
                     min={item.min}
                     step={item.step}
                     max={item.max}
                 />
             </span>
         ),
-        numbercolorpicker: (item: any) => (
-            <NumberColorPicker value={item.value} theme={theme} onChange={(val: any) => onItemChange(item.id, val)} />
+        numbercolorpicker: (item: TSettingsItem) => (
+            <NumberColorPicker
+                value={
+                    item.value as {
+                        Value: string;
+                        Color: string;
+                    }
+                }
+                theme={theme}
+                onChange={val => onItemChange(item.id, val)}
+            />
         ),
-        font: (item: any) => <FontSetting value={item.value} onChange={(val: any) => onItemChange(item.id, val)} />,
+        font: (item: TSettingsItem) => (
+            <FontSetting
+                value={
+                    item.value as {
+                        [x: string]: string;
+                    }
+                }
+                onChange={val => onItemChange(item.id, val)}
+            />
+        ),
     };
 
     const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
@@ -119,7 +172,7 @@ const SettingsPanelGroup = ({
         <div className={`form__input-group ${input_group_name}`}>
             {title === 'Show Zones' ? '' : <h4>{title}</h4>}
             {items.map(
-                (item: any) =>
+                item =>
                     renderMap[item.type as keyof typeof renderMap] && (
                         <SettingsPanelItem
                             key={item.id}
@@ -134,7 +187,7 @@ const SettingsPanelGroup = ({
     );
 };
 
-const Footer = ({ onDelete, onReset, onDone }: any) => (
+const Footer: React.FC<TFooterProps> = ({ onDelete, onReset, onDone }) => (
     <div className='buttons'>
         {onDelete && <DeleteIcon className='sc-btn--delete' onClick={onDelete} />}
         <div>
@@ -144,15 +197,21 @@ const Footer = ({ onDelete, onReset, onDone }: any) => (
     </div>
 );
 
-const SettingsPanel = ({ itemGroups, theme, onItemChange, setScrollPanel, freezeScroll, formClassname }: any) => (
+const SettingsPanel: React.FC<TSettingsPanelProps> = ({
+    itemGroups,
+    theme,
+    onItemChange,
+    setScrollPanel,
+    freezeScroll,
+    formClassname,
+}) => (
     <div className={`form form--indicator-setting ${formClassname}`}>
         <Scroll setPanel={setScrollPanel} freeze={freezeScroll} autoHide height='282px'>
             {itemGroups.map(
-                (group: any) =>
+                group =>
                     group.fields.length > 0 && (
                         <SettingsPanelGroup
                             key={group.key}
-                            group={group.key}
                             title={group.key}
                             items={group.fields}
                             theme={theme}
@@ -164,21 +223,17 @@ const SettingsPanel = ({ itemGroups, theme, onItemChange, setScrollPanel, freeze
     </div>
 );
 
-const ResetButton = ({ onClick }: any) => (
+const ResetButton: React.FC<TResetButtonProps> = ({ onClick }) => (
     <button type='button' className='sc-btn sc-btn--outline-secondary sc-btn--reset' onClick={onClick}>
         {t.translate('Reset')}
     </button>
 );
 
-const DoneButton = ({ onClick }: any) => (
-    <button type='button' className='sc-btn sc-btn--primary sc-btn--save' onClick={() => onClick()}>
+const DoneButton: React.FC<TDoneButtonProps> = ({ onClick }) => (
+    <button type='button' className='sc-btn sc-btn--primary sc-btn--save' onClick={onClick}>
         {t.translate('Done')}
     </button>
 );
-
-type TSettingsDialogProps = {
-    store: SettingsDialogStore;
-};
 
 const SettingsDialog: React.FC<TSettingsDialogProps> = ({ store }) => {
     const {
