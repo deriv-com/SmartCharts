@@ -1,6 +1,7 @@
 import { observable, action, computed, runInAction } from 'mobx';
 import { stableSort, cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
+import { isDeepEqual } from '../utils/object';
 
 const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
@@ -22,14 +23,14 @@ export default class ActiveSymbols {
             await this.symbolsPromise;
             return this.activeSymbols;
         }
-
+        const response = await this._api.getActiveSymbols();
         this.isRetrievingSymbols = true;
         let active_symbols = [];
         if (this._params.initialData && !this.processedSymbols) {
             active_symbols = this._params.initialData;
-        } else if (this._params.enable !== false) {
-            const response = await this._api.getActiveSymbols();
+        } else if (this._params.enable !== false || !isDeepEqual(response.active_symbols, this._params.initialData)) {
             active_symbols = response.active_symbols;
+            this._params.initialData = response.active_symbols;
         } else if (this._params.chartData && this._params.enable === false) {
             // Do not need to do anything, the chartData handle the staff
             console.log('ActiveSymbols would render through chartData.');
@@ -66,14 +67,13 @@ export default class ActiveSymbols {
     }
 
     @computed get activeSymbols() {
-        const categorized = cloneCategories(this.categorizedSymbols, item => {
+        return cloneCategories(this.categorizedSymbols, item => {
             const { symbol } = item.dataObject;
             if (symbol in this.changes) {
                 item.dataObject.exchange_is_open = this.changes[symbol];
             }
             return { ...item };
         });
-        return categorized;
     }
 
     getSymbolObj(symbol) {
