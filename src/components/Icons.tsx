@@ -240,24 +240,29 @@ import DrawToolsRectangle from '../../sass/icons/draw-tools/ic-rectangle.svg';
 import DrawToolsTrend from '../../sass/icons/draw-tools/ic-trend.svg';
 import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
 
-export const Wrapper = (SvgLogo: any) => (props: any) => {
-    let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
-    className = `ic-icon ${className || ''}`;
-    const vb = SvgLogo.viewBox.split(' ').slice(2);
+export const Wrapper = (SvgLogo: React.SVGAttributes<SVGElement>) => {
+    const InnerWrapper: React.FC<{ className?: string; ['tooltip-title']?: React.ReactElement | string }> = props => {
+        let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
+        className = `ic-icon ${className || ''}`;
+        const vb = SvgLogo.viewBox?.split(' ').slice(2) || [];
 
-    return (
-        <span className={className} tooltip-title={tooltip} {...p}>
-            <svg width={vb[0]} height={vb[1]}>
-                <use xlinkHref={__webpack_public_path__ + SvgLogo.url /* eslint-disable-line no-undef */} />
-            </svg>
-            {tooltip && (
-                <>
-                    <br />
-                    <span className='ic-subtitle'>{tooltip}</span>
-                </>
-            )}
-        </span>
-    );
+        return (
+            <span className={className} tooltip-title={tooltip} {...p}>
+                <svg width={vb[0]} height={vb[1]}>
+                    <use
+                        xlinkHref={__webpack_public_path__ + (SvgLogo as any).url /* eslint-disable-line no-undef */}
+                    />
+                </svg>
+                {tooltip && (
+                    <>
+                        <br />
+                        <span className='ic-subtitle'>{tooltip}</span>
+                    </>
+                )}
+            </span>
+        );
+    };
+    return InnerWrapper;
 };
 
 export const DrawingCursorIcon = Wrapper(DrawCursor);
@@ -547,8 +552,8 @@ export const ItemIconMap = {
     cryBTCUSD: Wrapper(BTCUSD),
 };
 
-function createCompositeIcon(A: any, B: any, icId: any) {
-    return (props: any) => {
+const createCompositeIcon = (A: React.FC, B: React.FC, icId: string) => {
+    const FC: React.FC<{ className?: string }> = props => {
         const { className, ...p } = props;
         return (
             <span className={`${icId} ${className}`} {...p}>
@@ -557,7 +562,9 @@ function createCompositeIcon(A: any, B: any, icId: any) {
             </span>
         );
     };
-}
+
+    return FC;
+};
 
 function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
     const A = FlagIconMap[flagA];
@@ -568,7 +575,7 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 export const OTCBadgeIcon = Wrapper(OTCBadge);
 const SmartFXIcon = Wrapper(SmartFX);
 
-function otc(flag: keyof typeof FlagIconMap, symbol: any) {
+function otc(flag: keyof typeof FlagIconMap, symbol: string) {
     const FlagIcon = FlagIconMap[flag];
     ItemIconMap[symbol as keyof typeof ItemIconMap] = FlagIcon;
 }

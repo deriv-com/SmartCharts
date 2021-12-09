@@ -1,11 +1,12 @@
 import { ServerTimeResponse } from '@deriv/api-types';
+import { BinaryAPI } from 'src/binaryapi';
 import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 import PendingPromise from './PendingPromise';
 
 class ServerTime {
     static _instance: ServerTime;
 
-    _api: any;
+    _api?: BinaryAPI;
     clientTimeAtRequest?: number;
     getTimeInterval?: ReturnType<typeof setInterval>;
     onTimeUpdated?: () => void;
@@ -15,7 +16,7 @@ class ServerTime {
     clockStarted = false;
     clockStartedPromise = PendingPromise();
 
-    async init(api?: any, updatedCallback?: () => void) {
+    async init(api?: BinaryAPI, updatedCallback?: () => void) {
         this._api = api;
         this.onTimeUpdated = updatedCallback;
         if (!this.clockStarted) {
@@ -35,7 +36,7 @@ class ServerTime {
         this.clientTimeAtRequest = getUTCEpoch(new Date());
         if (this.serverTimeAtResponse) {
             // it is not the first time
-            await this._api.getServerTime().then(this._timeResponse);
+            await this._api?.getServerTime().then(this._timeResponse);
         } else {
             // it is the first time
             // to boot up the speed, at the beginig
@@ -47,8 +48,8 @@ class ServerTime {
         this.clockStartedPromise.resolve();
     }
 
-    _timeResponse = (response: ServerTimeResponse | { time: number; error?: any }) => {
-        if (response.error) {
+    _timeResponse = (response: ServerTimeResponse | { time: number }) => {
+        if ('msg_type' in response && response.error) {
             this.clockStarted = false;
         }
 

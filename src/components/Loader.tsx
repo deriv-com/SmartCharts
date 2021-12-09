@@ -3,7 +3,12 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 
-export const InlineLoader = ({ children, className, enabled = true, ...props }: any) => (
+type TInlineLoaderProps = {
+    className: string;
+    enabled?: boolean;
+};
+
+export const InlineLoader: React.FC<TInlineLoaderProps> = ({ children, className, enabled = true, ...props }) => (
     <div className={classNames('sc-inline-loader', className, { 'sc-inline-loader--enable': enabled })} {...props}>
         {children}
         {enabled && (
