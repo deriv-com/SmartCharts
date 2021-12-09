@@ -1,11 +1,12 @@
-import { TicksHistoryRequest, TicksStreamResponse } from '@deriv/api-types';
+import { TicksStreamResponse } from '@deriv/api-types';
 import { IPendingPromise } from 'src/types';
+import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import PendingPromise from '../../utils/PendingPromise';
 import Subscription from './Subscription';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
 class RealtimeSubscription extends Subscription {
-    _tickCallback: any;
+    _tickCallback?: (resp: TicksStreamResponse) => void;
 
     pause() {
         // prevent forget requests; active streams are invalid when connection closed
@@ -20,7 +21,7 @@ class RealtimeSubscription extends Subscription {
         return super.resume();
     }
 
-    async _startSubscribe(tickHistoryRequest: TicksHistoryRequest) {
+    async _startSubscribe(tickHistoryRequest: TCreateTickHistoryParams) {
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
         this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
         const response = await tickHistoryPromise;
@@ -32,7 +33,7 @@ class RealtimeSubscription extends Subscription {
 
     forget() {
         if (this._tickCallback) {
-            const { symbol, granularity } = this._request as any;
+            const { symbol, granularity } = this._request;
             this._binaryApi.forget({
                 symbol,
                 granularity,
@@ -48,7 +49,7 @@ class RealtimeSubscription extends Subscription {
         const tickHistoryPromise = PendingPromise<TicksStreamResponse>();
         const processTickHistory = (resp: TicksStreamResponse) => {
             if (this._stx.isDestroyed) {
-                const subscriptionId = resp.subscription?.id;
+                const subscriptionId = resp.subscription?.id as string;
                 this._binaryApi.forgetStream(subscriptionId);
                 return;
             }

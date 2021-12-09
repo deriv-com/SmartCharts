@@ -1,19 +1,24 @@
-import { TicksHistoryRequest, TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
+import { TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
-import { OHLCStreamResponse, TQuote } from 'src/types';
+import { BinaryAPI } from 'src/binaryapi';
+import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
+import Context from 'src/components/ui/Context';
+import { Listener, OHLCStreamResponse, TQuote } from 'src/types';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
+export type TQuoteResponse = { quotes: TQuote[]; response: TicksHistoryResponse; error?: unknown };
+
 class Subscription {
-    _binaryApi: any;
+    _binaryApi: BinaryAPI;
     _emitter: EventEmitter;
-    _request: TicksHistoryRequest;
-    _stx: any;
+    _request: TCreateTickHistoryParams;
+    _stx: Context['stx'];
     lastStreamEpoch?: number;
     static get EVENT_CHART_DATA() {
         return 'EVENT_CHART_DATA';
     }
 
-    constructor(request: TicksHistoryRequest, api: any, stx: any) {
+    constructor(request: TCreateTickHistoryParams, api: BinaryAPI, stx: Context['stx']) {
         this._binaryApi = api;
         this._stx = stx;
         this._request = request;
@@ -26,6 +31,7 @@ class Subscription {
         return quotes_and_response;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     pause() {}
 
     async resume() {
@@ -46,7 +52,7 @@ class Subscription {
         this._emitter.off(Subscription.EVENT_CHART_DATA);
     }
 
-    async _startSubscribe(request: TicksHistoryRequest): Promise<{ quotes: TQuote[]; response: TicksHistoryResponse }> {
+    async _startSubscribe(request: TCreateTickHistoryParams): Promise<TQuoteResponse> {
         throw new Error('Please override!');
     }
 
@@ -67,7 +73,7 @@ class Subscription {
         return quotes;
     }
 
-    onChartData(callback: any) {
+    onChartData(callback: Listener) {
         this._emitter.on(Subscription.EVENT_CHART_DATA, callback);
     }
 

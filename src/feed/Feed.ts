@@ -1,20 +1,35 @@
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
-import { TicksHistoryResponse } from '@deriv/api-types';
-import { TMainStore, TQuote } from 'src/types';
+import { TicksHistoryRequest, TicksHistoryResponse } from '@deriv/api-types';
+import { Listener, TError, TGranularity, TMainStore, TQuote } from 'src/types';
+import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
+import { BinaryAPI, TradingTimes } from 'src/binaryapi';
+import Context from 'src/components/ui/Context';
 import { TickHistoryFormatter } from './TickHistoryFormatter';
 import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
 import { RealtimeSubscription, DelayedSubscription } from './subscription';
 import ServerTime from '../utils/ServerTime';
+import { TQuoteResponse } from './subscription/Subscription';
+
+type TPaginationParams = {
+    period: number;
+    interval: string;
+    symbolObject: {
+        name: string;
+        symbol: string;
+    };
+};
+
+type TPaginationCallback = (params: { quotes?: TQuote[]; error?: unknown; moreAvailable?: boolean }) => void;
 
 class Feed {
-    _binaryApi: any;
-    _connectionClosedDate: any;
-    _emitter: any;
+    _binaryApi: BinaryAPI;
+    _connectionClosedDate?: Date;
+    _emitter: EventEmitter;
     _mainStore: TMainStore;
-    _serverTime: any;
-    _stx: any;
-    _tradingTimes: any;
+    _serverTime: ServerTime;
+    _stx: Context['stx'];
+    _tradingTimes: TradingTimes;
     static get EVENT_MASTER_DATA_UPDATE() {
         return 'EVENT_MASTER_DATA_UPDATE';
     }
@@ -51,9 +66,9 @@ class Feed {
     get paginationLoader() {
         return this._mainStore.paginationLoader;
     }
-    _activeStreams: { [key: string]: any } = {};
+    _activeStreams: { [key: string]: DelayedSubscription | RealtimeSubscription } = {};
     _isConnectionOpened = true;
-    constructor(binaryApi: any, stx: any, mainStore: TMainStore, tradingTimes: any) {
+    constructor(binaryApi: BinaryAPI, stx: Context['stx'], mainStore: TMainStore, tradingTimes: TradingTimes) {
         this._stx = stx;
         this._binaryApi = binaryApi;
         this._mainStore = mainStore;
@@ -62,8 +77,8 @@ class Feed {
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
-    onRangeChanged = (forceLoad: any) => {
-        const periodicity = calculateTimeUnitInterval(this.granularity as any);
+    onRangeChanged = (forceLoad: boolean) => {
+        const periodicity = calculateTimeUnitInterval(this.granularity);
         const rangeTime = (this.granularity || 1) * this._stx.chart.maxTicks;
         let dtLeft = null;
         let dtRight = null;
@@ -116,22 +131,29 @@ class Feed {
         }
     }
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     subscribe() {}
     // Do not call explicitly! Method below is called by ChartIQ when unsubscribing symbols.
-    unsubscribe({ symbol, period, interval }: any) {
+    unsubscribe({ symbol, period, interval }: { symbol: string; period: number; interval: string }) {
         // the chart forgets the ticks_history of the main chart symbol before sending a new request in fetchInitialData function.
         if (this._stx.chart.symbol === symbol) return;
         const granularity = calculateGranularity(period, interval);
         const key = this._getKey({ symbol, granularity });
         this._forgetStream(key);
     }
-    _forgetStream(key: any) {
+    _forgetStream(key: string) {
         if (this._activeStreams[key]) {
             this._activeStreams[key].forget();
             delete this._activeStreams[key];
         }
     }
-    async fetchInitialData(symbol: any, suggestedStartDate: any, suggestedEndDate: any, params: any, callback: any) {
+    async fetchInitialData(
+        symbol: string,
+        suggestedStartDate: Date,
+        suggestedEndDate: Date,
+        params: TPaginationParams,
+        callback: TPaginationCallback
+    ) {
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { period, interval, symbolObject } = params;
@@ -139,11 +161,11 @@ class Feed {
         const key = this._getKey({ symbol, granularity });
         const localDate = this._serverTime.getLocalDate();
         if (suggestedStartDate > localDate) suggestedStartDate = localDate;
-        if (!this.startEpoch && suggestedStartDate > this.endEpoch) {
-            suggestedStartDate = CIQ.strToDateTime(getUTCDate(this.endEpoch - 200000));
+        if (!this.startEpoch && ((suggestedStartDate as unknown) as number) > (this.endEpoch as number)) {
+            suggestedStartDate = CIQ.strToDateTime(getUTCDate((this.endEpoch as number) - 200000));
         }
         const isComparisonChart = this._stx.chart.symbol !== symbol;
-        let start = this.startEpoch || Math.floor((suggestedStartDate / 1000) | 0);
+        let start = this.startEpoch || Math.floor((((suggestedStartDate as unknown) as number) / 1000) | 0);
         start = this.margin && this.startEpoch ? start - this.margin : start;
         const end = this.margin && this.endEpoch ? this.endEpoch + this.margin : this.endEpoch;
         if (isComparisonChart) {
@@ -155,7 +177,11 @@ class Feed {
         this.loader.setState('chart-data');
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.notifier.notifyFeedUnavailable(symbolName);
-            let dataCallback: any = { quotes: [] };
+            let dataCallback: {
+                error?: string;
+                suppressAlert?: boolean;
+                quotes: TQuote[];
+            } = { quotes: [] };
             if (isComparisonChart) {
                 // Passing error will prevent the chart from being shown; for
                 // main chart we still want the chart to be shown, just disabled
@@ -166,25 +192,34 @@ class Feed {
             callback(dataCallback);
             return;
         }
-        const tickHistoryRequest: any = {
+        const tickHistoryRequest: Partial<TCreateTickHistoryParams> = {
             start,
             symbol,
-            granularity,
+            granularity: granularity as TicksHistoryRequest['granularity'],
         };
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {
             // When there is end; no streaming required
-            tickHistoryRequest.end = end;
+            tickHistoryRequest.end = String(end);
             getHistoryOnly = true;
         } else if (this._tradingTimes.isMarketOpened(symbol)) {
             let subscription: DelayedSubscription | RealtimeSubscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
                 this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
-                subscription = new DelayedSubscription(tickHistoryRequest, this._binaryApi, this._stx, delay);
+                subscription = new DelayedSubscription(
+                    tickHistoryRequest as TCreateTickHistoryParams,
+                    this._binaryApi,
+                    this._stx,
+                    delay
+                );
             } else {
-                subscription = new RealtimeSubscription(tickHistoryRequest, this._binaryApi, this._stx);
+                subscription = new RealtimeSubscription(
+                    tickHistoryRequest as TCreateTickHistoryParams,
+                    this._binaryApi,
+                    this._stx
+                );
             }
             try {
                 // The chart should forget all ticks_history subscriptions when the symbol/granularity of the main chart is changed before sending the new request.
@@ -195,9 +230,9 @@ class Feed {
                 quotes = new_quotes;
                 this._mainStore.lastDigitStats.updateLastDigitStats(response);
             } catch (error) {
-                const { message: text } = error as any;
+                const { message: text } = error as TError;
                 this._mainStore.notifier.notify({
-                    text,
+                    text: text as string,
                     type: 'error',
                     category: 'activesymbol',
                 });
@@ -205,7 +240,7 @@ class Feed {
                 this.paginationLoader.updateOnPagination(false);
                 return;
             }
-            subscription.onChartData((tickResponse: any) => {
+            subscription.onChartData((tickResponse: TQuote[]) => {
                 // Append comming ticks to chart only if it belongs to selected symbol after symbol changes
                 if (isComparisonChart || symbol === this._stx.chart.symbol) {
                     if (this._stx.isDestroyed) return;
@@ -225,7 +260,9 @@ class Feed {
             getHistoryOnly = true;
         }
         if (getHistoryOnly) {
-            const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(tickHistoryRequest);
+            const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
+                tickHistoryRequest as TCreateTickHistoryParams
+            );
             quotes = TickHistoryFormatter.formatHistory(response);
         }
         if (!quotes) {
@@ -241,7 +278,13 @@ class Feed {
         this._mainStore.state.setMaxtTick();
         this.paginationLoader.updateOnPagination(false);
     }
-    async fetchPaginationData(symbol: any, suggestedStartDate: any, endDate: any, params: any, callback: any) {
+    async fetchPaginationData(
+        symbol: string,
+        suggestedStartDate: Date,
+        endDate: Date,
+        params: TPaginationParams,
+        callback: TPaginationCallback
+    ) {
         const end = getUTCEpoch(endDate);
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
@@ -253,7 +296,13 @@ class Feed {
         }
         await this._getPaginationData(symbol, granularity, start, end, callback);
     }
-    async _getPaginationData(symbol: any, granularity: any, start: any, end: any, callback: any) {
+    async _getPaginationData(
+        symbol: string,
+        granularity: TGranularity,
+        start: number,
+        end: number,
+        callback: TPaginationCallback
+    ) {
         const isMainChart = this._stx.chart.symbol === symbol;
         // TODO There is no need to get historical data before startTime
         if (this.startEpoch /* && start < this.startEpoch */ || (this.endEpoch && end > this.endEpoch)) {
@@ -268,22 +317,22 @@ class Feed {
         const now = this._serverTime.getEpoch();
         // Tick history data only goes as far back as 3 years:
         const startLimit = now - Math.ceil(2.8 * 365 * 24 * 60 * 60); /* == 3 Years */
-        let result: any = { quotes: [] };
-        let firstEpoch;
+        let result: Partial<TQuoteResponse> = { quotes: [] };
+        let firstEpoch: number | undefined;
         if (end > startLimit) {
             try {
                 const response = await this._binaryApi.getTickHistory({
                     symbol,
-                    granularity,
+                    granularity: granularity as TicksHistoryRequest['granularity'],
                     start: Math.floor(Math.max(start, startLimit)),
-                    end,
+                    end: String(end),
                 });
                 if (response.error) {
-                    const { message: text } = response.error;
+                    const { message: text } = response.error as TError;
                     this.loader.hide();
                     this.paginationLoader.updateOnPagination(false);
                     this._mainStore.notifier.notify({
-                        text,
+                        text: text as string,
                         type: 'error',
                         category: 'activesymbol',
                     });
@@ -318,11 +367,11 @@ class Feed {
             // ignore comparisons
             // prevent overlapping by setting pagination end as firstEpoch
             // if 'end' is greater than firstEpoch from feed
-            const paginationEnd = end > firstEpoch ? firstEpoch : end;
+            const paginationEnd = firstEpoch && end > firstEpoch ? firstEpoch : end;
             this._emitter.emit(Feed.EVENT_ON_PAGINATION, { start, end: paginationEnd });
         }
     }
-    setHasReachedEndOfData(hasReachedEndOfData: any) {
+    setHasReachedEndOfData(hasReachedEndOfData: boolean) {
         this.paginationLoader.updateOnPagination(false);
         if (this._mainStore.state.hasReachedEndOfData !== hasReachedEndOfData) {
             this._mainStore.state.hasReachedEndOfData = hasReachedEndOfData;
@@ -333,14 +382,19 @@ class Feed {
             this._forgetStream(key);
         }
     }
-    _forgetIfEndEpoch(key: any) {
+    _forgetIfEndEpoch(key: string) {
         const subscription = this._activeStreams[key];
         let result = true;
         if (!subscription) {
             return;
         }
         const lastEpoch = subscription.lastStreamEpoch;
-        if (this.endEpoch && lastEpoch + this.granularity > this.endEpoch) {
+        if (
+            this.endEpoch &&
+            lastEpoch !== undefined &&
+            this.granularity !== undefined &&
+            lastEpoch + this.granularity > this.endEpoch
+        ) {
             if (
                 this._activeStreams[key] &&
                 this.granularity === 0 &&
@@ -356,7 +410,7 @@ class Feed {
         }
         return result;
     }
-    _appendChartData(quotes: any, key: any, comparisonChartSymbol: any) {
+    _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
@@ -391,7 +445,7 @@ class Feed {
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
-    _emitDataUpdate(quotes: any, comparisonChartSymbol: any, isChartReinitialized = false) {
+    _emitDataUpdate(quotes: TQuote[], comparisonChartSymbol?: string, isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
         const prevClose = prev !== undefined ? prev.Close : undefined;
         const dataUpdate = {
@@ -412,40 +466,40 @@ class Feed {
             });
         }
     }
-    static getFirstEpoch({ candles, history }: any) {
+    static getFirstEpoch({ candles, history }: TicksHistoryResponse) {
         if (candles && candles.length > 0) {
             return candles[0].epoch;
         }
-        if (history && history.times.length > 0) {
+        if (history && history.times && history.times.length > 0) {
             const { times } = history;
             return +times[0];
         }
     }
-    onMasterDataUpdate(callback: any) {
+    onMasterDataUpdate(callback: Listener) {
         this._emitter.on(Feed.EVENT_MASTER_DATA_UPDATE, callback);
     }
-    offMasterDataUpdate(callback: any) {
+    offMasterDataUpdate(callback: Listener) {
         this._emitter.off(Feed.EVENT_MASTER_DATA_UPDATE, callback);
     }
-    onMasterDataReinitialize(callback: any) {
+    onMasterDataReinitialize(callback: Listener) {
         this._emitter.on(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
     }
-    offMasterDataReinitialize(callback: any) {
+    offMasterDataReinitialize(callback: Listener) {
         this._emitter.off(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
     }
-    onComparisonDataUpdate(callback: any) {
+    onComparisonDataUpdate(callback: Listener) {
         this._emitter.on(Feed.EVENT_COMPARISON_DATA_UPDATE, callback);
     }
-    onPagination(callback: any) {
+    onPagination(callback: Listener) {
         this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
     }
-    offPagination(callback: any) {
+    offPagination(callback: Listener) {
         this._emitter.off(Feed.EVENT_ON_PAGINATION, callback);
     }
-    onStartPagination(callback: any) {
+    onStartPagination(callback: Listener) {
         this._emitter.on(Feed.EVENT_START_PAGINATION, callback);
     }
-    offStartPagination(callback: any) {
+    offStartPagination(callback: Listener) {
         this._emitter.off(Feed.EVENT_START_PAGINATION, callback);
     }
     onConnectionChanged() {
@@ -472,7 +526,8 @@ class Feed {
             return;
         }
         const { granularity } = this._unpackKey(keys[0]);
-        const elapsedSeconds = (((new Date() as any) - this._connectionClosedDate) / 1000) | 0;
+        const elapsedSeconds =
+            ((((new Date() as unknown) as number) - ((this._connectionClosedDate as unknown) as number)) / 1000) | 0;
         const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();
@@ -486,12 +541,14 @@ class Feed {
     _resumeStream(key: string) {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
-        this._activeStreams[key].resume().then(({ quotes }: { quotes: any }) => {
+
+        this._activeStreams[key].resume().then((params?: TQuoteResponse) => {
+            const { quotes } = params as TQuoteResponse;
             if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });
     }
-    _getKey({ symbol, granularity }: any) {
+    _getKey({ symbol, granularity }: { symbol: string; granularity: TGranularity }) {
         return `${symbol}-${granularity}`;
     }
     _unpackKey(key: string) {
@@ -505,7 +562,7 @@ class Feed {
         if (!trimmedQuotes.length) return [];
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(
-                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch))
+                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch as number))
             );
             if (startTickIndex > -1) {
                 trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
@@ -513,7 +570,7 @@ class Feed {
         }
         if (this.endEpoch && this.margin) {
             endTickIndex = trimmedQuotes.findIndex(
-                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch))
+                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch as number))
             );
             if (endTickIndex > -1) {
                 const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
