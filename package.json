@@ -1,6 +1,6 @@
 {
     "name": "@deriv/deriv-charts",
-    "version": "0.4.5",
+    "version": "0.4.7",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
     "contributors": [
@@ -104,7 +104,6 @@
         "postcss-svgo": "^4.0.2",
         "prettier": "^2.1.2",
         "raw-loader": "^3.1.0",
-        "react-transition-group": "^4.4.1",
         "regenerator-runtime": "^0.13.3",
         "resize-observer-polyfill": "^1.5.1",
         "rimraf": "^2.6.3",
@@ -135,6 +134,7 @@
         "prop-types": "^15.7.2",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
+        "react-transition-group": "^4.4.1",
         "react-tabs": "^3.0.0",
         "url-search-params-polyfill": "^7.0.0"
     },

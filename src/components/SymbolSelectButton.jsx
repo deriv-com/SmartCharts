@@ -20,13 +20,15 @@ export const SymbolInfo = ({ symbol, ChartPrice, isSymbolOpen, symbolOpenTime })
 };
 export const SymbolSelectButton = ({ symbol, ChartPrice, isSymbolOpen, symbolOpenTime }) => (
     <div className='cq-symbol-select-btn'>
-        <SymbolInfo
-            symbol={symbol}
-            ChartPrice={ChartPrice}
-            symbolOpenTime={symbolOpenTime}
-            isSymbolOpen={isSymbolOpen}
-        />
-        {!isSymbolOpen && <div className='cq-symbol-closed-text'>{t.translate('CLOSED')}</div>}
+        <div className='cq-symbol-select-btn__container'>
+            <SymbolInfo
+                symbol={symbol}
+                ChartPrice={ChartPrice}
+                symbolOpenTime={symbolOpenTime}
+                isSymbolOpen={isSymbolOpen}
+            />
+            {!isSymbolOpen && <div className='cq-symbol-closed-text'>{t.translate('CLOSED')}</div>}
+        </div>
         <ArrowIcon className='cq-symbol-dropdown' />
     </div>
 );

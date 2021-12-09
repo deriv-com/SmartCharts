@@ -220,7 +220,7 @@ html, body {
     padding: 0px;
     margin-bottom: 17px;
     border-radius: $border-radius;
-    z-index: 15;
+    z-index: 12;
     cursor: pointer;
     @include themify($themes) {
         background: themed('NavigationWidgetBg');
