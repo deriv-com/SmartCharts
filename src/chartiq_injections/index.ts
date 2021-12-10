@@ -1,3 +1,4 @@
+import DrawToolsStore from 'src/store/DrawToolsStore';
 import { createXAxis } from './createXAxis';
 import { drawCurrentPriceLine } from './currentHR';
 import { maintainHeadsUpHR } from './headsUpHR';
@@ -13,7 +14,7 @@ import { overrideRenderSegment } from './renderSegment';
 import { overrideResizeObserver } from './resizeObserver';
 import { BackingStore } from './backingStore';
 
-const inject = (option: any) => {
+const inject = (option: { drawToolsStore: DrawToolsStore }) => {
     createXAxis();
     drawCurrentPriceLine();
     maintainHeadsUpHR();

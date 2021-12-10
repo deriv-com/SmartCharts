@@ -14,6 +14,6 @@ declare module '*.svg' {
 }
 
 interface Navigator {
-    msSaveBlob: any;
+    msSaveBlob: (blob: Blob, name: string) => void;
     onLine: boolean;
 }

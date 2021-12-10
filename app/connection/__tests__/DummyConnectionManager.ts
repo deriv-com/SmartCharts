@@ -1,5 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
 import sinon from 'sinon';
+import { Listener } from 'src/types';
 import PendingPromise from '../../../src/utils/PendingPromise';
 
 export class DummyConnectionManager extends EventEmitter {
@@ -9,9 +10,10 @@ export class DummyConnectionManager extends EventEmitter {
         this.send = sinon.fake(this.send.bind(this));
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onOpened() {}
 
-    onClosed(cb: any) {
+    onClosed(cb: Listener) {
         this.on('close', cb);
     }
 

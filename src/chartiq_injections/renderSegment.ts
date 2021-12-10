@@ -2,7 +2,7 @@ import { timezoneJS } from '../../chartiq/development/js/chartiq.js';
 
 export const overrideRenderSegment = () => {
     // overriding the method to avoid error in case this.p0 or this.p1 is null.
-    CIQ.Drawing.segment.prototype.render = function (context: any) {
+    CIQ.Drawing.segment.prototype.render = function (context: CanvasRenderingContext2D) {
         const panel = this.stx.panels[this.panelName];
         if (!panel || !this.p0 || !this.p1) return;
         const x0 = this.stx.pixelFromTick(this.p0[0], panel.chart);

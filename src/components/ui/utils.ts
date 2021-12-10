@@ -31,34 +31,6 @@ export function createElement(html: string) {
     return wrapper.firstChild;
 }
 
-// Auxiliary function that enables multiple inheritence with es6 classes: https://stackoverflow.com/a/45332959/1471258
-export function aggregation(baseClass: any, ...mixins: any[]) {
-    const copyProps = (target: any, source: any) => {
-        // this function copies all properties and symbols, filtering out some special ones
-        Object.getOwnPropertyNames(source)
-            .concat(Object.getOwnPropertySymbols(source) as any)
-            .forEach(prop => {
-                if (!prop.match(/^(?:constructor|prototype|arguments|caller|name|bind|call|apply|toString|length)$/)) {
-                    Object.defineProperty(target, prop, Object.getOwnPropertyDescriptor(source, prop) as any);
-                }
-            });
-    };
-    class base extends baseClass {
-        constructor(...args: any[]) {
-            super(...args);
-            mixins.forEach(mixin => {
-                copyProps(this, new mixin()); // eslint-disable-line new-cap
-            });
-        }
-    }
-    mixins.forEach(mixin => {
-        // outside contructor() to allow aggregation(A,B,C).staticFunction() to be called etc.
-        copyProps(base.prototype, mixin.prototype);
-        copyProps(base, mixin);
-    });
-    return base;
-}
-
 export function setHidden(element: HTMLElement, isHidden: boolean) {
     if (isHidden) {
         element.setAttribute('hidden', 'true');

@@ -10,7 +10,7 @@ import { DummyConnectionManager } from './DummyConnectionManager';
 chai.use(sinonChai);
 
 describe('Test StreamManager (Tick)', function () {
-    let dcm: any, sm: any;
+    let dcm: DummyConnectionManager, sm: StreamManager;
 
     beforeEach(function () {
         dcm = new DummyConnectionManager();

@@ -1,6 +1,6 @@
 export const overrideRenderEllipse = () => {
     // overriding the method to avoid error in case this.p0 or this.p1 is undefined or null.
-    CIQ.Drawing.ellipse.prototype.render = function (context: any) {
+    CIQ.Drawing.ellipse.prototype.render = function (context: CanvasRenderingContext2D) {
         const panel = this.stx.panels[this.panelName];
         if (!panel || !this.p0 || !this.p1) return;
         const x0 = this.stx.pixelFromTick(this.p0[0], panel.chart);
