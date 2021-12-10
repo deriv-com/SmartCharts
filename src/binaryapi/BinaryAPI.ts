@@ -23,7 +23,7 @@ export type TCreateTickHistoryParams = TicksHistoryRequestPartial & { symbol: st
 export default class BinaryAPI {
     requestAPI: TRequestAPI;
     requestForget: TRequestForget;
-    requestForgetStream: TRequestForgetStream;
+    requestForgetStream?: TRequestForgetStream;
     requestSubscribe: TRequestSubscribe;
     static get DEFAULT_COUNT() {
         return 1000;
@@ -35,7 +35,7 @@ export default class BinaryAPI {
         requestAPI: TRequestAPI,
         requestSubscribe: TRequestSubscribe,
         requestForget: TRequestForget,
-        requestForgetStream: TRequestForgetStream
+        requestForgetStream?: TRequestForgetStream
     ) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;

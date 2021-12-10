@@ -1,11 +1,11 @@
 // @ts-nocheck
-export const overideMeasure = (option: any) => {
+export const overideMeasure = (option: { drawToolsStore: DrawToolsStore }) => {
     CIQ.ChartEngine.prototype.append('setMeasure', function (
-        price1: any,
-        price2: any,
-        tick1: any,
-        tick2: any,
-        hover: any
+        price1: number,
+        price2: number,
+        tick1: number,
+        tick2: number,
+        hover: boolean
     ) {
         let m = (this.drawingContainer || document).querySelector('.mMeasure');
         let message = '';

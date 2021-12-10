@@ -106,7 +106,7 @@ class ChartStore {
     }
     feedCall: { tradingTimes?: boolean; activeSymbols?: boolean } = {};
     RANGE_PADDING_PX = 125;
-    contextPromise: IPendingPromise<Context> | null = PendingPromise<Context>();
+    contextPromise: IPendingPromise<Context, void> | null = PendingPromise<Context, void>();
     rootNode: (HTMLElement & { CIQ: typeof CIQ }) | null = null;
     stxx: typeof CIQ.ChartEngine | null = null;
     api: BinaryAPI | null = null;
@@ -1151,7 +1151,7 @@ class ChartStore {
         if (!this.chartNode) return;
 
         const paddingRatio = this.chartNode.clientWidth / this.RANGE_PADDING_PX;
-        const elapsedSeconds = (endEpoch || startEpoch as number) - (startEpoch || endEpoch as number);
+        const elapsedSeconds = (endEpoch || (startEpoch as number)) - (startEpoch || (endEpoch as number));
         const epochPadding = (elapsedSeconds / paddingRatio) | 0;
         if (startEpoch || endEpoch) {
             const dtLeft = startEpoch ? CIQ.strToDateTime(getUTCDate(startEpoch - epochPadding)) : undefined;

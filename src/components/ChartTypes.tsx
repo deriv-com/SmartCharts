@@ -10,7 +10,7 @@ import List from './List';
 import Menu from './Menu';
 
 type TTypeIcon = {
-    Icon: (props: any) => JSX.Element;
+    Icon: React.FC;
     className: string;
 };
 

@@ -14,7 +14,7 @@ class ServerTime {
     updateTimeInterval?: ReturnType<typeof setInterval>;
 
     clockStarted = false;
-    clockStartedPromise = PendingPromise();
+    clockStartedPromise = PendingPromise<void, void>();
 
     async init(api?: BinaryAPI, updatedCallback?: () => void) {
         this._api = api;
