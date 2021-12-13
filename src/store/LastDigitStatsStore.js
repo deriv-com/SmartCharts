@@ -56,7 +56,7 @@ export default class LastDigitStatsStore {
         return this.mainStore.state.shouldMinimiseLastDigits;
     }
 
-    @action.bound async updateLastDigitStats(response = {}) {
+    @action.bound async updateLastDigitStats(response) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
 
         this.digits = [];
