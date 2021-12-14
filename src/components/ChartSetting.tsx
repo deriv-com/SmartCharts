@@ -5,7 +5,7 @@ import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useStores } from 'src/store';
 import { TLanguage } from 'src/store/ChartSettingStore';
-import { TMainStore } from 'src/types';
+import { TIconProps, TMainStore } from 'src/types';
 import '../../sass/components/_chart-setting.scss';
 import { FormGroup, SwitchIcon } from './Form';
 import {
@@ -27,8 +27,8 @@ type ChartSettingsItemProps = {
     label: string;
     value: boolean;
     onChange: TMainStore['chartSetting']['showCountdown'];
-    noramIcon: (props: any) => JSX.Element;
-    activeIcon: (props: any) => JSX.Element;
+    noramIcon: React.FC<TIconProps>;
+    activeIcon: React.FC<TIconProps>;
 };
 
 const ChartSettingItem: React.FC<ChartSettingsItemProps> = ({

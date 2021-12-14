@@ -1,5 +1,6 @@
 import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse } from '@deriv/api-types';
-import { BinaryAPI, TradingTimes } from 'src/binaryapi';
+import { HtmlHTMLAttributes } from 'react';
+import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
 import BarrierStore from 'src/store/BarrierStore';
 import { TSettings } from 'src/store/ChartSettingStore';
@@ -12,8 +13,38 @@ export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType exten
     : never;
 
 export type TObject = {
-    [key: string]: any;
+    [key: string]: unknown;
 };
+
+export type TBinaryAPIRequest = {
+    passthrough?: {
+        [k: string]: unknown;
+    };
+    req_id?: number;
+    [k: string]: unknown;
+};
+
+export type TBinaryAPIResponse = {
+    echo_req: {
+        [k: string]: unknown;
+    };
+    req_id?: number;
+    msg_type: any;
+    [k: string]: unknown;
+};
+
+export type TRequestAPI = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse>;
+export type TResponseAPICallback = (response: TBinaryAPIResponse) => void;
+export type TRequestSubscribe = (request: TBinaryAPIRequest, callback: TResponseAPICallback) => void;
+export type TRequestForgetStream = (id: string) => void;
+export type TRequestForget = (request: TBinaryAPIRequest, callback: TResponseAPICallback) => void;
+
+export type Listener = (...args: any[]) => void;
+
+export type TIconProps = {
+    className?: string;
+    ['tooltip-title']?: React.ReactElement | string;
+} & HtmlHTMLAttributes<HTMLSpanElement>;
 
 export type TBar = {
     height: number;
@@ -69,7 +100,7 @@ export type TChartParams = {
     yAxisMargin?: { bottom: number; top: number };
     enableScroll?: boolean | null;
     enableZoom?: boolean | null;
-    chartData?: { activeSymbols: ActiveSymbols; tradingTimes: TradingTimes };
+    chartData?: { activeSymbols: ActiveSymbols; tradingTimes: TradingTimesResponse['trading_times'] };
 };
 
 export type TQuote = {
@@ -84,9 +115,9 @@ export type TQuote = {
     prevClose?: number;
 };
 
-export interface IPendingPromise<Response> extends Promise<Response> {
-    resolve: (res?: Response) => void;
-    reject: (error?: Error) => void;
+export interface IPendingPromise<T, E> extends Promise<T> {
+    resolve: (res: T | PromiseLike<T>) => void;
+    reject: (error: E | PromiseLike<E>) => void;
     isPending: boolean;
     data: any;
 }

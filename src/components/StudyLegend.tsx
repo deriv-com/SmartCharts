@@ -2,6 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
+import { TIconProps } from 'src/types';
 import { useStores } from 'src/store';
 import StudyLegendStore from 'src/store/StudyLegendStore';
 import NotificationBadge from './NotificationBadge';
@@ -14,7 +15,7 @@ import Menu from './Menu';
 import SearchInput from './SearchInput';
 
 type TStudyIconProps = {
-    Icon: React.FC;
+    Icon: React.FC<TIconProps>;
 };
 
 type TIndicatorListProps = {
@@ -61,7 +62,7 @@ type TTabularDisplayProps = {
 };
 
 type TStudyLegendProps = {
-    portalNodeId: string;
+    portalNodeId?: string;
 };
 
 const StudyIcon: React.FC<TStudyIconProps> = ({ Icon }) => <Icon />;
@@ -247,7 +248,7 @@ const TabularDisplay: React.FC<TTabularDisplayProps> = ({
                     <IndicatorList
                         onSelectItem={onSelectItem}
                         onInfoItem={onInfoItem}
-                        items={Category.items}
+                        items={Category.items as TActiveItem[]}
                         disableAll={activeItems.length === maxAllowedItem}
                         isTick={isTick}
                     />

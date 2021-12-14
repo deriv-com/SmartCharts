@@ -1,10 +1,21 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import classNames from 'classnames';
+import PriceLineStore from 'src/store/PriceLineStore';
 import PriceLineArrow from './PriceLineArrow';
 import PriceLineTitle from './PriceLineTitle';
 
-const PriceLine: React.FC<any> = ({
+type TPriceLineProps = {
+    store: PriceLineStore;
+    lineStyle?: string;
+    hideOffscreenBarrier?: boolean;
+    foregroundColor: string;
+    color?: string;
+    opacityOnOverlap: number;
+    width: number;
+};
+
+const PriceLine: React.FC<TPriceLineProps> = ({
     lineStyle,
     color,
     foregroundColor,
@@ -35,7 +46,7 @@ const PriceLine: React.FC<any> = ({
         () => !hideBarrierLine && (!hideOffscreenLine || !offScreen) && !isOverlapping,
         [hideBarrierLine, hideOffscreenLine, offScreen, isOverlapping]
     );
-    const opacity = React.useMemo(() => isOverlapping && opacityOnOverlap, [isOverlapping, opacityOnOverlap]);
+    const opacity = React.useMemo(() => (isOverlapping ? opacityOnOverlap : ''), [isOverlapping, opacityOnOverlap]);
 
     React.useEffect(() => {
         init();
@@ -55,7 +66,7 @@ const PriceLine: React.FC<any> = ({
                     backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00`,
                 }}
             >
-                {showBarrierDragLine && <div className='drag-line' style={{ borderTopStyle: lineStyle }} />}
+                {showBarrierDragLine && <div className='drag-line' style={{ borderTop: lineStyle }} />}
                 <div className='draggable-area' />
                 <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
                     <div className='price'>{priceDisplay}</div>

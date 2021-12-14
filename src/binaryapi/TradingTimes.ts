@@ -1,18 +1,20 @@
+import { TradingTimesResponse } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
-import { TChartParams, TError, TOpenClose, TTradingTimesItem, TTradingTimesSymbol } from 'src/types';
+import { Listener, TChartParams, TError, TOpenClose, TTradingTimesItem, TTradingTimesSymbol } from 'src/types';
 import PendingPromise from '../utils/PendingPromise';
 import ServerTime from '../utils/ServerTime';
+import BinaryAPI from './BinaryAPI';
 
 const DaysOfWeek = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'];
 class TradingTimes {
-    _api: any;
-    _emitter: any;
+    _api: BinaryAPI;
+    _emitter: EventEmitter;
     _params: Partial<TChartParams>;
     _serverTime: ServerTime;
-    _shouldFetchTradingTimes: any;
+    _shouldFetchTradingTimes: boolean;
     _tradingTimesMap?: { [key: string]: TTradingTimesItem };
-    _updateTimer: any;
-    lastUpdateDate: any;
+    _updateTimer?: ReturnType<typeof setTimeout>;
+    lastUpdateDate?: string;
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() {
         return 'EVENT_MARKET_OPEN_CLOSE_CHANGE';
     }
@@ -20,9 +22,9 @@ class TradingTimes {
         return 'chartonly';
     }
     isInitialized = false;
-    tradingTimesPromise = PendingPromise();
-    timeUpdateCallback: any;
-    constructor(api: any, params?: Partial<TChartParams>) {
+    tradingTimesPromise = PendingPromise<void, void>();
+    timeUpdateCallback?: () => void;
+    constructor(api: BinaryAPI, params?: Partial<TChartParams>) {
         this._params = params || {};
         this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || true;
         this._api = api;
@@ -72,7 +74,8 @@ class TradingTimes {
                     // next update date will be 00:00 hours (UTC) of the following day:
                     nextUpdate = nextUpdateDate;
                 }
-                const waitPeriod = (nextUpdate as any) - (this._serverTime.getLocalDate() as any);
+                const waitPeriod =
+                    ((nextUpdate as unknown) as number) - ((this._serverTime.getLocalDate() as unknown) as number);
                 this._updateTimer = setTimeout(periodicUpdate, waitPeriod);
             };
             await periodicUpdate();
@@ -90,7 +93,7 @@ class TradingTimes {
         return changed;
     }
     async _updateTradeTimes() {
-        let response: any = {};
+        let response: TradingTimesResponse = {} as TradingTimesResponse;
         if (!this._tradingTimesMap && this._params.initialData) response = this._params.initialData;
         else if (this._params.enable !== false) response = await this._api.getTradingTimes(this.lastUpdateDate);
         else {
@@ -106,12 +109,12 @@ class TradingTimes {
         this._calculatingTradingTime(response.trading_times);
     }
 
-    _calculatingTradingTime(raw_trading_time: any) {
+    _calculatingTradingTime(raw_trading_time: TradingTimesResponse['trading_times'] | undefined) {
         if (!raw_trading_time) return;
         this._tradingTimesMap = {};
         const now = this._serverTime.getLocalDate();
         const dateStr = now.toISOString().substring(0, 11);
-        const getUTCDate = (hour: any) => new Date(`${dateStr}${hour}Z`);
+        const getUTCDate = (hour: string) => new Date(`${dateStr}${hour}Z`);
 
         if (!raw_trading_time) return;
 
@@ -186,7 +189,7 @@ class TradingTimes {
                     const isOpenAllDay = open.length === 1 && open[0] === '00:00:00' && close[0] === '23:59:59';
                     const isClosedAllDay = open.length === 1 && open[0] === '--' && close[0] === '--';
                     if (!isOpenAllDay && !isClosedAllDay) {
-                        _times = open.map((openTime: any, idx: any) => ({
+                        _times = open.map((openTime: string, idx) => ({
                             open: getUTCDate(openTime),
                             close: getUTCDate(close[idx]),
                         }));
@@ -221,8 +224,8 @@ class TradingTimes {
         }
         return this._tradingTimesMap[symbol].feed_license === TradingTimes.FEED_UNAVAILABLE;
     }
-    getDelayedMinutes(symbol: string) {
-        return this._tradingTimesMap?.[symbol].delay_amount;
+    getDelayedMinutes(symbol: string): number {
+        return this._tradingTimesMap?.[symbol].delay_amount as number;
     }
     isMarketOpened(symbol: string) {
         if (!this._tradingTimesMap) {
@@ -258,12 +261,12 @@ class TradingTimes {
         ) {
             return false;
         }
-        const opens_late_date = opens_late.find((event: any) => event.date === dateStr);
+        const opens_late_date = opens_late.find(event => event.date === dateStr);
         if (opens_late_date) {
             const { open, close } = opens_late_date;
             return !!(now >= open && now < close);
         }
-        const closes_early_date = closes_early.find((event: any) => event.date === dateStr);
+        const closes_early_date = closes_early.find(event => event.date === dateStr);
         if (closes_early_date) {
             const { open, close } = closes_early_date;
             return !!(now >= open && now < close);
@@ -301,10 +304,10 @@ class TradingTimes {
         }
         return nextDate;
     }
-    onMarketOpenCloseChanged(callback: any) {
+    onMarketOpenCloseChanged(callback: Listener) {
         this._emitter.on(TradingTimes.EVENT_MARKET_OPEN_CLOSE_CHANGE, callback);
     }
-    onTimeChanged(callback: any) {
+    onTimeChanged(callback: () => void) {
         this.timeUpdateCallback = callback;
     }
 }

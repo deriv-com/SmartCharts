@@ -1,13 +1,15 @@
+import Context from './Context';
+
 /**
  * Abstract class for UI Helpers
  * @name CIQ.UI.Helper
  * @constructor
  */
 class Helper {
-    context: any;
+    context: Context | null;
     injections: any;
-    node: any;
-    constructor(node: any, context: any) {
+    node: HTMLElement;
+    constructor(node: HTMLElement, context: Context | null) {
         this.node = node;
         this.context = context;
         this.injections = []; // To keep track of injections for later removal
@@ -20,8 +22,8 @@ class Helper {
      * @param {Function} code      The code to be run
      * @memberof CIQ.UI.Helper
      */
-    addInjection(position: any, injection: any, code: any) {
-        this.injections.push(this.context.stx[position](injection, code));
+    addInjection(position: string, injection: string, code: any) {
+        this.injections.push(this.context?.stx[position](injection, code));
     }
 
     /**
@@ -30,7 +32,7 @@ class Helper {
      */
     destroy() {
         for (let i = 0; i < this.injections.length; i++) {
-            this.context.stx.removeInjection(this.injections[i]);
+            this.context?.stx.removeInjection(this.injections[i]);
         }
         this.injections = [];
     }

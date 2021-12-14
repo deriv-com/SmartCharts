@@ -18,7 +18,7 @@ import Timeperiod from './Timeperiod';
 
 type TChartModeProps = {
     portalNodeId: string;
-    onChartType: any;
+    onChartType: (chartType?: string | undefined) => void;
     onGranularity: (granularity?: TGranularity) => void;
 };
 

@@ -22,6 +22,8 @@ export type TAdditionalChartProps = {
     anchorChartToLeft: boolean;
 };
 
+type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
+
 type TScrollListenerParamsData = {
     grab: boolean;
     panel: typeof CIQ.ChartEngine.Panel;
@@ -44,10 +46,7 @@ class ChartState {
     @observable isConnectionOpened = false;
     @observable isChartReady = false;
     @observable chartStatusListener?: (isChartReady: boolean) => boolean;
-    @observable stateChangeListener?: (
-        state: string,
-        option?: { symbol: string | undefined; isClosed: boolean }
-    ) => void;
+    @observable stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
     @observable settings?: TSettings;
     @observable showLastDigitStats = false;
     @observable scrollToEpoch?: number | null;
@@ -382,7 +381,7 @@ class ChartState {
         this.stxx.draw();
     }
 
-    @action.bound stateChange(tag: string, option?: { symbol: string | undefined; isClosed: boolean }) {
+    @action.bound stateChange(tag: string, option?: TStateChangeOption) {
         if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
             this.stateChangeListener(tag, option);
         }

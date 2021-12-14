@@ -40,17 +40,17 @@ const FastMarker: React.FC<TFastMarkerProps> = props => {
     const { chart: chartStore } = useStores();
     const { contextPromise } = chartStore;
     const price_ref = React.useRef<number | null>(null);
-    const date_ref = React.useRef<any>(null);
-    const elem_ref = React.useRef<any>(null);
-    const ctx_ref = React.useRef<any>(null);
-    const stx_ref = React.useRef<any>(null);
+    const date_ref = React.useRef<Date | null>(null);
+    const elem_ref = React.useRef<HTMLDivElement | null>(null);
+    const ctx_ref = React.useRef<Context | null>(null);
+    const stx_ref = React.useRef<Context['stx']>(null);
     const injection_id_ref = React.useRef();
     const props_ref = React.useRef(props);
     props_ref.current = props;
 
     const setPosition = ({ epoch, price }: { [key: string]: number | null }) => {
         price_ref.current = Number(price) || null;
-        date_ref.current = CIQ.strToDateTime(getUTCDate(epoch as number));
+        date_ref.current = CIQ.strToDateTime(getUTCDate(epoch as number)) as Date;
         updateCSS();
     };
 
@@ -94,10 +94,13 @@ const FastMarker: React.FC<TFastMarkerProps> = props => {
                 const barPrev = tickIdx > 0 ? chart.dataSet[tickIdx - 1] : null;
                 if (barNext && barNext.Close && barNext.DT > date_ref.current) {
                     const pixelToNextBar = stx.pixelFromTick(tickIdx + 1, chart) - x;
-                    x += ((date_ref.current - bar.DT) / (barNext.DT - bar.DT)) * pixelToNextBar;
+                    x +=
+                        ((((date_ref.current as unknown) as number) - bar.DT) / (barNext.DT - bar.DT)) * pixelToNextBar;
                 } else if (barPrev && barPrev.Close) {
                     const pixelFromPrevBar = x - stx.pixelFromTick(tickIdx - 1, chart);
-                    x += ((date_ref.current - bar.DT) / (bar.DT - barPrev.DT)) * pixelFromPrevBar;
+                    x +=
+                        ((((date_ref.current as unknown) as number) - bar.DT) / (bar.DT - barPrev.DT)) *
+                        pixelFromPrevBar;
                 }
             }
 

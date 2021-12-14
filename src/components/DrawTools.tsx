@@ -3,7 +3,8 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useStores } from 'src/store';
-import { TMainStore } from 'src/types';
+import DrawToolsStore from 'src/store/DrawToolsStore';
+import { ArrayElement, TIconProps, TMainStore } from 'src/types';
 import '../../sass/components/_draw_tools.scss';
 import { ActiveIcon, DeleteIcon, DrawToolIcon, EmptyStateIcon, SettingIcon } from './Icons';
 import Menu from './Menu';
@@ -12,6 +13,40 @@ import Scroll from './Scroll';
 
 type TActivePanelViewProps = {
     enabled: boolean;
+};
+
+type TActiveDrawToolsListProps = {
+    activeDrawToolsGroup: TMainStore['drawTools']['activeToolsGroup'];
+    onSetting: TMainStore['drawTools']['onSetting'];
+    onDelete: TMainStore['drawTools']['onDeleted'];
+};
+
+type InfoProps = {
+    Icon?: React.FC<TIconProps>;
+    text?: string;
+    num?: string | number;
+    bars?: number | null;
+};
+
+type DrawToolsProps = {
+    portalNodeId?: string;
+};
+
+type TActiveDrawToolsListGroupProps = {
+    group: ArrayElement<TMainStore['drawTools']['activeToolsGroup']>;
+    onSetting: TMainStore['drawTools']['onSetting'];
+    onDelete: TMainStore['drawTools']['onDeleted'];
+};
+
+type TActiveDrawToolsListItemProps = {
+    item: ArrayElement<ArrayElement<TMainStore['drawTools']['activeToolsGroup']>['items']>;
+    onSetting: TMainStore['drawTools']['onSetting'];
+    onDelete: TMainStore['drawTools']['onDeleted'];
+};
+
+type TDrawToolsListProps = {
+    items: DrawToolsStore['drawToolsItems'];
+    onClick: DrawToolsStore['selectTool'];
 };
 
 const ActivePanelView: React.FC<TActivePanelViewProps> = ({ enabled, children }) =>
@@ -24,13 +59,6 @@ const ActivePanelView: React.FC<TActivePanelViewProps> = ({ enabled, children })
         <React.Fragment>{children}</React.Fragment>
     );
 
-type InfoProps = {
-    Icon: (props: any) => JSX.Element;
-    text: string;
-    num?: number;
-    bars?: any;
-};
-
 const Info: React.FC<InfoProps> = ({ Icon, text, num, bars }) => (
     <div className='info'>
         {Icon ? <Icon className='icon' /> : ''}
@@ -41,9 +69,9 @@ const Info: React.FC<InfoProps> = ({ Icon, text, num, bars }) => (
     </div>
 );
 
-const DrawToolsList = ({ items, onClick }: any) => (
+const DrawToolsList: React.FC<TDrawToolsListProps> = ({ items, onClick }) => (
     <div className='sc-dtools__list'>
-        {items.map((Item: any) => (
+        {items.map(Item => (
             <div key={Item.id} className='sc-dtools__list__item' onClick={() => onClick(Item.id)}>
                 <Info Icon={Item.icon} text={Item.text} />
             </div>
@@ -51,7 +79,7 @@ const DrawToolsList = ({ items, onClick }: any) => (
     </div>
 );
 
-const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: any) => (
+const ActiveDrawToolsListItem: React.FC<TActiveDrawToolsListItemProps> = ({ item, onSetting, onDelete }) => (
     <div className='sc-dtools__list__item'>
         <Info Icon={item.icon} text={item.text} bars={item.bars} num={item.num} />
         <div className='actions'>
@@ -61,12 +89,12 @@ const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: any) => (
     </div>
 );
 
-const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: any) => (
+const ActiveDrawToolsListGroup: React.FC<TActiveDrawToolsListGroupProps> = ({ group, onSetting, onDelete }) => (
     <div className='sc-dtools__category'>
         <div className='sc-dtools__category__head'>{t.translate(group.name, { num: ' ' })}</div>
         <div className='sc-dtools__category__body'>
             <div className='sc-dtools__list'>
-                {group.items.map((item: any) => (
+                {group.items.map(item => (
                     <ActiveDrawToolsListItem
                         key={`${item.index}`}
                         item={item}
@@ -78,12 +106,6 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: any) => (
         </div>
     </div>
 );
-
-type TActiveDrawToolsListProps = {
-    activeDrawToolsGroup: TMainStore['drawTools']['activeToolsGroup'];
-    onSetting: TMainStore['drawTools']['onSetting'];
-    onDelete: TMainStore['drawTools']['onDeleted'];
-};
 
 const ActiveDrawToolsList: React.FC<TActiveDrawToolsListProps> = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
     <Scroll autoHide height={320}>
@@ -101,10 +123,6 @@ const ActiveDrawToolsList: React.FC<TActiveDrawToolsListProps> = ({ activeDrawTo
         )}
     </Scroll>
 );
-
-type DrawToolsProps = {
-    portalNodeId?: string;
-};
 
 const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {
     const { drawTools } = useStores();

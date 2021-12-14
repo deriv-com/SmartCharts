@@ -15,18 +15,19 @@ import Context from './Context';
  * @constructor
  */
 
-type TParams = { cb: (key: string | number, hub: KeystrokeHub) => boolean };
+type TParams = { cb: (key: string, hub: KeystrokeHub) => boolean };
 class KeystrokeHub extends Helper {
     static instance: KeystrokeHub | null = null;
     capsLock = false;
     keystroke: Keystroke;
     params: TParams;
-    constructor(node: HTMLElement, context: Context, params: TParams) {
+    constructor(node: HTMLElement, context: Context | null, params: TParams) {
         super(node, context);
         this.node = node;
         this.context = context;
         this.params = params || {};
         KeystrokeHub.instance = this;
+        // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
         function handler() {
             return (...args: [TKeystrokeProps]) => {
@@ -43,7 +44,7 @@ class KeystrokeHub extends Helper {
      * @return {boolean}     Return true if you captured the key
      */
     static defaultHotKeys(key: string, hub: KeystrokeHub) {
-        const stx = hub.context.stx;
+        const stx = hub.context?.stx;
         let push = 1;
         switch (key) {
             case 'up':
@@ -115,7 +116,7 @@ class KeystrokeHub extends Helper {
      * @param {CIQ.UI.Context} context The context
      * @memberof CIQ.UI.KeystrokeHub
      */
-    setActiveContext(context: Context) {
+    setActiveContext(context: Context | null) {
         this.context = context;
     }
 
@@ -163,7 +164,7 @@ class KeystrokeHub extends Helper {
             return;
         } // target is not the chart
         if (this.params.cb) {
-            if (this.params.cb(key, this)) {
+            if (this.params.cb(key as string, this)) {
                 e.preventDefault();
             }
         }

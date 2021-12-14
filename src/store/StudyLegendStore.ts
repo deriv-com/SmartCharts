@@ -107,7 +107,7 @@ export default class StudyLegendStore {
     @observable
     infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
     @observable
-    portalNodeIdChanged = '';
+    portalNodeIdChanged? = '';
     onContextReady = () => {
         this.stx.addEventListener('studyOverlayEdit', this.editStudy);
         this.stx.addEventListener('studyPanelEdit', this.editStudy);
@@ -514,7 +514,7 @@ export default class StudyLegendStore {
             : study;
     }
     @action.bound
-    updatePortalNode(portalNodeId: string) {
+    updatePortalNode(portalNodeId?: string) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }

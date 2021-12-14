@@ -16,11 +16,11 @@ export function isValidProp(p: number) {
     return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
 }
 
-export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval?: string | number }) => {
+export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
     }
-    if (timeUnit === 'minute' && (interval as any) % 60 === 0) {
+    if (timeUnit === 'minute' && typeof interval === 'number' && interval % 60 === 0) {
         return 'hour';
     }
     if (timeUnit === 'second') {
@@ -94,7 +94,7 @@ export function sameBar(bar1: any, bar2: any) {
     );
 }
 
-export function downloadFileInBrowser(filename: string, content: any, type: string, newTab: any) {
+export function downloadFileInBrowser(filename: string, content: string, type: string, newTab: Window) {
     const blob = new Blob([content], { type });
     if (navigator.msSaveBlob) {
         // IE 10+
@@ -310,10 +310,10 @@ export const prepareIndicatorName = (name: string) => {
     };
 };
 
-export const renderSVGString = (icon: any) => {
-    const vb = icon.viewBox.split(' ').slice(2);
+export const renderSVGString = (icon: React.SVGAttributes<SVGAElement>) => {
+    const vb = icon.viewBox?.split(' ').slice(2) || [];
     return `<svg id="${icon.id}" width="${vb[0]}" height="${vb[1]}"><use xlink:href="${
-        __webpack_public_path__ + icon.url
+        __webpack_public_path__ + (icon as any).url
     }" /></svg>`;
 };
 export const wrapText = (str: string, letter_count: number) => {

@@ -44,7 +44,7 @@ export default class ChartSettingStore {
     get stx(): Context['stx'] {
         return this.context?.stx;
     }
-    languages: Array<TLanguage | string> = [];
+    languages: (TLanguage | string)[] = [];
     defaultLanguage = {} as TLanguage | string;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void = undefined;
     @observable
@@ -77,8 +77,7 @@ export default class ChartSettingStore {
         } = settings;
         if (
             !(
-                (!activeLanguages &&
-                    Languages.every((x: TLanguage) => this.languages.find(y => (y as TLanguage).key === x.key))) ||
+                (!activeLanguages && Languages.every(x => this.languages.find(y => (y as TLanguage).key === x.key))) ||
                 (activeLanguages &&
                     this.languages.length === activeLanguages.length &&
                     this.languages.every(x => activeLanguages.indexOf((x as TLanguage).key.toUpperCase()) !== -1))
@@ -125,7 +124,7 @@ export default class ChartSettingStore {
     updateActiveLanguage(activeLanguages: Array<string>) {
         if (activeLanguages) {
             this.languages = activeLanguages
-                .map((lngKey: string) => Languages.find((lng: TLanguage) => lng.key.toUpperCase() === lngKey) || '')
+                .map(lngKey => Languages.find(lng => lng.key.toUpperCase() === lngKey) || '')
                 .filter(x => x);
         } else this.languages = Languages;
         // set default language as the first item of active languages or Eng

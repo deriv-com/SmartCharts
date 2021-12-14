@@ -2,7 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
-import { ChartType } from 'src/types';
+import { ChartType, TIconProps } from 'src/types';
 import { TListItem } from 'src/store/ListStore';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
@@ -10,7 +10,7 @@ import List from './List';
 import Menu from './Menu';
 
 type TTypeIcon = {
-    Icon: React.FC;
+    Icon: React.FC<TIconProps>;
     className: string;
 };
 
@@ -19,7 +19,7 @@ const TypeIcon: React.FC<TTypeIcon> = ({ Icon, ...props }) => <Icon {...props} /
 type TChartTypesProps = {
     enabled?: boolean;
     newDesign?: boolean;
-    onChange?: any;
+    onChange?: (chartType?: string) => void;
 };
 
 const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: onChangeFn }) => {

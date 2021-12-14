@@ -10,7 +10,7 @@ import ShadeStore from './ShadeStore';
 export type TUpdatePropsParams = BarrierStore & {
     color?: string;
     draggable: boolean;
-    hideBarrierLine?: boolean;
+    hideBarrierLine: boolean;
     hideOffscreenLine?: boolean;
     hidePriceLines: boolean;
     high: number;
@@ -67,7 +67,7 @@ export default class BarrierStore {
     @observable hidePriceLines = false;
     @observable lineStyle?: string;
     @observable isInitialized = false;
-    @observable initializePromise = PendingPromise();
+    @observable initializePromise = PendingPromise<void, void>();
     @observable hideBarrierLine = false;
     @observable hideOffscreenLine = false;
     @observable hideOffscreenBarrier = false;
@@ -128,7 +128,7 @@ export default class BarrierStore {
         const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote()?.Close;
         const distance = this.chart.yAxis.priceTick;
         this._high_barrier.price = price + distance;
-        this._low_barrier.price = price as number - distance;
+        this._low_barrier.price = (price as number) - distance;
         this._high_barrier._calculateTop();
         this._low_barrier._calculateTop();
         this._drawShadedArea();

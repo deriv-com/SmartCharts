@@ -112,7 +112,7 @@ export default class ChartTypeStore {
     }
     @observable
     type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
-    onChartTypeChanged?: (chartType?: string) => typeof action;
+    onChartTypeChanged?: (chartType?: string) => void;
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
@@ -142,7 +142,7 @@ export default class ChartTypeStore {
         );
     };
     @action.bound
-    setTypeFromUI(type: ChartType | string) {
+    setTypeFromUI(type?: string) {
         if (this.chartTypeProp !== undefined) {
             console.error(
                 'Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />'
@@ -152,7 +152,7 @@ export default class ChartTypeStore {
         this.setType(type);
     }
     @action.bound
-    setType(type: ChartType | string) {
+    setType(type?: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (!type) {
             type = 'mountain';
@@ -183,7 +183,7 @@ export default class ChartTypeStore {
         this.type = type;
     }
     @action.bound
-    updateProps(onChange: () => typeof action) {
+    updateProps(onChange: (chartType?: string) => void) {
         this.onChartTypeChanged = onChange;
     }
 

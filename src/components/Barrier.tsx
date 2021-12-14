@@ -20,14 +20,11 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
         shadeColor = '#39b19d',
         color = '#39b19d',
         foregroundColor = '#ffffff',
-        hideBarrierLine,
         hideOffscreenBarrier,
-        hideOffscreenLine,
         hidePriceLines,
         lineStyle,
         isInitialized,
         priceLabelWidth,
-        title,
         isSingleBarrier,
         opacityOnOverlap,
     } = store;
@@ -45,10 +42,7 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
                 lineStyle={lineStyle}
                 color={color}
                 foregroundColor={foregroundColor}
-                hideBarrierLine={hideBarrierLine}
                 hideOffscreenBarrier={hideOffscreenBarrier}
-                hideOffscreenLine={hideOffscreenLine}
-                title={title}
                 opacityOnOverlap={opacityOnOverlap}
                 {...props}
             />
@@ -60,10 +54,7 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
                         lineStyle={lineStyle}
                         color={color}
                         foregroundColor={foregroundColor}
-                        hideBarrierLine={hideBarrierLine}
                         hideOffscreenBarrier={hideOffscreenBarrier}
-                        hideOffscreenLine={hideOffscreenLine}
-                        title={title}
                         opacityOnOverlap={opacityOnOverlap}
                         {...props}
                     />

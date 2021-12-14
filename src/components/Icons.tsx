@@ -1,4 +1,5 @@
 import React from 'react';
+import { TIconProps } from 'src/types';
 import '../../sass/components/_icons.scss';
 
 // Chart types:
@@ -241,7 +242,7 @@ import DrawToolsTrend from '../../sass/icons/draw-tools/ic-trend.svg';
 import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
 
 export const Wrapper = (SvgLogo: React.SVGAttributes<SVGElement>) => {
-    const InnerWrapper: React.FC<{ className?: string; ['tooltip-title']?: React.ReactElement | string }> = props => {
+    const InnerWrapper: React.FC<TIconProps> = props => {
         let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
         className = `ic-icon ${className || ''}`;
         const vb = SvgLogo.viewBox?.split(' ').slice(2) || [];

@@ -33,7 +33,7 @@ export default class PriceLineStore {
     // @observable uncentered = false;
     @observable title?: string;
     @observable isOverlapping = false;
-    @observable offScreenDirection: string | null = null;
+    @observable offScreenDirection: keyof typeof DIRECTIONS | null = null;
 
     set zIndex(value: string | number | null) {
         if (this._line && value) {
@@ -136,14 +136,14 @@ export default class PriceLineStore {
     }
 
     get realPrice(): number {
-        return this.relative ? this.mainStore.chart.currentCloseQuote()?.Close as number + this._price : this._price;
+        return this.relative ? (this.mainStore.chart.currentCloseQuote()?.Close as number) + this._price : this._price;
     }
 
     get yAxiswidth() {
         return this.mainStore.chart.yAxiswidth;
     }
 
-    @action.bound setDragLine(el: HTMLElement) {
+    @action.bound setDragLine(el: HTMLDivElement) {
         this._line = el;
         if (this._line) {
             this._draw();
@@ -218,13 +218,13 @@ export default class PriceLineStore {
         if (top < 0) {
             // this.uncentered = true;
             if (top < -LINE_OFFSET_HEIGHT_HALF) {
-                this.offScreenDirection = DIRECTIONS.UP;
+                this.offScreenDirection = DIRECTIONS.UP as 'UP';
             }
             top = 0;
         } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
             // this.uncentered = true;
             if (top + LINE_OFFSET_HEIGHT - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
-                this.offScreenDirection = DIRECTIONS.DOWN;
+                this.offScreenDirection = DIRECTIONS.DOWN as 'DOWN';
             }
             top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
         } else {

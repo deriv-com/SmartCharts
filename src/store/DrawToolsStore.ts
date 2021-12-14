@@ -1,6 +1,6 @@
 import { action, computed, observable, reaction, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TSettingsItem } from 'src/types';
+import { TIconProps, TObject, TSettingsItem } from 'src/types';
 import MainStore from '.';
 import { drawTools } from '../Constant';
 import { formatCamelCase } from '../utils';
@@ -40,7 +40,7 @@ type TDrawingObject = {
     field?: string | null;
     fillColor?: string;
     highlighted: boolean;
-    icon?: (props: unknown) => JSX.Element;
+    icon?: React.FC<TIconProps>;
     id?: string;
     index?: number;
     lineWidth: number;
@@ -231,7 +231,8 @@ export default class DrawToolsStore {
     @action.bound
     onChanged(items: TSettingsItem[]) {
         for (const item of items) {
-            (this.activeDrawing as TDrawingObject & { [key: string]: string })[item.id] = item.value;
+            (this.activeDrawing as TDrawingObject & { [key: string]: string | boolean | number | TObject })[item.id] =
+                item.value;
         }
         (this.activeDrawing as TDrawingObject).highlighted = false;
         (this.activeDrawing as TDrawingObject).adjust();
@@ -251,11 +252,11 @@ export default class DrawToolsStore {
         this.computeActiveDrawTools();
     }
     @action.bound
-    onSetting(indx: number) {
-        if (!this.stx.drawingObjects[indx]) {
+    onSetting(indx?: number) {
+        if (!this.stx.drawingObjects[indx as number]) {
             return;
         }
-        this.showDrawToolDialog(this.stx.drawingObjects[indx]);
+        this.showDrawToolDialog(this.stx.drawingObjects[indx as number]);
     }
 
     @action.bound

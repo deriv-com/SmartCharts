@@ -4,7 +4,7 @@ import React, { ChangeEvent, PropsWithChildren } from 'react';
 import debounce from 'lodash.debounce';
 
 import classNames from 'classnames';
-import { ArrayElement, TObject } from 'src/types';
+import { ArrayElement, TIconProps, TObject } from 'src/types';
 import Scroll from './Scroll';
 import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon, CheckboxIcon, CheckboxActiveIcon } from './Icons';
 import '../../sass/components/_form.scss';
@@ -87,8 +87,8 @@ type TSwitchIconProps = {
     label: string;
     value: boolean;
     onChange: (checked: boolean) => void;
-    noramIcon: React.FC<{ className: string }>;
-    activeIcon: React.FC<{ className: string }>;
+    noramIcon: React.FC<TIconProps>;
+    activeIcon: React.FC<TIconProps>;
 };
 
 type TPatterProps = {
