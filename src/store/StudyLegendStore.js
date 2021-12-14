@@ -339,8 +339,9 @@ export default class StudyLegendStore {
 
     handleDrawPanels = () => {
         if (this.stx) {
-            const panelsLen = Object.keys(this.stx.panels).length;
-            Object.keys(this.stx.panels).forEach((id, index) => {
+            const panels = Object.keys(this.stx.panels);
+            const panelsLen = panels.length;
+            panels.forEach((id, index) => {
                 if (index === 0) {
                     return;
                 }
