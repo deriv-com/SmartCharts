@@ -1,7 +1,17 @@
 /* eslint-disable no-restricted-globals,no-restricted-properties */
 
-export default function plotSpline(points: any, tension: any, context: any, colorPatternChanges: any) {
-    function getControlPoints(i: any) {
+export default function plotSpline(
+    points: number[],
+    tension: number,
+    context: CanvasRenderingContext2D,
+    colorPatternChanges: {
+        width: number;
+        pattern: number[];
+        color: string;
+        coord: number[];
+    }[]
+) {
+    function getControlPoints(i: number) {
         const x0 = points[i];
         const y0 = points[i + 1];
         const x1 = points[i + 2];
@@ -10,7 +20,7 @@ export default function plotSpline(points: any, tension: any, context: any, colo
         const y2 = points[i + 5];
 
         if (isNaN(x0) || isNaN(x1) || isNaN(x2) || isNaN(y0) || isNaN(y1) || isNaN(y2)) {
-            return null;
+            return [];
         }
         // x0,y0,x1,y1 are the coordinates of the end (knot) points of this segment
         // x2,y2 is the next knot -- not connected here but needed to calculate p2
@@ -38,7 +48,7 @@ export default function plotSpline(points: any, tension: any, context: any, colo
     if (!tension || tension < 0) {
         tension = 0;
     }
-    let cp: any = []; // array of control points, as x0,y0,x1,y1,...
+    let cp: number[] = []; // array of control points, as x0,y0,x1,y1,...
     const n = points.length;
     // Draw an open curve, not connected at the ends
     for (let i = 0; i < n - 4; i += 2) {
@@ -52,7 +62,7 @@ export default function plotSpline(points: any, tension: any, context: any, colo
     }
     let colorPatternIndex = 0;
 
-    function seeIfStrokeNeeded(i: any) {
+    function seeIfStrokeNeeded(i: number) {
         if (colorPatternIndex === colorPatternChanges.length) {
             return;
         }

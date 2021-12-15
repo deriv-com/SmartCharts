@@ -116,10 +116,11 @@ export default class ActiveSymbols {
     }
 
     @computed get activeSymbols() {
-        const categorized = cloneCategories(this.categorizedSymbols, item => {
-            const { symbol } = item.dataObject;
+        const categorized = cloneCategories<TSubCategoryDataItem>(this.categorizedSymbols, item => {
+            const itemObject = item as TSubCategoryDataItem;
+            const { symbol } = itemObject.dataObject;
             if (symbol in this.changes) {
-                item.dataObject.exchange_is_open = this.changes[symbol];
+                itemObject.dataObject.exchange_is_open = this.changes[symbol];
             }
             return { ...item };
         });

@@ -3,7 +3,19 @@ export const plotterDrawText = () => {
     // as there isn't any option to make y-axis text align center, and also there
     // isn't any injection for drawText, we have to do a monkey patching for handling
     // this issue
-    CIQ.Plotter.prototype.drawText = function (context: CanvasRenderingContext2D, series: any) {
+    CIQ.Plotter.prototype.drawText = function (
+        context: CanvasRenderingContext2D,
+        series: {
+            text: {
+                width: number;
+                height: number;
+                text: string;
+                bg: string;
+                x: number;
+                y: number;
+            }[];
+        }
+    ) {
         for (let i = 0; i < series.text.length; i++) {
             const textObj = series.text[i];
             const w = textObj.width ? textObj.width : context.measureText(textObj.text).width;

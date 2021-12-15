@@ -1,6 +1,9 @@
 // @ts-nocheck
 /* TAKEN OUT OF ADDONS.JS */
 /* eslint-disable no-unused-vars,eqeqeq,no-shadow,no-alert,no-restricted-globals,prefer-const,prefer-destructuring */
+
+import Context from './Context';
+
 /**
  * Add-On that animates the chart.
  *
@@ -43,7 +46,7 @@
  *    new CIQ.Animation(stxx, {tension:0.3});  //Default animation with splining tension of 0.3
  *
  */
-export default function animateChart(stx: any, animationParameters: any) {
+export default function animateChart(stx: Context['stx'], animationParameters: any) {
     let params = {
         stayPut: false,
         ticksFromEdgeOfScreen: 5,
