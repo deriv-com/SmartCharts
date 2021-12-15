@@ -1,12 +1,11 @@
 declare var t: {
-    translate(x?: string, options?: any): string;
+    translate(x?: string, params?: { [key: string]: string | number | boolean }): string;
     setLanguage(x: string): void;
 };
 
 declare var CIQ: any;
-declare var __webpack_public_path__: any;
+declare var __webpack_public_path__: string;
 
-declare module '@binary-com/smartcharts';
 declare module '*.scss';
 declare module '*.svg' {
     const content: React.SVGAttributes<SVGElement>;
@@ -16,4 +15,8 @@ declare module '*.svg' {
 interface Navigator {
     msSaveBlob: (blob: Blob, name: string) => void;
     onLine: boolean;
+}
+
+interface Document {
+    documentMode?: any;
 }
