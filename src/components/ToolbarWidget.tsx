@@ -6,7 +6,7 @@ import { useStores } from 'src/store';
 import '../../sass/components/_toolbar-widget.scss';
 
 type TToolbarWidgetProps = {
-    position: string;
+    position?: string;
 };
 
 const ToolbarWidget: React.FC<TToolbarWidgetProps> = ({ position = 'top', children }) => {

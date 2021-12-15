@@ -1,6 +1,6 @@
 import { IPendingPromise } from 'src/types';
 
-export default function PendingPromise<T, E>() {
+export default function PendingPromise<T, E>(data: any = null) {
     let resolve: (res: T | PromiseLike<T>) => void;
     let reject: (error: E | PromiseLike<E>) => void;
 
@@ -17,5 +17,6 @@ export default function PendingPromise<T, E>() {
         promise.isPending = false;
         reject(error);
     };
+    promise.data = data;
     return promise;
 }

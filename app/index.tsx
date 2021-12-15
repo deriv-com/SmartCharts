@@ -21,6 +21,7 @@ import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { TNotification } from 'src/store/Notifier';
+import { TGranularity, TNetworkConfig, TRefData } from 'src/types';
 import 'url-search-params-polyfill';
 import './app.scss';
 import ChartHistory from './ChartHistory';
@@ -28,6 +29,8 @@ import ChartNotifier from './ChartNotifier';
 import { ConnectionManager, StreamManager } from './connection';
 import NetworkMonitor from './connection/NetworkMonitor';
 import Notification from './Notification';
+
+type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
@@ -119,7 +122,9 @@ const App = () => {
     const [settings, setSettings] = React.useState(initialSettings);
     settingsRef.current = settings;
     const memoizedValues = React.useMemo(() => {
-        let endEpoch, granularity, chartType;
+        let endEpoch: number | undefined,
+            granularity: number | undefined,
+            chartType = '';
         if (settingsRef.current.historical) {
             endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
             chartType = 'mountain';
@@ -145,12 +150,12 @@ const App = () => {
             endEpoch,
         };
     }, [layout]);
-    const [chartType, setChartType] = React.useState(memoizedValues.chartType);
+    const [chartType, setChartType] = React.useState<string | undefined>(memoizedValues.chartType);
     const [granularity, setGranularity] = React.useState(memoizedValues.granularity);
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
     const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
-    const [networkStatus, setNetworkStatus] = React.useState();
-    const [symbol, setSymbol] = React.useState();
+    const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
+    const [symbol, setSymbol] = React.useState<string>('');
     React.useEffect(() => {
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => setIsConnectionOpened(false));
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => setIsConnectionOpened(true));
@@ -163,7 +168,7 @@ const App = () => {
             || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
     }
     */
-    const handleNetworkStatus = (status: any) => setNetworkStatus(status);
+    const handleNetworkStatus = (status: TNetworkConfig) => setNetworkStatus(status);
     const saveSettings = React.useCallback(newSettings => {
         const prevSetting = settingsRef.current;
         console.log('settings updated:', newSettings);
@@ -185,13 +190,13 @@ const App = () => {
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     }, []);
-    const handleDateChange = (value: any) => {
+    const handleDateChange = (value: string) => {
         setEndEpoch(value !== '' ? new Date(`${value}:00Z`).valueOf() / 1000 : undefined);
     };
-    const handleStateChange = (tag: any, option: any) =>
+    const handleStateChange = (tag: string, option: TStateChangeOption) =>
         console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`);
     const renderTopWidgets = React.useCallback(() => {
-        const symbolChange = (new_symbol: any) => {
+        const symbolChange = (new_symbol: string) => {
             logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, new_symbol);
             notifier.removeByCategory('activesymbol');
             setSymbol(new_symbol);
@@ -206,8 +211,8 @@ const App = () => {
     }, [notifier]);
     const renderControls = React.useCallback(() => <ChartSetting />, []);
     const renderToolbarWidget = React.useCallback(() => {
-        const changeGranularity = (timePeriod: any) => setGranularity(timePeriod);
-        const changeChartType = (_chartType: any) => setChartType(_chartType);
+        const changeGranularity = (timePeriod: TGranularity) => setGranularity(timePeriod);
+        const changeChartType = (_chartType?: string) => setChartType(_chartType);
         return (
             <ToolbarWidget>
                 <ChartMode onChartType={changeChartType} onGranularity={changeGranularity} />
@@ -221,8 +226,8 @@ const App = () => {
     const onMessage = (e: TNotification) => {
         notifier.notify(e);
     };
-    const getIsChartReady = (isChartReady: any) => isChartReady;
-    const onMarkerRef = (ref: any) => {
+    const getIsChartReady = (isChartReady: boolean) => isChartReady;
+    const onMarkerRef = (ref: TRefData) => {
         if (ref) {
             ref.setPosition({
                 epoch: endEpoch,
@@ -232,7 +237,7 @@ const App = () => {
     return (
         <SmartChart
             id={chartId}
-            chartStatusListener={(isChartReady: any) => getIsChartReady(isChartReady)}
+            chartStatusListener={(isChartReady: boolean) => getIsChartReady(isChartReady)}
             stateChangeListener={handleStateChange}
             isMobile={isMobile}
             symbol={symbol}

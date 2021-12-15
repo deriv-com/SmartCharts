@@ -33,11 +33,15 @@ export type TBinaryAPIResponse = {
     [k: string]: unknown;
 };
 
-export type TRequestAPI = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse>;
+export type TRequestAPI = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse | void>;
 export type TResponseAPICallback = (response: TBinaryAPIResponse) => void;
 export type TRequestSubscribe = (request: TBinaryAPIRequest, callback: TResponseAPICallback) => void;
 export type TRequestForgetStream = (id: string) => void;
 export type TRequestForget = (request: TBinaryAPIRequest, callback: TResponseAPICallback) => void;
+export type TNetworkConfig = {
+    class: string;
+    tooltip: string;
+};
 
 export type Listener = (...args: any[]) => void;
 
@@ -119,6 +123,7 @@ export interface IPendingPromise<T, E> extends Promise<T> {
     resolve: (res: T | PromiseLike<T>) => void;
     reject: (error: E | PromiseLike<E>) => void;
     isPending: boolean;
+    data: any;
 }
 
 export type TChanges = {
@@ -159,4 +164,18 @@ export type TTradingTimesItem = {
     isOpenAllDay: boolean;
     isClosedAllDay: boolean;
     isOpened?: boolean;
+};
+
+export type TBarrierChangeParam = { high?: number; low?: number };
+
+export type TOpenMarket = {
+    category?: string;
+    subcategory?: string | null;
+    market?: string | null;
+};
+
+export type TRefData = {
+    setPosition: ({ epoch, price }: { [key: string]: number | null | undefined }) => void;
+    div: HTMLDivElement;
+    value?: Element | null;
 };

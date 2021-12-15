@@ -17,9 +17,10 @@ import {
 import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { configure } from 'mobx';
 import moment from 'moment';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { TNotification } from 'src/store/Notifier';
+import { TBarrierChangeParam, TGranularity, TNetworkConfig, TOpenMarket } from 'src/types';
 import 'url-search-params-polyfill';
 import './app.scss';
 import ChartHistory from './ChartHistory';
@@ -29,6 +30,14 @@ import NetworkMonitor from './connection/NetworkMonitor';
 import { masterData, MockActiveSymbol, MockTradingTime } from './initialData';
 import Notification from './Notification';
 import './test.scss';
+
+type TSettings = {
+    language: string;
+    activeLanguages?: string[] | null;
+    isHighestLowestMarkerEnabled?: boolean;
+    historical?: boolean;
+    theme?: string;
+};
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
@@ -75,9 +84,9 @@ function getServerUrl() {
     const local = localStorage.getItem('config.server_url');
     return `wss://${local || 'ws.binaryws.com'}/websockets/v3`;
 }
-const parseQueryString = (query: any) => {
+const parseQueryString = (query: string) => {
     const vars = query.split('&');
-    const query_string: any = {};
+    const query_string: { [x: string]: string | string[] } = {};
     for (let i = 0; i < vars.length; i++) {
         const pair = vars[i].split('=');
         const key = decodeURIComponent(pair[0]);
@@ -87,16 +96,22 @@ const parseQueryString = (query: any) => {
             query_string[key] = decodeURIComponent(value);
             // If second entry with this name
         } else if (typeof query_string[key] === 'string') {
-            const arr = [query_string[key], decodeURIComponent(value)];
+            const arr: string[] = [query_string[key] as string, decodeURIComponent(value)];
             query_string[key] = arr;
             // If third or later entry with this name
         } else {
-            query_string[key].push(decodeURIComponent(value));
+            (query_string[key] as string[]).push(decodeURIComponent(value));
         }
     }
     return query_string;
 };
-const generateURL = (new_params: any) => {
+const generateURL = (new_params: {
+    initialdata_tradingTimes?: boolean;
+    initialdata_activeSymbols?: boolean;
+    initialdata_masterData?: boolean;
+    feedcall_tradingTimes?: boolean;
+    feedcall_activeSymbols?: boolean;
+}) => {
     const { origin, pathname, search } = window.location;
     const cleanSearch = search.replace('?', '').trim();
     const params = {
@@ -104,7 +119,7 @@ const generateURL = (new_params: any) => {
         ...new_params,
     };
     window.location.href = `${origin}${pathname}?${Object.keys(params)
-        .map(key => `${key}=${params[key]}`)
+        .map(key => `${key}=${params[key as keyof typeof new_params]}`)
         .join('&')}`;
 };
 const chartId = '1';
@@ -131,13 +146,12 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const App = () => {
     const startingLanguageRef = React.useRef('en');
-    const settingsRef = React.useRef<any>();
-    const openMarketRef = React.useRef<any>({});
+    const openMarketRef = React.useRef<TOpenMarket>({});
     const [notifier] = React.useState(new ChartNotifier());
     const [layoutString] = React.useState(localStorage.getItem(`layout-${chartId}`) || '');
     const [layout] = React.useState(JSON.parse(layoutString !== '' ? layoutString : '{}'));
     const initialSettings = React.useMemo(() => {
-        let _settings = createObjectFromLocalStorage('smartchart-setting');
+        let _settings: TSettings = createObjectFromLocalStorage('smartchart-setting');
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
         if (_settings) {
             _settings.language = language;
@@ -151,8 +165,11 @@ const App = () => {
         }
         return _settings;
     }, []);
+
     const [settings, setSettings] = React.useState(initialSettings);
+    const settingsRef = React.useRef<TSettings>(settings);
     settingsRef.current = settings;
+
     const memoizedValues = React.useMemo(() => {
         let chartType;
         let isChartTypeCandle;
@@ -188,34 +205,41 @@ const App = () => {
         };
     }, [layout]);
 
-    const [closed_market, setClosedMarket] = React.useState<any>(null);
-    const [exclude_symbol, setExcludeSymbol] = React.useState<any>(null);
+    const [closed_market, setClosedMarket] = React.useState<string | null>(null);
+    const [exclude_symbol, setExcludeSymbol] = React.useState<string | null>(null);
     const [chartType, setChartType] = React.useState(memoizedValues.chartType);
-    const [granularity, setGranularity] = React.useState(memoizedValues.granularity);
+    const [granularity, setGranularity] = React.useState<TGranularity>(memoizedValues.granularity as TGranularity);
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
     const [isChartTypeCandle, setIsChartTypeCandle] = React.useState(memoizedValues.isChartTypeCandle);
     const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
-    const [networkStatus, setNetworkStatus] = React.useState();
-    const [symbol, setSymbol] = React.useState();
+    const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
+    const [symbol, setSymbol] = React.useState<string>();
     const [relative, setRelative] = React.useState(false);
     const [draggable, setDraggable] = React.useState(true);
-    const [highLow, setHighLow] = React.useState<any>({});
+    const [highLow, setHighLow] = React.useState<{ high?: number; low?: number }>({});
     const [barrierType, setBarrierType] = React.useState('');
     const [zoom, setZoom] = React.useState<number>();
-    const [maxTick, setMaxTick] = React.useState<any>();
-    const [openMarket, setOpenMarket] = React.useState({});
-    const [markers, setMarkers] = React.useState<any>([]);
-    const [crosshairState, setCrosshairState] = React.useState<any>(1);
-    const [leftOffset, setLeftOffset] = React.useState<any>();
-    const [scrollToEpoch, setScrollToEpoch] = React.useState<any>();
+    const [maxTick, setMaxTick] = React.useState<number | null>();
+    const [openMarket, setOpenMarket] = React.useState<TOpenMarket>({});
+    const [markers, setMarkers] = React.useState<
+        {
+            ts: number;
+            className: string;
+            xPositioner: string;
+            yPositioner: string;
+        }[]
+    >([]);
+    const [crosshairState, setCrosshairState] = React.useState<number | null>(1);
+    const [leftOffset, setLeftOffset] = React.useState<number>();
+    const [scrollToEpoch, setScrollToEpoch] = React.useState<number>();
     const [enableFooter, setEnableFooter] = React.useState(true);
     const [enableScroll, setEnableScroll] = React.useState(false);
     const [enableZoom, setEnableZoom] = React.useState(false);
     const [enableNavigationWidget, setEnableNavigationWidget] = React.useState(false);
-    const [foregroundColor, setForegroundColor] = React.useState();
+    const [foregroundColor, setForegroundColor] = React.useState<string>();
     const [hidePriceLines, setHidePriceLines] = React.useState(false);
-    const [shadeColor, setShadeColor] = React.useState();
-    const [color, setColor] = React.useState();
+    const [shadeColor, setShadeColor] = React.useState<string>();
+    const [color, setColor] = React.useState<string>();
     const [refreshActiveSymbols, setRefreshActiveSymbols] = React.useState(false);
     const [activeLanguage, setActiveLanguage] = React.useState(
         new URLSearchParams(window.location.search).get('activeLanguage') === 'true'
@@ -229,18 +253,20 @@ const App = () => {
         networkMonitor.init(requestAPI, handleNetworkStatus);
     }, []);
     const [urlParams] = React.useState(parseQueryString(window.location.search.replace('?', '')));
-    const [marketsOrder] = React.useState((urlParams as any).marketsOrder || 'null');
-    const getMarketsOrder = marketsOrder !== '' && marketsOrder !== 'null' ? () => marketsOrder.split(',') : undefined;
+
+    const [marketsOrder] = React.useState(urlParams.marketsOrder || 'null');
+    const getMarketsOrder =
+        marketsOrder !== '' && marketsOrder !== 'null' ? () => (marketsOrder as string).split(',') : undefined;
     const [feedCall] = React.useState({
-        ...((urlParams as any).feedcall_tradingTimes === 'false' ? { tradingTimes: false } : {}),
-        ...((urlParams as any).feedcall_activeSymbols === 'false' ? { activeSymbols: false } : {}),
+        ...(urlParams.feedcall_tradingTimes === 'false' ? { tradingTimes: false } : {}),
+        ...(urlParams.feedcall_activeSymbols === 'false' ? { activeSymbols: false } : {}),
     });
     const [initialData] = React.useState({
-        ...((urlParams as any).initialdata_masterData === 'true' ? { masterData: masterData() } : {}),
-        ...((urlParams as any).initialdata_tradingTimes === 'true' ? { tradingTimes: MockTradingTime } : {}),
-        ...((urlParams as any).initialdata_activeSymbols === 'true' ? { activeSymbols: MockActiveSymbol } : {}),
+        ...(urlParams.initialdata_masterData === 'true' ? { masterData: masterData() } : {}),
+        ...(urlParams.initialdata_tradingTimes === 'true' ? { tradingTimes: MockTradingTime } : {}),
+        ...(urlParams.initialdata_activeSymbols === 'true' ? { activeSymbols: MockActiveSymbol } : {}),
     });
-    const handleNetworkStatus = (status: any) => setNetworkStatus(status);
+    const handleNetworkStatus = (status: TNetworkConfig) => setNetworkStatus(status);
     const saveSettings = React.useCallback(newSettings => {
         const prevSetting = settingsRef.current;
         console.log('settings updated:', newSettings);
@@ -264,11 +290,11 @@ const App = () => {
             window.location.href = `${origin}${pathname}?${url.toString()}`;
         }
     }, []);
-    const handleDateChange = (value: any) => {
+    const handleDateChange = (value: string) => {
         setEndEpoch(value !== '' ? new Date(`${value}:00Z`).valueOf() / 1000 : undefined);
     };
     const renderTopWidgets = React.useCallback(() => {
-        const symbolChange = (newSymbol: any) => {
+        const symbolChange = (newSymbol: string) => {
             logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, newSymbol);
             notifier.removeByCategory('activesymbol');
             setSymbol(newSymbol);
@@ -290,11 +316,10 @@ const App = () => {
             <ToolbarWidget>
                 <ChartMode
                     portalNodeId='portal-node'
-                    onChartType={(_chartType: any, _isChartTypeCandle: any) => {
+                    onChartType={(_chartType?: string) => {
                         setChartType(_chartType);
-                        setIsChartTypeCandle(_isChartTypeCandle);
                     }}
-                    onGranularity={(timePeriod: any) => {
+                    onGranularity={(timePeriod: TGranularity) => {
                         setGranularity(timePeriod);
                         const isCandle = isChartTypeCandle;
                         if (isCandle && timePeriod === 0) {
@@ -315,24 +340,24 @@ const App = () => {
         [isChartTypeCandle]
     );
     const onMessage = (e: TNotification) => notifier.notify(e);
-    const onPriceLineDisableChange = (evt: any) => setHidePriceLines(evt.target.checked);
-    const onShadeColorChange = (evt: any) => setShadeColor(evt.target.value);
-    const onColorChange = (evt: any) => setColor(evt.target.value);
-    const onFGColorChange = (evt: any) => setForegroundColor(evt.target.value);
-    const onHighLowChange = (evt: any) => {
+    const onPriceLineDisableChange = (evt: ChangeEvent<HTMLInputElement>) => setHidePriceLines(evt.target.checked);
+    const onShadeColorChange = (evt: ChangeEvent<HTMLSelectElement>) => setShadeColor(evt.target.value);
+    const onColorChange = (evt: ChangeEvent<HTMLSelectElement>) => setColor(evt.target.value);
+    const onFGColorChange = (evt: ChangeEvent<HTMLSelectElement>) => setForegroundColor(evt.target.value);
+    const onHighLowChange = (evt: ChangeEvent<HTMLInputElement>) => {
         setHighLow({ ...highLow, [evt.target.id]: +evt.target.value });
     };
-    const onRelativeChange = (evt: any) => setRelative(evt.target.checked);
-    const onDraggableChange = (evt: any) => setDraggable(evt.target.checked);
-    const handleBarrierChange = (evt: any) => setHighLow(evt);
-    const onBarrierTypeChange = (evt: any) => {
+    const onRelativeChange = (evt: ChangeEvent<HTMLInputElement>) => setRelative(evt.target.checked);
+    const onDraggableChange = (evt: ChangeEvent<HTMLInputElement>) => setDraggable(evt.target.checked);
+    const handleBarrierChange = (param: TBarrierChangeParam) => setHighLow(param);
+    const onBarrierTypeChange = (evt: ChangeEvent<HTMLSelectElement>) => {
         const { value: _barrierType } = evt.target;
         if (_barrierType === '') {
             setHighLow({});
         }
         setBarrierType(_barrierType);
     };
-    const onAddMarker = (evt: any) => {
+    const onAddMarker = (evt: ChangeEvent<HTMLSelectElement>) => {
         let _markers = [];
         switch (evt.target.value) {
             case 'LINE':
@@ -377,7 +402,7 @@ const App = () => {
             setScrollToEpoch(moment.utc().unix());
         }
     };
-    const onLeftOffset = (evt: any) => {
+    const onLeftOffset = (evt: ChangeEvent<HTMLInputElement>) => {
         setLeftOffset(+evt.target.value);
     };
     const onActiveLanguage = () => {
@@ -387,21 +412,21 @@ const App = () => {
             activeLanguages: activeLanguage ? activeLanguagesList : null,
         });
     };
-    const onLanguage = (evt: any) => {
+    const onLanguage = (evt: ChangeEvent<HTMLSelectElement>) => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         window.location.href = `${baseUrl}?l=${evt.target.value}&activeLanguage=${
             settings.activeLanguages ? 'true' : 'false'
         }`;
     };
-    const onCrosshair = (evt: any) => {
+    const onCrosshair = (evt: ChangeEvent<HTMLSelectElement>) => {
         const value = evt.target.value;
         setCrosshairState(value === 'null' ? null : parseInt(value, 10));
     };
-    const onActiveSymbol = (evt: any) => {
+    const onActiveSymbol = (evt: ChangeEvent<HTMLSelectElement>) => {
         const baseUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}`;
         window.location.href = `${baseUrl}?marketsOrder=${evt.target.value}`;
     };
-    const onOpenMarket = (evt: any) => {
+    const onOpenMarket = (evt: ChangeEvent<HTMLSelectElement>) => {
         const marketArray = evt.target.value.split(',');
         if (marketArray.length === 0) {
             return;
@@ -421,35 +446,43 @@ const App = () => {
         setRefreshActiveSymbols(true);
         setTimeout(() => setRefreshActiveSymbols(false));
     };
-    const onChartSize = (state: any) => {
+    const onChartSize = (state: number) => {
         setZoom(state);
         setTimeout(() => {
             setZoom(0);
         }, 300);
     };
-    const onMaxTick = (evt: any) => {
+    const onMaxTick = (evt: ChangeEvent<HTMLSelectElement>) => {
         const value = evt.target.value;
         setMaxTick(value === 'null' ? null : parseInt(value, 10));
     };
     /**
      * Initial Data
      */
-    const onInitalDataTradingTime = (evt: any) => generateURL({ initialdata_tradingTimes: evt.currentTarget.checked });
-    const onInitalDataActiveSymbols = (evt: any) =>
+    const onInitalDataTradingTime = (evt: ChangeEvent<HTMLInputElement>) =>
+        generateURL({ initialdata_tradingTimes: evt.currentTarget.checked });
+    const onInitalDataActiveSymbols = (evt: ChangeEvent<HTMLInputElement>) =>
         generateURL({ initialdata_activeSymbols: evt.currentTarget.checked });
-    const onInitalDataMasterData = (evt: any) => generateURL({ initialdata_masterData: evt.currentTarget.checked });
-    const onFeedCallTradingTime = (evt: any) => generateURL({ feedcall_tradingTimes: evt.currentTarget.checked });
-    const onFeedCallActiveSymbols = (evt: any) => generateURL({ feedcall_activeSymbols: evt.currentTarget.checked });
+    const onInitalDataMasterData = (evt: ChangeEvent<HTMLInputElement>) =>
+        generateURL({ initialdata_masterData: evt.currentTarget.checked });
+    const onFeedCallTradingTime = (evt: ChangeEvent<HTMLInputElement>) =>
+        generateURL({ feedcall_tradingTimes: evt.currentTarget.checked });
+    const onFeedCallActiveSymbols = (evt: ChangeEvent<HTMLInputElement>) =>
+        generateURL({ feedcall_activeSymbols: evt.currentTarget.checked });
 
     const initial_data = React.useMemo(() => {
-        const data: any = {};
+        const data: {
+            masterData?: ReturnType<typeof masterData>;
+            tradingTimes?: typeof MockTradingTime.trading_times;
+            activeSymbols?: typeof MockActiveSymbol;
+        } = {};
 
         if (urlParams.initialdata_masterData === 'true') {
             data.masterData = masterData();
         }
 
         if (urlParams.initialdata_tradingTimes === 'true') {
-            data.tradingTimes = MockTradingTime;
+            data.tradingTimes = MockTradingTime.trading_times;
         }
 
         if (urlParams.initialdata_activeSymbols === 'true') {
@@ -459,14 +492,18 @@ const App = () => {
     }, [urlParams]);
 
     const chart_data = React.useMemo(() => {
-        const data: any = {};
+        const data: {
+            masterData?: ReturnType<typeof masterData>;
+            tradingTimes?: typeof MockTradingTime.trading_times;
+            activeSymbols?: typeof MockActiveSymbol;
+        } = {};
 
         if (urlParams.initialdata_masterData === 'true') {
             data.masterData = masterData();
         }
 
         if (urlParams.initialdata_tradingTimes === 'true') {
-            data.tradingTimes = MockTradingTime;
+            data.tradingTimes = MockTradingTime.trading_times;
         }
 
         if (urlParams.initialdata_activeSymbols === 'true') {
@@ -474,25 +511,27 @@ const App = () => {
         }
 
         if (exclude_symbol) {
-            const CLONED_MockActiveSymbol = JSON.parse(JSON.stringify(MockActiveSymbol));
+            const CLONED_MockActiveSymbol: typeof MockActiveSymbol = JSON.parse(JSON.stringify(MockActiveSymbol));
             const exclude_obj = exclude_symbol.split(',');
             if (exclude_obj && exclude_obj.length === 2) {
-                data.activeSymbols = CLONED_MockActiveSymbol.filter(
-                    (item: any) => !(item.market === exclude_obj[0] && item.submarket === exclude_obj[1])
+                data.activeSymbols = CLONED_MockActiveSymbol?.filter(
+                    item => !(item.market === exclude_obj[0] && item.submarket === exclude_obj[1])
                 );
             } else if (exclude_obj && exclude_obj.length === 1) {
-                data.activeSymbols = CLONED_MockActiveSymbol.filter((item: any) => !(item.market === exclude_obj[0]));
+                data.activeSymbols = CLONED_MockActiveSymbol?.filter(item => !(item.market === exclude_obj[0]));
             }
         }
 
         if (closed_market) {
-            const cloned_trading_mock_data = JSON.parse(JSON.stringify(MockTradingTime.trading_times));
+            const cloned_trading_mock_data: typeof MockTradingTime.trading_times = JSON.parse(
+                JSON.stringify(MockTradingTime.trading_times)
+            );
 
             if (closed_market === 'default') {
                 data.tradingTimes = cloned_trading_mock_data;
             } else {
                 data.tradingTimes = {
-                    markets: cloned_trading_mock_data.markets.map((_market: any) => {
+                    markets: cloned_trading_mock_data.markets.map(_market => {
                         if (_market.name === closed_market) {
                             _market.submarkets = [..._market.submarkets].map(_submarkets => {
                                 _submarkets.symbols = [..._submarkets.symbols].map(_symbol => {
@@ -580,13 +619,13 @@ const App = () => {
                     ) : (
                         ''
                     )}
-                    {markers.map((x: any) => (
+                    {markers.map(x => (
                         <Marker
-                            key={(x as any).ts}
-                            className={(x as any).className}
-                            x={(x as any).ts}
-                            xPositioner={(x as any).xPositioner}
-                            yPositioner={(x as any).yPositioner}
+                            key={x.ts}
+                            className={x.className}
+                            x={x.ts}
+                            xPositioner={x.xPositioner}
+                            yPositioner={x.yPositioner}
                         />
                     ))}
                 </SmartChart>

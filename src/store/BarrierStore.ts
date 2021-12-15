@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TCIQAddEventListener, TCIQAppend } from '../types';
+import { TBarrierChangeParam, TCIQAddEventListener, TCIQAppend } from '../types';
 import { isValidProp } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
@@ -17,7 +17,7 @@ export type TUpdatePropsParams = BarrierStore & {
     lineStyle?: string;
     low?: number;
     mainStore: MainStore;
-    onChange: () => typeof action;
+    onChange: (param: TBarrierChangeParam) => void;
     onChartBarrierChange: () => typeof action;
     relative: boolean;
     shade?: string;
@@ -259,9 +259,9 @@ export default class BarrierStore {
         return this.stx.chart;
     }
 
-    _onBarrierChange: ((arg: { high?: number; low?: number }) => void) | null = null;
+    _onBarrierChange: ((arg: TBarrierChangeParam) => void) | null = null;
 
-    set onBarrierChange(callback: () => typeof action) {
+    set onBarrierChange(callback: (param: TBarrierChangeParam) => void) {
         if (this._onBarrierChange !== callback) {
             this._onBarrierChange = callback;
         }

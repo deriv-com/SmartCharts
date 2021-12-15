@@ -1,18 +1,13 @@
 import { action, observable, when } from 'mobx';
 import React from 'react';
 import Context from 'src/components/ui/Context';
+import { TRefData } from 'src/types';
 import MainStore from '.';
 import ChartStore from './ChartStore';
 
 type TFeedOnPaginationParams = {
     start: number;
     end: number | 'latest';
-};
-
-export type TRefData = {
-    setPosition: ({ epoch, price }: { [key: string]: number | null }) => void;
-    div: HTMLDivElement;
-    value?: Element | null;
 };
 
 class PaginationLoaderStore {

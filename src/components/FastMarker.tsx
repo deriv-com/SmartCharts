@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/store';
-import { TRefData } from 'src/store/PaginationLoaderStore';
+import { TRefData } from 'src/types';
 import { getUTCDate } from '../utils';
 import Context from './ui/Context';
 
@@ -29,11 +29,14 @@ import Context from './ui/Context';
 //    the marker will only be shown if it's within that zoom threshold.
 
 type TFastMarkerProps = {
-    markerRef: (ref: TRefData | null) => void;
+    markerRef?: (ref: TRefData | null) => void;
     threshold?: number;
     className: string;
     offsetTop?: number;
     offsetLeft?: number;
+    x?: number;
+    xPositioner?: string;
+    yPositioner?: string;
 };
 
 const FastMarker: React.FC<TFastMarkerProps> = props => {

@@ -68,7 +68,7 @@ const App = () => (
     <div className='grid'>
         <div className='chart-instance'>
             <SmartChart
-                onSymbolChange={(symbol: any) => console.log('Symbol has changed to:', symbol)}
+                onSymbolChange={(symbol: string) => console.log('Symbol has changed to:', symbol)}
                 isMobile={isMobile}
                 requestAPI={requestAPI}
                 requestSubscribe={requestSubscribe}

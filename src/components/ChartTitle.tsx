@@ -3,16 +3,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import { useStores } from 'src/store';
+import { TOpenMarket } from 'src/types';
 import '../../sass/components/_chart-title.scss';
 import { CategoricalDisplay } from './categoricaldisplay';
 import Menu from './Menu';
 import { SymbolSelectButton } from './SymbolSelectButton';
-
-export type TOpenMarket = {
-    category: string;
-    subcategory: string;
-    market: string;
-};
 
 export type TChartTitleProps = {
     containerId?: string;

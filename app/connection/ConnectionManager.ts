@@ -1,15 +1,16 @@
 import EventEmitter from 'event-emitter-es6';
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+import { IPendingPromise, Listener, TBinaryAPIRequest, TBinaryAPIResponse } from 'src/types';
 import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
-    _bufferedRequests: any;
-    _connectionOpened: any;
-    _counterReqId: any;
-    _pendingRequests: any;
-    _pingTimer: any;
-    _url: any;
-    _websocket: any;
+    _bufferedRequests: IPendingPromise<void, Error>[];
+    _connectionOpened?: IPendingPromise<void, void>;
+    _counterReqId: number;
+    _pendingRequests: { [key: string]: undefined | IPendingPromise<void | TBinaryAPIResponse, Error> };
+    _pingTimer?: ReturnType<typeof setInterval>;
+    _url: string;
+    _websocket: RobustWebsocket;
     static get EVENT_CONNECTION_CLOSE() {
         return 'CONNECTION_CLOSE';
     }
@@ -17,7 +18,7 @@ class ConnectionManager extends EventEmitter {
         return 'CONNECTION_REOPEN';
     }
 
-    constructor({ appId, endpoint, language }: any) {
+    constructor({ appId, endpoint, language }: { appId: number | string; endpoint: string; language: string }) {
         super({ emitDelay: 0 });
         this._url = `${endpoint}?l=${language}&app_id=${appId}`;
         this._counterReqId = 1;
@@ -56,11 +57,11 @@ class ConnectionManager extends EventEmitter {
         this._websocket.addEventListener('message', this._onmessage.bind(this));
     }
 
-    onOpened(callback: any) {
+    onOpened(callback: Listener) {
         this.on(ConnectionManager.EVENT_CONNECTION_REOPEN, callback);
     }
 
-    onClosed(callback: any) {
+    onClosed(callback: Listener) {
         this.on(ConnectionManager.EVENT_CONNECTION_CLOSE, callback);
     }
 
@@ -97,26 +98,28 @@ class ConnectionManager extends EventEmitter {
         }
 
         Object.keys(this._pendingRequests).forEach(req_id => {
-            this._bufferedRequests.push(this._pendingRequests[req_id]);
+            if (this._pendingRequests[req_id] !== undefined) {
+                this._bufferedRequests.push(this._pendingRequests[req_id] as IPendingPromise<void, Error>);
+            }
         });
 
         this.emit(ConnectionManager.EVENT_CONNECTION_CLOSE);
     }
 
-    _onmessage(message: any) {
-        const data = JSON.parse(message.data);
+    _onmessage(message: { data: string }) {
+        const data: TBinaryAPIResponse = JSON.parse(message.data);
         const { req_id, msg_type } = data;
-        if (this._pendingRequests[req_id]) {
-            this._pendingRequests[req_id].resolve(data);
-            delete this._pendingRequests[req_id];
+        if (this._pendingRequests[req_id as number]) {
+            this._pendingRequests[req_id as number]?.resolve(data);
+            delete this._pendingRequests[req_id as number];
         }
         this.emit(msg_type, data);
     }
 
-    _timeoutRequest(req_id: any, timeout: any) {
+    _timeoutRequest(req_id: number, timeout: number) {
         setTimeout(() => {
-            if (this._pendingRequests[req_id] && this._pendingRequests[req_id].isPending) {
-                this._pendingRequests[req_id].reject(new Error('Request Timeout'));
+            if (this._pendingRequests[req_id] && this._pendingRequests[req_id]?.isPending) {
+                this._pendingRequests[req_id]?.reject(new Error('Request Timeout'));
                 delete this._pendingRequests[req_id];
             }
         }, timeout);
@@ -125,27 +128,27 @@ class ConnectionManager extends EventEmitter {
     _sendBufferedRequests() {
         while (this._bufferedRequests.length > 0) {
             const req = this._bufferedRequests.shift();
-            this.send(req.data);
+            this.send(req?.data);
         }
     }
 
-    async send(data: any, timeout?: any) {
+    async send(data: TBinaryAPIRequest, timeout?: number) {
         const req = { ...data };
         req.req_id = req.req_id || this._counterReqId++;
 
         if (this._websocket.readyState !== WebSocket.OPEN) {
             if (!this._connectionOpened) {
-                this._connectionOpened = new PendingPromise();
+                this._connectionOpened = PendingPromise();
             }
             await this._connectionOpened;
         }
 
         this._websocket.send(JSON.stringify(req));
-        if (!this._pendingRequests[data.req_id]) {
-            this._pendingRequests[req.req_id] = new PendingPromise(req);
+        if (!this._pendingRequests[data.req_id as number]) {
+            this._pendingRequests[req.req_id] = PendingPromise(req);
         }
         if (timeout) {
-            this._timeoutRequest(req.req_id, timeout);
+            this._timeoutRequest(req.req_id as number, timeout);
         }
         return this._pendingRequests[req.req_id];
     }

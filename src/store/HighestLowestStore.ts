@@ -1,10 +1,9 @@
 import { reaction, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TCIQAppend, TQuote } from 'src/types';
+import { TCIQAppend, TQuote, TRefData } from 'src/types';
 import MainStore from '.';
 import { getUTCEpoch } from '../utils';
 import ChartStore from './ChartStore';
-import { TRefData } from './PaginationLoaderStore';
 
 class HighestLowestStore {
     highestRef: TRefData | null = null;
@@ -58,15 +57,15 @@ class HighestLowestStore {
 
     setHighestRef = (ref: TRefData | null) => {
         this.highestRef = ref;
-        if (ref !== null) {
-            (this.highestRef as TRefData).value = ref.div.querySelector('.spot__value');
+        if (this.highestRef !== null && ref !== null) {
+            this.highestRef.value = ref.div.querySelector('.spot__value');
         }
     };
     setLowestRef = (ref: TRefData | null) => {
         this.lowestRef = ref;
 
-        if (ref !== null) {
-            (this.lowestRef as TRefData).value = ref.div.querySelector('.spot__value');
+        if (this.lowestRef != null && ref !== null) {
+            this.lowestRef.value = ref.div.querySelector('.spot__value');
         }
     };
 

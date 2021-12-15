@@ -1,20 +1,25 @@
 import { PendingPromise } from '@binary-com/smartcharts';
+import { PingResponse } from '@deriv/api-types';
+import { TNetworkConfig, TRequestAPI } from 'src/types';
 // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+
+type TOnStatusUpdated = (config: TNetworkConfig, is_online: boolean) => void;
+
 class NetworkMonitor {
-    static _instance: any;
-    _requestAPI: any;
-    getTimeInterval: any;
-    onStatusUpdated: any;
+    static _instance: NetworkMonitor;
+    _requestAPI?: TRequestAPI | null;
+    getTimeInterval?: ReturnType<typeof setInterval>;
+    onStatusUpdated?: TOnStatusUpdated;
     status_config = {
         online: { class: 'online', tooltip: t.translate('Online') },
         offline: { class: 'offline', tooltip: t.translate('Offline') },
         blinking: { class: 'blinker', tooltip: t.translate('Connecting to server') },
     };
-    last_status: any;
-    last_is_online: any;
+    last_status?: string;
+    last_is_online?: boolean;
     statusStarted = false;
-    statusStartedPromise = new PendingPromise();
-    setNetworkStatus = (status: any) => {
+    statusStartedPromise = PendingPromise<void, void>();
+    setNetworkStatus = (status: string) => {
         const is_online = this.isOnline();
         if (status !== this.last_status || is_online !== this.last_is_online) {
             this.last_status = status;
@@ -26,7 +31,7 @@ class NetworkMonitor {
         }
     };
     isOnline = () => navigator.onLine;
-    async init(requestAPI?: any, updatedCallback?: any) {
+    async init(requestAPI?: TRequestAPI | null, updatedCallback?: TOnStatusUpdated) {
         this._requestAPI = requestAPI;
         this.onStatusUpdated = updatedCallback;
         if ('onLine' in navigator) {
@@ -37,7 +42,7 @@ class NetworkMonitor {
             window.addEventListener('offline', () => this.setNetworkStatus('offline'));
         } else {
             // default to always online and fallback to WS checks
-            (navigator as any).onLine = true;
+            navigator.onLine = true;
         }
         this.setNetworkStatus(this.isOnline() ? 'blinking' : 'offline');
         return this.establishConnection();
@@ -45,7 +50,7 @@ class NetworkMonitor {
     async establishConnection() {
         if (!this.statusStarted && this.isOnline()) {
             this.statusStarted = true;
-            clearInterval(this.getTimeInterval);
+            clearInterval(this.getTimeInterval as NodeJS.Timeout);
             await this.requestPing();
             this.getTimeInterval = setInterval(this.requestPing.bind(this), 30000);
         } else {
@@ -53,10 +58,10 @@ class NetworkMonitor {
         }
     }
     async requestPing() {
-        await this._requestAPI({ ping: 1 }).then(this._statusResponse);
+        await this._requestAPI?.({ ping: 1 }).then(this._statusResponse);
         this.statusStartedPromise.resolve();
     }
-    _statusResponse = (response: any) => {
+    _statusResponse = (response: PingResponse) => {
         if (response.error) {
             this.statusStarted = false;
         }
