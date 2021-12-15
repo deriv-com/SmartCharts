@@ -16,7 +16,7 @@ type TPoint = {
 type TRawMarkerProps = {
     shouldRedraw: boolean;
     threshold: number;
-    draw_callback: (props: { canvas_height: number; points: TPoint[]; prices: number[]; ctx: any }) => void;
+    draw_callback: (props: { canvas_height: number; points: TPoint[]; prices: number[]; ctx: Context }) => void;
     price_array: number[];
     epoch_array: number[];
 };

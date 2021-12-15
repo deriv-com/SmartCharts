@@ -119,7 +119,6 @@ export interface IPendingPromise<T, E> extends Promise<T> {
     resolve: (res: T | PromiseLike<T>) => void;
     reject: (error: E | PromiseLike<E>) => void;
     isPending: boolean;
-    data: any;
 }
 
 export type TChanges = {

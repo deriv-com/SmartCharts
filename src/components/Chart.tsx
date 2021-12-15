@@ -23,7 +23,6 @@ import NavigationWidget from './NavigationWidget';
 import PaginationLoader from './PaginationLoader';
 import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
-import './ui';
 
 export type TChartProps = TChartParams &
     ChartState &
@@ -33,7 +32,7 @@ export type TChartProps = TChartParams &
         enabledChartFooter?: boolean;
         enabledNavigationWidget?: boolean;
         isMobile?: boolean;
-        chartControlsWidgets?: React.FC;
+        chartControlsWidgets?: React.FC<{ isMobile?: boolean }>;
         topWidgets?: React.FC;
         bottomWidgets?: React.FC;
         toolbarWidget: React.FC;

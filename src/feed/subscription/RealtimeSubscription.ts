@@ -44,9 +44,9 @@ class RealtimeSubscription extends Subscription {
         super.forget();
     }
 
-    _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse>, (resp: TicksStreamResponse) => void] {
+    _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse, void>, (resp: TicksStreamResponse) => void] {
         let hasHistory = false;
-        const tickHistoryPromise = PendingPromise<TicksStreamResponse>();
+        const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
             if (this._stx.isDestroyed) {
                 const subscriptionId = resp.subscription?.id as string;

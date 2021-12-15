@@ -12,7 +12,7 @@ import DrawTools from './DrawTools';
 import Share from './Share';
 import '../../sass/components/_chart-controls.scss';
 
-type TRenderDefaultControls = { isMobile: boolean };
+type TRenderDefaultControls = { isMobile?: boolean };
 
 export const RenderDefaultControls: React.FC<TRenderDefaultControls> = ({ isMobile }) => (
     <>
@@ -28,7 +28,7 @@ export const RenderDefaultControls: React.FC<TRenderDefaultControls> = ({ isMobi
 );
 
 type TChartControlsProps = {
-    widgets: any;
+    widgets?: React.FC<{ isMobile?: boolean }>;
 };
 
 const ChartControls: React.FC<TChartControlsProps> = ({ widgets }) => {

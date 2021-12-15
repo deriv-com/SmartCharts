@@ -10,7 +10,7 @@ import DeleteIcon from '../../sass/icons/delete/ic-delete.svg';
 import EditIcon from '../../sass/icons/edit/ic-edit.svg';
 import HomeIcon from '../../sass/icons/navigation-widgets/ic-home.svg';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
-import { TProcessedSymbolItem } from '../binaryapi/ActiveSymbols';
+import { TProcessedSymbolItem, TSubCategoryDataItem } from '../binaryapi/ActiveSymbols';
 import inject from '../chartiq_injections';
 import animateChart from '../components/ui/Animation';
 import Context from '../components/ui/Context';
@@ -948,8 +948,8 @@ class ChartStore {
     get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
         const activeSymbols = this.activeSymbols.activeSymbols;
-        return cloneCategories(activeSymbols, item => {
-            const selected = item.dataObject.symbol === this.currentActiveSymbol?.symbol;
+        return cloneCategories<TSubCategoryDataItem>(activeSymbols, item => {
+            const selected = (item as TSubCategoryDataItem).dataObject.symbol === this.currentActiveSymbol?.symbol;
             return {
                 ...item,
                 selected,

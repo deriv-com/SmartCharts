@@ -137,7 +137,9 @@ export default class CategoricalDisplayStore {
     }
 
     @computed get filteredItems(): TCategorizedSymbols {
-        let filteredItems = cloneCategories(this.getCategoricalItems());
+        let filteredItems: TCategorizedSymbolItem<TSubCategory>[] = cloneCategories<TSubCategory>(
+            this.getCategoricalItems()
+        );
         const activeItems = this.activeCategories.length
             ? this.activeCategories
             : [this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite'];
@@ -178,13 +180,13 @@ export default class CategoricalDisplayStore {
                 (favItem: TSubCategory) => typeof favItem !== 'string'
             );
 
-            filteredItems.forEach((category: TCategorizedSymbolItem) => {
+            filteredItems.forEach(category => {
                 const foundItems = findFavItem(category);
                 (favsCategoryItem as TSubCategory[] & TSubCategoryDataItem[]).push(...foundItems);
             });
 
             favsCategory.data = favsCategoryItem.filter(favItem => favItem);
-            filteredItems.unshift(favsCategory);
+            filteredItems.unshift((0 as unknown) as TCategorizedSymbolItem<TSubCategory>);
         }
 
         if (this.filterText === '') {
@@ -199,9 +201,14 @@ export default class CategoricalDisplayStore {
             .map(b => b.toLowerCase().trim());
         // regex to check all separate words by comma, should exist in the string
         const hasSearchString = (text: string) => queries.reduce((a, b) => text.toLowerCase().includes(b) && a, true);
-        const filterCategory = (c: TSubCategory) => {
-            c.data = c.data.filter((item: TSubCategoryDataItem) =>
-                hasSearchString(item.display || (typeof item.dataObject === 'object' ? item.dataObject.symbol : ''))
+        const filterCategory = (c: TCategorizedSymbolItem<TSubCategoryDataItem | TSubCategory>) => {
+            c.data = c.data.filter(item =>
+                hasSearchString(
+                    (item as TSubCategoryDataItem).display ||
+                        (typeof (item as TSubCategoryDataItem).dataObject === 'object'
+                            ? (item as TSubCategoryDataItem).dataObject.symbol
+                            : '')
+                )
             );
             if (c.data.length) {
                 searchHasResult = true;
@@ -212,7 +219,7 @@ export default class CategoricalDisplayStore {
             category.active = true;
             if (category.hasSubcategory) {
                 for (const subcategory of category.data) {
-                    filterCategory(subcategory);
+                    filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
                 }
             } else {
                 filterCategory(category);

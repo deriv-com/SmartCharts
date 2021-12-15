@@ -1,4 +1,9 @@
+import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
+import Context from 'src/components/ui/Context';
+import MarkerStore from 'src/store/MarkerStore';
 import { TGranularity } from 'src/types';
+
+type TTransferItem = (item: TSubCategoryDataItem | TSubCategory) => TSubCategoryDataItem | TSubCategory;
 
 export function createObjectFromLocalStorage(key: string) {
     const val = localStorage.getItem(key);
@@ -64,9 +69,9 @@ export const is_browser = {
     Chrome: () =>
         navigator.userAgent.indexOf('Chrome') !== -1 && !navigator.userAgent.match(/OPR|Opera|Chromium|Edg|Edge/i),
     Chromium: () => navigator.userAgent.indexOf('Chromium') !== -1,
-    Edge: () => !!navigator.userAgent.match(/Edg|Edge/i) && !(document as any).documentMode,
+    Edge: () => !!navigator.userAgent.match(/Edg|Edge/i) && !document.documentMode,
     Firefox: () => navigator.userAgent.indexOf('Firefox') !== -1 && navigator.userAgent.indexOf('Seamonkey') === -1,
-    IE: () => navigator.userAgent.match(/MSIE|Trident/i) || !!(document as any).documentMode,
+    IE: () => navigator.userAgent.match(/MSIE|Trident/i) || !!document.documentMode,
     Opera: () => !!navigator.userAgent.match(/OPR|Opera/i),
     Safari: () => navigator.userAgent.indexOf('Safari') !== -1 && !navigator.userAgent.match(/Chrome|Chromium/i),
     Seamonkey: () => navigator.userAgent.indexOf('Seamonkey') !== -1,
@@ -127,8 +132,8 @@ export function downloadFileInBrowser(filename: string, content: string, type: s
     }
 }
 
-export function stxtap(el: any, func: any) {
-    if (el && !el.safeClickTouchEvents) {
+export function stxtap(el: HTMLElement, func: EventListenerOrEventListenerObject) {
+    if (el && !(el as any).safeClickTouchEvents) {
         CIQ.installTapEvent(el);
         el.addEventListener('stxtap', func);
     }
@@ -147,11 +152,15 @@ export function getLocalDate(epoch: number) {
     return new Date(epoch * 1000);
 }
 
-export function updatePropIfChanged(source: any, props: any, onChanged: any) {
+export function updatePropIfChanged(
+    source: MarkerStore,
+    props: { [key: string]: string | number | Date | boolean | undefined },
+    onChanged: () => void
+) {
     let isChanged = false;
     for (const attr in props) {
-        if (props[attr] !== undefined && source[attr] !== props[attr]) {
-            source[attr] = props[attr];
+        if (props[attr] !== undefined && source[attr as keyof MarkerStore] !== props[attr]) {
+            (source as any)[attr] = props[attr];
             isChanged = true;
         }
     }
@@ -198,17 +207,25 @@ export function displayMilliseconds(ms: number) {
     return `${hours}${minutes}:${seconds}`;
 }
 
-export function cloneCategory(category: any, transformItem = (x: any) => x) {
-    const categoryData: any = [];
-    const categoryCopy = { ...category, data: categoryData };
+export function cloneCategory<T>(
+    category: TCategorizedSymbolItem<TSubCategoryDataItem | TSubCategory>,
+    transformItem: TTransferItem = x => x
+): TCategorizedSymbolItem<T> {
+    const categoryData: (TSubCategoryDataItem | TSubCategory)[] = [];
+    const categoryCopy: TCategorizedSymbolItem<T> = {
+        ...category,
+        data: (categoryData as unknown) as T[],
+    };
     if (category.hasSubcategory) {
         for (const subcategory of category.data) {
-            const subcategoryData: any = [];
-            const subcategoryCopy = { ...subcategory, data: subcategoryData };
-            for (const item of subcategory.data) {
-                subcategoryData.push(transformItem(item));
+            if ('data' in subcategory) {
+                const subcategoryData: TSubCategoryDataItem[] = [];
+                const subcategoryCopy: TSubCategory = { ...subcategory, data: subcategoryData };
+                for (const item of subcategory.data) {
+                    subcategoryData.push(transformItem(item) as TSubCategoryDataItem);
+                }
+                categoryData.push(subcategoryCopy);
             }
-            categoryData.push(subcategoryCopy);
         }
     } else {
         for (const item of category.data) {
@@ -219,10 +236,13 @@ export function cloneCategory(category: any, transformItem = (x: any) => x) {
     return categoryCopy;
 }
 
-export function cloneCategories(categories: any, transformItem = (x: any) => x) {
-    const categorized = [];
+export function cloneCategories<T>(
+    categories: TCategorizedSymbolItem<TSubCategoryDataItem | TSubCategory>[],
+    transformItem: TTransferItem = x => x
+): TCategorizedSymbolItem<T>[] {
+    const categorized: TCategorizedSymbolItem<T>[] = [];
     for (const category of categories) {
-        categorized.push(cloneCategory(category, transformItem));
+        categorized.push(cloneCategory<T>(category, transformItem));
     }
 
     return categorized;
@@ -244,8 +264,8 @@ export function cloneCategories(categories: any, transformItem = (x: any) => x) 
 // However we need the pixel value down to the decimal points.
 // This is copy from chartiq.js file WITHOUT rounding down the pixel value.
 
-export function patchPixelFromChart(stx: any) {
-    stx.pixelFromTick = function (tick: any, _chart: any) {
+export function patchPixelFromChart(stx: Context['stx']) {
+    stx.pixelFromTick = function (tick: number, _chart: any) {
         const chart = _chart || stx.chart;
         const dataSegment = chart.dataSegment,
             dataSet = chart.dataSet,
