@@ -71,7 +71,8 @@ const Chart: React.FC<TChartProps> = props => {
     const hasPosition = chartControlsWidgets && position && !isMobile;
     const TopWidgets = topWidgets || defaultTopWidgets;
     // if there are any markers, then increase the subholder z-index
-    const ToolbarWidget = toolbarWidget;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
 
     return (
         <div

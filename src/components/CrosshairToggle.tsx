@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import { CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon } from './Icons';
 import { Toggle } from './Form';
+import Tooltip from './Tooltip';
 
 type TCrosshairToggleProps = {
     onChange?: () => void;
@@ -10,12 +11,19 @@ type TCrosshairToggleProps = {
 };
 
 const CrosshairToggle: React.FC<TCrosshairToggleProps> = ({ onChange, isVisible = true }) => {
-    const { crosshair } = useStores();
+    const { crosshair, chart } = useStores();
     const { setCrosshairState, updateProps } = crosshair;
+    const { isMobile } = chart;
 
     const state = typeof crosshair.state !== 'number' ? 0 : crosshair.state;
 
     const CrosshairIcon = [CrosshairOffIcon, CrosshairOnIcon, CrosshairTooltipIcon][state];
+
+    const labels = [
+        t.translate("Don't show price info on chart"),
+        t.translate('Show price info on x & y axes'),
+        t.translate('Show price info on chart'),
+    ];
 
     const onCrosshairToggle = () => {
         setCrosshairState((state + 1) % 3);
@@ -26,9 +34,11 @@ const CrosshairToggle: React.FC<TCrosshairToggleProps> = ({ onChange, isVisible 
     if (!isVisible) return null;
 
     return (
-        <Toggle active={state !== 0} onChange={onCrosshairToggle}>
-            <CrosshairIcon />
-        </Toggle>
+        <Tooltip content={labels[state]} enabled={!isMobile} position='right'>
+            <Toggle active={state !== 0} onChange={onCrosshairToggle}>
+                <CrosshairIcon />
+            </Toggle>
+        </Tooltip>
     );
 };
 

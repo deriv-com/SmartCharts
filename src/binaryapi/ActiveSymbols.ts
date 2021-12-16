@@ -1,10 +1,11 @@
 import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
 import { action, computed, observable, runInAction } from 'mobx';
-import { TChanges, TChartProps } from 'src/types';
+import { TChanges, TChartProps, TInitialChartData } from 'src/types';
 import BinaryAPI from './BinaryAPI';
+import TradingTimes from './TradingTimes';
 import { cloneCategories, stableSort } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
-import TradingTimes from './TradingTimes';
+import { isDeepEqual } from '../utils/object';
 
 const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
@@ -49,9 +50,16 @@ export type TCategorizedSymbolItem<T = TSubCategory> = {
 
 export type TCategorizedSymbols = TCategorizedSymbolItem[];
 
+type ActiveSymbolsParam = {
+    enable?: boolean;
+    getMarketsOrder?: TChartProps['getMarketsOrder'];
+    activeSymbols?: ActiveSymbolsResponse['active_symbols'];
+    chartData?: TInitialChartData;
+};
+
 export default class ActiveSymbols {
     _api: BinaryAPI;
-    _params: Partial<TChartProps>;
+    _params: ActiveSymbolsParam;
     _tradingTimes: TradingTimes;
     processedSymbols?: TProcessedSymbols;
     @observable changes: TChanges = {};
@@ -60,7 +68,7 @@ export default class ActiveSymbols {
     symbolsPromise = PendingPromise<void, void>();
     isRetrievingSymbols = false;
 
-    constructor(api: BinaryAPI, tradingTimes: TradingTimes, params: Partial<TChartProps>) {
+    constructor(api: BinaryAPI, tradingTimes: TradingTimes, params: ActiveSymbolsParam) {
         this._api = api;
         this._tradingTimes = tradingTimes;
         this._params = params;
@@ -71,15 +79,15 @@ export default class ActiveSymbols {
             await this.symbolsPromise;
             return this.activeSymbols;
         }
-
+        const response = await this._api.getActiveSymbols();
         this.isRetrievingSymbols = true;
 
-        let active_symbols: TActiveSymbols = [];
-        if (this._params.initialData && !this.processedSymbols) {
-            active_symbols = this._params.initialData.activeSymbols as TActiveSymbols;
-        } else if (this._params.enable !== false) {
-            const response = (await this._api.getActiveSymbols()) as ActiveSymbolsResponse;
-            active_symbols = response.active_symbols as TActiveSymbols;
+        let active_symbols: TActiveSymbols | undefined = [];
+        if (this._params.activeSymbols && !this.processedSymbols) {
+            active_symbols = this._params.activeSymbols;
+        } else if (this._params.enable !== false || !isDeepEqual(response.active_symbols, this._params.activeSymbols)) {
+            active_symbols = response.active_symbols;
+            this._params.activeSymbols = response.active_symbols;
         } else if (this._params.chartData && this._params.enable === false) {
             // Do not need to do anything, the chartData handle the staff
             console.log('ActiveSymbols would render through chartData.');
@@ -89,7 +97,9 @@ export default class ActiveSymbols {
             return;
         }
 
-        this.computeActiveSymbols(active_symbols);
+        if (active_symbols != undefined) {
+            this.computeActiveSymbols(active_symbols);
+        }
         this.symbolsPromise.resolve();
         return this.activeSymbols;
     }
@@ -116,7 +126,7 @@ export default class ActiveSymbols {
     }
 
     @computed get activeSymbols() {
-        const categorized = cloneCategories<TSubCategoryDataItem>(this.categorizedSymbols, item => {
+        return cloneCategories<TSubCategoryDataItem>(this.categorizedSymbols, item => {
             const itemObject = item as TSubCategoryDataItem;
             const { symbol } = itemObject.dataObject;
             if (symbol in this.changes) {
@@ -124,7 +134,6 @@ export default class ActiveSymbols {
             }
             return { ...item };
         });
-        return categorized;
     }
 
     getSymbolObj(symbol: string) {

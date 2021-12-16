@@ -108,7 +108,7 @@ class CrosshairStore {
     }
     @action.bound
     toggleState() {
-        const state = (this.state as number + 1) % 3;
+        const state = ((this.state as number) + 1) % 3;
         this.setCrosshairState(state);
     }
     @action.bound
@@ -260,7 +260,7 @@ class CrosshairStore {
                             sKey = CIQ.createObjectChainNames(sKey, subField)[0];
                         }
                         const display = seriesParams.display || seriesParams.symbol || seriesParams.field;
-                        if (sKey && (!dupMap[display] || seriesParams.symbol === undefined)) {
+                        if (display && sKey && (!dupMap[display] || seriesParams.symbol === undefined)) {
                             fields.push({
                                 member: sKey,
                                 display,
@@ -345,7 +345,8 @@ class CrosshairStore {
             } else if (name === 'Change') {
                 dsField = data.Close - data.iqPrevClose;
             }
-            const fieldName = displayName.replace(/^(Result )(.*)/, '$2');
+
+            const fieldName = displayName?.replace(/^(Result )(.*)/, '$2');
             if (
                 (dsField || dsField === 0) &&
                 (name === 'DT' || typeof dsField !== 'object' || dsField.Close || dsField.Close === 0)

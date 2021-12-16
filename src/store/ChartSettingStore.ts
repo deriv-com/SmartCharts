@@ -1,4 +1,4 @@
-import { action, observable, when } from 'mobx';
+import { observable, action, when, reaction } from 'mobx';
 import { TLanguage, TSettings } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -13,6 +13,17 @@ export default class ChartSettingStore {
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'setting' });
+        // below reaction is updating the symbols and those elements that are not updating automatically on language change.
+        reaction(
+            () => (this?.language as TLanguage)?.key,
+            () => {
+                mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true).then(() => {
+                    mainStore?.chart?.changeSymbol?.(mainStore.state.symbol, mainStore.state.granularity, true);
+                    mainStore?.chart?.addDeleteElement();
+                    mainStore?.chart?.addManageElement();
+                });
+            }
+        );
         when(
             () => !!this.context,
             () => {

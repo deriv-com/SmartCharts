@@ -15,7 +15,6 @@ import inject from '../chartiq_injections';
 import animateChart from '../components/ui/Animation';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
-// import '../utils/raf';
 import { STATE } from '../Constant';
 import { Feed } from '../feed';
 import plotSpline from '../SplinePlotter';
@@ -210,8 +209,15 @@ class ChartStore {
 
         this.stxx.resizeChart();
     };
-    @action.bound
-    resizeScreen() {
+    @action.bound addDeleteElement = () => {
+        const deleteElement = this.stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
+        deleteElement.textContent = t.translate('Right click to delete');
+    };
+    @action.bound addManageElement = () => {
+        const manageElement = this.stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
+        manageElement.textContent = t.translate('Right click to manage');
+    };
+    @action.bound resizeScreen() {
         if (!this.context) {
             return;
         }
@@ -722,7 +728,7 @@ class ChartStore {
             (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
-                initialData,
+                activeSymbols: initialData?.activeSymbols,
                 chartData,
             }));
         const { chartSetting } = this.mainStore;
@@ -811,12 +817,11 @@ class ChartStore {
         });
         stxx.isAutoScale = settings && settings.isAutoScale !== false;
         ChartStore.chartCount += 1;
-        const deleteElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
-        const manageElement = stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
-        deleteElement.textContent = t.translate('Right click to delete');
-        manageElement.textContent = t.translate('Right click to manage');
+
+        this.addDeleteElement();
+        this.addManageElement();
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
-        // stxx.chart.lockScroll = true;
+
         // connect chart to data
         this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
         stxx.attachQuoteFeed(this.feed, {
@@ -870,7 +875,8 @@ class ChartStore {
                     );
                     stxx.container.addEventListener('mouseenter', this.onMouseEnter);
                     stxx.container.addEventListener('mouseleave', this.onMouseLeave);
-                    this.contextPromise?.resolve(this.context);
+
+                    this.contextPromise?.resolve?.(this.context);
                     this.resizeScreen();
                     reaction(
                         () => [this.state?.symbol, this.state?.granularity],
@@ -965,7 +971,6 @@ class ChartStore {
          * Disable key press events for chart until we can get it not to
          * interfere with key presses outside the chart:
          */
-        // ChartStore.keystrokeHub.setActiveContext(this.context);
     }
     @action.bound
     onMouseLeave() {
@@ -974,7 +979,6 @@ class ChartStore {
          * Disable key press events for chart until we can get it not to
          * interfere with key presses outside the chart:
          */
-        // ChartStore.keystrokeHub.setActiveContext(null);
     }
     @action.bound
     updateCurrentActiveSymbol() {
@@ -989,7 +993,11 @@ class ChartStore {
         this.isChartAvailable = status;
     }
     @action.bound
-    changeSymbol(symbolObj: TProcessedSymbolItem | string | undefined, granularity?: TGranularity) {
+    changeSymbol(
+        symbolObj: TProcessedSymbolItem | string | undefined,
+        granularity?: TGranularity,
+        isLanguageChanged = false
+    ) {
         if (!this.stxx) return;
         if (typeof symbolObj === 'string') {
             symbolObj = this.activeSymbols?.getSymbolObj(symbolObj);
@@ -999,7 +1007,8 @@ class ChartStore {
             isSymbolAvailable &&
             symbolObj?.symbol === this.currentActiveSymbol?.symbol &&
             granularity !== undefined &&
-            granularity === this.granularity
+            granularity === this.granularity &&
+            !isLanguageChanged
         ) {
             return;
         }

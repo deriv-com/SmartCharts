@@ -456,6 +456,8 @@ $themes: (
         ChartStatusOffline: $color-red-2,
         PredictionDialogTitle: $color-black-1,
         PredictionDialogText: $color-black-1,
+        ChartHistoricalMarker: $color-grey-5,
+        ChartHistoricalMarkerFont: $color-black-1,
     ),
     dark: (
         DefaultMain:            $color-black,
@@ -768,6 +770,8 @@ $themes: (
         ChartStatusOffline: $color-red-2,
         PredictionDialogTitle: $color-white,
         PredictionDialogText: $color-white,
+        ChartHistoricalMarker: $color-black-8,
+        ChartHistoricalMarkerFont: $color-grey,
     ),
 );
 

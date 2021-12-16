@@ -65,8 +65,10 @@ const SymbolSelectButtonBase: React.FC = () => {
     const { isSymbolOpen } = chartTitle;
     return (
         <div className='cq-symbol-select-btn'>
-            <SymbolInfo />
-            {!isSymbolOpen && <div className='cq-symbol-closed-text'>{t.translate('CLOSED')}</div>}
+            <div className='cq-symbol-select-btn__container'>
+                <SymbolInfo />
+                {!isSymbolOpen && <div className='cq-symbol-closed-text'>{t.translate('CLOSED')}</div>}
+            </div>
             <ArrowIcon className='cq-symbol-dropdown' />
         </div>
     );

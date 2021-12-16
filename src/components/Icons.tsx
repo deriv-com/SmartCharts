@@ -122,11 +122,11 @@ import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg
 import Metal from '../../sass/icons/active-symbols/metals/ic-metal.svg';
 
 /* Synthetic Indices */
-import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10-index.svg';
-import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25-index.svg';
-import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-index.svg';
-import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index.svg';
-import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index.svg';
+import Vol10 from '../../sass/icons/active-symbols/volatility/10 index/ic-10-index-v.svg';
+import Vol25 from '../../sass/icons/active-symbols/volatility/25 index/ic-25-index-v.svg';
+import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-index-v.svg';
+import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index-v.svg';
+import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index-v.svg';
 import Vol1S10 from '../../sass/icons/active-symbols/volatility/1s10 index/ic-10-1s-index.svg';
 import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light-25(1s)index.svg';
 import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
