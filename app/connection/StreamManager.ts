@@ -6,7 +6,7 @@ import {
     TickSpotData,
     TicksStreamResponse,
 } from '@deriv/api-types';
-import { ArrayElement, OHLCStreamResponse } from 'src/types';
+import { ArrayElement, OHLCStreamResponse, TBinaryAPIRequest } from 'src/types';
 import ConnectionManager from './ConnectionManager';
 import Stream from './Stream';
 import { mergeTickHistory } from './tickUtils';
@@ -20,8 +20,8 @@ class StreamManager {
     _streamIds: {
         [key: string]: string | undefined;
     } = {};
-    _tickHistoryCache: { [key: string]: TicksHistoryResponse } = {};
-    _tickHistoryPromises: { [key: string]: Promise<TicksHistoryResponse> } = {};
+    _tickHistoryCache: { [key: string]: Required<TicksHistoryResponse> } = {};
+    _tickHistoryPromises: { [key: string]: Promise<Required<TicksHistoryResponse>> } = {};
     _beingForgotten: { [key: string]: boolean } = {};
 
     constructor(connection: ConnectionManager) {
@@ -61,7 +61,7 @@ class StreamManager {
         }
     }
 
-    _onReceiveTickHistory(data: TicksHistoryResponse) {
+    _onReceiveTickHistory(data: Required<TicksHistoryResponse>) {
         const key = this._getKey((data.echo_req as unknown) as TicksHistoryRequest);
         const cache = StreamManager.cloneTickHistoryResponse(data);
         if (cache) {
@@ -135,12 +135,12 @@ class StreamManager {
         const key = this._getKey(request);
         const stream = new Stream();
         this._streams[key] = stream;
-        const subscribePromise = this._connection.send(request);
-        this._tickHistoryPromises[key] = subscribePromise;
+        const subscribePromise = this._connection.send((request as unknown) as TBinaryAPIRequest);
+        this._tickHistoryPromises[key] = subscribePromise as Promise<Required<TicksHistoryResponse>>;
 
         subscribePromise
-            .then((response: TicksHistoryResponse) => {
-                this._onReceiveTickHistory(response);
+            .then(response => {
+                this._onReceiveTickHistory(response as Required<TicksHistoryResponse>);
                 if (response.error) {
                     this._forgetStream(key);
                 }
@@ -154,7 +154,8 @@ class StreamManager {
         return stream;
     }
 
-    async subscribe(request: TicksHistoryRequest, callback: (response: TicksHistoryResponse) => void) {
+    async subscribe(req: TBinaryAPIRequest, callback: (response: TicksHistoryResponse) => void) {
+        const request = (req as unknown) as TicksHistoryRequest;
         const key = this._getKey(request);
         let stream = this._streams[key];
         if (!stream) {
@@ -173,7 +174,7 @@ class StreamManager {
             delete patchRequest.subscribe;
             const { history, candles } = tickHistoryResponse as Required<TicksHistoryResponse>;
             patchRequest.end = String(history && history.times?.[0] ? +history.times[0] : candles[0].epoch || '');
-            const patch = await this._connection.send(patchRequest);
+            const patch = (await this._connection.send(patchRequest)) as Required<TicksHistoryResponse>;
             tickHistoryResponse = mergeTickHistory(tickHistoryResponse, patch);
         }
 
@@ -188,8 +189,8 @@ class StreamManager {
         stream.onStream(callback);
     }
 
-    forget(request: TicksHistoryRequest, callback: (response: TicksHistoryResponse) => void) {
-        const key = this._getKey(request);
+    forget(request: TBinaryAPIRequest, callback: (response: TicksHistoryResponse) => void) {
+        const key = this._getKey((request as unknown) as TicksHistoryRequest);
         const stream = this._streams[key];
         if (stream) {
             stream.offStream(callback);
@@ -200,7 +201,7 @@ class StreamManager {
         return `${symbol}-${granularity || 0}`;
     }
 
-    static cloneTickHistoryResponse({ history, candles, ...others }: TicksHistoryResponse) {
+    static cloneTickHistoryResponse({ history, candles, ...others }: Required<TicksHistoryResponse>) {
         let clone: TicksHistoryResponse | null = null;
 
         if (history) {
@@ -216,7 +217,7 @@ class StreamManager {
             clone = { ...others, candles: candles.slice(0) };
         }
 
-        return clone as TicksHistoryResponse;
+        return clone as Required<TicksHistoryResponse>;
     }
 }
 

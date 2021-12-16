@@ -21,7 +21,7 @@ import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { TNotification } from 'src/store/Notifier';
-import { TGranularity, TNetworkConfig, TRefData } from 'src/types';
+import { TGranularity, TNetworkConfig, TRefData, TStateChangeListener } from 'src/types';
 import 'url-search-params-polyfill';
 import './app.scss';
 import ChartHistory from './ChartHistory';
@@ -29,8 +29,6 @@ import ChartNotifier from './ChartNotifier';
 import { ConnectionManager, StreamManager } from './connection';
 import NetworkMonitor from './connection/NetworkMonitor';
 import Notification from './Notification';
-
-type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
@@ -42,12 +40,10 @@ if (process.env.NODE_ENV !== 'production') {
     });
 }
 const trackJSDomains = ['binary.com', 'binary.me'];
-(window as any).isProductionWebsite = trackJSDomains.reduce(
-    (acc, val) => acc || window.location.host.endsWith(val),
-    false
-);
-if ((window as any).isProductionWebsite) {
-    (window as any)._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
+window.isProductionWebsite = trackJSDomains.some(val => window.location.host.endsWith(val));
+
+if (window.isProductionWebsite) {
+    window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
     const s = document.createElement('script');
     s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
     document.body.appendChild(s);
@@ -101,7 +97,7 @@ const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const App = () => {
     const startingLanguageRef = React.useRef('en');
-    const settingsRef = React.useRef<any>();
+
     const [notifier] = React.useState(new ChartNotifier());
     const [layoutString] = React.useState(localStorage.getItem(`layout-${chartId}`) || '');
     const [layout] = React.useState(JSON.parse(layoutString !== '' ? layoutString : '{}'));
@@ -119,8 +115,11 @@ const App = () => {
         }
         return _settings;
     }, []);
+
     const [settings, setSettings] = React.useState(initialSettings);
+    const settingsRef = React.useRef<typeof settings>();
     settingsRef.current = settings;
+
     const memoizedValues = React.useMemo(() => {
         let endEpoch: number | undefined,
             granularity: number | undefined,
@@ -151,7 +150,7 @@ const App = () => {
         };
     }, [layout]);
     const [chartType, setChartType] = React.useState<string | undefined>(memoizedValues.chartType);
-    const [granularity, setGranularity] = React.useState(memoizedValues.granularity);
+    const [granularity, setGranularity] = React.useState<TGranularity>(memoizedValues.granularity as TGranularity);
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
     const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
     const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
@@ -193,7 +192,7 @@ const App = () => {
     const handleDateChange = (value: string) => {
         setEndEpoch(value !== '' ? new Date(`${value}:00Z`).valueOf() / 1000 : undefined);
     };
-    const handleStateChange = (tag: string, option: TStateChangeOption) =>
+    const handleStateChange: TStateChangeListener = (tag, option) =>
         console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`);
     const renderTopWidgets = React.useCallback(() => {
         const symbolChange = (new_symbol: string) => {
@@ -227,7 +226,7 @@ const App = () => {
         notifier.notify(e);
     };
     const getIsChartReady = (isChartReady: boolean) => isChartReady;
-    const onMarkerRef = (ref: TRefData) => {
+    const onMarkerRef = (ref: TRefData | null) => {
         if (ref) {
             ref.setPosition({
                 epoch: endEpoch,

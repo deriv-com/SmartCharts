@@ -1,15 +1,21 @@
 import { TradingTimesResponse } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
-import { Listener, TChartParams, TError, TOpenClose, TTradingTimesItem, TTradingTimesSymbol } from 'src/types';
+import { Listener, TError, TOpenClose, TTradingTimesItem, TTradingTimesSymbol } from 'src/types';
 import PendingPromise from '../utils/PendingPromise';
 import ServerTime from '../utils/ServerTime';
 import BinaryAPI from './BinaryAPI';
 
 const DaysOfWeek = ['Sundays', 'Mondays', 'Tuesdays', 'Wednesdays', 'Thursdays', 'Fridays', 'Saturdays'];
+
+type TTradingTimesParam = {
+    enable?: boolean;
+    shouldFetchTradingTimes?: boolean;
+    tradingTimes?: TradingTimesResponse['trading_times'];
+};
 class TradingTimes {
     _api: BinaryAPI;
     _emitter: EventEmitter;
-    _params: Partial<TChartParams>;
+    _params: TTradingTimesParam;
     _serverTime: ServerTime;
     _shouldFetchTradingTimes: boolean;
     _tradingTimesMap?: { [key: string]: TTradingTimesItem };
@@ -24,7 +30,7 @@ class TradingTimes {
     isInitialized = false;
     tradingTimesPromise = PendingPromise<void, void>();
     timeUpdateCallback?: () => void;
-    constructor(api: BinaryAPI, params?: Partial<TChartParams>) {
+    constructor(api: BinaryAPI, params?: TTradingTimesParam) {
         this._params = params || {};
         this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || true;
         this._api = api;
@@ -93,14 +99,15 @@ class TradingTimes {
         return changed;
     }
     async _updateTradeTimes() {
-        let response: TradingTimesResponse = {} as TradingTimesResponse;
-        if (!this._tradingTimesMap && this._params.initialData) response = this._params.initialData;
+        let response: Partial<TradingTimesResponse> = {};
+
+        if (!this._tradingTimesMap && this._params.tradingTimes) response = this._params.tradingTimes;
         else if (this._params.enable !== false) response = await this._api.getTradingTimes(this.lastUpdateDate);
         else {
             console.error('TradingTimes feed is not enable nor has initial data!');
             return;
         }
-        if (response?.error) {
+        if ('error' in response && response?.error) {
             const error = response.error as TError;
             console.error(`Error getting trading times on ${this.lastUpdateDate}: [${error.code}] "${error.message}"`);
             return;

@@ -1,29 +1,11 @@
 import { action, computed, observable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TBarrierChangeParam, TCIQAddEventListener, TCIQAppend } from '../types';
+import { TBarrierChangeParam, TBarrierUpdateProps, TCIQAddEventListener, TCIQAppend } from '../types';
 import { isValidProp } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
-
-export type TUpdatePropsParams = BarrierStore & {
-    color?: string;
-    draggable: boolean;
-    hideBarrierLine: boolean;
-    hideOffscreenLine?: boolean;
-    hidePriceLines: boolean;
-    high: number;
-    lineStyle?: string;
-    low?: number;
-    mainStore: MainStore;
-    onChange: (param: TBarrierChangeParam) => void;
-    onChartBarrierChange: () => typeof action;
-    relative: boolean;
-    shade?: string;
-    shadeColor?: string;
-    title?: string;
-};
 
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
@@ -153,7 +135,7 @@ export default class BarrierStore {
         showOffscreenArrows,
         isSingleBarrier,
         opacityOnOverlap,
-    }: TUpdatePropsParams): void {
+    }: TBarrierUpdateProps): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
@@ -174,10 +156,10 @@ export default class BarrierStore {
                 if (draggable !== undefined) {
                     this.draggable = draggable;
                 }
-                if (isValidProp(high)) {
+                if (high !== undefined && isValidProp(high)) {
                     this.high_barrier = high;
                 }
-                if (low && isValidProp(low)) {
+                if (low !== undefined && isValidProp(low)) {
                     this.low_barrier = low;
                 }
                 if (onChange) {

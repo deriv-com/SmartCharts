@@ -3,9 +3,8 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
-import BarrierStore from 'src/store/BarrierStore';
-import ChartState, { TAdditionalChartProps } from 'src/store/ChartState';
-import { TChartParams } from 'src/types';
+
+import { TChartProps } from 'src/types';
 /* css + scss */
 import '../../sass/main.scss';
 import { initGA, logPageView } from '../utils/ga';
@@ -23,21 +22,6 @@ import NavigationWidget from './NavigationWidget';
 import PaginationLoader from './PaginationLoader';
 import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
-
-export type TChartProps = TChartParams &
-    ChartState &
-    TAdditionalChartProps & {
-        id: string;
-        barriers: BarrierStore[];
-        enabledChartFooter?: boolean;
-        enabledNavigationWidget?: boolean;
-        isMobile?: boolean;
-        chartControlsWidgets?: React.FC<{ isMobile?: boolean }>;
-        topWidgets?: React.FC;
-        bottomWidgets?: React.FC;
-        toolbarWidget: React.FC;
-        onCrosshairChange: (state?: number | null) => void | null;
-    };
 
 const Chart: React.FC<TChartProps> = props => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();

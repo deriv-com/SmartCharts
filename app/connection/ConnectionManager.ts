@@ -4,10 +4,10 @@ import { IPendingPromise, Listener, TBinaryAPIRequest, TBinaryAPIResponse } from
 import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
-    _bufferedRequests: IPendingPromise<void, Error>[];
+    _bufferedRequests: IPendingPromise<TBinaryAPIResponse, Error>[];
     _connectionOpened?: IPendingPromise<void, void>;
     _counterReqId: number;
-    _pendingRequests: { [key: string]: undefined | IPendingPromise<void | TBinaryAPIResponse, Error> };
+    _pendingRequests: { [key: string]: undefined | IPendingPromise<TBinaryAPIResponse, Error> };
     _pingTimer?: ReturnType<typeof setInterval>;
     _url: string;
     _websocket: RobustWebsocket;
@@ -99,7 +99,9 @@ class ConnectionManager extends EventEmitter {
 
         Object.keys(this._pendingRequests).forEach(req_id => {
             if (this._pendingRequests[req_id] !== undefined) {
-                this._bufferedRequests.push(this._pendingRequests[req_id] as IPendingPromise<void, Error>);
+                this._bufferedRequests.push(
+                    this._pendingRequests[req_id] as IPendingPromise<TBinaryAPIResponse, Error>
+                );
             }
         });
 
@@ -150,7 +152,7 @@ class ConnectionManager extends EventEmitter {
         if (timeout) {
             this._timeoutRequest(req.req_id as number, timeout);
         }
-        return this._pendingRequests[req.req_id];
+        return this._pendingRequests[req.req_id] as Promise<TBinaryAPIResponse>;
     }
 
     destroy() {

@@ -5,11 +5,11 @@ import connectStore from 'src/store/ConnectStore';
 import '../../sass/components/_markers.scss';
 import MarkerStore from '../store/MarkerStore';
 
-export type TMarkerProps = {
+export type TMarkerBaseProps = {
     store: MarkerStore;
 };
 
-const Marker: React.FC<TMarkerProps> = ({ store, children }) => {
+const Marker: React.FC<TMarkerBaseProps> = ({ store, children }) => {
     const { display, left, bottom, className } = store;
 
     return (
@@ -19,6 +19,6 @@ const Marker: React.FC<TMarkerProps> = ({ store, children }) => {
     );
 };
 
-const BarrierWrapper = connectStore<TMarkerProps>(observer(Marker), MarkerStore);
+const BarrierWrapper = connectStore<TMarkerBaseProps, void>(observer(Marker), MarkerStore);
 
 export default BarrierWrapper;

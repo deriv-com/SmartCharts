@@ -15,7 +15,7 @@
     function (global: any, navigator: any) {
         var RobustWebSocket = function (this: any, url: any, protocols: any, userOptions: any) {
             let realWs = { close() {} },
-                connectTimeout: any,
+                connectTimeout: ReturnType<typeof setTimeout>,
                 self = this,
                 attempts = 0,
                 reconnects = -1,

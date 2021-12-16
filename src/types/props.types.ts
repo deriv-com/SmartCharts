@@ -3,7 +3,7 @@ import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
 import BarrierStore from 'src/store/BarrierStore';
-import { TSettings } from 'src/store/ChartSettingStore';
+import ChartState from 'src/store/ChartState';
 import { TNotification } from 'src/store/Notifier';
 import { TGranularity } from '.';
 import { OHLCStreamResponse } from './api.types';
@@ -21,7 +21,7 @@ export type TBinaryAPIRequest = {
         [k: string]: unknown;
     };
     req_id?: number;
-    [k: string]: unknown;
+    [key: string]: unknown;
 };
 
 export type TBinaryAPIResponse = {
@@ -30,10 +30,10 @@ export type TBinaryAPIResponse = {
     };
     req_id?: number;
     msg_type: any;
-    [k: string]: unknown;
+    [key: string]: unknown;
 };
 
-export type TRequestAPI = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse | void>;
+export type TRequestAPI = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse>;
 export type TResponseAPICallback = (response: TBinaryAPIResponse) => void;
 export type TRequestSubscribe = (request: TBinaryAPIRequest, callback: TResponseAPICallback) => void;
 export type TRequestForgetStream = (id: string) => void;
@@ -57,34 +57,84 @@ export type TBar = {
 
 export type ChartType = ArrayElement<typeof ChartTypes> & { active?: boolean; disabled?: boolean };
 
-export type TChartParams = {
+export type TLanguage = {
+    key: string;
+    name: string;
+    icon: JSX.Element;
+};
+
+export type TSettings = {
+    countdown?: boolean;
+    historical?: boolean;
+    lang?: string;
+    language: string;
+    position?: string;
+    enabledNavigationWidget?: boolean;
+    isAutoScale?: boolean;
+    isHighestLowestMarkerEnabled?: boolean;
+    theme?: string;
+    activeLanguages?: Array<string | TLanguage> | null;
+};
+
+export type TStateChangeListener = (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
+
+export type TRatio = {
+    height: number;
+    percent: number;
+};
+
+export type TGetIndicatorHeightRatio = (chart_height: number, indicator_count: number) => TRatio;
+
+export type TInitialChartData = {
+    masterData?: TQuote[];
+    tradingTimes?: TradingTimesResponse['trading_times'];
+    activeSymbols?: ActiveSymbols;
+};
+
+export type TBarrierUpdateProps = {
+    shade: string;
+    shadeColor: string | undefined;
+    foregroundColor: string | null;
+    color: string;
+    onChange: (param: TBarrierChangeParam) => void;
+    relative: boolean;
+    draggable: boolean;
+    lineStyle: string;
+    hidePriceLines: boolean;
+    high?: number;
+    low?: number;
+    hideBarrierLine?: boolean;
+    hideOffscreenBarrier?: boolean;
+    hideOffscreenLine?: boolean;
+    title?: string;
+    showOffscreenArrows?: boolean;
+    isSingleBarrier?: boolean;
+    opacityOnOverlap?: number;
+};
+
+export type TChartProps = {
     requestAPI: BinaryAPI['requestAPI'];
     requestSubscribe: BinaryAPI['requestSubscribe'];
     requestForget: BinaryAPI['requestForget'];
     requestForgetStream?: BinaryAPI['requestForgetStream'];
     id?: string;
     getMarketsOrder?: (active_symbols: ActiveSymbols) => string[];
-    getIndicatorHeightRatio?: (chart_height: number, indicator_count: number) => { height: number; percent: number };
+    getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
     symbol?: string;
-    initialData?: {
-        masterData?: TQuote[];
-        tradingTimes?: TradingTimesResponse;
-        activeSymbols?: ActiveSymbols;
-    } & TradingTimesResponse;
-    feedCall?: { activeSymbols: boolean; tradingTimes: boolean };
+    feedCall?: { activeSymbols?: boolean; tradingTimes?: boolean };
     granularity?: TGranularity;
     chartType?: string;
     startEpoch?: number;
     endEpoch?: number;
-    chartControlsWidgets?: React.FC | null;
+    chartControlsWidgets?: React.FC<{ isMobile?: boolean }> | null;
     topWidgets?: React.FC;
     bottomWidgets?: React.FC;
     toolbarWidget?: React.FC;
     isMobile?: boolean;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void;
-    stateChangeListener?: (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
+    stateChangeListener?: TStateChangeListener;
     settings?: TSettings;
-    barriers?: BarrierStore[];
+    barriers?: TBarrierUpdateProps[];
     enableRouting?: boolean;
     enable?: boolean;
     isConnectionOpened?: boolean;
@@ -97,14 +147,25 @@ export type TChartParams = {
     onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
     importedLayout?: typeof CIQ.UI.Layout;
     shouldFetchTradingTimes?: boolean;
-    maxTick?: number;
-    crosshair?: number;
+    maxTick?: number | null;
+    crosshair?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;
     yAxisMargin?: { bottom: number; top: number };
     enableScroll?: boolean | null;
     enableZoom?: boolean | null;
-    chartData?: { activeSymbols: ActiveSymbols; tradingTimes: TradingTimesResponse['trading_times'] };
+    initialData?: TInitialChartData;
+    chartData?: TInitialChartData;
+    networkStatus?: TNetworkConfig;
+    refreshActiveSymbols?: ChartState['refreshActiveSymbols'];
+    chartStatusListener?: ChartState['chartStatusListener'];
+    enabledChartFooter?: boolean;
+    anchorChartToLeft?: boolean;
+    margin?: number;
+    isStaticChart?: ChartState['isStaticChart'];
+    enabledNavigationWidget?: boolean;
+    onCrosshairChange?: (state?: number | null) => void | null;
+    crosshairState?: number | null;
 };
 
 export type TQuote = {

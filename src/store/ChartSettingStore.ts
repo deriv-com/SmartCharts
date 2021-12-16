@@ -1,28 +1,10 @@
 import { action, observable, when } from 'mobx';
+import { TLanguage, TSettings } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import { Languages } from '../Constant';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
-
-export type TSettings = {
-    countdown: boolean;
-    historical?: boolean;
-    lang?: string;
-    language?: string;
-    position: string;
-    enabledNavigationWidget?: boolean;
-    isAutoScale?: boolean;
-    isHighestLowestMarkerEnabled: boolean;
-    theme: string;
-    activeLanguages?: Array<string | TLanguage>;
-};
-
-export type TLanguage = {
-    key: string;
-    name: string;
-    icon: JSX.Element;
-};
 
 export default class ChartSettingStore {
     mainStore: MainStore;

@@ -3,14 +3,15 @@ import { observer } from 'mobx-react-lite';
 import React, { CSSProperties } from 'react';
 import BarrierStore from 'src/store/BarrierStore';
 import connectStore from 'src/store/ConnectStore';
+import { TBarrierUpdateProps } from 'src/types';
 import PriceLine from './PriceLine';
 import Shade from './Shade';
 
-export type TBarrierProps = {
+export type TBarrierBaseProps = {
     store: BarrierStore;
 };
 
-const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
+const Barrier: React.FC<TBarrierBaseProps> = ({ store, ...props }) => {
     const {
         _high_barrier,
         _low_barrier,
@@ -67,6 +68,6 @@ const Barrier: React.FC<TBarrierProps> = ({ store, ...props }) => {
     );
 };
 
-const BarrierWrapper = connectStore<TBarrierProps>(observer(Barrier), BarrierStore);
+const BarrierWrapper = connectStore<TBarrierBaseProps, TBarrierUpdateProps>(observer(Barrier), BarrierStore);
 
 export default BarrierWrapper;

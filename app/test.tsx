@@ -20,7 +20,14 @@ import moment from 'moment';
 import React, { ChangeEvent } from 'react';
 import ReactDOM from 'react-dom';
 import { TNotification } from 'src/store/Notifier';
-import { TBarrierChangeParam, TGranularity, TNetworkConfig, TOpenMarket } from 'src/types';
+import {
+    TBarrierChangeParam,
+    TGranularity,
+    TInitialChartData,
+    TNetworkConfig,
+    TOpenMarket,
+    TSettings,
+} from 'src/types';
 import 'url-search-params-polyfill';
 import './app.scss';
 import ChartHistory from './ChartHistory';
@@ -30,14 +37,6 @@ import NetworkMonitor from './connection/NetworkMonitor';
 import { masterData, MockActiveSymbol, MockTradingTime } from './initialData';
 import Notification from './Notification';
 import './test.scss';
-
-type TSettings = {
-    language: string;
-    activeLanguages?: string[] | null;
-    isHighestLowestMarkerEnabled?: boolean;
-    historical?: boolean;
-    theme?: string;
-};
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
@@ -49,12 +48,9 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 const trackJSDomains = ['binary.com', 'binary.me'];
-(window as any).isProductionWebsite = trackJSDomains.reduce(
-    (acc, val) => acc || window.location.host.endsWith(val),
-    false
-);
-if ((window as any).isProductionWebsite) {
-    (window as any)._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
+window.isProductionWebsite = trackJSDomains.some(val => window.location.host.endsWith(val));
+if (window.isProductionWebsite) {
+    window._trackJs = { token: '346262e7ffef497d85874322fff3bbf8', application: 'smartcharts' };
     const s = document.createElement('script');
     s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
     document.body.appendChild(s);
@@ -470,11 +466,11 @@ const App = () => {
     const onFeedCallActiveSymbols = (evt: ChangeEvent<HTMLInputElement>) =>
         generateURL({ feedcall_activeSymbols: evt.currentTarget.checked });
 
-    const initial_data = React.useMemo(() => {
+    const initial_data: TInitialChartData = React.useMemo(() => {
         const data: {
-            masterData?: ReturnType<typeof masterData>;
-            tradingTimes?: typeof MockTradingTime.trading_times;
-            activeSymbols?: typeof MockActiveSymbol;
+            masterData?: TInitialChartData['masterData'];
+            tradingTimes?: TInitialChartData['tradingTimes'];
+            activeSymbols?: TInitialChartData['activeSymbols'];
         } = {};
 
         if (urlParams.initialdata_masterData === 'true') {
@@ -493,9 +489,9 @@ const App = () => {
 
     const chart_data = React.useMemo(() => {
         const data: {
-            masterData?: ReturnType<typeof masterData>;
-            tradingTimes?: typeof MockTradingTime.trading_times;
-            activeSymbols?: typeof MockActiveSymbol;
+            masterData?: TInitialChartData['masterData'];
+            tradingTimes?: TInitialChartData['tradingTimes'];
+            activeSymbols?: TInitialChartData['activeSymbols'];
         } = {};
 
         if (urlParams.initialdata_masterData === 'true') {
@@ -533,12 +529,14 @@ const App = () => {
                 data.tradingTimes = {
                     markets: cloned_trading_mock_data.markets.map(_market => {
                         if (_market.name === closed_market) {
-                            _market.submarkets = [..._market.submarkets].map(_submarkets => {
-                                _submarkets.symbols = [..._submarkets.symbols].map(_symbol => {
-                                    _symbol.events.push({
-                                        dates: 'today',
-                                        descrip: 'close all',
-                                    });
+                            _market.submarkets = [...(_market.submarkets || [])].map(_submarkets => {
+                                _submarkets.symbols = [...(_submarkets.symbols || [])].map(_symbol => {
+                                    if (_symbol.events !== undefined) {
+                                        _symbol.events.push({
+                                            dates: 'today',
+                                            descrip: 'close all',
+                                        });
+                                    }
                                     return _symbol;
                                 });
                                 return _submarkets;

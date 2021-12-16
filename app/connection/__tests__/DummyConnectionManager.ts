@@ -1,10 +1,11 @@
+import { TicksStreamResponse } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import sinon from 'sinon';
-import { Listener } from 'src/types';
+import { IPendingPromise, Listener, TBinaryAPIRequest, TBinaryAPIResponse } from 'src/types';
 import PendingPromise from '../../../src/utils/PendingPromise';
 
 export class DummyConnectionManager extends EventEmitter {
-    pendingRequest: any;
+    pendingRequest: null | IPendingPromise<TBinaryAPIResponse, void> = null;
     constructor() {
         super({ emitDelay: 0 });
         this.send = sinon.fake(this.send.bind(this));
@@ -21,9 +22,9 @@ export class DummyConnectionManager extends EventEmitter {
         this.emit('close');
     }
 
-    _response = null;
+    _response: TBinaryAPIResponse | null = null;
 
-    set response(val: any) {
+    set response(val: TBinaryAPIResponse) {
         if (!this._response && this.pendingRequest) {
             this.pendingRequest.resolve(val);
             this.pendingRequest = null;
@@ -32,16 +33,16 @@ export class DummyConnectionManager extends EventEmitter {
         this._response = val;
     }
 
-    send(request: any) {
+    send(request: TBinaryAPIRequest) {
         if (!this._response && !this.pendingRequest) {
-            this.pendingRequest = PendingPromise();
+            this.pendingRequest = PendingPromise<TBinaryAPIResponse, void>();
             return this.pendingRequest;
         }
 
         return Promise.resolve(this._response);
     }
 
-    emitTick(response: any) {
+    emitTick(response: TicksStreamResponse) {
         const { tick } = response;
         this.emit(tick ? 'tick' : 'ohlc', response);
     }

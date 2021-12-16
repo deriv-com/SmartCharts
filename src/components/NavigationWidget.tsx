@@ -9,7 +9,7 @@ import '../../sass/components/_navigation-widget.scss';
 import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons';
 
 type TNavigationWidgetProps = {
-    onCrosshairChange: TMainStore['crosshair']['onCrosshairChanged'];
+    onCrosshairChange?: TMainStore['crosshair']['onCrosshairChanged'];
 };
 
 const NavigationWidget: React.FC<TNavigationWidgetProps> = ({ onCrosshairChange }) => {

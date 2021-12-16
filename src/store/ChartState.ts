@@ -1,6 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { TChartParams, TGranularity, TQuote } from 'src/types';
+import { TChartProps, TGetIndicatorHeightRatio, TGranularity, TQuote, TSettings } from 'src/types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -11,16 +11,7 @@ import {
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
-import { TSettings } from './ChartSettingStore';
-import ChartStore, { TRatio } from './ChartStore';
-
-export type TAdditionalChartProps = {
-    networkStatus: {
-        tooltip: string;
-        class: string;
-    };
-    anchorChartToLeft: boolean;
-};
+import ChartStore from './ChartStore';
 
 type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
 
@@ -34,7 +25,7 @@ type TScrollListenerParamsData = {
 
 class ChartState {
     chartStore: ChartStore;
-    getIndicatorHeightRatio?: (offsetHeight: number | undefined, num: number) => TRatio;
+    getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -43,7 +34,7 @@ class ChartState {
     @observable startEpoch?: number;
     @observable endEpoch?: number;
     @observable symbol?: string;
-    @observable isConnectionOpened = false;
+    @observable isConnectionOpened? = false;
     @observable isChartReady = false;
     @observable chartStatusListener?: (isChartReady: boolean) => boolean;
     @observable stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
@@ -54,14 +45,14 @@ class ChartState {
     @observable clearChart?: () => void;
     @observable isChartClosed = false;
     @observable shouldMinimiseLastDigits = false;
-    @observable isStaticChart = false;
+    @observable isStaticChart? = false;
     @observable shouldFetchTradingTimes = true;
     @observable refreshActiveSymbols?: boolean;
     @observable hasReachedEndOfData = false;
     @observable prevChartType?: string;
     @observable isChartScrollingToEpoch = false;
     @observable crosshairState: number | null = 1;
-    @observable crosshairTooltipLeftAllow = null;
+    @observable crosshairTooltipLeftAllow: number | null = null;
     @observable maxTick?: number;
     @observable enableScroll: boolean | null = true;
     @observable enableZoom: boolean | null = true;
@@ -146,7 +137,7 @@ class ChartState {
         enableZoom = null,
         anchorChartToLeft = false,
         chartData,
-    }: TChartParams & ChartState & TAdditionalChartProps) {
+    }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
@@ -591,7 +582,9 @@ class ChartState {
         } else if ((scrollToEpoch && this.startEpoch) || force) {
             // scale 1:1 happen
             this.stxx.chart.lockScroll = true;
-            this.stxx.chart.entryTick = this.stxx.tickFromDate(getUTCDate(this.startEpoch || scrollToEpoch as number));
+            this.stxx.chart.entryTick = this.stxx.tickFromDate(
+                getUTCDate(this.startEpoch || (scrollToEpoch as number))
+            );
             const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);

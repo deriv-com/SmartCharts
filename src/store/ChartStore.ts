@@ -19,7 +19,7 @@ import KeystrokeHub from '../components/ui/KeystrokeHub';
 import { STATE } from '../Constant';
 import { Feed } from '../feed';
 import plotSpline from '../SplinePlotter';
-import { IPendingPromise, TChanges, TChartParams, TGranularity, TQuote } from '../types';
+import { IPendingPromise, TChanges, TChartProps, TGranularity, TNetworkConfig, TQuote, TRatio } from '../types';
 import {
     calculateTimeUnitInterval,
     cloneCategories,
@@ -36,10 +36,7 @@ type TDefaults = {
     granularity: TGranularity;
     chartType: string;
 };
-export type TRatio = {
-    height: number;
-    percent: number;
-};
+
 type TRange = {
     dtLeft?: Date;
     dtRight?: Date;
@@ -148,10 +145,7 @@ class ChartStore {
     @observable
     serverTime?: string;
     @observable
-    networkStatus?: {
-        tooltip: string;
-        class: string;
-    };
+    networkStatus?: TNetworkConfig;
 
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
@@ -254,8 +248,8 @@ class ChartStore {
      */
     indicatorHeightRatio = (num: number) => {
         let ratio = {} as TRatio;
-        if (typeof this.stateStore.getIndicatorHeightRatio === 'function') {
-            ratio = this.stateStore.getIndicatorHeightRatio(this.chartNode?.offsetHeight, num);
+        if (typeof this.stateStore.getIndicatorHeightRatio === 'function' && this.chartNode) {
+            ratio = this.stateStore.getIndicatorHeightRatio(this.chartNode.offsetHeight, num);
         }
         if (this.chartNode && (!ratio || !ratio.height || !ratio.percent)) {
             const chartHeight = this.chartNode.offsetHeight;
@@ -272,7 +266,7 @@ class ChartStore {
         }
         return ratio;
     };
-    init = (rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartParams>) => {
+    init = (rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartProps>) => {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
         this.loader.setState('chart-engine');
@@ -316,7 +310,7 @@ class ChartStore {
         }
     };
     @action.bound
-    _initChart(rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartParams>) {
+    _initChart(rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartProps>) {
         const _self = this;
         // Add custom injections to the CIQ
         inject({
@@ -721,7 +715,7 @@ class ChartStore {
             (ChartStore.tradingTimes = new TradingTimes(this.api, {
                 enable: this.feedCall.tradingTimes,
                 shouldFetchTradingTimes: this.mainStore.state.shouldFetchTradingTimes,
-                initialData: initialData?.tradingTimes,
+                tradingTimes: initialData?.tradingTimes,
             }));
         this.activeSymbols =
             ChartStore.activeSymbols ||

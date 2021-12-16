@@ -1,18 +1,18 @@
 import React from 'react';
-import { TBarrierProps } from 'src/components/Barrier';
-import { TMarkerProps } from 'src/components/Marker';
+import { TBarrierBaseProps } from 'src/components/Barrier';
+import { TMarkerBaseProps } from 'src/components/Marker';
 import { useConstructor } from 'src/hooks';
+import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
-import { TUpdatePropsParams } from './BarrierStore';
 import MarkerStore from './MarkerStore';
 
-type TWrappedComponentsProps = TBarrierProps | TMarkerProps;
+type TWrappedComponentsProps = TBarrierBaseProps | TMarkerBaseProps;
 
 type TStoreClass = {
     new (mainStore: TMainStore): TWrappedComponentsProps['store'];
 };
 
-type TConnectStoreWrapperProps = TUpdatePropsParams &
+type TConnectStoreWrapperProps = TBarrierUpdateProps &
     MarkerStore & {
         StoreClass: TStoreClass;
         children: (store?: TWrappedComponentsProps['store']) => JSX.Element;
@@ -42,11 +42,11 @@ const ConnectStoreWrapper: React.FC<
     return <React.Fragment>{props.children(storeRef.current)}</React.Fragment>;
 };
 
-const connectStore = <P,>(BaseComponent: React.FC<P>, StoreClass: TStoreClass) => {
-    const Component: React.FC<unknown> = ({ children, ...props }) => (
+const connectStore = <B, C>(BaseComponent: React.FC<B>, StoreClass: TStoreClass) => {
+    const Component: React.FC<C> = ({ children, ...props }) => (
         <ConnectStoreWrapper StoreClass={StoreClass} {...props}>
             {store => (
-                <BaseComponent store={store} {...(props as P)}>
+                <BaseComponent store={store} {...((props as unknown) as B)}>
                     {children as React.ReactElement}
                 </BaseComponent>
             )}

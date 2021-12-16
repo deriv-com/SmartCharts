@@ -1,6 +1,6 @@
 import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
 import { action, computed, observable, runInAction } from 'mobx';
-import { TChanges, TChartParams } from 'src/types';
+import { TChanges, TChartProps } from 'src/types';
 import BinaryAPI from './BinaryAPI';
 import { cloneCategories, stableSort } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
@@ -51,7 +51,7 @@ export type TCategorizedSymbols = TCategorizedSymbolItem[];
 
 export default class ActiveSymbols {
     _api: BinaryAPI;
-    _params: Partial<TChartParams>;
+    _params: Partial<TChartProps>;
     _tradingTimes: TradingTimes;
     processedSymbols?: TProcessedSymbols;
     @observable changes: TChanges = {};
@@ -60,7 +60,7 @@ export default class ActiveSymbols {
     symbolsPromise = PendingPromise<void, void>();
     isRetrievingSymbols = false;
 
-    constructor(api: BinaryAPI, tradingTimes: TradingTimes, params: Partial<TChartParams>) {
+    constructor(api: BinaryAPI, tradingTimes: TradingTimes, params: Partial<TChartProps>) {
         this._api = api;
         this._tradingTimes = tradingTimes;
         this._params = params;

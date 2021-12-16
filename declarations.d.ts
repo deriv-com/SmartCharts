@@ -12,6 +12,14 @@ declare module '*.svg' {
     export default content;
 }
 
+interface Window {
+    isProductionWebsite?: boolean;
+    _trackJs: {
+        token: string;
+        application: string;
+    };
+}
+
 interface Navigator {
     msSaveBlob: (blob: Blob, name: string) => void;
     onLine: boolean;
