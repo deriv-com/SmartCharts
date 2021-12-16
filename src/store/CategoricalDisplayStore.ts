@@ -184,7 +184,7 @@ export default class CategoricalDisplayStore {
             });
 
             favsCategory.data = favsCategoryItem.filter(favItem => favItem);
-            filteredItems.unshift((0 as unknown) as TCategorizedSymbolItem<TSubCategory>);
+            filteredItems.unshift(favsCategory as TCategorizedSymbolItem<TSubCategory>);
         }
 
         if (this.filterText === '') {
