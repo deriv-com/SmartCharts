@@ -195,7 +195,8 @@ class Feed {
         const tickHistoryRequest: Partial<TCreateTickHistoryParams> = {
             symbol,
             granularity: granularity as TicksHistoryRequest['granularity'],
-            count: this._mainStore.lastDigitStats.count,
+            start: this.endEpoch ? start : undefined,
+            count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
@@ -230,7 +231,10 @@ class Feed {
                 quotes = new_quotes.filter(quote => {
                     return new Date(`${quote.Date}Z`).getTime() / 1000 >= start;
                 });
-                this._mainStore.lastDigitStats.updateLastDigitStats(response);
+
+                if (!this.endEpoch) {
+                    this._mainStore.lastDigitStats.updateLastDigitStats(response);
+                }
             } catch (error) {
                 const { message: text } = error as TError;
                 this._mainStore.notifier.notify({

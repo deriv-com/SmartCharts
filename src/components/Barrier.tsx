@@ -22,6 +22,8 @@ const Barrier: React.FC<TBarrierBaseProps> = ({ store, ...props }) => {
         color = '#39b19d',
         foregroundColor = '#ffffff',
         hideOffscreenBarrier,
+        hideOffscreenLine,
+        hideBarrierLine,
         hidePriceLines,
         lineStyle,
         isInitialized,
@@ -44,6 +46,8 @@ const Barrier: React.FC<TBarrierBaseProps> = ({ store, ...props }) => {
                 color={color}
                 foregroundColor={foregroundColor}
                 hideOffscreenBarrier={hideOffscreenBarrier}
+                hideOffscreenLine={hideOffscreenLine}
+                hideBarrierLine={hideBarrierLine}
                 opacityOnOverlap={opacityOnOverlap}
                 {...props}
             />
@@ -56,6 +60,8 @@ const Barrier: React.FC<TBarrierBaseProps> = ({ store, ...props }) => {
                         color={color}
                         foregroundColor={foregroundColor}
                         hideOffscreenBarrier={hideOffscreenBarrier}
+                        hideOffscreenLine={hideOffscreenLine}
+                        hideBarrierLine={hideBarrierLine}
                         opacityOnOverlap={opacityOnOverlap}
                         {...props}
                     />

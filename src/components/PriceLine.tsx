@@ -9,6 +9,8 @@ type TPriceLineProps = {
     store: PriceLineStore;
     lineStyle?: string;
     hideOffscreenBarrier?: boolean;
+    hideOffscreenLine?: boolean;
+    hideBarrierLine?: boolean;
     foregroundColor: string;
     color?: string;
     opacityOnOverlap: number;
@@ -22,6 +24,8 @@ const PriceLine: React.FC<TPriceLineProps> = ({
     width,
     hideOffscreenBarrier,
     opacityOnOverlap,
+    hideOffscreenLine,
+    hideBarrierLine,
     store,
 }) => {
     const {
@@ -35,8 +39,6 @@ const PriceLine: React.FC<TPriceLineProps> = ({
         title,
         yAxiswidth,
         offScreen,
-        hideBarrierLine,
-        hideOffscreenLine,
         offScreenDirection,
         isOverlapping,
     } = store;
@@ -66,7 +68,9 @@ const PriceLine: React.FC<TPriceLineProps> = ({
                     backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00`,
                 }}
             >
-                {showBarrierDragLine && <div className='drag-line' style={{ borderTop: lineStyle }} />}
+                {showBarrierDragLine && (
+                    <div className='drag-line' style={{ borderTopStyle: lineStyle as 'solid' | 'dotted' }} />
+                )}
                 <div className='draggable-area' />
                 <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
                     <div className='price'>{priceDisplay}</div>
