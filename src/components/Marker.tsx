@@ -19,6 +19,6 @@ const Marker: React.FC<TMarkerBaseProps> = ({ store, children }) => {
     );
 };
 
-const BarrierWrapper = connectStore<TMarkerBaseProps, void>(observer(Marker), MarkerStore);
+const MarkerWrapper = connectStore<TMarkerBaseProps, void>(observer(Marker), MarkerStore);
 
-export default BarrierWrapper;
+export default MarkerWrapper;

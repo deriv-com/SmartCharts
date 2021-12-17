@@ -1,5 +1,6 @@
-import { TickSpotData, TicksStreamResponse } from '@deriv/api-types';
+import { TicksHistoryResponse, TickSpotData, TicksStreamResponse } from '@deriv/api-types';
 import { action, computed, observable, when } from 'mobx';
+import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
 import { TBar, TQuote } from '../types';
@@ -61,7 +62,7 @@ export default class LastDigitStatsStore {
         return this.mainStore.state.shouldMinimiseLastDigits;
     }
 
-    @action.bound async updateLastDigitStats(response) {
+    @action.bound async updateLastDigitStats(response?: TicksHistoryResponse) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.digits = [];
         this.bars = [];
@@ -80,8 +81,8 @@ export default class LastDigitStatsStore {
                 (await this.api?.getTickHistory({
                     symbol: this.mainStore.chart.currentActiveSymbol.symbol,
                     count: this.count,
-                }));
-            this.latestData = tickHistory && tickHistory.history ? tickHistory.history.prices : [];
+                } as TCreateTickHistoryParams));
+            this.latestData = tickHistory?.history?.prices ? tickHistory.history.prices : [];
         }
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.latestData.forEach(price => {

@@ -2,7 +2,6 @@ import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse } from '@deriv
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
-import BarrierStore from 'src/store/BarrierStore';
 import ChartState from 'src/store/ChartState';
 import { TNotification } from 'src/store/Notifier';
 import { TGranularity } from '.';

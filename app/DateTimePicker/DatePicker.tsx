@@ -123,7 +123,7 @@ const DatePicker: React.FC<TDatePickerProps> = React.memo(props => {
     const handleVisibility = () => {
         setIsDatepickerVisible(!is_datepicker_visible);
     };
-    const onSelectCalendar = (selected_date: string, _is_datepicker_visible: boolean = false) => {
+    const onSelectCalendar = (selected_date: string, _is_datepicker_visible = false) => {
         let _selected_date = selected_date;
         if (!moment.utc(_selected_date).isValid) {
             _selected_date = '';
@@ -157,7 +157,7 @@ const DatePicker: React.FC<TDatePickerProps> = React.memo(props => {
     // update MobX store
     const updateStore = (_value: string) => {
         if (typeof onChange === 'function') {
-            onChange(value);
+            onChange(_value);
         }
     };
     if (is_nativepicker) {

@@ -1,6 +1,7 @@
 declare var t: {
     translate(x?: string, params?: { [key: string]: string | number | boolean }): string;
     setLanguage(x: string): void;
+    lang: string;
 };
 
 declare var CIQ: any;
