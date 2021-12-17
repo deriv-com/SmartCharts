@@ -795,8 +795,8 @@ class ChartStore {
         let wheelInMotion = false;
         stxx.animations.zoom.run = (
             fc: (t: number, b?: number, c?: number, d?: number) => void,
-            startValues?: { [key: string]: number } | number,
-            endValues?: { [key: string]: number } | number
+            startValues?: Record<string, number> | number,
+            endValues?: Record<string, number> | number
         ) => {
             if (wheelInMotion) return;
             wheelInMotion = true;
@@ -1233,7 +1233,7 @@ class ChartStore {
     }
 
     @action.bound openFullscreen() {
-        const fullscreen_map: { [key: string]: string[] } = {
+        const fullscreen_map: Record<string, string[]> = {
             element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
             fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],
             fnc_exit: ['exitFullscreen', 'webkitExitFullscreen', 'mozCancelFullScreen', 'msExitFullscreen'],

@@ -14,15 +14,11 @@ import { mergeTickHistory } from './tickUtils';
 class StreamManager {
     MAX_CACHE_TICKS = 5000;
     _connection: ConnectionManager;
-    _streams: {
-        [key: string]: Stream;
-    } = {};
-    _streamIds: {
-        [key: string]: string | undefined;
-    } = {};
-    _tickHistoryCache: { [key: string]: Required<TicksHistoryResponse> } = {};
-    _tickHistoryPromises: { [key: string]: Promise<Required<TicksHistoryResponse>> } = {};
-    _beingForgotten: { [key: string]: boolean } = {};
+    _streams: Record<string, Stream> = {};
+    _streamIds: Record<string, string | undefined> = {};
+    _tickHistoryCache: Record<string, Required<TicksHistoryResponse>> = {};
+    _tickHistoryPromises: Record<string, Promise<Required<TicksHistoryResponse>>> = {};
+    _beingForgotten: Record<string, boolean> = {};
 
     constructor(connection: ConnectionManager) {
         this._connection = connection;

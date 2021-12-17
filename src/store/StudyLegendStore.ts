@@ -18,7 +18,7 @@ type THelperInput = {
     name: string;
     type: string;
     value: number;
-    options?: { [key: string]: string } | null;
+    options?: Record<string, string> | null;
 };
 
 type THelperOutput = {
@@ -46,7 +46,7 @@ type TStudyItems = {
     defaultValue: string | number | TValueObject;
     id: string;
     min?: number;
-    options?: { [key: string]: string } | null;
+    options?: Record<string, string> | null;
     step?: number;
     title: string;
     type: string;
@@ -66,7 +66,7 @@ const updateFieldHeading = (heading: string, type: string) => {
     return heading;
 };
 export default class StudyLegendStore {
-    excludedStudies: { [key: string]: boolean };
+    excludedStudies: Record<string, boolean>;
     helper: typeof CIQ.UI.Helper;
     mainStore: MainStore;
     menuStore: MenuStore;
@@ -96,7 +96,7 @@ export default class StudyLegendStore {
             }
         );
     }
-    previousStudies: { [key: string]: typeof CIQ.Studies.StudyDescriptor } = {};
+    previousStudies: Record<string, typeof CIQ.Studies.StudyDescriptor> = {};
     searchInputClassName?: string;
     @observable
     selectedTab = 1;
@@ -300,7 +300,7 @@ export default class StudyLegendStore {
     }
     @action.bound
     updateStudy(study: typeof CIQ.Studies.StudyDescriptor, items: TSettingsItem[]) {
-        const updates: { [key: string]: { [key: string]: string } } = {};
+        const updates: Record<string, Record<string, string>> = {};
         for (const { id, category, value, type } of items as TStudyItems[]) {
             let isChanged;
             if (type === 'numbercolorpicker') {

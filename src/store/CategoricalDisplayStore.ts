@@ -28,7 +28,7 @@ type TCategoricalDisplayStoreProps = {
 export default class CategoricalDisplayStore {
     activeMarket?: string | null;
     activeSubCategory = '';
-    categoryElements: { [id: string]: HTMLElement | null };
+    categoryElements: Record<string, HTMLElement | null>;
     favoritesId: string;
     getCategoricalItems: () => TCategorizedSymbols;
     getCurrentActiveCategory: () => string;

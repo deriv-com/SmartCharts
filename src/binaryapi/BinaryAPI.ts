@@ -28,7 +28,7 @@ export default class BinaryAPI {
     static get DEFAULT_COUNT() {
         return 1000;
     }
-    streamRequests: { [key: string]: { request: TBinaryAPIRequest; callback: TResponseAPICallback } } = {};
+    streamRequests: Record<string, { request: TBinaryAPIRequest; callback: TResponseAPICallback }> = {};
     tradingTimesCache: TradingTimesResponse | null = null;
 
     constructor(

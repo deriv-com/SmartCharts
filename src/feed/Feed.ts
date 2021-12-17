@@ -66,7 +66,7 @@ class Feed {
     get paginationLoader() {
         return this._mainStore.paginationLoader;
     }
-    _activeStreams: { [key: string]: DelayedSubscription | RealtimeSubscription } = {};
+    _activeStreams: Record<string, DelayedSubscription | RealtimeSubscription> = {};
     _isConnectionOpened = true;
     constructor(binaryApi: BinaryAPI, stx: Context['stx'], mainStore: TMainStore, tradingTimes: TradingTimes) {
         this._stx = stx;

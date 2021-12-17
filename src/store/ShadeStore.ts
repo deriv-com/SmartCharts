@@ -9,7 +9,7 @@ export default class ShadeStore {
         this.className = className;
     }
 
-    setPosition = ({ top, bottom, right }: {[key: string]: number}) => {
+    setPosition = ({ top, bottom, right }: Record<string, number>) => {
         if (this._div) {
             let pos = null;
             if (bottom && top) {

@@ -205,9 +205,7 @@ export type TSettingsItem = {
     min?: number;
     max?: number;
     step?: number;
-    options?: {
-        [x: string]: string;
-    };
+    options?: Record<string, string>;
 };
 
 export type TOpenClose = { date: string; open: Date; close: Date };
@@ -235,7 +233,7 @@ export type TOpenMarket = {
 };
 
 export type TRefData = {
-    setPosition: ({ epoch, price }: { [key: string]: number | null | undefined }) => void;
+    setPosition: ({ epoch, price }: Record<string, number | null | undefined>) => void;
     div: HTMLDivElement;
     value?: Element | null;
 };

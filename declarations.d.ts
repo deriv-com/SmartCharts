@@ -1,5 +1,5 @@
 declare var t: {
-    translate(x?: string, params?: { [key: string]: string | number | boolean }): string;
+    translate(x?: string, params?: Record<string, string | number | boolean>): string;
     setLanguage(x: string): void;
     lang: string;
 };

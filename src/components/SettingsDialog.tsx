@@ -155,14 +155,7 @@ const SettingsPanelGroup: React.FC<TSettingsPanelGroupProps> = ({
             />
         ),
         font: (item: TSettingsItem) => (
-            <FontSetting
-                value={
-                    item.value as {
-                        [x: string]: string;
-                    }
-                }
-                onChange={val => onItemChange(item.id, val)}
-            />
+            <FontSetting value={item.value as Record<string, string>} onChange={val => onItemChange(item.id, val)} />
         ),
     };
 

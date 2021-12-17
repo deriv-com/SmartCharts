@@ -231,7 +231,7 @@ export default class DrawToolsStore {
     @action.bound
     onChanged(items: TSettingsItem[]) {
         for (const item of items) {
-            (this.activeDrawing as TDrawingObject & { [key: string]: string | boolean | number | TObject })[item.id] =
+            (this.activeDrawing as TDrawingObject & Record<string, string | boolean | number | TObject>)[item.id] =
                 item.value;
         }
         (this.activeDrawing as TDrawingObject).highlighted = false;
@@ -262,11 +262,9 @@ export default class DrawToolsStore {
     @action.bound
     computeActiveDrawTools() {
         if (!this.context) return;
-        const items: { [x: string]: number } = {};
+        const items: Record<string, number> = {};
         const ignoreBarType = ['vertical', 'horizontal'];
-        const groups: {
-            [key: string]: TDrawToolsGroup;
-        } = {};
+        const groups: Record<string, TDrawToolsGroup> = {};
         this.stx.drawingObjects.forEach((item: TDrawingObject, indx: number) => {
             item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;

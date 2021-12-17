@@ -18,7 +18,7 @@ class TradingTimes {
     _params: TTradingTimesParam;
     _serverTime: ServerTime;
     _shouldFetchTradingTimes: boolean;
-    _tradingTimesMap?: { [key: string]: TTradingTimesItem };
+    _tradingTimesMap?: Record<string, TTradingTimesItem>;
     _updateTimer?: ReturnType<typeof setTimeout>;
     lastUpdateDate?: string;
     static get EVENT_MARKET_OPEN_CLOSE_CHANGE() {
@@ -69,7 +69,7 @@ class TradingTimes {
                     this.lastUpdateDate = (now > nextUpdateDate ? now : nextUpdateDate).toISOString().substring(0, 10);
                     // Retain the current market open close status, because the trade times
                     // will now be the following day:
-                    const isOpenMap: { [key: string]: boolean } = {};
+                    const isOpenMap: Record<string, boolean> = {};
                     for (const key in this._tradingTimesMap) {
                         isOpenMap[key] = !!this._tradingTimesMap[key].isOpened;
                     }
@@ -88,7 +88,7 @@ class TradingTimes {
         }
     }
     _updateMarketOpenClosed() {
-        const changed: { [symbol: string]: boolean | undefined } = {};
+        const changed: Record<string, boolean | undefined> = {};
         for (const symbol in this._tradingTimesMap) {
             const isOpened = this._calcIsMarketOpened(symbol);
             if (this._tradingTimesMap[symbol].isOpened !== isOpened) {

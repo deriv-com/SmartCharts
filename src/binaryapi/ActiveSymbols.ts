@@ -64,7 +64,7 @@ export default class ActiveSymbols {
     processedSymbols?: TProcessedSymbols;
     @observable changes: TChanges = {};
     @observable categorizedSymbols: TCategorizedSymbols = [];
-    symbolMap: { [key: string]: TProcessedSymbolItem } = {};
+    symbolMap: Record<string, TProcessedSymbolItem> = {};
     symbolsPromise = PendingPromise<void, void>();
     isRetrievingSymbols = false;
 

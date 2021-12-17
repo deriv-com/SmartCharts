@@ -82,7 +82,7 @@ function getServerUrl() {
 }
 const parseQueryString = (query: string) => {
     const vars = query.split('&');
-    const query_string: { [x: string]: string | string[] } = {};
+    const query_string: Record<string, string | string[]> = {};
     for (let i = 0; i < vars.length; i++) {
         const pair = vars[i].split('=');
         const key = decodeURIComponent(pair[0]);

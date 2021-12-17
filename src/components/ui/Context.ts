@@ -10,13 +10,13 @@
 class Context {
     advertised: typeof CIQ.UI.Layout;
     loader: typeof CIQ.UI.Loader;
-    params?: { [key: string]: unknown };
+    params?: Record<string, unknown>;
     stx: typeof CIQ.ChartEngine;
     topNode: (HTMLElement & { CIQ: typeof CIQ }) | null;
     constructor(
         stx: typeof CIQ.ChartEngine,
         topNode: (HTMLElement & { CIQ: typeof CIQ }) | null,
-        params?: { [key: string]: unknown }
+        params?: Record<string, unknown>
     ) {
         this.params = params || {};
         this.stx = stx;

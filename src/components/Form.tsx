@@ -15,10 +15,8 @@ type TFormGroupProps = {
 };
 
 type TFontSettingProps = {
-    onChange: (object: { [x: string]: string | undefined }) => void;
-    value: {
-        [x: string]: string;
-    };
+    onChange: (object: Record<string, string | undefined>) => void;
+    value: Record<string, string>;
 };
 
 type TColorPickerProps = {
@@ -537,7 +535,7 @@ export const FontSetting: React.FC<TFontSettingProps> = ({ onChange, value }) =>
     const families = ['Default', 'Helvetica', 'Courier', 'Garamond', 'Palatino', 'Times New Roman'];
     const fontSizes = [8, 10, 12, 13, 14, 16, 20, 28, 36, 48, 64];
 
-    const fireChange = (change: { [x: string]: string | undefined }) => onChange({ ...value, ...change });
+    const fireChange = (change: Record<string, string | undefined>) => onChange({ ...value, ...change });
     const onFontFamilyChange = (family: string) => fireChange({ family });
     const onFontSizeChange = (size: number) => fireChange({ size: `${size}px` });
     const onBoldChange = (isBold: boolean) => fireChange({ weight: isBold ? 'bold' : undefined });

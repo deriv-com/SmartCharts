@@ -7,7 +7,7 @@ class ConnectionManager extends EventEmitter {
     _bufferedRequests: IPendingPromise<TBinaryAPIResponse, Error>[];
     _connectionOpened?: IPendingPromise<void, void>;
     _counterReqId: number;
-    _pendingRequests: { [key: string]: undefined | IPendingPromise<TBinaryAPIResponse, Error> };
+    _pendingRequests: Record<string, undefined | IPendingPromise<TBinaryAPIResponse, Error>>;
     _pingTimer?: ReturnType<typeof setInterval>;
     _url: string;
     _websocket: RobustWebsocket;

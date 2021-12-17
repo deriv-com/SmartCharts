@@ -8,9 +8,9 @@ function loadFavorites() {
         return;
     }
 
-    const favorites: { [x: string]: { [x: string]: boolean} } = {};
+    const favorites: Record<string, Record<string, boolean>> = {};
     for (const categoryName in local) {
-        const category: { [x: string]: boolean } = {};
+        const category: Record<string, boolean> = {};
         for (const id of local[categoryName]) {
             category[id] = true;
         }
@@ -71,7 +71,7 @@ class FavoriteStore {
     }
 
     saveFavorites() {
-        const favorites: { [x: string]: string[] } = {};
+        const favorites: Record<string, string[]> = {};
         for (const categoryName in this.favoritesMap) {
             const category = [];
             for (const id in this.favoritesMap[categoryName]) {

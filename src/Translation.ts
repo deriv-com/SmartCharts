@@ -1,7 +1,5 @@
 const lang_map: {
-    [key: string]: {
-        [key: string]: string;
-    };
+    [key: string]: Record<string, string>;
 } = {};
 
 export class Translation {
@@ -34,7 +32,7 @@ export class Translation {
      * Note: The first key-value pair will be used to determine the plural form.
      *
      */
-    translate(...args: [string, { [key: string]: string }]) {
+    translate(...args: [string, Record<string, string>]) {
         const curr_lang = lang_map[this.lang];
         const key = args[0].trim();
         const key_with_quotation = key.replace(/"/gi, '\\"'); /* eslint-disable-line */

@@ -3,7 +3,7 @@ import { observable, action } from 'mobx';
 export default class LoaderStore {
     @observable isActive = false;
     @observable currentState: string | boolean = false;
-    states: {[key: string]: string | boolean} = {};
+    states: Record<string, string | boolean> = {};
 
     constructor() {
         this.states = {

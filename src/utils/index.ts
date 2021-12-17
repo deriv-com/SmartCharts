@@ -154,7 +154,7 @@ export function getLocalDate(epoch: number) {
 
 export function updatePropIfChanged(
     source: MarkerStore,
-    props: { [key: string]: string | number | Date | boolean | undefined },
+    props: Record<string, string | number | Date | boolean | undefined>,
     onChanged: () => void
 ) {
     let isChanged = false;
