@@ -2,7 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
-import { ChartType, TIconProps } from 'src/types';
+import { ChartType, TIcon } from 'src/types';
 import { TListItem } from 'src/store/ListStore';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
@@ -10,7 +10,7 @@ import List from './List';
 import Menu from './Menu';
 
 type TTypeIcon = {
-    Icon: React.FC<TIconProps>;
+    Icon: TIcon;
     className: string;
 };
 

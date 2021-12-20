@@ -125,10 +125,10 @@ export type TChartProps = {
     chartType?: string;
     startEpoch?: number;
     endEpoch?: number;
-    chartControlsWidgets?: React.FC<{ isMobile?: boolean }> | null;
-    topWidgets?: React.FC;
+    chartControlsWidgets?: TChartControlsWidgets;
+    topWidgets?: () => React.ReactElement;
     bottomWidgets?: () => React.ReactElement;
-    toolbarWidget?: React.FC;
+    toolbarWidget?: () => React.ReactElement;
     isMobile?: boolean;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void;
     stateChangeListener?: TStateChangeListener;
@@ -238,3 +238,7 @@ export type TRefData = {
     div: HTMLDivElement;
     value?: Element | null;
 };
+
+export type TChartControlsWidgets = (props: { isMobile?: boolean }) => React.ReactElement | null;
+
+export type TIcon = (props: TIconProps) => JSX.Element;

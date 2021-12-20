@@ -1,5 +1,5 @@
 import React from 'react';
-import { TIconProps } from 'src/types';
+import { TIcon, TIconProps } from 'src/types';
 import '../../sass/components/_icons.scss';
 
 // Chart types:
@@ -553,7 +553,7 @@ export const ItemIconMap = {
     cryBTCUSD: Wrapper(BTCUSD),
 };
 
-const createCompositeIcon = (A: React.FC, B: React.FC, icId: string) => {
+const createCompositeIcon = (A: TIcon, B: TIcon, icId: string) => {
     const FC = (props: { className?: string }) => {
         const { className, ...p } = props;
         return (

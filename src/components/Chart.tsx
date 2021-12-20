@@ -64,7 +64,7 @@ const Chart = (props: TChartProps) => {
         bottomWidgets,
         enabledChartFooter = true,
         enabledNavigationWidget = true,
-        toolbarWidget,
+        toolbarWidget = () => null,
         onCrosshairChange,
     } = props;
 
@@ -72,7 +72,7 @@ const Chart = (props: TChartProps) => {
     const TopWidgets = topWidgets || defaultTopWidgets;
     // if there are any markers, then increase the subholder z-index
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const ToolbarWidget = React.useCallback(toolbarWidget as React.FC, [t.lang]);
+    const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
 
     return (
         <div

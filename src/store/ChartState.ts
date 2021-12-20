@@ -1,6 +1,13 @@
 /* eslint-disable no-new */
 import { action, observable, when } from 'mobx';
-import { TChartProps, TGetIndicatorHeightRatio, TGranularity, TQuote, TSettings } from 'src/types';
+import {
+    TChartControlsWidgets,
+    TChartProps,
+    TGetIndicatorHeightRatio,
+    TGranularity,
+    TQuote,
+    TSettings,
+} from 'src/types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -59,7 +66,7 @@ class ChartState {
     @observable yAxisMargin = { top: 106, bottom: 64 };
     tradingTimes: string | null = null;
     activeSymbols: string | null = null;
-    chartControlsWidgets?: React.FC | null;
+    chartControlsWidgets?: TChartControlsWidgets;
     enabledChartFooter?: boolean;
 
     get stxx(): ChartStore['stxx'] {

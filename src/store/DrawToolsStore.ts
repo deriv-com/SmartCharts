@@ -1,6 +1,6 @@
 import { action, computed, observable, reaction, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TIconProps, TObject, TSettingsItem } from 'src/types';
+import { TIcon, TObject, TSettingsItem } from 'src/types';
 import MainStore from '.';
 import { drawTools } from '../Constant';
 import { formatCamelCase } from '../utils';
@@ -40,7 +40,7 @@ type TDrawingObject = {
     field?: string | null;
     fillColor?: string;
     highlighted: boolean;
-    icon?: React.FC<TIconProps>;
+    icon?: TIcon;
     id?: string;
     index?: number;
     lineWidth: number;

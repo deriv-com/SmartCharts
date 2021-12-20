@@ -43,19 +43,19 @@ import {
     TypeHollowIcon,
     TypeOhlcIcon,
 } from './components/Icons';
-import { TIconProps } from './types';
+import { TIcon } from './types';
 
 type TDrawTools = {
     [key: string]: {
         id: string;
         text: string;
-        icon: React.FC<TIconProps>;
+        icon: TIcon;
     };
 };
 
 export type TIndicatorItem = {
     description: string;
-    icon: React.FC<TIconProps>;
+    icon: TIcon;
     id: string;
     isPrediction?: boolean;
     name: string;
@@ -86,7 +86,7 @@ export type TActiveItem = TIndicatorItem & {
 };
 
 export type TIndicatorsTree = {
-    icon: React.FC<TIconProps>;
+    icon: TIcon;
     name: string;
     id: string;
     items: TIndicatorItem[];

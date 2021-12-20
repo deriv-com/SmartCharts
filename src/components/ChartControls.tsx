@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
+import { TChartControlsWidgets } from 'src/types';
 import { useStores } from 'src/store';
 import ChartTypes from './ChartTypes';
 import StudyLegend from './StudyLegend';
@@ -28,7 +29,7 @@ export const RenderDefaultControls = ({ isMobile }: TRenderDefaultControls) => (
 );
 
 type TChartControlsProps = {
-    widgets?: React.FC<{ isMobile?: boolean }>;
+    widgets?: TChartControlsWidgets;
 };
 
 const ChartControls = ({ widgets }: TChartControlsProps) => {

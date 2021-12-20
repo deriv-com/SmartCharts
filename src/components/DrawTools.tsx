@@ -4,7 +4,7 @@ import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useStores } from 'src/store';
 import DrawToolsStore from 'src/store/DrawToolsStore';
-import { ArrayElement, TIconProps, TMainStore } from 'src/types';
+import { ArrayElement, TIcon, TMainStore } from 'src/types';
 import '../../sass/components/_draw_tools.scss';
 import { ActiveIcon, DeleteIcon, DrawToolIcon, EmptyStateIcon, SettingIcon } from './Icons';
 import Menu from './Menu';
@@ -23,7 +23,7 @@ type TActiveDrawToolsListProps = {
 };
 
 type InfoProps = {
-    Icon?: React.FC<TIconProps>;
+    Icon?: TIcon;
     text?: string;
     num?: string | number;
     bars?: number | null;

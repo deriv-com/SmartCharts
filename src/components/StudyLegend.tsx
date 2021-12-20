@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { TIconProps } from 'src/types';
+import { TIcon } from 'src/types';
 import { useStores } from 'src/store';
 import StudyLegendStore from 'src/store/StudyLegendStore';
 import NotificationBadge from './NotificationBadge';
@@ -15,7 +15,7 @@ import Menu from './Menu';
 import SearchInput from './SearchInput';
 
 type TStudyIconProps = {
-    Icon: React.FC<TIconProps>;
+    Icon: TIcon;
 };
 
 type TIndicatorListProps = {
