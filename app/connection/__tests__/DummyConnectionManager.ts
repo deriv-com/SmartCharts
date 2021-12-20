@@ -1,7 +1,7 @@
 import { TicksStreamResponse } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import sinon from 'sinon';
-import { IPendingPromise, Listener, TBinaryAPIRequest, TBinaryAPIResponse } from 'src/types';
+import { IPendingPromise, Listener, TBinaryAPIResponse } from 'src/types';
 import PendingPromise from '../../../src/utils/PendingPromise';
 
 export class DummyConnectionManager extends EventEmitter {
@@ -33,7 +33,7 @@ export class DummyConnectionManager extends EventEmitter {
         this._response = val;
     }
 
-    send(request: TBinaryAPIRequest) {
+    send() {
         if (!this._response && !this.pendingRequest) {
             this.pendingRequest = PendingPromise<TBinaryAPIResponse, void>();
             return this.pendingRequest;
