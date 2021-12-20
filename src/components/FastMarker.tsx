@@ -37,9 +37,10 @@ type TFastMarkerProps = {
     x?: number;
     xPositioner?: string;
     yPositioner?: string;
+    children?: React.ReactNode;
 };
 
-const FastMarker: React.FC<TFastMarkerProps> = props => {
+const FastMarker = (props: TFastMarkerProps) => {
     const { chart: chartStore } = useStores();
     const { contextPromise } = chartStore;
     const price_ref = React.useRef<number | null>(null);

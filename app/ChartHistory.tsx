@@ -8,7 +8,7 @@ type TChartHistoryProps = {
     onChange: (date: string) => void;
 };
 
-const ChartHistory: React.FC<TChartHistoryProps> = React.memo(({ onChange }) => {
+const ChartHistory = React.memo(({ onChange }: TChartHistoryProps) => {
     const [date, setDate] = React.useState(moment().format('YYYY/MM/DD'));
     const [focusOnDate, setFocusOnDate] = React.useState(false);
     const [focusOnTime, setFocusOnTime] = React.useState(false);

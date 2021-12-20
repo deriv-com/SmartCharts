@@ -242,7 +242,7 @@ import DrawToolsTrend from '../../sass/icons/draw-tools/ic-trend.svg';
 import DrawToolsVertical from '../../sass/icons/draw-tools/ic-vertical.svg';
 
 export const Wrapper = (SvgLogo: React.SVGAttributes<SVGElement>) => {
-    const InnerWrapper: React.FC<TIconProps> = props => {
+    const InnerWrapper = (props: TIconProps) => {
         let { className, 'tooltip-title': tooltip, ...p } = props; // eslint-disable-line prefer-const
         className = `ic-icon ${className || ''}`;
         const vb = SvgLogo.viewBox?.split(' ').slice(2) || [];
@@ -554,7 +554,7 @@ export const ItemIconMap = {
 };
 
 const createCompositeIcon = (A: React.FC, B: React.FC, icId: string) => {
-    const FC: React.FC<{ className?: string }> = props => {
+    const FC = (props: { className?: string }) => {
         const { className, ...p } = props;
         return (
             <span className={`${icId} ${className}`} {...p}>

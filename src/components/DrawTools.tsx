@@ -13,6 +13,7 @@ import Scroll from './Scroll';
 
 type TActivePanelViewProps = {
     enabled: boolean;
+    children?: React.ReactNode;
 };
 
 type TActiveDrawToolsListProps = {
@@ -49,7 +50,7 @@ type TDrawToolsListProps = {
     onClick: DrawToolsStore['selectTool'];
 };
 
-const ActivePanelView: React.FC<TActivePanelViewProps> = ({ enabled, children }) =>
+const ActivePanelView = ({ enabled, children }: TActivePanelViewProps) =>
     enabled ? (
         <div className='sc-dtools--empty'>
             <EmptyStateIcon />
@@ -59,7 +60,7 @@ const ActivePanelView: React.FC<TActivePanelViewProps> = ({ enabled, children })
         <React.Fragment>{children}</React.Fragment>
     );
 
-const Info: React.FC<InfoProps> = ({ Icon, text, num, bars }) => (
+const Info = ({ Icon, text, num, bars }: InfoProps) => (
     <div className='info'>
         {Icon ? <Icon className='icon' /> : ''}
         <div className='text'>
@@ -69,7 +70,7 @@ const Info: React.FC<InfoProps> = ({ Icon, text, num, bars }) => (
     </div>
 );
 
-const DrawToolsList: React.FC<TDrawToolsListProps> = ({ items, onClick }) => (
+const DrawToolsList = ({ items, onClick }: TDrawToolsListProps) => (
     <div className='sc-dtools__list'>
         {items.map(Item => (
             <div key={Item.id} className='sc-dtools__list__item' onClick={() => onClick(Item.id)}>
@@ -79,7 +80,7 @@ const DrawToolsList: React.FC<TDrawToolsListProps> = ({ items, onClick }) => (
     </div>
 );
 
-const ActiveDrawToolsListItem: React.FC<TActiveDrawToolsListItemProps> = ({ item, onSetting, onDelete }) => (
+const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: TActiveDrawToolsListItemProps) => (
     <div className='sc-dtools__list__item'>
         <Info Icon={item.icon} text={item.text} bars={item.bars} num={item.num} />
         <div className='actions'>
@@ -89,7 +90,7 @@ const ActiveDrawToolsListItem: React.FC<TActiveDrawToolsListItemProps> = ({ item
     </div>
 );
 
-const ActiveDrawToolsListGroup: React.FC<TActiveDrawToolsListGroupProps> = ({ group, onSetting, onDelete }) => (
+const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: TActiveDrawToolsListGroupProps) => (
     <div className='sc-dtools__category'>
         <div className='sc-dtools__category__head'>{t.translate(group.name, { num: ' ' })}</div>
         <div className='sc-dtools__category__body'>
@@ -107,7 +108,7 @@ const ActiveDrawToolsListGroup: React.FC<TActiveDrawToolsListGroupProps> = ({ gr
     </div>
 );
 
-const ActiveDrawToolsList: React.FC<TActiveDrawToolsListProps> = ({ activeDrawToolsGroup, onSetting, onDelete }) => (
+const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }: TActiveDrawToolsListProps) => (
     <Scroll autoHide height={320}>
         {activeDrawToolsGroup.map(group =>
             group.items && group.items.length === 1 ? (
@@ -124,7 +125,7 @@ const ActiveDrawToolsList: React.FC<TActiveDrawToolsListProps> = ({ activeDrawTo
     </Scroll>
 );
 
-const DrawTools: React.FC<DrawToolsProps> = ({ portalNodeId }) => {
+const DrawTools = ({ portalNodeId }: DrawToolsProps) => {
     const { drawTools } = useStores();
 
     const {

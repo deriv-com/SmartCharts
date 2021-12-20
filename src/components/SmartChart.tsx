@@ -3,7 +3,7 @@ import { useStores, getContext, initContext } from 'src/store';
 import { TChartProps } from 'src/types';
 import Chart from './Chart';
 
-const SmartChart: React.FC<TChartProps> = ({ children, ...props }) => {
+const SmartChart = ({ children, ...props }: TChartProps) => {
     const is_context_intialized = React.useRef(false);
     if (!is_context_intialized.current) {
         initContext();

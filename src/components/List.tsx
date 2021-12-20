@@ -10,7 +10,7 @@ type TListProps = {
     store: ListStore;
 };
 
-const List: React.FC<TListProps> = ({ height, store, children }) => {
+const List = ({ height, store, children }: TListProps) => {
     const { getItems, onItemClick } = store;
     const renderRow = typeof children === 'function' ? children : (item: TListItem) => item.text;
     const itemClassName = (it: TListItem) =>

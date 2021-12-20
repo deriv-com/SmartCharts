@@ -4,7 +4,7 @@ import { useStores } from 'src/store';
 import '../../sass/components/_indicator_prediction_dialog.scss';
 import Menu from './Menu';
 
-const IndicatorPredictionDialog: React.FC = () => {
+const IndicatorPredictionDialog = () => {
     const { timeperiod } = useStores();
 
     const {

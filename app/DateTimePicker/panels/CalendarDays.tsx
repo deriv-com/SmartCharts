@@ -91,7 +91,7 @@ const getDays = ({
 
 const week_headers = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-export const CalendarDays: React.FC<TCalendarProps> = props => {
+export const CalendarDays = (props: TCalendarProps) => {
     const days = getDays(props).map(day => day);
 
     return (

@@ -10,7 +10,7 @@ type TCrosshairToggleProps = {
     isVisible?: boolean;
 };
 
-const CrosshairToggle: React.FC<TCrosshairToggleProps> = ({ onChange, isVisible = true }) => {
+const CrosshairToggle = ({ onChange, isVisible = true }: TCrosshairToggleProps) => {
     const { crosshair, chart } = useStores();
     const { setCrosshairState, updateProps } = crosshair;
     const { isMobile } = chart;

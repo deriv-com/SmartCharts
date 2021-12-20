@@ -407,10 +407,7 @@ export default class StudyLegendStore {
             if (panelObj.solo.style.display !== 'none') {
                 const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
                 const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                if (
-                    InnerSoloPanel.querySelector('svg').getAttribute('id') !==
-                    (soloIcon as React.FC & { id: string }).id
-                ) {
+                if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
                     InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
                 }
             }

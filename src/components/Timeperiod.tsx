@@ -23,7 +23,7 @@ const enableLoader = (isLoading: boolean, inval: number, preparingInterval: numb
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
 
-const TimeperiodItemComponent: React.FC<TTimeperiodItemProps> = ({ item, category, onClick }) => {
+const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
     const { timeperiod, chartType, loader } = useStores();
     const chartTypeId = chartType.type.id;
     const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
@@ -83,7 +83,7 @@ const TimeperiodItem = observer(TimeperiodItemComponent);
 
 type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGranularity) => void; newDesign?: boolean };
 
-const Timeperiod: React.FC<TTimeperiodProps> = ({ portalNodeId, onChange }) => {
+const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
     const { timeperiod } = useStores();
 
     const { setGranularity, updateProps, changeGranularity, updatePortalNode } = timeperiod;

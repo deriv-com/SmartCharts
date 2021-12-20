@@ -7,6 +7,7 @@ type TCalendarButtonProps = {
     is_hidden?: boolean;
     label?: string;
     onClick?: React.MouseEventHandler;
+    children?: React.ReactNode;
 };
 
 type TCalendarProps = {
@@ -19,6 +20,7 @@ type TCalendarProps = {
     min_date: string;
     onSelect: (date: string, is_datepicker_visible?: boolean) => void;
     ref?: React.Ref<TCalendarRefProps>;
+    children?: React.ReactNode;
 };
 
 export type TCalendarRefProps = {
@@ -71,7 +73,7 @@ type TCalendarHeaderProps = {
     calendar_view: string;
 };
 
-const CalendarButton: React.FC<TCalendarButtonProps> = ({ children, className, is_hidden, label, onClick }) => {
+const CalendarButton = ({ children, className, is_hidden, label, onClick }: TCalendarButtonProps) => {
     return (
         <React.Fragment>
             {!is_hidden && (
@@ -84,7 +86,7 @@ const CalendarButton: React.FC<TCalendarButtonProps> = ({ children, className, i
     );
 };
 
-const CalendarPanel: React.FC<TCalendarPanelProps> = props => {
+const CalendarPanel = (props: TCalendarPanelProps) => {
     const calendar_panel = {
         date: <CalendarDays {...props} />,
         month: <CalendarMonths {...props} />,
@@ -95,7 +97,7 @@ const CalendarPanel: React.FC<TCalendarPanelProps> = props => {
     return <div className='calendar-panel'>{calendar_panel[props.calendar_view as keyof typeof calendar_panel]}</div>;
 };
 
-const CalendarFooter: React.FC<TCalendarFooterProps> = ({ footer, has_today_btn, onClick }) => {
+const CalendarFooter = ({ footer, has_today_btn, onClick }: TCalendarFooterProps) => {
     return (
         <div className='calendar-footer'>
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
@@ -108,13 +110,13 @@ const CalendarFooter: React.FC<TCalendarFooterProps> = ({ footer, has_today_btn,
     );
 };
 
-const CalendarHeader: React.FC<TCalendarHeaderProps> = ({
+const CalendarHeader = ({
     calendar_date,
     isPeriodDisabled,
     onClick,
     onSelect,
     calendar_view,
-}) => {
+}: TCalendarHeaderProps) => {
     const is_date_view = calendar_view === 'date';
     const is_month_view = calendar_view === 'month';
     const is_year_view = calendar_view === 'year';
@@ -199,7 +201,7 @@ const CalendarHeader: React.FC<TCalendarHeaderProps> = ({
     );
 };
 
-const Calendar: React.FC<TCalendarProps> = React.forwardRef<TCalendarRefProps, TCalendarProps>(
+const Calendar = React.forwardRef<TCalendarRefProps, TCalendarProps>(
     (
         {
             children,
@@ -211,7 +213,7 @@ const Calendar: React.FC<TCalendarProps> = React.forwardRef<TCalendarRefProps, T
             max_date = moment().utc().add(120, 'y').format('YYYY-MM-DD'), // by default, max_date is set to 120 years after today
             min_date = moment(0).utc().format('YYYY-MM-DD'), // by default, min_date is set to Unix Epoch (January 1st 1970)
             onSelect,
-        },
+        }: TCalendarProps,
         ref
     ) => {
         const [calendar_date, setCalendarDate] = React.useState(moment.utc(start_date).format(date_format));

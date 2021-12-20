@@ -7,7 +7,7 @@ type TPriceLineTitleProps = {
     yAxiswidth: number;
 };
 
-const PriceLineTitle: React.FC<TPriceLineTitleProps> = ({ color, yAxiswidth, title, opacity }) => (
+const PriceLineTitle = ({ color, yAxiswidth, title, opacity }: TPriceLineTitleProps) => (
     <div className='title-wrapper' style={{ color, right: yAxiswidth, opacity }}>
         <span className='title'>{title}</span>
     </div>

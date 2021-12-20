@@ -34,7 +34,7 @@ type TActiveListViewProps = {
     remove: TMainStore['view']['remove'];
 };
 
-const ViewItem: React.FC<TViewItemProps> = ({ view, remove, onClick }) => (
+const ViewItem = ({ view, remove, onClick }: TViewItemProps) => (
     <Tooltip
         className='sc-views__views__list__item'
         onClick={onClick}
@@ -57,7 +57,7 @@ const EmptyView = ({ onClick }: { onClick: (event: React.MouseEvent<HTMLElement>
     </div>
 );
 
-const OverwriteView: React.FC<TOverwriteViewProps> = ({ templateName, onCancel, onOverwrite }) => (
+const OverwriteView ({ templateName, onCancel, onOverwrite }:TOverwriteViewProps) => (
     <div className='sc-views--overwrite'>
         <div className='sc-views--overwrite__content'>
             <OverwriteStateIcon />
@@ -78,7 +78,7 @@ const OverwriteView: React.FC<TOverwriteViewProps> = ({ templateName, onCancel, 
     </div>
 );
 
-const ActiveListView: React.FC<TActiveListViewProps> = ({ views, removeAll, applyLayout, remove }) => {
+const ActiveListView= ({ views, removeAll, applyLayout, remove }:TActiveListViewProps) => {
     if (!views.length) return null;
 
     return (
@@ -105,7 +105,7 @@ const ActiveListView: React.FC<TActiveListViewProps> = ({ views, removeAll, appl
     );
 };
 
-const Views: React.FC<TViewsProps> = ({ portalNodeId }) => {
+const Views= ({ portalNodeId }:TViewsProps) => {
     const { view } = useStores();
 
     const {

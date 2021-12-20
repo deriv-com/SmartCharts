@@ -12,7 +12,7 @@ const Bar = ({ x, bar }: { x: number; bar: TBar }) => (
     </div>
 );
 
-const LastDigitStats: React.FC = () => {
+const LastDigitStats = () => {
     const { lastDigitStats } = useStores();
     const { isVisible, bars, marketDisplayName, shouldMinimiseLastDigits } = lastDigitStats;
     return (

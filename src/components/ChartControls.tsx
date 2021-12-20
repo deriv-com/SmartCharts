@@ -14,7 +14,7 @@ import '../../sass/components/_chart-controls.scss';
 
 type TRenderDefaultControls = { isMobile?: boolean };
 
-export const RenderDefaultControls: React.FC<TRenderDefaultControls> = ({ isMobile }) => (
+export const RenderDefaultControls = ({ isMobile }: TRenderDefaultControls) => (
     <>
         {isMobile ? '' : <CrosshairToggle />}
         <ChartTypes />
@@ -31,7 +31,7 @@ type TChartControlsProps = {
     widgets?: React.FC<{ isMobile?: boolean }>;
 };
 
-const ChartControls: React.FC<TChartControlsProps> = ({ widgets }) => {
+const ChartControls = ({ widgets }: TChartControlsProps) => {
     const { chart, chartType, studies, drawTools, view, share, chartSetting } = useStores();
     const { context, isMobile } = chart;
     const hasOpenMenu =

@@ -4,8 +4,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import { useStores } from 'src/store';
-import { TLanguage } from 'src/store/ChartSettingStore';
-import { TIconProps, TMainStore } from 'src/types';
+import { TIconProps, TMainStore, TLanguage } from 'src/types';
 import '../../sass/components/_chart-setting.scss';
 import { FormGroup, SwitchIcon } from './Form';
 import {
@@ -31,15 +30,7 @@ type ChartSettingsItemProps = {
     activeIcon: React.FC<TIconProps>;
 };
 
-const ChartSettingItem: React.FC<ChartSettingsItemProps> = ({
-    title,
-    id,
-    label,
-    value,
-    onChange,
-    noramIcon,
-    activeIcon,
-}) => (
+const ChartSettingItem = ({ title, id, label, value, onChange, noramIcon, activeIcon }: ChartSettingsItemProps) => (
     <FormGroup title={title} type={id}>
         <SwitchIcon
             id={id}
@@ -52,7 +43,7 @@ const ChartSettingItem: React.FC<ChartSettingsItemProps> = ({
     </FormGroup>
 );
 
-const ChartSetting: React.FC = () => {
+const ChartSetting = () => {
     const { chartSetting } = useStores();
     const {
         menuStore,

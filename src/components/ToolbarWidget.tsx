@@ -7,9 +7,10 @@ import '../../sass/components/_toolbar-widget.scss';
 
 type TToolbarWidgetProps = {
     position?: string;
+    children?: React.ReactNode;
 };
 
-const ToolbarWidget: React.FC<TToolbarWidgetProps> = ({ position = 'top', children }) => {
+const ToolbarWidget = ({ position = 'top', children }: TToolbarWidgetProps) => {
     const { chart, toolbarWidget } = useStores();
     const { context } = chart;
     const { onMouseEnter, onMouseLeave } = toolbarWidget;

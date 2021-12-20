@@ -66,13 +66,13 @@ function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
     return count;
 }
 
-const EmptyCategory: React.FC<TEmptyCategoryProps> = React.memo(({ category }) => (
+const EmptyCategory = React.memo(({ category }: TEmptyCategoryProps) => (
     <div className='sc-mcd__category__content'>
         <div className='empty-category'>{t.translate(category.emptyDescription)}</div>
     </div>
 ));
 
-const CategoryTitleLeft: React.FC<TCategoryTitleLeftProps> = React.memo(({ isNestedList, category }) => {
+const CategoryTitleLeft = React.memo(({ isNestedList, category }: TCategoryTitleLeftProps) => {
     const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
         <span className='category-title-left'>
@@ -82,7 +82,7 @@ const CategoryTitleLeft: React.FC<TCategoryTitleLeftProps> = React.memo(({ isNes
     );
 });
 
-const CategoryTitle: React.FC<TCategoryTitleProps> = ({ category, activeHeadKey, isNestedList, handleTitleClick }) => (
+const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick }: TCategoryTitleProps) => (
     <div
         className={classNames('sc-mcd__category__head', {
             'has-subtitle': category.categorySubtitle,
@@ -101,7 +101,7 @@ const CategoryTitle: React.FC<TCategoryTitleProps> = ({ category, activeHeadKey,
     </div>
 );
 
-const Category: React.FC<TCategoryProps> = ({
+const Category = ({
     category,
     categoryItemCount,
     ItemType,
@@ -112,7 +112,7 @@ const Category: React.FC<TCategoryProps> = ({
     isNestedList,
     handleTitleClick,
     favoritesId,
-}) => (
+}: TCategoryProps) => (
     <div
         className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
             'sc-mcd__category--has-subtitle': category.categorySubtitle,
@@ -169,7 +169,7 @@ const Category: React.FC<TCategoryProps> = ({
     </div>
 );
 
-const ResultsPanel: React.FC<TResultsPanelProps> = ({
+const ResultsPanel = ({
     filteredItems,
     onSelectItem,
     ItemType,
@@ -179,7 +179,7 @@ const ResultsPanel: React.FC<TResultsPanelProps> = ({
     isNestedList,
     handleTitleClick,
     favoritesId,
-}) => (
+}: TResultsPanelProps) => (
     <>
         {filteredItems.map((category: TCategorizedSymbolItem) => {
             const categoryItemCount = getItemCount(category);

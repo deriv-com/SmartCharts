@@ -20,7 +20,7 @@ export type TChartTitleProps = {
     onChange?: (x: string) => void;
 };
 
-const ChartTitle: React.FC<TChartTitleProps> = props => {
+const ChartTitle = (props: TChartTitleProps) => {
     const { chartTitle, chart, chartSetting } = useStores();
     const { isMobile } = chart;
 

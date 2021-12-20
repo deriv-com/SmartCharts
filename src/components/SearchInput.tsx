@@ -12,13 +12,7 @@ export type TSearchInputProps = {
     onChange: (value: string) => void;
 };
 
-const SearchInput: React.FC<TSearchInputProps> = ({
-    placeholder,
-    value,
-    searchInput,
-    searchInputClassName,
-    onChange,
-}) => (
+const SearchInput = ({ placeholder, value, searchInput, searchInputClassName, onChange }: TSearchInputProps) => (
     <div className={classNames('sc-search-input', { active: value.trim() !== '' })}>
         <input
             className={searchInputClassName}

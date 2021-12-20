@@ -12,9 +12,10 @@ export type TDialogProps = {
     title?: string;
     handleCloseDialog?: () => void;
     customHead?: React.ReactElement;
+    children?: React.ReactNode;
 };
 
-const Dialog: React.FC<TDialogProps> = ({
+const Dialog = ({
     store,
     children,
     className = '',
@@ -22,7 +23,7 @@ const Dialog: React.FC<TDialogProps> = ({
     customHead,
     enableTabular = false,
     handleCloseDialog,
-}) => {
+}: TDialogProps) => {
     const { updateCloseCallback, onContainerClick } = store;
     useEffect(() => updateCloseCallback(handleCloseDialog));
     return (

@@ -29,7 +29,7 @@ const TypeMap = {
     hollow_candle: TypeHollowGrayscaleIcon,
 };
 
-const ChartMode: React.FC<TChartModeProps> = ({ onChartType, onGranularity, portalNodeId }) => {
+const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps) => {
     const { chartMode, chartType, timeperiod } = useStores();
     const { menuStore } = chartMode;
 

@@ -7,7 +7,7 @@ type TPriceLineArrowProps = {
     color?: string;
 };
 
-const PriceLineArrow: React.FC<TPriceLineArrowProps> = ({ offScreenDirection, color }) => {
+const PriceLineArrow = ({ offScreenDirection, color }: TPriceLineArrowProps) => {
     const top = offScreenDirection === DIRECTIONS.UP ? `${-ARROW_HEIGHT}px` : '';
     const transform = offScreenDirection === DIRECTIONS.DOWN ? 'rotate(180deg)' : '';
 

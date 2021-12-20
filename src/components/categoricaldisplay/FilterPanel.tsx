@@ -24,8 +24,8 @@ const FilterItemIcon = React.memo(({ categoryId }: { categoryId: string }) => {
     return CategoryIcon && <CategoryIcon className={`ic-${categoryId}`} />;
 });
 
-const FilterItem: React.FC<TFilterItemProps> = React.memo(
-    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }) => {
+const FilterItem = React.memo(
+    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }: TFilterItemProps) => {
         const isActive =
             focusedCategoryKey && focusedCategoryKey.length
                 ? focusedCategoryKey === category.categoryId
@@ -42,13 +42,13 @@ const FilterItem: React.FC<TFilterItemProps> = React.memo(
     }
 );
 
-const FilterPanel: React.FC<TFilterPanelProps> = ({
+const FilterPanel = ({
     filteredItems,
     handleFilterClick,
     focusedCategoryKey,
     activeCategoryKey,
     isSearching,
-}) => (
+}: TFilterPanelProps) => (
     <div className='sc-mcd__filter'>
         {filteredItems.map((category: TCategorizedSymbolItem) => (
             <FilterItem

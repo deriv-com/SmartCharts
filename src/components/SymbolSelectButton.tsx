@@ -19,7 +19,7 @@ type TClosedSymbolProps = {
     symbolOpenTime: ChartTitleStore['symbolOpenTime'];
 };
 
-const SymbolInfoBase: React.FC = () => {
+const SymbolInfoBase = () => {
     const { chartTitle } = useStores();
 
     const {
@@ -60,7 +60,7 @@ const SymbolInfoBase: React.FC = () => {
 
 export const SymbolInfo = observer(SymbolInfoBase);
 
-const SymbolSelectButtonBase: React.FC = () => {
+const SymbolSelectButtonBase = () => {
     const { chartTitle } = useStores();
     const { isSymbolOpen } = chartTitle;
     return (
@@ -75,7 +75,7 @@ const SymbolSelectButtonBase: React.FC = () => {
 };
 export const SymbolSelectButton = observer(SymbolSelectButtonBase);
 
-const ChartPriceBase: React.FC<TChartPriceProps> = ({ isVisible, status, todayChange, todayChangePercent }) => {
+const ChartPriceBase = ({ isVisible, status, todayChange, todayChangePercent }: TChartPriceProps) => {
     const { chartTitle } = useStores();
     const { animatedPrice } = chartTitle;
     const { price, isIncrease } = animatedPrice;
@@ -98,7 +98,7 @@ const ChartPriceBase: React.FC<TChartPriceProps> = ({ isVisible, status, todayCh
 
 export const ChartPrice = observer(ChartPriceBase);
 
-const ClosedSymbol: React.FC<TClosedSymbolProps> = ({ symbolOpenTime }) => (
+const ClosedSymbol = ({ symbolOpenTime }: TClosedSymbolProps) => (
     <div className='cq-chart-closed'>
         <TimeIcon className='cq-closed-icon' />
         <div className='cq-closed-opening'>

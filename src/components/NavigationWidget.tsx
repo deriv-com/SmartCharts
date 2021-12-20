@@ -12,7 +12,7 @@ type TNavigationWidgetProps = {
     onCrosshairChange?: TMainStore['crosshair']['onCrosshairChanged'];
 };
 
-const NavigationWidget: React.FC<TNavigationWidgetProps> = ({ onCrosshairChange }) => {
+const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
     const { chart, chartSize, navigationWidget, chartSetting } = useStores();
     const { context, isScaledOneOne } = chart;
     const { zoomIn, zoomOut } = chartSize;

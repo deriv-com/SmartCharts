@@ -127,7 +127,7 @@ export type TChartProps = {
     endEpoch?: number;
     chartControlsWidgets?: React.FC<{ isMobile?: boolean }> | null;
     topWidgets?: React.FC;
-    bottomWidgets?: React.FC;
+    bottomWidgets?: () => React.ReactElement;
     toolbarWidget?: React.FC;
     isMobile?: boolean;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void;
@@ -165,6 +165,7 @@ export type TChartProps = {
     enabledNavigationWidget?: boolean;
     onCrosshairChange?: (state?: number | null) => void | null;
     crosshairState?: number | null;
+    children?: React.ReactNode;
 };
 
 export type TQuote = {

@@ -4,7 +4,7 @@ import { useStores } from 'src/store';
 import FastMarker from './FastMarker';
 import '../../sass/components/_pagination-loader.scss';
 
-const PaginationLoader: React.FC = () => {
+const PaginationLoader = () => {
     const { paginationLoader } = useStores();
     const { isOnPagination, setRef } = paginationLoader;
     return isOnPagination ? (

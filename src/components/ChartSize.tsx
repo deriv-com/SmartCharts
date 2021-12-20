@@ -4,7 +4,7 @@ import { useStores } from 'src/store';
 import '../../sass/components/_chart-size.scss';
 import { ZoomInIcon, ZoomOutIcon } from './Icons';
 
-const ChartSize: React.FC = () => {
+const ChartSize () => {
     const { chartSize } = useStores();
     const { zoomIn, zoomOut } = chartSize;
 

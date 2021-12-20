@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import '../../sass/components/_bottom-widget-container.scss';
 
-const BottomWidgetsContainer: React.FC = ({ children }) => {
+const BottomWidgetsContainer = ({ children }: { children?: React.ReactNode }) => {
     const { bottomWidgetsContainer } = useStores();
     const { bottom, isReadyToShow, top, updateChartMargin } = bottomWidgetsContainer;
     React.useEffect(() => {

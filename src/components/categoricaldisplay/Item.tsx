@@ -41,7 +41,7 @@ const ItemDetail = React.memo(
     )
 );
 
-const NormalItemBase: React.FC<TNormalItemProps> = ({ onSelectItem, item, favoritesId }) => (
+const NormalItemBase = ({ onSelectItem, item, favoritesId }: TNormalItemProps) => (
     <div
         className={`sc-mcd__item sc-mcd__item--${item.itemId} ${item.selected ? 'sc-mcd__item--selected ' : ''}`}
         onClick={() => item.enabled && onSelectItem?.(item.dataObject)}

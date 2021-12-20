@@ -9,7 +9,7 @@ type TAnimatedPriceProps = {
     status: AnimatedPriceStore['status'];
 };
 
-const AnimatedPrice: React.FC<TAnimatedPriceProps> = ({ isIncrease, price, className }) => (
+const AnimatedPrice = ({ isIncrease, price, className }: TAnimatedPriceProps) => (
     <>
         {!price && <span className='cq-comparison-loader stx-show' />}
         <div

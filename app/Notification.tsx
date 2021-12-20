@@ -14,7 +14,7 @@ type TMessageObj = {
     text?: string;
 };
 
-const Notification: React.FC<TNotificationProps> = ({ notifier }) => {
+const Notification = ({ notifier }: TNotificationProps) => {
     const [messages, setMessages] = React.useState<TMessageObj[]>([]);
     const messages_ref = React.useRef<TMessageObj[]>(messages);
     messages_ref.current = messages;

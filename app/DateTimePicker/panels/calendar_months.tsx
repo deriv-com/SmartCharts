@@ -18,12 +18,7 @@ const getMonthHeaders = () => ({
     Dec: t.translate('Dec'),
 });
 
-export const CalendarMonths: React.FC<TCalendarViewProps> = ({
-    calendar_date,
-    isPeriodDisabled,
-    onClick,
-    selected_date,
-}) => {
+export const CalendarMonths = ({ calendar_date, isPeriodDisabled, onClick, selected_date }: TCalendarViewProps) => {
     const moment_date = moment.utc(calendar_date);
     const selected_month = moment.utc(selected_date).month();
     const month_headers = getMonthHeaders();

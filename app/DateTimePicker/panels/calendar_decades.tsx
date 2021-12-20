@@ -3,12 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import { TCalendarViewProps } from '../calendar.props';
 
-export const CalendarDecades: React.FC<TCalendarViewProps> = ({
-    calendar_date,
-    isPeriodDisabled,
-    onClick,
-    selected_date,
-}) => {
+export const CalendarDecades = ({ calendar_date, isPeriodDisabled, onClick, selected_date }: TCalendarViewProps) => {
     const selected_year = moment.utc(selected_date).year();
     const moment_date = moment.utc(calendar_date);
 

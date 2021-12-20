@@ -11,7 +11,7 @@ export type TBarrierBaseProps = {
     store: BarrierStore;
 };
 
-const Barrier: React.FC<TBarrierBaseProps> = ({ store, ...props }) => {
+const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
     const {
         _high_barrier,
         _low_barrier,

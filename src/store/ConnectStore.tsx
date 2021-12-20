@@ -19,9 +19,10 @@ type TConnectStoreWrapperProps = TBarrierUpdateProps &
         [x: string]: unknown;
     };
 
-const ConnectStoreWrapper: React.FC<
-    Partial<TConnectStoreWrapperProps> & Required<Pick<TConnectStoreWrapperProps, 'StoreClass' | 'children'>>
-> = ({ StoreClass, ...props }) => {
+const ConnectStoreWrapper = ({
+    StoreClass,
+    ...props
+}: Partial<TConnectStoreWrapperProps> & Required<Pick<TConnectStoreWrapperProps, 'StoreClass' | 'children'>>) => {
     const store = useStores();
     const storeRef = React.useRef<TWrappedComponentsProps['store']>();
 
@@ -42,12 +43,12 @@ const ConnectStoreWrapper: React.FC<
     return <React.Fragment>{props.children(storeRef.current)}</React.Fragment>;
 };
 
-const connectStore = <B, C>(BaseComponent: React.FC<B>, StoreClass: TStoreClass) => {
-    const Component: React.FC<C> = ({ children, ...props }) => (
+const connectStore = <B, C>(BaseComponent: (props: B) => React.ReactElement | null, StoreClass: TStoreClass) => {
+    const Component = ({ children, ...props }: C & { children?: React.ReactNode }) => (
         <ConnectStoreWrapper StoreClass={StoreClass} {...props}>
             {store => (
                 <BaseComponent store={store} {...((props as unknown) as B)}>
-                    {children as React.ReactElement}
+                    {children}
                 </BaseComponent>
             )}
         </ConnectStoreWrapper>

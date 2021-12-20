@@ -12,6 +12,7 @@ import '../../sass/components/_form.scss';
 type TFormGroupProps = {
     title?: string | null;
     type?: string;
+    children?: React.ReactNode;
 };
 
 type TFontSettingProps = {
@@ -78,6 +79,7 @@ type TToogleProps = {
     className?: string;
     active?: boolean;
     onChange: (value: boolean) => void;
+    children?: React.ReactNode;
 };
 
 type TSwitchIconProps = {
@@ -96,7 +98,7 @@ type TPatterProps = {
     onChange: (value: { width: number; pattern: string }) => void;
 };
 
-export const FormGroup: React.FC<TFormGroupProps> = ({ title, type, children }) => (
+export const FormGroup = ({ title, type, children }: TFormGroupProps) => (
     <div className={`form__group ${type ? `form__group--${type}` : ''}`}>
         {title && (
             <div className='form__label'>
@@ -107,7 +109,7 @@ export const FormGroup: React.FC<TFormGroupProps> = ({ title, type, children }) 
     </div>
 );
 
-export const Checkbox: React.FC<TCheckboxProps> = ({ id, label, checked, disabled, onChange }) => (
+export const Checkbox = ({ id, label, checked, disabled, onChange }: TCheckboxProps) => (
     <span onClick={() => onChange(!checked)}>
         <label
             htmlFor={id}
@@ -125,7 +127,7 @@ export const Checkbox: React.FC<TCheckboxProps> = ({ id, label, checked, disable
     </span>
 );
 
-export const Slider: React.FC<TSliderProps> = ({ min = 1, max = 10, step = 1, value, onChange }) => {
+export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }: TSliderProps) => {
     const activeWidth = React.useMemo(() => {
         const barWidth = 238; // css hardcode
         const width = Math.round((barWidth * (value - min)) / (max - min));
@@ -214,7 +216,7 @@ export const DropDown = <T extends number | string | TObject>(props: PropsWithCh
     );
 };
 
-export const Pattern: React.FC<TPatterProps> = ({ pattern, subtitle, lineWidth, onChange }) => {
+export const Pattern = ({ pattern, subtitle, lineWidth, onChange }: TPatterProps) => {
     const patterns = [
         { width: 1, pattern: 'solid' },
         { width: 3, pattern: 'solid' },
@@ -248,7 +250,7 @@ export const Pattern: React.FC<TPatterProps> = ({ pattern, subtitle, lineWidth, 
     );
 };
 
-export const ColorPicker: React.FC<TColorPickerProps> = ({ subtitle, color, theme, setColor }) => {
+export const ColorPicker = ({ subtitle, color, theme, setColor }: TColorPickerProps) => {
     const colorMap = [
         [
             '#ffffff',
@@ -413,13 +415,13 @@ export const ColorPicker: React.FC<TColorPickerProps> = ({ subtitle, color, them
     );
 };
 
-export const Switch: React.FC<TSwitchProps> = ({ value, onChange }) => (
+export const Switch = ({ value, onChange }: TSwitchProps) => (
     <div className={`sc-switch ${value ? 'on' : 'off'}`} onClick={() => onChange(!value)}>
         <div className='handle' />
     </div>
 );
 
-export const SwitchIcon: React.FC<TSwitchIconProps> = ({ id, label, value, onChange, noramIcon, activeIcon }) => {
+export const SwitchIcon = ({ id, label, value, onChange, noramIcon, activeIcon }: TSwitchIconProps) => {
     const Icon = value ? activeIcon : noramIcon;
     return (
         <div className='sc-switch-icon'>
@@ -432,7 +434,7 @@ export const SwitchIcon: React.FC<TSwitchIconProps> = ({ id, label, value, onCha
 };
 
 // NumericInput fires onChange on Enter or onBlur
-export const NumericInput: React.FC<TNumericInputProps> = ({ subtitle, onChange, min, max, step, value }) => {
+export const NumericInput = ({ subtitle, onChange, min, max, step, value }: TNumericInputProps) => {
     const [innerValue, setInnerValue] = React.useState<number | string>('');
 
     const handleFireOnChange = debounce(
@@ -505,7 +507,7 @@ export const NumericInput: React.FC<TNumericInputProps> = ({ subtitle, onChange,
     );
 };
 
-export const NumberColorPicker: React.FC<TNumberColorPickerProps> = ({ value, theme, onChange }) => {
+export const NumberColorPicker = ({ value, theme, onChange }: TNumberColorPickerProps) => {
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
     const { Value, Color } = value;
@@ -525,13 +527,13 @@ export const NumberColorPicker: React.FC<TNumberColorPickerProps> = ({ value, th
     );
 };
 
-export const Toggle: React.FC<TToogleProps> = ({ className, children, active, onChange }) => (
+export const Toggle = ({ className, children, active, onChange }: TToogleProps) => (
     <div onClick={() => onChange(!active)} className={`${className || ''} ${active ? 'active' : ''} sc-toggle`}>
         {children}
     </div>
 );
 
-export const FontSetting: React.FC<TFontSettingProps> = ({ onChange, value }) => {
+export const FontSetting = ({ onChange, value }: TFontSettingProps) => {
     const families = ['Default', 'Helvetica', 'Courier', 'Garamond', 'Palatino', 'Times New Roman'];
     const fontSizes = [8, 10, 12, 13, 14, 16, 20, 28, 36, 48, 64];
 

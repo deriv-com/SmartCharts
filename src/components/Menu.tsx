@@ -24,14 +24,10 @@ type TMenuProps = {
     onMouseLeave?: React.MouseEventHandler<HTMLDivElement>;
     enableTabular?: boolean;
     customHead?: React.ReactElement;
+    children?: React.ReactNode;
 };
 
-type TMenuFC = React.FunctionComponent<TMenuProps> & {
-    Title: React.FC;
-    Body: React.FC;
-};
-
-const Menu: React.FC<TMenuProps> = ({
+const Menu = ({
     store,
     className,
     children,
@@ -45,7 +41,7 @@ const Menu: React.FC<TMenuProps> = ({
     customHead,
     emptyMenu,
     modalMode,
-}) => {
+}: TMenuProps) => {
     const { open, dialogStatus, onTitleClick, handleCloseDialog, dialogStore } = store;
 
     const { chartSetting, chart } = useStores();
@@ -177,13 +173,13 @@ const Menu: React.FC<TMenuProps> = ({
     );
 };
 
-const ObservedMenu = observer(Menu) as TMenuFC;
-
-const MenuSubComponent: React.FC = ({ children }) => {
+const MenuSubComponent = ({ children }: { children?: React.ReactNode }) => {
     return <React.Fragment>{children}</React.Fragment>;
 };
 
-ObservedMenu.Title = MenuSubComponent;
-ObservedMenu.Body = MenuSubComponent;
+Menu.Title = MenuSubComponent;
+Menu.Body = MenuSubComponent;
+
+const ObservedMenu = observer(Menu);
 
 export default ObservedMenu;

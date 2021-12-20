@@ -7,9 +7,10 @@ import MarkerStore from '../store/MarkerStore';
 
 export type TMarkerBaseProps = {
     store: MarkerStore;
+    children?: React.ReactNode;
 };
 
-const Marker: React.FC<TMarkerBaseProps> = ({ store, children }) => {
+const Marker = ({ store, children }: TMarkerBaseProps): React.ReactElement => {
     const { display, left, bottom, className } = store;
 
     return (

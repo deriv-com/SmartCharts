@@ -12,7 +12,7 @@ type TMenuMobileProps = {
     menu_element: React.ReactElement | null;
 };
 
-const MenuMobile: React.FC<TMenuMobileProps> = ({ className, menu_element, portalNodeId, open, onClick }) => {
+const MenuMobile = ({ className, menu_element, portalNodeId, open, onClick }: TMenuMobileProps) => {
     const { chartSetting } = useStores();
     const { theme } = chartSetting;
     // fix to remove body background scrolling when scrolling on absolute element

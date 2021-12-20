@@ -11,7 +11,7 @@ type TChartFooterNetworkProps = {
     networkStatus: TMainStore['chart']['networkStatus'];
 };
 
-const ChartFooterNetwork: React.FC<TChartFooterNetworkProps> = React.memo(({ networkStatus }) => (
+const ChartFooterNetwork = React.memo(({ networkStatus }: TChartFooterNetworkProps) => (
     <Tooltip
         className='sc-chart-footer__item sc-chart-footer__item--status'
         content={`${t.translate('Network status')}: ${networkStatus ? t.translate(networkStatus.tooltip) : ''}`}
@@ -21,7 +21,7 @@ const ChartFooterNetwork: React.FC<TChartFooterNetworkProps> = React.memo(({ net
     </Tooltip>
 ));
 
-const ChartFooter: React.FC = () => {
+const ChartFooter = () => {
     const { chart } = useStores();
     const { context, serverTime, networkStatus, openFullscreen } = chart;
 

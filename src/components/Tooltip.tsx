@@ -7,9 +7,10 @@ type TTooltipProps = {
     content: React.ReactNode;
     position?: string;
     onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+    children?: React.ReactNode;
 };
 
-const Tooltip: React.FC<TTooltipProps> = ({
+const Tooltip = ({
     children,
     className = '',
     enabled = false,
@@ -19,7 +20,7 @@ const Tooltip: React.FC<TTooltipProps> = ({
     position = 'top',
 
     ...props
-}) => (
+}: TTooltipProps) => (
     <div
         className={classNames('sc-tooltip', className, {
             [`sc-tooltip--${position}`]: !!position,

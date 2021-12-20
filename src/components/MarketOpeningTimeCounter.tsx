@@ -7,7 +7,7 @@ type TMarketOpeningTimeCounterProps = {
     symbolOpenTime: ChartTitleStore['symbolOpenTime'];
 };
 
-export const MarketOpeningTimeCounter: React.FC<TMarketOpeningTimeCounterProps> = ({ symbolOpenTime }) => {
+export const MarketOpeningTimeCounter = ({ symbolOpenTime }: TMarketOpeningTimeCounterProps) => {
     const [time, setTime] = React.useState(0);
 
     const timeUntilOpenTime = React.useMemo(() => {

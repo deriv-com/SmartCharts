@@ -10,7 +10,7 @@ type TFavoriteProps = {
     id: string;
 };
 
-const Favorite: React.FC<TFavoriteProps> = ({ category, id }) => {
+const Favorite = ({ category, id }: TFavoriteProps) => {
     const [store] = React.useState(FavoriteStore.getInstance());
     const [is_favorite, setFavorite] = React.useState(false);
 

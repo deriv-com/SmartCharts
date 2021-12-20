@@ -46,8 +46,8 @@ const isSessionAvailable = (
     return end_time - compare_moment.valueOf() > 0 && compare_moment.valueOf() - start_time > 0;
 };
 
-const TimePickerDropdown: React.FC<TimePickerDropdownProps> = React.memo(
-    ({ className, preClass, value, onChange, toggle, start_date }) => {
+const TimePickerDropdown = React.memo(
+    ({ className, preClass, value, onChange, toggle, start_date }: TimePickerDropdownProps) => {
         const [is_hour_selected, setIsHourSelected] = React.useState(false);
         const [is_minute_selected, setIsMinuteSelected] = React.useState(false);
         const [last_updated_type, setLastUpdatedType] = React.useState<string | null>(null);
@@ -172,7 +172,7 @@ const TimePickerDropdown: React.FC<TimePickerDropdownProps> = React.memo(
         );
     }
 );
-const TimePicker: React.FC<TTimerPickerProps> = props => {
+const TimePicker = (props: TTimerPickerProps) => {
     const {
         disableFocus,
         onChange,

@@ -7,7 +7,7 @@ type TShadeProps = {
     store: ShadeStore;
 };
 
-const Shade: React.FC<TShadeProps> = ({ store }) => {
+const Shade = ({ store }: TShadeProps) => {
     const { visible, className, setShadeRef } = store;
 
     return (

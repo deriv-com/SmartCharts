@@ -21,7 +21,7 @@ type TRawMarkerProps = {
     epoch_array: number[];
 };
 
-const RawMarker: React.FC<TRawMarkerProps> = props => {
+const RawMarker = (props: TRawMarkerProps) => {
     const { chart: chartStore } = useStores();
     const { contextPromise } = chartStore;
 

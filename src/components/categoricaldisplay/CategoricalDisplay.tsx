@@ -18,14 +18,14 @@ type TCategoricalDisplayProps = {
     disableAll?: boolean;
 };
 
-const CategoricalDisplay: React.FC<TCategoricalDisplayProps> = ({
+const CategoricalDisplay = ({
     store,
     id,
     searchInputClassName,
     disableAll,
     isNestedList,
     onSelectItem: onSelectItemProp,
-}) => {
+}: TCategoricalDisplayProps) => {
     const {
         updateScrollSpy,
         setScrollPanel,

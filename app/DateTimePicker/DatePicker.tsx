@@ -38,7 +38,7 @@ type TDatePickerProps = {
 };
 
 const CalendarIcon = Wrapper(CalendarIC);
-const DatePickerInput: React.FC<TDatePickerInputProps> = ({
+const DatePickerInput = ({
     value,
     format,
     id,
@@ -49,7 +49,7 @@ const DatePickerInput: React.FC<TDatePickerInputProps> = ({
     onChange,
     onClick,
     mode,
-}) => {
+}: TDatePickerInputProps) => {
     const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
     return (
         <input
@@ -75,7 +75,7 @@ const daysFromTodayTo = (date: string): string => {
     const diff = moment(date).utc().diff(moment().utc(), 'days');
     return !date || diff < 0 ? '' : (diff + 1).toString();
 };
-const DatePicker: React.FC<TDatePickerProps> = React.memo(props => {
+const DatePicker = React.memo((props: TDatePickerProps) => {
     const {
         date_format,
         disableFocus,

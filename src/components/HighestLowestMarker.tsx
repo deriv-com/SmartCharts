@@ -5,7 +5,7 @@ import FastMarker from './FastMarker';
 
 import '../../sass/components/_highest-lowest-marker.scss';
 
-const HighestLowestMarker: React.FC = () => {
+const HighestLowestMarker = () => {
     const { highestLowest } = useStores();
     const { setHighestRef, setLowestRef } = highestLowest;
 

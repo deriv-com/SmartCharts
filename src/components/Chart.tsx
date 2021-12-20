@@ -23,7 +23,7 @@ import PaginationLoader from './PaginationLoader';
 import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
 
-const Chart: React.FC<TChartProps> = props => {
+const Chart = (props: TChartProps) => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();
 
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;

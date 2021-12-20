@@ -14,7 +14,7 @@ type TTypeIcon = {
     className: string;
 };
 
-const TypeIcon: React.FC<TTypeIcon> = ({ Icon, ...props }) => <Icon {...props} />;
+const TypeIcon = ({ Icon, ...props }: TTypeIcon) => <Icon {...props} />;
 
 type TChartTypesProps = {
     enabled?: boolean;
@@ -22,7 +22,7 @@ type TChartTypesProps = {
     onChange?: (chartType?: string) => void;
 };
 
-const ChartTypes: React.FC<TChartTypesProps> = ({ enabled, newDesign, onChange: onChangeFn }) => {
+const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
     const { chartType, chart } = useStores();
 
     const { listStore, setTypeFromUI, updateProps, types, type, menuStore } = chartType;

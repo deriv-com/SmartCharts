@@ -65,7 +65,7 @@ type TStudyLegendProps = {
     portalNodeId?: string;
 };
 
-const StudyIcon: React.FC<TStudyIconProps> = ({ Icon }) => <Icon />;
+const StudyIcon = ({ Icon }: TStudyIconProps) => <Icon />;
 
 const EmptyView = () => (
     <div className='sc-studies--empty'>
@@ -83,7 +83,7 @@ const NoResultView = ({ text }: { text: string }) => (
     </div>
 );
 
-const IndicatorList: React.FC<TIndicatorListProps> = ({
+const IndicatorList = ({
     items,
     onSelectItem,
     onDeleteItem,
@@ -91,7 +91,7 @@ const IndicatorList: React.FC<TIndicatorListProps> = ({
     onInfoItem,
     disableAll,
     isTick,
-}) => (
+}: TIndicatorListProps) => (
     <div className='sc-studies__list'>
         {items.map(Item => (
             <div
@@ -131,13 +131,13 @@ const IndicatorList: React.FC<TIndicatorListProps> = ({
     </div>
 );
 
-const TabularDisplaySearchPanel: React.FC<TTabularDisplaySearchPanelProps> = ({
+const TabularDisplaySearchPanel = ({
     categories,
     onSelectItem,
     onInfoItem,
     disableAll,
     isTick,
-}) => (
+}: TTabularDisplaySearchPanelProps) => (
     <Scroll autoHide>
         {categories.map(Category => (
             <div key={Category.id} className='sc-studies__category'>
@@ -156,13 +156,13 @@ const TabularDisplaySearchPanel: React.FC<TTabularDisplaySearchPanelProps> = ({
     </Scroll>
 );
 
-const TabularDisplayActivePanel: React.FC<TabularDisplayActivePanelProps> = ({
+const TabularDisplayActivePanel = ({
     items,
     onDeleteItem,
     onEditItem,
     clearAll,
     isMobile,
-}) => (
+}: TabularDisplayActivePanelProps) => (
     <React.Fragment>
         <div className='sc-studies__panel__head'>
             <p>
@@ -180,7 +180,7 @@ const TabularDisplayActivePanel: React.FC<TabularDisplayActivePanelProps> = ({
     </React.Fragment>
 );
 
-const TabularDisplay: React.FC<TTabularDisplayProps> = ({
+const TabularDisplay = ({
     onSelectTab,
     selectedTab,
     categories,
@@ -195,7 +195,7 @@ const TabularDisplay: React.FC<TTabularDisplayProps> = ({
     isMobile,
     maxAllowedItem,
     isTick,
-}) => (
+}: TTabularDisplayProps) => (
     <Tabs className='tabs--vertical' selectedIndex={selectedTab} onSelect={onSelectTab}>
         <TabList>
             <Tab key='hidden' className='hidden' />
@@ -258,7 +258,7 @@ const TabularDisplay: React.FC<TTabularDisplayProps> = ({
     </Tabs>
 );
 
-const StudyLegend: React.FC<TStudyLegendProps> = ({ portalNodeId }) => {
+const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
     const { studies, chart, timeperiod } = useStores();
 
     const {

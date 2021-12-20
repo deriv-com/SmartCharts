@@ -12,9 +12,10 @@ type TScrollProps = {
     width?: string | number;
     setPanel?: (ref: HTMLDivElement) => void;
     onScroll?: (ev: React.UIEvent<HTMLElement>) => void;
+    children?: React.ReactNode;
 };
 
-const Scroll: React.FC<TScrollProps> = ({
+const Scroll = ({
     children,
     className,
     height,
@@ -23,7 +24,7 @@ const Scroll: React.FC<TScrollProps> = ({
     freeze = false,
     onScroll = () => null,
     setPanel,
-}) => {
+}: TScrollProps) => {
     const { scroll } = useStores();
 
     const { setScrollPanel, isHover } = scroll;

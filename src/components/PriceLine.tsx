@@ -17,7 +17,7 @@ type TPriceLineProps = {
     width: number;
 };
 
-const PriceLine: React.FC<TPriceLineProps> = ({
+const PriceLine = ({
     lineStyle,
     color,
     foregroundColor,
@@ -27,7 +27,7 @@ const PriceLine: React.FC<TPriceLineProps> = ({
     hideOffscreenLine,
     hideBarrierLine,
     store,
-}) => {
+}: TPriceLineProps) => {
     const {
         priceDisplay,
         visible,

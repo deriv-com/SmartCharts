@@ -61,7 +61,7 @@ type TSettingsDialogProps = {
     store: SettingsDialogStore;
 };
 
-const SettingsPanelItem: React.FC<TSettingsPanelItem> = ({ group, title, type, Field }) => (
+const SettingsPanelItem = ({ group, title, type, Field }: TSettingsPanelItem) => (
     <FormGroup
         title={
             type === 'select' ||
@@ -79,13 +79,13 @@ const SettingsPanelItem: React.FC<TSettingsPanelItem> = ({ group, title, type, F
     </FormGroup>
 );
 
-const SettingsPanelGroup: React.FC<TSettingsPanelGroupProps> = ({
+const SettingsPanelGroup = ({
     title,
     // [{ id, title, value, defaultValue, type }]
     items,
     theme,
     onItemChange,
-}) => {
+}: TSettingsPanelGroupProps) => {
     const renderMap = {
         switch: (item: TSettingsItem) => (
             <Switch value={item.value as string} onChange={v => onItemChange(item.id, v)} />
@@ -180,7 +180,7 @@ const SettingsPanelGroup: React.FC<TSettingsPanelGroupProps> = ({
     );
 };
 
-const Footer: React.FC<TFooterProps> = ({ onDelete, onReset, onDone }) => (
+const Footer = ({ onDelete, onReset, onDone }: TFooterProps) => (
     <div className='buttons'>
         {onDelete && <DeleteIcon className='sc-btn--delete' onClick={onDelete} />}
         <div>
@@ -190,14 +190,14 @@ const Footer: React.FC<TFooterProps> = ({ onDelete, onReset, onDone }) => (
     </div>
 );
 
-const SettingsPanel: React.FC<TSettingsPanelProps> = ({
+const SettingsPanel = ({
     itemGroups,
     theme,
     onItemChange,
     setScrollPanel,
     freezeScroll,
     formClassname,
-}) => (
+}: TSettingsPanelProps) => (
     <div className={`form form--indicator-setting ${formClassname}`}>
         <Scroll setPanel={setScrollPanel} freeze={freezeScroll} autoHide height='282px'>
             {itemGroups.map(
@@ -216,19 +216,19 @@ const SettingsPanel: React.FC<TSettingsPanelProps> = ({
     </div>
 );
 
-const ResetButton: React.FC<TResetButtonProps> = ({ onClick }) => (
+const ResetButton = ({ onClick }: TResetButtonProps) => (
     <button type='button' className='sc-btn sc-btn--outline-secondary sc-btn--reset' onClick={onClick}>
         {t.translate('Reset')}
     </button>
 );
 
-const DoneButton: React.FC<TDoneButtonProps> = ({ onClick }) => (
+const DoneButton = ({ onClick }: TDoneButtonProps) => (
     <button type='button' className='sc-btn sc-btn--primary sc-btn--save' onClick={onClick}>
         {t.translate('Done')}
     </button>
 );
 
-const SettingsDialog: React.FC<TSettingsDialogProps> = ({ store }) => {
+const SettingsDialog = ({ store }: TSettingsDialogProps) => {
     const {
         itemGroups,
         title,
