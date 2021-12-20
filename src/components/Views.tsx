@@ -3,13 +3,13 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import { ArrayElement, TCustomEvent, TMainStore } from 'src/types';
+import { TViews } from 'src/store/ViewStore';
 import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
 import Menu from './Menu';
-import { TViews } from 'src/store/ViewStore';
 
 type TViewItemProps = {
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
@@ -57,7 +57,7 @@ const EmptyView = ({ onClick }: { onClick: (event: React.MouseEvent<HTMLElement>
     </div>
 );
 
-const OverwriteView ({ templateName, onCancel, onOverwrite }:TOverwriteViewProps) => (
+const OverwriteView = ({ templateName, onCancel, onOverwrite }: TOverwriteViewProps) => (
     <div className='sc-views--overwrite'>
         <div className='sc-views--overwrite__content'>
             <OverwriteStateIcon />
@@ -78,7 +78,7 @@ const OverwriteView ({ templateName, onCancel, onOverwrite }:TOverwriteViewProps
     </div>
 );
 
-const ActiveListView= ({ views, removeAll, applyLayout, remove }:TActiveListViewProps) => {
+const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListViewProps) => {
     if (!views.length) return null;
 
     return (
@@ -105,7 +105,7 @@ const ActiveListView= ({ views, removeAll, applyLayout, remove }:TActiveListView
     );
 };
 
-const Views= ({ portalNodeId }:TViewsProps) => {
+const Views = ({ portalNodeId }: TViewsProps) => {
     const { view } = useStores();
 
     const {
