@@ -568,7 +568,7 @@ const App = () => {
           ]
         : [];
     return (
-        <div className='test-container' style={{ display: 'block' }}>
+        <div className='test-container'>
             <div id='portal-node' className='portal-node' />
             <div className='chart-section'>
                 <SmartChart
