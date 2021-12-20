@@ -239,6 +239,6 @@ export type TRefData = {
     value?: Element | null;
 };
 
-export type TChartControlsWidgets = (props: { isMobile?: boolean }) => React.ReactElement | null;
+export type TChartControlsWidgets = ((props: { isMobile?: boolean }) => React.ReactElement) | null;
 
 export type TIcon = (props: TIconProps) => JSX.Element;

@@ -99,7 +99,7 @@ export function sameBar(bar1: any, bar2: any) {
     );
 }
 
-export function downloadFileInBrowser(filename: string, content: string, type: string, newTab: Window) {
+export function downloadFileInBrowser(filename: string, content: string, type: string, newTab: Window | null) {
     const blob = new Blob([content], { type });
     if (navigator.msSaveBlob) {
         // IE 10+

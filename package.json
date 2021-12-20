@@ -95,6 +95,7 @@
         "espree": "^6.0.0",
         "estree-walk": "^2.2.0",
         "file-loader": "^4.2.0",
+        "fork-ts-checker-webpack-plugin": "^6.5.0",
         "fs": "^0.0.1-security",
         "gettext-loader2": "^0.3.0",
         "gh-pages": "^2.1.1",
