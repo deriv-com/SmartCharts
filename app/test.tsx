@@ -151,7 +151,7 @@ const App = () => {
         const activeLanguage = new URLSearchParams(window.location.search).get('activeLanguage') === 'true';
         if (_settings) {
             _settings.language = language;
-            startingLanguageRef.current = _settings.language;
+            startingLanguageRef.current = _settings.language as string;
         } else {
             _settings = { language };
         }

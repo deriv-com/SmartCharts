@@ -12,16 +12,16 @@ import Context from '../components/ui/Context';
 import { cloneCategories } from '../utils';
 
 type TCategoricalDisplayStoreProps = {
-    getCategoricalItems: () => TCategorizedSymbols;
+    getCategoricalItems: () => TCategorizedSymbolItem<TSubCategoryDataItem>[];
     onSelectItem?: (item: TProcessedSymbolItem) => void;
     getIsShown: () => boolean;
     placeholderText: string;
     favoritesId: string;
     mainStore: MainStore;
     id: string;
-    getCurrentActiveCategory: () => string;
-    getCurrentActiveSubCategory: () => string;
-    getCurrentActiveMarket: () => string | null;
+    getCurrentActiveCategory: () => string | undefined | null;
+    getCurrentActiveSubCategory: () => string | undefined | null;
+    getCurrentActiveMarket: () => string | undefined | null;
     searchInputClassName?: string;
 };
 
@@ -30,10 +30,10 @@ export default class CategoricalDisplayStore {
     activeSubCategory = '';
     categoryElements: Record<string, HTMLElement | null>;
     favoritesId: string;
-    getCategoricalItems: () => TCategorizedSymbols;
-    getCurrentActiveCategory: () => string;
-    getCurrentActiveMarket: () => string | null;
-    getCurrentActiveSubCategory: () => string;
+    getCategoricalItems: () => TCategorizedSymbolItem<TSubCategoryDataItem>[];
+    getCurrentActiveCategory: () => string | undefined | null;
+    getCurrentActiveMarket: () => string | undefined | null;
+    getCurrentActiveSubCategory: () => string | null | undefined;
     id: string;
     isInit: boolean;
     mainStore: MainStore;
@@ -349,8 +349,10 @@ export default class CategoricalDisplayStore {
 
     @action.bound scrollToActiveSymbol(): void {
         this.focusedCategoryKey = null;
-        this.activeCategoryKey = this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite';
-        this.activeSubCategory = this.getCurrentActiveSubCategory ? this.getCurrentActiveSubCategory() : '';
+        this.activeCategoryKey = this.getCurrentActiveCategory
+            ? (this.getCurrentActiveCategory() as string)
+            : 'favorite';
+        this.activeSubCategory = this.getCurrentActiveSubCategory ? (this.getCurrentActiveSubCategory() as string) : '';
         this.activeMarket = this.getCurrentActiveMarket ? this.getCurrentActiveMarket() : '';
         const el = this.categoryElements[this.activeCategoryKey];
         const activeSubCategoryClassName = `.sc-mcd__category--${this.activeCategoryKey}  .sc-mcd__category__content--${this.activeSubCategory}`;

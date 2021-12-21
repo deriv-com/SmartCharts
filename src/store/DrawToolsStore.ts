@@ -141,6 +141,7 @@ export default class DrawToolsStore {
     }
     showDrawToolDialog(drawing: TDrawingObject) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
+        // @ts-ignore
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
         let title = formatCamelCase(drawing.name);

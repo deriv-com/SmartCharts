@@ -7,6 +7,7 @@ type TInlineLoaderProps = {
     className?: string;
     enabled?: boolean;
     children?: React.ReactNode;
+    onClick?: React.MouseEventHandler<HTMLDivElement>;
 };
 
 export const InlineLoader = ({ children, className, enabled = true, ...props }: TInlineLoaderProps) => (

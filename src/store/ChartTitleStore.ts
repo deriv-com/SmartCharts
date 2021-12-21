@@ -1,7 +1,7 @@
 import { action, computed, observable, when } from 'mobx';
-import { TChartTitleProps, TOpenMarket } from 'src/components/ChartTitle';
+import { TChartTitleProps } from 'src/components/ChartTitle';
 import Context from 'src/components/ui/Context';
-import { TChanges, TQuote, TTimes } from 'src/types';
+import { TChanges, TOpenMarket, TQuote, TTimes } from 'src/types';
 import MainStore from '.';
 import ServerTime from '../utils/ServerTime';
 import AnimatedPriceStore from './AnimatedPriceStore';

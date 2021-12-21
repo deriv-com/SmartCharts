@@ -52,7 +52,7 @@ class Subscription {
         this._emitter.off(Subscription.EVENT_CHART_DATA);
     }
 
-    async _startSubscribe(request: TCreateTickHistoryParams): Promise<TQuoteResponse> {
+    async _startSubscribe(_request: TCreateTickHistoryParams): Promise<TQuoteResponse> {
         throw new Error('Please override!');
     }
 

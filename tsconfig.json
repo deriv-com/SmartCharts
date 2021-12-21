@@ -9,6 +9,7 @@
         "jsx": "react",
         "sourceMap": true,
         "removeComments": true,
+        "downlevelIteration": true,
         /* "outDir": "./dist", */
         "rootDirs": ["./"],
         /* Checks */

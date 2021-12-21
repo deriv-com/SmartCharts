@@ -1,3 +1,4 @@
+// @ts-ignore
 import { timezoneJS } from '../../chartiq/development/js/chartiq.js';
 
 export const overrideRenderSegment = () => {

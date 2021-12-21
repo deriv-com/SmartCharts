@@ -66,7 +66,7 @@ export type TSettings = {
     countdown?: boolean;
     historical?: boolean;
     lang?: string;
-    language: string;
+    language?: string;
     position?: string;
     enabledNavigationWidget?: boolean;
     isAutoScale?: boolean;
@@ -137,7 +137,7 @@ export type TChartProps = {
     enableRouting?: boolean;
     enable?: boolean;
     isConnectionOpened?: boolean;
-    onMessage: (message: TNotification) => void;
+    onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
     showLastDigitStats?: boolean;
     scrollToEpoch?: number | null;

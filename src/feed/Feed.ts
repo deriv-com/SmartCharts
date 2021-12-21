@@ -150,7 +150,7 @@ class Feed {
     async fetchInitialData(
         symbol: string,
         suggestedStartDate: Date,
-        suggestedEndDate: Date,
+        _suggestedEndDate: Date,
         params: TPaginationParams,
         callback: TPaginationCallback
     ) {

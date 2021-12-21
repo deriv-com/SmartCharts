@@ -100,7 +100,6 @@ class App extends React.Component {
     render() {
         return (
             <SmartChart
-                onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
                 requestSubscribe={({ tick_history, granularity, ... }, cb) => {}}   // Passes the whole request object
                 requestForget={({ tick_history, granularity, ... }, cb) => {}}      // request object and cb is exactly the same reference passed to subscribe
                 // for active_symbols, trading_times, ... (NOT streaming)
