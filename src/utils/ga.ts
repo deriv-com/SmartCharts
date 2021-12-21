@@ -20,7 +20,7 @@ export const LogActions = Object.freeze({
 /* eslint-disable */
 export function initGA() {
     /* @START-EXCLUDE: 'lib' */
-    if (!(window as any).isProductionWebsite) return;
+    if (!window.isProductionWebsite) return;
     (function (i: any, s, o, g, r, a, m) {
         (i as any).GoogleAnalyticsObject = r;
         (i[r] =
