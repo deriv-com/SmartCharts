@@ -1,7 +1,7 @@
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
 import Context from 'src/components/ui/Context';
 import MarkerStore from 'src/store/MarkerStore';
-import { TGranularity } from 'src/types';
+import { TGranularity, TQuote } from 'src/types';
 
 type TTransferItem = (item: TSubCategoryDataItem | TSubCategory) => TSubCategoryDataItem | TSubCategory;
 
@@ -88,11 +88,11 @@ export function stableSort<T>(arr: T[], compare: (a: T, b: T) => number) {
     return newArray;
 }
 
-export function sameBar(bar1: any, bar2: any) {
+export function sameBar(bar1: TQuote, bar2: TQuote) {
     return !(
         !bar1 ||
         !bar2 ||
-        +bar1.DT !== +bar2.DT ||
+        +(bar1.DT as Date) !== +(bar2.DT as Date) ||
         bar1.Close !== bar2.Close ||
         bar1.Open !== bar2.Open ||
         bar1.Volume !== bar2.Volume
@@ -170,7 +170,7 @@ export function updatePropIfChanged(
     }
 }
 
-export function calculateTimeUnitInterval(granularity: number | undefined) {
+export function calculateTimeUnitInterval(granularity: TGranularity | undefined) {
     let interval = 1;
     let timeUnit = 'second';
 
@@ -265,7 +265,7 @@ export function cloneCategories<T>(
 // This is copy from chartiq.js file WITHOUT rounding down the pixel value.
 
 export function patchPixelFromChart(stx: Context['stx']) {
-    stx.pixelFromTick = function (tick: number, _chart: any) {
+    stx.pixelFromTick = function (tick: number, _chart: typeof CIQ.ChartEngine.Chart) {
         const chart = _chart || stx.chart;
         const dataSegment = chart.dataSegment,
             dataSet = chart.dataSet,

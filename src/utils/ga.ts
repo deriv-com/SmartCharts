@@ -39,13 +39,13 @@ export function initGA() {
 }
 export function logPageView() {
     /* @START-EXCLUDE: 'lib' */
-    if (!(window as any).isProductionWebsite || !(window as any).ga) return;
+    if (!window.isProductionWebsite || !(window as any).ga) return;
     ga('send', 'pageview', window.location.pathname);
     /* @END-EXCLUDE */
 }
 export function logEvent(category: any, action: any, label: any) {
     /* @START-EXCLUDE: 'lib' */
-    if (!(window as any).isProductionWebsite || !(window as any).ga) return;
+    if (!window.isProductionWebsite || !(window as any).ga) return;
     ga('send', 'event', category, action, label);
     /* @END-EXCLUDE */
 }

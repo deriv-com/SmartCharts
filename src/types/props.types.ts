@@ -178,6 +178,7 @@ export type TQuote = {
     ohlc?: OHLCStreamResponse['ohlc'];
     DT?: Date;
     prevClose?: number;
+    Volume?: number;
 };
 
 export interface IPendingPromise<T, E> extends Promise<T> {

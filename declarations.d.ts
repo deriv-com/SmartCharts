@@ -27,5 +27,5 @@ interface Navigator {
 }
 
 interface Document {
-    documentMode?: any;
+    documentMode?: number;
 }
