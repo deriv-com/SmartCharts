@@ -1,5 +1,6 @@
 import { action, computed, observable, when } from 'mobx';
 import Context from 'src/components/ui/Context';
+import { TQuote } from 'src/types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { sameBar } from '../utils';
@@ -185,7 +186,7 @@ class CrosshairStore {
             return;
         }
         let rows = null;
-        if (!(sameBar(data, this.lastBar) && bar !== stx.chart.dataSegment.length - 1)) {
+        if (!(sameBar(data, this.lastBar as TQuote) && bar !== stx.chart.dataSegment.length - 1)) {
             rows = this.calculateRows(data);
             this.lastBar = data;
         }
