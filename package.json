@@ -153,6 +153,7 @@
         "react-dom": "^16.13.1",
         "react-tabs": "^3.0.0",
         "react-transition-group": "^4.4.1",
+        "robust-websocket": "^1.0.0",
         "sinon-chai": "^3.7.0",
         "url-search-params-polyfill": "^7.0.0"
     },

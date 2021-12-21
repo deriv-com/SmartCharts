@@ -1,7 +1,8 @@
 import EventEmitter from 'event-emitter-es6';
 import { PendingPromise } from '@binary-com/smartcharts'; // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved
+// @ts-ignore
+import RobustWebsocket from 'robust-websocket';
 import { IPendingPromise, Listener, TBinaryAPIRequest, TBinaryAPIResponse } from 'src/types';
-import RobustWebsocket from './robust-websocket';
 
 class ConnectionManager extends EventEmitter {
     _bufferedRequests: IPendingPromise<TBinaryAPIResponse, Error>[];
