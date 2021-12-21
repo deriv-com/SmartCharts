@@ -97,7 +97,7 @@ export default class ActiveSymbols {
             return;
         }
 
-        if (active_symbols != undefined) {
+        if (active_symbols !== undefined) {
             this.computeActiveSymbols(active_symbols);
         }
         this.symbolsPromise.resolve();
