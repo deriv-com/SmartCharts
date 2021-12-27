@@ -64,7 +64,7 @@ export default function animateChart(stx: Context['stx'], animationParameters: a
     stx.addEventListener(['symbolChange', 'layout'], function (obj: any) {
         initMarketSessionFlags();
     });
-    stx.prepend('updateCurrentMarketData', function (this: any, data: any, chart: any, symbol: any, params: any) {
+    stx.prepend('updateCurrentMarketData', function (data: any, chart: any, symbol: any, params: any) {
         if (!chart) chart = this.chart;
         if (params && params.fromTrade && (chart.closePendingAnimation || chart.closePendingAnimation === 0)) {
             params.finalClose = chart.closePendingAnimation;
