@@ -451,7 +451,7 @@ class ChartState {
         if (!layoutData || !layoutData.symbols.length) return false;
 
         // prop values will always take precedence
-        if (this.symbol !== undefined && this.symbol !== layoutData.symbols[0].symbol) {
+        if (this.symbol !== undefined && this.symbol !== '' && this.symbol !== layoutData.symbols[0].symbol) {
             // symbol prop takes precedence over local storage data
             const symbolObject = this.chartStore.activeSymbols?.getSymbolObj(this.symbol);
             layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
