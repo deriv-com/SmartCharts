@@ -503,11 +503,11 @@ class ChartState {
             panel.percent = indiactorHeightPercent;
         });
 
-        if (!this.context) return false;
-
         this.stxx.importLayout(layoutData, {
             managePeriodicity: true,
             cb: () => {
+                if (!this.context) return false;
+
                 if (layoutData.tension) {
                     this.stxx.chart.tension = layoutData.tension;
                 }
