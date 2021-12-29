@@ -1592,6 +1592,20 @@ const trading_times: TradingTimesResponse['trading_times'] = {
                             times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' },
                             trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                         },
+                        {
+                            events: [],
+                            name: 'Volatility 200 (1s) Index',
+                            symbol: '1HZ200V',
+                            times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' },
+                            trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                        },
+                        {
+                            events: [],
+                            name: 'Volatility 300 (1s) Index',
+                            symbol: '1HZ300V',
+                            times: { close: ['23:59:59'], open: ['00:00:00'], settlement: '23:59:59' },
+                            trading_days: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                        },
                     ],
                 },
                 {

@@ -72,9 +72,9 @@ export default class LastDigitStatsStore {
             this.bars.push({ height: 0, cName: '' });
         }
         if (this.stx.masterData && this.stx.masterData.length >= this.count) {
-            this.latestData = this.stx.masterData
+            this.latestData = (this.stx.masterData as TQuote[])
                 .slice(-this.count)
-                .map((x: TQuote) => x.Close.toFixed(this.decimalPlaces));
+                .map(x => +x.Close.toFixed(this.decimalPlaces));
         } else {
             const tickHistory =
                 response ||
@@ -100,7 +100,7 @@ export default class LastDigitStatsStore {
             // Symbol has changed
             this.updateLastDigitStats();
         } else if (this.latestData.length) {
-            const firstDigit = (this.latestData.shift() as number).toFixed(this.decimalPlaces).slice(-1);
+            const firstDigit = (+(this.latestData.shift() as number)).toFixed(this.decimalPlaces).slice(-1);
             const price = (+Close).toFixed(this.decimalPlaces);
             const lastDigit = price.slice(-1);
             this.latestData.push(+price);
