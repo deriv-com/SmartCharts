@@ -130,6 +130,9 @@ export default class CategoricalDisplayStore {
             }
         }
     }
+    @computed get favoritesCategoryData() {
+        return Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [];
+    }
     @action.bound getFavorites() {
         this.pauseScrollSpy = true;
         const favoritesCategory = {
@@ -138,7 +141,6 @@ export default class CategoricalDisplayStore {
             hasSubcategory: false,
             active: true,
             emptyDescription: t.translate('There are no favorites yet.'),
-            data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
         setTimeout(() => {
             this.pauseScrollSpy = false;
@@ -158,7 +160,7 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.favoritesId) {
-            const favsCategory = { ...this.getFavorites() };
+            const favsCategory = { ...this.getFavorites(), data: this.favoritesCategoryData };
             const findFavItem = category => {
                 const foundItems = [];
                 if (category.hasSubcategory) {
