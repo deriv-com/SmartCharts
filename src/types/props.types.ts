@@ -141,7 +141,6 @@ export type TChartProps = {
     isAnimationEnabled?: boolean;
     showLastDigitStats?: boolean;
     scrollToEpoch?: number | null;
-    scrollToEpochOffset?: number;
     clearChart?: () => void;
     onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
     importedLayout?: typeof CIQ.UI.Layout;

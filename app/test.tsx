@@ -226,7 +226,6 @@ const App = () => {
         }[]
     >([]);
     const [crosshairState, setCrosshairState] = React.useState<number | null>(1);
-    const [leftOffset, setLeftOffset] = React.useState<number>();
     const [scrollToEpoch, setScrollToEpoch] = React.useState<number>();
     const [enableFooter, setEnableFooter] = React.useState(true);
     const [enableScroll, setEnableScroll] = React.useState(false);
@@ -397,9 +396,6 @@ const App = () => {
         } else {
             setScrollToEpoch(moment.utc().unix());
         }
-    };
-    const onLeftOffset = (evt: ChangeEvent<HTMLInputElement>) => {
-        setLeftOffset(+evt.target.value);
     };
     const onActiveLanguage = () => {
         setActiveLanguage(!activeLanguage);
@@ -598,7 +594,6 @@ const App = () => {
                     isConnectionOpened={isConnectionOpened}
                     barriers={barriers}
                     scrollToEpoch={scrollToEpoch}
-                    scrollToEpochOffset={leftOffset}
                     crosshairState={crosshairState}
                     getMarketsOrder={getMarketsOrder}
                     zoom={zoom}
@@ -829,7 +824,6 @@ const App = () => {
                         Toggle
                     </button>
                     <br />
-                    LeftOffset(bars): <input type='number' value={leftOffset || 0} onChange={onLeftOffset} />
                 </div>
                 <div className='card'>
                     <h3>InitialData</h3>
