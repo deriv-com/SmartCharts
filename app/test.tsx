@@ -530,7 +530,7 @@ const App = () => {
                                     if (_symbol.events !== undefined) {
                                         _symbol.events.push({
                                             dates: 'today',
-                                            descrip: 'close all',
+                                            descrip: 'Closes early (at 00:00)',
                                         });
                                     }
                                     return _symbol;
