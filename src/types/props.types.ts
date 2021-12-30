@@ -147,7 +147,6 @@ export type TChartProps = {
     importedLayout?: typeof CIQ.UI.Layout;
     shouldFetchTradingTimes?: boolean;
     maxTick?: number | null;
-    crosshair?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;
     yAxisMargin?: { bottom: number; top: number };

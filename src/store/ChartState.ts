@@ -135,7 +135,7 @@ class ChartState {
         showLastDigitStats = false,
         startEpoch,
         symbol,
-        crosshair,
+        crosshairState,
         zoom,
         maxTick,
         crosshairTooltipLeftAllow,
@@ -270,9 +270,9 @@ class ChartState {
             }
         }
 
-        if (crosshair !== undefined && crosshair !== null && crosshair !== this.crosshairState) {
-            this.mainStore.crosshair.setCrosshairState(crosshair);
-            this.crosshairState = crosshair;
+        if (crosshairState !== undefined && crosshairState !== null && crosshairState !== this.crosshairState) {
+            this.mainStore.crosshair.setCrosshairState(crosshairState);
+            this.crosshairState = crosshairState;
         }
 
         if (crosshairTooltipLeftAllow !== undefined && this.crosshairTooltipLeftAllow !== crosshairTooltipLeftAllow) {
