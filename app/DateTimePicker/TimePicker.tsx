@@ -73,11 +73,8 @@ const TimePickerDropdown = React.memo(
                 const start_moment_clone = start_moment.clone().minute(0).second(0);
                 if ((type === 'h' && new_value !== prev_hour) || (type === 'm' && new_value !== prev_minute)) {
                     setLastUpdatedType(type);
-                    if (type === 'h') {
-                        setIsHourSelected(true);
-                    } else {
-                        setIsMinuteSelected(true);
-                    }
+                    type === 'h' ? setIsHourSelected(true) : setIsMinuteSelected(true);
+
                     let selected_time = `${type === 'h' ? new_value : prev_hour}:${
                         type === 'm' ? new_value : prev_minute
                     }`;
