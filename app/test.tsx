@@ -26,6 +26,7 @@ import {
     TInitialChartData,
     TNetworkConfig,
     TOpenMarket,
+    TRefData,
     TSettings,
 } from 'src/types';
 import 'url-search-params-polyfill';
@@ -613,13 +614,7 @@ const App = () => {
                         ''
                     )}
                     {markers.map(x => (
-                        <Marker
-                            key={x.ts}
-                            className={x.className}
-                            x={x.ts}
-                            xPositioner={x.xPositioner}
-                            yPositioner={x.yPositioner}
-                        />
+                        <ChartMarker {...x} />
                     ))}
                 </SmartChart>
             </div>
@@ -879,4 +874,27 @@ const App = () => {
         </div>
     );
 };
+
+const ChartMarker = (props: { ts: number; className: string; xPositioner: string; yPositioner: string }) => {
+    const { ts, className, xPositioner, yPositioner } = props;
+
+    const onMarkerRef = (ref: TRefData | null) => {
+        if (ref) {
+            ref.setPosition({
+                epoch: ts,
+            });
+        }
+    };
+    return (
+        <Marker
+            key={ts}
+            className={className}
+            x={ts}
+            xPositioner={xPositioner}
+            yPositioner={yPositioner}
+            markerRef={onMarkerRef}
+        />
+    );
+};
+
 ReactDOM.render(<App />, document.getElementById('root'));
