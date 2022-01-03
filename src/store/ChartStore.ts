@@ -1247,8 +1247,7 @@ class ChartStore {
         );
 
         if (fncToCall) {
-            const function_to_call = (el as HTMLElement)[fncToCall as keyof HTMLElement] as () => void;
-            function_to_call();
+            (el as HTMLElement)[fncToCall as 'requestFullscreen']();
         }
     }
 }
