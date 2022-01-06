@@ -207,7 +207,10 @@ export default class DrawToolsStore {
         const items = {};
         const ignoreBarType = ['vertical', 'horizontal'];
         const groups = {};
-        this.stx.drawingObjects.forEach((item, indx) => {
+        this.stx?.drawingObjects.forEach((item, indx) => {
+            if (item === undefined) {
+                return;
+            }
             item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;
             item.bars =
