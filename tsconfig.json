@@ -1,0 +1,36 @@
+{
+    "ts-node": {
+        "files": true
+    },
+    "compilerOptions": {
+        /* Visit https://aka.ms/tsconfig.json to read more about this file */
+        "target": "es5",
+        "module": "es2020",
+        "jsx": "react",
+        "sourceMap": true,
+        "removeComments": true,
+        "downlevelIteration": true,
+        /* "outDir": "./dist", */
+        "rootDirs": ["./"],
+        /* Checks */
+        "strict": true,
+
+        /* Additional Checks */
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+
+        /* Module Resolution Options */
+        "moduleResolution": "node",
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "paths": {
+            "@binary-com/smartcharts": ["src/"]
+        }
+    },
+    "include": ["**/*.ts", "**/*.tsx", "./declarations.d.ts"],
+    "exclude": ["**/*.js", "**/*.jsx"]
+}
