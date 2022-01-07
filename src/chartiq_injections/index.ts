@@ -4,6 +4,7 @@ import { drawCurrentPriceLine } from './currentHR';
 import { maintainHeadsUpHR } from './headsUpHR';
 import { plotterDrawText } from './plotterDrawText';
 import { overrideCalculateAwesome } from './calculateAwesome';
+import { overrideFindHighlights } from './findHighlights';
 import { overideMeasure } from './setMeasure';
 import { overrideRenderEllipse } from './renderEllipse';
 import { overrideRenderChannel } from './renderChannel';
@@ -20,6 +21,7 @@ const inject = (option: { drawToolsStore: DrawToolsStore }) => {
     maintainHeadsUpHR();
     plotterDrawText();
     overrideCalculateAwesome();
+    overrideFindHighlights();
     overideMeasure(option);
     overrideRenderEllipse();
     overrideRenderChannel();
