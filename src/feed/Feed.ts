@@ -272,7 +272,6 @@ class Feed {
             quotes = TickHistoryFormatter.formatHistory(response);
         }
         if (!quotes) {
-            console.error('No quotes found!!');
             callback({ quotes: [] });
             return;
         }
