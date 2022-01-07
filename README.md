@@ -100,7 +100,6 @@ class App extends React.Component {
     render() {
         return (
             <SmartChart
-                onSymbolChange={(symbol) => console.log('Symbol has changed to:', symbol)}
                 requestSubscribe={({ tick_history, granularity, ... }, cb) => {}}   // Passes the whole request object
                 requestForget={({ tick_history, granularity, ... }, cb) => {}}      // request object and cb is exactly the same reference passed to subscribe
                 // for active_symbols, trading_times, ... (NOT streaming)
@@ -171,7 +170,7 @@ Props marked with `*` are **mandatory**:
 | isAnimationEnabled        | Determine whether chart animation is enabled or disabled. It may needs to be disabled for better performance. Defaults to `true`.                                                                                                                                                                                                                                |
 | showLastDigitStats        | Shows last digits stats. Defaults to `false`.                                                                                                                                                                                                                                                                                                                    |
 | scrollToEpoch             | Scrolls the chart to the leftmost side and sets the last spot/bar as the first visible spot/bar in the chart. Also, it disables scrolling until the chart reaches the 3/4 of the width of the main pane of the chart. Defaults to `null`.                                                                                                                        |
-| scrollToEpochOffset       | Sets the number of spot/bar(s) which should be visible before the last spot/bar at the leftmost side of the chart (It should be used with `scrollToEpoch`). Defaults to `0`.                                                                                                                                                                                     |
+                                                         |
 | clearChart                | Clear the chart.                                                                                                                                                                                                                                                                                                                                                 |
 | onExportLayout            | Export the layout and send it back using this callback.                                                                                                                                                                                                                                                                                                          |
 | importedLayout            | The layout to be imported to chart. It should be the layout that was exported in onExportLayout;                                                                                                                                                                                                                                                                 |
