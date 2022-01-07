@@ -1,5 +1,4 @@
-// @ts-ignore
-
+// @ts-nocheck
 export const overrideFindHighlights = () => {
     // overriding the method to avoid error in case myPanel is null:
     CIQ.ChartEngine.prototype.findHighlights = function (isTap, clearOnly) {

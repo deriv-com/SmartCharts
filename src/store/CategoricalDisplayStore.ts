@@ -119,7 +119,10 @@ export default class CategoricalDisplayStore {
             }
         }
     }
-    @action.bound getFavorites(): TCategorizedSymbolItem<TSubCategory | string> {
+    @computed get favoritesCategoryData() {
+        return Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [];
+    }
+    @action.bound getFavorites(): Omit<TCategorizedSymbolItem<TSubCategory | string>, 'data'> {
         this.pauseScrollSpy = true;
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
@@ -127,7 +130,6 @@ export default class CategoricalDisplayStore {
             hasSubcategory: false,
             active: true,
             emptyDescription: t.translate('There are no favorites yet.'),
-            data: Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [],
         };
         setTimeout(() => {
             this.pauseScrollSpy = false;
@@ -149,7 +151,10 @@ export default class CategoricalDisplayStore {
         }
 
         if (this.favoritesId) {
-            const favsCategory = { ...this.getFavorites() };
+            const favsCategory: TCategorizedSymbolItem<TSubCategory | string> = {
+                ...this.getFavorites(),
+                data: this.favoritesCategoryData,
+            };
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
                 const foundItems: TSubCategoryDataItem[] = [];
                 if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
