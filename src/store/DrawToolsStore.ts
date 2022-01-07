@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, when } from 'mobx';
+import { action, computed, observable, reaction } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TIcon, TObject, TSettingsItem } from 'src/types';
 import MainStore from '.';
@@ -88,7 +88,18 @@ export default class DrawToolsStore {
             onDeleted: this.onDeleted,
             onChanged: this.onChanged,
         });
-        when(() => !!this.context, this.onContextReady);
+
+        reaction(
+            () => this.context,
+            () => {
+                if (this.context) {
+                    this.onContextReady();
+                } else {
+                    this.destructor();
+                }
+            }
+        );
+
         reaction(
             () => this.menuStore.open,
             () => {
@@ -141,7 +152,7 @@ export default class DrawToolsStore {
     }
     showDrawToolDialog(drawing: TDrawingObject) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
-        // @ts-ignore
+        /* tslint:disable-next-line */
         const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         const parameters = CIQ.Drawing.getDrawingParameters(this.stx, drawing.name);
         let title = formatCamelCase(drawing.name);
@@ -204,8 +215,12 @@ export default class DrawToolsStore {
         }
         return null;
     };
-    @action.bound
-    drawingFinished() {
+
+    destructor() {
+        document.removeEventListener('keydown', this.closeOnEscape, false);
+    }
+
+    @action.bound drawingFinished() {
         this.computeActiveDrawTools();
         if (this.stateStore) {
             this.crosshairStore.setCrosshairState(this.stateStore.crosshairState);
