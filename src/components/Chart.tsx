@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
+import { usePrevious } from '../hooks';
 
 import { TChartProps } from 'src/types';
 /* css + scss */
@@ -32,7 +33,7 @@ const Chart = (props: TChartProps) => {
     const { settingsDialog: chartTypeSettingsDialog, isCandle, isSpline } = chartType;
     const { updateProps, isChartClosed } = state;
     const { theme, position, isHighestLowestMarkerEnabled } = chartSetting;
-    const { isActive: isLoading } = loader;
+    const { isActive: isLoading, show: showChart } = loader;
 
     const rootRef = React.useRef<HTMLDivElement>(null);
 
@@ -51,6 +52,14 @@ const Chart = (props: TChartProps) => {
     React.useEffect(() => {
         updateProps(props);
     });
+
+    const prevLang = usePrevious(t.lang);
+    React.useEffect(() => {
+        if (prevLang && prevLang !== t.lang && !isLoading) {
+            showChart?.();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [t.lang]);
 
     const defaultTopWidgets = () => <ChartTitle />;
 
