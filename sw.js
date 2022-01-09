@@ -8,7 +8,7 @@ var filesToCache = [
   './dist/react-dom.js',
   './dist/react-transition-group.js',
   './dist/mobx.js',
-  './dist/mobx-react.js',
+  './dist/mobx-react-lite.js',
   './dist/smartcharts.js'
 ];
 
