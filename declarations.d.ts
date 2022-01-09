@@ -1,6 +1,6 @@
 declare var t: {
     translate(x?: string, params?: Record<string, string | number | boolean>): string;
-    setLanguage(x: string): void;
+    setLanguage(x: string, callback: () => void): void;
     lang: string;
 };
 
