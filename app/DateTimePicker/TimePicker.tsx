@@ -112,9 +112,6 @@ const TimePickerDropdown = React.memo(
         }
         return (
             <div className={`${preClass}-dropdown ${className}`}>
-                <div className={`${preClass}-panel`} onClick={toggle}>
-                    <span className={value ? '' : 'placeholder'}>{t.translate(value || 'Select time')}</span>
-                </div>
                 <div className={`${preClass}-selector`}>
                     <div className={`${preClass}-hours`}>
                         <div className='list-title center-text'>
@@ -246,7 +243,7 @@ const TimePicker = (props: TTimerPickerProps) => {
                 findAvailabeTime(start_moment_clone);
             }
         }
-    }, [focus, is_open, minutes, prev_is_open, prev_value, start_date, handleChange, toggleDropDown]);
+    }, [focus, is_open, minutes, prev_is_open, prev_value, prev_focus, start_date, handleChange, toggleDropDown]);
     const prefix_class = 'time-picker';
     return (
         <div ref={wrapper_ref} className={`${prefix_class}${padding ? ' padding' : ''}${is_open ? ' active' : ''}`}>
@@ -254,7 +251,7 @@ const TimePicker = (props: TTimerPickerProps) => {
                 <input type='time' id={`${prefix_class}-input`} value={value} onChange={handleChange} name={name} />
             ) : (
                 <React.Fragment>
-                    <span onClick={toggleDropDown}>
+                    <span className='time-picker-container' onClick={toggleDropDown}>
                         <input
                             type='text'
                             readOnly

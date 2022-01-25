@@ -4,99 +4,84 @@
     &.padding {
         padding: 16px;
     }
-    .picker-time-icon {
-        position: absolute;
-        top: 3px;
-        right: 2px;
-        cursor: pointer;
+    span {
+        display: flex;
+        align-items: center;
 
-        svg {
-            @include themify($themes) {
-                fill: themed('ChartHistoryPickerIcon');
+        .picker-time-icon {
+            right: 2px;
+            cursor: pointer;
+            padding-right: 0.8rem;
+
+            svg {
+                @include themify($themes) {
+                    fill: themed('ChartHistoryPickerIcon');
+                }
             }
         }
     }
     #time-picker-input.time-picker-input {
-        height: 32px;
-        padding: 0 8px;
-        border-radius: $border-radius;
+        font-family: $base-font;
+        font-weight: normal;
         box-sizing: border-box;
-        font-size: 1.4em;
-        font-weight: 300;
         margin: 0;
         cursor: pointer;
+        background: none;
         @include themify($themes) {
             color: themed('ChartHistoryPickerColor');
-            background: themed('ChartHistoryPickerBg');
-            border: 1px solid themed('ChartHistoryPickerBorder');
         }
 
         &.active,
         &:hover {
             @include themify($themes) {
-                border-color: themed('ChartHistoryPickerActiveBorder');
+                outline: none;
             }
+        }
+        &:focus-visible {
+            outline: none;
         }
     }
     .time-picker-dropdown {
         font-size: 1.4em;
         position: absolute;
         top: 100%;
+        right: 0;
         display: flex;
         flex-direction: column;
-        height: 295px;
         opacity: 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 2px 8px $COLOR_LIGHT_BLACK_6;
         z-index: -9;
         transition: all 300ms ease;
         border-radius: $border-radius;
         pointer-events: none;
         @include themify($themes) {
             color: themed('ChartHistoryPickerColor');
-            background: themed('ChartHistoryPickerBg');
-            border: 1px solid themed('ChartHistoryPickerBorder');
+            background: themed('ChartHistoryPickerDropdownBg');
+            border: 1px solid themed('ChartHistoryPickerDropdownBorder');
         }
 
         &.active {
             opacity: 1;
             z-index: 9;
-            top: calc(100% + 10px);
+            top: calc(100% + 2.6rem);
             pointer-events: initial;
-
-            .time-picker-panel {
-                .time-picker-clear {
-                    display: inline-block;
-                }
-            }
+            filter: drop-shadow(0 0 24px $COLOR_LIGHT_GRAY_7) drop-shadow(0 24px 24px $COLOR_LIGHT_GRAY_7);
         }
         &.from-right {
             right: 0;
         }
-        .time-picker-panel {
-            height: 30px;
-            border-radius: $border-radius $border-radius 0 0;
-            padding: 2px 8px 0 9px;
-            line-height: 30px;
-            font-weight: 300;
-            transition: height 0.3s ease 0.15s;
-            @include themify($themes) {
-                background: themed('ChartHistoryPickerHeaderBg');
-                border-bottom: 1px solid themed('ChartHistoryPickerHeaderBorder');
-            }
+        .time-picker-clear {
+            position: relative;
+            float: right;
+            display: none;
+            top: 1px;
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
 
-            .time-picker-clear {
-                position: relative;
-                float: right;
-                display: none;
-                top: 1px;
-                width: 17px;
-                height: 17px;
-                cursor: pointer;
-
-                svg {
-                    @include themify($themes) {
-                        fill: themed('ChartHistoryPickerTopColor');
-                    }
+            svg {
+                @include themify($themes) {
+                    fill: themed('ChartHistoryPickerTopColor');
                 }
             }
         }
@@ -106,57 +91,82 @@
 
             .time-picker-hours {
                 border-radius: 0 0 0 $border-radius;
-                width: 150px;
+                width: 13.6rem;
                 @include themify($themes) {
-                    border-right: 1px solid themed('ChartHistoryPickerBorder');
+                    border-right: 1px solid themed('ChartHistoryPickerDropdownBorder');
+                }
+
+                & .list-container {
+                    grid-template-columns: repeat(4, 2.4rem);
                 }
             }
             .time-picker-minutes {
-                width: 80px;
+                width: 7.2rem;
                 border-radius: 0 0 $border-radius;
+
+                & .list-container {
+                    grid-template-columns: repeat(2, 2.4rem);
+                }
             }
             .time-picker-hours,
             .time-picker-minutes {
                 display: inline-block;
-                height: 262px;
                 overflow: hidden;
                 text-align: center;
 
                 .list-title {
-                    margin-top: 10px;
+                    padding: 0.8rem 0.8rem 0;
                     @include themify($themes) {
                         color: themed('ChartHistoryPickerHeaderColor');
                     }
 
                     strong {
-                        font-weight: 400;
+                        font-weight: bold;
                     }
                 }
-                .list-container .list-item {
-                    display: inline-block;
-                    margin: 3px;
-                    padding: 7px;
-                    transition: all 0.3s ease;
-                    cursor: pointer;
-                    border-radius: $border-radius;
-                    @include themify($themes) {
-                        color: themed('ChartHistoryPickerBodyColor');
-                    }
+                .list-container {
+                    grid-auto-rows: 2.4rem;
+                    display: grid;
+                    grid-gap: 0.8rem;
+                    padding: 0.8rem;
 
-                    &.selected {
+                    & .list-item {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: all 0.3s ease;
+                        cursor: pointer;
+                        border-radius: $border-radius;
                         @include themify($themes) {
-                            background: themed('ChartHistoryPickerBodyActiveBg');
-                            color: themed('ChartHistoryPickerBodyActiveColor');
+                            color: themed('ChartHistoryPickerBodyColor');
                         }
-                    }
-                    &.disabled {
-                        cursor: default;
-                        @include themify($themes) {
-                            color: themed('ChartHistoryPickerBodyDisableColor');
+
+                        &.selected {
+                            @include themify($themes) {
+                                background: themed('ChartHistoryPickerBodyActiveBg');
+                                color: themed('ChartHistoryPickerBodyActiveColor');
+                                font-weight: 700;
+                            }
+                        }
+                        &.disabled {
+                            cursor: default;
+                            @include themify($themes) {
+                                color: themed('ChartHistoryPickerBodyDisableColor');
+                            }
+                        }
+                        &:hover {
+                            @include themify($themes) {
+                                background: themed('ChartHistoryPickerBodyHoverBg');
+                            }
                         }
                     }
                 }
             }
         }
     }
+}
+
+.smartcharts-desktop .time-picker-input {
+    font-size: 1.4em;
+    padding-left: 0.8rem;
 }

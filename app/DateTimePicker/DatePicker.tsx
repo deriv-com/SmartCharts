@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import moment from 'moment';
 import Calendar, { TCalendarRefProps } from './Calendar';
 import './date-picker.scss';
@@ -17,6 +17,7 @@ type TDatePickerInputProps = {
     onChange?: React.ChangeEventHandler;
     onClick?: React.MouseEventHandler;
     mode?: string;
+    display_format: string;
 };
 
 type TDatePickerProps = {
@@ -35,6 +36,7 @@ type TDatePickerProps = {
     is_nativepicker?: boolean;
     is_read_only?: boolean;
     mode?: string;
+    display_format: string;
 };
 
 const CalendarIcon = Wrapper(CalendarIC);
@@ -49,8 +51,9 @@ const DatePickerInput = ({
     onChange,
     onClick,
     mode,
+    display_format,
 }: TDatePickerInputProps) => {
-    const input_value = format ? moment(value, 'YYYY-MM-DD').format(format) : value;
+    const input_value = format ? moment(value, 'YYYY-MM-DD').format(display_format) : value;
     return (
         <input
             id={id}
@@ -82,7 +85,6 @@ const DatePicker = React.memo((props: TDatePickerProps) => {
         focus,
         format,
         is_nativepicker,
-        is_read_only,
         max_date,
         min_date,
         mode,
@@ -91,6 +93,7 @@ const DatePicker = React.memo((props: TDatePickerProps) => {
         placeholder,
         start_date,
         value: props_value,
+        display_format,
         has_today_btn,
     } = props;
     const [value, setValue] = useStateCallback<string>(props_value || '');
@@ -134,9 +137,6 @@ const DatePicker = React.memo((props: TDatePickerProps) => {
             updateDatePickerValue(_selected_date);
         }
         setIsDatepickerVisible(_is_datepicker_visible);
-    };
-    const onChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-        updateDatePickerValue(e.target.value, mode);
     };
     // TODO: handle cases where user inputs date before min_date and date after max_date
     const updateDatePickerValue = (_value: string, _mode?: string) => {
@@ -200,7 +200,7 @@ const DatePicker = React.memo((props: TDatePickerProps) => {
                     placeholder={t.translate(placeholder)}
                     is_read_only
                     value={value}
-                />
+                    display_format={display_format} />
                 <CalendarIcon className='date-picker-calendar-icon' />
             </div>
             <div className={`datepicker-calendar ${is_datepicker_visible ? 'show' : ''}`}>
@@ -213,16 +213,6 @@ const DatePicker = React.memo((props: TDatePickerProps) => {
                     has_today_btn={has_today_btn}
                     start_date={start_date}
                 >
-                    <DatePickerInput
-                        class_name='calendar-input'
-                        mode={mode}
-                        name={name}
-                        format={format}
-                        onChange={onChangeInput}
-                        placeholder={t.translate(placeholder)}
-                        is_read_only={is_read_only || false}
-                        value={value}
-                    />
                 </Calendar>
             </div>
         </div>

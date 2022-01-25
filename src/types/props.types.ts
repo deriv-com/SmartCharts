@@ -164,6 +164,7 @@ export type TChartProps = {
     onCrosshairChange?: (state?: number | null) => void | null;
     crosshairState?: number | null;
     children?: React.ReactNode;
+    historical?: boolean;
 };
 
 export type TQuote = {

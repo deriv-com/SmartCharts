@@ -1,6 +1,10 @@
 import moment from 'moment';
 import React from 'react';
+import { Wrapper } from '../../src/components/Icons';
+import CalendarICInfo from '../icons/ic-calendar-info.svg';
 import { CalendarDays, CalendarMonths, CalendarYears, CalendarDecades } from './panels/index';
+
+const CalendarIconInfo = Wrapper(CalendarICInfo);
 
 type TCalendarButtonProps = {
     className: string;
@@ -97,13 +101,13 @@ const CalendarPanel = (props: TCalendarPanelProps) => {
     return <div className='calendar-panel'>{calendar_panel[props.calendar_view as keyof typeof calendar_panel]}</div>;
 };
 
-const CalendarFooter = ({ footer, has_today_btn, onClick }: TCalendarFooterProps) => {
+const CalendarFooter = ({ footer, has_today_btn }: TCalendarFooterProps) => {
     return (
         <div className='calendar-footer'>
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
             {has_today_btn && (
                 <CalendarButton className='calendar-footer-btn'>
-                    <span onClick={onClick}>{t.translate('Today')}</span>
+                    <CalendarIconInfo className='calendar-footer-btn-icon-info' />
                 </CalendarButton>
             )}
         </div>

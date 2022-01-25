@@ -75,6 +75,7 @@ const Chart = (props: TChartProps) => {
         enabledNavigationWidget = true,
         toolbarWidget = () => null,
         onCrosshairChange,
+        historical,
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;
@@ -128,7 +129,13 @@ const Chart = (props: TChartProps) => {
                                 <div className='cq-top-ui-widgets'>
                                     <TopWidgets />
                                 </div>
-                                <div className='chartContainer' style={{ height: chartContainerHeight }}>
+                                <div
+                                    className='chartContainer'
+                                    style={{
+                                        height:
+                                            historical && chartContainerHeight && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                    }}
+                                >
                                     <Crosshair />
                                 </div>
                                 {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}

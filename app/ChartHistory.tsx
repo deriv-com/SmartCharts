@@ -45,28 +45,30 @@ const ChartHistory = React.memo(({ onChange }: TChartHistoryProps) => {
 
     return (
         <div className='ciq-chart-history'>
-            <strong>{t.translate('Historical Data')}:</strong>
-            <DatePicker
-                placeholder={t.translate('select date')}
-                name='date'
-                format='DD MMMM YYYY'
-                focus={focusOnDate}
-                disableFocus={onDisableFocus}
-                has_today_btn
-                value={date}
-                onChange={onChangeDate}
-                min_date={moment.utc().subtract(1, 'years').toDate().toString()}
-                max_date={moment.utc().toDate().toString()}
-            />
-            <TimePicker
-                placeholder='time'
-                name='time'
-                focus={focusOnTime}
-                disableFocus={onDisableFocus}
-                start_date={moment(date, 'YYYY/MM/DD').valueOf() / 1000}
-                value={time}
-                onChange={onChangeTime}
-            />
+            <div className='ciq-chart-history__container'>
+                <strong>{t.translate('Historical data')}</strong>
+                <DatePicker
+                    placeholder={t.translate('select date')}
+                    name='date'
+                    format='DD MMMM YYYY'
+                    focus={focusOnDate}
+                    disableFocus={onDisableFocus}
+                    has_today_btn
+                    value={date}
+                    onChange={onChangeDate}
+                    min_date={moment.utc().subtract(1, 'years').toDate().toString()}
+                    max_date={moment.utc().toDate().toString()} 
+                    display_format={'DD MMM YYYY'} />
+                <TimePicker
+                    placeholder='time'
+                    name='time'
+                    focus={focusOnTime}
+                    disableFocus={onDisableFocus}
+                    start_date={moment(date, 'YYYY/MM/DD').valueOf() / 1000}
+                    value={time}
+                    onChange={onChangeTime}
+                />
+            </div>
         </div>
     );
 });
