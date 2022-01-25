@@ -1,6 +1,6 @@
-import { action, computed, observable, reaction } from 'mobx';
+import { action, computed, observable, reaction, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TIcon, TObject, TSettingsItem } from 'src/types';
+import { TCIQAddEventListener, TCIQAppend, TIcon, TObject, TSettingsItem } from 'src/types';
 import MainStore from '.';
 import { drawTools } from '../Constant';
 import { formatCamelCase } from '../utils';
@@ -76,6 +76,8 @@ type TDrawToolsGroup = {
 };
 
 export default class DrawToolsStore {
+    _injectionId: TCIQAppend<() => void> | null = null;
+    _listenerId: TCIQAddEventListener<() => void> | null = null;
     _pervDrawingObjectCount = 0;
     mainStore: MainStore;
     menuStore: MenuStore;
@@ -89,16 +91,7 @@ export default class DrawToolsStore {
             onChanged: this.onChanged,
         });
 
-        reaction(
-            () => this.context,
-            () => {
-                if (this.context) {
-                    this.onContextReady();
-                } else {
-                    this.destructor();
-                }
-            }
-        );
+        when(() => !!this.context, this.onContextReady);
 
         reaction(
             () => this.menuStore.open,
@@ -130,8 +123,8 @@ export default class DrawToolsStore {
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
-        this.stx.addEventListener('drawing', this.noTool);
-        this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
+        this._listenerId = this.stx.addEventListener('drawing', this.noTool);
+        this._injectionId = this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
     };
     closeOnEscape = (e: KeyboardEvent) => {
         const ESCAPE = 27;
@@ -145,6 +138,19 @@ export default class DrawToolsStore {
     get activeToolsNo() {
         return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
     }
+
+    @action.bound destructor() {
+        document.removeEventListener('keydown', this.closeOnEscape);
+        document.removeEventListener('dblclick', this.doubleClick);
+        if (!this.context) return;
+        if (this._listenerId) {
+            this.stx.removeEventListener(this._listenerId);
+        }
+        if (this._injectionId) {
+            this.stx.removeInjection(this._injectionId);
+        }
+    }
+
     @action.bound
     onRightClickDrawing(drawing: TDrawingObject) {
         this.showDrawToolDialog(drawing);
@@ -215,10 +221,6 @@ export default class DrawToolsStore {
         }
         return null;
     };
-
-    destructor() {
-        document.removeEventListener('keydown', this.closeOnEscape, false);
-    }
 
     @action.bound drawingFinished() {
         this.computeActiveDrawTools();
