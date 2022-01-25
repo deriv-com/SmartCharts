@@ -281,7 +281,10 @@ export default class DrawToolsStore {
         const items: Record<string, number> = {};
         const ignoreBarType = ['vertical', 'horizontal'];
         const groups: Record<string, TDrawToolsGroup> = {};
-        this.stx.drawingObjects.forEach((item: TDrawingObject, indx: number) => {
+        this.stx?.drawingObjects.forEach((item: TDrawingObject, indx: number) => {
+            if (item === undefined) {
+                return;
+            }
             item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;
             item.bars =
