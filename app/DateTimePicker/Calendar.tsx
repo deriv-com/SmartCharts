@@ -101,13 +101,13 @@ const CalendarPanel = (props: TCalendarPanelProps) => {
     return <div className='calendar-panel'>{calendar_panel[props.calendar_view as keyof typeof calendar_panel]}</div>;
 };
 
-const CalendarFooter = ({ footer, has_today_btn }: TCalendarFooterProps) => {
+const CalendarFooter = ({ footer, has_today_btn, onClick }: TCalendarFooterProps) => {
     return (
         <div className='calendar-footer'>
             {footer && <span className='calendar-footer-extra'>{footer}</span>}
             {has_today_btn && (
                 <CalendarButton className='calendar-footer-btn'>
-                    <CalendarIconInfo className='calendar-footer-btn-icon-info' />
+                    <CalendarIconInfo className='calendar-footer-btn-icon-info' onClick={onClick} />
                 </CalendarButton>
             )}
         </div>
