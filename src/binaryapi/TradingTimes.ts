@@ -101,9 +101,11 @@ class TradingTimes {
     async _updateTradeTimes() {
         let response: Partial<TradingTimesResponse> = {};
 
-        if (!this._tradingTimesMap && this._params.tradingTimes) response = this._params.tradingTimes;
-        else if (this._params.enable !== false) response = await this._api.getTradingTimes(this.lastUpdateDate);
-        else {
+        if (!this._tradingTimesMap && this._params.tradingTimes) {
+            response = (this._params.tradingTimes as unknown) as Partial<TradingTimesResponse>;
+        } else if (this._params.enable !== false) {
+            response = await this._api.getTradingTimes(this.lastUpdateDate);
+        } else {
             console.error('TradingTimes feed is not enable nor has initial data!');
             return;
         }
