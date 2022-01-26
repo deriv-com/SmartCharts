@@ -519,7 +519,7 @@ t.translate("[currency] [amount] payout if the last tick.", {
   currency: "USD",
   amount: 43.12,
 });
-t.setLanguage("fr"); // components need to be rerendered for changes to take affect
+t.setLanguage("fr", callback_function); // components need to be rerendered for changes to take affect
 ```
 
 Each time a new translation string is added to the code, you need to update the `messages.pot` via:

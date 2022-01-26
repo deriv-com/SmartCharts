@@ -138,7 +138,9 @@ export default class ChartSettingStore {
             return;
         }
         this.language = this.languages.find(item => (item as TLanguage).key === lng) || this.defaultLanguage;
-        t.setLanguage((this.language as TLanguage).key);
+        t.setLanguage((this.language as TLanguage).key, () => {
+            this?.mainStore?.loader?.hide?.();
+        });
         logEvent(
             LogCategories.ChartControl,
             LogActions.ChartSetting,

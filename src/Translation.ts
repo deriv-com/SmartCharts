@@ -8,14 +8,16 @@ export class Translation {
         this.lang = lang;
     }
 
-    setLanguage(lang: string) {
+    setLanguage(lang: string, callback: () => void) {
         if (lang_map[lang] || lang === 'en') {
             this.lang = lang;
+            callback?.();
         } else {
             import(/* webpackChunkName: "[request]" */ `../translation/${lang}.json`).then(imported_lang => {
                 if (imported_lang) {
                     lang_map[lang] = imported_lang.default;
                     this.lang = lang;
+                    callback?.();
                 } else {
                     console.error('Unsupported language:', lang);
                 }
