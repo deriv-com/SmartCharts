@@ -1,3 +1,4 @@
+// @ts-nocheck
 export const overrideDrawingClickChartEngine = () => {
     // overriding the method to avoid error in case 'this.controls.crossX.classList' is not a string.
     CIQ.ChartEngine.prototype.drawingClick = function (panel, x, y) {
