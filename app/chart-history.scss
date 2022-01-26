@@ -2,7 +2,7 @@
     border-radius: $border-radius;
     z-index: 8;
     position: relative;
-    top: 0px;
+    top: 0.4em;
     display: none;
     padding: 0.8rem;
     @include themify($themes) {
