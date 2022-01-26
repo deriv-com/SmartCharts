@@ -14,6 +14,7 @@ import { overrideRenderRectangle } from './renderRectangle';
 import { overrideRenderSegment } from './renderSegment';
 import { overrideResizeObserver } from './resizeObserver';
 import { BackingStore } from './backingStore';
+import { overrideDrawingClickChartEngine } from './drawingClickChartEngine';
 
 const inject = (option: { drawToolsStore: DrawToolsStore }) => {
     createXAxis();
@@ -31,6 +32,7 @@ const inject = (option: { drawToolsStore: DrawToolsStore }) => {
     overrideRenderSegment();
     overrideResizeObserver();
     BackingStore();
+    overrideDrawingClickChartEngine();
 };
 
 export default inject;
