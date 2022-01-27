@@ -1,3 +1,5 @@
+project_id: '302424'
+api_token_env: 'CROWDIN_API_KEY'
 files:
-  - source: /translation/messages.json
-    translation: /translation/%two_letters_code%.json
+    - source: /translation/messages.json
+      translation: /translation/%two_letters_code%.json
