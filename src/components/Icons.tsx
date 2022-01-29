@@ -45,6 +45,7 @@ import Cryptocurrency from '../../sass/icons/sidebar/cryptocurrency/ic-cryptocur
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
 import BasketIndex from '../../sass/icons/sidebar/basket_index/ic-basket-normal.svg';
+import BasketIndexPlaceholder from '../../sass/icons/sidebar/basket_index/ic-basket-active.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
 import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
 import SynthIndex from '../../sass/icons/sidebar/synth_index/ic-synth-normal.svg';
@@ -575,7 +576,7 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 }
 
 export const OTCBadgeIcon = Wrapper(OTCBadge);
-const BasketIndexIcon = Wrapper(BasketIndex);
+const BasketIndexIcon = Wrapper(BasketIndexPlaceholder);
 
 function otc(flag: keyof typeof FlagIconMap, symbol: string) {
     const FlagIcon = FlagIconMap[flag];
