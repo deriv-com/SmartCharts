@@ -44,6 +44,7 @@ import Active from '../../sass/icons/common/ic-active.svg';
 import Cryptocurrency from '../../sass/icons/sidebar/cryptocurrency/ic-cryptocurrency-normal.svg';
 import Commodities from '../../sass/icons/sidebar/commodities/ic-commodities-normal.svg';
 import Forex from '../../sass/icons/sidebar/forex/ic-forex-normal.svg';
+import BasketIndex from '../../sass/icons/sidebar/basket_index/ic-basket-normal.svg';
 import Indices from '../../sass/icons/sidebar/indices/ic-indices-normal.svg';
 import Stocks from '../../sass/icons/sidebar/otc/ic-otc-normal.svg';
 import SynthIndex from '../../sass/icons/sidebar/synth_index/ic-synth-normal.svg';
@@ -171,7 +172,6 @@ import XRPUSD from '../../sass/icons/active-symbols/cryptos/ic-xrpusd.svg';
 import BTCUSD from '../../sass/icons/active-symbols/cryptos/ic-btcusd.svg';
 
 import OTCBadge from '../../sass/icons/active-symbols/ic-otcbadge.svg';
-import SmartFX from '../../sass/icons/active-symbols/ic-smartfx-placeholder.svg';
 
 import EmptyState from '../../sass/icons/shape/ic-empty-state.svg';
 import OverwriteState from '../../sass/icons/shape/ic-overwrite-state.svg';
@@ -410,6 +410,7 @@ export const CategoryIconMap = {
     cryptocurrency: Wrapper(Cryptocurrency),
     favorite: Wrapper(Star),
     forex: Wrapper(Forex),
+    basket_index: Wrapper(BasketIndex),
     indices: Wrapper(Indices),
     stocks: Wrapper(Stocks),
     volidx: Wrapper(Volidx),
@@ -574,7 +575,7 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 }
 
 export const OTCBadgeIcon = Wrapper(OTCBadge);
-const SmartFXIcon = Wrapper(SmartFX);
+const BasketIndexIcon = Wrapper(BasketIndex);
 
 function otc(flag: keyof typeof FlagIconMap, symbol: string) {
     const FlagIcon = FlagIconMap[flag];
@@ -583,8 +584,17 @@ function otc(flag: keyof typeof FlagIconMap, symbol: string) {
 
 function wld(flag: keyof typeof FlagIconMap) {
     const FlagIcon = FlagIconMap[flag];
-    ItemIconMap[`WLD${flag}` as keyof typeof ItemIconMap] = createCompositeIcon(SmartFXIcon, FlagIcon, 'ic-wld');
+    ItemIconMap[`WLD${flag}` as keyof typeof ItemIconMap] = createCompositeIcon(BasketIndexIcon, FlagIcon, 'ic-wld');
 }
+
+/* Basket Indices */
+/* Forex */
+wld('AUD');
+wld('EUR');
+wld('GBP');
+wld('USD');
+/* Commodities */
+wld('XAU');
 
 /* FOREX */
 /* Major Pairs */
@@ -619,12 +629,6 @@ frx('USD', 'MXN');
 frx('USD', 'NOK');
 frx('USD', 'PLN');
 frx('USD', 'SEK');
-/* Smart FX */
-wld('AUD');
-wld('EUR');
-wld('GBP');
-wld('USD');
-wld('XAU');
 /* OTC Indicies */
 otc('Dutch', 'OTC_AEX');
 otc('GBP', 'OTC_FTSE');

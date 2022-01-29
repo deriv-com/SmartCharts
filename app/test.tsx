@@ -654,11 +654,11 @@ const App = () => {
                     <select onChange={onActiveSymbol}>
                         <option value=''> -- Set Active Symbols -- </option>
                         <option value='null'>Default</option>
-                        <option value='synthetic_index,forex,indices,stocks,commodities'>
-                            synthetic_index,forex,indices,stocks,commodities
+                        <option value='synthetic_index,basket_index,forex,indices,stocks,commodities'>
+                            synthetic_index,basket_index,forex,indices,stocks,commodities
                         </option>
-                        <option value='synthetic_index,indices,stocks,commodities,forex'>
-                            synthetic_index,indices,stocks,commodities,forex
+                        <option value='synthetic_index,indices,stocks,commodities,basket_index,forex'>
+                            synthetic_index,indices,stocks,commodities,basket_index,forex
                         </option>
                     </select>
                 </div>
@@ -668,6 +668,7 @@ const App = () => {
                     <select onChange={el => setClosedMarket(el.target.value)}>
                         <option value='default'> Default </option>
                         <option value='Forex'> Forex </option>
+                        <option value='Basket Indices'> Basket Indices </option>
                         <option value='Commodities'> Commodities </option>
                         <option value='Stock Indices'> Stock Indices </option>
                         <option value='Synthetic Indices'> Synthetic Indices </option>
@@ -679,6 +680,7 @@ const App = () => {
                     <select onChange={el => setExcludeSymbol(el.target.value)}>
                         <option value='default'> Default </option>
                         <option value='forex'> Forex </option>
+                        <option value='basket_index'> Basket Indices </option>
                         <option value='commodities'> Commodities </option>
                         <option value='indices'> Stock Indices </option>
                         <option value='synthetic_index'> Synthetic Indices </option>

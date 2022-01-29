@@ -484,8 +484,13 @@ const friday_trading_times = {
                             },
                         ],
                     },
+                ],
+            },
+            {
+                name: 'Basket Indices',
+                submarkets: [
                     {
-                        name: 'Smart FX',
+                        name: 'Forex',
                         symbols: [
                             {
                                 events: [
@@ -494,7 +499,7 @@ const friday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'AUD Index',
+                                name: 'AUD Basket',
                                 symbol: 'WLDAUD',
                                 times: {
                                     close: ['21:00:00'],
@@ -510,7 +515,7 @@ const friday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'EUR Index',
+                                name: 'EUR Basket',
                                 symbol: 'WLDEUR',
                                 times: {
                                     close: ['21:00:00'],
@@ -526,7 +531,7 @@ const friday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'GBP Index',
+                                name: 'GBP Basket',
                                 symbol: 'WLDGBP',
                                 times: {
                                     close: ['21:00:00'],
@@ -542,8 +547,29 @@ const friday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'USD Index',
+                                name: 'USD Basket',
                                 symbol: 'WLDUSD',
+                                times: {
+                                    close: ['21:00:00'],
+                                    open: ['00:00:00'],
+                                    settlement: '23:59:59',
+                                },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                            },
+                        ],
+                    },
+                    {
+                        name: 'Commodities',
+                        symbols: [
+                            {
+                                events: [
+                                    {
+                                        dates: 'Fridays',
+                                        descrip: 'Closes early (at 21:00)',
+                                    },
+                                ],
+                                name: 'Gold Basket',
+                                symbol: 'WLDXAU',
                                 times: {
                                     close: ['21:00:00'],
                                     open: ['00:00:00'],
@@ -1670,8 +1696,13 @@ const saturday_trading_times = {
                             },
                         ],
                     },
+                ],
+            },
+            {
+                name: 'Basket Indices',
+                submarkets: [
                     {
-                        name: 'Smart FX',
+                        name: 'Forex',
                         symbols: [
                             {
                                 events: [
@@ -1680,7 +1711,7 @@ const saturday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'AUD Index',
+                                name: 'AUD Basket',
                                 symbol: 'WLDAUD',
                                 times: {
                                     close: ['--'],
@@ -1696,7 +1727,7 @@ const saturday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'EUR Index',
+                                name: 'EUR Basket',
                                 symbol: 'WLDEUR',
                                 times: {
                                     close: ['--'],
@@ -1712,7 +1743,7 @@ const saturday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'GBP Index',
+                                name: 'GBP Basket',
                                 symbol: 'WLDGBP',
                                 times: {
                                     close: ['--'],
@@ -1728,8 +1759,29 @@ const saturday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'USD Index',
+                                name: 'USD Basket',
                                 symbol: 'WLDUSD',
+                                times: {
+                                    close: ['--'],
+                                    open: ['--'],
+                                    settlement: '--',
+                                },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                            },
+                        ],
+                    },
+                    {
+                        name: 'Commodities',
+                        symbols: [
+                            {
+                                events: [
+                                    {
+                                        dates: 'Fridays',
+                                        descrip: 'Closes early (at 21:00)',
+                                    },
+                                ],
+                                name: 'Gold Basket',
+                                symbol: 'WLDXAU',
                                 times: {
                                     close: ['--'],
                                     open: ['--'],
@@ -2866,8 +2918,13 @@ const sunday_trading_times = {
                             },
                         ],
                     },
+                ],
+            },
+            {
+                name: 'Basket Indices',
+                submarkets: [
                     {
-                        name: 'Smart FX',
+                        name: 'Forex',
                         symbols: [
                             {
                                 events: [
@@ -2876,7 +2933,7 @@ const sunday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'AUD Index',
+                                name: 'AUD Basket',
                                 symbol: 'WLDAUD',
                                 times: {
                                     close: ['--'],
@@ -2892,7 +2949,7 @@ const sunday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'EUR Index',
+                                name: 'EUR Basket',
                                 symbol: 'WLDEUR',
                                 times: {
                                     close: ['--'],
@@ -2908,7 +2965,7 @@ const sunday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'GBP Index',
+                                name: 'GBP Basket',
                                 symbol: 'WLDGBP',
                                 times: {
                                     close: ['--'],
@@ -2924,8 +2981,29 @@ const sunday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'USD Index',
+                                name: 'USD Basket',
                                 symbol: 'WLDUSD',
+                                times: {
+                                    close: ['--'],
+                                    open: ['--'],
+                                    settlement: '--',
+                                },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                            },
+                        ],
+                    },
+                    {
+                        name: 'Commodities',
+                        symbols: [
+                            {
+                                events: [
+                                    {
+                                        dates: 'Fridays',
+                                        descrip: 'Closes early (at 21:00)',
+                                    },
+                                ],
+                                name: 'Gold Basket',
+                                symbol: 'WLDXAU',
                                 times: {
                                     close: ['--'],
                                     open: ['--'],
@@ -4062,8 +4140,13 @@ const monday_trading_times = {
                             },
                         ],
                     },
+                ],
+            },
+            {
+                name: 'Basket Indices',
+                submarkets: [
                     {
-                        name: 'Smart FX',
+                        name: 'Forex',
                         symbols: [
                             {
                                 events: [
@@ -4072,7 +4155,7 @@ const monday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'AUD Index',
+                                name: 'AUD Basket',
                                 symbol: 'WLDAUD',
                                 times: {
                                     close: ['23:59:59'],
@@ -4088,7 +4171,7 @@ const monday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'EUR Index',
+                                name: 'EUR Basket',
                                 symbol: 'WLDEUR',
                                 times: {
                                     close: ['23:59:59'],
@@ -4104,7 +4187,7 @@ const monday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'GBP Index',
+                                name: 'GBP Basket',
                                 symbol: 'WLDGBP',
                                 times: {
                                     close: ['23:59:59'],
@@ -4120,8 +4203,29 @@ const monday_trading_times = {
                                         descrip: 'Closes early (at 21:00)',
                                     },
                                 ],
-                                name: 'USD Index',
+                                name: 'USD Basket',
                                 symbol: 'WLDUSD',
+                                times: {
+                                    close: ['23:59:59'],
+                                    open: ['00:00:00'],
+                                    settlement: '23:59:59',
+                                },
+                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+                            },
+                        ],
+                    },
+                    {
+                        name: 'Commodities',
+                        symbols: [
+                            {
+                                events: [
+                                    {
+                                        dates: 'Fridays',
+                                        descrip: 'Closes early (at 21:00)',
+                                    },
+                                ],
+                                name: 'Gold Basket',
+                                symbol: 'WLDXAU',
                                 times: {
                                     close: ['23:59:59'],
                                     open: ['00:00:00'],
