@@ -26,7 +26,7 @@
         display: flex;
         justify-content: space-between;
         border-radius: $border-radius $border-radius 0 0;
-        height: 56px;
+        height: fit-content;
         box-sizing: border-box;
         border-bottom: 2px solid;
         @include themify($themes) {
@@ -90,14 +90,15 @@
             border-radius: 0 5px 0 0;
 
             .ic-icon {
-                width: 32px;
-                height: 32px;
-                line-height: 34px;
+                width: 27px;
+                height: 27px;
+                line-height: 27px;
                 cursor: pointer;
                 border-radius: $border-radius;
                 padding: 4px;
                 position: relative;
                 top: -6px;
+                right: -2.5px;
 
                 svg {
                     @include themify($themes) {
