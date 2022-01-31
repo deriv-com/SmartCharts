@@ -1,6 +1,6 @@
 {
     "name": "@deriv/deriv-charts",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
     "contributors": [
@@ -35,6 +35,7 @@
         "gh-pages": "gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME,Dockerfile,.dockerignore,default.conf,.circleci/**}'",
         "gh-pages:folder": "f () { gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME,Dockerfile,.dockerignore,default.conf,.circleci/**}' --dest $1 ;}; f",
         "translations": "npm run build && node scripts/extract-translations.js ./dist/smartcharts.js",
+        "translations:download": "crowdin download -b master",
         "deploy:production": "npm run build-travis && echo 'charts.binary.com' > CNAME  && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
         "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'",
         "prettify": "./node_modules/.bin/prettier --config ./.prettierrc --write \"./{app,loaders,src}/**/*.{js,jsx,scss}\"",
