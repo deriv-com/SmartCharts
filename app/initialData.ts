@@ -11,7 +11,7 @@ export const MockActiveSymbol: TInitialChartData['activeSymbols'] = [
         market_display_name: 'Basket Indices',
         pip: 0.001,
         submarket: 'forex_basket',
-        submarket_display_name: 'Forex',
+        submarket_display_name: 'Forex Basket',
         symbol: 'WLDAUD',
         symbol_type: 'forex_basket',
     },
@@ -141,7 +141,7 @@ export const MockActiveSymbol: TInitialChartData['activeSymbols'] = [
         market_display_name: 'Basket Indices',
         pip: 0.001,
         submarket: 'forex_basket',
-        submarket_display_name: 'Forex',
+        submarket_display_name: 'Forex Basket',
         symbol: 'WLDEUR',
         symbol_type: 'forex_basket',
     },
@@ -271,7 +271,7 @@ export const MockActiveSymbol: TInitialChartData['activeSymbols'] = [
         market_display_name: 'Basket Indices',
         pip: 0.001,
         submarket: 'forex_basket',
-        submarket_display_name: 'Forex',
+        submarket_display_name: 'Forex Basket',
         symbol: 'WLDGBP',
         symbol_type: 'forex_basket',
     },
@@ -557,7 +557,7 @@ export const MockActiveSymbol: TInitialChartData['activeSymbols'] = [
         market_display_name: 'Basket Indices',
         pip: 0.001,
         submarket: 'forex_basket',
-        submarket_display_name: 'Forex',
+        submarket_display_name: 'Forex Basket',
         symbol: 'WLDUSD',
         symbol_type: 'forex_basket',
     },
@@ -1152,7 +1152,7 @@ const trading_times: TradingTimesResponse['trading_times'] = {
             name: 'Basket Indices',
             submarkets: [
                 {
-                    name: 'Forex',
+                    name: 'Forex Basket',
                     symbols: [
                         {
                             events: [
@@ -1201,7 +1201,7 @@ const trading_times: TradingTimesResponse['trading_times'] = {
                     ],
                 },
                 {
-                    name: 'Commodities',
+                    name: 'Commodities Basket',
                     symbols: [
                         {
                             events: [

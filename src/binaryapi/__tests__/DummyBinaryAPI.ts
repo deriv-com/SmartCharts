@@ -490,7 +490,7 @@ const friday_trading_times = {
                 name: 'Basket Indices',
                 submarkets: [
                     {
-                        name: 'Forex',
+                        name: 'Forex Basket',
                         symbols: [
                             {
                                 events: [
@@ -559,7 +559,7 @@ const friday_trading_times = {
                         ],
                     },
                     {
-                        name: 'Commodities',
+                        name: 'Commodities Basket',
                         symbols: [
                             {
                                 events: [
@@ -1702,7 +1702,7 @@ const saturday_trading_times = {
                 name: 'Basket Indices',
                 submarkets: [
                     {
-                        name: 'Forex',
+                        name: 'Forex Basket',
                         symbols: [
                             {
                                 events: [
@@ -1771,7 +1771,7 @@ const saturday_trading_times = {
                         ],
                     },
                     {
-                        name: 'Commodities',
+                        name: 'Commodities Basket',
                         symbols: [
                             {
                                 events: [
@@ -2924,7 +2924,7 @@ const sunday_trading_times = {
                 name: 'Basket Indices',
                 submarkets: [
                     {
-                        name: 'Forex',
+                        name: 'Forex Basket',
                         symbols: [
                             {
                                 events: [
@@ -2993,7 +2993,7 @@ const sunday_trading_times = {
                         ],
                     },
                     {
-                        name: 'Commodities',
+                        name: 'Commodities Basket',
                         symbols: [
                             {
                                 events: [
@@ -4146,7 +4146,7 @@ const monday_trading_times = {
                 name: 'Basket Indices',
                 submarkets: [
                     {
-                        name: 'Forex',
+                        name: 'Forex Basket',
                         symbols: [
                             {
                                 events: [
@@ -4215,7 +4215,7 @@ const monday_trading_times = {
                         ],
                     },
                     {
-                        name: 'Commodities',
+                        name: 'Commodities Basket',
                         symbols: [
                             {
                                 events: [

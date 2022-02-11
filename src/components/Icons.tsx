@@ -589,12 +589,12 @@ function wld(flag: keyof typeof FlagIconMap) {
 }
 
 /* Basket Indices */
-/* Forex */
+/* Forex Basket */
 wld('AUD');
 wld('EUR');
 wld('GBP');
 wld('USD');
-/* Commodities */
+/* Commodities Basket */
 wld('XAU');
 
 /* FOREX */
