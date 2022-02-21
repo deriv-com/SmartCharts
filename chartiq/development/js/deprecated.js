@@ -1,11 +1,11 @@
 /**
  *	8.2.0
- *	Generation date: 2021-03-19T19:54:09.125Z
+ *	Generation date: 2022-02-18T13:21:32.984Z
  *	Client name: deriv limited
- *	Package Type: Technical Analysis 8.2
+ *	Package Type: Technical Analysis
  *	License type: annual
- *	Expiration date: "2022/04/01"
- *	Domain lock: ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot","deriv.com","deriv.app","deriv.me"]
+ *	Expiration date: "2023/04/01"
+ *	Domain lock: ["127.0.0.1","localhost","deriv.com","deriv.app","deriv.me","binary.com","binary.sx","binary.me","binary.bot","deriv.be"]
  *	iFrame lock: true
  */
 
