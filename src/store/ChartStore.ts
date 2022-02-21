@@ -1248,9 +1248,7 @@ class ChartStore {
         );
         // fncToCall can be undefined for iOS that does not support fullscreenAPI
         if (fncToCall) {
-            (el as HTMLElement)[fncToCall as 'requestFullscreen']()?.catch(() => {
-                /* no actual handling expected */
-            });
+            (el as HTMLElement)[fncToCall as 'requestFullscreen']()?.catch(() => undefined);
         }
     }
 }
