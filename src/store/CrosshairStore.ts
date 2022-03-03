@@ -387,7 +387,7 @@ class CrosshairStore {
                     fieldValue = dsField;
                 }
                 rows.push({
-                    name: fieldName.toUpperCase(),
+                    name: fieldName ? fieldName.toUpperCase() : '',
                     value: fieldValue,
                 });
             }
