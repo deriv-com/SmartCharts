@@ -290,6 +290,7 @@ class Feed {
         params: TPaginationParams,
         callback: TPaginationCallback
     ) {
+        this.paginationLoader.updateOnPagination(true);
         const end = getUTCEpoch(endDate);
         const start = getUTCEpoch(suggestedStartDate);
         const { period, interval } = params;
@@ -300,6 +301,7 @@ class Feed {
             this._emitter.emit(Feed.EVENT_START_PAGINATION, { start, end });
         }
         await this._getPaginationData(symbol, granularity, start, end, callback);
+        this.paginationLoader.updateOnPagination(false);
     }
     async _getPaginationData(
         symbol: string,
@@ -335,7 +337,6 @@ class Feed {
                 if (response.error) {
                     const { message: text } = response.error as TError;
                     this.loader.hide();
-                    this.paginationLoader.updateOnPagination(false);
                     this._mainStore.notifier.notify({
                         text: text as string,
                         type: 'error',
