@@ -13,7 +13,6 @@ import { mergeTickHistory } from './tickUtils';
 
 class StreamManager {
     MAX_CACHE_TICKS = 5000;
-    is_rendering = false;
     _connection: ConnectionManager;
     _streams: Record<string, Stream> = {};
     _streamIds: Record<string, string | undefined> = {};
@@ -34,12 +33,9 @@ class StreamManager {
         const key = this._getKey((data.echo_req as unknown) as TicksHistoryRequest);
 
         if (this._streams[key] && this._tickHistoryCache[key]) {
-            if (!this.is_rendering){
-                this.is_rendering = true;
-                this._streamIds[key] = data[data.msg_type]?.id;
-                this._cacheTick(key, data);
-                this._streams[key].emitTick(data);
-            }
+            this._streamIds[key] = data[data.msg_type]?.id;
+            this._cacheTick(key, data);
+            this._streams[key].emitTick(data);
         } else if (this._beingForgotten[key] === undefined) {
             // There could be the possibility a stream could still enter even though
             // it is no longer in used. This is because we can't know the stream ID
@@ -106,12 +102,6 @@ class StreamManager {
                 prices.shift();
                 times.shift();
             }
-
-            // on certain mobile devices the stream will get a huge number of ticks simultaneously from websocket after a pause
-            // this timeout will make sure that there will be at least 0.75 seconds gap between each tick being rendered
-            setTimeout(() => {
-                this.is_rendering = false;
-            }, 750);
         }
     }
 

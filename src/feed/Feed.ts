@@ -26,6 +26,7 @@ class Feed {
     _binaryApi: BinaryAPI;
     _connectionClosedDate?: Date;
     _emitter: EventEmitter;
+    _last_tick_timestamp: number;
     _mainStore: TMainStore;
     _serverTime: ServerTime;
     _stx: Context['stx'];
@@ -76,6 +77,7 @@ class Feed {
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
+        this._last_tick_timestamp = 0;
     }
     onRangeChanged = (forceLoad: boolean) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
@@ -154,6 +156,7 @@ class Feed {
         params: TPaginationParams,
         callback: TPaginationCallback
     ) {
+        this._last_tick_timestamp = this._serverTime.getEpoch();
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { period, interval, symbolObject } = params;
@@ -416,6 +419,8 @@ class Feed {
         return result;
     }
     _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
+        const current_tick_timestamp = this._serverTime.getEpoch();
+
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
@@ -443,10 +448,18 @@ class Feed {
                 noCreateDataSet: true,
             });
         } else {
-            this._stx.updateChartData(quotes, null, {
-                allowReplaceOHL: true,
-            });
-            this._stx.createDataSet();
+            // we will reload the chart instead of rendering new ticks
+            // in case if the duration between the previous tick and the current one is longer than a minute
+            // to avoid disturbing animation on slower devices
+            if (current_tick_timestamp - this._last_tick_timestamp < 60) {
+                this._stx.updateChartData(quotes, null, {
+                    allowReplaceOHL: true,
+                });
+                this._stx.createDataSet();
+            } else {
+                this._mainStore.chart.refreshChart();
+            }
+            this._last_tick_timestamp = current_tick_timestamp;
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
