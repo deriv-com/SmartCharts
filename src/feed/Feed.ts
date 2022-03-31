@@ -420,6 +420,7 @@ class Feed {
     }
     _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
         const current_tick_timestamp = this._serverTime.getEpoch();
+        const max_tick_delay = 30;
 
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
@@ -451,7 +452,7 @@ class Feed {
             // we will reload the chart instead of rendering new ticks
             // in case if the duration between the previous tick and the current one is longer than a minute
             // to avoid disturbing animation on slower devices
-            if (current_tick_timestamp - this._last_tick_timestamp < 60) {
+            if (current_tick_timestamp - this._last_tick_timestamp < max_tick_delay) {
                 this._stx.updateChartData(quotes, null, {
                     allowReplaceOHL: true,
                 });
