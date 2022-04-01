@@ -93,6 +93,7 @@ const IntervalEnum = {
 const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID', 'IT', 'PL', 'PT', 'RU', 'TH', 'VI', 'ZH_CN', 'ZH_TW'];
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
+const subscribeProposalOpenContract = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const App = () => {
@@ -160,6 +161,7 @@ const App = () => {
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => setIsConnectionOpened(true));
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, handleNetworkStatus);
+        networkMonitor.init(subscribeProposalOpenContract, handleNetworkStatus);
     }, []);
     /*
     shouldComponentUpdate(nextProps, nextState) {
@@ -247,6 +249,7 @@ const App = () => {
             toolbarWidget={renderToolbarWidget}
             chartControlsWidgets={renderControls}
             requestAPI={requestAPI}
+            subscribeProposalOpenContract={subscribeProposalOpenContract}
             requestSubscribe={requestSubscribe}
             requestForget={requestForget}
             endEpoch={endEpoch}
@@ -258,6 +261,7 @@ const App = () => {
             isConnectionOpened={isConnectionOpened}
             networkStatus={networkStatus}
             shouldFetchTradingTimes
+            shouldFetchTickHistory
             enabledChartFooter
             getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
                 const isSmallScreen = chart_height < 780;

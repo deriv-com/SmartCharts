@@ -33,6 +33,7 @@ export type TBinaryAPIResponse = {
 };
 
 export type TRequestAPI = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse>;
+export type TSubscribeProposalOpenContract = (request: TBinaryAPIRequest) => Promise<TBinaryAPIResponse>;
 export type TResponseAPICallback = (response: TBinaryAPIResponse) => void;
 export type TRequestSubscribe = (request: TBinaryAPIRequest, callback: TResponseAPICallback) => void;
 export type TRequestForgetStream = (id: string) => void;
@@ -145,6 +146,7 @@ export type TChartProps = {
     onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
     importedLayout?: typeof CIQ.UI.Layout;
     shouldFetchTradingTimes?: boolean;
+    shouldFetchTickHistory?: boolean;
     maxTick?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;
@@ -165,6 +167,7 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
+    subscribeProposalOpenContract?: BinaryAPI['subscribeProposalOpenContract'];
 };
 
 export type TQuote = {

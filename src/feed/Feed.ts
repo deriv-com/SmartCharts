@@ -30,6 +30,7 @@ class Feed {
     _serverTime: ServerTime;
     _stx: Context['stx'];
     _tradingTimes: TradingTimes;
+    _shouldFetchTickHistory: boolean;
     static get EVENT_MASTER_DATA_UPDATE() {
         return 'EVENT_MASTER_DATA_UPDATE';
     }
@@ -68,7 +69,7 @@ class Feed {
     }
     _activeStreams: Record<string, DelayedSubscription | RealtimeSubscription> = {};
     _isConnectionOpened = true;
-    constructor(binaryApi: BinaryAPI, stx: Context['stx'], mainStore: TMainStore, tradingTimes: TradingTimes) {
+    constructor(binaryApi: BinaryAPI, stx: Context['stx'], mainStore: TMainStore, tradingTimes: TradingTimes, _shouldFetchTickHistory: boolean) {
         this._stx = stx;
         this._binaryApi = binaryApi;
         this._mainStore = mainStore;
@@ -76,6 +77,7 @@ class Feed {
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
+        this._shouldFetchTickHistory = _shouldFetchTickHistory || false;
     }
     onRangeChanged = (forceLoad: boolean) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
@@ -198,6 +200,11 @@ class Feed {
             start: this.endEpoch ? start : undefined,
             count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
+        const subscribeProposalOpenContractRequest: Partial<any> = {
+            proposal_open_contract: 1,
+            contract_id: 162802038888,
+            subscribe: 1
+          };
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {
@@ -266,10 +273,21 @@ class Feed {
             getHistoryOnly = true;
         }
         if (getHistoryOnly) {
-            const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
-                tickHistoryRequest as TCreateTickHistoryParams
-            );
-            quotes = TickHistoryFormatter.formatHistory(response);
+            
+            if (this._shouldFetchTickHistory) {
+                
+                const response2: any = await this._binaryApi.getTickHistory2(
+                // subscribeProposalOpenContractRequest
+                    {qwe: '123'}
+                );
+                console.log('SmartCharts response if', response2);
+            }else{
+                const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
+                    tickHistoryRequest as TCreateTickHistoryParams
+                );
+                console.log('SmartCharts response else', response, 'this._mainStore', this._mainStore);
+                quotes = TickHistoryFormatter.formatHistory(response);
+            }
         }
         if (!quotes) {
             callback({ quotes: [] });
