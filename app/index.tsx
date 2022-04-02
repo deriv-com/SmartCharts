@@ -22,6 +22,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { TNotification } from 'src/store/Notifier';
 import { TGranularity, TNetworkConfig, TRefData, TStateChangeListener } from 'src/types';
+import { AuditDetailsForExpiredContract } from '@deriv/api-types';
 import 'url-search-params-polyfill';
 import './app.scss';
 import ChartHistory from './ChartHistory';
@@ -93,7 +94,6 @@ const IntervalEnum = {
 const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID', 'IT', 'PL', 'PT', 'RU', 'TH', 'VI', 'ZH_CN', 'ZH_TW'];
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
-const subscribeProposalOpenContract = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
 const requestForget = streamManager.forget.bind(streamManager);
 const App = () => {
@@ -156,12 +156,12 @@ const App = () => {
     const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
     const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
     const [symbol, setSymbol] = React.useState<string>('');
+    const allTicks: keyof AuditDetailsForExpiredContract | [] = [];
     React.useEffect(() => {
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => setIsConnectionOpened(false));
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => setIsConnectionOpened(true));
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, handleNetworkStatus);
-        networkMonitor.init(subscribeProposalOpenContract, handleNetworkStatus);
     }, []);
     /*
     shouldComponentUpdate(nextProps, nextState) {
@@ -249,7 +249,6 @@ const App = () => {
             toolbarWidget={renderToolbarWidget}
             chartControlsWidgets={renderControls}
             requestAPI={requestAPI}
-            subscribeProposalOpenContract={subscribeProposalOpenContract}
             requestSubscribe={requestSubscribe}
             requestForget={requestForget}
             endEpoch={endEpoch}
@@ -263,6 +262,7 @@ const App = () => {
             shouldFetchTradingTimes
             shouldFetchTickHistory
             enabledChartFooter
+            allTicks={allTicks}
             getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
                 const isSmallScreen = chart_height < 780;
                 const denominator = indicator_count >= 5 ? indicator_count : indicator_count + 1;

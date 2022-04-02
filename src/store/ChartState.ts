@@ -55,6 +55,7 @@ class ChartState {
     @observable isStaticChart? = false;
     @observable shouldFetchTradingTimes = true;
     @observable shouldFetchTickHistory = true;
+    @observable allTicks = [];
     @observable refreshActiveSymbols?: boolean;
     @observable hasReachedEndOfData = false;
     @observable prevChartType?: string;
@@ -100,7 +101,6 @@ class ChartState {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => !!this.context, this.onContextReady);
-        console.log('this.chartStore', this.chartStore);
     }
 
     @action.bound onContextReady = () => {
@@ -135,6 +135,7 @@ class ChartState {
         settings,
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
+        allTicks = [],
         showLastDigitStats = false,
         startEpoch,
         symbol,
@@ -177,6 +178,7 @@ class ChartState {
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
+        this.allTicks = allTicks;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
 

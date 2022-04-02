@@ -703,7 +703,6 @@ class ChartStore {
             requestSubscribe,
             requestForget,
             requestForgetStream,
-            subscribeProposalOpenContract,
             isMobile,
             enableRouting,
             onMessage,
@@ -715,7 +714,7 @@ class ChartStore {
             feedCall,
         } = props;
         this.feedCall = feedCall || {};
-        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream, subscribeProposalOpenContract);
+        this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes =
             ChartStore.tradingTimes ||
@@ -824,7 +823,7 @@ class ChartStore {
         if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
 
         // connect chart to data
-        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes, this.mainStore.state.shouldFetchTickHistory);
+        this.feed = new Feed(this.api, stxx, this.mainStore, this.tradingTimes);
         stxx.attachQuoteFeed(this.feed, {
             refreshInterval: null,
         });

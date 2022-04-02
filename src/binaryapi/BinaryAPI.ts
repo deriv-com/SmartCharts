@@ -13,7 +13,6 @@ import {
     TRequestForgetStream,
     TRequestSubscribe,
     TResponseAPICallback,
-    TSubscribeProposalOpenContract,
 } from 'src/types';
 
 type TicksHistoryRequestPartial = Omit<TicksHistoryRequest, 'count' | 'ticks_history'> & {
@@ -26,7 +25,6 @@ export default class BinaryAPI {
     requestForget: TRequestForget;
     requestForgetStream?: TRequestForgetStream;
     requestSubscribe: TRequestSubscribe;
-    subscribeProposalOpenContract: TSubscribeProposalOpenContract;
     static get DEFAULT_COUNT() {
         return 1000;
     }
@@ -38,10 +36,8 @@ export default class BinaryAPI {
         requestSubscribe: TRequestSubscribe,
         requestForget: TRequestForget,
         requestForgetStream?: TRequestForgetStream,
-        subscribeProposalOpenContract?: any,
     ) {
         this.requestAPI = requestAPI;
-        this.subscribeProposalOpenContract = subscribeProposalOpenContract;
         this.requestSubscribe = requestSubscribe;
         this.requestForget = requestForget;
         this.requestForgetStream = requestForgetStream;
@@ -65,15 +61,6 @@ export default class BinaryAPI {
     getTickHistory(params: TCreateTickHistoryParams): Promise<TicksHistoryResponse> {
         const request = BinaryAPI.createTickHistoryRequest(params);
         return this.requestAPI(request);
-    }
-    getTickHistory2(_params: any): Promise<any> {
-        const subscribeProposalOpenContractRequest: Partial<any> = {
-            proposal_open_contract: 1,
-            contract_id: 162802038888,
-            subscribe: 1
-        };
-        // return this.subscribeProposalOpenContract(subscribeProposalOpenContractRequest);
-        return this.subscribeProposalOpenContract({qwe: '123'});
     }
     subscribeTickHistory(params: TCreateTickHistoryParams, callback: TResponseAPICallback) {
         const key = this._getKey(params);
