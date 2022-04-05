@@ -273,17 +273,16 @@ class Feed {
         }
         if (getHistoryOnly) {
             if (this.shouldFetchTickHistory) {
+                const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
+                    tickHistoryRequest as TCreateTickHistoryParams
+                );
+                quotes = TickHistoryFormatter.formatHistory(response);
+            } else {
                 // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
                 const allTicksContract = await this.allTicks;
                 quotes = TickHistoryFormatter.formatAllTicks(
                     allTicksContract as keyof AuditDetailsForExpiredContract | []
                     );
-                
-            } else {
-                const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
-                    tickHistoryRequest as TCreateTickHistoryParams
-                );
-                quotes = TickHistoryFormatter.formatHistory(response);
             }
         }
         if (!quotes) {
