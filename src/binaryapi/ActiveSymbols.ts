@@ -7,7 +7,7 @@ import { cloneCategories, stableSort } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import { isDeepEqual } from '../utils/object';
 
-const DefaultSymbols = ['forex', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
+const DefaultSymbols = ['forex', 'basket_index', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
 
 export type TProcessedSymbolItem = {
     symbol: string;
