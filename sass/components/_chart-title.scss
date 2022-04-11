@@ -7,6 +7,8 @@
     &.ciq-menu.ciq-enabled {
         .cq-menu-btn > .cq-symbol-select-btn {
             cursor: pointer;
+            display: flex;
+            justify-content: space-between;
 
             > .ic-icon.cq-symbol-dropdown {
                 display: block;
@@ -53,7 +55,7 @@
     }
     .cq-symbol-select-btn {
         font-family: $base-font;
-        padding: 0.58em 1em;
+        padding: 0.6em 1em;
         position: relative;
         display: flex;
         align-items: center;
@@ -62,6 +64,10 @@
             color: themed('ChartTitleText');
         }
 
+        &__container {
+            display: flex;
+            justify-content: space-between;
+        }
         &:hover {
             @include themify($themes) {
                 border: solid 1px themed('ChartTitleHoverBorder');

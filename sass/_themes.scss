@@ -19,6 +19,7 @@ $COLOR_LIGHT_GRAY   : #7f8397;
 $COLOR_LIGHT_GRAY_30: rgba($COLOR_LIGHT_GRAY, 0.3);
 $COLOR_LIGHT_GRAY_1 : #999cac;
 $COLOR_LIGHT_GRAY_2 : rgba($COLOR_LIGHT_GRAY_1, 0.32);
+$COLOR_LIGHT_GRAY_3 : rgb(250, 250, 251);
 $COLOR_LIGHT_BLACK_1: rgba($COLOR_BLACK, 0.8);
 $COLOR_LIGHT_BLACK_1_40: rgba($COLOR_BLACK, 0.4);
 $COLOR_LIGHT_BLACK_3: rgba($COLOR_BLACK, 0.16);
@@ -26,7 +27,10 @@ $COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
 $COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
 $COLOR_LIGHT_BLACK_4: rgba($COLOR_BLACK, 0.04);
 $COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
+$COLOR_LIGHT_BLACK_5: rgba($COLOR_BLACK, 0.14);
+$COLOR_LIGHT_BLACK_6: rgba($COLOR_BLACK, 0.15);
 
+//Legacy Colours. TODO: Check with design team, replace and remove these colours
 //Legacy Colours. TODO: Check with design team, replace and remove these colours
 $COLOR_YELLOW       : #fef1cf;
 $COLOR_LIGHT_BLACK : #5c5c5c;
@@ -119,6 +123,8 @@ $COLOR_LIGHT_GRAY_2         : rgba(153, 156, 172, 0.32);
 $COLOR_LIGHT_GRAY_3         : #eaeced;
 $COLOR_LIGHT_GRAY_4         : #6e6e6e;
 $COLOR_LIGHT_GRAY_5         : #c2c2c2;
+$COLOR_LIGHT_GRAY_6          : #e9e9ed;
+$COLOR_LIGHT_GRAY_7: rgba(0, 0, 0, 0.08);
 $COLOR_LIGHT_GREEN_GRADIENT : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(0, 148, 117, 0.16));
 $COLOR_LIGHT_RED_GRADIENT   : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(227, 28, 75, 0.16));
 $COLOR_LIGHT_WHITE_GRADIENT : linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
@@ -154,7 +160,7 @@ $themes: (
         BtnSecondaryBg: $color-grey-1,
         BtnSecondaryText: $color-black-1,
         BtnSecondaryBorder: $color-grey-1,
-        BtnSecondaryHoverBg: rgba(0, 0, 0, 0.08),
+        BtnSecondaryHoverBg: $COLOR_LIGHT_GRAY_7,
         InputDefaultText: $color-grey-1,
         InputDefaultBorder: $color-grey-5,
         InputDefaultHoverBorder: $color-grey-1,
@@ -302,7 +308,7 @@ $themes: (
         TemplateListItemText: $color-black-1,
         TemplateListItemHoverBg: $color-grey-4,
         ColorPickerBg: $COLOR_WHITE,
-        ColorPickerShadow: rgba(0, 0, 0, 0.08),
+        ColorPickerShadow: $COLOR_LIGHT_GRAY_7,
         ColorPickerBorder: $COLOR_LIGHT_GRAY,
         ColorPickerInputBorder: $color-grey-5,
         ColorPickerActiveBorder: $color-green,
@@ -320,7 +326,7 @@ $themes: (
         DropdownActiveBg: $color-grey-5,
         DropdownActiveText: $color-black-1,
         DropdownActiveBorder: $color-green,
-        DropdownActiveShadow: rgba(0, 0, 0, 0.08),
+        DropdownActiveShadow: $COLOR_LIGHT_GRAY_7,
         DropdownHoverBg: $color-grey-4,
         DropdownHoverBorder: $color-grey-1,
         SliderText: $color-black-1,
@@ -395,29 +401,33 @@ $themes: (
         LastdigitsMinBarBg: $COLOR_RED,
         LastdigitsBarText: $COLOR_LIGHT_GRAY,
         LastdigitsBarFooter: $COLOR_BLACK,
-        ChartHistoryBg: $COLOR_LIGHT_GRAY_1,
-        ChartHistoryColor: $COLOR_LIGHT_BLACK,
+        ChartHistoryBg: $color-grey-2,
+        ChartHistoryBgContainer: $color-white,
+        ChartHistoryColor: $color-black-1,
         ChartHistoryBorder: $COLOR_LIGHT_GRAY,
         ChartHistoryPickerBg: $COLOR_WHITE,
-        ChartHistoryPickerBorder: $COLOR_LIGHT_GRAY,
+        ChartHistoryPickerDropdownBg: $COLOR_WHITE,
+        ChartHistoryPickerDropdownBorder: $color-grey-3,
+        ChartHistoryPickerBorder: $color-grey-3,
         ChartHistoryPickerColor: $COLOR_LIGHT_BLACK,
         ChartHistoryPickerIcon: $COLOR_LIGHT_BLACK,
-        ChartHistoryPickerActiveBorder: $COLOR_DARK_BLUE_5,
+        ChartHistoryPickerActiveBorder: $COLOR_GREEN,
         ChartHistoryPickerActiveColor: $COLOR_LIGHT_BLACK,
         ChartHistoryPickerActiveIcon: $COLOR_DARK_BLUE_5,
         ChartHistoryPickerTopColor: $COLOR_BRANDBLUE_40,
         ChartHistoryPickerHeaderBg: $COLOR_WHITE,
-        ChartHistoryPickerHeaderBorder: $COLOR_LIGHT_GRAY,
+        ChartHistoryPickerHeaderBorder: $COLOR_LIGHT_GRAY_3,
         ChartHistoryPickerHeaderColor: $COLOR_BLACK,
-        ChartHistoryPickerHeaderIcon: $COLOR_BRANDBLUE_40,
+        ChartHistoryPickerHeaderIcon: $color-black-1,
         ChartHistoryPickerFooterBg: $COLOR_WHITE,
-        ChartHistoryPickerFooterBorder: $COLOR_LIGHT_GRAY,
-        ChartHistoryPickerFooterColor: $COLOR_DARK_BLUE_5,
-        ChartHistoryPickerBodyColor: $COLOR_DARK_BLUE_5,
-        ChartHistoryPickerBodyDisableColor: $COLOR_DARK_GRAY_3,
-        ChartHistoryPickerBodyActiveBg: $COLOR_DARK_BLUE_5,
-        ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
+        ChartHistoryPickerFooterBorder: $color-grey-2,
+        ChartHistoryPickerFooterColor: $color-black-1,
+        ChartHistoryPickerBodyColor: $color-black-1,
+        ChartHistoryPickerBodyDisableColor: $color-grey-6,
+        ChartHistoryPickerBodyActiveBg: $color-grey-5,
+        ChartHistoryPickerBodyActiveColor: $color-black-1,
         ChartHistoryPickerBodyActiveBorder: $COLOR_DARK_BLUE_5,
+        ChartHistoryPickerBodyHoverBg: $color-grey-3,
         PaginationLoaderStripeColor: $COLOR_LIGHT_BLACK_4_SOLID,
         NavigationWidgetBg: $color-grey-2,
         NavigationWidgetColor: $color-black-1,
@@ -456,6 +466,9 @@ $themes: (
         ChartStatusOffline: $color-red-2,
         PredictionDialogTitle: $color-black-1,
         PredictionDialogText: $color-black-1,
+        ChartHistoryPickerBgCalendar: $color-white,
+        ChartHistoricalMarker: $color-grey-5,
+        ChartHistoricalMarkerFont: $color-black-1,
     ),
     dark: (
         DefaultMain:            $color-black,
@@ -500,7 +513,7 @@ $themes: (
         ChartGrid: $color-black-4,
         ChartIndicateText: $COLOR_WHITE,
         ChartIndicateDivide: $color-black-8,
-        ChartMountainBorder: rgba($COLOR_WHITE, 1),
+        ChartMountainBorder: $color-green,
         ChartMountainBg: rgba(255, 255, 255, 0.36),
         ChartMountainBgShade: rgba(16, 19, 32, 0),
         ChartMountainClosedBorder: rgba($COLOR_WHITE, 0.32),
@@ -707,29 +720,33 @@ $themes: (
         LastdigitsMinBarBg: $COLOR_RED,
         LastdigitsBarText: $COLOR_LIGHT_GRAY,
         LastdigitsBarFooter: $COLOR_WHITE,
-        ChartHistoryBg: $COLOR_BRANDBLUE_95,
-        ChartHistoryColor: $COLOR_BRANDBLUE_40,
+        ChartHistoryBg: $color-black-3,
+        ChartHistoryBgContainer: $color-black,
+        ChartHistoryColor: $color-grey,
         ChartHistoryBorder: $COLOR_BRANDBLUE_85,
-        ChartHistoryPickerBg: $COLOR_BRANDBLUE_95,
-        ChartHistoryPickerBorder: $COLOR_BRANDBLUE_85,
+        ChartHistoryPickerBg: $color-black,
+        ChartHistoryPickerBorder: $color-black-8,
+        ChartHistoryPickerDropdownBg: $color-black-3,
+        ChartHistoryPickerDropdownBorder: $color-black,
         ChartHistoryPickerColor: $COLOR_WHITE,
-        ChartHistoryPickerIcon: $COLOR_BRANDBLUE_40,
-        ChartHistoryPickerActiveBorder: $COLOR_WHITE,
+        ChartHistoryPickerIcon: $color-grey,
+        ChartHistoryPickerActiveBorder: $COLOR_GREEN,
         ChartHistoryPickerActiveColor: $COLOR_WHITE,
         ChartHistoryPickerActiveIcon: $COLOR_WHITE,
         ChartHistoryPickerTopColor: $COLOR_BRANDBLUE_40,
-        ChartHistoryPickerHeaderBg: $COLOR_DARK_BLUE_5,
-        ChartHistoryPickerHeaderBorder: $COLOR_DARK_BLUE_5,
+        ChartHistoryPickerHeaderBg: $color-black-3,
+        ChartHistoryPickerHeaderBorder: $color-black,
         ChartHistoryPickerHeaderColor: $COLOR_WHITE,
-        ChartHistoryPickerHeaderIcon: $COLOR_BRANDBLUE_40,
-        ChartHistoryPickerFooterBg: $COLOR_BRANDBLUE_95,
-        ChartHistoryPickerFooterBorder: $COLOR_BRANDBLUE_85,
-        ChartHistoryPickerFooterColor: $COLOR_WHITE,
-        ChartHistoryPickerBodyColor: $COLOR_BRANDBLUE_40,
-        ChartHistoryPickerBodyDisableColor: $COLOR_BRANDBLUE_75,
-        ChartHistoryPickerBodyActiveBg: $COLOR_WHITE,
-        ChartHistoryPickerBodyActiveColor: $COLOR_DARK_BLUE_5,
-        ChartHistoryPickerBodyActiveBorder: $COLOR_WHITE,
+        ChartHistoryPickerHeaderIcon: $color-grey,
+        ChartHistoryPickerFooterBg: $color-black-3,
+        ChartHistoryPickerFooterBorder: $color-black,
+        ChartHistoryPickerFooterColor: $color-grey,
+        ChartHistoryPickerBodyColor: $color-grey,
+        ChartHistoryPickerBodyDisableColor:$color-black-6,
+        ChartHistoryPickerBodyActiveBg: $color-black-8,
+        ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
+        ChartHistoryPickerBodyActiveBorder: $color-black-8,
+        ChartHistoryPickerBodyHoverBg: $color-black-5,
         PaginationLoaderStripeColor: $color-black-1,
         NavigationWidgetBg: $color-black-3,
         NavigationWidgetColor: $color-grey,
@@ -768,6 +785,9 @@ $themes: (
         ChartStatusOffline: $color-red-2,
         PredictionDialogTitle: $color-white,
         PredictionDialogText: $color-white,
+        ChartHistoryPickerBgCalendar: $color-black-3,
+        ChartHistoricalMarker: $color-black-8,
+        ChartHistoricalMarkerFont: $color-grey,
     ),
 );
 

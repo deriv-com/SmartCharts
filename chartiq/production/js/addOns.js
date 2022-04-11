@@ -1,11 +1,11 @@
 /**
  *	8.2.0
- *	Generation date: 2021-03-19T19:54:09.125Z
+ *	Generation date: 2022-02-18T13:21:32.984Z
  *	Client name: deriv limited
- *	Package Type: Technical Analysis 8.2
+ *	Package Type: Technical Analysis
  *	License type: annual
- *	Expiration date: "2022/04/01"
- *	Domain lock: ["127.0.0.1","localhost","binary.com","binary.sx","binary.me","binary.bot","deriv.com","deriv.app","deriv.me"]
+ *	Expiration date: "2023/04/01"
+ *	Domain lock: ["127.0.0.1","localhost","deriv.com","deriv.app","deriv.me","binary.com","binary.sx","binary.me","binary.bot","deriv.be"]
  *	iFrame lock: true
  */
 
@@ -21,1870 +21,10 @@
 /* eslint-disable no-extra-parens */
 
 
-import {CIQ} from "../js/chartiq.js";
+import {CIQ as __CIQ_} from "../js/chartiq.js";
 
-let __js_addons_advanced_animation_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Add-On that animates the chart.
- *
- * Requires *addOns.js*.
- *
- * The chart is animated in three ways:
- * 1.  The current price pulsates
- * 2.  The current price appears to move smoothly from the previous price
- * 3.  The chart's y-axis smoothly expands/contracts when a new high or low is reached
- *
- * The following chart types are supported: line, mountain, baseline_delta.
- *
- * Chart aggregations such as Kagi, Renko, Range Bars, etc. are not supported.
- *
- * **Animation displays more gracefully when updates are sent into the chart one at a time using {@link CIQ.ChartEngine#updateChartData}
- * instead of in batches using a [QuoteFeed]{@link CIQ.ChartEngine#attachQuoteFeed}. Sending data in batches will produce a ‘jumping’ effect.**
- *
- * By default, there will be a flashing beacon created using a canvas circle. If instead you want to use a custom animation beacon, you will be able to extend the functionality yourself as follows:
- * - In js/addOns.js, at the bottom of the CIQ.Animation function, there is an stx.append("draw") function.
- * - Make a copy of this function so you can override the behavior.
- * - In there you will see it determine var x and y, which are the coordinates for the center of the beacon.
- * - At the bottom of this append function, we draw the beacon by using the Canvas arc() function to draw a circle and then fill() to make the circle solid.
- * - You can replace  the canvas circle with an image using [CanvasRenderingContext2D.drawImage()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D#Drawing_images) .
- * - Example:
- *
- *   ```
- *   var image = document.getElementById('beacon'); // include a hidden image on your HTML
- *   context.drawImage(image, x-10, y-10, 20, 20); // add the image on the canvas. Offset the x and y values by the radius of the beacon.
- *   ```
- *
- * Animation Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
- *
- * You can disable animation after each different [chart type is activated]{@link CIQ.ChartEngine#setChartType} by calling:
- * ```
- * stxx.mainSeriesRenderer.supportsAnimation=false;
- * ```
- * Keep in mind that changing to a different chart type, may once again enable animation. You can override this by [adding an event listener]{@link CIQ.ChartEngine#addEventListener} on [layout changes]{@link CIQ.ChartEngine~layoutEventListener}.
- *
- * @param {object} config The constructor parameters
- * @param {CIQ.ChartEngine} config.stx The chart object
- * @param {object} [config.animationParameters] Configuration parameters
- * @param {boolean} [config.animationParameters.stayPut=false] Set to true for last tick to stay in position it was scrolled and have rest of the chart move backwards as new ticks are added instead of having new ticks advance forward and leave the rest of the chart in place.
- * @param {number} [config.animationParameters.ticksFromEdgeOfScreen=5] Number of ticks from the right edge the chart should stop moving forward so the last tick never goes off screen (only applicable if stayPut=false)
- * @param {number} [config.animationParameters.granularity=1000000] Set to a value that will give enough granularity for the animation.  The larger the number the smaller the price jump between frames, which is good for charts that need a very slow smooth animation either because the price jumps between ticks are very small, or because the animation was set up to run over a large number of frames when instantiating the CIQ.EaseMachine.
- * @param {number} [config.animationParameters.tension=null] Splining tension for smooth curves around data points (range 0-1).
- * @param {CIQ.EaseMachine} config.easeMachine Override the default easeMachine.  Default is `new CIQ.EaseMachine(Math.easeOutCubic, 1000);`
- * @constructor
- * @name  CIQ.Animation
- * @since
- * - 3.0.0 Now part of *addOns.js*. Previously provided as a standalone *animation.js* file.
- * - 4.0.0 Beacon only flashes for line charts. On candles or bars, it is suppressed as it produces an unnatural effect.
- * - 7.0.2 Now takes one configuration object as its constructor. Must have a reference to a chart engine.
- * @example
- * 	new CIQ.Animation({stx: stxx, animationParameters: {tension:0.3}});  //Default animation with splining tension of 0.3
- *
- */
-CIQ.Animation =
-	CIQ.Animation ||
-	function (config) {
-		if (!config) throw new Error("Invalid constructor arguments.");
-		var stx, animationParameters, easeMachine;
-		if (config instanceof CIQ.ChartEngine) {
-			// legacy constructor
-			stx = arguments[0];
-			animationParameters = arguments[1];
-			easeMachine = arguments[2];
-		} else {
-			stx = config.stx;
-			animationParameters = config.animationParameters;
-			easeMachine = config.easeMachine;
-		}
-		if (!stx)
-			return console.warn(
-				"No CIQ.ChartEngine provided. Cannot properly create CIQ.Animation instance"
-			);
-		var params = {
-			stayPut: false,
-			ticksFromEdgeOfScreen: 5,
-			granularity: 1000000
-		};
-		animationParameters = CIQ.extend(params, animationParameters);
-
-		if (params.tension) stx.chart.tension = animationParameters.tension;
-		stx.tickAnimator =
-			easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
-		var scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
-
-		var flashingColors = ["#0298d3", "#19bcfc", "#5dcffc", "#9ee3ff"];
-		var flashingColorIndex = 0;
-		var flashingColorThrottle = 20;
-		var flashingColorThrottleCounter = 0;
-
-		var filterSession = false;
-		var nextBoundary = null;
-
-		function initMarketSessionFlags() {
-			filterSession = false;
-			nextBoundary = null;
-		}
-
-		stx.addEventListener(["symbolChange", "layout"], function (obj) {
-			initMarketSessionFlags();
-		});
-
-		stx.prepend("updateCurrentMarketData", function (
-			data,
-			chart,
-			symbol,
-			params
-		) {
-			if (!chart) chart = this.chart;
-			if (
-				params &&
-				params.fromTrade &&
-				(chart.closePendingAnimation || chart.closePendingAnimation === 0)
-			) {
-				params.finalClose = chart.closePendingAnimation;
-			}
-		});
-
-		stx.prepend("updateChartData", function (appendQuotes, chart, params) {
-			var self = this;
-			if (!chart) {
-				chart = self.chart;
-			}
-			if (
-				!chart ||
-				!chart.defaultChartStyleConfig ||
-				chart.defaultChartStyleConfig == "none"
-			)
-				return;
-
-			if (params !== undefined) {
-				if (params.animationEntry || params.secondarySeries) return;
-			}
-
-			if (!chart.dataSegment) return;
-
-			function completeLastBar(record) {
-				if (!chart.masterData) return;
-				for (var md = chart.masterData.length - 1; md >= 0; md--) {
-					var bar = chart.masterData[md];
-					if (bar.Close || bar.Close === 0) {
-						bar.Close = record.Close;
-						if (record.LastSize) bar.LastSize = record.LastSize;
-						if (record.LastTime) bar.LastTime = record.LastTime;
-						self.updateCurrentMarketData({
-							Close: bar.Close,
-							DT: bar.DT,
-							LastSize: bar.LastSize,
-							LastTime: bar.LastTime
-						});
-						self.createDataSet(null, null, { appending: true });
-						return;
-					}
-				}
-			}
-			function unanimateScroll() {
-				if (chart.animatingHorizontalScroll) {
-					chart.animatingHorizontalScroll = false;
-					self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
-					chart.lastTickOffset = 0;
-				}
-				if (chart.closePendingAnimation !== null) {
-					var close = chart.closePendingAnimation;
-					chart.closePendingAnimation = null;
-					completeLastBar({ Close: close });
-				}
-			}
-			var tickAnimator = self.tickAnimator;
-			// These chart types are the only types supported by animation
-			var supportedChartType =
-				this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
-			if (supportedChartType) {
-				if (!tickAnimator) {
-					console.warn(
-						"Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js"
-					);
-					return;
-				}
-
-				// If symbol changes then reset all of our variables
-				if (this.prevSymbol != chart.symbol) {
-					this.prevQuote = 0;
-					chart.closePendingAnimation = null;
-					this.prevSymbol = chart.symbol;
-				}
-				unanimateScroll();
-				tickAnimator.stop();
-				if (appendQuotes.length > 2) {
-					return;
-				}
-			}
-			var newParams = CIQ.clone(params);
-			if (!newParams) newParams = {};
-			newParams.animationEntry = true;
-			newParams.bypassGovernor = true;
-			newParams.noCreateDataSet = false;
-			newParams.appending = true;
-			//newParams.allowReplaceOHL = true;
-			newParams.firstLoop = true;
-			var symbol = this.chart.symbol;
-			var period = this.layout.periodicity;
-			var interval = this.layout.interval;
-			var timeUnit = this.layout.timeUnit;
-
-			function cb(quote, prevQuote, chartJustAdvanced) {
-				return function (newData) {
-					var newClose = newData.Close;
-					if (
-						!chart.dataSet.length ||
-						symbol != chart.symbol ||
-						period != self.layout.periodicity ||
-						interval != self.layout.interval ||
-						timeUnit != self.layout.timeUnit
-					) {
-						//console.log ("---- STOP animating: Old",symbol,' New : ',chart.symbol, Date())
-						tickAnimator.stop();
-						unanimateScroll();
-						return; // changed symbols mid animation
-					}
-					var q = CIQ.clone(quote);
-					q.Adj_Close = null; // Don't use this, it will mess up our calculated close
-					q.Close =
-						Math.round(newClose * animationParameters.granularity) /
-						animationParameters.granularity; //<<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
-					//q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
-					if (chartJustAdvanced) {
-						if (!q.Open && q.Open !== 0) q.Open = q.Close;
-						if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
-						if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
-					} else {
-						if (quote.Close > prevQuote.High) q.High = q.Close;
-						if (quote.Close < prevQuote.Low) q.Low = q.Close;
-					}
-					if (chart.animatingHorizontalScroll) {
-						self.micropixels = newData.micropixels;
-						chart.lastTickOffset = newData.lineOffset;
-					}
-					newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
-					//console.log("animating: Old",symbol,' New : ',chart.symbol);
-					var updateQuotes = [q];
-					// Don't include previous quote if tick mode. It will append, duplicating the quote
-					if (chartJustAdvanced && self.layout.interval !== "tick")
-						updateQuotes.unshift(prevQuote);
-					self.updateChartData(updateQuotes, chart, newParams);
-					newParams.firstLoop = false;
-					if (tickAnimator.hasCompleted) {
-						//console.log( 'animator has completed') ;
-						//self.pendingScrollAdvance=false;
-						//var possibleYAxisChange = chart.animatingHorizontalScroll;
-						unanimateScroll();
-						/*if (possibleYAxisChange) { // <---- Logic no longer necessary
-						 // After completion, one more draw for good measure in case our
-						 // displayed high and low have changed, which would trigger
-						 // the y-axis animation
-						 setTimeout(function(){
-						 self.draw();
-						 }, 0);
-						 }*/
-					}
-				};
-			}
-			if (supportedChartType) {
-				var quote = appendQuotes[appendQuotes.length - 1];
-				this.prevQuote = this.currentQuote(); // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
-				var chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
-				var dontScroll = false;
-				if (period == 1 && appendQuotes.length == 2) {
-					// Don't do this if consolidating
-					this.prevQuote = appendQuotes[0];
-					var dataSetLength = chart.dataSet.length;
-					completeLastBar(this.prevQuote);
-					if (dataSetLength == chart.dataSet.length) dontScroll = true;
-				}
-				if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close)
-					return false;
-
-				if (this.extendedHours && chart.market.market_def) {
-					// Filter out unwanted sessions
-					var dtToFilter = quote.DT;
-					if (CIQ.ChartEngine.isDailyInterval(interval)) {
-						filterSession = !chart.market.isMarketDate(dtToFilter);
-					} else {
-						if (!nextBoundary || nextBoundary <= dtToFilter) {
-							var session = chart.market.getSession(dtToFilter);
-							filterSession =
-								session !== "" &&
-								(!this.layout.marketSessions ||
-									!this.layout.marketSessions[session]);
-							nextBoundary = chart.market[
-								filterSession ? "getNextOpen" : "getNextClose"
-							](dtToFilter);
-						}
-					}
-					if (filterSession) {
-						this.draw();
-						return false;
-					}
-				}
-
-				var barSpan = period;
-				if (interval == "second" || timeUnit == "second") barSpan *= 1000;
-				else if (interval == "minute" || timeUnit == "minute") barSpan *= 60000;
-				if (!isNaN(interval)) barSpan *= interval;
-				if (interval == "day" || timeUnit == "day")
-					chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
-				else if (interval == "week" || timeUnit == "week")
-					chartJustAdvanced =
-						quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
-				else if (interval == "month" || timeUnit == "month")
-					chartJustAdvanced =
-						quote.DT.getMonth() != this.prevQuote.DT.getMonth();
-				else
-					chartJustAdvanced =
-						quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
-
-				var linearChart =
-					!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars;
-
-				var beginningOffset = 0;
-				if (chartJustAdvanced) {
-					if (this.animations.zoom.hasCompleted) {
-						var candleWidth = this.layout.candleWidth;
-						if (chart.scroll <= chart.maxTicks) {
-							while (this.micropixels > 0) {
-								// If micropixels is larger than a candle then scroll back further
-								chart.scroll++;
-								this.micropixels -= candleWidth;
-							}
-						}
-						if (chart.scroll <= chart.maxTicks) {
-							this.previousMicroPixels = this.micropixels;
-							this.nextMicroPixels = this.micropixels + candleWidth;
-							beginningOffset = candleWidth * -1;
-							if (
-								chart.dataSegment.length <
-									chart.maxTicks - animationParameters.ticksFromEdgeOfScreen &&
-								!animationParameters.stayPut
-							) {
-								this.nextMicroPixels = this.micropixels;
-								chart.scroll++;
-							}
-							chart.animatingHorizontalScroll = linearChart; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
-							chart.previousDataSetLength = chart.dataSet.length;
-						} else {
-							if (!dontScroll) chart.scroll++;
-						}
-					} else {
-						return false;
-					}
-				}
-				chart.closePendingAnimation = quote.Close;
-				var start =
-					chartJustAdvanced && !linearChart ? quote.Open : this.prevQuote.Close;
-				tickAnimator.run(
-					cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced),
-					{
-						Close: start,
-						micropixels: this.nextMicroPixels,
-						lineOffset: beginningOffset
-					},
-					{ Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 }
-				);
-				return true; // bypass default behavior in favor of animation
-			}
-		});
-
-		stx.prepend("renderYAxis", function (chart) {
-			if (this.grabbingScreen || !this.isHome()) return;
-			// When display style doesn't support animation
-			var supportedChartType =
-				this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
-			if (!supportedChartType) return;
-
-			var panel = chart.panel;
-			var yAxis = panel.yAxis;
-			if (CIQ.Comparison && yAxis.priceFormatter == CIQ.Comparison.priceFormat)
-				return; // too difficult to animate y-axis change when it changes on every tick due to percentage axis on comparison
-
-			function closure(self) {
-				return function (values) {
-					chart.animatedLow = values.low;
-					chart.animatedHigh = values.high;
-					self.draw();
-				};
-			}
-			// initialize prev values
-			if (!chart.prevLowValue && chart.prevLowValue !== 0) {
-				chart.prevLowValue = chart.animatedLow = chart.lowValue;
-			}
-			if (!chart.prevHighValue && chart.prevHighValue !== 0) {
-				chart.prevHighValue = chart.animatedHigh = chart.highValue;
-			}
-
-			// check for a change, if so we will spin off an animation
-			if (!scrollAnimator.running) chart.animatingVerticalScroll = false;
-			if (
-				chart.prevLowValue >= chart.lowValue &&
-				chart.prevHighValue <= chart.highValue
-			) {
-				if (chart.animatingVerticalScroll) {
-					yAxis.highValue = chart.animatedHigh;
-					yAxis.lowValue = chart.animatedLow;
-				}
-				return;
-			}
-			if (scrollAnimator.running) scrollAnimator.stop();
-			if (!chart.lowValue && !chart.highValue) return; // chart just reset, don't animate yet
-			var prevLow = chart.prevLowValue,
-				prevHigh = chart.prevHighValue;
-			chart.prevLowValue = chart.lowValue;
-			chart.prevHighValue = chart.highValue;
-			chart.animatingVerticalScroll = true;
-			scrollAnimator.run(
-				closure(this),
-				{ low: prevLow, high: prevHigh },
-				{ low: chart.lowValue, high: chart.highValue }
-			);
-
-			yAxis.lowValue = chart.animatedLow;
-			yAxis.highValue = chart.animatedHigh;
-		});
-
-		/*stx.prepend("draw", function() {
-			if(this.chart.animatingVerticalScroll) {
-				this.renderYAxis(this.chart);
-				return true;
-			}
-		});*/
-
-		stx.append("draw", function () {
-			if (filterSession) return;
-			if (
-				this.chart.dataSet &&
-				this.chart.dataSet.length &&
-				this.mainSeriesRenderer &&
-				this.mainSeriesRenderer.supportsAnimation
-			) {
-				if (flashingColorThrottleCounter % flashingColorThrottle === 0) {
-					flashingColorIndex++;
-					flashingColorThrottleCounter = 0;
-				}
-				flashingColorThrottleCounter++;
-
-				var context = this.chart.context;
-				var panel = this.chart.panel;
-				var currentQuote = this.currentQuote();
-				if (!currentQuote) return;
-				var price = currentQuote.Close;
-				var x = this.pixelFromTick(currentQuote.tick, this.chart);
-				if (this.chart.lastTickOffset) x = x + this.chart.lastTickOffset;
-				var y = this.pixelFromPrice(price, panel);
-				if (
-					this.chart.yAxis.left > x &&
-					this.chart.yAxis.top <= y &&
-					this.chart.yAxis.bottom >= y
-				) {
-					if (flashingColorIndex >= flashingColors.length)
-						flashingColorIndex = 0;
-					context.beginPath();
-					context.moveTo(x, y);
-					context.arc(
-						x,
-						y,
-						2 + flashingColorIndex * 1.07,
-						0,
-						Math.PI * 2,
-						false
-					);
-					context.fillStyle = flashingColors[flashingColorIndex];
-					context.fill();
-				}
-			}
-		});
-	};
-
-/**
- * CIQ.EaseMachine interface placeholder to be augmented in *standard.js* with properties.
- *
- * @tsinterface CIQ~EaseMachine
- */
-
-};
-
-let __js_addons_advanced_continuousZoom_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Add-on that responds to the chart zoom action, changing periodicities as the number of ticks and/or candle width
- * hits a set boundary.
- *
- * Although this feature is available for all chart styles, it shows best on continuous renderings
- * such as lines and mountains vs. candles and bars. This is because some users may find the
- * changes in candle width that take place as the same range is displayed in a different
- * periodicity, inappropriate. The effect can be mitigated by increasing the number of boundaries
- * so periodicities change more often, preventing large candle width changes, and by using the
- * periodicity roll up feature instead of fetching new data from a quote feed. See examples.
- *
- * See {@link CIQ.ChartEngine#setPeriodicity} and {@link CIQ.ChartEngine#createDataSet}
- *
- * Requires *addOns.js*.
- *
- * The feature will not work without supplying at least one element within the periodicities array
- * and at least one property within the boundaries object.
- *
- * @param {object} params Configuration parameters.
- * @param {CIQ.ChartEngine} params.stx The chart object.
- * @param {array} params.periodicities Set this array with eligible periodicities in any order.
- * 		These will be the periodicities which will be used by the continuous zooming once a
- * 		boundary is hit. The periodicities are objects with `period`, `interval`, and optional
- * 		`timeUnit` properties (see {@link CIQ.ChartEngine#setPeriodicity}).
- * @param {object} params.boundaries Optional boundary cases to trigger the periodicity change.
- * 		Hitting a maximum boundary switches to the next larger periodicity; hitting a minimum
- * 		boundary switches to the next smaller periodicity.
- * @param {number} [params.boundaries.maxCandleWidth] Largest size of candle in pixels to display
- * 		before switching periodicity.
- * @param {number} [params.boundaries.minCandleWidth] Smallest size of candle in pixels to display
- * 		before switching periodicity.
- * @param {number} [params.boundaries.maxTicks] Most number of ticks to display before switching
- * 		periodicity.
- * @param {number} [params.boundaries.minTicks] Least number of ticks to display before switching
- * 		periodicity.
- *
- * @constructor
- * @name CIQ.ContinuousZoom
- * @since 7.0.0
- *
- * @example
- * new CIQ.ContinuousZoom({
- *     stx: stxx,
- *     periodicities: [
- *         { period:1, interval:"month" },
- *         { period:1, interval:"day" },
- *         { period:2, interval:30 },
- *         { period:1, interval:5 },
- *         { period:15, interval:1, timeUnit:"second" },
- *         { period:1, interval:1, timeUnit:"second" }
- *     ],
- *     boundaries: {
- *         maxCandleWidth: 100,
- *         minCandleWidth: 3,
- *         maxTicks: 500,
- *         minTicks: 10
- *     }
- * });
- *
- * @example
- * // Smother periodicity change by rolling daily into weekly and monthly.
- * // Also try reusing the same interval data and have the chart roll it instead of fetching new data.
- * stxx.dontRoll = false;
- * new CIQ.ContinuousZoom({
- *     stx: stxx,
- *     periodicities: [
- *         // Daily interval data
- *         {period:1, interval:"month"},
- *         {period:2, interval:"week"},
- *         {period:1, interval:"week"},
- *         {period:3, interval:"day"},
- *         {period:1, interval:"day"},
- *         // 30 minute interval data
- *         {period:16, interval:30},
- *         {period:8, interval:30},
- *         {period:4, interval:30},
- *         {period:2, interval:30},
- *         // one minute interval data
- *         {period:30, interval:1},
- *         {period:15, interval:1},
- *         {period:10, interval:1},
- *         {period:5, interval:1},
- *         {period:2, interval:1},
- *         {period:1, interval:1},
- *         // One second interval data
- *         {period:30,interval:1, timeUnit:"second"},
- *         {period:15,interval:1, timeUnit:"second"},
- *         {period:5, interval:1, timeUnit:"second"},
- *         {period:2, interval:1, timeUnit:"second"},
- *         {period:1, interval:1, timeUnit:"second"},
- *     ],
- *     boundaries: {
- *         maxCandleWidth: 15,
- *         minCandleWidth: 3
- *    }
- * });
- */
-CIQ.ContinuousZoom =
-	CIQ.ContinuousZoom ||
-	function (params) {
-		this.cssRequired = true;
-		this.update(params);
-		this.stx.continuousZoom = this;
-
-		//Attaches SmartZoom button to HTML DOM inside .chartSize element
-		this.addSmartZoomButton = function () {
-			// Don't add a button if one already exists
-			var smartZoomButton =
-				this.stx.registerChartControl &&
-				this.stx.registerChartControl(
-					"stx-smart-zoom",
-					"SmartZoom (Alt + 0)",
-					(function (self) {
-						return function (e) {
-							self.smartZoomToggle(e);
-							e.stopPropagation();
-						};
-					})(this)
-				);
-			if (smartZoomButton) {
-				// Listen for a layout changed event and refresh the toggle state of the button
-				this.stx.addEventListener("layout", function (event) {
-					if (event.stx.layout.smartzoom === true) {
-						smartZoomButton.classList.add("active");
-					} else {
-						smartZoomButton.classList.remove("active");
-					}
-				});
-				// Piggyback off of symbolImport event to detect smartzoom set to false from layout import
-				this.stx.addEventListener("symbolImport", function (event) {
-					if (event.stx.layout.smartzoom === false)
-						smartZoomButton.classList.remove("active");
-				});
-			}
-		};
-
-		//Click event handler for the Smart Zoom button. Sets smartzoom property of layout to its inverse
-		this.smartZoomToggle = function (e) {
-			this.smartZoomEnable(!this.stx.layout.smartzoom);
-		};
-
-		//Sets smartzoom property of layout and notifies attached ChartEngine of change
-		this.smartZoomEnable = function (state) {
-			this.stx.layout.smartzoom = state;
-			this.stx.changeOccurred("layout");
-		};
-
-		// Add the SmartZoom button to chartControls
-		this.addSmartZoomButton();
-		// Enable SmartZoom by default
-		this.smartZoomEnable(true);
-	};
-
-/**
- * Updates continuous zoom parameters
- * @param  {object} params Configuration parameters.  See constructor for details
- * @memberof CIQ.ContinuousZoom
- * @since 7.0.0
- * @private
- */
-CIQ.ContinuousZoom.prototype.update = function (params) {
-	if (!params) params = {};
-	this.stx = params.stx;
-	this.periodicities = params.periodicities;
-	this.boundaries = params.boundaries;
-};
-
-/**
- * Potentially performs a continuous zoom after a zoom event
- * @param  {boolean} [zoomOut] True for a zoomOut operation, otherwise zoomIn
- * @memberof CIQ.ContinuousZoom
- * @since 7.0.0
- * @private
- */
-CIQ.ContinuousZoom.prototype.execute = function (zoomOut) {
-	// assign a weight to a periodicity setting, the higher the length, the higher the weight
-	function valuate(periodicity) {
-		var period = periodicity.period || periodicity.periodicity,
-			interval = periodicity.interval,
-			timeUnit = periodicity.timeUnit || "minute";
-		if (isNaN(interval)) {
-			timeUnit = interval;
-			interval = 1;
-		}
-		switch (timeUnit) {
-			case "month":
-				interval *= 4.35; /* falls through */
-			case "week":
-				interval *= 7; /* falls through */
-			case "day":
-				interval *= 1440; /* falls through */
-			case "minute":
-				interval *= 60; /* falls through */
-			case "second":
-				break;
-			case "millisecond":
-				interval /= 1000;
-				break;
-			default:
-				return null;
-		}
-		return period * interval;
-	}
-	if (!this.stx || !this.stx.layout.smartzoom) return;
-	var periodicities = this.periodicities,
-		boundaries = this.boundaries,
-		stx = this.stx,
-		layout = stx.layout,
-		chart = stx.chart;
-	if (!periodicities || !boundaries) return;
-
-	if (
-		(!zoomOut &&
-			boundaries.maxCandleWidth &&
-			layout.candleWidth > boundaries.maxCandleWidth) ||
-		(zoomOut &&
-			boundaries.minCandleWidth &&
-			layout.candleWidth < boundaries.minCandleWidth) ||
-		(!zoomOut && boundaries.minTicks && chart.maxTicks < boundaries.minTicks) ||
-		(zoomOut && boundaries.maxTicks && chart.maxTicks > boundaries.maxTicks)
-	) {
-		var next = { value: zoomOut ? Number.MAX_VALUE : 0 };
-		var myValue = valuate(layout);
-		for (var p = 0; p < periodicities.length; p++) {
-			var value = valuate(periodicities[p]);
-			if (
-				(value > myValue && value < next.value && zoomOut) ||
-				(value < myValue && value > next.value && !zoomOut)
-			) {
-				next = { value: value, periodicity: periodicities[p] };
-			}
-		}
-		var newPeriodicity = next.periodicity;
-		if (newPeriodicity) {
-			stx.setRange({
-				dtLeft: chart.xaxis[0].DT,
-				dtRight: chart.xaxis[chart.xaxis.length - 1].DT,
-				dontSaveRangeToLayout: true,
-				periodicity: newPeriodicity
-			});
-		}
-	}
-};
-
-};
-
-let __js_addons_advanced_outliers_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Creates the outliers add-on which scales the y-axis to the main trend, hiding outlier
- * values. Markers are placed at the location of the outlier values enabling the user to
- * restore the full extent of the y-axis by selecting the markers.
- *
- * Requires *addOns.js*.
- *
- * ![Chart with hidden outliers](./img-Chart-with-Hidden-Outliers.png "Chart with hidden outliers")
- *
- * @param {object} params Configuration parameters.
- * @param {CIQ.ChartEngine} [params.stx] A reference to the chart object.
- * @param {number} [params.multiplier=3] Sets the threshold for outliers by multiplying the
- * 		normal data range. The default value hides only extreme outliers.
- * @param {Array} [params.altColors] An array of hexadecimal color values used to style
- * 		outlier markers when multiple y-axes share the same panel. Markers for the first
- * 		additional y-axis are styled with the value at index 0; markers for the second
- * 		additional y-axis, the value at index 1; and so forth. If not provided, a default
- * 		array of colors is assigned.
- * @param {string} [params.menuContextClass] A CSS class name used to query the menu DOM element
- * 		that contains the UI control for the outliers add-on. In a multi-chart document, the
- * 		add-on is available only on charts that have a menu DOM element with the value for
- * 		`menuContextClass` as a class attribute.
- *
- * @constructor
- * @name CIQ.Outliers
- * @since
- * - 7.5.0
- * - 8.0.0 Added `params.altColors` and `params.menuContextClass`.
- *
- * @example
- * new CIQ.Outliers({ stx: stxx });
- */
-CIQ.Outliers =
-	CIQ.Outliers ||
-	function (params) {
-		if (!params) params = {};
-		if (!params.stx) {
-			console.warn("The Outliers addon requires an stx parameter");
-			return;
-		}
-		// Set default marker colors
-		if (!Array.isArray(params.altColors)) {
-			params.altColors = [
-				"#323390",
-				"#66308f",
-				"#0073ba",
-				"#f4932f",
-				"#0056a4",
-				"#00a99c",
-				"#00a553",
-				"#ea1d2c",
-				"#e9088c",
-				"#fff126",
-				"#912a8e",
-				"#ee652e",
-				"#00afed",
-				"#8ec648"
-			];
-		}
-		this.stx = params.stx;
-		this.stx.outliers = this;
-		this.cssRequired = true;
-
-		this.multiplier = params.multiplier || 3; // Default to 3 for extreme outliers
-		this.altColors = params.altColors;
-
-		this.axisData = {};
-
-		// Listen for a layout changed event and reset the markers
-		this.stx.addEventListener("layout", function (event) {
-			Object.keys(event.stx.outliers.axisData).forEach(
-				function (key) {
-					this.removeAllMarkers(this.axisData[key]);
-					delete this.axisData[key];
-				}.bind(event.stx.outliers)
-			);
-		});
-
-		/**
-		 * Checks for outlier values in `dataSet`, and adds outlier markers (data point markers
-		 * and axis markers) to `axis`.
-		 *
-		 * @param {Array} dataSet An array of objects of the form `{value: Number, quote: Object}`.
-		 * 		Each object contains a value and its associated quote. The value is checked to
-		 * 		determine whether it is an outlier of the data set. When checking more than one
-		 * 		value for a quote (such as an OHLC quote), each value is included in a separate
-		 * 		object; for example, `[{value: open, quote: quote}, {value: high, quote: quote},
-		 * 		{value: low, quote: quote}, {value: close, quote: quote}...]`.
-		 * @param {object} panel The panel where `dataSet` is rendered.
-		 * @param {object} axis The y-axis against which `dataSet` is rendered. **Note:** Charts
-		 * 		and panels can have multiple y-axes; each y-axis has its own set of outlier
-		 * 		markers based on the data rendered on the axis.
-		 * @return {Array} A tuple consisting of the outlier minimum and maximum &mdash; or trend
-		 * 		minimum and maximum, if no outliers are found &mdash; to be handled by the
-		 * 		{@link CIQ.ChartEngine#determineMinMax} method. See the return value of the
-		 * 		[find]{@link CIQ.Outliers#find} function for a description of outlier and trend
-		 * 		minimum and maximum.
-		 *
-		 * @alias processDataSet
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 8.0.0
-		 */
-		this.processDataSet = function (dataSet, panel, axis) {
-			if (!dataSet.length || dataSet.length <= 1) return false;
-
-			var result = [0, 0]; // Min/Max axis values to return
-
-			// Create an axis reference if one does not exist
-			if (!this.axisData[axis.name]) {
-				var markerColor = "";
-				var axisDepth = -1;
-				// Check for another axis using this panel
-				Object.keys(this.axisData).forEach(
-					function (key) {
-						if (this.axisData[key].panel.name == panel.name) {
-							axisDepth++;
-						}
-					}.bind(this)
-				);
-				if (axisDepth > -1 && axisDepth < this.altColors.length)
-					markerColor = this.altColors[axisDepth];
-
-				this.axisData[axis.name] = {
-					axis: axis,
-					panel: panel,
-					displayState: "none",
-					isFlipped: false,
-					originalZoom: axis.zoom,
-					markerColor: markerColor,
-					markers: {},
-					axisMarkers: {}
-				};
-			}
-
-			var currentAxis = this.axisData[axis.name];
-			// Attach the min/max values to the current axis data
-			Object.assign(currentAxis, this.find(dataSet));
-
-			// Update/add necessary markers
-			this.refreshMarkerArray(currentAxis);
-
-			// Update marker display and labels
-			this.refreshMarkers(currentAxis);
-
-			// Return either trendMin or outlierMin based on the axis displayState
-			if (
-				(currentAxis.displayState === "low" ||
-					currentAxis.displayState === "all") &&
-				currentAxis.outlierMin !== null
-			)
-				result[0] = currentAxis.outlierMin;
-			else result[0] = currentAxis.trendMin;
-			// Return either trendMax or outlierMax based on the axis displayState
-			if (
-				(currentAxis.displayState === "high" ||
-					currentAxis.displayState === "all") &&
-				currentAxis.outlierMax !== null
-			)
-				result[1] = currentAxis.outlierMax;
-			else result[1] = currentAxis.trendMax;
-
-			return result;
-		};
-
-		/**
-		 * Finds the outliers contained in `dataSet`.
-		 *
-		 * **Note:** This function may be overridden to provide a custom algorithm for finding
-		 * outliers.
-		 *
-		 * @param {Array} dataSet An array of objects of the form `{value: Number, quote: Object}`.
-		 * 		Each object contains a value and its associated quote. The value is checked to
-		 * 		determine whether it is an outlier of the data set. When checking more than one
-		 * 		value for a quote (such as an OHLC quote), each value is included in a separate
-		 * 		object; for example, `[{value: open, quote: quote}, {value: high, quote: quote},
-		 * 		{value: low, quote: quote}, {value: close, quote: quote}...]`.
-		 * @return {object} An object of the form:
-		 * ```
-		 * {
-		 * 	// Minimum and maximum threshold values of dataSet to be considered an outlier.
-		 * 	minValue: null,
-		 * 	maxValue: null,
-		 * 	// Mininum and maximum values of dataSet that are not considered outliers.
-		 * 	// Will be the least and greatest values in dataSet if no outliers are found.
-		 * 	trendMin: null,
-		 * 	trendMax: null,
-		 * 	// Minimum and maximum values of dataSet that are considered outliers.
-		 * 	// Will remain null if no outliers are found.
-		 * 	outlierMin: null,
-		 * 	outlierMax: null,
-		 * 	// Array of individual outlier information for marker placement, in the format {DT:DateTime, value:Number, position:String}
-		 * 	// (position is either 'high' or 'low').
-		 * 	activeOutliers: []
-		 * }
-		 * ```
-		 *
-		 * @alias find
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added return value.
-		 */
-		this.find = function (dataSet) {
-			if (!dataSet.length || dataSet.length <= 0) return;
-
-			var createMarkerPlaceholder = function (data, position) {
-				return {
-					quote: data.quote,
-					DT: data.quote.DT,
-					value: data.value,
-					position: position
-				};
-			};
-
-			// The minimum and maximum threshold values to be considered an outlier.
-			var minValue = null;
-			var maxValue = null;
-			// min/max values of available data that are not considered outliers. Will be the least and greatest values in the available data if no outliers are found.
-			var trendMin = null;
-			var trendMax = null;
-			// min/max values of available data that are considered outliers. Will remain null if no outlier is found.
-			var outlierMin = null;
-			var outlierMax = null;
-			// Array of outlier information in the format
-			// {DT:DateTime, value:Number, position:String}
-			var activeOutliers = [];
-
-			var dataSorted = dataSet.slice();
-			dataSorted.sort(function (a, b) {
-				return a.value - b.value;
-			});
-			var dataLength = dataSorted.length;
-
-			// Outlier threshold values are defined as more than the interquartile range above the third quartile
-			// or below the first quartile, of the sorted dataSet, multiplied by the value of the
-			// stxx.outlierMultiplier property.
-			var q1 = dataSorted[Math.floor(dataLength / 4)].value;
-			var q3 = dataSorted[Math.floor(dataLength * (3 / 4))].value;
-			var iqr = q3 - q1;
-
-			minValue = q1 - iqr * this.multiplier;
-			maxValue = q3 + iqr * this.multiplier;
-
-			// Loop through the sorted data and find the outliers as well as the trend min/max
-			for (var idx = 0; idx < dataLength; idx++) {
-				// Attack the array from both ends
-				var dataLow = dataSorted[idx];
-				var dataHigh = dataSorted[dataLength - (idx + 1)];
-
-				// Find and mark outliers. Existing merkers will be refreshed in setMarker.
-				if (dataLow.value <= minValue)
-					activeOutliers.push(createMarkerPlaceholder(dataLow, "low"));
-				if (dataHigh.value >= maxValue)
-					activeOutliers.push(createMarkerPlaceholder(dataHigh, "high"));
-
-				// Find the first low value that's less than or equal to outlier threshold min
-				if (outlierMin === null && dataLow.value <= minValue)
-					outlierMin = dataLow.value;
-				// Find the first high value that's greater than or equal to outlier threshold max
-				if (outlierMax === null && dataHigh.value >= maxValue)
-					outlierMax = dataHigh.value;
-
-				// Find the first low value that's greater than the outlier threshold min
-				if (trendMin === null && dataLow.value > minValue)
-					trendMin = dataLow.value;
-				// Find the first high value that's less than the outlier threshold max
-				if (trendMax === null && dataHigh.value < maxValue)
-					trendMax = dataHigh.value;
-
-				// No need to loop through the entire array. Once the trend min/max are found we're done.
-				if (trendMin !== null && trendMax !== null) break;
-			}
-
-			return {
-				minValue: minValue,
-				maxValue: maxValue,
-				trendMin: trendMin,
-				trendMax: trendMax,
-				outlierMin: outlierMin,
-				outlierMax: outlierMax,
-				activeOutliers: activeOutliers
-			};
-		};
-
-		/**
-		 * Updates the freshness status of outlier markers belonging to `targetAxis`.
-		 *
-		 * Sets the status to fresh if the markers represent data points in the `activeOutliers`
-		 * list of `targetAxis` or a marker is an axis marker for high or low outliers and high or
-		 * low outliers exist. (See the return value of the [find]{@link CIQ.Outliers#find}
-		 * function for a description of the `activeOutliers` list.)
-		 *
-		 * Adds new markers to `targetAxis` for data points in the `activeOutliers` list not
-		 * already represented by a marker (see [markOutlier]{@link CIQ.Outliers#markOutlier}).
-		 * Adds new axis markers if the data set rendered on `targetAxis` contains high or low
-		 * outliers and the respective axis marker does not exist (see
-		 * [markAxis]{@link CIQ.Outliers#markAxis}).
-		 *
-		 * Sets the status of all other markers belonging to `targetAxis` to stale, or unfresh
-		 * (these markers are ultimately removed).
-		 *
-		 * @param {object} targetAxis The y-axis for which the markers are refreshed.
-		 * 		**Note:** Charts and panels can have multiple y-axes, each with its own array of
-		 * 		outlier markers.
-		 *
-		 * @alias refreshMarkerArray
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 8.0.0
-		 */
-		this.refreshMarkerArray = function (targetAxis) {
-			this.deprecateMarkers(targetAxis); // If a marker isn't refreshed below, it will be deleted in the next call
-
-			var targetMarkers = targetAxis.markers;
-			targetAxis.activeOutliers.forEach(
-				function (outlier) {
-					var quoteTime = outlier.DT.getTime().toString();
-					// Add a quote marker if there isn't one already
-					if (!targetMarkers[quoteTime]) {
-						targetMarkers[quoteTime] = {
-							isFresh: true,
-							type: "quote",
-							value: outlier.value,
-							marker: this.markOutlier(outlier, outlier.position, targetAxis)
-						};
-					}
-					// Always refresh the status of the marker
-					targetMarkers[quoteTime].isFresh = true;
-				}.bind(this)
-			);
-			if (targetAxis.outlierMax !== null) {
-				// Add the high axis marker if there isn't one
-				if (!targetMarkers.axisHigh) {
-					targetMarkers.axisHigh = {
-						isFresh: true,
-						type: "axis",
-						value: targetAxis.outlierMax,
-						marker: this.markAxis("high", targetAxis)
-					};
-				}
-				// Always refresh the status of the marker
-				targetMarkers.axisHigh.isFresh = true;
-			}
-			if (targetAxis.outlierMin !== null) {
-				// Add the low axis marker if there isn't one
-				if (!targetMarkers.axisLow) {
-					targetMarkers.axisLow = {
-						isFresh: true,
-						type: "axis",
-						value: targetAxis.outlierMin,
-						marker: this.markAxis("low", targetAxis)
-					};
-				}
-				// Always refresh the status of the marker
-				targetMarkers.axisLow.isFresh = true;
-			}
-		};
-
-		/**
-		 * Sets the outlier display state, which determines whether to display outlier markers.
-		 *
-		 * @param {string} newState The intended display state; should be one of:
-		 * <ul>
-		 *		<li>"high" &mdash; Show high outliers; hide high outlier markers.</li>
-		 *		<li>"low" &mdash; Show low outliers; hide low outlier markers.</li>
-		 *		<li>"all" &mdash; Show high and low outliers; hide high and low outlier markers.</li>
-		 *		<li>"none" &mdash; Hide high and low outliers; show high and low outlier markers.</li>
-		 * </ul>
-		 * If none of the above is provided, "none" is assumed.
-		 * @param {object} targetAxis The y-axis on which the outlier state is set. **Note:** A
-		 * 		chart or panel can have multiple y-axes.
-		 *
-		 * @alias setDisplayState
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added `targetAxis` parameter.
-		 */
-		this.setDisplayState = function (newState, targetAxis) {
-			if (newState != "high" && newState != "low" && newState != "all")
-				newState = "none";
-
-			var displayState = newState;
-			// Set the value of displayState to show the intended state, based on its existing state. This
-			// allows the markers to toggle between states without concern for what is currently displayed.
-			// For example: if the current display state is showing low outlier only, and the intent is to
-			// now display high outliers as well, then the display state will change to 'all'.
-			// This will toggle the high/low state off as well.
-			if (targetAxis.displayState == "all" && newState == "high")
-				displayState = "low";
-			else if (targetAxis.displayState == "all" && newState == "low")
-				displayState = "high";
-			else if (targetAxis.displayState == "high" && newState == "low")
-				displayState = "all";
-			else if (targetAxis.displayState == "low" && newState == "high")
-				displayState = "all";
-			else if (targetAxis.displayState == newState) displayState = "none";
-
-			targetAxis.displayState = displayState;
-			// Reset the axis zoom state
-			targetAxis.axis.zoom = targetAxis.originalZoom;
-
-			this.refreshMarkers(targetAxis);
-			this.stx.draw();
-		};
-
-		/**
-		 * Removes all markers from `targetAxis` that are no longer fresh; that is, markers that
-		 * do not represent data points in the current data set, or axis markers that are
-		 * irrelevant because high or low outliers no longer exist. Sets the status of all
-		 * remaining outlier markers to stale, or not fresh (the freshness status should
-		 * subsequently be reevaluated).
-		 *
-		 * @param {object} targetAxis The y-axis for which the markers are deprecated. **Note:**
-		 * 		A chart or panel can have multiple y-axes; each y-axis has its own outlier
-		 * 		markers based on the data rendered on the axis.
-		 *
-		 * @alias deprecateMarkers
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added `targetAxis` parameter.
-		 */
-		this.deprecateMarkers = function (targetAxis) {
-			var removeMarker = function (marker) {
-				if (marker.marker && !marker.isFresh) {
-					if (marker.marker.remove) marker.marker.remove();
-					marker.marker = null;
-				} else {
-					marker.isFresh = false;
-				}
-			};
-
-			// Handle the outlier markers
-			Object.keys(targetAxis.markers).forEach(
-				function (key) {
-					removeMarker(this.markers[key]);
-					// Remove the marker property if its marker has been removed
-					if (!this.markers[key].marker) {
-						delete this.markers[key];
-					}
-				}.bind(targetAxis)
-			);
-		};
-
-		/**
-		 * Removes all outlier markers from `targetAxis`, including data point markers and y-axis
-		 * markers.
-		 *
-		 * @param {object} targetAxis The y-axis from which the markers are removed. **Note:**
-		 * 		Charts and panels can have multiple y-axes, each with its own outlier markers.
-		 *
-		 * @alias removeAllMarkers
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added `targetAxis` parameter.
-		 */
-		this.removeAllMarkers = function (targetAxis) {
-			Object.keys(targetAxis.markers).forEach(function (key) {
-				var targetMarker = targetAxis.markers[key].marker;
-				if (targetMarker) {
-					if (targetMarker.remove) targetMarker.remove();
-					targetMarker = null;
-				}
-				// Remove the marker property if its marker has been removed
-				if (!targetMarker) {
-					delete targetAxis.markers[key];
-				}
-			});
-		};
-
-		/**
-		 * Shows or hides outlier markers based on the display state.
-		 *
-		 * See [setDisplayState]{@link CIQ.Outliers#setDisplayState}.
-		 *
-		 * @alias updateMarkerVisibility
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 7.5.0
-		 */
-		this.updateMarkerVisibility = function () {
-			Object.keys(this.markers).forEach(
-				function (key) {
-					if (
-						this.displayState == "all" ||
-						this.markers[key].marker.node.classList.contains(this.displayState)
-					)
-						this.markers[key].marker.node.style.display = "none";
-					else this.markers[key].marker.node.style.display = "block";
-				}.bind(this)
-			);
-		};
-
-		/**
-		 * Updates the position of the axis outlier marker represented by `node`.
-		 *
-		 * @param {HTMLElement} node The axis marker to position.
-		 * @param {object} targetAxis The y-axis on which the axis marker is positioned.
-		 *
-		 * @alias refreshAxisMarkers
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added `targetAxis` parameter.
-		 */
-		this.refreshAxisMarkers = function (node, targetAxis) {
-			var isHigh = false;
-			var positionClass = "low";
-			if (node.classList.contains("high")) {
-				isHigh = true;
-				positionClass = "high";
-			}
-			var posTop = targetAxis.axis.top;
-			// Set the low marker of reverse the value if the axis is flipped
-			if (
-				(!targetAxis.isFlipped && !isHigh) ||
-				(targetAxis.isFlipped && isHigh)
-			) {
-				posTop = targetAxis.axis.bottom - 50;
-			}
-			// Overlap the markers in the center for nano size because it's all or nothing at that size.
-			if (node.classList.contains("nano")) {
-				posTop = targetAxis.axis.top + targetAxis.axis.height / 2 - 22;
-			}
-
-			var xFormLeft = Math.floor(targetAxis.axis.left).toString() + "px";
-			var xFormTop = Math.floor(posTop).toString() + "px";
-			// Use the vlaue property instead
-			var labelPrice = isHigh ? targetAxis.outlierMax : targetAxis.outlierMin;
-
-			// Set marker positioning relative to the y-axis
-			node.style.transform = "translate(" + xFormLeft + ", " + xFormTop + ")";
-			node.querySelector(
-				".outlier-value"
-			).innerText = this.stx.formatYAxisPrice(labelPrice);
-			// Apply .right class when axis is on the left to right position child elements
-			if (xFormLeft === "0px") node.classList.add("right");
-			else node.classList.remove("right");
-		};
-
-		/**
-		 * Updates the display styles of all outlier markers belonging to `targetAxis`, including
-		 * data point markers and axis markers. Shows the markers if outliers are hidden and the
-		 * marked outliers exceed the bounds of `targetAxis`. Flips the markers if `targetAxis`
-		 * has been inverted (see [flipMarkers]{@link CIQ.Outliers#flipMarkers}).
-		 *
-		 * @param {object} targetAxis The y-axis on which the markers are refreshed. **Note:**
-		 * 		Charts and panels can have multiple y-axes, each with its own outlier markers.
-		 *
-		 * @alias refreshMarkers
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 8.0.0
-		 */
-		this.refreshMarkers = function (targetAxis) {
-			Object.keys(targetAxis.markers).forEach(
-				function (targetAxis, key) {
-					var targetMarker = targetAxis.markers[key].marker;
-					var targetValue = targetAxis.markers[key].value;
-					var targetType = targetAxis.markers[key].type;
-					// Check the marker value against the actual axis min/max. This accounts for yaxis scaling
-					// in addition to the outlier display state.
-					if (
-						(targetValue > targetAxis.trendMax &&
-							targetAxis.axis.high >= targetValue) ||
-						(targetValue < targetAxis.trendMin &&
-							targetAxis.axis.low <= targetValue)
-					) {
-						if (targetType == "quote") {
-							targetMarker.node.style.display = "none";
-						} else if (targetType == "axis") {
-							targetMarker.node.classList.add("compress");
-						}
-					} else {
-						if (targetType == "quote") {
-							targetMarker.node.style.display = "block";
-						} else if (targetType == "axis") {
-							targetMarker.node.classList.remove("compress");
-						}
-					}
-
-					if (targetType == "axis") {
-						this.refreshAxisMarkers(targetMarker.node, targetAxis);
-					}
-
-					// Update the marker responsive style
-					if (targetAxis.axis.height < 100)
-						targetMarker.node.classList.add("nano");
-					else targetMarker.node.classList.remove("nano");
-
-					if (targetAxis.axis.height < 250)
-						targetMarker.node.classList.add("micro");
-					else targetMarker.node.classList.remove("micro");
-				}.bind(this, targetAxis)
-			);
-
-			// Check for a change in the flipped state of the axis
-			if (targetAxis.isFlipped !== targetAxis.axis.flipped)
-				this.flipMarkers(targetAxis);
-		};
-
-		/**
-		 * Places markers on the y-axis when high or low outliers exist.
-		 *
-		 * @param {string} position The position of the marker; either "high" or "low". If the
-		 * 		position is "high", the marker is placed at the top of the axis; if "low", at the
-		 * 		bottom of the axis.
-		 * @param {object} targetAxis The y-axis on which the markers are placed. **Note:**
-		 * 		Charts and panels can have multiple y-axes, each with its own outlier markers.
-		 * @return {CIQ.Marker} The axis outlier marker, which is added to the display.
-		 *
-		 * @alias markAxis
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added `position` and `targetAxis` parameters and return value.
-		 */
-		this.markAxis = function (position, targetAxis) {
-			// Create a marker positioned on the Y axis and return it.
-			var axisMarker = document.createElement("div");
-			axisMarker.classList.add("outlier-sticker", "axis", "mini", position);
-			axisMarker.innerHTML =
-				'<div class="expansion"><div class="pill"><div class="icon"></div></div><div class="tick"></div><span class="outlier-value"></div><div class="compression"><div class="pill"><div class="icon"></div></div></div></span>';
-
-			this.matchYAxisStyle(axisMarker);
-			this.setMarkerColor(axisMarker, targetAxis.markerColor);
-
-			var activate = this.handleMarkerClick.bind(
-				this,
-				position,
-				targetAxis,
-				axisMarker
-			);
-			axisMarker.addEventListener("click", activate);
-			axisMarker.addEventListener("touchend", activate);
-
-			return new CIQ.Marker({
-				stx: this.stx,
-				xPositioner: "none",
-				yPositioner: "none",
-				label: "expand",
-				permanent: true,
-				chartContainer: true,
-				node: axisMarker
-			});
-		};
-
-		/**
-		 * Adds an outlier marker to a tick (data point).
-		 *
-		 * @param {object} data Represents the tick that is marked as an outlier. Contains the
-		 * 		outlier value and its associated quote; for example,
-		 * 		`{value: Number, quote: Object}`.
-		 * @param {string} position The position of the marker; either "high" or "low". If the
-		 * 		position is "high", the marker is placed at the top of the chart; if "low", at the
-		 * 		bottom of the chart.
-		 * @param {object} targetAxis The y-axis to which the marker is added. **Note:** A chart
-		 * 		or panel can have multiple y-axes; each y-axis has its own outlier markers.
-		 * @return {CIQ.Marker} The outlier marker, which is added to the display.
-		 *
-		 * @alias markOutlier
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Added `targetAxis` parameter.
-		 */
-		this.markOutlier = function (data, position, targetAxis) {
-			if (!data) return;
-			if (!targetAxis) targetAxis = { panel: this.stx.panels.chart };
-			position = position || "high";
-
-			// Create a marker
-			var outlierMarker = document.createElement("div");
-			outlierMarker.classList.add("outlier-sticker", "quote", "mini", position);
-			outlierMarker.innerHTML =
-				'<div class="pill"><div class="icon"></div></div><span class="outlier-value">' +
-				this.stx.formatYAxisPrice(data.value, targetAxis.panel) +
-				"</span>";
-
-			this.matchYAxisStyle(outlierMarker);
-			this.setMarkerColor(outlierMarker, targetAxis.markerColor);
-
-			var activate = this.handleMarkerClick.bind(
-				this,
-				position,
-				targetAxis,
-				outlierMarker
-			);
-			outlierMarker.addEventListener("click", activate);
-			outlierMarker.addEventListener("touchend", activate);
-
-			return new CIQ.Marker({
-				stx: this.stx,
-				xPositioner: "date",
-				yPositioner: position == "high" ? "top" : "bottom",
-				x: data.quote.DT,
-				panelName: targetAxis.panel.name,
-				node: outlierMarker
-			});
-		};
-
-		/**
-		 * Calls [setDisplayState]{@link CIQ.Outliers#setDisplayState} in response to selecting an
-		 * outlier marker.
-		 *
-		 * @param {string} position The position of the marker; either "high" or "low".
-		 * @param {object} targetAxis The y-axis that contains the selected marker. **Note:**
-		 * 		Charts and panels can have multiple y-axes; each y-axis has its own outlier
-		 * 		markers.
-		 * @param {HTMLElement} targetNode The selected outlier marker DOM node.
-		 *
-		 * @alias handleMarkerClick
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 8.0.0
-		 */
-		this.handleMarkerClick = function (position, targetAxis, targetNode) {
-			if (targetNode.classList.contains("nano")) position = "all"; // not concerned about differentiation between high and low at the nano size
-			this.setDisplayState(position, targetAxis);
-			this.stx.draw();
-		};
-
-		/**
-		 * Sets the CSS style properties of the y-axis outlier marker to match the CSS styling of
-		 * the y-axis itself.
-		 *
-		 * @param {HTMLElement} node The y-axis marker to style.
-		 *
-		 * @alias matchYAxisStyle
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 7.5.0
-		 */
-		this.matchYAxisStyle = function (node) {
-			// Apply styles from the yAxis
-			if (this.stx.styles.stx_yaxis) {
-				var styles = this.stx.styles.stx_yaxis;
-				node.style.fontSize = styles.fontSize;
-				node.style.fontFamily = styles.fontFamily;
-				node.style.color = styles.color;
-				node.style.borderColor = styles.color;
-			}
-		};
-
-		/**
-		 * Applies a background color to an outlier data point marker.
-		 *
-		 * @param {HTMLElement} node The outlier marker DOM node to which the background color is
-		 * 		applied.
-		 * @param {string} color The hexadecimal color value set as the node background color.
-		 *
-		 * @alias setMarkerColor
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 8.0.0
-		 */
-		this.setMarkerColor = function (node, color) {
-			if (color == "") return;
-			//Set marker color
-			var markerPills = node.querySelectorAll(".pill");
-			for (var markerIdx = 0; markerIdx < markerPills.length; markerIdx++) {
-				markerPills[markerIdx].style.backgroundColor = color;
-			}
-		};
-
-		/**
-		 * Repositions outlier markers from the top of the display to the bottom (or vice versa)
-		 * when the associated y-axis has been flipped (inverted).
-		 *
-		 * @param {object} targetAxis The y-axis that has been flipped.
-		 *
-		 * @alias flipMarkers
-		 * @memberOf CIQ.Outliers.prototype
-		 * @since 8.0.0
-		 */
-		this.flipMarkers = function (targetAxis) {
-			targetAxis.isFlipped = targetAxis.axis.flipped;
-
-			Object.keys(targetAxis.markers).forEach(
-				function (targetAxis, key) {
-					var targetMarker = targetAxis.markers[key].marker;
-					var targetValue = targetAxis.markers[key].value;
-					var targetType = targetAxis.markers[key].type;
-					// Check for flipped state and add/remove flipped class
-					if (targetAxis.isFlipped) {
-						targetMarker.node.classList.add("flipped");
-					} else {
-						targetMarker.node.classList.remove("flipped");
-					}
-
-					// Set Y positioning of quote markers
-					if (targetType == "quote") {
-						if (targetValue > targetAxis.trendMax) {
-							// High marker
-							if (targetAxis.isFlipped)
-								targetMarker.params.yPositioner = "bottom";
-							else targetMarker.params.yPositioner = "top";
-						} else if (targetValue < targetAxis.trendMin) {
-							// Low marker
-							if (targetAxis.isFlipped) targetMarker.params.yPositioner = "top";
-							else targetMarker.params.yPositioner = "bottom";
-						}
-					}
-				}.bind(this, targetAxis)
-			);
-		};
-
-		var originalDetermineMinMax = CIQ.ChartEngine.prototype.determineMinMax.bind(
-			this.stx
-		);
-		/**
-		 * Overrides the default `CIQ.ChartEngine.prototype.determineMinMax` function when the
-		 * Outliers add-on is active. Injects the local {@link CIQ.Outliers#processDataSet}
-		 * function as a data filter and passes the filter along to the original `determineMinMax`
-		 * function (see below).
-		 *
-		 * @param {Array} quotes The array of quotes (typically
-		 * 		`CIQ.ChartEngine.chart.dataSegment`) to evaluate for minimum and maximum values.
-		 * @param {Array} fields A list of fields to compare.
-		 * @param {boolean|Array} [sum] If true, then compute maximum sum rather than the maximum
-		 * 		single value across all fields. If an array, compute sum over just the fields in
-		 * 		the array.
-		 * @param {boolean} [bypassTransform] If true, bypass any transformations.
-		 * @param {number} [length] Specifies how many elements of the quotes array to process.
-		 * @param {boolean} [checkArray] If true, the type of the value used to determine the
-		 * 		min/max is checked to ascertain whether it is an array; if so, the first element
-		 * 		of the array is retrieved for use in the min/max determination.
-		 * @param {CIQ.ChartEngine.Panel} [panel] A reference to the panel rendering the quotes.
-		 * @param {CIQ.ChartEngine.YAxis} [axis] A reference to the y-axis rendered for the quotes.
-		 * @param {Array} [filters] Array of functions to process the min/max values before
-		 * 	returning. Filter functions must return a valid min/max tuple or false.
-		 * @return {function} A reference to the original
-		 * 		`CIQ.ChartEngine.prototype.determineMinMax` library function.
-		 *
-		 * @memberof CIQ.ChartEngine
-		 * @since
-		 * - 7.5.0
-		 * - 8.0.0 Allow the `sum` parameter to be an array of valid fields to sum over.
-		 * 		Added the `panel`, `axis`, and `filters` parameters.
-		 * @private
-		 */
-		CIQ.ChartEngine.prototype.determineMinMax = function (
-			quotes,
-			fields,
-			sum,
-			bypassTransform,
-			length,
-			checkArray,
-			panel,
-			axis,
-			filters
-		) {
-			if (!filters) filters = [];
-			if (panel && axis && this.layout.outliers)
-				filters.push(this.outliers.processDataSet.bind(this.outliers));
-			return originalDetermineMinMax(
-				quotes,
-				fields,
-				sum,
-				bypassTransform,
-				length,
-				checkArray,
-				panel,
-				axis,
-				filters
-			);
-		};
-	};
-
-/**
- * CIQ.Marker interface placeholder to be augmented in *standard.js* with properties.
- *
- * @tsinterface CIQ~Marker
- */
-
-};
-
-let __js_addons_advanced_plotComplementer_ = (_exports) => {
-
-
-/* global _CIQ, _timezoneJS, _SplinePlotter */
-
-var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
-
-/**
- * Creates an add-on that enables a series to complement another series.
- *
- * ![Plot Complementer](./img-Data-Forecasting.png)
- *
- * The complementary series is a permanent fixture of the series which it complements. It moves
- * in tandem with the series, and gets removed with the series. In all other respects, though, it
- * behaves like its own series. It shows separately in the panel legend and plots using its own
- * renderer.
- *
- * Charts can have multiple `PlotComplementer` instances. Each instance is attached to the chart
- * engine as a member of a `PlotComplementer` collection.
- *
- * Multiple `PlotComplementer` instances can be associated with a time series. To link a
- * `PlotComplementer` to a series, specify the series instrument in the `params.filter` function.
- * See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
- *
- * **Note:** The series created by this add-on is not exported with the layout, since it is
- * created in tandem with the series it complements. Currently, this feature works only with
- * non-comparison series.
- *
- * Requires *addOns.js*.
- *
- * @param {object} params Configuration parameters.
- * @param {CIQ.ChartEngine} params.stx The chart object.
- * @param {string} [params.id] Unique key used by the add-on to identify itself. If not supplied,
- * 		a random key is chosen.
- * @param {object} [params.quoteFeed] Attaches the quote feed to the quote driver to satisfy any
- * 		quote requests for any series created by the add-on.
- * @param {object} [params.behavior] Used as the behavior for the quote feed supplied in this
- * 		parameter list.
- * @param {function} [params.filter] Used as the filter for the quote feed supplied in this
- * 		parameter list. See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
- * @param {object} [params.decorator] Container object for the `symbol` and `display` properties.
- * 		The `decorator` provides the label (`symbol`) for the complementary series and a short
- * 		description (`display`) that is appended to the label; for example:
- * ```
- * decorator: {symbol:"_fcst", display:" Forecast"}
- * ```
- * @param {string} [params.decorator.symbol] Adds this string onto the ID when creating the
- * 		complementary series. Otherwise, a unique ID is used.
- * @param {string} [params.decorator.display] Customizes the display value of the series.
- * @param {object} [params.renderingParameters={chartType: "line", width: 1, opacity: 0.5}] A
- * 		collection of parameters that override the default rendering parameters. The
- * 		`renderingParameters` object can be set or changed at any time. The default parameters
- * 		can be restored by calling {@link CIQ.PlotComplementer#resetRenderingParameters}.
- * 		<p>Here are a few examples of rendering parameters:</p>
- * ```
- * // Assuming a PlotComplementer declared as "forecaster":
- * forecaster.renderingParameters = {chartType:"scatterplot", opacity:0.5, field:"Certainty"}
- * forecaster.renderingParameters = {chartType:"histogram", border_color:"transparent", opacity:0.3}
- * forecaster.renderingParameters = {chartType:"channel", opacity:0.5, pattern:"dotted"}
- * forecaster.renderingParameters = {chartType:"candle", opacity:0.5, color:"blue", border_color:"blue"}
- * ```
- *
- * @constructor
- * @name CIQ.PlotComplementer
- * @since 7.3.0
- *
- * @example <caption>Forecasting</caption>
- * let forecaster = new CIQ.PlotComplementer({
- *     stx:stxx,
- *     id:"forecast",
- *     quoteFeed: fcstFeed.quoteFeedForecastSimulator,
- *     behavior: {refreshInterval:60},
- *     decorator: {symbol:"_fcst", display:" Forecast"},
- *     renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
- * });
- */
-CIQ.PlotComplementer =
-	CIQ.PlotComplementer ||
-	function (params) {
-		var stx = params.stx;
-		var unique = CIQ.uniqueID();
-		if (!params.decorator) params.decorator = {};
-		var symbolDecorator = params.decorator.symbol || "_" + unique;
-		var displayDecorator = params.decorator.display || " (addl)";
-		if (!stx.plotComplementers) stx.plotComplementers = [];
-		stx.plotComplementers.push(this);
-
-		this.id = params.id || unique;
-
-		this.defaultRenderingParameters = {
-			chartType: "line",
-			width: 1,
-			opacity: 0.5
-		};
-
-		if (params.renderingParameters)
-			this.defaultRenderingParameters = params.renderingParameters;
-
-		var self = this;
-		function addSeries(stx, symbol, parameters, id) {
-			function verifyQuoteFeed(stx) {
-				if (!stx.quoteDriver) return;
-				if (!params.quoteFeed) return;
-				for (var qf = 0; qf < stx.quoteDriver.quoteFeeds.length; qf++) {
-					if (stx.quoteDriver.quoteFeeds[qf].engine == params.quoteFeed) return;
-				}
-				return "err";
-			}
-			if (verifyQuoteFeed(stx) == "err") return;
-			if (!id) id = symbol;
-			if (stx.isEquationChart(symbol)) return;
-			if (!parameters) parameters = {};
-			if (parameters.isComparison) return;
-			if (id && id.indexOf(symbolDecorator) == -1) {
-				var fId = id + symbolDecorator,
-					fSymbol = symbol + symbolDecorator;
-				var masterRenderer = stx.getRendererFromSeries(id);
-				var myParms = CIQ.extend(
-					{
-						display: symbol + displayDecorator,
-						name: fId,
-						symbol: fSymbol,
-						symbolObject: {
-							symbol: fSymbol,
-							generator: self.id,
-							masterSymbol: symbol
-						},
-						overChart: false,
-						gapDisplayStyle: true,
-						permanent: true,
-						panel: parameters.panel,
-						yAxis: parameters.yAxis,
-						shareYAxis: true,
-						loadData: !!self.quoteFeed,
-						dependentOf: masterRenderer
-							? masterRenderer.params.name
-							: stx.mainSeriesRenderer.params.name
-					},
-					self.renderingParameters
-				);
-				if (!myParms.color) myParms.color = parameters.color || "auto";
-				stx.addSeries(fId, myParms, function (error, obj) {
-					if (error) stx.removeSeries(fId, stx.chart);
-					if (stx.chart.seriesRenderers[fId]) {
-						stx.chart.seriesRenderers[fId].params.display = myParms.display;
-					}
-				});
-			}
-		}
-
-		function removeSeries(stx, id, chart) {
-			if (id && id.indexOf(symbolDecorator) == -1)
-				stx.removeSeries(id + symbolDecorator, chart);
-		}
-
-		function symbolChange(obj) {
-			if (obj.action == "master") {
-				if (!obj.prevSymbol) obj.prevSymbol = obj.symbol;
-				removeSeries(obj.stx, obj.prevSymbol, obj.stx.chart);
-				addSeries(obj.stx, obj.symbol);
-			} else if (obj.action == "add-series") {
-				removeSeries(obj.stx, obj.id, obj.stx.chart);
-				addSeries(obj.stx, obj.symbol, obj.parameters, obj.id);
-			} else if (obj.action == "remove-series") {
-				removeSeries(obj.stx, obj.id, obj.stx.chart);
-			}
-		}
-
-		stx.addEventListener("symbolChange", symbolChange);
-		stx.addEventListener("symbolImport", symbolChange);
-
-		/**
-		 * Resets the `PlotComplementer` rendering values to the default settings.
-		 *
-		 * Default settings can be provided in the parameters passed to the `PlotComplementer` constructor. If no settings are
-		 * provided to the constructor, `PlotComplementer` uses the following defaults: `{ chartType:"line", width:1, opacity:0.5 }`.
-		 *
-		 * The rendering parameters may be set anytime after creating `PlotComplementer`; for example, to set an ad-hoc rendering
-		 * right before adding a series.
-		 *
-		 * @alias resetRenderingParameters
-		 * @memberof CIQ.PlotComplementer.prototype
-		 * @since 7.3.0
-		 */
-		this.resetRenderingParameters = function () {
-			this.renderingParameters = this.defaultRenderingParameters;
-		};
-
-		/**
-		 * Sets a quote feed for the `PlotComplementer`.
-		 *
-		 * Automatically called when a quote feed is provided in the constructor argument. If a
-		 * quote feed or `behavior` object is not specified in `params`, this function returns
-		 * without doing anything.
-		 *
-		 * @param {object} params Configuration parameters.
-		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy
-		 * 		any quote requests for any series created by the add-on. This quote feed is like
-		 * 		any time series quote feed object. See the
-		 * 		[Data Integration Overview]{@tutorial DataIntegrationOverview}.
-		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter
-		 * 		list. This object is like any `behavior` object associated with a quote feed.
-		 * 		See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on `behavior`
-		 * 		objects.
-		 * @param {function} [params.filter] Filters the quote feed supplied in this parameter
-		 * 		list. The filter function takes as an argument an object typically containing
-		 * 		`symbolObject`, `symbol`, and `interval` properties. The properties associate the
-		 * 		`PlotComplementer` with an instrument. If the `filter` function returns true, the
-		 * 		`PlotComplementer` quote feed is used for the instrument.
-		 * 		<p>This `filter` function is like the `filter` in basic quote feeds.
-		 * 		See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on quote feed
-		 * 		`filter` functions.</p>
-		 * @alias setQuoteFeed
-		 * @memberof CIQ.PlotComplementer.prototype
-		 * @since 7.3.0
-		 */
-		this.setQuoteFeed = function (params) {
-			if (!params.quoteFeed || !params.behavior) return;
-			var behavior = CIQ.clone(params.behavior);
-			behavior.generator = this.id;
-			var existingFilter = params.filter;
-			var filter = function (params) {
-				if (existingFilter && !existingFilter(params)) return false;
-				return params.symbolObject.generator == behavior.generator;
-			};
-			stx.attachQuoteFeed(params.quoteFeed, behavior, filter);
-			this.quoteFeed = params.quoteFeed;
-		};
-
-		this.setQuoteFeed(params);
-		this.resetRenderingParameters();
-	};
-
-};
 
 let __js_addons_standard_extendedHours_ = (_exports) => {
-
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -2188,8 +328,8 @@ CIQ.ExtendedHours =
 
 };
 
-let __js_addons_standard_fullScreen_ = (_exports) => {
 
+let __js_addons_standard_fullScreen_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -2354,8 +494,8 @@ CIQ.FullScreen =
 
 };
 
-let __js_addons_standard_inactivityTimer_ = (_exports) => {
 
+let __js_addons_standard_inactivityTimer_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -2440,8 +580,8 @@ CIQ.InactivityTimer =
 
 };
 
-let __js_addons_standard_rangeSlider_ = (_exports) => {
 
+let __js_addons_standard_rangeSlider_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -3017,8 +1157,8 @@ CIQ.RangeSlider =
 
 };
 
-let __js_addons_standard_shortcuts_ = (_exports) => {
 
+let __js_addons_standard_shortcuts_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -3272,8 +1412,8 @@ CIQ.Shortcuts.prototype.toggle = function (value) {
 
 };
 
-let __js_addons_standard_tableView_ = (_exports) => {
 
+let __js_addons_standard_tableView_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -4244,8 +2384,8 @@ TableViewBuilder.getSeriesDataNames = function (stx) {
 
 };
 
-let __js_addons_standard_tooltip_ = (_exports) => {
 
+let __js_addons_standard_tooltip_ = (_exports) => {
 
 /* global _CIQ, _timezoneJS, _SplinePlotter */
 
@@ -4948,11 +3088,1867 @@ if (!CIQ.Marker) {
 };
 
 
-let _exports = {CIQ};
-export {__js_addons_advanced_animation_ as animation};
-export {__js_addons_advanced_continuousZoom_ as continuousZoom};
-export {__js_addons_advanced_outliers_ as outliers};
-export {__js_addons_advanced_plotComplementer_ as plotComplementer};
+let __js_addons_advanced_animation_ = (_exports) => {
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Add-On that animates the chart.
+ *
+ * Requires *addOns.js*.
+ *
+ * The chart is animated in three ways:
+ * 1.  The current price pulsates
+ * 2.  The current price appears to move smoothly from the previous price
+ * 3.  The chart's y-axis smoothly expands/contracts when a new high or low is reached
+ *
+ * The following chart types are supported: line, mountain, baseline_delta.
+ *
+ * Chart aggregations such as Kagi, Renko, Range Bars, etc. are not supported.
+ *
+ * **Animation displays more gracefully when updates are sent into the chart one at a time using {@link CIQ.ChartEngine#updateChartData}
+ * instead of in batches using a [QuoteFeed]{@link CIQ.ChartEngine#attachQuoteFeed}. Sending data in batches will produce a ‘jumping’ effect.**
+ *
+ * By default, there will be a flashing beacon created using a canvas circle. If instead you want to use a custom animation beacon, you will be able to extend the functionality yourself as follows:
+ * - In js/addOns.js, at the bottom of the CIQ.Animation function, there is an stx.append("draw") function.
+ * - Make a copy of this function so you can override the behavior.
+ * - In there you will see it determine var x and y, which are the coordinates for the center of the beacon.
+ * - At the bottom of this append function, we draw the beacon by using the Canvas arc() function to draw a circle and then fill() to make the circle solid.
+ * - You can replace  the canvas circle with an image using [CanvasRenderingContext2D.drawImage()](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D#Drawing_images) .
+ * - Example:
+ *
+ *   ```
+ *   var image = document.getElementById('beacon'); // include a hidden image on your HTML
+ *   context.drawImage(image, x-10, y-10, 20, 20); // add the image on the canvas. Offset the x and y values by the radius of the beacon.
+ *   ```
+ *
+ * Animation Example <iframe width="800" height="500" scrolling="no" seamless="seamless" align="top" style="float:top" src="https://jsfiddle.net/chartiq/6fqw652z/embedded/result,js,html/" allowfullscreen="allowfullscreen" frameborder="1"></iframe>
+ *
+ * You can disable animation after each different [chart type is activated]{@link CIQ.ChartEngine#setChartType} by calling:
+ * ```
+ * stxx.mainSeriesRenderer.supportsAnimation=false;
+ * ```
+ * Keep in mind that changing to a different chart type, may once again enable animation. You can override this by [adding an event listener]{@link CIQ.ChartEngine#addEventListener} on [layout changes]{@link CIQ.ChartEngine~layoutEventListener}.
+ *
+ * @param {object} config The constructor parameters
+ * @param {CIQ.ChartEngine} config.stx The chart object
+ * @param {object} [config.animationParameters] Configuration parameters
+ * @param {boolean} [config.animationParameters.stayPut=false] Set to true for last tick to stay in position it was scrolled and have rest of the chart move backwards as new ticks are added instead of having new ticks advance forward and leave the rest of the chart in place.
+ * @param {number} [config.animationParameters.ticksFromEdgeOfScreen=5] Number of ticks from the right edge the chart should stop moving forward so the last tick never goes off screen (only applicable if stayPut=false)
+ * @param {number} [config.animationParameters.granularity=1000000] Set to a value that will give enough granularity for the animation.  The larger the number the smaller the price jump between frames, which is good for charts that need a very slow smooth animation either because the price jumps between ticks are very small, or because the animation was set up to run over a large number of frames when instantiating the CIQ.EaseMachine.
+ * @param {number} [config.animationParameters.tension=null] Splining tension for smooth curves around data points (range 0-1).
+ * @param {CIQ.EaseMachine} config.easeMachine Override the default easeMachine.  Default is `new CIQ.EaseMachine(Math.easeOutCubic, 1000);`
+ * @constructor
+ * @name  CIQ.Animation
+ * @since
+ * - 3.0.0 Now part of *addOns.js*. Previously provided as a standalone *animation.js* file.
+ * - 4.0.0 Beacon only flashes for line charts. On candles or bars, it is suppressed as it produces an unnatural effect.
+ * - 7.0.2 Now takes one configuration object as its constructor. Must have a reference to a chart engine.
+ * @example
+ * 	new CIQ.Animation({stx: stxx, animationParameters: {tension:0.3}});  //Default animation with splining tension of 0.3
+ *
+ */
+CIQ.Animation =
+	CIQ.Animation ||
+	function (config) {
+		if (!config) throw new Error("Invalid constructor arguments.");
+		var stx, animationParameters, easeMachine;
+		if (config instanceof CIQ.ChartEngine) {
+			// legacy constructor
+			stx = arguments[0];
+			animationParameters = arguments[1];
+			easeMachine = arguments[2];
+		} else {
+			stx = config.stx;
+			animationParameters = config.animationParameters;
+			easeMachine = config.easeMachine;
+		}
+		if (!stx)
+			return console.warn(
+				"No CIQ.ChartEngine provided. Cannot properly create CIQ.Animation instance"
+			);
+		var params = {
+			stayPut: false,
+			ticksFromEdgeOfScreen: 5,
+			granularity: 1000000
+		};
+		animationParameters = CIQ.extend(params, animationParameters);
+
+		if (params.tension) stx.chart.tension = animationParameters.tension;
+		stx.tickAnimator =
+			easeMachine || new CIQ.EaseMachine(Math.easeOutCubic, 1000);
+		var scrollAnimator = new CIQ.EaseMachine(Math.easeInOutCubic, 1000);
+
+		var flashingColors = ["#0298d3", "#19bcfc", "#5dcffc", "#9ee3ff"];
+		var flashingColorIndex = 0;
+		var flashingColorThrottle = 20;
+		var flashingColorThrottleCounter = 0;
+
+		var filterSession = false;
+		var nextBoundary = null;
+
+		function initMarketSessionFlags() {
+			filterSession = false;
+			nextBoundary = null;
+		}
+
+		stx.addEventListener(["symbolChange", "layout"], function (obj) {
+			initMarketSessionFlags();
+		});
+
+		stx.prepend("updateCurrentMarketData", function (
+			data,
+			chart,
+			symbol,
+			params
+		) {
+			if (!chart) chart = this.chart;
+			if (
+				params &&
+				params.fromTrade &&
+				(chart.closePendingAnimation || chart.closePendingAnimation === 0)
+			) {
+				params.finalClose = chart.closePendingAnimation;
+			}
+		});
+
+		stx.prepend("updateChartData", function (appendQuotes, chart, params) {
+			var self = this;
+			if (!chart) {
+				chart = self.chart;
+			}
+			if (
+				!chart ||
+				!chart.defaultChartStyleConfig ||
+				chart.defaultChartStyleConfig == "none"
+			)
+				return;
+
+			if (params !== undefined) {
+				if (params.animationEntry || params.secondarySeries) return;
+			}
+
+			if (!chart.dataSegment) return;
+
+			function completeLastBar(record) {
+				if (!chart.masterData) return;
+				for (var md = chart.masterData.length - 1; md >= 0; md--) {
+					var bar = chart.masterData[md];
+					if (bar.Close || bar.Close === 0) {
+						bar.Close = record.Close;
+						if (record.LastSize) bar.LastSize = record.LastSize;
+						if (record.LastTime) bar.LastTime = record.LastTime;
+						self.updateCurrentMarketData({
+							Close: bar.Close,
+							DT: bar.DT,
+							LastSize: bar.LastSize,
+							LastTime: bar.LastTime
+						});
+						self.createDataSet(null, null, { appending: true });
+						return;
+					}
+				}
+			}
+			function unanimateScroll() {
+				if (chart.animatingHorizontalScroll) {
+					chart.animatingHorizontalScroll = false;
+					self.micropixels = self.nextMicroPixels = self.previousMicroPixels; // <-- Reset self.nextMicroPixels here
+					chart.lastTickOffset = 0;
+				}
+				if (chart.closePendingAnimation !== null) {
+					var close = chart.closePendingAnimation;
+					chart.closePendingAnimation = null;
+					completeLastBar({ Close: close });
+				}
+			}
+			var tickAnimator = self.tickAnimator;
+			// These chart types are the only types supported by animation
+			var supportedChartType =
+				this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
+			if (supportedChartType) {
+				if (!tickAnimator) {
+					console.warn(
+						"Animation plug-in can not run because the tickAnimator has not been declared. See instructions in animation.js"
+					);
+					return;
+				}
+
+				// If symbol changes then reset all of our variables
+				if (this.prevSymbol != chart.symbol) {
+					this.prevQuote = 0;
+					chart.closePendingAnimation = null;
+					this.prevSymbol = chart.symbol;
+				}
+				unanimateScroll();
+				tickAnimator.stop();
+				if (appendQuotes.length > 2) {
+					return;
+				}
+			}
+			var newParams = CIQ.clone(params);
+			if (!newParams) newParams = {};
+			newParams.animationEntry = true;
+			newParams.bypassGovernor = true;
+			newParams.noCreateDataSet = false;
+			newParams.appending = true;
+			//newParams.allowReplaceOHL = true;
+			newParams.firstLoop = true;
+			var symbol = this.chart.symbol;
+			var period = this.layout.periodicity;
+			var interval = this.layout.interval;
+			var timeUnit = this.layout.timeUnit;
+
+			function cb(quote, prevQuote, chartJustAdvanced) {
+				return function (newData) {
+					var newClose = newData.Close;
+					if (
+						!chart.dataSet.length ||
+						symbol != chart.symbol ||
+						period != self.layout.periodicity ||
+						interval != self.layout.interval ||
+						timeUnit != self.layout.timeUnit
+					) {
+						//console.log ("---- STOP animating: Old",symbol,' New : ',chart.symbol, Date())
+						tickAnimator.stop();
+						unanimateScroll();
+						return; // changed symbols mid animation
+					}
+					var q = CIQ.clone(quote);
+					q.Adj_Close = null; // Don't use this, it will mess up our calculated close
+					q.Close =
+						Math.round(newClose * animationParameters.granularity) /
+						animationParameters.granularity; //<<------ IMPORTANT! Use 1000000 for small price increments, otherwise animation will be in increments of .0001
+					//q.Close = Math.round(newClose*chart.roundit)/chart.roundit; // to ensure decimal points don't go out too far for interim values
+					if (chartJustAdvanced) {
+						if (!q.Open && q.Open !== 0) q.Open = q.Close;
+						if (!q.High && q.High !== 0) q.High = Math.max(q.Open, q.Close);
+						if (!q.Low && q.Low !== 0) q.Low = Math.min(q.Open, q.Close);
+					} else {
+						if (quote.Close > prevQuote.High) q.High = q.Close;
+						if (quote.Close < prevQuote.Low) q.Low = q.Close;
+					}
+					if (chart.animatingHorizontalScroll) {
+						self.micropixels = newData.micropixels;
+						chart.lastTickOffset = newData.lineOffset;
+					}
+					newParams.updateDataSegmentInPlace = !tickAnimator.hasCompleted;
+					//console.log("animating: Old",symbol,' New : ',chart.symbol);
+					var updateQuotes = [q];
+					// Don't include previous quote if tick mode. It will append, duplicating the quote
+					if (chartJustAdvanced && self.layout.interval !== "tick")
+						updateQuotes.unshift(prevQuote);
+					self.updateChartData(updateQuotes, chart, newParams);
+					newParams.firstLoop = false;
+					if (tickAnimator.hasCompleted) {
+						//console.log( 'animator has completed') ;
+						//self.pendingScrollAdvance=false;
+						//var possibleYAxisChange = chart.animatingHorizontalScroll;
+						unanimateScroll();
+						/*if (possibleYAxisChange) { // <---- Logic no longer necessary
+						 // After completion, one more draw for good measure in case our
+						 // displayed high and low have changed, which would trigger
+						 // the y-axis animation
+						 setTimeout(function(){
+						 self.draw();
+						 }, 0);
+						 }*/
+					}
+				};
+			}
+			if (supportedChartType) {
+				var quote = appendQuotes[appendQuotes.length - 1];
+				this.prevQuote = this.currentQuote(); // <---- prevQuote logic has been changed to prevent forward/back jitter when more than one tick comes in between animations
+				var chartJustAdvanced = false; // When advancing, we need special logic to deal with the open
+				var dontScroll = false;
+				if (period == 1 && appendQuotes.length == 2) {
+					// Don't do this if consolidating
+					this.prevQuote = appendQuotes[0];
+					var dataSetLength = chart.dataSet.length;
+					completeLastBar(this.prevQuote);
+					if (dataSetLength == chart.dataSet.length) dontScroll = true;
+				}
+				if (!quote || !quote.Close || !this.prevQuote || !this.prevQuote.Close)
+					return false;
+
+				if (this.extendedHours && chart.market.market_def) {
+					// Filter out unwanted sessions
+					var dtToFilter = quote.DT;
+					if (CIQ.ChartEngine.isDailyInterval(interval)) {
+						filterSession = !chart.market.isMarketDate(dtToFilter);
+					} else {
+						if (!nextBoundary || nextBoundary <= dtToFilter) {
+							var session = chart.market.getSession(dtToFilter);
+							filterSession =
+								session !== "" &&
+								(!this.layout.marketSessions ||
+									!this.layout.marketSessions[session]);
+							nextBoundary = chart.market[
+								filterSession ? "getNextOpen" : "getNextClose"
+							](dtToFilter);
+						}
+					}
+					if (filterSession) {
+						this.draw();
+						return false;
+					}
+				}
+
+				var barSpan = period;
+				if (interval == "second" || timeUnit == "second") barSpan *= 1000;
+				else if (interval == "minute" || timeUnit == "minute") barSpan *= 60000;
+				if (!isNaN(interval)) barSpan *= interval;
+				if (interval == "day" || timeUnit == "day")
+					chartJustAdvanced = quote.DT.getDate() != this.prevQuote.DT.getDate();
+				else if (interval == "week" || timeUnit == "week")
+					chartJustAdvanced =
+						quote.DT.getDate() >= this.prevQuote.DT.getDate() + 7;
+				else if (interval == "month" || timeUnit == "month")
+					chartJustAdvanced =
+						quote.DT.getMonth() != this.prevQuote.DT.getMonth();
+				else
+					chartJustAdvanced =
+						quote.DT.getTime() >= this.prevQuote.DT.getTime() + barSpan;
+
+				var linearChart =
+					!this.mainSeriesRenderer || !this.mainSeriesRenderer.standaloneBars;
+
+				var beginningOffset = 0;
+				if (chartJustAdvanced) {
+					if (this.animations.zoom.hasCompleted) {
+						var candleWidth = this.layout.candleWidth;
+						if (chart.scroll <= chart.maxTicks) {
+							while (this.micropixels > 0) {
+								// If micropixels is larger than a candle then scroll back further
+								chart.scroll++;
+								this.micropixels -= candleWidth;
+							}
+						}
+						if (chart.scroll <= chart.maxTicks) {
+							this.previousMicroPixels = this.micropixels;
+							this.nextMicroPixels = this.micropixels + candleWidth;
+							beginningOffset = candleWidth * -1;
+							if (
+								chart.dataSegment.length <
+									chart.maxTicks - animationParameters.ticksFromEdgeOfScreen &&
+								!animationParameters.stayPut
+							) {
+								this.nextMicroPixels = this.micropixels;
+								chart.scroll++;
+							}
+							chart.animatingHorizontalScroll = linearChart; // When the chart advances we also animate the horizontal scroll by incrementing micropixels
+							chart.previousDataSetLength = chart.dataSet.length;
+						} else {
+							if (!dontScroll) chart.scroll++;
+						}
+					} else {
+						return false;
+					}
+				}
+				chart.closePendingAnimation = quote.Close;
+				var start =
+					chartJustAdvanced && !linearChart ? quote.Open : this.prevQuote.Close;
+				tickAnimator.run(
+					cb(quote, CIQ.clone(this.prevQuote), chartJustAdvanced),
+					{
+						Close: start,
+						micropixels: this.nextMicroPixels,
+						lineOffset: beginningOffset
+					},
+					{ Close: quote.Close, micropixels: this.micropixels, lineOffset: 0 }
+				);
+				return true; // bypass default behavior in favor of animation
+			}
+		});
+
+		stx.prepend("renderYAxis", function (chart) {
+			if (this.grabbingScreen || !this.isHome()) return;
+			// When display style doesn't support animation
+			var supportedChartType =
+				this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
+			if (!supportedChartType) return;
+
+			var panel = chart.panel;
+			var yAxis = panel.yAxis;
+			if (CIQ.Comparison && yAxis.priceFormatter == CIQ.Comparison.priceFormat)
+				return; // too difficult to animate y-axis change when it changes on every tick due to percentage axis on comparison
+
+			function closure(self) {
+				return function (values) {
+					chart.animatedLow = values.low;
+					chart.animatedHigh = values.high;
+					self.draw();
+				};
+			}
+			// initialize prev values
+			if (!chart.prevLowValue && chart.prevLowValue !== 0) {
+				chart.prevLowValue = chart.animatedLow = chart.lowValue;
+			}
+			if (!chart.prevHighValue && chart.prevHighValue !== 0) {
+				chart.prevHighValue = chart.animatedHigh = chart.highValue;
+			}
+
+			// check for a change, if so we will spin off an animation
+			if (!scrollAnimator.running) chart.animatingVerticalScroll = false;
+			if (
+				chart.prevLowValue >= chart.lowValue &&
+				chart.prevHighValue <= chart.highValue
+			) {
+				if (chart.animatingVerticalScroll) {
+					yAxis.highValue = chart.animatedHigh;
+					yAxis.lowValue = chart.animatedLow;
+				}
+				return;
+			}
+			if (scrollAnimator.running) scrollAnimator.stop();
+			if (!chart.lowValue && !chart.highValue) return; // chart just reset, don't animate yet
+			var prevLow = chart.prevLowValue,
+				prevHigh = chart.prevHighValue;
+			chart.prevLowValue = chart.lowValue;
+			chart.prevHighValue = chart.highValue;
+			chart.animatingVerticalScroll = true;
+			scrollAnimator.run(
+				closure(this),
+				{ low: prevLow, high: prevHigh },
+				{ low: chart.lowValue, high: chart.highValue }
+			);
+
+			yAxis.lowValue = chart.animatedLow;
+			yAxis.highValue = chart.animatedHigh;
+		});
+
+		/*stx.prepend("draw", function() {
+			if(this.chart.animatingVerticalScroll) {
+				this.renderYAxis(this.chart);
+				return true;
+			}
+		});*/
+
+		stx.append("draw", function () {
+			if (filterSession) return;
+			if (
+				this.chart.dataSet &&
+				this.chart.dataSet.length &&
+				this.mainSeriesRenderer &&
+				this.mainSeriesRenderer.supportsAnimation
+			) {
+				if (flashingColorThrottleCounter % flashingColorThrottle === 0) {
+					flashingColorIndex++;
+					flashingColorThrottleCounter = 0;
+				}
+				flashingColorThrottleCounter++;
+
+				var context = this.chart.context;
+				var panel = this.chart.panel;
+				var currentQuote = this.currentQuote();
+				if (!currentQuote) return;
+				var price = currentQuote.Close;
+				var x = this.pixelFromTick(currentQuote.tick, this.chart);
+				if (this.chart.lastTickOffset) x = x + this.chart.lastTickOffset;
+				var y = this.pixelFromPrice(price, panel);
+				if (
+					this.chart.yAxis.left > x &&
+					this.chart.yAxis.top <= y &&
+					this.chart.yAxis.bottom >= y
+				) {
+					if (flashingColorIndex >= flashingColors.length)
+						flashingColorIndex = 0;
+					context.beginPath();
+					context.moveTo(x, y);
+					context.arc(
+						x,
+						y,
+						2 + flashingColorIndex * 1.07,
+						0,
+						Math.PI * 2,
+						false
+					);
+					context.fillStyle = flashingColors[flashingColorIndex];
+					context.fill();
+				}
+			}
+		});
+	};
+
+/**
+ * CIQ.EaseMachine interface placeholder to be augmented in *standard.js* with properties.
+ *
+ * @tsinterface CIQ~EaseMachine
+ */
+
+};
+
+
+let __js_addons_advanced_continuousZoom_ = (_exports) => {
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Add-on that responds to the chart zoom action, changing periodicities as the number of ticks and/or candle width
+ * hits a set boundary.
+ *
+ * Although this feature is available for all chart styles, it shows best on continuous renderings
+ * such as lines and mountains vs. candles and bars. This is because some users may find the
+ * changes in candle width that take place as the same range is displayed in a different
+ * periodicity, inappropriate. The effect can be mitigated by increasing the number of boundaries
+ * so periodicities change more often, preventing large candle width changes, and by using the
+ * periodicity roll up feature instead of fetching new data from a quote feed. See examples.
+ *
+ * See {@link CIQ.ChartEngine#setPeriodicity} and {@link CIQ.ChartEngine#createDataSet}
+ *
+ * Requires *addOns.js*.
+ *
+ * The feature will not work without supplying at least one element within the periodicities array
+ * and at least one property within the boundaries object.
+ *
+ * @param {object} params Configuration parameters.
+ * @param {CIQ.ChartEngine} params.stx The chart object.
+ * @param {array} params.periodicities Set this array with eligible periodicities in any order.
+ * 		These will be the periodicities which will be used by the continuous zooming once a
+ * 		boundary is hit. The periodicities are objects with `period`, `interval`, and optional
+ * 		`timeUnit` properties (see {@link CIQ.ChartEngine#setPeriodicity}).
+ * @param {object} params.boundaries Optional boundary cases to trigger the periodicity change.
+ * 		Hitting a maximum boundary switches to the next larger periodicity; hitting a minimum
+ * 		boundary switches to the next smaller periodicity.
+ * @param {number} [params.boundaries.maxCandleWidth] Largest size of candle in pixels to display
+ * 		before switching periodicity.
+ * @param {number} [params.boundaries.minCandleWidth] Smallest size of candle in pixels to display
+ * 		before switching periodicity.
+ * @param {number} [params.boundaries.maxTicks] Most number of ticks to display before switching
+ * 		periodicity.
+ * @param {number} [params.boundaries.minTicks] Least number of ticks to display before switching
+ * 		periodicity.
+ *
+ * @constructor
+ * @name CIQ.ContinuousZoom
+ * @since 7.0.0
+ *
+ * @example
+ * new CIQ.ContinuousZoom({
+ *     stx: stxx,
+ *     periodicities: [
+ *         { period:1, interval:"month" },
+ *         { period:1, interval:"day" },
+ *         { period:2, interval:30 },
+ *         { period:1, interval:5 },
+ *         { period:15, interval:1, timeUnit:"second" },
+ *         { period:1, interval:1, timeUnit:"second" }
+ *     ],
+ *     boundaries: {
+ *         maxCandleWidth: 100,
+ *         minCandleWidth: 3,
+ *         maxTicks: 500,
+ *         minTicks: 10
+ *     }
+ * });
+ *
+ * @example
+ * // Smother periodicity change by rolling daily into weekly and monthly.
+ * // Also try reusing the same interval data and have the chart roll it instead of fetching new data.
+ * stxx.dontRoll = false;
+ * new CIQ.ContinuousZoom({
+ *     stx: stxx,
+ *     periodicities: [
+ *         // Daily interval data
+ *         {period:1, interval:"month"},
+ *         {period:2, interval:"week"},
+ *         {period:1, interval:"week"},
+ *         {period:3, interval:"day"},
+ *         {period:1, interval:"day"},
+ *         // 30 minute interval data
+ *         {period:16, interval:30},
+ *         {period:8, interval:30},
+ *         {period:4, interval:30},
+ *         {period:2, interval:30},
+ *         // one minute interval data
+ *         {period:30, interval:1},
+ *         {period:15, interval:1},
+ *         {period:10, interval:1},
+ *         {period:5, interval:1},
+ *         {period:2, interval:1},
+ *         {period:1, interval:1},
+ *         // One second interval data
+ *         {period:30,interval:1, timeUnit:"second"},
+ *         {period:15,interval:1, timeUnit:"second"},
+ *         {period:5, interval:1, timeUnit:"second"},
+ *         {period:2, interval:1, timeUnit:"second"},
+ *         {period:1, interval:1, timeUnit:"second"},
+ *     ],
+ *     boundaries: {
+ *         maxCandleWidth: 15,
+ *         minCandleWidth: 3
+ *    }
+ * });
+ */
+CIQ.ContinuousZoom =
+	CIQ.ContinuousZoom ||
+	function (params) {
+		this.cssRequired = true;
+		this.update(params);
+		this.stx.continuousZoom = this;
+
+		//Attaches SmartZoom button to HTML DOM inside .chartSize element
+		this.addSmartZoomButton = function () {
+			// Don't add a button if one already exists
+			var smartZoomButton =
+				this.stx.registerChartControl &&
+				this.stx.registerChartControl(
+					"stx-smart-zoom",
+					"SmartZoom (Alt + 0)",
+					(function (self) {
+						return function (e) {
+							self.smartZoomToggle(e);
+							e.stopPropagation();
+						};
+					})(this)
+				);
+			if (smartZoomButton) {
+				// Listen for a layout changed event and refresh the toggle state of the button
+				this.stx.addEventListener("layout", function (event) {
+					if (event.stx.layout.smartzoom === true) {
+						smartZoomButton.classList.add("active");
+					} else {
+						smartZoomButton.classList.remove("active");
+					}
+				});
+				// Piggyback off of symbolImport event to detect smartzoom set to false from layout import
+				this.stx.addEventListener("symbolImport", function (event) {
+					if (event.stx.layout.smartzoom === false)
+						smartZoomButton.classList.remove("active");
+				});
+			}
+		};
+
+		//Click event handler for the Smart Zoom button. Sets smartzoom property of layout to its inverse
+		this.smartZoomToggle = function (e) {
+			this.smartZoomEnable(!this.stx.layout.smartzoom);
+		};
+
+		//Sets smartzoom property of layout and notifies attached ChartEngine of change
+		this.smartZoomEnable = function (state) {
+			this.stx.layout.smartzoom = state;
+			this.stx.changeOccurred("layout");
+		};
+
+		// Add the SmartZoom button to chartControls
+		this.addSmartZoomButton();
+		// Enable SmartZoom by default
+		this.smartZoomEnable(true);
+	};
+
+/**
+ * Updates continuous zoom parameters
+ * @param  {object} params Configuration parameters.  See constructor for details
+ * @memberof CIQ.ContinuousZoom
+ * @since 7.0.0
+ * @private
+ */
+CIQ.ContinuousZoom.prototype.update = function (params) {
+	if (!params) params = {};
+	this.stx = params.stx;
+	this.periodicities = params.periodicities;
+	this.boundaries = params.boundaries;
+};
+
+/**
+ * Potentially performs a continuous zoom after a zoom event
+ * @param  {boolean} [zoomOut] True for a zoomOut operation, otherwise zoomIn
+ * @memberof CIQ.ContinuousZoom
+ * @since 7.0.0
+ * @private
+ */
+CIQ.ContinuousZoom.prototype.execute = function (zoomOut) {
+	// assign a weight to a periodicity setting, the higher the length, the higher the weight
+	function valuate(periodicity) {
+		var period = periodicity.period || periodicity.periodicity,
+			interval = periodicity.interval,
+			timeUnit = periodicity.timeUnit || "minute";
+		if (isNaN(interval)) {
+			timeUnit = interval;
+			interval = 1;
+		}
+		switch (timeUnit) {
+			case "month":
+				interval *= 4.35; /* falls through */
+			case "week":
+				interval *= 7; /* falls through */
+			case "day":
+				interval *= 1440; /* falls through */
+			case "minute":
+				interval *= 60; /* falls through */
+			case "second":
+				break;
+			case "millisecond":
+				interval /= 1000;
+				break;
+			default:
+				return null;
+		}
+		return period * interval;
+	}
+	if (!this.stx || !this.stx.layout.smartzoom) return;
+	var periodicities = this.periodicities,
+		boundaries = this.boundaries,
+		stx = this.stx,
+		layout = stx.layout,
+		chart = stx.chart;
+	if (!periodicities || !boundaries) return;
+
+	if (
+		(!zoomOut &&
+			boundaries.maxCandleWidth &&
+			layout.candleWidth > boundaries.maxCandleWidth) ||
+		(zoomOut &&
+			boundaries.minCandleWidth &&
+			layout.candleWidth < boundaries.minCandleWidth) ||
+		(!zoomOut && boundaries.minTicks && chart.maxTicks < boundaries.minTicks) ||
+		(zoomOut && boundaries.maxTicks && chart.maxTicks > boundaries.maxTicks)
+	) {
+		var next = { value: zoomOut ? Number.MAX_VALUE : 0 };
+		var myValue = valuate(layout);
+		for (var p = 0; p < periodicities.length; p++) {
+			var value = valuate(periodicities[p]);
+			if (
+				(value > myValue && value < next.value && zoomOut) ||
+				(value < myValue && value > next.value && !zoomOut)
+			) {
+				next = { value: value, periodicity: periodicities[p] };
+			}
+		}
+		var newPeriodicity = next.periodicity;
+		if (newPeriodicity) {
+			stx.setRange({
+				dtLeft: chart.xaxis[0].DT,
+				dtRight: chart.xaxis[chart.xaxis.length - 1].DT,
+				dontSaveRangeToLayout: true,
+				periodicity: newPeriodicity
+			});
+		}
+	}
+};
+
+};
+
+
+let __js_addons_advanced_outliers_ = (_exports) => {
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Creates the outliers add-on which scales the y-axis to the main trend, hiding outlier
+ * values. Markers are placed at the location of the outlier values enabling the user to
+ * restore the full extent of the y-axis by selecting the markers.
+ *
+ * Requires *addOns.js*.
+ *
+ * ![Chart with hidden outliers](./img-Chart-with-Hidden-Outliers.png "Chart with hidden outliers")
+ *
+ * @param {object} params Configuration parameters.
+ * @param {CIQ.ChartEngine} [params.stx] A reference to the chart object.
+ * @param {number} [params.multiplier=3] Sets the threshold for outliers by multiplying the
+ * 		normal data range. The default value hides only extreme outliers.
+ * @param {Array} [params.altColors] An array of hexadecimal color values used to style
+ * 		outlier markers when multiple y-axes share the same panel. Markers for the first
+ * 		additional y-axis are styled with the value at index 0; markers for the second
+ * 		additional y-axis, the value at index 1; and so forth. If not provided, a default
+ * 		array of colors is assigned.
+ * @param {string} [params.menuContextClass] A CSS class name used to query the menu DOM element
+ * 		that contains the UI control for the outliers add-on. In a multi-chart document, the
+ * 		add-on is available only on charts that have a menu DOM element with the value for
+ * 		`menuContextClass` as a class attribute.
+ *
+ * @constructor
+ * @name CIQ.Outliers
+ * @since
+ * - 7.5.0
+ * - 8.0.0 Added `params.altColors` and `params.menuContextClass`.
+ *
+ * @example
+ * new CIQ.Outliers({ stx: stxx });
+ */
+CIQ.Outliers =
+	CIQ.Outliers ||
+	function (params) {
+		if (!params) params = {};
+		if (!params.stx) {
+			console.warn("The Outliers addon requires an stx parameter");
+			return;
+		}
+		// Set default marker colors
+		if (!Array.isArray(params.altColors)) {
+			params.altColors = [
+				"#323390",
+				"#66308f",
+				"#0073ba",
+				"#f4932f",
+				"#0056a4",
+				"#00a99c",
+				"#00a553",
+				"#ea1d2c",
+				"#e9088c",
+				"#fff126",
+				"#912a8e",
+				"#ee652e",
+				"#00afed",
+				"#8ec648"
+			];
+		}
+		this.stx = params.stx;
+		this.stx.outliers = this;
+		this.cssRequired = true;
+
+		this.multiplier = params.multiplier || 3; // Default to 3 for extreme outliers
+		this.altColors = params.altColors;
+
+		this.axisData = {};
+
+		// Listen for a layout changed event and reset the markers
+		this.stx.addEventListener("layout", function (event) {
+			Object.keys(event.stx.outliers.axisData).forEach(
+				function (key) {
+					this.removeAllMarkers(this.axisData[key]);
+					delete this.axisData[key];
+				}.bind(event.stx.outliers)
+			);
+		});
+
+		/**
+		 * Checks for outlier values in `dataSet`, and adds outlier markers (data point markers
+		 * and axis markers) to `axis`.
+		 *
+		 * @param {Array} dataSet An array of objects of the form `{value: Number, quote: Object}`.
+		 * 		Each object contains a value and its associated quote. The value is checked to
+		 * 		determine whether it is an outlier of the data set. When checking more than one
+		 * 		value for a quote (such as an OHLC quote), each value is included in a separate
+		 * 		object; for example, `[{value: open, quote: quote}, {value: high, quote: quote},
+		 * 		{value: low, quote: quote}, {value: close, quote: quote}...]`.
+		 * @param {object} panel The panel where `dataSet` is rendered.
+		 * @param {object} axis The y-axis against which `dataSet` is rendered. **Note:** Charts
+		 * 		and panels can have multiple y-axes; each y-axis has its own set of outlier
+		 * 		markers based on the data rendered on the axis.
+		 * @return {Array} A tuple consisting of the outlier minimum and maximum &mdash; or trend
+		 * 		minimum and maximum, if no outliers are found &mdash; to be handled by the
+		 * 		{@link CIQ.ChartEngine#determineMinMax} method. See the return value of the
+		 * 		[find]{@link CIQ.Outliers#find} function for a description of outlier and trend
+		 * 		minimum and maximum.
+		 *
+		 * @alias processDataSet
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 8.0.0
+		 */
+		this.processDataSet = function (dataSet, panel, axis) {
+			if (!dataSet.length || dataSet.length <= 1) return false;
+
+			var result = [0, 0]; // Min/Max axis values to return
+
+			// Create an axis reference if one does not exist
+			if (!this.axisData[axis.name]) {
+				var markerColor = "";
+				var axisDepth = -1;
+				// Check for another axis using this panel
+				Object.keys(this.axisData).forEach(
+					function (key) {
+						if (this.axisData[key].panel.name == panel.name) {
+							axisDepth++;
+						}
+					}.bind(this)
+				);
+				if (axisDepth > -1 && axisDepth < this.altColors.length)
+					markerColor = this.altColors[axisDepth];
+
+				this.axisData[axis.name] = {
+					axis: axis,
+					panel: panel,
+					displayState: "none",
+					isFlipped: false,
+					originalZoom: axis.zoom,
+					markerColor: markerColor,
+					markers: {},
+					axisMarkers: {}
+				};
+			}
+
+			var currentAxis = this.axisData[axis.name];
+			// Attach the min/max values to the current axis data
+			Object.assign(currentAxis, this.find(dataSet));
+
+			// Update/add necessary markers
+			this.refreshMarkerArray(currentAxis);
+
+			// Update marker display and labels
+			this.refreshMarkers(currentAxis);
+
+			// Return either trendMin or outlierMin based on the axis displayState
+			if (
+				(currentAxis.displayState === "low" ||
+					currentAxis.displayState === "all") &&
+				currentAxis.outlierMin !== null
+			)
+				result[0] = currentAxis.outlierMin;
+			else result[0] = currentAxis.trendMin;
+			// Return either trendMax or outlierMax based on the axis displayState
+			if (
+				(currentAxis.displayState === "high" ||
+					currentAxis.displayState === "all") &&
+				currentAxis.outlierMax !== null
+			)
+				result[1] = currentAxis.outlierMax;
+			else result[1] = currentAxis.trendMax;
+
+			return result;
+		};
+
+		/**
+		 * Finds the outliers contained in `dataSet`.
+		 *
+		 * **Note:** This function may be overridden to provide a custom algorithm for finding
+		 * outliers.
+		 *
+		 * @param {Array} dataSet An array of objects of the form `{value: Number, quote: Object}`.
+		 * 		Each object contains a value and its associated quote. The value is checked to
+		 * 		determine whether it is an outlier of the data set. When checking more than one
+		 * 		value for a quote (such as an OHLC quote), each value is included in a separate
+		 * 		object; for example, `[{value: open, quote: quote}, {value: high, quote: quote},
+		 * 		{value: low, quote: quote}, {value: close, quote: quote}...]`.
+		 * @return {object} An object of the form:
+		 * ```
+		 * {
+		 * 	// Minimum and maximum threshold values of dataSet to be considered an outlier.
+		 * 	minValue: null,
+		 * 	maxValue: null,
+		 * 	// Mininum and maximum values of dataSet that are not considered outliers.
+		 * 	// Will be the least and greatest values in dataSet if no outliers are found.
+		 * 	trendMin: null,
+		 * 	trendMax: null,
+		 * 	// Minimum and maximum values of dataSet that are considered outliers.
+		 * 	// Will remain null if no outliers are found.
+		 * 	outlierMin: null,
+		 * 	outlierMax: null,
+		 * 	// Array of individual outlier information for marker placement, in the format {DT:DateTime, value:Number, position:String}
+		 * 	// (position is either 'high' or 'low').
+		 * 	activeOutliers: []
+		 * }
+		 * ```
+		 *
+		 * @alias find
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added return value.
+		 */
+		this.find = function (dataSet) {
+			if (!dataSet.length || dataSet.length <= 0) return;
+
+			var createMarkerPlaceholder = function (data, position) {
+				return {
+					quote: data.quote,
+					DT: data.quote.DT,
+					value: data.value,
+					position: position
+				};
+			};
+
+			// The minimum and maximum threshold values to be considered an outlier.
+			var minValue = null;
+			var maxValue = null;
+			// min/max values of available data that are not considered outliers. Will be the least and greatest values in the available data if no outliers are found.
+			var trendMin = null;
+			var trendMax = null;
+			// min/max values of available data that are considered outliers. Will remain null if no outlier is found.
+			var outlierMin = null;
+			var outlierMax = null;
+			// Array of outlier information in the format
+			// {DT:DateTime, value:Number, position:String}
+			var activeOutliers = [];
+
+			var dataSorted = dataSet.slice();
+			dataSorted.sort(function (a, b) {
+				return a.value - b.value;
+			});
+			var dataLength = dataSorted.length;
+
+			// Outlier threshold values are defined as more than the interquartile range above the third quartile
+			// or below the first quartile, of the sorted dataSet, multiplied by the value of the
+			// stxx.outlierMultiplier property.
+			var q1 = dataSorted[Math.floor(dataLength / 4)].value;
+			var q3 = dataSorted[Math.floor(dataLength * (3 / 4))].value;
+			var iqr = q3 - q1;
+
+			minValue = q1 - iqr * this.multiplier;
+			maxValue = q3 + iqr * this.multiplier;
+
+			// Loop through the sorted data and find the outliers as well as the trend min/max
+			for (var idx = 0; idx < dataLength; idx++) {
+				// Attack the array from both ends
+				var dataLow = dataSorted[idx];
+				var dataHigh = dataSorted[dataLength - (idx + 1)];
+
+				// Find and mark outliers. Existing merkers will be refreshed in setMarker.
+				if (dataLow.value <= minValue)
+					activeOutliers.push(createMarkerPlaceholder(dataLow, "low"));
+				if (dataHigh.value >= maxValue)
+					activeOutliers.push(createMarkerPlaceholder(dataHigh, "high"));
+
+				// Find the first low value that's less than or equal to outlier threshold min
+				if (outlierMin === null && dataLow.value <= minValue)
+					outlierMin = dataLow.value;
+				// Find the first high value that's greater than or equal to outlier threshold max
+				if (outlierMax === null && dataHigh.value >= maxValue)
+					outlierMax = dataHigh.value;
+
+				// Find the first low value that's greater than the outlier threshold min
+				if (trendMin === null && dataLow.value > minValue)
+					trendMin = dataLow.value;
+				// Find the first high value that's less than the outlier threshold max
+				if (trendMax === null && dataHigh.value < maxValue)
+					trendMax = dataHigh.value;
+
+				// No need to loop through the entire array. Once the trend min/max are found we're done.
+				if (trendMin !== null && trendMax !== null) break;
+			}
+
+			return {
+				minValue: minValue,
+				maxValue: maxValue,
+				trendMin: trendMin,
+				trendMax: trendMax,
+				outlierMin: outlierMin,
+				outlierMax: outlierMax,
+				activeOutliers: activeOutliers
+			};
+		};
+
+		/**
+		 * Updates the freshness status of outlier markers belonging to `targetAxis`.
+		 *
+		 * Sets the status to fresh if the markers represent data points in the `activeOutliers`
+		 * list of `targetAxis` or a marker is an axis marker for high or low outliers and high or
+		 * low outliers exist. (See the return value of the [find]{@link CIQ.Outliers#find}
+		 * function for a description of the `activeOutliers` list.)
+		 *
+		 * Adds new markers to `targetAxis` for data points in the `activeOutliers` list not
+		 * already represented by a marker (see [markOutlier]{@link CIQ.Outliers#markOutlier}).
+		 * Adds new axis markers if the data set rendered on `targetAxis` contains high or low
+		 * outliers and the respective axis marker does not exist (see
+		 * [markAxis]{@link CIQ.Outliers#markAxis}).
+		 *
+		 * Sets the status of all other markers belonging to `targetAxis` to stale, or unfresh
+		 * (these markers are ultimately removed).
+		 *
+		 * @param {object} targetAxis The y-axis for which the markers are refreshed.
+		 * 		**Note:** Charts and panels can have multiple y-axes, each with its own array of
+		 * 		outlier markers.
+		 *
+		 * @alias refreshMarkerArray
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 8.0.0
+		 */
+		this.refreshMarkerArray = function (targetAxis) {
+			this.deprecateMarkers(targetAxis); // If a marker isn't refreshed below, it will be deleted in the next call
+
+			var targetMarkers = targetAxis.markers;
+			targetAxis.activeOutliers.forEach(
+				function (outlier) {
+					var quoteTime = outlier.DT.getTime().toString();
+					// Add a quote marker if there isn't one already
+					if (!targetMarkers[quoteTime]) {
+						targetMarkers[quoteTime] = {
+							isFresh: true,
+							type: "quote",
+							value: outlier.value,
+							marker: this.markOutlier(outlier, outlier.position, targetAxis)
+						};
+					}
+					// Always refresh the status of the marker
+					targetMarkers[quoteTime].isFresh = true;
+				}.bind(this)
+			);
+			if (targetAxis.outlierMax !== null) {
+				// Add the high axis marker if there isn't one
+				if (!targetMarkers.axisHigh) {
+					targetMarkers.axisHigh = {
+						isFresh: true,
+						type: "axis",
+						value: targetAxis.outlierMax,
+						marker: this.markAxis("high", targetAxis)
+					};
+				}
+				// Always refresh the status of the marker
+				targetMarkers.axisHigh.isFresh = true;
+			}
+			if (targetAxis.outlierMin !== null) {
+				// Add the low axis marker if there isn't one
+				if (!targetMarkers.axisLow) {
+					targetMarkers.axisLow = {
+						isFresh: true,
+						type: "axis",
+						value: targetAxis.outlierMin,
+						marker: this.markAxis("low", targetAxis)
+					};
+				}
+				// Always refresh the status of the marker
+				targetMarkers.axisLow.isFresh = true;
+			}
+		};
+
+		/**
+		 * Sets the outlier display state, which determines whether to display outlier markers.
+		 *
+		 * @param {string} newState The intended display state; should be one of:
+		 * <ul>
+		 *		<li>"high" &mdash; Show high outliers; hide high outlier markers.</li>
+		 *		<li>"low" &mdash; Show low outliers; hide low outlier markers.</li>
+		 *		<li>"all" &mdash; Show high and low outliers; hide high and low outlier markers.</li>
+		 *		<li>"none" &mdash; Hide high and low outliers; show high and low outlier markers.</li>
+		 * </ul>
+		 * If none of the above is provided, "none" is assumed.
+		 * @param {object} targetAxis The y-axis on which the outlier state is set. **Note:** A
+		 * 		chart or panel can have multiple y-axes.
+		 *
+		 * @alias setDisplayState
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added `targetAxis` parameter.
+		 */
+		this.setDisplayState = function (newState, targetAxis) {
+			if (newState != "high" && newState != "low" && newState != "all")
+				newState = "none";
+
+			var displayState = newState;
+			// Set the value of displayState to show the intended state, based on its existing state. This
+			// allows the markers to toggle between states without concern for what is currently displayed.
+			// For example: if the current display state is showing low outlier only, and the intent is to
+			// now display high outliers as well, then the display state will change to 'all'.
+			// This will toggle the high/low state off as well.
+			if (targetAxis.displayState == "all" && newState == "high")
+				displayState = "low";
+			else if (targetAxis.displayState == "all" && newState == "low")
+				displayState = "high";
+			else if (targetAxis.displayState == "high" && newState == "low")
+				displayState = "all";
+			else if (targetAxis.displayState == "low" && newState == "high")
+				displayState = "all";
+			else if (targetAxis.displayState == newState) displayState = "none";
+
+			targetAxis.displayState = displayState;
+			// Reset the axis zoom state
+			targetAxis.axis.zoom = targetAxis.originalZoom;
+
+			this.refreshMarkers(targetAxis);
+			this.stx.draw();
+		};
+
+		/**
+		 * Removes all markers from `targetAxis` that are no longer fresh; that is, markers that
+		 * do not represent data points in the current data set, or axis markers that are
+		 * irrelevant because high or low outliers no longer exist. Sets the status of all
+		 * remaining outlier markers to stale, or not fresh (the freshness status should
+		 * subsequently be reevaluated).
+		 *
+		 * @param {object} targetAxis The y-axis for which the markers are deprecated. **Note:**
+		 * 		A chart or panel can have multiple y-axes; each y-axis has its own outlier
+		 * 		markers based on the data rendered on the axis.
+		 *
+		 * @alias deprecateMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added `targetAxis` parameter.
+		 */
+		this.deprecateMarkers = function (targetAxis) {
+			var removeMarker = function (marker) {
+				if (marker.marker && !marker.isFresh) {
+					if (marker.marker.remove) marker.marker.remove();
+					marker.marker = null;
+				} else {
+					marker.isFresh = false;
+				}
+			};
+
+			// Handle the outlier markers
+			Object.keys(targetAxis.markers).forEach(
+				function (key) {
+					removeMarker(this.markers[key]);
+					// Remove the marker property if its marker has been removed
+					if (!this.markers[key].marker) {
+						delete this.markers[key];
+					}
+				}.bind(targetAxis)
+			);
+		};
+
+		/**
+		 * Removes all outlier markers from `targetAxis`, including data point markers and y-axis
+		 * markers.
+		 *
+		 * @param {object} targetAxis The y-axis from which the markers are removed. **Note:**
+		 * 		Charts and panels can have multiple y-axes, each with its own outlier markers.
+		 *
+		 * @alias removeAllMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added `targetAxis` parameter.
+		 */
+		this.removeAllMarkers = function (targetAxis) {
+			Object.keys(targetAxis.markers).forEach(function (key) {
+				var targetMarker = targetAxis.markers[key].marker;
+				if (targetMarker) {
+					if (targetMarker.remove) targetMarker.remove();
+					targetMarker = null;
+				}
+				// Remove the marker property if its marker has been removed
+				if (!targetMarker) {
+					delete targetAxis.markers[key];
+				}
+			});
+		};
+
+		/**
+		 * Shows or hides outlier markers based on the display state.
+		 *
+		 * See [setDisplayState]{@link CIQ.Outliers#setDisplayState}.
+		 *
+		 * @alias updateMarkerVisibility
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.updateMarkerVisibility = function () {
+			Object.keys(this.markers).forEach(
+				function (key) {
+					if (
+						this.displayState == "all" ||
+						this.markers[key].marker.node.classList.contains(this.displayState)
+					)
+						this.markers[key].marker.node.style.display = "none";
+					else this.markers[key].marker.node.style.display = "block";
+				}.bind(this)
+			);
+		};
+
+		/**
+		 * Updates the position of the axis outlier marker represented by `node`.
+		 *
+		 * @param {HTMLElement} node The axis marker to position.
+		 * @param {object} targetAxis The y-axis on which the axis marker is positioned.
+		 *
+		 * @alias refreshAxisMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added `targetAxis` parameter.
+		 */
+		this.refreshAxisMarkers = function (node, targetAxis) {
+			var isHigh = false;
+			var positionClass = "low";
+			if (node.classList.contains("high")) {
+				isHigh = true;
+				positionClass = "high";
+			}
+			var posTop = targetAxis.axis.top;
+			// Set the low marker of reverse the value if the axis is flipped
+			if (
+				(!targetAxis.isFlipped && !isHigh) ||
+				(targetAxis.isFlipped && isHigh)
+			) {
+				posTop = targetAxis.axis.bottom - 50;
+			}
+			// Overlap the markers in the center for nano size because it's all or nothing at that size.
+			if (node.classList.contains("nano")) {
+				posTop = targetAxis.axis.top + targetAxis.axis.height / 2 - 22;
+			}
+
+			var xFormLeft = Math.floor(targetAxis.axis.left).toString() + "px";
+			var xFormTop = Math.floor(posTop).toString() + "px";
+			// Use the vlaue property instead
+			var labelPrice = isHigh ? targetAxis.outlierMax : targetAxis.outlierMin;
+
+			// Set marker positioning relative to the y-axis
+			node.style.transform = "translate(" + xFormLeft + ", " + xFormTop + ")";
+			node.querySelector(
+				".outlier-value"
+			).innerText = this.stx.formatYAxisPrice(labelPrice);
+			// Apply .right class when axis is on the left to right position child elements
+			if (xFormLeft === "0px") node.classList.add("right");
+			else node.classList.remove("right");
+		};
+
+		/**
+		 * Updates the display styles of all outlier markers belonging to `targetAxis`, including
+		 * data point markers and axis markers. Shows the markers if outliers are hidden and the
+		 * marked outliers exceed the bounds of `targetAxis`. Flips the markers if `targetAxis`
+		 * has been inverted (see [flipMarkers]{@link CIQ.Outliers#flipMarkers}).
+		 *
+		 * @param {object} targetAxis The y-axis on which the markers are refreshed. **Note:**
+		 * 		Charts and panels can have multiple y-axes, each with its own outlier markers.
+		 *
+		 * @alias refreshMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 8.0.0
+		 */
+		this.refreshMarkers = function (targetAxis) {
+			Object.keys(targetAxis.markers).forEach(
+				function (targetAxis, key) {
+					var targetMarker = targetAxis.markers[key].marker;
+					var targetValue = targetAxis.markers[key].value;
+					var targetType = targetAxis.markers[key].type;
+					// Check the marker value against the actual axis min/max. This accounts for yaxis scaling
+					// in addition to the outlier display state.
+					if (
+						(targetValue > targetAxis.trendMax &&
+							targetAxis.axis.high >= targetValue) ||
+						(targetValue < targetAxis.trendMin &&
+							targetAxis.axis.low <= targetValue)
+					) {
+						if (targetType == "quote") {
+							targetMarker.node.style.display = "none";
+						} else if (targetType == "axis") {
+							targetMarker.node.classList.add("compress");
+						}
+					} else {
+						if (targetType == "quote") {
+							targetMarker.node.style.display = "block";
+						} else if (targetType == "axis") {
+							targetMarker.node.classList.remove("compress");
+						}
+					}
+
+					if (targetType == "axis") {
+						this.refreshAxisMarkers(targetMarker.node, targetAxis);
+					}
+
+					// Update the marker responsive style
+					if (targetAxis.axis.height < 100)
+						targetMarker.node.classList.add("nano");
+					else targetMarker.node.classList.remove("nano");
+
+					if (targetAxis.axis.height < 250)
+						targetMarker.node.classList.add("micro");
+					else targetMarker.node.classList.remove("micro");
+				}.bind(this, targetAxis)
+			);
+
+			// Check for a change in the flipped state of the axis
+			if (targetAxis.isFlipped !== targetAxis.axis.flipped)
+				this.flipMarkers(targetAxis);
+		};
+
+		/**
+		 * Places markers on the y-axis when high or low outliers exist.
+		 *
+		 * @param {string} position The position of the marker; either "high" or "low". If the
+		 * 		position is "high", the marker is placed at the top of the axis; if "low", at the
+		 * 		bottom of the axis.
+		 * @param {object} targetAxis The y-axis on which the markers are placed. **Note:**
+		 * 		Charts and panels can have multiple y-axes, each with its own outlier markers.
+		 * @return {CIQ.Marker} The axis outlier marker, which is added to the display.
+		 *
+		 * @alias markAxis
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added `position` and `targetAxis` parameters and return value.
+		 */
+		this.markAxis = function (position, targetAxis) {
+			// Create a marker positioned on the Y axis and return it.
+			var axisMarker = document.createElement("div");
+			axisMarker.classList.add("outlier-sticker", "axis", "mini", position);
+			axisMarker.innerHTML =
+				'<div class="expansion"><div class="pill"><div class="icon"></div></div><div class="tick"></div><span class="outlier-value"></div><div class="compression"><div class="pill"><div class="icon"></div></div></div></span>';
+
+			this.matchYAxisStyle(axisMarker);
+			this.setMarkerColor(axisMarker, targetAxis.markerColor);
+
+			var activate = this.handleMarkerClick.bind(
+				this,
+				position,
+				targetAxis,
+				axisMarker
+			);
+			axisMarker.addEventListener("click", activate);
+			axisMarker.addEventListener("touchend", activate);
+
+			return new CIQ.Marker({
+				stx: this.stx,
+				xPositioner: "none",
+				yPositioner: "none",
+				label: "expand",
+				permanent: true,
+				chartContainer: true,
+				node: axisMarker
+			});
+		};
+
+		/**
+		 * Adds an outlier marker to a tick (data point).
+		 *
+		 * @param {object} data Represents the tick that is marked as an outlier. Contains the
+		 * 		outlier value and its associated quote; for example,
+		 * 		`{value: Number, quote: Object}`.
+		 * @param {string} position The position of the marker; either "high" or "low". If the
+		 * 		position is "high", the marker is placed at the top of the chart; if "low", at the
+		 * 		bottom of the chart.
+		 * @param {object} targetAxis The y-axis to which the marker is added. **Note:** A chart
+		 * 		or panel can have multiple y-axes; each y-axis has its own outlier markers.
+		 * @return {CIQ.Marker} The outlier marker, which is added to the display.
+		 *
+		 * @alias markOutlier
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Added `targetAxis` parameter.
+		 */
+		this.markOutlier = function (data, position, targetAxis) {
+			if (!data) return;
+			if (!targetAxis) targetAxis = { panel: this.stx.panels.chart };
+			position = position || "high";
+
+			// Create a marker
+			var outlierMarker = document.createElement("div");
+			outlierMarker.classList.add("outlier-sticker", "quote", "mini", position);
+			outlierMarker.innerHTML =
+				'<div class="pill"><div class="icon"></div></div><span class="outlier-value">' +
+				this.stx.formatYAxisPrice(data.value, targetAxis.panel) +
+				"</span>";
+
+			this.matchYAxisStyle(outlierMarker);
+			this.setMarkerColor(outlierMarker, targetAxis.markerColor);
+
+			var activate = this.handleMarkerClick.bind(
+				this,
+				position,
+				targetAxis,
+				outlierMarker
+			);
+			outlierMarker.addEventListener("click", activate);
+			outlierMarker.addEventListener("touchend", activate);
+
+			return new CIQ.Marker({
+				stx: this.stx,
+				xPositioner: "date",
+				yPositioner: position == "high" ? "top" : "bottom",
+				x: data.quote.DT,
+				panelName: targetAxis.panel.name,
+				node: outlierMarker
+			});
+		};
+
+		/**
+		 * Calls [setDisplayState]{@link CIQ.Outliers#setDisplayState} in response to selecting an
+		 * outlier marker.
+		 *
+		 * @param {string} position The position of the marker; either "high" or "low".
+		 * @param {object} targetAxis The y-axis that contains the selected marker. **Note:**
+		 * 		Charts and panels can have multiple y-axes; each y-axis has its own outlier
+		 * 		markers.
+		 * @param {HTMLElement} targetNode The selected outlier marker DOM node.
+		 *
+		 * @alias handleMarkerClick
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 8.0.0
+		 */
+		this.handleMarkerClick = function (position, targetAxis, targetNode) {
+			if (targetNode.classList.contains("nano")) position = "all"; // not concerned about differentiation between high and low at the nano size
+			this.setDisplayState(position, targetAxis);
+			this.stx.draw();
+		};
+
+		/**
+		 * Sets the CSS style properties of the y-axis outlier marker to match the CSS styling of
+		 * the y-axis itself.
+		 *
+		 * @param {HTMLElement} node The y-axis marker to style.
+		 *
+		 * @alias matchYAxisStyle
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 7.5.0
+		 */
+		this.matchYAxisStyle = function (node) {
+			// Apply styles from the yAxis
+			if (this.stx.styles.stx_yaxis) {
+				var styles = this.stx.styles.stx_yaxis;
+				node.style.fontSize = styles.fontSize;
+				node.style.fontFamily = styles.fontFamily;
+				node.style.color = styles.color;
+				node.style.borderColor = styles.color;
+			}
+		};
+
+		/**
+		 * Applies a background color to an outlier data point marker.
+		 *
+		 * @param {HTMLElement} node The outlier marker DOM node to which the background color is
+		 * 		applied.
+		 * @param {string} color The hexadecimal color value set as the node background color.
+		 *
+		 * @alias setMarkerColor
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 8.0.0
+		 */
+		this.setMarkerColor = function (node, color) {
+			if (color == "") return;
+			//Set marker color
+			var markerPills = node.querySelectorAll(".pill");
+			for (var markerIdx = 0; markerIdx < markerPills.length; markerIdx++) {
+				markerPills[markerIdx].style.backgroundColor = color;
+			}
+		};
+
+		/**
+		 * Repositions outlier markers from the top of the display to the bottom (or vice versa)
+		 * when the associated y-axis has been flipped (inverted).
+		 *
+		 * @param {object} targetAxis The y-axis that has been flipped.
+		 *
+		 * @alias flipMarkers
+		 * @memberOf CIQ.Outliers.prototype
+		 * @since 8.0.0
+		 */
+		this.flipMarkers = function (targetAxis) {
+			targetAxis.isFlipped = targetAxis.axis.flipped;
+
+			Object.keys(targetAxis.markers).forEach(
+				function (targetAxis, key) {
+					var targetMarker = targetAxis.markers[key].marker;
+					var targetValue = targetAxis.markers[key].value;
+					var targetType = targetAxis.markers[key].type;
+					// Check for flipped state and add/remove flipped class
+					if (targetAxis.isFlipped) {
+						targetMarker.node.classList.add("flipped");
+					} else {
+						targetMarker.node.classList.remove("flipped");
+					}
+
+					// Set Y positioning of quote markers
+					if (targetType == "quote") {
+						if (targetValue > targetAxis.trendMax) {
+							// High marker
+							if (targetAxis.isFlipped)
+								targetMarker.params.yPositioner = "bottom";
+							else targetMarker.params.yPositioner = "top";
+						} else if (targetValue < targetAxis.trendMin) {
+							// Low marker
+							if (targetAxis.isFlipped) targetMarker.params.yPositioner = "top";
+							else targetMarker.params.yPositioner = "bottom";
+						}
+					}
+				}.bind(this, targetAxis)
+			);
+		};
+
+		var originalDetermineMinMax = CIQ.ChartEngine.prototype.determineMinMax.bind(
+			this.stx
+		);
+		/**
+		 * Overrides the default `CIQ.ChartEngine.prototype.determineMinMax` function when the
+		 * Outliers add-on is active. Injects the local {@link CIQ.Outliers#processDataSet}
+		 * function as a data filter and passes the filter along to the original `determineMinMax`
+		 * function (see below).
+		 *
+		 * @param {Array} quotes The array of quotes (typically
+		 * 		`CIQ.ChartEngine.chart.dataSegment`) to evaluate for minimum and maximum values.
+		 * @param {Array} fields A list of fields to compare.
+		 * @param {boolean|Array} [sum] If true, then compute maximum sum rather than the maximum
+		 * 		single value across all fields. If an array, compute sum over just the fields in
+		 * 		the array.
+		 * @param {boolean} [bypassTransform] If true, bypass any transformations.
+		 * @param {number} [length] Specifies how many elements of the quotes array to process.
+		 * @param {boolean} [checkArray] If true, the type of the value used to determine the
+		 * 		min/max is checked to ascertain whether it is an array; if so, the first element
+		 * 		of the array is retrieved for use in the min/max determination.
+		 * @param {CIQ.ChartEngine.Panel} [panel] A reference to the panel rendering the quotes.
+		 * @param {CIQ.ChartEngine.YAxis} [axis] A reference to the y-axis rendered for the quotes.
+		 * @param {Array} [filters] Array of functions to process the min/max values before
+		 * 	returning. Filter functions must return a valid min/max tuple or false.
+		 * @return {function} A reference to the original
+		 * 		`CIQ.ChartEngine.prototype.determineMinMax` library function.
+		 *
+		 * @memberof CIQ.ChartEngine
+		 * @since
+		 * - 7.5.0
+		 * - 8.0.0 Allow the `sum` parameter to be an array of valid fields to sum over.
+		 * 		Added the `panel`, `axis`, and `filters` parameters.
+		 * @private
+		 */
+		CIQ.ChartEngine.prototype.determineMinMax = function (
+			quotes,
+			fields,
+			sum,
+			bypassTransform,
+			length,
+			checkArray,
+			panel,
+			axis,
+			filters
+		) {
+			if (!filters) filters = [];
+			if (panel && axis && this.layout.outliers)
+				filters.push(this.outliers.processDataSet.bind(this.outliers));
+			return originalDetermineMinMax(
+				quotes,
+				fields,
+				sum,
+				bypassTransform,
+				length,
+				checkArray,
+				panel,
+				axis,
+				filters
+			);
+		};
+	};
+
+/**
+ * CIQ.Marker interface placeholder to be augmented in *standard.js* with properties.
+ *
+ * @tsinterface CIQ~Marker
+ */
+
+};
+
+
+let __js_addons_advanced_plotComplementer_ = (_exports) => {
+
+/* global _CIQ, _timezoneJS, _SplinePlotter */
+
+var CIQ = typeof _CIQ !== "undefined" ? _CIQ : _exports.CIQ;
+
+/**
+ * Creates an add-on that enables a series to complement another series.
+ *
+ * ![Plot Complementer](./img-Data-Forecasting.png)
+ *
+ * The complementary series is a permanent fixture of the series which it complements. It moves
+ * in tandem with the series, and gets removed with the series. In all other respects, though, it
+ * behaves like its own series. It shows separately in the panel legend and plots using its own
+ * renderer.
+ *
+ * Charts can have multiple `PlotComplementer` instances. Each instance is attached to the chart
+ * engine as a member of a `PlotComplementer` collection.
+ *
+ * Multiple `PlotComplementer` instances can be associated with a time series. To link a
+ * `PlotComplementer` to a series, specify the series instrument in the `params.filter` function.
+ * See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
+ *
+ * **Note:** The series created by this add-on is not exported with the layout, since it is
+ * created in tandem with the series it complements. Currently, this feature works only with
+ * non-comparison series.
+ *
+ * Requires *addOns.js*.
+ *
+ * @param {object} params Configuration parameters.
+ * @param {CIQ.ChartEngine} params.stx The chart object.
+ * @param {string} [params.id] Unique key used by the add-on to identify itself. If not supplied,
+ * 		a random key is chosen.
+ * @param {object} [params.quoteFeed] Attaches the quote feed to the quote driver to satisfy any
+ * 		quote requests for any series created by the add-on.
+ * @param {object} [params.behavior] Used as the behavior for the quote feed supplied in this
+ * 		parameter list.
+ * @param {function} [params.filter] Used as the filter for the quote feed supplied in this
+ * 		parameter list. See `[setQuoteFeed]{@link CIQ.PlotComplementer#setQuoteFeed}`.
+ * @param {object} [params.decorator] Container object for the `symbol` and `display` properties.
+ * 		The `decorator` provides the label (`symbol`) for the complementary series and a short
+ * 		description (`display`) that is appended to the label; for example:
+ * ```
+ * decorator: {symbol:"_fcst", display:" Forecast"}
+ * ```
+ * @param {string} [params.decorator.symbol] Adds this string onto the ID when creating the
+ * 		complementary series. Otherwise, a unique ID is used.
+ * @param {string} [params.decorator.display] Customizes the display value of the series.
+ * @param {object} [params.renderingParameters={chartType: "line", width: 1, opacity: 0.5}] A
+ * 		collection of parameters that override the default rendering parameters. The
+ * 		`renderingParameters` object can be set or changed at any time. The default parameters
+ * 		can be restored by calling {@link CIQ.PlotComplementer#resetRenderingParameters}.
+ * 		<p>Here are a few examples of rendering parameters:</p>
+ * ```
+ * // Assuming a PlotComplementer declared as "forecaster":
+ * forecaster.renderingParameters = {chartType:"scatterplot", opacity:0.5, field:"Certainty"}
+ * forecaster.renderingParameters = {chartType:"histogram", border_color:"transparent", opacity:0.3}
+ * forecaster.renderingParameters = {chartType:"channel", opacity:0.5, pattern:"dotted"}
+ * forecaster.renderingParameters = {chartType:"candle", opacity:0.5, color:"blue", border_color:"blue"}
+ * ```
+ *
+ * @constructor
+ * @name CIQ.PlotComplementer
+ * @since 7.3.0
+ *
+ * @example <caption>Forecasting</caption>
+ * let forecaster = new CIQ.PlotComplementer({
+ *     stx:stxx,
+ *     id:"forecast",
+ *     quoteFeed: fcstFeed.quoteFeedForecastSimulator,
+ *     behavior: {refreshInterval:60},
+ *     decorator: {symbol:"_fcst", display:" Forecast"},
+ *     renderingParameters: {chartType:"channel", opacity:0.5, pattern:"dotted"}
+ * });
+ */
+CIQ.PlotComplementer =
+	CIQ.PlotComplementer ||
+	function (params) {
+		var stx = params.stx;
+		var unique = CIQ.uniqueID();
+		if (!params.decorator) params.decorator = {};
+		var symbolDecorator = params.decorator.symbol || "_" + unique;
+		var displayDecorator = params.decorator.display || " (addl)";
+		if (!stx.plotComplementers) stx.plotComplementers = [];
+		stx.plotComplementers.push(this);
+
+		this.id = params.id || unique;
+
+		this.defaultRenderingParameters = {
+			chartType: "line",
+			width: 1,
+			opacity: 0.5
+		};
+
+		if (params.renderingParameters)
+			this.defaultRenderingParameters = params.renderingParameters;
+
+		var self = this;
+		function addSeries(stx, symbol, parameters, id) {
+			function verifyQuoteFeed(stx) {
+				if (!stx.quoteDriver) return;
+				if (!params.quoteFeed) return;
+				for (var qf = 0; qf < stx.quoteDriver.quoteFeeds.length; qf++) {
+					if (stx.quoteDriver.quoteFeeds[qf].engine == params.quoteFeed) return;
+				}
+				return "err";
+			}
+			if (verifyQuoteFeed(stx) == "err") return;
+			if (!id) id = symbol;
+			if (stx.isEquationChart(symbol)) return;
+			if (!parameters) parameters = {};
+			if (parameters.isComparison) return;
+			if (id && id.indexOf(symbolDecorator) == -1) {
+				var fId = id + symbolDecorator,
+					fSymbol = symbol + symbolDecorator;
+				var masterRenderer = stx.getRendererFromSeries(id);
+				var myParms = CIQ.extend(
+					{
+						display: symbol + displayDecorator,
+						name: fId,
+						symbol: fSymbol,
+						symbolObject: {
+							symbol: fSymbol,
+							generator: self.id,
+							masterSymbol: symbol
+						},
+						overChart: false,
+						gapDisplayStyle: true,
+						permanent: true,
+						panel: parameters.panel,
+						yAxis: parameters.yAxis,
+						shareYAxis: true,
+						loadData: !!self.quoteFeed,
+						dependentOf: masterRenderer
+							? masterRenderer.params.name
+							: stx.mainSeriesRenderer.params.name
+					},
+					self.renderingParameters
+				);
+				if (!myParms.color) myParms.color = parameters.color || "auto";
+				stx.addSeries(fId, myParms, function (error, obj) {
+					if (error) stx.removeSeries(fId, stx.chart);
+					if (stx.chart.seriesRenderers[fId]) {
+						stx.chart.seriesRenderers[fId].params.display = myParms.display;
+					}
+				});
+			}
+		}
+
+		function removeSeries(stx, id, chart) {
+			if (id && id.indexOf(symbolDecorator) == -1)
+				stx.removeSeries(id + symbolDecorator, chart);
+		}
+
+		function symbolChange(obj) {
+			if (obj.action == "master") {
+				if (!obj.prevSymbol) obj.prevSymbol = obj.symbol;
+				removeSeries(obj.stx, obj.prevSymbol, obj.stx.chart);
+				addSeries(obj.stx, obj.symbol);
+			} else if (obj.action == "add-series") {
+				removeSeries(obj.stx, obj.id, obj.stx.chart);
+				addSeries(obj.stx, obj.symbol, obj.parameters, obj.id);
+			} else if (obj.action == "remove-series") {
+				removeSeries(obj.stx, obj.id, obj.stx.chart);
+			}
+		}
+
+		stx.addEventListener("symbolChange", symbolChange);
+		stx.addEventListener("symbolImport", symbolChange);
+
+		/**
+		 * Resets the `PlotComplementer` rendering values to the default settings.
+		 *
+		 * Default settings can be provided in the parameters passed to the `PlotComplementer` constructor. If no settings are
+		 * provided to the constructor, `PlotComplementer` uses the following defaults: `{ chartType:"line", width:1, opacity:0.5 }`.
+		 *
+		 * The rendering parameters may be set anytime after creating `PlotComplementer`; for example, to set an ad-hoc rendering
+		 * right before adding a series.
+		 *
+		 * @alias resetRenderingParameters
+		 * @memberof CIQ.PlotComplementer.prototype
+		 * @since 7.3.0
+		 */
+		this.resetRenderingParameters = function () {
+			this.renderingParameters = this.defaultRenderingParameters;
+		};
+
+		/**
+		 * Sets a quote feed for the `PlotComplementer`.
+		 *
+		 * Automatically called when a quote feed is provided in the constructor argument. If a
+		 * quote feed or `behavior` object is not specified in `params`, this function returns
+		 * without doing anything.
+		 *
+		 * @param {object} params Configuration parameters.
+		 * @param {object} params.quoteFeed Quote feed to attach to the quote driver to satisfy
+		 * 		any quote requests for any series created by the add-on. This quote feed is like
+		 * 		any time series quote feed object. See the
+		 * 		[Data Integration Overview]{@tutorial DataIntegrationOverview}.
+		 * @param {object} params.behavior Behavior for the quote feed supplied in this parameter
+		 * 		list. This object is like any `behavior` object associated with a quote feed.
+		 * 		See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on `behavior`
+		 * 		objects.
+		 * @param {function} [params.filter] Filters the quote feed supplied in this parameter
+		 * 		list. The filter function takes as an argument an object typically containing
+		 * 		`symbolObject`, `symbol`, and `interval` properties. The properties associate the
+		 * 		`PlotComplementer` with an instrument. If the `filter` function returns true, the
+		 * 		`PlotComplementer` quote feed is used for the instrument.
+		 * 		<p>This `filter` function is like the `filter` in basic quote feeds.
+		 * 		See {@link CIQ.ChartEngine#attachQuoteFeed} for more information on quote feed
+		 * 		`filter` functions.</p>
+		 * @alias setQuoteFeed
+		 * @memberof CIQ.PlotComplementer.prototype
+		 * @since 7.3.0
+		 */
+		this.setQuoteFeed = function (params) {
+			if (!params.quoteFeed || !params.behavior) return;
+			var behavior = CIQ.clone(params.behavior);
+			behavior.generator = this.id;
+			var existingFilter = params.filter;
+			var filter = function (params) {
+				if (existingFilter && !existingFilter(params)) return false;
+				return params.symbolObject.generator == behavior.generator;
+			};
+			stx.attachQuoteFeed(params.quoteFeed, behavior, filter);
+			this.quoteFeed = params.quoteFeed;
+		};
+
+		this.setQuoteFeed(params);
+		this.resetRenderingParameters();
+	};
+
+};
+
+
+let _exports = {CIQ:__CIQ_};
 export {__js_addons_standard_extendedHours_ as extendedHours};
 export {__js_addons_standard_fullScreen_ as fullScreen};
 export {__js_addons_standard_inactivityTimer_ as inactivityTimer};
@@ -4960,16 +4956,16 @@ export {__js_addons_standard_rangeSlider_ as rangeSlider};
 export {__js_addons_standard_shortcuts_ as shortcuts};
 export {__js_addons_standard_tableView_ as tableView};
 export {__js_addons_standard_tooltip_ as tooltip};
+export {__js_addons_advanced_animation_ as animation};
+export {__js_addons_advanced_continuousZoom_ as continuousZoom};
+export {__js_addons_advanced_outliers_ as outliers};
+export {__js_addons_advanced_plotComplementer_ as plotComplementer};
 
-export {CIQ};
+export {__CIQ_ as CIQ};
 
 /* global __TREE_SHAKE__ */
 if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
-	(_exports.CIQ || CIQ).activateImports(
-		__js_addons_advanced_animation_,
-		__js_addons_advanced_continuousZoom_,
-		__js_addons_advanced_outliers_,
-		__js_addons_advanced_plotComplementer_,
+	_exports.CIQ.activateImports(
 		__js_addons_standard_extendedHours_,
 		__js_addons_standard_fullScreen_,
 		__js_addons_standard_inactivityTimer_,
@@ -4977,6 +4973,10 @@ if (typeof __TREE_SHAKE__ === "undefined" || !__TREE_SHAKE__) {
 		__js_addons_standard_shortcuts_,
 		__js_addons_standard_tableView_,
 		__js_addons_standard_tooltip_,
+		__js_addons_advanced_animation_,
+		__js_addons_advanced_continuousZoom_,
+		__js_addons_advanced_outliers_,
+		__js_addons_advanced_plotComplementer_,
 		null
 	);
 }

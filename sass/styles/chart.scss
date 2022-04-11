@@ -56,12 +56,13 @@ html, body {
     }
 
     &--screenshot {
-        .cq-symbol-select-btn .ic-icon,
+        .calendar,
         .cq-menu-dropdown,
         .sc-toolbar-widget,
         .sc-navigation-widget,
         .stx_jump_today.home,
-        .stx-panel-control .stx-btn-panel {
+        .stx-panel-control .stx-btn-panel,
+        .time-picker-dropdown {
             /*
             There is a strange bug where dropdowns get displayed (partially)
             when html is being rendered to canvas. So we set this to manually
@@ -71,9 +72,6 @@ html, body {
         }
         .stx-panel-control {
             left: 5px;
-        }
-        .cq-symbol-select-btn .cq-symbol-info {
-            margin: 0 !important;
         }
         .sc-studies-list {
             .stx-btn-panel {
@@ -222,7 +220,7 @@ html, body {
     padding: 0px;
     margin-bottom: 17px;
     border-radius: $border-radius;
-    z-index: 15;
+    z-index: 12;
     cursor: pointer;
     @include themify($themes) {
         background: themed('NavigationWidgetBg');
