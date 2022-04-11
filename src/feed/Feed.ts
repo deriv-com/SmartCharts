@@ -26,6 +26,7 @@ class Feed {
     _binaryApi: BinaryAPI;
     _connectionClosedDate?: Date;
     _emitter: EventEmitter;
+    _last_tick_timeout: any;
     _last_tick_timestamp: number;
     _mainStore: TMainStore;
     _serverTime: ServerTime;
@@ -78,6 +79,7 @@ class Feed {
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
         this._last_tick_timestamp = 0;
+        this._last_tick_timeout = null;
     }
     onRangeChanged = (forceLoad: boolean) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
@@ -419,8 +421,9 @@ class Feed {
         return result;
     }
     _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
+        clearTimeout(this._last_tick_timeout);
         const current_tick_timestamp = this._serverTime.getEpoch();
-        const max_tick_delay = 30;
+        const max_tick_delay = 30; // in seconds
 
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
@@ -457,7 +460,12 @@ class Feed {
                     allowReplaceOHL: true,
                 });
                 this._stx.createDataSet();
+                this._last_tick_timeout = setTimeout(() => {
+                    this.unsubscribeAll();
+                    this._mainStore.chart.refreshChart();
+                }, max_tick_delay * 2 * 1000); // refresh the chart in case if there are no new ticks within a minute
             } else {
+                this.unsubscribeAll();
                 this._mainStore.chart.refreshChart();
             }
             this._last_tick_timestamp = current_tick_timestamp;
