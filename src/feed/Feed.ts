@@ -1,6 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
-import { TicksHistoryRequest, TicksHistoryResponse } from '@deriv/api-types';
+import { TicksHistoryRequest, TicksHistoryResponse, AuditDetailsForExpiredContract } from '@deriv/api-types';
 import { Listener, TError, TGranularity, TMainStore, TQuote } from 'src/types';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
@@ -53,6 +53,12 @@ class Feed {
     }
     get granularity() {
         return this._mainStore.chart.granularity;
+    }
+    get allTicks() {
+        return this._mainStore.state.allTicks;
+    }
+    get shouldFetchTickHistory() {
+        return this._mainStore.state.shouldFetchTickHistory || false;
     }
     get context() {
         return this._mainStore.chart.context;
@@ -266,10 +272,18 @@ class Feed {
             getHistoryOnly = true;
         }
         if (getHistoryOnly) {
-            const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
-                tickHistoryRequest as TCreateTickHistoryParams
-            );
-            quotes = TickHistoryFormatter.formatHistory(response);
+            if (this.shouldFetchTickHistory) {
+                const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
+                    tickHistoryRequest as TCreateTickHistoryParams
+                );
+                quotes = TickHistoryFormatter.formatHistory(response);
+            } else {
+                // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
+                const allTicksContract = await this.allTicks;
+                quotes = TickHistoryFormatter.formatAllTicks(
+                    allTicksContract as keyof AuditDetailsForExpiredContract | []
+                    );
+            }
         }
         if (!quotes) {
             callback({ quotes: [] });
