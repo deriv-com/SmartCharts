@@ -132,13 +132,6 @@ commands:
           success_message: "Release succeeded for Smartchart with version *$(cat version)*"
           webhook: ${SLACK_WEBHOOK}
 jobs:
-  test:
-    docker:
-      - image: circleci/node:14.17.1
-    steps:
-      - git_checkout_from_cache
-      - npm_install
-      - test
   release_staging:
     docker:
       - image: circleci/node:14.17.1
@@ -180,12 +173,6 @@ jobs:
       - notify_slack
 
 workflows:
-  test:
-    jobs:
-      - test:
-          filters:
-             branches:
-               ignore: /^master$/
   release:
     jobs:
       - release_staging:
