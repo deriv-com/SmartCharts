@@ -22,6 +22,27 @@ class RealtimeSubscription extends Subscription {
     }
 
     async _startSubscribe(tickHistoryRequest: TCreateTickHistoryParams) {
+//@ts-ignore
+        if(!!this.contractInfo.tick_stream){
+
+            
+            console.log('it is open contract');
+
+        // const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
+                //@ts-ignore
+        const response = await this.contractInfo?.tick_stream;
+        // const response = await tickHistoryPromise;
+        // this._tickCallback = processTickHistory;
+        const quotes = this._processHistoryResponse(response);
+
+        console.log('qqq', quotes, response);
+        
+
+        //@ts-ignore
+        // console.log('_startSubscribe contractInfo', this.contractInfo?.tick_stream[Object.keys(this.contractInfo?.tick_stream).length - 1].tick);
+
+            return { quotes, response };
+        }else{
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
         this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
         const response = await tickHistoryPromise;
@@ -29,6 +50,7 @@ class RealtimeSubscription extends Subscription {
         this._tickCallback = processTickHistory;
 
         return { quotes, response };
+        }
     }
 
     forget() {
@@ -48,19 +70,42 @@ class RealtimeSubscription extends Subscription {
         let hasHistory = false;
         const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
-            if (this._stx.isDestroyed) {
-                const subscriptionId = resp.subscription?.id as string;
-                this._binaryApi.forgetStream(subscriptionId);
-                return;
+            // console.log('resp', resp);
+            // @ts-ignore
+            if(!!this.contractInfo.tick_stream){
+                        // @ts-ignore
+        const resmy = this.contractInfo?.tick_stream[Object.keys(this.contractInfo?.tick_stream).length - 1];
+                    //@ts-ignore
+                console.log('_startSubscribe contractInfo', this.contractInfo?.tick_stream[Object.keys(this.contractInfo?.tick_stream).length - 1].tick);
+                // if (this._stx.isDestroyed) {
+                //     const subscriptionId = resp.subscription?.id as string;
+                //     this._binaryApi.forgetStream(subscriptionId);
+                //     return;
+                // }
+                // We assume that 1st response is the history, and subsequent
+                // responses are tick stream data.
+                // if (hasHistory) {
+                //     this._onTick(resmy);
+                //     return;
+                // }
+                //     tickHistoryPromise.resolve(resmy);
+                //     hasHistory = true;
+
+            }else{
+                if (this._stx.isDestroyed) {
+                    const subscriptionId = resp.subscription?.id as string;
+                    this._binaryApi.forgetStream(subscriptionId);
+                    return;
+                }
+                // We assume that 1st response is the history, and subsequent
+                // responses are tick stream data.
+                if (hasHistory) {
+                    this._onTick(resp);
+                    return;
+                }
+                tickHistoryPromise.resolve(resp);
+                hasHistory = true;
             }
-            // We assume that 1st response is the history, and subsequent
-            // responses are tick stream data.
-            if (hasHistory) {
-                this._onTick(resp);
-                return;
-            }
-            tickHistoryPromise.resolve(resp);
-            hasHistory = true;
         };
         return [tickHistoryPromise, processTickHistory];
     }

@@ -57,6 +57,9 @@ class Feed {
     get allTicks() {
         return this._mainStore.state.allTicks;
     }
+    get contractInfo() {
+        return this._mainStore.state.contractInfo;
+    }
     get shouldFetchTickHistory() {
         return this._mainStore.state.shouldFetchTickHistory || false;
     }
@@ -82,6 +85,9 @@ class Feed {
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
+        //@ts-ignore
+        console.log('this._mainStore', this._mainStore.state?.contractInfo?.tick_stream);
+        
     }
     onRangeChanged = (forceLoad: boolean) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
@@ -225,7 +231,8 @@ class Feed {
                 subscription = new RealtimeSubscription(
                     tickHistoryRequest as TCreateTickHistoryParams,
                     this._binaryApi,
-                    this._stx
+                    this._stx,
+                    this._mainStore
                 );
             }
             try {
@@ -592,8 +599,10 @@ class Feed {
                 tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch as number))
             );
             if (endTickIndex > -1) {
-                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
-                trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
+                // const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
+                // trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
+                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 1 : 1;
+                trimmedQuotes = trimmedQuotes.slice(2, endTickIndex + addon);
             }
         }
         return trimmedQuotes;

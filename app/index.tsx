@@ -157,6 +157,7 @@ const App = () => {
     const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
     const [symbol, setSymbol] = React.useState<string>('');
     const allTicks: keyof AuditDetailsForExpiredContract | [] = [];
+    const contractInfo: any | {} = {};
     React.useEffect(() => {
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_CLOSE, () => setIsConnectionOpened(false));
         connectionManager.on(ConnectionManager.EVENT_CONNECTION_REOPEN, () => setIsConnectionOpened(true));
@@ -263,6 +264,7 @@ const App = () => {
             shouldFetchTickHistory
             enabledChartFooter
             allTicks={allTicks}
+            contractInfo={contractInfo}
             getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
                 const isSmallScreen = chart_height < 780;
                 const denominator = indicator_count >= 5 ? indicator_count : indicator_count + 1;
