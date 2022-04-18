@@ -30,7 +30,23 @@ export class TickHistoryFormatter {
         return undefined;
     }
 
-    static formatTick(response: TicksStreamResponse | OHLCStreamResponse): TQuote | undefined {
+    static formatTick(response: TicksStreamResponse | OHLCStreamResponse | any): TQuote | undefined {
+        //@ts-ignore
+        if( !!response.tick_display_value){
+            const t = response;
+            return {
+                //@ts-ignore
+                Date: getUTCDate(+t.epoch),
+                //@ts-ignore
+                Close: +t.tick,
+                // Keep the origial value.
+                // It'll be used to pass down to deriv.app in BottomWidgets.
+                // TODO: use tick.epoch in RawMarker to speed up calculations.
+                //@ts-ignore
+                response,
+            };
+        }
+        
         if ('tick' in response) {
             const { tick } = response as Required<typeof response>;
             const t = tick as Required<typeof tick>;
