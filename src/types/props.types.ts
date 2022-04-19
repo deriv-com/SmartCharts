@@ -1,4 +1,4 @@
-import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse, AuditDetailsForExpiredContract } from '@deriv/api-types';
+import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse, AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
@@ -147,6 +147,7 @@ export type TChartProps = {
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
+    contractInfo?: keyof ProposalOpenContract | {};
     maxTick?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;
