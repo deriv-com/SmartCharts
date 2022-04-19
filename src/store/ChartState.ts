@@ -56,7 +56,6 @@ class ChartState {
     @observable shouldFetchTradingTimes = true;
     @observable shouldFetchTickHistory = true;
     @observable allTicks = [];
-    @observable contractInfo = {};
     @observable refreshActiveSymbols?: boolean;
     @observable hasReachedEndOfData = false;
     @observable prevChartType?: string;
@@ -137,7 +136,6 @@ class ChartState {
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
         allTicks = [],
-        contractInfo = {},
         showLastDigitStats = false,
         startEpoch,
         symbol,
@@ -181,7 +179,6 @@ class ChartState {
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
         this.allTicks = allTicks;
-        this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
 

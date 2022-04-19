@@ -23,10 +23,6 @@ import NavigationWidget from './NavigationWidget';
 import PaginationLoader from './PaginationLoader';
 import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
-// import { TickHistoryFormatter } from '../feed/TickHistoryFormatter';
-// import { RealtimeSubscription } from 'src/feed/subscription';
-// import Subscription from 'src/feed/subscription/Subscription';
-// import EventEmitter from 'event-emitter-es6';
 
 const Chart = (props: TChartProps) => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();
@@ -54,17 +50,6 @@ const Chart = (props: TChartProps) => {
     }, []);
 
     React.useEffect(() => {
-        // console.log('Chart tick_stream: ', props.contractInfo?.tick_stream);
-        // @ts-ignore
-        // const resmy = this.contractInfo?.tick_stream[Object.keys(this.contractInfo?.tick_stream).length - 1];
-        // RealtimeSubscription._onTick(resmy);
-        // if(!!props.contractInfo?.tick_stream){
-    //    let response = TickHistoryFormatter.formatAllTicks(props.contractInfo?.tick_stream);
-    //     callback({ quotes });
-    //@ts-ignore
-    // const quotes = [TickHistoryFormatter.formatTick(response)];
-    //     }
-
         updateProps(props);
     });
 

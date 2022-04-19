@@ -1,5 +1,4 @@
 import { TicksHistoryResponse } from '@deriv/api-types';
-import { TMainStore } from 'src/types';
 import { BinaryAPI } from 'src/binaryapi';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import Context from 'src/components/ui/Context';
@@ -9,8 +8,8 @@ class DelayedSubscription extends Subscription {
     _timerId?: ReturnType<typeof setInterval>;
     UPDATE_INTERVAL = 3000;
 
-    constructor(request: TCreateTickHistoryParams, api: BinaryAPI, stx: Context['stx'], delay: number, mainStore: TMainStore) {
-        super(request, api, stx, mainStore);
+    constructor(request: TCreateTickHistoryParams, api: BinaryAPI, stx: Context['stx'], delay: number) {
+        super(request, api, stx);
         this._request = {
             ...this._request,
             // start times must be offset with delay because
