@@ -20,6 +20,7 @@ export default class ViewStore {
     templateName = '';
     currentRoute = 'main';
     isInputActive = false;
+    static views: TViews = createObjectFromLocalStorage('cq-views') || [];
     routes = {
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
@@ -32,6 +33,7 @@ export default class ViewStore {
             currentRoute: observable,
             isInputActive: observable,
             routes: observable,
+            // views: observable,
             sortedItems: computed,
             onChange: action.bound,
             onSubmit: action.bound,
@@ -66,7 +68,6 @@ export default class ViewStore {
         );
     }
 
-    @observable static views: TViews = createObjectFromLocalStorage('cq-views') || [];
     mainStore: MainStore;
     menuStore: MenuStore;
 
