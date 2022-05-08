@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, when } from 'mobx';
+import { action, computed, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { ChartType, TSettingsItem } from 'src/types';
 import MainStore from '.';
@@ -97,7 +97,18 @@ export default class ChartTypeStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
+    type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            type: observable,
+            setTypeFromUI: action.bound,
+            setType: action.bound,
+            updateProps: action.bound,
+            types: computed,
+            setChartTypeFromLayout: action.bound
+        });
+
         this.mainStore = mainStore;
         when(() => !!this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-type' });
@@ -110,8 +121,7 @@ export default class ChartTypeStore {
             onChanged: (items: TSettingsItem[]) => this.updateAggregate(items),
         });
     }
-    @observable
-    type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
+
     onChartTypeChanged?: (chartType?: string) => void;
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -141,7 +151,6 @@ export default class ChartTypeStore {
             }
         );
     };
-    @action.bound
     setTypeFromUI(type?: string) {
         if (this.chartTypeProp !== undefined) {
             console.error(
@@ -151,7 +160,6 @@ export default class ChartTypeStore {
         }
         this.setType(type);
     }
-    @action.bound
     setType(type?: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (!type) {
@@ -182,7 +190,6 @@ export default class ChartTypeStore {
         }
         this.type = type;
     }
-    @action.bound
     updateProps(onChange: (chartType?: string) => void) {
         this.onChartTypeChanged = onChange;
     }
@@ -196,7 +203,6 @@ export default class ChartTypeStore {
         this.stx.createDataSet();
         this.stx.draw();
     };
-    @computed
     get types() {
         const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
         if (this.chartTypes === undefined || this.chartTypes.length === 0) {
@@ -208,7 +214,6 @@ export default class ChartTypeStore {
             disabled: t.candleOnly ? isTickSelected : false,
         }));
     }
-    @action.bound
     setChartTypeFromLayout(layout: typeof CIQ.UI.Layout) {
         const chartType = this.getChartTypeFromLayout(layout);
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);

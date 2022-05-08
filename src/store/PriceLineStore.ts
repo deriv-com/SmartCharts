@@ -1,5 +1,5 @@
 import EventEmitter from 'event-emitter-es6';
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TCustomEvent } from 'src/types';
 import MainStore from '.';
@@ -23,17 +23,17 @@ export default class PriceLineStore {
     opacityOnOverlap = 0;
     showOffscreenArrows = false;
     _relative = false;
-    @observable draggable = true;
-    @observable isDragging = false;
-    @observable visible = true;
+    draggable = true;
+    isDragging = false;
+    visible = true;
     // @observable top = 0;
-    @observable _price = 0;
+    _price = 0;
     // @observable zIndex;
-    @observable offScreen = false;
+    offScreen = false;
     // @observable uncentered = false;
-    @observable title?: string;
-    @observable isOverlapping = false;
-    @observable offScreenDirection: keyof typeof DIRECTIONS | null = null;
+    title?: string;
+    isOverlapping = false;
+    offScreenDirection: keyof typeof DIRECTIONS | null = null;
 
     set zIndex(value: string | number | null) {
         if (this._line && value) {
@@ -41,11 +41,29 @@ export default class PriceLineStore {
         }
     }
 
-    @computed get pip() {
+    get pip() {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            draggable: observable,
+            isDragging: observable,
+            visible: observable,
+            _price: observable,
+            offScreen: observable,
+            title: observable,
+            isOverlapping: observable,
+            offScreenDirection: observable,
+            pip: computed,
+            priceDisplay: computed,
+            setDragLine: action.bound,
+            _startDrag: action.bound,
+            _dragLine: action.bound,
+            _endDrag: action.bound,
+            _calculateTop: action.bound
+        });
+
         this.mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
         when(() => !!this.context, this.onContextReady);
@@ -80,7 +98,7 @@ export default class PriceLineStore {
         return 'EVENT_DRAG_RELEASED';
     }
 
-    @computed get priceDisplay() {
+    get priceDisplay() {
         let display = this._price.toFixed(this.pip);
         if (this.relative && this._price > 0) {
             display = `+${display}`;
@@ -143,7 +161,7 @@ export default class PriceLineStore {
         return this.mainStore.chart.yAxiswidth;
     }
 
-    @action.bound setDragLine(el: HTMLDivElement) {
+    setDragLine(el: HTMLDivElement) {
         this._line = el;
         if (this._line) {
             this._draw();
@@ -163,14 +181,14 @@ export default class PriceLineStore {
         this.stx.editingAnnotation = false;
     }
 
-    @action.bound _startDrag() {
+    _startDrag() {
         this._modalBegin();
         this.isDragging = true;
         this._initialPosition = this.top;
         this._startDragPrice = this._price;
     }
 
-    @action.bound _dragLine(e: TCustomEvent) {
+    _dragLine(e: TCustomEvent) {
         if (!this._line) {
             return;
         }
@@ -188,7 +206,7 @@ export default class PriceLineStore {
         this.price = newPrice;
     }
 
-    @action.bound _endDrag() {
+    _endDrag() {
         this._modalEnd();
         this.isDragging = false;
 
@@ -207,7 +225,7 @@ export default class PriceLineStore {
         return price;
     }
 
-    @action.bound _calculateTop = () => {
+    _calculateTop = () => {
         if (this.stx.currentQuote() === null) {
             return;
         }

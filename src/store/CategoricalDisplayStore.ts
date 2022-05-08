@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from 'mobx';
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import React from 'react';
 import MainStore from '.';
 import {
@@ -43,6 +43,18 @@ export default class CategoricalDisplayStore {
     searchInputClassName?: string;
     placeholderText: string;
 
+    isShown = false;
+    scrollPanel?: HTMLElement | null;
+    filterText = '';
+    activeCategoryKey = '';
+    focusedCategoryKey: string | null = null;
+    isScrollingDown = false;
+    activeHeadKey: string | null = '';
+    scrollTop?: number = undefined;
+    isUserScrolling = true;
+    lastFilteredItems: TCategorizedSymbols = [];
+    activeCategories: string[] = [];
+
     constructor({
         getCategoricalItems,
         onSelectItem,
@@ -56,6 +68,29 @@ export default class CategoricalDisplayStore {
         getCurrentActiveMarket,
         searchInputClassName,
     }: TCategoricalDisplayStoreProps) {
+        makeObservable(this, {
+            isShown: observable,
+            scrollPanel: observable,
+            filterText: observable,
+            activeCategoryKey: observable,
+            focusedCategoryKey: observable,
+            isScrollingDown: observable,
+            activeHeadKey: observable,
+            init: action.bound,
+            favoritesCategoryData: computed,
+            getFavorites: action.bound,
+            filteredItems: computed,
+            updateScrollSpy: action.bound,
+            scrollUp: action.bound,
+            scrollDown: action.bound,
+            setCategoryElement: action.bound,
+            setFilterText: action.bound,
+            handleFilterClick: action.bound,
+            setScrollPanel: action.bound,
+            handleTitleClick: action.bound,
+            scrollToActiveSymbol: action.bound
+        });
+
         reaction(
             () => getIsShown && getIsShown() && this.scrollPanel,
             () => {
@@ -82,17 +117,6 @@ export default class CategoricalDisplayStore {
         this.placeholderText = placeholderText;
     }
 
-    @observable isShown = false;
-    @observable scrollPanel?: HTMLElement | null;
-    @observable filterText = '';
-    @observable activeCategoryKey = '';
-    @observable focusedCategoryKey: string | null = null;
-    @observable isScrollingDown = false;
-    @observable activeHeadKey: string | null = '';
-    scrollTop?: number = undefined;
-    isUserScrolling = true;
-    lastFilteredItems: TCategorizedSymbols = [];
-    activeCategories: string[] = [];
 
     get chart(): MainStore['chart'] {
         return this.mainStore.chart;
@@ -106,7 +130,7 @@ export default class CategoricalDisplayStore {
         return this.chart.chartContainerHeight ? this.chart.chartContainerHeight - (this.chart.isMobile ? 0 : 120) : 0;
     }
 
-    @action.bound init(): void {
+    init(): void {
         this.isInit = true;
         // Select first non-empty category:
         if (this.activeCategoryKey === '' && this.filteredItems.length > 0) {
@@ -119,10 +143,10 @@ export default class CategoricalDisplayStore {
             }
         }
     }
-    @computed get favoritesCategoryData() {
+    get favoritesCategoryData() {
         return Object.keys(this.mainStore.favorites.favoritesMap[this.favoritesId]) || [];
     }
-    @action.bound getFavorites(): Omit<TCategorizedSymbolItem<TSubCategory | string>, 'data'> {
+    getFavorites(): Omit<TCategorizedSymbolItem<TSubCategory | string>, 'data'> {
         this.pauseScrollSpy = true;
         const favoritesCategory = {
             categoryName: t.translate('Favorites'),
@@ -136,7 +160,7 @@ export default class CategoricalDisplayStore {
         }, 20);
         return favoritesCategory;
     }
-    @computed get filteredItems(): TCategorizedSymbols {
+    get filteredItems(): TCategorizedSymbols {
         let filteredItems: TCategorizedSymbolItem<TSubCategory>[] = cloneCategories<TSubCategory>(
             this.getCategoricalItems()
         );
@@ -239,7 +263,7 @@ export default class CategoricalDisplayStore {
         return filteredItems;
     }
 
-    @action.bound updateScrollSpy(): void {
+    updateScrollSpy(): void {
         if (this.pauseScrollSpy || !this.scrollPanel) {
             return;
         }
@@ -277,21 +301,21 @@ export default class CategoricalDisplayStore {
         this.activeHeadKey = this.scrollTop === 0 ? null : this.focusedCategoryKey;
     }
 
-    @action.bound scrollUp(): void {
+    scrollUp(): void {
         this.isScrollingDown = false;
     }
 
-    @action.bound scrollDown(): void {
+    scrollDown(): void {
         // This only affects when scrolling by mouse not by code
         this.isScrollingDown = this.isUserScrolling;
         this.isUserScrolling = true;
     }
 
-    @action.bound setCategoryElement(element: HTMLElement | null, id: string): void {
+    setCategoryElement(element: HTMLElement | null, id: string): void {
         this.categoryElements[id] = element;
     }
 
-    @action.bound setFilterText(filterText: string): void {
+    setFilterText(filterText: string): void {
         this.filterText = filterText;
         this.isUserScrolling = false;
         this.updateScrollSpy();
@@ -300,7 +324,7 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound handleFilterClick(categoryId: string): void {
+    handleFilterClick(categoryId: string): void {
         const el = this.categoryElements[categoryId];
         const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
@@ -329,11 +353,11 @@ export default class CategoricalDisplayStore {
         }
     }
 
-    @action.bound setScrollPanel(element: HTMLElement | null): void {
+    setScrollPanel(element: HTMLElement | null): void {
         this.scrollPanel = element;
     }
 
-    @action.bound handleTitleClick(categoryId: string): void {
+    handleTitleClick(categoryId: string): void {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
             if (item.categoryId === categoryId) {
@@ -352,7 +376,7 @@ export default class CategoricalDisplayStore {
         setTimeout(() => this.updateScrollSpy(), 0);
     }
 
-    @action.bound scrollToActiveSymbol(): void {
+    scrollToActiveSymbol(): void {
         this.focusedCategoryKey = null;
         this.activeCategoryKey = this.getCurrentActiveCategory
             ? (this.getCurrentActiveCategory() as string)

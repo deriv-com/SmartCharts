@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, when } from 'mobx';
+import { action, computed, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAddEventListener, TCIQAppend, TIcon, TObject, TSettingsItem } from 'src/types';
 import MainStore from '.';
@@ -82,7 +82,27 @@ export default class DrawToolsStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
+
+    activeToolsGroup: TDrawToolsGroup[] = [];
+    portalNodeIdChanged?: string;
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            activeToolsGroup: observable,
+            portalNodeIdChanged: observable,
+            activeToolsNo: computed,
+            destructor: action.bound,
+            onRightClickDrawing: action.bound,
+            drawingFinished: action.bound,
+            clearAll: action.bound,
+            selectTool: action.bound,
+            onChanged: action.bound,
+            onDeleted: action.bound,
+            onSetting: action.bound,
+            computeActiveDrawTools: action.bound,
+            updatePortalNode: action.bound
+        });
+
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'draw-tool' });
         this.settingsDialog = new SettingsDialogStore({
@@ -116,10 +136,6 @@ export default class DrawToolsStore {
     activeDrawing: TDrawingObject | null = null;
     isContinuous = false;
     drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
-    @observable
-    activeToolsGroup: TDrawToolsGroup[] = [];
-    @observable
-    portalNodeIdChanged?: string;
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
@@ -134,12 +150,11 @@ export default class DrawToolsStore {
         }
     };
     doubleClick = () => this.drawingFinished();
-    @computed
     get activeToolsNo() {
         return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
     }
 
-    @action.bound destructor() {
+    destructor() {
         document.removeEventListener('keydown', this.closeOnEscape);
         document.removeEventListener('dblclick', this.doubleClick);
         if (!this.context) return;
@@ -151,7 +166,6 @@ export default class DrawToolsStore {
         }
     }
 
-    @action.bound
     onRightClickDrawing(drawing: TDrawingObject) {
         this.showDrawToolDialog(drawing);
         return true;
@@ -222,19 +236,17 @@ export default class DrawToolsStore {
         return null;
     };
 
-    @action.bound drawingFinished() {
+    drawingFinished() {
         this.computeActiveDrawTools();
         if (this.stateStore) {
             this.crosshairStore.setCrosshairState(this.stateStore.crosshairState);
         }
     }
-    @action.bound
     clearAll() {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
         this.stx.clearDrawings();
         this.computeActiveDrawTools();
     }
-    @action.bound
     selectTool(id: string) {
         this.isContinuous = false;
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
@@ -246,7 +258,6 @@ export default class DrawToolsStore {
         }
         this.menuStore.setOpen(false);
     }
-    @action.bound
     onChanged(items: TSettingsItem[]) {
         for (const item of items) {
             (this.activeDrawing as TDrawingObject & Record<string, string | boolean | number | TObject>)[item.id] =
@@ -256,7 +267,6 @@ export default class DrawToolsStore {
         (this.activeDrawing as TDrawingObject).adjust();
         this.mainStore.state.saveDrawings();
     }
-    @action.bound
     onDeleted(indx: number | undefined) {
         if (indx === undefined && !this.activeDrawing) {
             return;
@@ -269,7 +279,6 @@ export default class DrawToolsStore {
         this.activeDrawing = null;
         this.computeActiveDrawTools();
     }
-    @action.bound
     onSetting(indx?: number) {
         if (!this.stx.drawingObjects[indx as number]) {
             return;
@@ -277,7 +286,6 @@ export default class DrawToolsStore {
         this.showDrawToolDialog(this.stx.drawingObjects[indx as number]);
     }
 
-    @action.bound
     computeActiveDrawTools() {
         if (!this.context) return;
         const items: Record<string, number> = {};
@@ -315,7 +323,6 @@ export default class DrawToolsStore {
         // this way the single item stay at top
         this.activeToolsGroup = Object.values(groups).sort((a, b) => a.items.length - b.items.length);
     }
-    @action.bound
     updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }

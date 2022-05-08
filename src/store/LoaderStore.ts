@@ -1,11 +1,19 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 
 export default class LoaderStore {
-    @observable isActive = false;
-    @observable currentState: string | boolean = false;
+    isActive = false;
+    currentState: string | boolean = false;
     states: Record<string, string | boolean> = {};
 
     constructor() {
+        makeObservable(this, {
+            isActive: observable,
+            currentState: observable,
+            setState: action.bound,
+            show: action.bound,
+            hide: action.bound
+        });
+
         this.states = {
             'chart-engine': t.translate('Retrieving Chart Engine...'),
             'market-symbol': t.translate('Retrieving Market Symbols...'),
@@ -14,7 +22,7 @@ export default class LoaderStore {
         };
     }
 
-    @action.bound setState(state: string) {
+    setState(state: string) {
         if (!this.states[state]) {
             console.error('Wrong state requested!');
             return;
@@ -22,11 +30,11 @@ export default class LoaderStore {
         this.currentState = this.states[state];
     }
 
-    @action.bound show() {
+    show() {
         this.isActive = true;
     }
 
-    @action.bound hide() {
+    hide() {
         this.isActive = false;
     }
 }

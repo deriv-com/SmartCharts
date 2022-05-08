@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAddEventListener, TCIQAppend } from 'src/types';
 import MainStore from '.';
@@ -23,13 +23,21 @@ export default class MarkerStore {
     children: React.ReactNode;
     x?: number | Date;
     y?: number;
-    @observable
     display?: string;
-    @observable
     left?: string | number;
-    @observable
     bottom?: number;
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            display: observable,
+            left: observable,
+            bottom: observable,
+            shouldDrawMarkers: computed,
+            destructor: action.bound,
+            updateProps: action.bound,
+            updatePosition: action.bound,
+            updateMarkerTick: action.bound
+        });
+
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         this.stx = this.mainStore.chart.context?.stx;
@@ -40,14 +48,12 @@ export default class MarkerStore {
         this._listenerId = this.stx.addEventListener('newChart', this.updateMarkerTick);
         this._injectionId = this.stx.prepend('positionMarkers', this.updateMarkerTick);
     }
-    @computed
     get shouldDrawMarkers() {
         // if this.y === null, we know line markers is passed, so check if chart has
         // been scrolled to the leftmost of the screen
         // else return true in order to show chart-loader when loading historical data
         return this.y === null ? this.stx.chart.isScrollLocationChanged : true;
     }
-    @action.bound
     destructor() {
         if (this._injectionId) {
             this.stx.removeInjection(this._injectionId);
@@ -61,7 +67,6 @@ export default class MarkerStore {
         this._injectionId = null;
         this._listenerId = null;
     }
-    @action.bound
     updateProps({ children, className, y, yPositioner, x, xPositioner }: MarkerStore) {
         this.className = className;
         this.children = children;
@@ -85,7 +90,6 @@ export default class MarkerStore {
     // in that it doesn't factor the marker width and height into the calculation.
     // Considering how often this function is called, it made more sense to have the offset
     // done in CSS.
-    @action.bound
     updatePosition() {
         // Don't position the markers when the chart hasn't been scrolled to the leftmost of the screen
         if (!this.shouldDrawMarkers) return;
@@ -217,7 +221,6 @@ export default class MarkerStore {
         this.bottom = bottom | 0;
         this.showMarker();
     }
-    @action.bound
     updateMarkerTick() {
         const dummyMarker = this.getDummyMarker();
         this.stx.setMarkerTick(dummyMarker);
