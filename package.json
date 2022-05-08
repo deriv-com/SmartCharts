@@ -146,7 +146,7 @@
         "event-emitter-es6": "^1.1.5",
         "lodash.debounce": "^4.0.8",
         "mobx": "^6.5.0",
-        "mobx-react-lite": "^3.3.0",
+        "mobx-react-lite": "^3.4.0",
         "mobx-undecorate": "^1.2.0",
         "moment": "^2.24.0",
         "prop-types": "^15.7.2",

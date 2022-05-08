@@ -197,8 +197,8 @@ if (isApp) {
                 },
                 {
                     from: production
-                        ? './node_modules/mobx/lib/mobx.umd.min.js'
-                        : './node_modules/mobx/lib/mobx.umd.js',
+                        ? './node_modules/mobx/dist/mobx.umd.production.min.js'
+                        : './node_modules/mobx/dist/mobx.umd.development.js',
                     to: 'mobx.js',
                 },
                 {

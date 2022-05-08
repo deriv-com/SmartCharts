@@ -1,5 +1,5 @@
 import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
-import { action, computed, observable, runInAction } from 'mobx';
+import { action, computed, observable, runInAction,makeObservable } from 'mobx';
 import { TChanges, TChartProps, TInitialChartData } from 'src/types';
 import BinaryAPI from './BinaryAPI';
 import TradingTimes from './TradingTimes';
@@ -62,19 +62,27 @@ export default class ActiveSymbols {
     _params: ActiveSymbolsParam;
     _tradingTimes: TradingTimes;
     processedSymbols?: TProcessedSymbols;
-    @observable changes: TChanges = {};
-    @observable categorizedSymbols: TCategorizedSymbols = [];
+    changes: TChanges = {};
+    categorizedSymbols: TCategorizedSymbols = [];
     symbolMap: Record<string, TProcessedSymbolItem> = {};
     symbolsPromise = PendingPromise<void, void>();
     isRetrievingSymbols = false;
 
     constructor(api: BinaryAPI, tradingTimes: TradingTimes, params: ActiveSymbolsParam) {
+        makeObservable(this,{
+            categorizedSymbols: observable,
+            changes: observable,
+            retrieveActiveSymbols:action.bound,
+            computeActiveSymbols:action.bound,
+            activeSymbols:computed,
+            
+        })
         this._api = api;
         this._tradingTimes = tradingTimes;
         this._params = params;
     }
 
-    @action.bound async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
+    async retrieveActiveSymbols(retrieveNewActiveSymbols = false) {
         if (this.isRetrievingSymbols && !retrieveNewActiveSymbols) {
             await this.symbolsPromise;
             return this.activeSymbols;
@@ -104,7 +112,7 @@ export default class ActiveSymbols {
         return this.activeSymbols;
     }
 
-    @action.bound computeActiveSymbols(active_symbols: TActiveSymbols) {
+    computeActiveSymbols(active_symbols: TActiveSymbols) {
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
@@ -125,7 +133,7 @@ export default class ActiveSymbols {
         );
     }
 
-    @computed get activeSymbols() {
+     get activeSymbols() {
         return cloneCategories<TSubCategoryDataItem>(this.categorizedSymbols, item => {
             const itemObject = item as TSubCategoryDataItem;
             const { symbol } = itemObject.dataObject;

@@ -24,7 +24,6 @@
         "moduleResolution": "node",
         "baseUrl": "./",
         "esModuleInterop": true,
-        "experimentalDecorators": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "paths": {
