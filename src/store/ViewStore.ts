@@ -33,6 +33,7 @@ export default class ViewStore {
             currentRoute: observable,
             isInputActive: observable,
             routes: observable,
+            views : observable,
             sortedItems: computed,
             onChange: action.bound,
             onSubmit: action.bound,
