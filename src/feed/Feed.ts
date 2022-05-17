@@ -465,6 +465,7 @@ class Feed {
                     this._mainStore.chart.refreshChart();
                 }, max_tick_delay * 2 * 1000); // refresh the chart in case if there are no new ticks within a minute
             } else {
+                clearTimeout(this._last_tick_timeout);
                 this.unsubscribeAll();
                 this._mainStore.chart.refreshChart();
             }
