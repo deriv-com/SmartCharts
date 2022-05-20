@@ -1,4 +1,3 @@
-
 .sc-dialog {
     width: auto;
     top: auto;
@@ -14,7 +13,8 @@
         background: themed('DialogBodyBg');
     }
 
-    &.sc-dialog-enter-done, &.sc-dialog-enter-active {
+    &.sc-dialog-enter-done,
+    &.sc-dialog-enter-active {
         opacity: 1;
         transform: none;
         z-index: 3;
@@ -86,8 +86,8 @@
             padding: 10px 0px 10px 12px;
         }
         &--action {
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            align-items: center;
             padding: 0 16px;
             border-radius: 0 5px 0 0;
 
