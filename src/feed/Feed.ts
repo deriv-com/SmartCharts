@@ -1,15 +1,15 @@
+import { AuditDetailsForExpiredContract, TicksHistoryRequest, TicksHistoryResponse, ProposalOpenContract } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
-import { TicksHistoryRequest, TicksHistoryResponse } from '@deriv/api-types';
-import { Listener, TError, TGranularity, TMainStore, TQuote } from 'src/types';
-import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
+import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import Context from 'src/components/ui/Context';
-import { TickHistoryFormatter } from './TickHistoryFormatter';
-import { calculateGranularity, getUTCEpoch, calculateTimeUnitInterval, getUTCDate } from '../utils';
-import { RealtimeSubscription, DelayedSubscription } from './subscription';
+import { Listener, TError, TGranularity, TMainStore, TQuote } from 'src/types';
+import { calculateGranularity, calculateTimeUnitInterval, getUTCDate, getUTCEpoch } from '../utils';
 import ServerTime from '../utils/ServerTime';
+import { DelayedSubscription, RealtimeSubscription } from './subscription';
 import { TQuoteResponse } from './subscription/Subscription';
+import { TickHistoryFormatter } from './TickHistoryFormatter';
 
 type TPaginationParams = {
     period: number;
@@ -53,6 +53,15 @@ class Feed {
     }
     get granularity() {
         return this._mainStore.chart.granularity;
+    }
+    get allTicks() {
+        return this._mainStore.state.allTicks;
+    }
+    get shouldFetchTickHistory() {
+        return this._mainStore.state.shouldFetchTickHistory || false;
+    }
+    get contractInfo() {
+        return this._mainStore.state.contractInfo;
     }
     get context() {
         return this._mainStore.chart.context;
@@ -213,13 +222,15 @@ class Feed {
                     tickHistoryRequest as TCreateTickHistoryParams,
                     this._binaryApi,
                     this._stx,
-                    delay
+                    delay,
+                    this._mainStore
                 );
             } else {
                 subscription = new RealtimeSubscription(
                     tickHistoryRequest as TCreateTickHistoryParams,
                     this._binaryApi,
-                    this._stx
+                    delay,
+                    this._mainStore
                 );
             }
             try {
@@ -266,10 +277,18 @@ class Feed {
             getHistoryOnly = true;
         }
         if (getHistoryOnly) {
-            const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
-                tickHistoryRequest as TCreateTickHistoryParams
-            );
-            quotes = TickHistoryFormatter.formatHistory(response);
+            if (this.shouldFetchTickHistory || !(this.contractInfo as ProposalOpenContract).tick_stream) {
+                const response: TicksHistoryResponse = await this._binaryApi.getTickHistory(
+                    tickHistoryRequest as TCreateTickHistoryParams
+                );
+                quotes = TickHistoryFormatter.formatHistory(response);
+            } else {
+                // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
+                const allTicksContract = await this.allTicks;
+                quotes = TickHistoryFormatter.formatAllTicks(
+                    allTicksContract as keyof AuditDetailsForExpiredContract | []
+                    );
+            }
         }
         if (!quotes) {
             callback({ quotes: [] });
