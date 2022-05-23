@@ -924,8 +924,13 @@ class ChartStore {
         });
     }
     setResizeEvent = () => {
+        const listener = (entries: ResizeObserverEntry[]) => {
+            entries.forEach(() => {
+                if (this.rootNode && this.rootNode.clientWidth > 0) this.resizeScreen();
+            });
+        };
         if ('ResizeObserver' in window) {
-            this.resizeObserver = new ResizeObserver(this.resizeScreen);
+            this.resizeObserver = new ResizeObserver(listener);
             if (this.rootNode) this.resizeObserver.observe(this.rootNode);
         } else {
             import(/* webpackChunkName: "resize-observer-polyfill" */ 'resize-observer-polyfill').then(
@@ -935,7 +940,7 @@ class ChartStore {
                     if (this.stxx.isDestroyed || !this.rootNode) {
                         return;
                     }
-                    this.resizeObserver = new ResizeObserver(this.resizeScreen);
+                    this.resizeObserver = new ResizeObserver(listener);
                     this.resizeObserver.observe(this.rootNode);
                 }
             );
@@ -1255,9 +1260,9 @@ class ChartStore {
         const fncToCall = fullscreen_map[isInFullScreen ? 'fnc_exit' : 'fnc_enter'].find(
             fnc => (el as HTMLElement)[fnc as keyof HTMLElement]
         );
-
+        // fncToCall can be undefined for iOS that does not support fullscreenAPI
         if (fncToCall) {
-            (el as HTMLElement)[fncToCall as 'requestFullscreen']();
+            (el as HTMLElement)[fncToCall as 'requestFullscreen']()?.catch(() => undefined);
         }
     }
 }
