@@ -36,37 +36,37 @@ class ChartState {
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
-    @observable granularity: TGranularity;
-    @observable chartType?: string;
-    @observable startEpoch?: number;
-    @observable endEpoch?: number;
-    @observable symbol?: string;
-    @observable isConnectionOpened? = false;
-    @observable isChartReady = false;
-    @observable chartStatusListener?: (isChartReady: boolean) => boolean;
-    @observable stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
-    @observable settings?: TSettings;
-    @observable showLastDigitStats = false;
-    @observable scrollToEpoch?: number | null;
-    @observable onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
-    @observable clearChart?: () => void;
-    @observable isChartClosed = false;
-    @observable shouldMinimiseLastDigits = false;
-    @observable isStaticChart? = false;
-    @observable shouldFetchTradingTimes = true;
-    @observable shouldFetchTickHistory = true;
-    @observable allTicks = [];
-    @observable contractInfo = {};
-    @observable refreshActiveSymbols?: boolean;
-    @observable hasReachedEndOfData = false;
-    @observable prevChartType?: string;
-    @observable isChartScrollingToEpoch = false;
-    @observable crosshairState: number | null = 1;
-    @observable crosshairTooltipLeftAllow: number | null = null;
-    @observable maxTick?: number;
-    @observable enableScroll: boolean | null = true;
-    @observable enableZoom: boolean | null = true;
-    @observable yAxisMargin = { top: 106, bottom: 64 };
+    granularity: TGranularity;
+    chartType?: string;
+    startEpoch?: number;
+    endEpoch?: number;
+    symbol?: string;
+    isConnectionOpened? = false;
+    isChartReady = false;
+    chartStatusListener?: (isChartReady: boolean) => boolean;
+    stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
+    settings?: TSettings;
+    showLastDigitStats = false;
+    scrollToEpoch?: number | null;
+    onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
+    clearChart?: () => void;
+    isChartClosed = false;
+    shouldMinimiseLastDigits = false;
+    isStaticChart? = false;
+    shouldFetchTradingTimes = true;
+    shouldFetchTickHistory = true;
+    allTicks = [];
+    contractInfo = {};
+    refreshActiveSymbols?: boolean;
+    hasReachedEndOfData = false;
+    prevChartType?: string;
+    isChartScrollingToEpoch = false;
+    crosshairState: number | null = 1;
+    crosshairTooltipLeftAllow: number | null = null;
+    maxTick?: number;
+    enableScroll: boolean | null = true;
+    enableZoom: boolean | null = true;
+    yAxisMargin = { top: 106, bottom: 64 };
     tradingTimes: string | null = null;
     activeSymbols: string | null = null;
     chartControlsWidgets?: TChartControlsWidgets;
@@ -118,6 +118,9 @@ class ChartState {
             shouldMinimiseLastDigits: observable,
             isStaticChart: observable,
             shouldFetchTradingTimes: observable,
+            shouldFetchTickHistory: observable,
+            allTicks: observable,
+            contractInfo: observable,
             refreshActiveSymbols: observable,
             hasReachedEndOfData: observable,
             prevChartType: observable,
@@ -128,16 +131,7 @@ class ChartState {
             enableScroll: observable,
             enableZoom: observable,
             yAxisMargin: observable,
-            onContextReady: action.bound,
-            updateProps: action.bound,
-            setMaxtTick: action.bound,
-            setIsChartScrollingToEpoch: action.bound,
-            setChartClosed: action.bound,
-            stateChange: action.bound,
-            setChartIsReady: action.bound,
-            setChartGranularity: action.bound,
-            setChartType: action.bound,
-            setShouldMinimiseLastDigit: action.bound
+            updateProps: action.bound
         });
 
         this.mainStore = mainStore;
@@ -156,42 +150,44 @@ class ChartState {
         this.granularity = this.chartStore.granularity;
     };
 
-    @action.bound updateProps({
-        networkStatus,
-        chartControlsWidgets,
-        enabledChartFooter,
-        chartStatusListener,
-        stateChangeListener,
-        getIndicatorHeightRatio,
-        chartType,
-        clearChart,
-        endEpoch,
-        isAnimationEnabled = true,
-        isConnectionOpened,
-        isStaticChart,
-        granularity,
-        margin = 0,
-        onExportLayout,
-        refreshActiveSymbols,
-        scrollToEpoch,
-        settings,
-        shouldFetchTradingTimes = true,
-        shouldFetchTickHistory = true,
-        allTicks = [],
-        contractInfo = {},
-        showLastDigitStats = false,
-        startEpoch,
-        symbol,
-        crosshairState,
-        zoom,
-        maxTick,
-        crosshairTooltipLeftAllow,
-        yAxisMargin,
-        enableScroll = null,
-        enableZoom = null,
-        anchorChartToLeft = false,
-        chartData,
-    }: TChartProps) {
+    updateProps(
+        {
+            networkStatus,
+            chartControlsWidgets,
+            enabledChartFooter,
+            chartStatusListener,
+            stateChangeListener,
+            getIndicatorHeightRatio,
+            chartType,
+            clearChart,
+            endEpoch,
+            isAnimationEnabled = true,
+            isConnectionOpened,
+            isStaticChart,
+            granularity,
+            margin = 0,
+            onExportLayout,
+            refreshActiveSymbols,
+            scrollToEpoch,
+            settings,
+            shouldFetchTradingTimes = true,
+            shouldFetchTickHistory = true,
+            allTicks = [],
+            contractInfo = {},
+            showLastDigitStats = false,
+            startEpoch,
+            symbol,
+            crosshairState,
+            zoom,
+            maxTick,
+            crosshairTooltipLeftAllow,
+            yAxisMargin,
+            enableScroll = null,
+            enableZoom = null,
+            anchorChartToLeft = false,
+            chartData,
+        }: TChartProps
+    ) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
