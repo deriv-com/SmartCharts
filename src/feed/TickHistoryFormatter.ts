@@ -1,4 +1,4 @@
-import { TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
+import { TicksHistoryResponse, TicksStreamResponse, AuditDetailsForExpiredContract } from '@deriv/api-types';
 import { OHLCStreamResponse, TQuote } from 'src/types';
 import { getUTCDate } from '../utils';
 
@@ -58,4 +58,10 @@ export class TickHistoryFormatter {
 
         return undefined;
     }
-}
+    static formatAllTicks(allTicksContract: keyof AuditDetailsForExpiredContract | []): TQuote[] | undefined {
+        return allTicksContract?.map((res: any,) => ({
+            Date: getUTCDate(+res.epoch),
+            Close: +res.tick,
+        }));
+    };
+};

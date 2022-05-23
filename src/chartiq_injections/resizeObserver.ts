@@ -8,7 +8,11 @@ export const overrideResizeObserver = () => {
         if (timeout) {
             if (typeof ResizeObserver !== 'undefined') {
                 if (!resizeHandle) {
-                    resizeHandle = new ResizeObserver(listener);
+                    resizeHandle = new ResizeObserver((entries: ResizeObserverEntry[], observer: ResizeObserver) => {
+                        entries.forEach(() => {
+                            if (element && element.clientWidth > 0) listener?.(entries, observer);
+                        });
+                    });
                     resizeHandle.observe(element);
                 }
             } else {
