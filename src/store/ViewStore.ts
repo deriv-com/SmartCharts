@@ -135,7 +135,7 @@ export default class ViewStore {
         }
         this.mainStore.state.setChartIsReady(false);
         const stx = this.stx;
-        const granularity = getIntervalInSeconds(ViewStore.views[idx].layout) as TGranularity;
+        const granularity = getIntervalInSeconds(this.sortedItems[idx].layout) as TGranularity;
 
         this.mainStore.timeperiod.onGranularityChange(granularity);
         const importLayout = () => {
@@ -149,16 +149,16 @@ export default class ViewStore {
                 this.mainStore.state.setChartIsReady(true);
                 this.mainStore.state.setChartGranularity(granularity);
             };
-            stx.importLayout(ViewStore.views[idx].layout, {
+            stx.importLayout(this.sortedItems[idx].layout, {
                 managePeriodicity: true,
                 preserveTicksAndCandleWidth: true,
                 cb: finishImportLayout,
             });
             // This condition is to make spline chart appear as spline chart
             // Both line chart and spline chart are of type mountain but with different tensions
-            let chartType = ViewStore.views[idx].layout.chartType;
+            let chartType = this.sortedItems[idx].layout.chartType;
             if (chartType === 'mountain') {
-                const tension = ViewStore.views[idx].layout.tension;
+                const tension = this.sortedItems[idx].layout.tension;
                 if (tension === 0.5) {
                     chartType = 'spline';
                 }
