@@ -112,6 +112,7 @@ class ChartStore {
     serverTime?: string;
     networkStatus?: TNetworkConfig;
     constructor(mainStore: MainStore) {
+        console.log("hahaha")
         makeObservable(this, {
             containerWidth: observable,
             context: observable,
