@@ -8,12 +8,12 @@ import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
 export type TViews = {
-    name: any;
+    name: string;
     layout: {
-        chartType: any;
-        tension: any;
-        timeUnit?: any | any;
-        interval?: any | any;
+        chartType: string;
+        tension: number;
+        timeUnit?: string | number;
+        interval?: string | number;
     };
 }[];
 export default class ViewStore {
