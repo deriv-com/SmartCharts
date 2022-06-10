@@ -60,7 +60,7 @@ export default class ViewStore {
     }
 
     @computed get sortedItems() {
-        return [...ViewStore.views].sort((a, b) => (a.name < b.name ? -1 : 1));
+        return [...ViewStore.views].sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
     }
 
     static updateLocalStorage() {
@@ -93,7 +93,7 @@ export default class ViewStore {
     @action.bound saveViews() {
         if (ViewStore.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
-        } else if (this.templateName.trim().length > 0) {
+        } else if (this.templateName.toLowerCase().trim().length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
             ViewStore.views.push({ name: this.templateName.trim(), layout });
