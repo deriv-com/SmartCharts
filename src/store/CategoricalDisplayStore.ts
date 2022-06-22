@@ -232,9 +232,9 @@ export default class CategoricalDisplayStore {
             c.data = c.data.filter(item =>
                 hasSearchString(
                     (item as TSubCategoryDataItem).display ||
-                        (typeof (item as TSubCategoryDataItem).dataObject === 'object'
-                            ? (item as TSubCategoryDataItem).dataObject.symbol
-                            : '')
+                    (typeof (item as TSubCategoryDataItem).dataObject === 'object'
+                        ? (item as TSubCategoryDataItem).dataObject.symbol
+                        : '')
                 )
             );
             if (c.data.length) {

@@ -1,5 +1,5 @@
 import { ActiveSymbols as TActiveSymbols, ActiveSymbolsResponse } from '@deriv/api-types';
-import { action, computed, observable, runInAction,makeObservable } from 'mobx';
+import { action, computed, observable, runInAction, makeObservable } from 'mobx';
 import { TChanges, TChartProps, TInitialChartData } from 'src/types';
 import BinaryAPI from './BinaryAPI';
 import TradingTimes from './TradingTimes';
@@ -69,13 +69,13 @@ export default class ActiveSymbols {
     isRetrievingSymbols = false;
 
     constructor(api: BinaryAPI, tradingTimes: TradingTimes, params: ActiveSymbolsParam) {
-        makeObservable(this,{
+        makeObservable(this, {
             categorizedSymbols: observable,
             changes: observable,
-            retrieveActiveSymbols:action.bound,
-            computeActiveSymbols:action.bound,
-            activeSymbols:computed,
-            
+            retrieveActiveSymbols: action.bound,
+            computeActiveSymbols: action.bound,
+            activeSymbols: computed,
+
         })
         this._api = api;
         this._tradingTimes = tradingTimes;
@@ -133,7 +133,7 @@ export default class ActiveSymbols {
         );
     }
 
-     get activeSymbols() {
+    get activeSymbols() {
         return cloneCategories<TSubCategoryDataItem>(this.categorizedSymbols, item => {
             const itemObject = item as TSubCategoryDataItem;
             const { symbol } = itemObject.dataObject;
