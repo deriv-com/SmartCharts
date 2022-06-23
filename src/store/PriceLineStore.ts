@@ -26,11 +26,8 @@ export default class PriceLineStore {
     draggable = true;
     isDragging = false;
     visible = true;
-    // @observable top = 0;
     _price = 0;
-    // @observable zIndex;
     offScreen = false;
-    // @observable uncentered = false;
     title?: string;
     isOverlapping = false;
     offScreenDirection: keyof typeof DIRECTIONS | null = null;
