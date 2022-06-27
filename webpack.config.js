@@ -180,7 +180,6 @@ if (isApp) {
             patterns: [
                 { from: './sass/favicons/*.png' },
                 { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
-                { from: './app/browser-detection.js' },
                 { from: './app/assets/*.svg' },
                 { from: './nojs-smartcharts.css' },
                 {
