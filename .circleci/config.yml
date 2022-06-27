@@ -58,7 +58,11 @@ commands:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: npm run build-travis
+          command: |
+            npm run build-travis
+            mkdir public
+            mv dist/ public/
+            cp index.html public/
   deploy:
     description: "Deploy"
     parameters:
@@ -131,6 +135,27 @@ commands:
           failure_message: "Release failed for Smartchart with version *$(cat version)*"
           success_message: "Release succeeded for Smartchart with version *$(cat version)*"
           webhook: ${SLACK_WEBHOOK}
+
+  publish_to_pages_staging:
+    description: "Publish to cloudflare pages"
+    steps:
+      - run:
+          name: "Publish to cloudflare pages (staging)"
+          command: |
+            cd public
+            npx wrangler pages publish . --project-name=smart-charts-pages --branch=staging
+            echo "New staging website - http://staging.cf-pages-smart-charts.deriv.com"
+
+  publish_to_pages_production:
+    description: "Publish to cloudflare pages"
+    steps:
+      - run:
+          name: "Publish to cloudflare pages (production)"
+          command: |
+            cd public
+            npx wrangler pages publish . --project-name=smart-charts-pages --branch=main
+            echo "New website - http://cf-pages-smart-charts.deriv.com"
+
 jobs:
   test:
     docker:
@@ -147,6 +172,10 @@ jobs:
       - npm_install
       - test
       - build
+      - persist_to_workspace:
+          root: public
+          paths:
+            - .
       - deploy:
           target_branch: "staging"
       - docker_build_push
@@ -160,6 +189,10 @@ jobs:
       - npm_install
       - test
       - build
+      - persist_to_workspace:
+          root: public
+          paths:
+            - .
       - deploy:
           target_branch: "production"
       - notify_slack
@@ -171,6 +204,10 @@ jobs:
       - npm_install
       - test
       - build
+      - persist_to_workspace:
+          root: public
+          paths:
+            - .
       - docker_build_push:
           docker_latest_image_tag: latest
           docker_image_tag: ${CIRCLE_TAG}
@@ -178,6 +215,22 @@ jobs:
           k8s_namespace: "charts-binary-com-production"
           k8s_version: ${CIRCLE_TAG}
       - notify_slack
+
+  publish_cloudflare_staging:
+    docker:
+      - image: circleci/node:16.13.1-stretch
+    steps:
+      - attach_workspace:
+          at: public
+      - publish_to_pages_staging
+
+  publish_cloudflare_production:
+    docker:
+      - image: circleci/node:16.13.1-stretch
+    steps:
+      - attach_workspace:
+          at: public
+      - publish_to_pages_production
 
 workflows:
   test:
@@ -192,6 +245,13 @@ workflows:
           filters:
             branches:
               only: /^master$/
+      - publish_cloudflare_staging:
+          requires:
+            - release_staging
+          filters:
+            branches:
+              only: /^master$/
+          context: binary-frontend-artifact-upload
       - release_production:
           filters:
             branches:
@@ -199,6 +259,15 @@ workflows:
             tags:
               only: /^production.*/
       - release_aws_production:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^production.*/
+          context: binary-frontend-artifact-upload
+      - publish_cloudflare_production:
+          requires:
+            - release_production
           filters:
             branches:
               ignore: /.*/
