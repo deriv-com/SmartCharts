@@ -26,6 +26,8 @@ class Feed {
     _binaryApi: BinaryAPI;
     _connectionClosedDate?: Date;
     _emitter: EventEmitter;
+    _last_tick_timeout: any;
+    _last_tick_timestamp: number;
     _mainStore: TMainStore;
     _serverTime: ServerTime;
     _stx: Context['stx'];
@@ -85,6 +87,8 @@ class Feed {
         this._tradingTimes = tradingTimes;
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
+        this._last_tick_timestamp = 0;
+        this._last_tick_timeout = null;
     }
     onRangeChanged = (forceLoad: boolean) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
@@ -163,6 +167,7 @@ class Feed {
         params: TPaginationParams,
         callback: TPaginationCallback
     ) {
+        this._last_tick_timestamp = this._serverTime.getEpoch();
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { period, interval, symbolObject } = params;
@@ -436,6 +441,10 @@ class Feed {
         return result;
     }
     _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
+        clearTimeout(this._last_tick_timeout);
+        const current_tick_timestamp = this._serverTime.getEpoch();
+        const max_tick_delay = 30; // in seconds
+
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
@@ -463,10 +472,24 @@ class Feed {
                 noCreateDataSet: true,
             });
         } else {
-            this._stx.updateChartData(quotes, null, {
-                allowReplaceOHL: true,
-            });
-            this._stx.createDataSet();
+            // we will reload the chart instead of rendering new ticks
+            // in case if the duration between the previous tick and the current one is longer than a minute
+            // to avoid disturbing animation on slower devices
+            if (current_tick_timestamp - this._last_tick_timestamp < max_tick_delay) {
+                this._stx.updateChartData(quotes, null, {
+                    allowReplaceOHL: true,
+                });
+                this._stx.createDataSet();
+                this._last_tick_timeout = setTimeout(() => {
+                    this.unsubscribeAll();
+                    this._mainStore.chart.refreshChart();
+                }, max_tick_delay * 2 * 1000); // refresh the chart in case if there are no new ticks within a minute
+            } else {
+                clearTimeout(this._last_tick_timeout);
+                this.unsubscribeAll();
+                this._mainStore.chart.refreshChart();
+            }
+            this._last_tick_timestamp = current_tick_timestamp;
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
