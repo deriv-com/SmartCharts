@@ -77,7 +77,7 @@ export const SymbolSelectButton = observer(SymbolSelectButtonBase);
 
 const ChartPriceBase = ({ isVisible, status, todayChange, todayChangePercent }: TChartPriceProps) => {
     const { chartTitle } = useStores();
-    const { animatedPrice } = chartTitle;
+    const { animatedPrice, decimalPlaces } = chartTitle;
     const { price, isIncrease } = animatedPrice;
     return isVisible ? (
         <div className='cq-chart-price'>
@@ -86,6 +86,7 @@ const ChartPriceBase = ({ isVisible, status, todayChange, todayChangePercent }: 
                 price={price}
                 isIncrease={isIncrease}
                 status={animatedPrice.status}
+                decimalPlaces={decimalPlaces}
             />
             <div className='divider'>-</div>
             <div className={classNames('cq-change', status)}>
