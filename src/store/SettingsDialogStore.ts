@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from 'mobx';
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { TObject, TSettingsItem, TSettingsItemGroup } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -18,29 +18,40 @@ export default class SettingsDialogStore {
     menuStore: MenuStore;
     onChanged: (items: TSettingsItem[]) => void;
     onDeleted?: () => void;
-    @observable
     items: TSettingsItem[] = []; // [{id: '', title: '', value: ''}]
-    @observable
     title = '';
-    @observable
     formTitle = '';
-    @observable
     formClassname = '';
-    @observable
     description = '';
-    @observable
     activeTab = 'settings'; // 'settings' | 'description'
-    @computed
     get showTabs() {
         return !!this.description;
     }
-    @observable
     scrollPanel?: HTMLElement;
-    @observable
     dialogPortalNodeId?: string;
-    @observable
     freezeScroll = false;
     constructor({ mainStore, getContext, onChanged, onDeleted }: TSettingsDialogStoreProps) {
+        makeObservable(this, {
+            items: observable,
+            title: observable,
+            formTitle: observable,
+            formClassname: observable,
+            description: observable,
+            activeTab: observable,
+            showTabs: computed,
+            scrollPanel: observable,
+            dialogPortalNodeId: observable,
+            freezeScroll: observable,
+            open: computed,
+            setFreezeScroll: action.bound,
+            setOpen: action.bound,
+            onResetClick: action.bound,
+            onItemDelete: action.bound,
+            onItemChange: action.bound,
+            itemGroups: computed,
+            setScrollPanel: action.bound
+        });
+
         this.mainStore = mainStore;
         this.getContext = getContext;
         this.onChanged = onChanged;
@@ -75,7 +86,6 @@ export default class SettingsDialogStore {
     get theme() {
         return this.mainStore.chartSetting.theme;
     }
-    @computed
     get open() {
         return this.menuStore.open;
     }
@@ -90,29 +100,24 @@ export default class SettingsDialogStore {
         });
         this.setFreezeScroll(freezeScroll);
     };
-    @action.bound
     setFreezeScroll(status: boolean) {
         this.freezeScroll = status;
     }
-    @action.bound
     setOpen(value: boolean) {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop = 0;
         }
         return this.menuStore.setOpen(value);
     }
-    @action.bound
     onResetClick() {
         const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
         this.items = items;
         this.onChanged(items);
     }
-    @action.bound
     onItemDelete() {
         this.menuStore.setOpen(false);
         if (this.onDeleted) this.onDeleted();
     }
-    @action.bound
     onItemChange(id: string, newValue: string | number | boolean | TObject) {
         const item = this.items.find(x => x.id === id);
         if (item && item.value !== newValue) {
@@ -121,7 +126,6 @@ export default class SettingsDialogStore {
             this.onChanged(this.items);
         }
     }
-    @computed
     get itemGroups() {
         const restGroup: TSettingsItem[] = [];
         const groups: TSettingsItemGroup[] = [];
@@ -162,7 +166,6 @@ export default class SettingsDialogStore {
         });
         return groups;
     }
-    @action.bound
     setScrollPanel(element: HTMLElement) {
         this.scrollPanel = element;
     }

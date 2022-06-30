@@ -106,8 +106,6 @@
         "md5-file": "^4.0.0",
         "mini-css-extract-plugin": "^0.8.0",
         "mkdirp": "^0.5.1",
-        "mobx": "^5.13.0",
-        "mobx-react-lite": "^2.2.2",
         "mocha": "^8.4.0",
         "node-sass": "^4.14.1",
         "nyc": "^14.1.1",
@@ -140,14 +138,16 @@
         "webpack": "^4.39.1",
         "webpack-bundle-analyzer": "^3.4.1",
         "webpack-cli": "^3.3.6",
-        "webpack-dev-server": "^3.11.0"
+        "webpack-dev-server": "^3.11.0",
+        "mobx-undecorate": "^1.2.0"
     },
     "dependencies": {
         "@welldone-software/why-did-you-render": "^3.3.8",
         "classnames": "^2.3.1",
         "event-emitter-es6": "^1.1.5",
         "lodash.debounce": "^4.0.8",
-        "mobx": "^5.0.3",
+        "mobx": "^6.5.0",
+        "mobx-react-lite": "^3.4.0",
         "moment": "^2.24.0",
         "prop-types": "^15.7.2",
         "react": "^16.13.1",

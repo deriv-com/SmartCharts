@@ -1,4 +1,4 @@
-import { action, observable, reaction, when } from 'mobx';
+import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TGranularity } from 'src/types';
 import MainStore from '.';
@@ -24,10 +24,25 @@ export default class TimeperiodStore {
     _injectionId?: TCIQAppend<() => void>;
     _serverTime: ReturnType<typeof ServerTime.getInstance>;
     mainStore: MainStore;
-    @observable portalNodeIdChanged?: string;
+    portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
+    timeUnit?: string | null = null;
+    interval: string | number | null = null;
+    preparingInterval: number | null = null;
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            portalNodeIdChanged: observable,
+            timeUnit: observable,
+            interval: observable,
+            preparingInterval: observable,
+            setGranularity: action.bound,
+            updateProps: action.bound,
+            changeGranularity: action.bound,
+            updateDisplay: action.bound,
+            updatePortalNode: action.bound
+        });
+
         this.mainStore = mainStore;
         this.predictionIndicator = new IndicatorPredictionDialogStore({
             mainStore,
@@ -54,9 +69,7 @@ export default class TimeperiodStore {
             this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
         } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
-    @observable timeUnit?: string | null = null;
-    @observable interval: string | number | null = null;
-    @observable preparingInterval: number | null = null;
+
 
     onGranularityChange: (granularity?: TGranularity) => void | null = () => null;
 
@@ -161,7 +174,7 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound setGranularity(granularity?: TGranularity) {
+    setGranularity(granularity?: TGranularity) {
         if (this.mainStore.state.granularity !== undefined) {
             console.error(
                 'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
@@ -173,13 +186,13 @@ export default class TimeperiodStore {
         this.mainStore.chart.changeSymbol(undefined, granularity);
     }
 
-    @action.bound updateProps(onChange: (granularity?: TGranularity) => void) {
+    updateProps(onChange: (granularity?: TGranularity) => void) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
         }
     }
 
-    @action.bound changeGranularity(interval: TGranularity) {
+    changeGranularity(interval: TGranularity) {
         if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
             this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
@@ -189,7 +202,7 @@ export default class TimeperiodStore {
         }
     }
 
-    @action.bound updateDisplay() {
+    updateDisplay() {
         if (!this.context) return;
         const stx = this.context.stx;
         this.timeUnit = getTimeUnit(stx.layout);
@@ -211,7 +224,7 @@ export default class TimeperiodStore {
         return y;
     };
 
-    @action.bound updatePortalNode(portalNodeId: string | undefined) {
+    updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }
 }

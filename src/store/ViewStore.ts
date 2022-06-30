@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from 'mobx';
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -17,13 +17,45 @@ export type TViews = {
     };
 }[];
 export default class ViewStore {
+    templateName = '';
+    currentRoute = 'main';
+    isInputActive = false;
+    views: TViews = createObjectFromLocalStorage('cq-views') || [];
+    routes = {
+        add: () => this.saveViews(),
+        main: () => this.updateRoute('add'),
+        cancel: () => this.onCancel(),
+        overwrite: () => this.overwrite(),
+    };
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            templateName: observable,
+            currentRoute: observable,
+            isInputActive: observable,
+            routes: observable,
+            views: observable,
+            sortedItems: computed,
+            onChange: action.bound,
+            onSubmit: action.bound,
+            onCancel: action.bound,
+            updateRoute: action.bound,
+            saveViews: action.bound,
+            overwrite: action.bound,
+            remove: action.bound,
+            removeAll: action.bound,
+            applyLayout: action.bound,
+            onToggleNew: action.bound,
+            inputRef: action.bound,
+            onFocus: action.bound,
+            onBlur: action.bound
+        });
+
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'templates' });
         reaction(
             () => this.menuStore.dialogStore.open,
             () => {
-                if (ViewStore.views.length === 0) {
+                if (this.views.length === 0) {
                     this.updateRoute('new');
                 } else {
                     this.updateRoute('main');
@@ -36,18 +68,9 @@ export default class ViewStore {
         );
     }
 
-    @observable static views: TViews = createObjectFromLocalStorage('cq-views') || [];
     mainStore: MainStore;
     menuStore: MenuStore;
-    @observable templateName = '';
-    @observable currentRoute = 'main';
-    @observable isInputActive = false;
-    @observable routes = {
-        add: () => this.saveViews(),
-        main: () => this.updateRoute('add'),
-        cancel: () => this.onCancel(),
-        overwrite: () => this.overwrite(),
-    };
+
 
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -59,74 +82,74 @@ export default class ViewStore {
         return this.mainStore.loader;
     }
 
-    @computed get sortedItems() {
-        return [...ViewStore.views].sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
+    get sortedItems() {
+        return [...this.views].sort((a, b) => (a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1));
     }
 
-    static updateLocalStorage() {
-        CIQ.localStorageSetItem('cq-views', JSON.stringify(ViewStore.views));
+    updateLocalStorage() {
+        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.views));
     }
 
-    @action.bound onChange(e: ChangeEvent<HTMLInputElement>) {
+    onChange(e: ChangeEvent<HTMLInputElement>) {
         if (this.currentRoute === 'overwrite') {
             return;
         }
         this.templateName = e.target.value;
     }
 
-    @action.bound onSubmit(e: KeyboardEvent<HTMLInputElement>) {
+    onSubmit(e: KeyboardEvent<HTMLInputElement>) {
         if (e.keyCode === 13) {
             this.saveViews();
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Save Template');
         }
     }
 
-    @action.bound onCancel() {
+    onCancel() {
         this.templateName = '';
         this.updateRoute('main');
     }
 
-    @action.bound updateRoute(name: string) {
+    updateRoute(name: string) {
         this.currentRoute = name;
     }
 
-    @action.bound saveViews() {
-        if (ViewStore.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
+    saveViews() {
+        if (this.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
             const layout = this.stx.exportLayout();
-            ViewStore.views.push({ name: this.templateName.trim(), layout });
-            ViewStore.updateLocalStorage();
+            this.views.push({ name: this.templateName.trim(), layout });
+            this.updateLocalStorage();
             this.templateName = '';
         }
     }
 
-    @action.bound overwrite() {
+    overwrite() {
         const layout = this.stx.exportLayout();
-        const templateIndex = ViewStore.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
-        ViewStore.views[templateIndex].layout = layout;
-        ViewStore.views[templateIndex].name = this.templateName.trim();
-        ViewStore.updateLocalStorage();
+        const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
+        this.views[templateIndex].layout = layout;
+        this.views[templateIndex].name = this.templateName.trim();
+        this.updateLocalStorage();
         this.updateRoute('main');
         this.templateName = '';
     }
 
-    @action.bound remove(idx: number, e: TCustomEvent) {
-        ViewStore.views = this.sortedItems.filter((_x, index) => idx !== index);
+    remove(idx: number, e: TCustomEvent) {
+        this.views = this.sortedItems.filter((_x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
-        ViewStore.updateLocalStorage();
+        this.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove Template');
     }
 
-    @action.bound removeAll() {
-        ViewStore.views = [];
-        ViewStore.updateLocalStorage();
+    removeAll() {
+        this.views = [];
+        this.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove All Templates');
         this.updateRoute('new');
     }
 
-    @action.bound applyLayout(idx: number, e: TCustomEvent) {
+    applyLayout(idx: number, e: TCustomEvent) {
         if (e.nativeEvent.is_item_removed) {
             return;
         }
@@ -172,22 +195,22 @@ export default class ViewStore {
         setTimeout(importLayout, 100);
     }
 
-    @action.bound onToggleNew() {
+    onToggleNew() {
         this.updateRoute('main');
     }
 
-    @action.bound inputRef(ref: HTMLElement | null) {
+    inputRef(ref: HTMLElement | null) {
         if (ref) {
             ref.focus();
             this.isInputActive = true;
         }
     }
 
-    @action.bound onFocus() {
+    onFocus() {
         this.isInputActive = true;
     }
 
-    @action.bound onBlur() {
+    onBlur() {
         this.isInputActive = false;
     }
 }

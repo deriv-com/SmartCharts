@@ -1,34 +1,42 @@
-import { computed, action, observable } from 'mobx';
+import { computed, action, observable, makeObservable } from 'mobx';
 import MainStore from '.';
 import MenuStore from './MenuStore';
 
 export default class IndicatorPredictionDialogStore {
-    @observable dialogPortalNodeId?: string;
+    dialogPortalNodeId?: string;
     mainStore: MainStore;
     menuStore: MenuStore;
     scrollPanel?: HTMLElement;
 
     constructor({ mainStore }: { mainStore: MainStore }) {
+        makeObservable(this, {
+            dialogPortalNodeId: observable,
+            open: computed,
+            setOpen: action.bound,
+            handleCancel: action.bound,
+            handleContinue: action.bound
+        });
+
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'indicator-setting' });
     }
 
-    @computed get open() {
+    get open() {
         return this.menuStore.open;
     }
 
-    @action.bound setOpen(value: boolean) {
+    setOpen(value: boolean) {
         if (value && this.scrollPanel) {
             this.scrollPanel.scrollTop = 0;
         }
         return this.menuStore.setOpen(value);
     }
 
-    @action.bound handleCancel() {
+    handleCancel() {
         this.setOpen(false);
     }
 
-    @action.bound handleContinue() {
+    handleContinue() {
         this.mainStore.studies.deletePredictionStudies();
         setTimeout(() => {
             this.mainStore.timeperiod.changeGranularity(0);
