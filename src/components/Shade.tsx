@@ -8,10 +8,14 @@ type TShadeProps = {
 };
 
 const Shade = ({ store }: TShadeProps) => {
-    const { visible, className, setShadeRef } = store;
+    const { is_square_shade, visible, className, setShadeRef } = store;
 
     return (
-        <div className={classNames('shade', className, { hidden: !visible })} ref={setShadeRef} style={{ top: -120 }} />
+        <div
+            className={classNames('shade', `${className}${is_square_shade ? '--square' : ''}`, { hidden: !visible })}
+            ref={setShadeRef}
+            style={{ top: -120 }}
+        />
     );
 };
 

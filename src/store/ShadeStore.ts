@@ -1,8 +1,9 @@
-import { observable } from 'mobx';
+import { action, observable } from 'mobx';
 
 export default class ShadeStore {
     _div: HTMLElement | null = null;
     @observable className = '';
+    @observable is_square_shade = false;
     @observable visible = false;
 
     constructor(className: string) {
@@ -28,6 +29,11 @@ export default class ShadeStore {
 
             this._div.style.transform = pos as string;
         }
+    };
+
+    @action
+    setSquareShade = (is_square_shade: boolean) => {
+        this.is_square_shade = is_square_shade;
     };
 
     setShadeRef = (ref: HTMLElement | null) => {

@@ -107,6 +107,7 @@ export type TBarrierUpdateProps = {
     hideOffscreenLine?: boolean;
     title?: string;
     showOffscreenArrows?: boolean;
+    squareShade?: boolean;
     isSingleBarrier?: boolean;
     opacityOnOverlap?: number;
 };

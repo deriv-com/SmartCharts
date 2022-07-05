@@ -54,6 +54,7 @@ export default class BarrierStore {
     @observable hideOffscreenLine = false;
     @observable hideOffscreenBarrier = false;
     @observable isSingleBarrier = false;
+    @observable squareShade = false;
 
     _shadeState = '';
 
@@ -133,6 +134,7 @@ export default class BarrierStore {
         lineStyle,
         title,
         showOffscreenArrows,
+        squareShade,
         isSingleBarrier,
         opacityOnOverlap,
     }: TBarrierUpdateProps): void {
@@ -174,6 +176,7 @@ export default class BarrierStore {
                 this.hideOffscreenLine = !!hideOffscreenLine;
                 this.hideOffscreenBarrier = !!hideOffscreenBarrier;
                 this.isSingleBarrier = !!isSingleBarrier;
+                this.squareShade = !!squareShade;
             })
         );
         if (opacityOnOverlap) {
@@ -352,6 +355,12 @@ export default class BarrierStore {
             this._shadeBetween();
         } else if (this._shadeState === BarrierStore.SHADE_OUTSIDE) {
             this._shadeOutside();
+        }
+
+        if (this.squareShade) {
+            this.aboveShadeStore.setSquareShade(true);
+            this.betweenShadeStore.setSquareShade(true);
+            this.belowShadeStore.setSquareShade(true);
         }
 
         if (this._low_barrier.visible && this._isBarriersOffScreen()) {

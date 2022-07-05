@@ -165,15 +165,37 @@
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
-.top-shade {
+.top-shade, .top-shade--square {
     background-image: linear-gradient(to bottom, transparent, var(--shade-color)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+
+    &--square {
+        @include themify($themes) {
+            border-bottom: 1px dashed themed('SquareBarrierShadeBorder');
+        }
+        background-clip: padding-box;
+    }
 }
 
-.between-shade {
+.between-shade, .between-shade--square {
     opacity: 0.2;
     background-color: var(--shade-color);
+
+    &--square {
+        @include themify($themes) {
+            border-top: 1px dashed themed('SquareBarrierShadeBorder');
+            border-bottom: 1px dashed themed('SquareBarrierShadeBorder');
+        }
+        background-clip: padding-box;
+    }
 }
 
-.bottom-shade {
+.bottom-shade, .bottom-shade--square {
     background-image: linear-gradient(to bottom, var(--shade-color), transparent); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+
+    &--square {
+        @include themify($themes) {
+            border-top: 1px dashed themed('SquareBarrierShadeBorder');
+        }
+        background-clip: padding-box;
+    }
 }
