@@ -58,7 +58,11 @@ commands:
       - run:
           name: Building App
           no_output_timeout: 30m
-          command: npm run build-travis
+          command: |
+            npm run build-travis
+            mkdir public
+            mv dist/ public/
+            cp index.html public/
   deploy:
     description: "Deploy"
     parameters:
@@ -139,7 +143,7 @@ commands:
           name: "Publish to cloudflare pages (staging)"
           command: |
             npm i wrangler@2.0.19
-            cd dist
+            cd public
             npx wrangler pages publish . --project-name=smart-charts-pages --branch=staging
             echo "New staging website - http://staging.cf-pages-smart-charts.deriv.com"
 
@@ -150,7 +154,7 @@ commands:
           name: "Publish to cloudflare pages (production)"
           command: |
             npm i wrangler@2.0.19
-            cd dist
+            cd public
             npx wrangler pages publish . --project-name=smart-charts-pages --branch=main
             echo "New website - http://cf-pages-smart-charts.deriv.com"
 
@@ -171,7 +175,7 @@ jobs:
       - test
       - build
       - persist_to_workspace:
-          root: dist
+          root: public
           paths:
             - .
       - deploy:
@@ -188,7 +192,7 @@ jobs:
       - test
       - build
       - persist_to_workspace:
-          root: dist
+          root: public
           paths:
             - .
       - deploy:
@@ -203,7 +207,7 @@ jobs:
       - test
       - build
       - persist_to_workspace:
-          root: dist
+          root: public
           paths:
             - .
       - docker_build_push:
@@ -219,7 +223,7 @@ jobs:
       - image: circleci/node:16.13.1-stretch
     steps:
       - attach_workspace:
-          at: dist
+          at: public
       - publish_to_pages_staging
 
   publish_cloudflare_production:
@@ -227,7 +231,7 @@ jobs:
       - image: circleci/node:16.13.1-stretch
     steps:
       - attach_workspace:
-          at: dist
+          at: public
       - publish_to_pages_production
 
 workflows:
