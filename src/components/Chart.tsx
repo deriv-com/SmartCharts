@@ -126,14 +126,18 @@ const Chart = (props: TChartProps) => {
                                 <RenderInsideChart at='subholder'>
                                     <PaginationLoader />
                                 </RenderInsideChart>
-                                <div className='cq-top-ui-widgets'>
-                                    <TopWidgets />
-                                </div>
+                                {!loader.isActive && (
+                                    <div className='cq-top-ui-widgets'>
+                                        <TopWidgets />
+                                    </div>
+                                )}
                                 <div
                                     className='chartContainer'
                                     style={{
                                         height:
-                                            historical && chartContainerHeight && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                            historical && chartContainerHeight && isMobile
+                                                ? chartContainerHeight - 30
+                                                : chartContainerHeight,
                                     }}
                                 >
                                     <Crosshair />
