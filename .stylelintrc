@@ -52,7 +52,7 @@
     "property-case"                                    : "lower",
     "plugin/no-unsupported-browser-features"           : [true, {
       "severity": "error",
-      "ignore": ["calc", "user-select-none", "multicolumn", "css-appearance"]
+      "ignore": ["calc", "user-select-none", "multicolumn", "css-appearance", "intrinsic-width"]
     }],
     "rule-empty-line-before"                           : ["always", { "ignore": ["after-comment"], "except": ["inside-block-and-after-rule", "first-nested"] }],
     "selector-attribute-brackets-space-inside"         : "never",

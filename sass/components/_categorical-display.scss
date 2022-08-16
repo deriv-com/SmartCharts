@@ -1,7 +1,9 @@
 // sc-market-categorical-display
 .sc-mcd {
     $self: &;
-    width: 560px;
+    max-width: 600px;
+    min-width: 560px;
+    width: auto;
     display: flex;
     height: 100%;
     @include themify($themes) {
@@ -29,7 +31,8 @@
         }
     }
     &__content {
-        width: 320px;
+        min-width: 320px;
+        width: max-content;
         display: flex;
         flex-direction: column;
 
