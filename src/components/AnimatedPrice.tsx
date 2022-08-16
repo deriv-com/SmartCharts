@@ -1,15 +1,17 @@
 import React from 'react';
 import classNames from 'classnames';
 import AnimatedPriceStore from 'src/store/AnimatedPriceStore';
+import ChartTitleStore from 'src/store/ChartTitleStore';
 
 type TAnimatedPriceProps = {
     isIncrease: AnimatedPriceStore['isIncrease'];
     price: AnimatedPriceStore['price'];
     className: AnimatedPriceStore['className'];
     status: AnimatedPriceStore['status'];
+    decimalPlaces: ChartTitleStore['decimalPlaces'];
 };
 
-const AnimatedPrice = ({ isIncrease, price, className }: TAnimatedPriceProps) => (
+const AnimatedPrice = ({ isIncrease, price, className, decimalPlaces }: TAnimatedPriceProps) => (
     <>
         {!price && <span className='cq-comparison-loader stx-show' />}
         <div
@@ -18,7 +20,7 @@ const AnimatedPrice = ({ isIncrease, price, className }: TAnimatedPriceProps) =>
                 'cq-down': !isIncrease,
             })}
         >
-            {price}
+            {price.toFixed(decimalPlaces)}
         </div>
     </>
 );

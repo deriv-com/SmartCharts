@@ -117,12 +117,23 @@
 
 .ic-wld {
     > span:last-child {
-        > svg {
+        top: -11px;
+        left: 13px;
+
+        svg {
             width: 15px;
             height: 10px;
         }
-        top: -11px;
-        left: 13px;
+        .app-contents--is-mobile & {
+            top: -4px;
+            left: 11px;
+
+            svg {
+                width: 12px;
+                height: 8px;
+                box-sizing: content-box;
+            }
+        }
     }
 }
 
