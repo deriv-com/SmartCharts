@@ -1,4 +1,4 @@
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable, when, makeObservable } from 'mobx';
 import { TChartTitleProps } from 'src/components/ChartTitle';
 import Context from 'src/components/ui/Context';
 import { TChanges, TOpenMarket, TQuote, TTimes } from 'src/types';
@@ -14,7 +14,33 @@ export default class ChartTitleStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     serverTime: ReturnType<typeof ServerTime.getInstance>;
+
+    todayChange: string | null = null;
+    todayChangePercent: string | null = null;
+    isVisible = false;
+    openMarket = {};
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            todayChange: observable,
+            todayChangePercent: observable,
+            isVisible: observable,
+            openMarket: observable,
+            currentSymbol: computed,
+            isSymbolOpen: computed,
+            decimalPlaces: computed,
+            isShowChartPrice: computed,
+            tradingTimes: computed,
+            symbolOpenTime: computed,
+            currentActiveCategory: computed,
+            currentActiveSubCategory: computed,
+            currentActiveMarket: computed,
+            setSymbol: action.bound,
+            update: action.bound,
+            hidePrice: action.bound,
+            updateProps: action.bound
+        });
+
         this.mainStore = mainStore;
         when(() => !!this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'chart-title' });
@@ -33,14 +59,7 @@ export default class ChartTitleStore {
         });
         this.serverTime = ServerTime.getInstance();
     }
-    @observable
-    todayChange: string | null = null;
-    @observable
-    todayChangePercent: string | null = null;
-    @observable
-    isVisible = false;
-    @observable
-    openMarket = {};
+
     enableShowPrice = false;
     searchInputClassName?: string;
     get chart() {
@@ -52,27 +71,21 @@ export default class ChartTitleStore {
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
-    @computed
     get currentSymbol() {
         return this.mainStore.chart.currentActiveSymbol;
     }
-    @computed
     get isSymbolOpen() {
         return this.currentSymbol?.exchange_is_open;
     }
-    @computed
     get decimalPlaces() {
         return (this.mainStore.chart.currentActiveSymbol?.decimal_places as number) || 2;
     }
-    @computed
     get isShowChartPrice() {
         return this.mainStore.chart.isChartAvailable;
     }
-    @computed
     get tradingTimes() {
         return this.mainStore.chart.tradingTimes;
     }
-    @computed
     get symbolOpenTime() {
         const times =
             this.tradingTimes?._tradingTimesMap && this.tradingTimes._tradingTimesMap.length && this.currentSymbol
@@ -85,21 +98,18 @@ export default class ChartTitleStore {
         }
         return { openTime };
     }
-    @computed
     get currentActiveCategory() {
         if ((this.openMarket as TOpenMarket).category) {
             return (this.openMarket as TOpenMarket).category;
         }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
     }
-    @computed
     get currentActiveSubCategory() {
         if ((this.openMarket as TOpenMarket).subcategory) {
             return (this.openMarket as TOpenMarket).subcategory;
         }
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.symbol : '';
     }
-    @computed
     get currentActiveMarket() {
         if ((this.openMarket as TOpenMarket).market) {
             return (this.openMarket as TOpenMarket).market;
@@ -119,7 +129,6 @@ export default class ChartTitleStore {
             })
         );
     };
-    @action.bound
     setSymbol(symbolObj: string) {
         if (this.mainStore.state.symbol !== undefined) {
             console.error(
@@ -129,7 +138,6 @@ export default class ChartTitleStore {
         }
         this.chart.changeSymbol(symbolObj);
     }
-    @action.bound
     update(quote?: TQuote) {
         if (!this.currentSymbol) {
             return;
@@ -162,12 +170,10 @@ export default class ChartTitleStore {
     }
     onMouseEnter = () => this.crosshairStore.updateVisibility(false);
     onMouseLeave = () => this.crosshairStore.updateVisibility(true);
-    @action.bound
     hidePrice() {
         this.isVisible = false;
         this.enableShowPrice = false;
     }
-    @action.bound
     updateProps({ open_market, open }: TChartTitleProps) {
         if (open_market) {
             this.openMarket = open_market;

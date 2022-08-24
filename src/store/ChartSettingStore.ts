@@ -1,4 +1,4 @@
-import { observable, action, when, reaction } from 'mobx';
+import { observable, action, when, reaction, makeObservable } from 'mobx';
 import { TLanguage, TSettings } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -9,7 +9,34 @@ import MenuStore from './MenuStore';
 export default class ChartSettingStore {
     mainStore: MainStore;
     menuStore: MenuStore;
+
+    language: TLanguage | string = '';
+    position = 'bottom';
+    theme = 'light';
+    countdown = false;
+    historical = false;
+    isAutoScale = true;
+    isHighestLowestMarkerEnabled = true;
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            language: observable,
+            position: observable,
+            theme: observable,
+            countdown: observable,
+            historical: observable,
+            isAutoScale: observable,
+            isHighestLowestMarkerEnabled: observable,
+            updateActiveLanguage: action.bound,
+            setLanguage: action.bound,
+            setTheme: action.bound,
+            setPosition: action.bound,
+            showCountdown: action.bound,
+            setHistorical: action.bound,
+            setAutoScale: action.bound,
+            toggleHighestLowestMarker: action.bound
+        });
+
         this.defaultLanguage = this.languages[0];
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'setting' });
@@ -40,20 +67,7 @@ export default class ChartSettingStore {
     languages: (TLanguage | string)[] = [];
     defaultLanguage = {} as TLanguage | string;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void = undefined;
-    @observable
-    language: TLanguage | string = '';
-    @observable
-    position = 'bottom';
-    @observable
-    theme = 'light';
-    @observable
-    countdown = false;
-    @observable
-    historical = false;
-    @observable
-    isAutoScale = true;
-    @observable
-    isHighestLowestMarkerEnabled = true;
+
     setSettings(settings?: TSettings) {
         if (settings === undefined) {
             return;
@@ -113,7 +127,6 @@ export default class ChartSettingStore {
             });
         }
     }
-    @action.bound
     updateActiveLanguage(activeLanguages: Array<string>) {
         if (activeLanguages) {
             this.languages = activeLanguages
@@ -129,7 +142,6 @@ export default class ChartSettingStore {
             this.setLanguage((this.languages[0] as TLanguage).key);
         }
     }
-    @action.bound
     setLanguage(lng: string) {
         if (!this.languages.length) {
             return;
@@ -148,7 +160,6 @@ export default class ChartSettingStore {
         );
         this.saveSetting();
     }
-    @action.bound
     setTheme(theme: string) {
         if (this.theme === theme) {
             return;
@@ -161,7 +172,6 @@ export default class ChartSettingStore {
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();
     }
-    @action.bound
     setPosition(value: string) {
         if (this.position === value) {
             return;
@@ -182,7 +192,6 @@ export default class ChartSettingStore {
         }, 10);
         this.menuStore.setOpen(false);
     }
-    @action.bound
     showCountdown(value: boolean) {
         if (this.countdown === value) {
             return;
@@ -191,7 +200,6 @@ export default class ChartSettingStore {
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `${value ? 'Show' : 'Hide'} Countdown`);
         this.saveSetting();
     }
-    @action.bound
     setHistorical(value: boolean) {
         if (this.historical === value) {
             return;
@@ -208,7 +216,6 @@ export default class ChartSettingStore {
             this.mainStore.chart.resizeScreen();
         }, 10);
     }
-    @action.bound
     setAutoScale(value: boolean) {
         if (this.isAutoScale === value) {
             return;
@@ -217,7 +224,6 @@ export default class ChartSettingStore {
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
         this.saveSetting();
     }
-    @action.bound
     toggleHighestLowestMarker(value: boolean) {
         if (this.isHighestLowestMarkerEnabled === value) {
             return;

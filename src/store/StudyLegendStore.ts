@@ -1,4 +1,4 @@
-import { action, observable, reaction, when } from 'mobx';
+import { action, observable, reaction, when, makeObservable } from 'mobx';
 import React from 'react';
 import Context from 'src/components/ui/Context';
 import { TSettingsItem } from 'src/types';
@@ -72,7 +72,38 @@ export default class StudyLegendStore {
     menuStore: MenuStore;
     searchInput: React.RefObject<HTMLInputElement>;
     settingsDialog: SettingsDialogStore;
+    selectedTab = 1;
+    filterText = '';
+    activeItems: TActiveItem[] = [];
+    infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
+    portalNodeIdChanged? = '';
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            selectedTab: observable,
+            filterText: observable,
+            activeItems: observable,
+            infoItem: observable,
+            portalNodeIdChanged: observable,
+            removeExtraStudies: action.bound,
+            onSelectItem: action.bound,
+            updateIndicatorHeight: action.bound,
+            updateStyle: action.bound,
+            updateProps: action.bound,
+            editStudy: action.bound,
+            deleteStudy: action.bound,
+            updateStudy: action.bound,
+            updateActiveStudies: action.bound,
+            deletePredictionStudies: action.bound,
+            deleteAllStudies: action.bound,
+            clearStudies: action.bound,
+            onStudyRemoved: action.bound,
+            onSelectTab: action.bound,
+            setFilterText: action.bound,
+            onInfoItem: action.bound,
+            updatePortalNode: action.bound
+        });
+
         this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => !!this.context, this.onContextReady);
@@ -98,16 +129,7 @@ export default class StudyLegendStore {
     }
     previousStudies: Record<string, typeof CIQ.Studies.StudyDescriptor> = {};
     searchInputClassName?: string;
-    @observable
-    selectedTab = 1;
-    @observable
-    filterText = '';
-    @observable
-    activeItems: TActiveItem[] = [];
-    @observable
-    infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
-    @observable
-    portalNodeIdChanged? = '';
+    
     onContextReady = () => {
         this.stx.addEventListener('studyOverlayEdit', this.editStudy);
         this.stx.addEventListener('studyPanelEdit', this.editStudy);
@@ -161,7 +183,6 @@ export default class StudyLegendStore {
     get maxAllowedItem() {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }
-    @action.bound
     removeExtraStudies() {
         if (this.stx.layout && this.stx.layout.studies) {
             Object.keys(this.stx.layout.studies).forEach((study, idx) => {
@@ -175,7 +196,6 @@ export default class StudyLegendStore {
             });
         }
     }
-    @action.bound
     onSelectItem(item: string) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
@@ -190,7 +210,6 @@ export default class StudyLegendStore {
             this.mainStore.chart.setYaxisWidth();
         }
     }
-    @action.bound
     updateIndicatorHeight() {
         const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
         const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
@@ -207,16 +226,13 @@ export default class StudyLegendStore {
     }
     // Temporary prevent user from adding more than 5 indicators
     // TODO All traces can be removed after new design for studies
-    @action.bound
     updateStyle() {
         const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
-    @action.bound
     updateProps({ searchInputClassName }: { searchInputClassName?: string }) {
         this.searchInputClassName = searchInputClassName;
     }
-    @action.bound
     editStudy(study: TActiveItem['dataObject']) {
         const helper = new CIQ.Studies.DialogHelper(study);
         this.helper = helper;
@@ -285,7 +301,6 @@ export default class StudyLegendStore {
         this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.setOpen(true);
     }
-    @action.bound
     deleteStudy(study: TActiveItem['dataObject']['sd']) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
         if (!study.permanent) {
@@ -298,7 +313,6 @@ export default class StudyLegendStore {
             setTimeout(this.updateIndicatorHeight, 20);
         }
     }
-    @action.bound
     updateStudy(study: typeof CIQ.Studies.StudyDescriptor, items: TSettingsItem[]) {
         const updates: Record<string, Record<string, string>> = {};
         for (const { id, category, value, type } of items as TStudyItems[]) {
@@ -434,7 +448,6 @@ export default class StudyLegendStore {
         // All traces can be removed after new design for studies
         this.updateStyle();
     };
-    @action.bound
     updateActiveStudies() {
         const stx = this.stx;
         const activeItems: TActiveItem[] = [];
@@ -467,7 +480,7 @@ export default class StudyLegendStore {
         this.activeItems = activeItems;
     }
 
-    @action.bound deletePredictionStudies() {
+    deletePredictionStudies() {
         const stx = this.stx;
         if (stx) {
             (this.activeItems || [])
@@ -479,7 +492,7 @@ export default class StudyLegendStore {
         }
     }
 
-    @action.bound deleteAllStudies() {
+    deleteAllStudies() {
         const stx = this.stx;
         if (stx) {
             Object.keys(stx.layout.studies || []).forEach(id => {
@@ -488,30 +501,26 @@ export default class StudyLegendStore {
             setTimeout(this.updateIndicatorHeight, 20);
         }
     }
-    @action.bound
     clearStudies() {
         if (this.context) {
             this.context.advertised.Layout.clearStudies();
         }
     }
-    @action.bound
     onStudyRemoved() {
         this.updateActiveStudies();
         setTimeout(this.updateIndicatorHeight, 20);
     }
-    @action.bound
     onSelectTab(tabIndex: number) {
         this.setFilterText('');
         this.selectedTab = tabIndex;
         this.onInfoItem(null);
     }
-    @action.bound
     setFilterText(filterText: string) {
         this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
     }
 
-    @action.bound onInfoItem(study: TActiveItem | null) {
+    onInfoItem(study: TActiveItem | null) {
         this.infoItem = study
             ? {
                   ...study,
@@ -519,7 +528,6 @@ export default class StudyLegendStore {
               }
             : study;
     }
-    @action.bound
     updatePortalNode(portalNodeId?: string) {
         this.portalNodeIdChanged = portalNodeId;
     }

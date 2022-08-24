@@ -1,11 +1,11 @@
-import { action, computed, observable, reaction, when } from 'mobx';
+import { action, computed, observable, reaction, when, makeObservable } from 'mobx';
 import { TQuote } from 'src/types';
 import MainStore from '.';
 import ChartStore from './ChartStore';
 
 export default class NavigationWidgetStore {
     mainStore: MainStore;
-    @observable mouse_in = false;
+    mouse_in = false;
     get chart(): ChartStore {
         return this.mainStore.chart;
     }
@@ -20,6 +20,16 @@ export default class NavigationWidgetStore {
     }
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            mouse_in: observable,
+            enableScale: computed,
+            onMouseWheel: action.bound,
+            onMouseEnter: action.bound,
+            onMouseLeave: action.bound,
+            onScale: action.bound,
+            onCrosshairChange: action.bound
+        });
+
         this.mainStore = mainStore;
         when(() => !!this.mainStore.chart.context, this.onContextReady);
         reaction(() => this.crosshairStore.state, this.onCrosshairChange);
@@ -29,26 +39,26 @@ export default class NavigationWidgetStore {
         this.stxx.prepend('mouseWheel', this.onMouseWheel);
     };
 
-    @computed get enableScale() {
+    get enableScale() {
         return this.stateStore.startEpoch;
     }
 
-    @action.bound onMouseWheel() {
+    onMouseWheel() {
         this.stxx.chart.lockScroll = false;
         this.mainStore.chart.updateScaledOneOne(false);
     }
 
-    @action.bound onMouseEnter() {
+    onMouseEnter() {
         this.mouse_in = true;
         this.crosshairStore.updateVisibility(false);
     }
 
-    @action.bound onMouseLeave() {
+    onMouseLeave() {
         this.mouse_in = false;
         this.crosshairStore.updateVisibility(true);
     }
 
-    @action.bound onScale() {
+    onScale() {
         let point: TQuote | null = null;
         const { dataSet } = this.stxx.chart;
         if (dataSet && dataSet.length) point = dataSet[0];
@@ -59,7 +69,7 @@ export default class NavigationWidgetStore {
         }, 10);
     }
 
-    @action.bound onCrosshairChange() {
+    onCrosshairChange() {
         if (this.crosshairStore.state === 2 && this.mouse_in) {
             this.crosshairStore.updateVisibility(false);
         }

@@ -1,4 +1,4 @@
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TQuote } from 'src/types';
 import MainStore from '.';
@@ -49,15 +49,24 @@ const MAX_TOOLTIP_WIDTH = 315;
 class CrosshairStore {
     mainStore: MainStore;
     prev_arrow?: string;
+
+    state: number | null = 2;
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            activeSymbol: computed,
+            decimalPlaces: computed,
+            state: observable,
+            toggleState: action.bound,
+            updateProps: action.bound,
+            setCrosshairState: action.bound
+        });
+
         this.mainStore = mainStore;
         when(() => !!this.context, this.onContextReady);
     }
-    @computed
     get activeSymbol() {
         return this.mainStore.chart.currentActiveSymbol;
     }
-    @computed
     get decimalPlaces() {
         return this.activeSymbol?.decimal_places;
     }
@@ -73,8 +82,7 @@ class CrosshairStore {
     get isChartReady() {
         return this.mainStore.state.isChartReady;
     }
-    @observable
-    state: number | null = 2;
+    
     node = null;
     lastBar = {};
     showChange = false;
@@ -107,16 +115,13 @@ class CrosshairStore {
             crosshair.classList.remove('active');
         }
     }
-    @action.bound
     toggleState() {
         const state = ((this.state as number) + 1) % 3;
         this.setCrosshairState(state);
     }
-    @action.bound
     updateProps(onChange?: () => void) {
         this.onCrosshairChanged = onChange || (() => null);
     }
-    @action.bound
     setCrosshairState(state: number | null) {
         if (!this.context) {
             return;

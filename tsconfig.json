@@ -24,12 +24,12 @@
         "moduleResolution": "node",
         "baseUrl": "./",
         "esModuleInterop": true,
-        "experimentalDecorators": true,
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "paths": {
             "@binary-com/smartcharts": ["src/"]
-        }
+        },
+        "useDefineForClassFields": true
     },
     "include": ["**/*.ts", "**/*.tsx", "./declarations.d.ts"],
     "exclude": ["**/*.js", "**/*.jsx"]

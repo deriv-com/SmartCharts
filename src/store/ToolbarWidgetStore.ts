@@ -1,4 +1,4 @@
-import { action, reaction } from 'mobx';
+import { action, reaction, makeObservable } from 'mobx';
 import MainStore from '.';
 
 export default class ToolbarWidgetStore {
@@ -11,6 +11,11 @@ export default class ToolbarWidgetStore {
     }
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            onMouseEnter: action.bound,
+            onMouseLeave: action.bound
+        });
+
         this.mainStore = mainStore;
 
         reaction(
@@ -36,7 +41,7 @@ export default class ToolbarWidgetStore {
         );
     }
 
-    @action.bound onMouseEnter() {
+    onMouseEnter() {
         this.crosshairStore.updateVisibility(false);
 
         // Hide the indicator tooltip
@@ -46,7 +51,7 @@ export default class ToolbarWidgetStore {
         }
     }
 
-    @action.bound onMouseLeave() {
+    onMouseLeave() {
         this.crosshairStore.updateVisibility(true);
     }
 }
