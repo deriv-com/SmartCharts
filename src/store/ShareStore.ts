@@ -1,4 +1,4 @@
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TQuote } from 'src/types';
 import MainStore from '.';
@@ -15,7 +15,21 @@ export default class ShareStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     screenshotArea?: Element | null;
+
+    isLoadingPNG = false;
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            timeUnit: computed,
+            timeperiodDisplay: computed,
+            marketDisplayName: computed,
+            decimalPlaces: computed,
+            isLoadingPNG: observable,
+            downloadPNG: action.bound,
+            _onCanvasReady: action.bound,
+            downloadCSV: action.bound
+        });
+
         this.mainStore = mainStore;
         this.menuStore = new MenuStore(mainStore, { route: 'download' });
         when(() => !!this.context, this.onContextReady);
@@ -28,26 +42,26 @@ export default class ShareStore {
         return this.context?.stx;
     }
 
-    @computed get timeUnit() {
+    get timeUnit() {
         return this.mainStore.timeperiod.timeUnit;
     }
-    @computed get timeperiodDisplay() {
+    get timeperiodDisplay() {
         return this.mainStore.timeperiod.display;
     }
-    @computed get marketDisplayName() {
+    get marketDisplayName() {
         return this.mainStore.chart.currentActiveSymbol?.name;
     }
-    @computed get decimalPlaces() {
+    get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places;
     }
-    @observable isLoadingPNG = false;
+    
 
     createNewTab() {
         // Create a new tab for older iOS browsers that don't support HTML5 download attribute
         return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? window.open() : null;
     }
 
-    @action.bound downloadPNG() {
+    downloadPNG() {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
@@ -118,14 +132,14 @@ export default class ShareStore {
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 
-    @action.bound _onCanvasReady(canvas: HTMLCanvasElement, newTab: Window | null) {
+    _onCanvasReady(canvas: HTMLCanvasElement, newTab: Window | null) {
         const content = canvas.toDataURL('image/png');
         downloadFileInBrowser(`${new Date().toUTCString()}.png`, content, 'image/png;', newTab);
         this.isLoadingPNG = false;
         this.screenshotArea?.classList.remove('ciq-chart--screenshot');
     }
 
-    @action.bound downloadCSV() {
+    downloadCSV() {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];

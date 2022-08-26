@@ -1,13 +1,20 @@
-import { action, observable, when } from 'mobx';
+import { action, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 
 export default class ChartSizeStore {
     mainStore: MainStore;
-    @observable stx: Context['stx'];
+    stx: Context['stx'];
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            stx: observable,
+            updateChartState: action.bound,
+            zoomIn: action.bound,
+            zoomOut: action.bound
+        });
+
         this.mainStore = mainStore;
         when(() => !!this.mainStore.chart.context, this.onContextReady);
     }
@@ -20,13 +27,13 @@ export default class ChartSizeStore {
         return this.mainStore.state;
     }
 
-    @action.bound updateChartState() {
+    updateChartState() {
         this.stx.chart.lockScroll = false;
         this.stx.chart.lockAutoScroll = false;
         this.mainStore.chart.updateScaledOneOne(false);
     }
 
-    @action.bound zoomIn() {
+    zoomIn() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom In');
         if (this.stx && this.state.enableZoom) {
             if (this.stx.minimumZoomTicks > this.stx.chart.maxTicks) {
@@ -37,7 +44,7 @@ export default class ChartSizeStore {
         }
     }
 
-    @action.bound zoomOut() {
+    zoomOut() {
         logEvent(LogCategories.ChartControl, LogActions.ChartSize, 'zoom Out');
         if (this.stx && this.state.enableZoom) {
             this.updateChartState();

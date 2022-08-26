@@ -1,6 +1,6 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { action, computed, observable, reaction } from 'mobx';
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import moment from 'moment';
 import MainStore from '.';
 import DownIcon from '../../sass/icons/chart/ic-down.svg';
@@ -97,7 +97,57 @@ class ChartStore {
     feed?: Feed | null;
     mainStore: MainStore;
     resizeObserver?: ResizeObserver;
+
+    containerWidth: number | null = null;
+    context: Context | null = null;
+    currentActiveSymbol?: TProcessedSymbolItem | null;
+    isChartAvailable = true;
+    chartHeight?: number;
+    chartContainerHeight?: number;
+    isMobile?: boolean = false;
+    isScaledOneOne = false;
+    cursorInChart = false;
+    shouldRenderDialogs = false;
+    yAxiswidth = 0;
+    serverTime?: string;
+    networkStatus?: TNetworkConfig;
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            containerWidth: observable,
+            context: observable,
+            currentActiveSymbol: observable,
+            isChartAvailable: observable,
+            chartHeight: observable,
+            chartContainerHeight: observable,
+            isMobile: observable,
+            isScaledOneOne: observable,
+            cursorInChart: observable,
+            shouldRenderDialogs: observable,
+            yAxiswidth: observable,
+            serverTime: observable,
+            networkStatus: observable,
+            pip: computed,
+            addDeleteElement: action.bound,
+            addManageElement: action.bound,
+            resizeScreen: action.bound,
+            _initChart: action.bound,
+            categorizedSymbols: computed,
+            onServerTimeChange: action.bound,
+            onMouseEnter: action.bound,
+            onMouseLeave: action.bound,
+            updateCurrentActiveSymbol: action.bound,
+            setChartAvailability: action.bound,
+            changeSymbol: action.bound,
+            calculateYaxisWidth: action.bound,
+            updateYaxisWidth: action.bound,
+            newChart: action.bound,
+            setYaxisWidth: action.bound,
+            updateScaledOneOne: action.bound,
+            refreshChart: action.bound,
+            destroy: action.bound,
+            openFullscreen: action.bound
+        });
+
         this.mainStore = mainStore;
     }
     feedCall: { tradingTimes?: boolean; activeSymbols?: boolean } = {};
@@ -119,32 +169,7 @@ class ChartStore {
     onMessage = null;
     defaultMinimumBars = 5;
     _barriers: BarrierStore[] = [];
-    @observable
-    containerWidth: number | null = null;
-    @observable
-    context: Context | null = null;
-    @observable
-    currentActiveSymbol?: TProcessedSymbolItem | null;
-    @observable
-    isChartAvailable = true;
-    @observable
-    chartHeight?: number;
-    @observable
-    chartContainerHeight?: number;
-    @observable
-    isMobile?: boolean = false;
-    @observable
-    isScaledOneOne = false;
-    @observable
-    cursorInChart = false;
-    @observable
-    shouldRenderDialogs = false;
-    @observable
-    yAxiswidth = 0;
-    @observable
-    serverTime?: string;
-    @observable
-    networkStatus?: TNetworkConfig;
+
 
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
@@ -160,7 +185,6 @@ class ChartStore {
     get studiesStore() {
         return this.mainStore.studies;
     }
-    @computed
     get pip() {
         return this.currentActiveSymbol?.decimal_places;
     }
@@ -209,15 +233,15 @@ class ChartStore {
 
         this.stxx.resizeChart();
     };
-    @action.bound addDeleteElement = () => {
+    addDeleteElement = () => {
         const deleteElement = this.stxx.chart.panel.holder.parentElement.querySelector('.mouseDeleteText');
         deleteElement.textContent = t.translate('Right click to delete');
     };
-    @action.bound addManageElement = () => {
+    addManageElement = () => {
         const manageElement = this.stxx.chart.panel.holder.parentElement.querySelector('.mouseManageText');
         manageElement.textContent = t.translate('Right click to manage');
     };
-    @action.bound resizeScreen() {
+    resizeScreen() {
         if (!this.context) {
             return;
         }
@@ -315,7 +339,6 @@ class ChartStore {
             );
         }
     };
-    @action.bound
     _initChart(rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartProps>) {
         const _self = this;
         // Add custom injections to the CIQ
@@ -949,7 +972,6 @@ class ChartStore {
         this.mainStore.state.setChartClosed(isChartClosed);
         this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme, isChartClosed);
     }
-    @computed
     get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];
         const activeSymbols = this.activeSymbols.activeSymbols;
@@ -961,7 +983,6 @@ class ChartStore {
             };
         });
     }
-    @action.bound
     onServerTimeChange() {
         if (this.tradingTimes?._serverTime) {
             this.serverTime = moment(this.tradingTimes._serverTime.getEpoch() * 1000).format(
@@ -969,7 +990,6 @@ class ChartStore {
             );
         }
     }
-    @action.bound
     onMouseEnter() {
         this.cursorInChart = true;
         /*
@@ -977,7 +997,6 @@ class ChartStore {
          * interfere with key presses outside the chart:
          */
     }
-    @action.bound
     onMouseLeave() {
         this.cursorInChart = false;
         /*
@@ -985,7 +1004,6 @@ class ChartStore {
          * interfere with key presses outside the chart:
          */
     }
-    @action.bound
     updateCurrentActiveSymbol() {
         const { symbolObject } = this.stxx.chart;
         this.currentActiveSymbol = symbolObject;
@@ -993,11 +1011,9 @@ class ChartStore {
         this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
         this.setMainSeriesDisplay(symbolObject.name);
     }
-    @action.bound
     setChartAvailability(status: boolean) {
         this.isChartAvailable = status;
     }
-    @action.bound
     changeSymbol(
         symbolObj: TProcessedSymbolItem | string | undefined,
         granularity?: TGranularity,
@@ -1034,7 +1050,6 @@ class ChartStore {
             this.updateCurrentActiveSymbol();
         }
     }
-    @action.bound
     calculateYaxisWidth = (price: number) => {
         if (!price) return;
 
@@ -1050,7 +1065,6 @@ class ChartStore {
             this.stxx.draw();
         }
     };
-    @action.bound
     updateYaxisWidth = () => {
         if (this.stxx && this.stxx.masterData && this.stxx.masterData.length) {
             if (this.currentCloseQuote() && this.currentCloseQuote()?.Close) {
@@ -1059,7 +1073,6 @@ class ChartStore {
         }
     };
     // Calling newChart with symbolObj as undefined refreshes the chart
-    @action.bound
     newChart(symbolObj = this.currentActiveSymbol, params?: TNewChartParams) {
         if (!symbolObj) return;
 
@@ -1142,7 +1155,6 @@ class ChartStore {
         }
         return y;
     };
-    @action.bound
     setYaxisWidth = (width?: number) => {
         this.yAxiswidth = width || this.yAxiswidth;
 
@@ -1190,17 +1202,14 @@ class ChartStore {
             this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
         }
     }
-    @action.bound
     updateScaledOneOne(state: boolean) {
         this.isScaledOneOne = state;
     }
     // Makes requests to tick history API that will replace
     // Existing chart tick/ohlc data
-    @action.bound
     refreshChart() {
         this.newChart();
     }
-    @action.bound
     destroy() {
         ChartStore.chartCount -= 1;
         if (this.resizeObserver) {
@@ -1238,7 +1247,7 @@ class ChartStore {
         this.context = null;
     }
 
-    @action.bound openFullscreen() {
+    openFullscreen() {
         const fullscreen_map: Record<string, string[]> = {
             element: ['fullscreenElement', 'webkitFullscreenElement', 'mozFullScreenElement', 'msFullscreenElement'],
             fnc_enter: ['requestFullscreen', 'webkitRequestFullscreen', 'mozRequestFullScreen', 'msRequestFullscreen'],

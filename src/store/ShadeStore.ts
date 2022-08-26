@@ -1,11 +1,16 @@
-import { observable } from 'mobx';
+import { observable, makeObservable } from 'mobx';
 
 export default class ShadeStore {
     _div: HTMLElement | null = null;
-    @observable className = '';
-    @observable visible = false;
+    className = '';
+    visible = false;
 
     constructor(className: string) {
+        makeObservable(this, {
+            className: observable,
+            visible: observable
+        });
+
         this.className = className;
     }
 

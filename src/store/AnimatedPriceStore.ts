@@ -1,13 +1,22 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 
 export default class AnimatedPriceStore {
     className = '';
-    @observable price = 0;
-    @observable isIncrease = false;
-    @observable status = '';
+    price = 0;
+    isIncrease = false;
+    status = '';
     oldPrice = 0;
 
-    @action.bound setPrice(val: number, prevPrice: number): void {
+    constructor() {
+        makeObservable(this, {
+            price: observable,
+            isIncrease: observable,
+            status: observable,
+            setPrice: action.bound
+        });
+    }
+
+    setPrice(val: number, prevPrice: number): void {
         const oldVal = prevPrice || +this.oldPrice;
         const newVal = +val;
         let isIncrease = false;

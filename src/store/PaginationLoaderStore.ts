@@ -1,4 +1,4 @@
-import { action, observable, when } from 'mobx';
+import { action, observable, when, makeObservable } from 'mobx';
 import React from 'react';
 import Context from 'src/components/ui/Context';
 import { TRefData } from 'src/types';
@@ -13,7 +13,7 @@ type TFeedOnPaginationParams = {
 class PaginationLoaderStore {
     mainStore: MainStore;
     ref: TRefData | null = null;
-    @observable isOnPagination = false;
+    isOnPagination = false;
     paginationEndEpoch: number | 'latest' | null = null;
 
     get feed(): ChartStore['feed'] {
@@ -27,6 +27,12 @@ class PaginationLoaderStore {
     }
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            isOnPagination: observable,
+            updateOnPagination: action.bound,
+            setOnPagination: action.bound
+        });
+
         this.mainStore = mainStore;
         when(() => !!this.context, this.onContextReady);
     }
@@ -57,11 +63,11 @@ class PaginationLoaderStore {
         }
     };
 
-    @action.bound updateOnPagination(state: boolean) {
+    updateOnPagination(state: boolean) {
         this.isOnPagination = state;
     }
 
-    @action.bound setOnPagination = ({ end }: TFeedOnPaginationParams) => {
+    setOnPagination = ({ end }: TFeedOnPaginationParams) => {
         this.isOnPagination = !this.isOnPagination;
         this.paginationEndEpoch = this.isOnPagination ? end : null;
 
