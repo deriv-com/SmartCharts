@@ -1,10 +1,18 @@
-import { action, observable, reaction } from 'mobx';
+import { action, observable, reaction, makeObservable } from 'mobx';
 
 export default class ScrollStore {
-    @observable isHover = false;
-    @observable scrollPanel?: HTMLElement;
+    isHover = false;
+    scrollPanel?: HTMLElement;
 
     constructor() {
+        makeObservable(this, {
+            isHover: observable,
+            scrollPanel: observable,
+            handleMouseOver: action.bound,
+            handleMouseOut: action.bound,
+            setScrollPanel: action.bound
+        });
+
         reaction(
             () => this.scrollPanel,
             () => {
@@ -17,14 +25,14 @@ export default class ScrollStore {
         );
     }
 
-    @action.bound handleMouseOver() {
+    handleMouseOver() {
         if (!this.isHover) this.isHover = true;
     }
-    @action.bound handleMouseOut() {
+    handleMouseOut() {
         if (this.isHover) this.isHover = false;
     }
 
-    @action.bound setScrollPanel(element: HTMLElement) {
+    setScrollPanel(element: HTMLElement) {
         if (!this.scrollPanel) this.scrollPanel = element;
     }
 }

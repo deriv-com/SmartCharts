@@ -145,7 +145,7 @@ commands:
             npm i wrangler@2.0.19
             cd public
             npx wrangler pages publish . --project-name=smart-charts-pages --branch=staging
-            echo "New staging website - http://staging.cf-pages-smart-charts.deriv.com"
+            echo "New staging website - http://staging.cf-pages-smart-charts.binary.com"
 
   publish_to_pages_production:
     description: "Publish to cloudflare pages"
@@ -156,7 +156,7 @@ commands:
             npm i wrangler@2.0.19
             cd public
             npx wrangler pages publish . --project-name=smart-charts-pages --branch=main
-            echo "New website - http://cf-pages-smart-charts.deriv.com"
+            echo "New website - http://cf-pages-smart-charts.binary.com"
 
 jobs:
   test:

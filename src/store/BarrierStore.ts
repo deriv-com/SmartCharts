@@ -1,4 +1,4 @@
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, makeObservable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import { TBarrierChangeParam, TBarrierUpdateProps, TCIQAddEventListener, TCIQAppend } from '../types';
@@ -40,34 +40,57 @@ export default class BarrierStore {
         return 'BARRIER_CHANGED';
     }
 
-    @observable shadeColor?: string;
-    @observable color?: string;
-    @observable foregroundColor?: string;
-    @observable isBetweenShadeVisible = false;
-    @observable isTopShadeVisible = false;
-    @observable isBottomShadeVisible = false;
-    @observable hidePriceLines = false;
-    @observable lineStyle?: string;
-    @observable isInitialized = false;
-    @observable initializePromise = PendingPromise<void, void>();
-    @observable hideBarrierLine = false;
-    @observable hideOffscreenLine = false;
-    @observable hideOffscreenBarrier = false;
-    @observable isSingleBarrier = false;
+    shadeColor?: string;
+    color?: string;
+    foregroundColor?: string;
+    isBetweenShadeVisible = false;
+    isTopShadeVisible = false;
+    isBottomShadeVisible = false;
+    hidePriceLines = false;
+    lineStyle?: string;
+    isInitialized = false;
+    initializePromise = PendingPromise<void, void>();
+    hideBarrierLine = false;
+    hideOffscreenLine = false;
+    hideOffscreenBarrier = false;
+    isSingleBarrier = false;
 
     _shadeState = '';
 
-    @computed get pip(): number {
+    get pip(): number {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
-    @computed get yAxisWidth(): number {
+    get yAxisWidth(): number {
         return this.mainStore.chart.yAxiswidth;
     }
-    @computed get priceLabelWidth(): number {
+    get priceLabelWidth(): number {
         return this.yAxisWidth + 1;
     }
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            shadeColor: observable,
+            color: observable,
+            foregroundColor: observable,
+            isBetweenShadeVisible: observable,
+            isTopShadeVisible: observable,
+            isBottomShadeVisible: observable,
+            hidePriceLines: observable,
+            lineStyle: observable,
+            isInitialized: observable,
+            initializePromise: observable,
+            hideBarrierLine: observable,
+            hideOffscreenLine: observable,
+            hideOffscreenBarrier: observable,
+            isSingleBarrier: observable,
+            pip: computed,
+            yAxisWidth: computed,
+            priceLabelWidth: computed,
+            init: action.bound,
+            updateProps: action.bound,
+            destructor: action.bound
+        });
+
         this.mainStore = mainStore;
         this._high_barrier = new PriceLineStore(this.mainStore);
         this._low_barrier = new PriceLineStore(this.mainStore);
@@ -97,7 +120,7 @@ export default class BarrierStore {
         this.mainStore.chart._barriers.push(this);
     }
 
-    @action.bound init(): void {
+    init(): void {
         this.isInitialized = true;
         this.initializePromise.resolve();
 
@@ -116,26 +139,28 @@ export default class BarrierStore {
         this._drawShadedArea();
     }
 
-    @action.bound updateProps({
-        color,
-        foregroundColor,
-        shadeColor,
-        shade,
-        high,
-        low,
-        relative,
-        draggable,
-        onChange,
-        hideBarrierLine,
-        hideOffscreenBarrier,
-        hideOffscreenLine,
-        hidePriceLines,
-        lineStyle,
-        title,
-        showOffscreenArrows,
-        isSingleBarrier,
-        opacityOnOverlap,
-    }: TBarrierUpdateProps): void {
+    updateProps(
+        {
+            color,
+            foregroundColor,
+            shadeColor,
+            shade,
+            high,
+            low,
+            relative,
+            draggable,
+            onChange,
+            hideBarrierLine,
+            hideOffscreenBarrier,
+            hideOffscreenLine,
+            hidePriceLines,
+            lineStyle,
+            title,
+            showOffscreenArrows,
+            isSingleBarrier,
+            opacityOnOverlap,
+        }: TBarrierUpdateProps
+    ): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
@@ -184,7 +209,7 @@ export default class BarrierStore {
         }
     }
 
-    @action.bound destructor(): void {
+    destructor(): void {
         if (!this.context) return;
         this.stx.removeInjection(this._injectionId);
         this.stx.removeEventListener(this._listenerId);

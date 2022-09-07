@@ -1,5 +1,5 @@
 import debounce from 'lodash.debounce';
-import { action, observable, when } from 'mobx';
+import { action, observable, when, makeObservable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import { TCustomEvent } from '../types';
@@ -8,7 +8,18 @@ let activeDialog: DialogStore | undefined;
 
 export default class DialogStore {
     mainStore: MainStore;
+    open = false;
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            open: observable,
+            openDialog: action.bound,
+            register: action.bound,
+            unregister: action.bound,
+            onContainerClick: action.bound,
+            updateCloseCallback: action.bound
+        });
+
         this.mainStore = mainStore;
         when(
             () => !!this.context,
@@ -25,7 +36,7 @@ export default class DialogStore {
         return this.mainStore.routing;
     }
 
-    @observable open = false;
+
     onClose = () => this.setOpen(false);
     setOpen = debounce(
         (val: boolean) => {
@@ -35,7 +46,7 @@ export default class DialogStore {
         { leading: true, trailing: false }
     );
 
-    @action.bound openDialog(val: boolean) {
+    openDialog(val: boolean) {
         if (this.open !== val) {
             this.open = val;
             if (this.open) {
@@ -78,23 +89,23 @@ export default class DialogStore {
         }
     };
 
-    @action.bound register() {
+    register() {
         document.addEventListener('click', this.handleClickOutside, false);
         document.addEventListener('keydown', this.closeOnEscape, false);
     }
 
-    @action.bound unregister() {
+    unregister() {
         document.removeEventListener('click', this.handleClickOutside);
         document.removeEventListener('keydown', this.closeOnEscape);
     }
 
-    @action.bound onContainerClick(e: React.MouseEvent | TCustomEvent) {
+    onContainerClick(e: React.MouseEvent | TCustomEvent) {
         /* TODO: why stopPropagation() is not working ಠ_ಠ */
         // e.stopPropagation();
         (e as TCustomEvent).nativeEvent.isHandledByDialog = true;
     }
 
-    @action.bound updateCloseCallback(onClose: (() => void) | undefined) {
+    updateCloseCallback(onClose: (() => void) | undefined) {
         if (onClose !== undefined) {
             this.onClose = onClose;
         }

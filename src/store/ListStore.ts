@@ -1,4 +1,4 @@
-import { action } from 'mobx';
+import { action, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { ChartType } from 'src/types';
 
@@ -17,12 +17,16 @@ export default class ListStore {
     getItems: () => ChartType[];
     onItemSelected?: (item: ChartType) => void;
     constructor({ getContext, getItems, onItemSelected }: TListStoreProps) {
+        makeObservable(this, {
+            onItemClick: action.bound
+        });
+
         this.getContext = getContext;
         this.getItems = getItems; // items : [{id: '', text: '', disabled?: false, active?: false}]
         this.onItemSelected = onItemSelected;
     }
 
-    @action.bound onItemClick(_idx: number, item: ChartType) {
+    onItemClick(_idx: number, item: ChartType) {
         if (this.onItemSelected) this.onItemSelected(item);
     }
 }

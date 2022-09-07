@@ -1,4 +1,4 @@
-import { action } from 'mobx';
+import { action, makeObservable } from 'mobx';
 import MainStore from '.';
 import DialogStore from './DialogStore';
 
@@ -7,10 +7,17 @@ const allDialogs: DialogStore[] = [];
 export default class RoutingStore {
     mainStore: MainStore;
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            handleRouting: action.bound,
+            updateRoute: action.bound,
+            registerDialog: action.bound,
+            closeAll: action.bound
+        });
+
         this.mainStore = mainStore;
     }
 
-    @action.bound handleRouting() {
+    handleRouting() {
         window.addEventListener(
             'hashchange',
             () => {
@@ -23,7 +30,7 @@ export default class RoutingStore {
         );
     }
 
-    @action.bound updateRoute(route: string, dialogStatus: boolean) {
+    updateRoute(route: string, dialogStatus: boolean) {
         const enableRouting = this.mainStore.chart.enableRouting;
         if (enableRouting && dialogStatus && route) {
             window.history.replaceState({ urlPath: '#' }, '', '#');
@@ -33,11 +40,11 @@ export default class RoutingStore {
         }
     }
 
-    @action.bound registerDialog(dialogStore: DialogStore) {
+    registerDialog(dialogStore: DialogStore) {
         allDialogs.push(dialogStore);
     }
 
-    @action.bound closeAll() {
+    closeAll() {
         allDialogs.forEach((m: DialogStore) => m.setOpen(false));
     }
 }

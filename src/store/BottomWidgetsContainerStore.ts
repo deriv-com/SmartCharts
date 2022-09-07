@@ -1,14 +1,14 @@
-import { action, observable, when } from 'mobx';
+import { action, observable, when, makeObservable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 
 export default class BottomWidgetsContainerStore {
     mainStore: MainStore;
-    @observable bottom = 0;
-    @observable isReadyToShow = false;
-    @observable mainChartHeight = 0;
-    @observable top = 0;
-    @observable totalHeight = 0;
+    bottom = 0;
+    isReadyToShow = false;
+    mainChartHeight = 0;
+    top = 0;
+    totalHeight = 0;
 
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -21,6 +21,15 @@ export default class BottomWidgetsContainerStore {
     }
 
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            bottom: observable,
+            isReadyToShow: observable,
+            mainChartHeight: observable,
+            top: observable,
+            totalHeight: observable,
+            updateChartHeight: action.bound
+        });
+
         this.mainStore = mainStore;
 
         when(() => !!this.context, this.initial);
@@ -31,7 +40,7 @@ export default class BottomWidgetsContainerStore {
         this.isReadyToShow = true;
     };
 
-    @action.bound updateChartHeight(): void {
+    updateChartHeight(): void {
         this.mainChartHeight = this.stx.panels.chart.height;
         this.totalHeight = Object.keys(this.stx.panels).reduce(
             (acc, key) => acc + (this.stx.panels[key].hidden ? 0 : this.stx.panels[key].height),

@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction } from 'mobx';
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import DialogStore from './DialogStore';
@@ -7,6 +7,16 @@ export default class MenuStore {
     dialogStore: DialogStore;
     mainStore: MainStore;
     constructor(mainStore: MainStore, options: { route: string }) {
+        makeObservable(this, {
+            dialogStatus: observable,
+            route: observable,
+            open: computed,
+            setOpen: action.bound,
+            onTitleClick: action.bound,
+            handleDialogStatus: action.bound,
+            handleCloseDialog: action.bound
+        });
+
         this.mainStore = mainStore;
         this.dialogStore = new DialogStore(mainStore);
         reaction(
@@ -23,15 +33,11 @@ export default class MenuStore {
     get routingStore() {
         return this.mainStore.routing;
     }
-    @observable
     dialogStatus = false;
-    @observable
     route = '';
-    @computed
     get open() {
         return this.dialogStore.open;
     }
-    @action.bound
     setOpen(val: boolean) {
         this.dialogStore.setOpen(val);
         /**
@@ -55,18 +61,15 @@ export default class MenuStore {
             this.mainStore.state.setDisableScroll();
         }
     }
-    @action.bound
     onTitleClick(e: React.MouseEvent) {
         if (e) {
             e.stopPropagation();
         }
         this.setOpen(!this.open);
     }
-    @action.bound
     handleDialogStatus() {
         this.dialogStatus = this.open;
     }
-    @action.bound
     handleCloseDialog() {
         this.dialogStatus = false;
         setTimeout(() => this.setOpen(false), 300);

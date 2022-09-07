@@ -1,5 +1,5 @@
 import { TicksHistoryResponse, TickSpotData, TicksStreamResponse } from '@deriv/api-types';
-import { action, computed, observable, when } from 'mobx';
+import { action, computed, observable, when, makeObservable } from 'mobx';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
@@ -7,8 +7,23 @@ import { TBar, TQuote } from '../types';
 
 export default class LastDigitStatsStore {
     mainStore: MainStore;
-
+    bars: TBar[] = [];
+    // api tick
+    lastTick?: TickSpotData | null = null;
+    
     constructor(mainStore: MainStore) {
+        makeObservable(this, {
+            bars: observable,
+            lastTick: observable,
+            decimalPlaces: computed,
+            isVisible: computed,
+            marketDisplayName: computed,
+            shouldMinimiseLastDigits: computed,
+            updateLastDigitStats: action.bound,
+            onMasterDataUpdate: action.bound,
+            updateBars: action.bound
+        });
+
         this.mainStore = mainStore;
         // since last digits stats is going to be rendered in deriv-app
         // we always keep track of the last digit stats.
@@ -37,32 +52,24 @@ export default class LastDigitStatsStore {
     digits: number[] = [];
     latestData: number[] = [];
     lastSymbol = '';
-    @observable
-    bars: TBar[] = [];
-    // api tick
-    @observable
-    lastTick?: TickSpotData | null = null;
+
     get api() {
         return this.mainStore.chart.api;
     }
-    @computed
     get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places || 2;
     }
-    @computed
     get isVisible() {
         return this.mainStore.state.showLastDigitStats;
     }
-    @computed
     get marketDisplayName(): string {
         return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.name : '';
     }
-    @computed
     get shouldMinimiseLastDigits() {
         return this.mainStore.state.shouldMinimiseLastDigits;
     }
 
-    @action.bound async updateLastDigitStats(response?: TicksHistoryResponse) {
+    async updateLastDigitStats(response?: TicksHistoryResponse) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.digits = [];
         this.bars = [];
@@ -91,7 +98,6 @@ export default class LastDigitStatsStore {
         });
         this.updateBars();
     }
-    @action.bound
     onMasterDataUpdate({ Close, tick }: TicksStreamResponse & { Close: number }) {
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.lastTick = tick;
@@ -109,7 +115,6 @@ export default class LastDigitStatsStore {
             this.updateBars();
         }
     }
-    @action.bound
     updateBars() {
         const min = Math.min(...this.digits);
         const max = Math.max(...this.digits);
