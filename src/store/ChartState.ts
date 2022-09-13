@@ -11,13 +11,7 @@ import {
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
-import {
-    calculateGranularity,
-    calculateTimeUnitInterval,
-    createObjectFromLocalStorage,
-    getUTCDate,
-    getUTCEpoch,
-} from '../utils';
+import { calculateTimeUnitInterval, createObjectFromLocalStorage, getUTCDate, getUTCEpoch } from '../utils';
 import ChartStore from './ChartStore';
 
 type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
@@ -131,7 +125,7 @@ class ChartState {
             enableScroll: observable,
             enableZoom: observable,
             yAxisMargin: observable,
-            updateProps: action.bound
+            updateProps: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -150,44 +144,42 @@ class ChartState {
         this.granularity = this.chartStore.granularity;
     };
 
-    updateProps(
-        {
-            networkStatus,
-            chartControlsWidgets,
-            enabledChartFooter,
-            chartStatusListener,
-            stateChangeListener,
-            getIndicatorHeightRatio,
-            chartType,
-            clearChart,
-            endEpoch,
-            isAnimationEnabled = true,
-            isConnectionOpened,
-            isStaticChart,
-            granularity,
-            margin = 0,
-            onExportLayout,
-            refreshActiveSymbols,
-            scrollToEpoch,
-            settings,
-            shouldFetchTradingTimes = true,
-            shouldFetchTickHistory = true,
-            allTicks = [],
-            contractInfo = {},
-            showLastDigitStats = false,
-            startEpoch,
-            symbol,
-            crosshairState,
-            zoom,
-            maxTick,
-            crosshairTooltipLeftAllow,
-            yAxisMargin,
-            enableScroll = null,
-            enableZoom = null,
-            anchorChartToLeft = false,
-            chartData,
-        }: TChartProps
-    ) {
+    updateProps({
+        networkStatus,
+        chartControlsWidgets,
+        enabledChartFooter,
+        chartStatusListener,
+        stateChangeListener,
+        getIndicatorHeightRatio,
+        chartType,
+        clearChart,
+        endEpoch,
+        isAnimationEnabled = true,
+        isConnectionOpened,
+        isStaticChart,
+        granularity,
+        margin = 0,
+        onExportLayout,
+        refreshActiveSymbols,
+        scrollToEpoch,
+        settings,
+        shouldFetchTradingTimes = true,
+        shouldFetchTickHistory = true,
+        allTicks = [],
+        contractInfo = {},
+        showLastDigitStats = false,
+        startEpoch,
+        symbol,
+        crosshairState,
+        zoom,
+        maxTick,
+        crosshairTooltipLeftAllow,
+        yAxisMargin,
+        enableScroll = null,
+        enableZoom = null,
+        anchorChartToLeft = false,
+        chartData,
+    }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 

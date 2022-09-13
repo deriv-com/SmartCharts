@@ -1,4 +1,4 @@
-import { action, observable, reaction, when, makeObservable } from 'mobx';
+import { action, observable, reaction, when, makeObservable, computed } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TGranularity } from 'src/types';
 import MainStore from '.';
@@ -15,9 +15,9 @@ const UnitMap = {
 };
 
 const TimeMap = {
-    tick: 1,
-    minute: 1,
-    hour: 60,
+    minute: 60,
+    hour: 3600,
+    day: 86400,
 };
 
 export default class TimeperiodStore {
@@ -26,21 +26,18 @@ export default class TimeperiodStore {
     mainStore: MainStore;
     portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
-    timeUnit?: string | null = null;
     interval: string | number | null = null;
     preparingInterval: number | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             portalNodeIdChanged: observable,
-            timeUnit: observable,
             interval: observable,
             preparingInterval: observable,
             setGranularity: action.bound,
             updateProps: action.bound,
             changeGranularity: action.bound,
-            updateDisplay: action.bound,
-            updatePortalNode: action.bound
+            updatePortalNode: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -64,21 +61,27 @@ export default class TimeperiodStore {
     get isSymbolOpen() {
         return this.mainStore.chartTitle.isSymbolOpen;
     }
+    get timeUnit() {
+        return getTimeUnit(this.mainStore.chart.granularity);
+    }
     get display() {
+        if (this.mainStore.chart.granularity === undefined) {
+            return '';
+        }
+
         return `${
-            this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
+            this.mainStore.chart.granularity === 0
+                ? 1
+                : this.mainStore.chart.granularity / TimeMap[this.timeUnit as keyof typeof TimeMap]
         } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
-
 
     onGranularityChange: (granularity?: TGranularity) => void | null = () => null;
 
     remain: string | null = null;
 
     onContextReady = () => {
-        const { timeUnit, interval } = this.context?.stx.layout;
-        this.timeUnit = getTimeUnit({ timeUnit, interval });
-        this.interval = interval;
+        // this.interval = interval;
 
         this.updateCountdown();
 
@@ -93,8 +96,6 @@ export default class TimeperiodStore {
             ],
             this.updateCountdown.bind(this)
         );
-
-        this.context?.stx.addEventListener('newChart', this.updateDisplay);
 
         reaction(
             () => this.mainStore.state.granularity,
@@ -187,9 +188,7 @@ export default class TimeperiodStore {
     }
 
     updateProps(onChange: (granularity?: TGranularity) => void) {
-        if (this.mainStore.state.granularity !== undefined) {
-            this.onGranularityChange = onChange;
-        }
+        this.onGranularityChange = onChange;
     }
 
     changeGranularity(interval: TGranularity) {
@@ -200,13 +199,6 @@ export default class TimeperiodStore {
             this.preparingInterval = interval as number;
             this.onGranularityChange(interval);
         }
-    }
-
-    updateDisplay() {
-        if (!this.context) return;
-        const stx = this.context.stx;
-        this.timeUnit = getTimeUnit(stx.layout);
-        this.interval = stx.layout.interval;
     }
 
     remainLabelY = () => {

@@ -98,7 +98,7 @@ export default class ChartTypeStore {
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
     type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             type: observable,
@@ -106,7 +106,7 @@ export default class ChartTypeStore {
             setType: action.bound,
             updateProps: action.bound,
             types: computed,
-            setChartTypeFromLayout: action.bound
+            setChartTypeFromLayout: action.bound,
         });
 
         this.mainStore = mainStore;

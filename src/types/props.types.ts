@@ -1,4 +1,10 @@
-import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse, AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
+import {
+    ActiveSymbols,
+    TicksStreamResponse,
+    TradingTimesResponse,
+    AuditDetailsForExpiredContract,
+    ProposalOpenContract,
+} from '@deriv/api-types';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
@@ -168,6 +174,7 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
+    iframeRef: React.Ref<HTMLIFrameElement>;
 };
 
 export type TQuote = {
@@ -245,3 +252,8 @@ export type TRefData = {
 export type TChartControlsWidgets = ((props: { isMobile?: boolean }) => React.ReactElement) | null;
 
 export type TIcon = (props: TIconProps) => JSX.Element;
+
+export type TMessage = {
+    type: string;
+    payload: any;
+};

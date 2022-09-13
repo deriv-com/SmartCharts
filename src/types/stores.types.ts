@@ -23,6 +23,7 @@ import HighestLowestStore from '../store/HighestLowestStore';
 import PaginationLoaderStore from '../store/PaginationLoaderStore';
 import ToolbarWidgetStore from '../store/ToolbarWidgetStore';
 import ScrollStore from '../store/ScrollStore';
+import ChartAdapterStore from 'src/store/ChartAdapterStore';
 
 export type TMainStore = {
     notifier: Notifier;
@@ -50,6 +51,7 @@ export type TMainStore = {
     paginationLoader: PaginationLoaderStore;
     toolbarWidget: ToolbarWidgetStore;
     scroll: ScrollStore;
+    chartAdapter: ChartAdapterStore;
 };
 
 export type Stores = Notifier;

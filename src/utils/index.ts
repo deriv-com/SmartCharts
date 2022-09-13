@@ -21,17 +21,19 @@ export function isValidProp(p: number) {
     return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
 }
 
-export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
-    if (timeUnit === null && interval === 'day') {
-        return 'day';
-    }
-    if (timeUnit === 'minute' && typeof interval === 'number' && interval % 60 === 0) {
+export const getTimeUnit = (granularity: TGranularity) => {
+    if (granularity !== undefined) {
+        if (granularity === 86400) {
+            return 'day';
+        }
+        if (granularity === 0) {
+            return 'tick';
+        }
+        if (granularity >= 60 && granularity <= 1800) {
+            return 'minute';
+        }
         return 'hour';
     }
-    if (timeUnit === 'second') {
-        return 'tick';
-    }
-    return timeUnit;
 };
 
 export const getIntervalInSeconds = ({
@@ -182,16 +184,6 @@ export function calculateTimeUnitInterval(granularity: TGranularity | undefined)
     }
 
     return { interval, timeUnit };
-}
-
-export function calculateGranularity(period: number, interval: string): TGranularity {
-    const toSeconds = {
-        second: 0,
-        minute: 60,
-        day: 24 * 60 * 60,
-    };
-
-    return (toSeconds[interval as keyof typeof toSeconds] * period) as TGranularity;
 }
 
 export function displayMilliseconds(ms: number) {
