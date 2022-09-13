@@ -23,13 +23,12 @@ const output = {
 };
 
 const config = {
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
     entry: path.resolve(__dirname, './src/index.ts'),
     output,
     resolve: {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
-            chartiq: path.resolve(__dirname, `chartiq/${production ? 'production' : 'development'}/index.js`),
             src: path.resolve(__dirname, 'src'),
         },
         extensions: ['.ts', '.tsx', '.js'],
@@ -93,7 +92,7 @@ const config = {
             { parser: { amd: false } },
             {
                 test: /\.(js|jsx)$/,
-                exclude: [/node_modules/, /\\chartiq/, /\\scripts/],
+                exclude: [/node_modules/, /\\scripts/],
                 loader: 'eslint-loader',
                 enforce: 'pre',
                 options: { fix: true },
@@ -132,7 +131,7 @@ const config = {
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
         new StyleLintPlugin(),
         new SpriteLoaderPlugin(),
-        new ForkTsCheckerWebpackPlugin(),
+        // new ForkTsCheckerWebpackPlugin(),
     ],
     externals: {
         react: {
