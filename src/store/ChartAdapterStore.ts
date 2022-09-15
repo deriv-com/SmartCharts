@@ -30,6 +30,17 @@ export default class ChartAdapterStore {
         }
     }
 
+    newChart() {
+        const message = {
+            type: 'NEW_CHART',
+            payload: {
+                granularity: this.mainStore.state.granularity,
+            },
+        };
+        console.log(message);
+        this.iframeElement?.contentWindow?.postMessage(message, '*');
+    }
+
     onTickHistory(quotes: TQuote[]) {
         const message = {
             type: 'TICKS_HISTORY',
@@ -40,10 +51,19 @@ export default class ChartAdapterStore {
     }
 
     onTick(quote: TQuote) {
-        const message = {
-            type: 'TICK',
-            payload: quote,
-        };
+        let message;
+
+        if (quote.ohlc) {
+            message = {
+                type: 'CANDLE',
+                payload: quote,
+            };
+        } else {
+            message = {
+                type: 'TICK',
+                payload: quote,
+            };
+        }
         this.iframeElement?.contentWindow?.postMessage(message, '*');
     }
 
@@ -67,5 +87,15 @@ export default class ChartAdapterStore {
                 this.iframeElement?.contentWindow?.postMessage(message, '*');
             }
         );
+    }
+
+    updateChartStyle(chartType?: string) {
+        const chartStyle = chartType === 'mountain' ? 'line' : 'candles';
+        const message = {
+            type: 'UPDATE_CHART_STYLE',
+            payload: chartStyle,
+        };
+        console.log(message);
+        this.iframeElement?.contentWindow?.postMessage(message, '*');
     }
 }
