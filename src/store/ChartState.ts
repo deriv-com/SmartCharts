@@ -452,6 +452,8 @@ class ChartState {
 
     setChartType(chartType: string | undefined) {
         this.chartType = chartType;
+        this.mainStore.chartType.setType(chartType);
+        this.mainStore.chartAdapter.updateChartStyle(this.chartType);
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);
         }

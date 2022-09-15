@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, when, makeObservable } from 'mobx';
+import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { ChartType, TSettingsItem } from 'src/types';
 import MainStore from '.';
@@ -105,7 +105,6 @@ export default class ChartTypeStore {
             setTypeFromUI: action.bound,
             setType: action.bound,
             updateProps: action.bound,
-            types: computed,
             setChartTypeFromLayout: action.bound,
         });
 
@@ -171,23 +170,6 @@ export default class ChartTypeStore {
         if (type.id === this.type.id) {
             return;
         }
-        if (type.id === 'spline') {
-            // Spline is just a line with tension
-            this.stx.chart.tension = this.stx.layout.tension = 0.5;
-            this.stx.setChartType('mountain');
-        } else {
-            this.stx.chart.tension = 0;
-            delete this.stx.layout.tension;
-            if (this.aggregates?.[type.id]) {
-                // Set baseline.userLevel to false so chart won't move up after AggregationType set.
-                this.stx.chart.baseline.userLevel = false;
-                this.stx.setAggregationType(type.id);
-                // Reset baseline.userLevel to its default value
-                this.stx.chart.baseline.userLevel = null;
-            } else {
-                this.stx.setChartType(type.id);
-            }
-        }
         this.type = type;
     }
     updateProps(onChange: (chartType?: string) => void) {
@@ -204,7 +186,7 @@ export default class ChartTypeStore {
         this.stx.draw();
     };
     get types() {
-        const isTickSelected = this.mainStore.timeperiod.timeUnit === 'tick';
+        const isTickSelected = this.mainStore.chart.granularity === 0;
         if (this.chartTypes === undefined || this.chartTypes.length === 0) {
             this.chartTypes = [...ChartTypes];
         }
