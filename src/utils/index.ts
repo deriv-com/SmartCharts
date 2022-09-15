@@ -17,6 +17,11 @@ export function createObjectFromLocalStorage(key: string) {
     return undefined;
 }
 
+export function saveToLocalStorage(key: string, value: any) {
+    const string = JSON.stringify(value);
+    localStorage.setItem(key, string);
+}
+
 export function isValidProp(p: number) {
     return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
 }
