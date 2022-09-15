@@ -5,24 +5,23 @@ import {
     TChartProps,
     TGetIndicatorHeightRatio,
     TGranularity,
+    TLayoutData,
     TQuote,
     TSettings,
 } from 'src/types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
-import { calculateTimeUnitInterval, createObjectFromLocalStorage, getUTCDate, getUTCEpoch } from '../utils';
+import {
+    calculateTimeUnitInterval,
+    createObjectFromLocalStorage,
+    getUTCDate,
+    getUTCEpoch,
+    saveToLocalStorage,
+} from '../utils';
 import ChartStore from './ChartStore';
 
 type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
-
-type TScrollListenerParamsData = {
-    grab: boolean;
-    panel: typeof CIQ.ChartEngine.Panel;
-    stx: typeof CIQ.ChartEngine;
-    x: number;
-    y: number;
-};
 
 class ChartState {
     chartStore: ChartStore;
@@ -137,7 +136,6 @@ class ChartState {
         this.stxx.addEventListener('layout', this.saveLayout.bind(this));
         this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
         this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        this.stxx.addEventListener('move', this.scrollListener.bind(this));
         this.stxx.append('zoomOut', this.setEnableScroll.bind(this));
         this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
@@ -478,15 +476,18 @@ class ChartState {
     }
 
     saveLayout() {
-        if (!this.chartStore.chartId || !this.stxx) return;
-        const layoutData = this.stxx.exportLayout(true);
+        if (!this.chartStore.chartId) return;
+        const layoutData: TLayoutData = {
+            granularity: this.granularity,
+            chartType: this.mainStore.chartType.type?.id,
+        };
         const json = JSON.stringify(layoutData);
-        CIQ.localStorageSetItem(`layout-${this.chartStore.chartId}`, json);
+        saveToLocalStorage(`layout-${this.chartStore.chartId}`, json);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layoutData = createObjectFromLocalStorage(`layout-${this.chartStore.chartId}`);
+        let layoutData: TLayoutData = createObjectFromLocalStorage(`layout-${this.chartStore.chartId}`);
 
         if (!layoutData || !layoutData.symbols.length) return false;
 
@@ -516,16 +517,7 @@ class ChartState {
             const periodicity = calculateTimeUnitInterval(this.granularity);
             layoutData = { ...layoutData, ...periodicity };
         } else {
-            // update this.granularity with chartLayout
-            const { timeUnit, interval, periodicity } = layoutData;
-            const period = timeUnit ? interval : periodicity;
-            this.chartStore.granularity = calculateGranularity(period, timeUnit || interval);
-        }
-
-        if (this.startEpoch || this.endEpoch) {
-            // already set in chart params
-            delete layoutData.span;
-            delete layoutData.range;
+            this.chartStore.granularity = layoutData.granularity;
         }
 
         if (this.chartType !== undefined) {
@@ -573,9 +565,9 @@ class ChartState {
         const obj = this.stxx.exportDrawings();
         const symbol = this.stxx.chart.symbol;
         if (obj.length === 0) {
-            CIQ.localStorage.removeItem(`${symbol}-${this.chartStore.chartId}`);
+            localStorage.removeItem(`${symbol}-${this.chartStore.chartId}`);
         } else {
-            CIQ.localStorageSetItem(`${symbol}-${this.chartStore.chartId}`, JSON.stringify(obj));
+            saveToLocalStorage(`${symbol}-${this.chartStore.chartId}`, obj);
         }
     }
 
@@ -685,12 +677,6 @@ class ChartState {
         currentLayout.previousMaxTicks = this.stxx.chart.maxTicks;
 
         this.onExportLayout(currentLayout);
-    }
-
-    scrollListener({ grab }: TScrollListenerParamsData) {
-        if (grab && this.stxx.chart.lockScroll) {
-            this.stxx.chart.lockScroll = false;
-        }
     }
 }
 
