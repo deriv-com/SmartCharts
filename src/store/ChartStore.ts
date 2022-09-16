@@ -167,7 +167,6 @@ class ChartStore {
     chartControlsNode?: HTMLElement | null = null;
     state?: ChartState;
     onMessage = null;
-    defaultMinimumBars = 5;
     _barriers: BarrierStore[] = [];
 
     tradingTimes?: TradingTimes;
@@ -358,47 +357,11 @@ class ChartStore {
         //     chartLayout = { ...chartLayout, ...rangeSpan };
         // }
         // engineParams.layout = chartLayout;
-        // const stxx = (this.stxx = new CIQ.ChartEngine(engineParams));
-        // TODO this part of the code prevent the chart to go to home after refreshing the page when the chart was zoomed in before.
-        // let defaultMinimumBars = this.defaultMinimumBars;
-        // if (stxx.chart.maxTicks - 10 > 50) {
-        //     defaultMinimumBars = 50;
-        // }
-        // stxx.minimumLeftBars = Math.min(stxx.chart.maxTicks, defaultMinimumBars);
-        // macos trackpad is so sensitive that it'll break our zoom animation.
-        // unfortunately there is no way to detect a trackpad from javascript,
-        // here we drop 'wheel' events shorter that 40ms
-        // TODO: email chartiq support to fix this.
-        // const org_run = stxx.animations.zoom.run.bind(stxx.animations.zoom);
-        let wheelInMotion = false;
-        // stxx.animations.zoom.run = (
-        //     fc: (t: number, b?: number, c?: number, d?: number) => void,
-        //     startValues?: Record<string, number> | number,
-        //     endValues?: Record<string, number> | number
-        // ) => {
-        //     if (wheelInMotion) return;
-        //     wheelInMotion = true;
-        //     setTimeout(() => {
-        //         wheelInMotion = false;
-        //     }, 40);
-        //     return org_run(fc, startValues, endValues);
-        // };
-        /**
-         * We got the error of `Cannot read property 't2' of undefined`
-         * that we coun't reproduce and after contacting ChartIQ support
-         * we still couldn't determind why this issue happen, as a result
-         * this peice of code is to makes that error slient.
-         */
-        // stxx.prepend('touchmove', function (this: typeof CIQ.ChartEngine) {
-        //     if (this.grabStartValues && this.grabStartValues.t2 && this.grabStartValues.t1) return false; // continue
-        //     return true; // exit
-        // });
-        // stxx.isAutoScale = settings && settings.isAutoScale !== false;
+
         ChartStore.chartCount += 1;
 
         this.addDeleteElement();
         this.addManageElement();
-        // if (this.state.isAnimationEnabled) animateChart(stxx, { stayPut: true });
 
         // connect chart to data
         this.feed = new Feed(this.api, this.mainStore, this.tradingTimes);
@@ -415,7 +378,7 @@ class ChartStore {
         }
         // TODO: excluded studies
         // stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
-        //  stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
+        // stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
         this.stateStore.stateChange(STATE.INITIAL);
         this.loader.setState('market-symbol');
         this.activeSymbols?.retrieveActiveSymbols().then(() => {
