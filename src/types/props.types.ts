@@ -149,7 +149,6 @@ export type TChartProps = {
     scrollToEpoch?: number | null;
     clearChart?: () => void;
     onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
-    importedLayout?: typeof CIQ.UI.Layout;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
@@ -174,7 +173,6 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
-    iframeRef: React.Ref<HTMLIFrameElement>;
 };
 
 export type TQuote = {
@@ -257,3 +255,12 @@ export type TMessage = {
     type: string;
     payload: any;
 };
+
+export type TLayoutData = {
+    granularity: TGranularity;
+    chartType: string;
+    symbol?: string;
+};
+
+export type TPaginationCallbackParams = { quotes?: TQuote[]; error?: unknown; moreAvailable?: boolean };
+export type TPaginationCallback = (params: TPaginationCallbackParams) => void;
