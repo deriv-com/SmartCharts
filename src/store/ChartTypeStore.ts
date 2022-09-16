@@ -117,16 +117,13 @@ export default class ChartTypeStore {
         });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            onChanged: (items: TSettingsItem[]) => this.updateAggregate(items),
+            onChanged: () => null,
         });
     }
 
     onChartTypeChanged?: (chartType?: string) => void;
     get context(): Context | null {
         return this.mainStore.chart.context;
-    }
-    get stx() {
-        return this.context?.stx;
     }
     get chartTypeProp() {
         return this.mainStore.state.chartType;
@@ -140,7 +137,7 @@ export default class ChartTypeStore {
     onContextReady = () => {
         this.aggregates = getAggregates();
         this.chartTypes = [...ChartTypes];
-        this.setChartTypeFromLayout(this.stx.layout);
+        // this.setChartTypeFromLayout(this.stx.layout);
         reaction(
             () => this.mainStore.state.chartType,
             () => {
@@ -176,15 +173,6 @@ export default class ChartTypeStore {
         this.onChartTypeChanged = onChange;
     }
 
-    updateAggregate = (items: TSettingsItem[]) => {
-        for (const { id, value } of items) {
-            const tuple = CIQ.deriveFromObjectChain(this.stx.layout, id);
-            tuple.obj[tuple.member] = value;
-        }
-        this.stx.changeOccurred('layout');
-        this.stx.createDataSet();
-        this.stx.draw();
-    };
     get types() {
         const isTickSelected = this.mainStore.chart.granularity === 0;
         if (this.chartTypes === undefined || this.chartTypes.length === 0) {
@@ -196,22 +184,9 @@ export default class ChartTypeStore {
             disabled: t.candleOnly ? isTickSelected : false,
         }));
     }
-    setChartTypeFromLayout(layout: typeof CIQ.UI.Layout) {
-        const chartType = this.getChartTypeFromLayout(layout);
+    setChartTypeFromLayout(chartType: string) {
         const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
         this.type = this.chartTypes[typeIdx];
-    }
-    getChartTypeFromLayout(layout: typeof CIQ.UI.Layout) {
-        let chartType;
-        if (layout.tension) {
-            // We assume that if tension is set, spline is enabled
-            chartType = 'spline';
-        } else if (this.aggregates?.[layout.aggregationType]) {
-            chartType = layout.aggregationType;
-        } else {
-            chartType = layout.chartType;
-        }
-        return chartType;
     }
     isTypeCandle(type: ChartType | string) {
         if (typeof type === 'string') {

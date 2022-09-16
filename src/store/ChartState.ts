@@ -65,9 +65,6 @@ class ChartState {
     chartControlsWidgets?: TChartControlsWidgets;
     enabledChartFooter?: boolean;
 
-    get stxx(): ChartStore['stxx'] {
-        return this.chartStore.stxx;
-    }
     get context() {
         return this.chartStore.context;
     }
@@ -133,12 +130,6 @@ class ChartState {
     }
 
     onContextReady = () => {
-        this.stxx.addEventListener('layout', this.saveLayout.bind(this));
-        this.stxx.addEventListener('symbolChange', this.saveLayout.bind(this));
-        this.stxx.addEventListener('drawing', this.saveDrawings.bind(this));
-        this.stxx.append('zoomOut', this.setEnableScroll.bind(this));
-        this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
-
         this.granularity = this.chartStore.granularity;
     };
 
@@ -276,7 +267,7 @@ class ChartState {
             this.startEpoch = startEpoch;
             this.endEpoch = endEpoch;
 
-            if (isStaticChart && this.stxx && this.granularity === this.mainStore.chart.granularity) {
+            if (isStaticChart && this.granularity === this.mainStore.chart.granularity) {
                 // Reload the chart if it is a static chart and the granularity hasn't changed
                 this.mainStore.chart.newChart();
             } else if (this.mainStore.chart.feed) {
@@ -325,7 +316,7 @@ class ChartState {
 
         this.mainStore.chartSetting.setSettings(this.settings);
 
-        if (maxTick && this.maxTick !== maxTick && this.stxx) {
+        if (maxTick && this.maxTick !== maxTick) {
             this.maxTick = maxTick;
             this.setMaxtTick();
         }
@@ -337,21 +328,12 @@ class ChartState {
             };
         }
 
-        if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
+        if (enableScroll !== null && this.enableScroll !== enableScroll) {
             this.enableScroll = enableScroll;
-            this.stxx.allowScroll = enableScroll;
         }
 
-        if (this.stxx && enableZoom !== null && this.enableZoom !== enableZoom) {
+        if (enableZoom !== null && this.enableZoom !== enableZoom) {
             this.enableZoom = enableZoom;
-            this.stxx.allowZoom = enableZoom;
-        }
-
-        if (this.stxx) {
-            this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
-            this.stxx.preferences.currentPriceLine = !this.endEpoch;
-            this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
-            this.stxx.draw();
         }
     }
 
@@ -372,47 +354,36 @@ class ChartState {
     }
 
     setChartTheme(theme: string, isChartClosed = this.isChartClosed) {
-        if (!this.stxx) return;
-        this.stxx.clearStyles();
-        this.stxx.setStyle('stx_grid', 'color', Theme[`${theme}_chart_grid`]);
-        this.stxx.setStyle('stx_yaxis', 'color', Theme[`${theme}_chart_text`]);
-        this.stxx.setStyle('stx_xaxis', 'color', Theme[`${theme}_chart_text`]);
-        this.stxx.setStyle('stx_xaxis_dark', 'color', Theme[`${theme}_chart_text`]);
-
         if (this.rootElement) {
             (this.rootElement?.querySelector('.chartContainer') as HTMLElement).style.backgroundColor =
                 Theme[`${theme}_chart_bg`];
         }
         // change chart colors to grey if the current market is closed and it is not a static chart
         if (isChartClosed && !this.isStaticChart) {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);
-
-            // Candle type
-            this.stxx.setStyle('stx_candle_up', 'color', Theme.chart_closed_candle_up);
-            this.stxx.setStyle('stx_candle_shadow_up', 'color', Theme.chart_closed_candle_border);
-            this.stxx.setStyle('stx_candle_down', 'color', Theme.chart_closed_candle_down);
-            this.stxx.setStyle('stx_candle_shadow_down', 'color', Theme.chart_closed_candle_border);
-
-            // Hollow type
-            this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme.chart_closed_candle_up);
-            this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme.chart_closed_candle_down);
-
-            // OHLC type
-            this.stxx.setStyle('stx_bar_up', 'color', Theme.chart_closed_candle_up);
-            this.stxx.setStyle('stx_bar_down', 'color', Theme.chart_closed_candle_down);
-
-            // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_closed_current_hr);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_closed_current_hr);
+            // this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_closed_mountain_border`]);
+            // // Candle type
+            // this.stxx.setStyle('stx_candle_up', 'color', Theme.chart_closed_candle_up);
+            // this.stxx.setStyle('stx_candle_shadow_up', 'color', Theme.chart_closed_candle_border);
+            // this.stxx.setStyle('stx_candle_down', 'color', Theme.chart_closed_candle_down);
+            // this.stxx.setStyle('stx_candle_shadow_down', 'color', Theme.chart_closed_candle_border);
+            // // Hollow type
+            // this.stxx.setStyle('stx_hollow_candle_up', 'color', Theme.chart_closed_candle_up);
+            // this.stxx.setStyle('stx_hollow_candle_down', 'color', Theme.chart_closed_candle_down);
+            // // OHLC type
+            // this.stxx.setStyle('stx_bar_up', 'color', Theme.chart_closed_candle_up);
+            // this.stxx.setStyle('stx_bar_down', 'color', Theme.chart_closed_candle_down);
+            // // current price bg color
+            // this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_closed_current_hr);
+            // this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_closed_current_hr);
         } else {
-            this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
-            this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
-            this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
-            // current price bg color
-            this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_current_hr);
-            this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_current_hr);
+            // this.stxx.setStyle('stx_mountain_chart', 'borderTopColor', Theme[`${theme}_chart_mountain_border`]);
+            // this.stxx.setStyle('stx_mountain_chart', 'backgroundColor', Theme[`${theme}_chart_mountain_bg`]);
+            // this.stxx.setStyle('stx_mountain_chart', 'color', Theme[`${theme}_chart_mountain_bg_shade`]);
+            // // current price bg color
+            // this.stxx.setStyle('stx_current_hr_down', 'background-color', Theme.chart_current_hr);
+            // this.stxx.setStyle('stx_current_hr_up', 'background-color', Theme.chart_current_hr);
         }
-        this.stxx.draw();
+        // this.stxx.draw();
     }
 
     stateChange(tag: string, option?: TStateChangeOption) {
@@ -451,7 +422,9 @@ class ChartState {
     setChartType(chartType: string | undefined) {
         this.chartType = chartType;
         this.mainStore.chartType.setType(chartType);
-        this.mainStore.chartAdapter.updateChartStyle(this.chartType);
+        if (this.chartType) {
+            this.mainStore.chartAdapter.updateChartStyle(this.chartType);
+        }
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);
         }
@@ -480,82 +453,59 @@ class ChartState {
         const layoutData: TLayoutData = {
             granularity: this.granularity,
             chartType: this.mainStore.chartType.type?.id,
+            symbol: this.symbol,
         };
-        const json = JSON.stringify(layoutData);
-        saveToLocalStorage(`layout-${this.chartStore.chartId}`, json);
+        saveToLocalStorage(`layout-${this.chartStore.chartId}`, layoutData);
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
+        return false;
         let layoutData: TLayoutData = createObjectFromLocalStorage(`layout-${this.chartStore.chartId}`);
 
-        if (!layoutData || !layoutData.symbols.length) return false;
+        if (!layoutData) return false;
 
-        // prop values will always take precedence
-        if (this.symbol !== undefined && this.symbol !== '' && this.symbol !== layoutData.symbols[0].symbol) {
-            // symbol prop takes precedence over local storage data
-            const symbolObject = this.chartStore.activeSymbols?.getSymbolObj(this.symbol);
-            layoutData.symbols = [{ symbol: this.symbol, symbolObject }];
-        }
-
-        for (const symbolDat of layoutData.symbols) {
-            // Symbol from cache may be in different language, so replace it with server's
-            const { symbol: cachedSymbol } = symbolDat;
-            const updatedSymbol = this.chartStore.activeSymbols?.getSymbolObj(cachedSymbol);
-            symbolDat.symbolObject = updatedSymbol;
-            if (symbolDat.parameters) {
-                symbolDat.parameters.display = updatedSymbol?.name;
-
-                // These gap settings are default when new comparisons are added,
-                // but for backward support we need to set them here.
-                symbolDat.parameters.fillGaps = true;
-                symbolDat.parameters.gapDisplayStyle = true;
-            }
-        }
-
-        if (this.granularity !== undefined) {
-            const periodicity = calculateTimeUnitInterval(this.granularity);
-            layoutData = { ...layoutData, ...periodicity };
-        } else {
-            this.chartStore.granularity = layoutData.granularity;
-        }
-
-        if (this.chartType !== undefined) {
-            layoutData.chartType = this.chartType;
-        }
+        // if (this.granularity !== undefined) {
+        //     layoutData = { ...layoutData, ...periodicity };
+        // } else {
+        this.chartStore.granularity = layoutData.granularity;
+        //}
 
         // Update Indictor panel height
-        const indicatorCount = Object.keys(layoutData.panels).filter(item => item !== 'chart').length;
-        const indiactorHeightPercent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
-        Object.keys(layoutData.panels).forEach(id => {
-            if (id === 'chart') {
-                return;
-            }
-            const panel = layoutData.panels[id];
-            panel.percent = indiactorHeightPercent;
-        });
+        // const indicatorCount = Object.keys(layoutData.panels).filter(item => item !== 'chart').length;
+        // const indiactorHeightPercent = this.indicatorRatio.indicatorHeightRatio(indicatorCount).percent;
+        // Object.keys(layoutData.panels).forEach(id => {
+        //     if (id === 'chart') {
+        //         return;
+        //     }
+        //     const panel = layoutData.panels[id];
+        //     panel.percent = indiactorHeightPercent;
+        // });
 
-        this.stxx.importLayout(layoutData, {
-            managePeriodicity: true,
-            cb: () => {
-                if (!this.context) return false;
+        // this.stxx.importLayout(layoutData, {
+        //     managePeriodicity: true,
+        //     cb: () => {
+        //         if (!this.context) return false;
 
-                if (layoutData.tension) {
-                    this.stxx.chart.tension = layoutData.tension;
-                }
-                this.restoreDrawings();
-                if (this.chartStore.loader) {
-                    this.chartStore.loader.hide();
-                    this.mainStore.paginationLoader.updateOnPagination(false);
-                    this.setChartIsReady(true);
-                    this.stxx.home();
-                }
+        //         if (layoutData.tension) {
+        //             this.stxx.chart.tension = layoutData.tension;
+        //         }
+        //         this.restoreDrawings();
+        //         if (this.chartStore.loader) {
+        //             this.chartStore.loader.hide();
+        //             this.mainStore.paginationLoader.updateOnPagination(false);
+        //             this.setChartIsReady(true);
+        //             this.stxx.home();
+        //         }
 
-                this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
-            },
-        });
+        //         this.chartStore.setMainSeriesDisplay(this.stxx.chart.symbolObject.name);
+        //     },
+        // });
 
-        this.chartStore.updateCurrentActiveSymbol();
+        if (layoutData.symbol) {
+            const symbolObj = this.mainStore.chart.activeSymbols?.getSymbolObj(layoutData.symbol);
+            this.chartStore.updateCurrentActiveSymbol(symbolObj!);
+        }
 
         return true;
     }
