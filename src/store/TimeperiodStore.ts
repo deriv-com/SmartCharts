@@ -26,14 +26,10 @@ export default class TimeperiodStore {
     mainStore: MainStore;
     portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
-    interval: string | number | null = null;
-    preparingInterval: number | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             portalNodeIdChanged: observable,
-            interval: observable,
-            preparingInterval: observable,
             setGranularity: action.bound,
             updateProps: action.bound,
             changeGranularity: action.bound,
@@ -81,14 +77,11 @@ export default class TimeperiodStore {
     remain: string | null = null;
 
     onContextReady = () => {
-        // this.interval = interval;
-
         this.updateCountdown();
 
         reaction(
             () => [
                 this.timeUnit,
-                this.interval,
                 this.mainStore.chartSetting.countdown,
                 this.mainStore.chartType.type,
                 this.loader.currentState,
@@ -111,7 +104,7 @@ export default class TimeperiodStore {
         }
 
         if (this._injectionId && this.context) {
-            this.context.stx.removeInjection(this._injectionId);
+            // this.context.stx.removeInjection(this._injectionId);
         }
 
         this._injectionId = undefined;
@@ -196,7 +189,6 @@ export default class TimeperiodStore {
             this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
         } else {
-            this.preparingInterval = interval as number;
             this.onGranularityChange(interval);
         }
     }

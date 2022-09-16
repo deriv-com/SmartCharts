@@ -18,24 +18,24 @@ type TTimeperiodItemProps = {
     onClick: (chart_type_id: string, key: string, inval: number) => void;
 };
 
-const enableLoader = (isLoading: boolean, inval: number, preparingInterval: number | null) =>
-    isLoading && inval === preparingInterval;
+const enableLoader = (isLoading: boolean, inval: number, granularity: TGranularity) =>
+    isLoading && inval === granularity;
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
 
 const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
     const { timeperiod, chartType, loader, chart } = useStores();
     const chartTypeId = chartType.type.id;
-    const { preparingInterval, mainStore } = timeperiod;
+    const { mainStore } = timeperiod;
     const { granularity } = chart;
     const isMobile = mainStore.chart.isMobile as boolean;
     const { isActive: isLoading } = loader;
 
     const is_tick = React.useMemo(() => category.key === 'tick', [category]);
-    const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, preparingInterval), [
+    const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, granularity), [
         isLoading,
         item,
-        preparingInterval,
+        granularity,
     ]);
     const enable_tooltip = React.useMemo(() => enableTooltip(isMobile, category.key, chartTypeId), [
         isMobile,
