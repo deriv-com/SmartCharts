@@ -61,6 +61,56 @@
         border-bottom: none;
         padding: 0;
 
+        &__group {
+            &-icon {
+                margin-right: 4.5px !important;
+                margin-left: auto;
+
+                &--open {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+        &__subgroups {
+            display: none;
+
+            &-item {
+                width: 100%;
+                display: flex;
+                box-sizing: border-box;
+                padding: 10px 50px;
+                border-radius: 0px;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                align-items: center;
+                outline: none !important;
+                box-shadow: none !important;
+                cursor: pointer;
+
+                &:hover {
+                    @include themify($themes) {
+                        background-color: themed('CatDisplayHoverFilterBg');
+                        border-left-color: themed('CatDisplayHoverFilterBg');
+                    }
+                }
+                &--selected {
+                    font-weight: 800;
+                    @include themify($themes) {
+                        color: themed('CatDisplayActiveFilterText');
+                        background-color: themed('CatDisplayActiveFilterBg') !important;
+                        border-left-color: themed('CatDisplayActiveFilterBorder') !important;
+                    }
+                }
+            }
+            &--open {
+                display: block;
+                animation: display 2s linear;
+                opacity: 1;
+            }
+        }
         &__item {
             width: 100%;
             display: flex;
@@ -93,6 +143,13 @@
                 @include themify($themes) {
                     background-color: themed('CatDisplayHoverFilterBg');
                     border-left-color: themed('CatDisplayHoverFilterBg');
+                }
+            }
+            &--active {
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveFilterText');
+                    background-color: themed('CatDisplayActiveFilterBg') !important;
+                    border-left-color: themed('CatDisplayActiveFilterBorder') !important;
                 }
             }
             &--selected {

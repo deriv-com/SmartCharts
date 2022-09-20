@@ -152,6 +152,7 @@ export default class CategoricalDisplayStore {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
             hasSubcategory: false,
+            hasSubgroup: false,
             active: true,
             emptyDescription: t.translate('There are no favorites yet.'),
         };
@@ -179,9 +180,17 @@ export default class CategoricalDisplayStore {
                 ...this.getFavorites(),
                 data: this.favoritesCategoryData,
             };
-            const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
+            const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory | any) => {
                 const foundItems: TSubCategoryDataItem[] = [];
-                if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
+                if ((category as any).hasSubgroup) {
+                    category.subgroups.forEach((el: any) => el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                        const foundSubItems = findFavItem(
+                            subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                        );
+                        foundItems.push(...foundSubItems);
+                    }));
+                }
+                else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
                             subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
