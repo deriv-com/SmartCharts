@@ -183,23 +183,44 @@ const ResultsPanel = ({
     <>
         {filteredItems.map((category: TCategorizedSymbolItem) => {
             const categoryItemCount = getItemCount(category);
-            return (
-                (categoryItemCount > 0 || category.emptyDescription) && (
-                    <Category
-                        key={category.categoryId}
-                        ItemType={ItemType}
-                        category={category}
-                        categoryItemCount={categoryItemCount}
-                        setCategoryElement={setCategoryElement}
-                        onSelectItem={onSelectItem}
-                        activeHeadKey={activeHeadKey}
-                        disableAll={disableAll}
-                        isNestedList={isNestedList}
-                        handleTitleClick={handleTitleClick}
-                        favoritesId={favoritesId}
-                    />
-                )
-            );
+            if (!category.hasSubgroup) {
+                return (
+                    (categoryItemCount > 0 || category.emptyDescription) && (
+                        <Category
+                            key={category.categoryId}
+                            ItemType={ItemType}
+                            category={category}
+                            categoryItemCount={categoryItemCount}
+                            setCategoryElement={setCategoryElement}
+                            onSelectItem={onSelectItem}
+                            activeHeadKey={activeHeadKey}
+                            disableAll={disableAll}
+                            isNestedList={isNestedList}
+                            handleTitleClick={handleTitleClick}
+                            favoritesId={favoritesId}
+                        />
+                    )
+                );
+            } else {
+                return (
+                    category.subgroups?.map((subgroup: any) => {
+                        return (
+                            <Category
+                                key={subgroup.categoryId}
+                                ItemType={ItemType}
+                                category={subgroup}
+                                categoryItemCount={categoryItemCount}
+                                setCategoryElement={setCategoryElement}
+                                onSelectItem={onSelectItem}
+                                activeHeadKey={activeHeadKey}
+                                disableAll={disableAll}
+                                isNestedList={isNestedList}
+                                handleTitleClick={handleTitleClick}
+                                favoritesId={favoritesId}
+                            />
+                        );
+                }));
+            }
         })}
     </>
 );
