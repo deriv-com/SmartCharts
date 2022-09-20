@@ -15,7 +15,7 @@ export type TProcessedSymbolItem = {
     market: string;
     market_display_name: string;
     subgroup: any;
-    subgroup_display_name: string;
+    subgroup_display_name: any;
     submarket_display_name: string;
     exchange_is_open: boolean;
     decimal_places: number;
