@@ -226,7 +226,7 @@ const ResultsPanel = ({
                                 favoritesId={favoritesId}
                             />
                             {
-                                category.subgroups?.map((subgroup: any) => {
+                                category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
                                     return (
                                         <Category
                                             key={subgroup.categoryId}

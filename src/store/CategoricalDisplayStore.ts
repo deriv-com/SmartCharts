@@ -184,7 +184,7 @@ export default class CategoricalDisplayStore {
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory | any) => {
                 const foundItems: TSubCategoryDataItem[] = [];
                 if ((category as any).hasSubgroup) {
-                    category.subgroups.forEach((el: any) => el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                    category.subgroups.forEach((el: TCategorizedSymbolItem) => el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
                             subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
                         );
@@ -283,11 +283,9 @@ export default class CategoricalDisplayStore {
 
         const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
         let activeMenuId = null;
-
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
             const row_gap = 57;
-
             if (!el) {
                 return;
             }
@@ -371,10 +369,10 @@ export default class CategoricalDisplayStore {
     handleTitleClick(categoryId: string): void {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
-            const isItemActive = !item.hasSubgroup ? item.categoryId === categoryId : item.subgroups?.filter((subgroup: any) => subgroup.categoryId === categoryId).length > 0;
+            const isItemActive = !item.hasSubgroup ? item.categoryId === categoryId : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).length > 0;
             if (isItemActive) {
                 if (item.hasSubgroup){
-                    item.subgroups.find((subgroup: any) => subgroup.categoryId === categoryId).active = !item.subgroups.find((subgroup: any) => subgroup.categoryId === categoryId).active;
+                    item.subgroups.find((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).active = !item.subgroups.find((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).active;
                         setTimeout(() => this.handleFilterClick(categoryId), 250);
                 } else {
                     item.active = !item.active;

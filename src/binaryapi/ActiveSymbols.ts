@@ -15,7 +15,7 @@ export type TProcessedSymbolItem = {
     market: string;
     market_display_name: string;
     subgroup: any;
-    subgroup_display_name: any;
+    subgroup_display_name: string;
     submarket_display_name: string;
     exchange_is_open: boolean;
     decimal_places: number;
@@ -197,7 +197,7 @@ export default class ActiveSymbols {
             subcategoryName: d.submarket_display_name,
             data: [],
         });
-        const getCategory = (d: TProcessedSymbolItem): any => ({
+        const getCategory = (d: TProcessedSymbolItem): TCategorizedSymbolItem => ({
             categoryName: d.market_display_name,
             categoryId: d.market,
             hasSubcategory: true,
@@ -216,7 +216,7 @@ export default class ActiveSymbols {
             }
 
             if (category.hasSubgroup) {
-                if(!category.subgroups.some((el: any) => el.categoryId === symbol.subgroup)) {
+                if(!category.subgroups.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
                     category.subgroups.push({
                         data: [],
                         categoryName: symbol.subgroup_display_name,
@@ -226,12 +226,12 @@ export default class ActiveSymbols {
                     });
                 }
                 // should push a subcategory instead of symbol
-                if (!category.subgroups.find((el: any) => el.categoryId === symbol.subgroup)?.data.find((el: any) => el.subcategoryName === symbol.submarket_display_name)) {
+                if (!category.subgroups.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)) {
                     subcategory = getSubcategory(symbol);
-                    category.subgroups.find((el: any) => el.categoryId === symbol.subgroup)?.data.push(subcategory);
+                    category.subgroups.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.push(subcategory);
                     subcategory = getSubcategory(symbol);
                 }
-                category.subgroups.find((el: any) => el.categoryId === symbol.subgroup)?.data.find((el: any) => el.subcategoryName === symbol.submarket_display_name)?.data.push({
+                category.subgroups.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)?.data.push({
                     enabled: true,
                     itemId: symbol.symbol,
                     display: symbol.name,

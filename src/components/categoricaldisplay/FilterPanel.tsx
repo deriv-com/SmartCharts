@@ -59,7 +59,7 @@ const FilterGroup = React.memo(
                 </div>
                 
                 <div className={`sc-mcd__filter__subgroups ${isOpen && 'sc-mcd__filter__subgroups--open'}`}>
-                    {category.subgroups.map((subgroup: any) => {
+                    {category.subgroups.map((subgroup: TCategorizedSymbolItem) => {
                         const isActive =
                             focusedCategoryKey && focusedCategoryKey.length
                                 ? focusedCategoryKey === subgroup.categoryId
@@ -67,7 +67,7 @@ const FilterGroup = React.memo(
                         if (isActive && !isGroupActive) {
                             setIsGroupActive(true);
                         } else if (isGroupActive) {
-                            category.subgroups.filter((el: any) => el.categoryId === focusedCategoryKey).length === 0 && setIsGroupActive(false);
+                            category.subgroups.filter((el: TCategorizedSymbolItem) => el.categoryId === focusedCategoryKey).length === 0 && setIsGroupActive(false);
                         }
                         return (
                             <div
