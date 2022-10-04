@@ -43,7 +43,7 @@ export type TCategorizedSymbolItem<T = TSubCategory> = {
     categoryId: string;
     hasSubcategory: boolean;
     hasSubgroup: boolean;
-    subgroups?: any[];
+    subgroups: any[];
     data: T[];
     active?: boolean;
     emptyDescription?: string;

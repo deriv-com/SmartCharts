@@ -196,6 +196,9 @@
         &--has-subtitle {
             padding-top: 6.5em;
         }
+        // &--has-subgroup {
+        //     padding-left: 35px !important;
+        // }
         &--favorite {
             .sc-mcd__category__content {
                 margin: 0 3px 4px 8px;
@@ -403,6 +406,12 @@
                     display: flex;
                     align-items: center;
 
+                    &__placeholder {
+                        margin-left: 40px;
+                    }
+                    &__subgroup {
+                        font-weight: normal;
+                    }
                     .ic-icon {
                         margin-right: 16px;
                         position: relative;
@@ -473,7 +482,17 @@
                 &--has-subcategory {
                     margin: 0 8px 4px;
                 }
+                .subcategory {
+                    padding: 0 48px;
+                }
             }
+            .empty-category {
+                padding: 0.9em 3.33em;
+            }
+        }
+        &__item {
+            padding-left: 45px;
+            padding-right: 45px;
         }
         &--nested {
             min-height: calc(100% - 38px);

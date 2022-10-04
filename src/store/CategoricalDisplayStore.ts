@@ -154,6 +154,7 @@ export default class CategoricalDisplayStore {
             hasSubcategory: false,
             hasSubgroup: false,
             active: true,
+            subgroups: [],
             emptyDescription: t.translate('There are no favorites yet.'),
         };
         setTimeout(() => {
@@ -369,16 +370,20 @@ export default class CategoricalDisplayStore {
     handleTitleClick(categoryId: string): void {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
-            if (item.categoryId === categoryId) {
-                item.active = !item.active;
-
-                if (item.active) {
-                    setTimeout(() => this.handleFilterClick(categoryId), 250);
-                }
-            }
-
+            const isItemActive = !item.hasSubgroup ? item.categoryId === categoryId : item.subgroups?.filter((subgroup: any) => subgroup.categoryId === categoryId).length > 0;
+            if (isItemActive) {
+                if (item.hasSubgroup){
+                    item.subgroups.find((subgroup: any) => subgroup.categoryId === categoryId).active = !item.subgroups.find((subgroup: any) => subgroup.categoryId === categoryId).active;
+                        setTimeout(() => this.handleFilterClick(categoryId), 250);
+                } else {
+                    item.active = !item.active;
+    
+                    if (item.active) {
+                        setTimeout(() => this.handleFilterClick(categoryId), 250);
+                    }
+                }}
             if (item.active && item.categoryId !== 'favorite') {
-                this.activeCategories.push(item.categoryId);
+                this.activeCategories.push(categoryId);
             }
         }
 

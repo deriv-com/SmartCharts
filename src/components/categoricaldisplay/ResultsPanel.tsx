@@ -26,6 +26,7 @@ export type TResultsPanelProps = {
 
 export type TCategoryProps = {
     handleTitleClick: TResultsPanelProps['handleTitleClick'];
+    hasSubgroup?: boolean;
     disableAll: TResultsPanelProps['disableAll'];
     isNestedList: TResultsPanelProps['isNestedList'];
     activeHeadKey: TResultsPanelProps['activeHeadKey'];
@@ -50,6 +51,7 @@ type TCategoryTitleProps = {
     isNestedList: boolean;
     category: TCategoryProps['category'];
     handleTitleClick: TCategoryProps['handleTitleClick'];
+    hasSubgroup?: boolean;
     activeHeadKey: TCategoryProps['activeHeadKey'];
 };
 
@@ -75,8 +77,10 @@ const EmptyCategory = React.memo(({ category }: TEmptyCategoryProps) => (
 const CategoryTitleLeft = React.memo(({ isNestedList, category }: TCategoryTitleLeftProps) => {
     const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
-        <span className='category-title-left'>
-            {isNestedList ? CategoryIcon && <CategoryIcon className={`ic-${category.categoryId}`} /> : ''}
+        <span className={classNames('category-title-left', {
+            'category-title-left__subgroup': !CategoryIcon,
+        })}>
+            {isNestedList && CategoryIcon ? <CategoryIcon className={`ic-${category.categoryId}`} /> : <div className='category-title-left__placeholder' />}
             {t.translate(category.categoryName)}
         </span>
     );
@@ -97,7 +101,7 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
                 <span className='category-name-postfix'>{category.categoryNamePostfix}</span>
             )}
         {category.categorySubtitle && <div className='category-subtitle'>{t.translate(category.categorySubtitle)}</div>}
-        {isNestedList ? <ArrowIcon className='arrow' /> : ''}
+        {!category.hasSubgroup && isNestedList ? <ArrowIcon className='arrow' /> : ''}
     </div>
 );
 
@@ -111,6 +115,7 @@ const Category = ({
     disableAll,
     isNestedList,
     handleTitleClick,
+    hasSubgroup,
     favoritesId,
 }: TCategoryProps) => (
     <div
@@ -126,9 +131,10 @@ const Category = ({
                 activeHeadKey={activeHeadKey}
                 isNestedList={!!isNestedList}
                 handleTitleClick={handleTitleClick}
+                hasSubgroup={hasSubgroup}
             />
         )}
-        {category.hasSubcategory
+        {!category.hasSubgroup && category.hasSubcategory
             ? (category.data as TSubCategory[])
                   .filter(subcategory => getItemCount(subcategory) > 0)
                   .map(subcategory => (
@@ -136,6 +142,7 @@ const Category = ({
                           className={classNames(
                               'sc-mcd__category__content',
                               `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
+                              'sc-mcd__category--has-subgroup',
                               'sc-mcd__category__content--has-subcategory'
                           )}
                           key={subcategory.subcategoryName}
@@ -152,7 +159,7 @@ const Category = ({
                           ))}
                       </div>
                   ))
-            : category.data.length > 0 && (
+            : !category.hasSubgroup && category.data.length > 0 && (
                   <div className='sc-mcd__category__content'>
                       {(category.data as TSubCategoryData).map((item, idx) => (
                           <ItemType
@@ -203,12 +210,12 @@ const ResultsPanel = ({
                 );
             } else {
                 return (
-                    category.subgroups?.map((subgroup: any) => {
-                        return (
+                    (categoryItemCount > 0 || category.emptyDescription) && (
+                        <>
                             <Category
-                                key={subgroup.categoryId}
+                                key={category.categoryId}
                                 ItemType={ItemType}
-                                category={subgroup}
+                                category={category}
                                 categoryItemCount={categoryItemCount}
                                 setCategoryElement={setCategoryElement}
                                 onSelectItem={onSelectItem}
@@ -218,8 +225,29 @@ const ResultsPanel = ({
                                 handleTitleClick={handleTitleClick}
                                 favoritesId={favoritesId}
                             />
-                        );
-                }));
+                            {
+                                category.subgroups?.map((subgroup: any) => {
+                                    return (
+                                        <Category
+                                            key={subgroup.categoryId}
+                                            ItemType={ItemType}
+                                            category={subgroup}
+                                            categoryItemCount={categoryItemCount}
+                                            setCategoryElement={setCategoryElement}
+                                            onSelectItem={onSelectItem}
+                                            activeHeadKey={activeHeadKey}
+                                            disableAll={disableAll}
+                                            isNestedList={isNestedList}
+                                            handleTitleClick={handleTitleClick}
+                                            hasSubgroup={true}
+                                            favoritesId={favoritesId}
+                                        />
+                                    );
+                                })
+                            }
+                        </>
+                    )
+                )
             }
         })}
     </>
