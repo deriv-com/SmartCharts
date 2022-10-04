@@ -286,16 +286,17 @@ export default class CategoricalDisplayStore {
 
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
+            const row_gap = 57;
 
             if (!el) {
                 return;
             }
-            const gap_top = this.filteredItems.indexOf(category) * 40;
+            const gap_top = this.filteredItems.indexOf(category) * (category.hasSubgroup ? category.subgroups.length + 1 * row_gap : row_gap);
 
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
-                activeMenuId = category.categoryId;
+                activeMenuId = category.hasSubgroup ? category.subgroups[+ (r.top < 0)].categoryId : category.categoryId;
             }
         }
 
