@@ -56,7 +56,7 @@ const ChartTitle = (props: TChartTitleProps) => {
             className='cq-chart-title stx-show cq-symbols-display'
             isFullscreen
             portalNodeId={portalNodeId}
-            title={isMobile ? t.translate('Underlying Assets') : ''}
+            title={isMobile ? t.translate('Markets') : ''}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
