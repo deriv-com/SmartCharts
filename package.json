@@ -166,8 +166,5 @@
         "hooks": {
             "pre-commit": "npm run precommit"
         }
-    },
-    "engines": {
-        "node": "14.19.0"
     }
 }
