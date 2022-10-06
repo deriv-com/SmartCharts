@@ -14,7 +14,7 @@ export type TProcessedSymbolItem = {
     name: string;
     market: string;
     market_display_name: string;
-    subgroup: any;
+    subgroup: string;
     subgroup_display_name: string;
     submarket_display_name: string;
     exchange_is_open: boolean;
@@ -43,7 +43,7 @@ export type TCategorizedSymbolItem<T = TSubCategory> = {
     categoryId: string;
     hasSubcategory: boolean;
     hasSubgroup: boolean;
-    subgroups: any[];
+    subgroups: TCategorizedSymbolItem[];
     data: T[];
     active?: boolean;
     emptyDescription?: string;
@@ -201,7 +201,7 @@ export default class ActiveSymbols {
             categoryName: d.market_display_name,
             categoryId: d.market,
             hasSubcategory: true,
-            hasSubgroup: d.subgroup && d.subgroup !== 'none',
+            hasSubgroup: !!(d.subgroup && d.subgroup !== 'none'),
             data: [],
             subgroups: [],
         });
@@ -216,22 +216,23 @@ export default class ActiveSymbols {
             }
 
             if (category.hasSubgroup) {
-                if(!category.subgroups.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
-                    category.subgroups.push({
+                if(!category.subgroups?.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
+                    category.subgroups?.push({
                         data: [],
                         categoryName: symbol.subgroup_display_name,
                         categoryId: symbol.subgroup,
                         hasSubcategory: true,
                         hasSubgroup: false,
+                        subgroups: [],
                     });
                 }
                 // should push a subcategory instead of symbol
-                if (!category.subgroups.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)) {
+                if (!category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)) {
                     subcategory = getSubcategory(symbol);
-                    category.subgroups.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.push(subcategory);
+                    category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.push(subcategory);
                     subcategory = getSubcategory(symbol);
                 }
-                category.subgroups.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)?.data.push({
+                category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)?.data.push({
                     enabled: true,
                     itemId: symbol.symbol,
                     display: symbol.name,

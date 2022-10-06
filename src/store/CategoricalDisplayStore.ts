@@ -372,7 +372,11 @@ export default class CategoricalDisplayStore {
             const isItemActive = !item.hasSubgroup ? item.categoryId === categoryId : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).length > 0;
             if (isItemActive) {
                 if (item.hasSubgroup){
-                    item.subgroups.find((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).active = !item.subgroups.find((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).active;
+                    const triggered_subgroup = item.subgroups.find((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId);
+
+                    if (triggered_subgroup != undefined) {
+                        triggered_subgroup.active = !triggered_subgroup.active;
+                    }
                         setTimeout(() => this.handleFilterClick(categoryId), 250);
                 } else {
                     item.active = !item.active;
