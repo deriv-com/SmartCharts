@@ -183,7 +183,7 @@ export default class CategoricalDisplayStore {
             };
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory | any) => {
                 const foundItems: TSubCategoryDataItem[] = [];
-                if ((category as any).hasSubgroup) {
+                if ((category as TCategorizedSymbolItem).hasSubgroup) {
                     category.subgroups.forEach((el: TCategorizedSymbolItem) => el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
                             subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
