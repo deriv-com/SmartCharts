@@ -167,10 +167,10 @@ export default class ActiveSymbols {
                 market: s.market,
                 market_display_name: s.market_display_name,
                 // TODO: stop ignoring these types after BE api types are updated
-                // @ts-ignore-start
+                // @ts-ignore
                 subgroup: s.subgroup,
+                // @ts-ignore
                 subgroup_display_name: s.subgroup_display_name,
-                // @ts-ignore-end
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: !!s.exchange_is_open,
                 decimal_places: s.pip.toString().length - 2,
