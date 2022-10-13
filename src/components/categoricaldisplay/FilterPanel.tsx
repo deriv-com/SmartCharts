@@ -43,7 +43,7 @@ const FilterItem = React.memo(
 );
 
 const FilterGroup = React.memo(
-    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }: any) => {
+    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }: TFilterItemProps) => {
         const [isGroupActive, setIsGroupActive] = React.useState(false);
         const [isOpen, setIsOpen] = React.useState(false);
 
@@ -54,7 +54,7 @@ const FilterGroup = React.memo(
                     onClick={() => setIsOpen(!isOpen)}
                 >
                     <FilterItemIcon categoryId={category.categoryId} />
-                    {t.translate(category.categoryName)}
+                    {category.categoryName}
                     <ArrowIcon className={`sc-mcd__filter__group-icon ${isOpen && 'sc-mcd__filter__group-icon--open'}`} />
                 </div>
                 
@@ -98,7 +98,6 @@ const FilterPanel = ({
                     <FilterGroup
                         key={category.categoryId}
                         category={category}
-                        filteredItems={filteredItems}
                         handleFilterClick={handleFilterClick}
                         activeCategoryKey={activeCategoryKey}
                         focusedCategoryKey={focusedCategoryKey}

@@ -88,7 +88,7 @@ export default class CategoricalDisplayStore {
             handleFilterClick: action.bound,
             setScrollPanel: action.bound,
             handleTitleClick: action.bound,
-            scrollToActiveSymbol: action.bound
+            scrollToActiveSymbol: action.bound,
         });
 
         reaction(
@@ -116,7 +116,6 @@ export default class CategoricalDisplayStore {
         this.searchInputClassName = searchInputClassName;
         this.placeholderText = placeholderText;
     }
-
 
     get chart(): MainStore['chart'] {
         return this.mainStore.chart;
@@ -184,14 +183,15 @@ export default class CategoricalDisplayStore {
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory | any) => {
                 const foundItems: TSubCategoryDataItem[] = [];
                 if ((category as TCategorizedSymbolItem).hasSubgroup) {
-                    category.subgroups.forEach((el: TCategorizedSymbolItem) => el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
-                        const foundSubItems = findFavItem(
-                            subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
-                        );
-                        foundItems.push(...foundSubItems);
-                    }));
-                }
-                else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
+                    category.subgroups.forEach((el: TCategorizedSymbolItem) =>
+                        el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                            const foundSubItems = findFavItem(
+                                subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                            );
+                            foundItems.push(...foundSubItems);
+                        })
+                    );
+                } else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
                             subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
@@ -242,9 +242,9 @@ export default class CategoricalDisplayStore {
             c.data = c.data.filter(item =>
                 hasSearchString(
                     (item as TSubCategoryDataItem).display ||
-                    (typeof (item as TSubCategoryDataItem).dataObject === 'object'
-                        ? (item as TSubCategoryDataItem).dataObject.symbol
-                        : '')
+                        (typeof (item as TSubCategoryDataItem).dataObject === 'object'
+                            ? (item as TSubCategoryDataItem).dataObject.symbol
+                            : '')
                 )
             );
             if (c.data.length) {
@@ -289,12 +289,14 @@ export default class CategoricalDisplayStore {
             if (!el) {
                 return;
             }
-            const gap_top = this.filteredItems.indexOf(category) * (category.hasSubgroup ? category.subgroups.length + 1 * row_gap : row_gap);
+            const gap_top =
+                this.filteredItems.indexOf(category) *
+                (category.hasSubgroup ? category.subgroups.length + 1 * row_gap : row_gap);
 
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
-                activeMenuId = category.hasSubgroup ? category.subgroups[+ (r.top < 0)].categoryId : category.categoryId;
+                activeMenuId = category.hasSubgroup ? category.subgroups[+(r.top < 0)].categoryId : category.categoryId;
             }
         }
 
@@ -369,22 +371,28 @@ export default class CategoricalDisplayStore {
     handleTitleClick(categoryId: string): void {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
-            const isItemActive = !item.hasSubgroup ? item.categoryId === categoryId : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId).length > 0;
+            const isItemActive = !item.hasSubgroup
+                ? item.categoryId === categoryId
+                : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId)
+                      .length > 0;
             if (isItemActive) {
-                if (item.hasSubgroup){
-                    const triggered_subgroup = item.subgroups.find((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId);
+                if (item.hasSubgroup) {
+                    const triggered_subgroup = item.subgroups.find(
+                        (subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId
+                    );
 
                     if (triggered_subgroup != undefined) {
                         triggered_subgroup.active = !triggered_subgroup.active;
                     }
-                        setTimeout(() => this.handleFilterClick(categoryId), 250);
+                    setTimeout(() => this.handleFilterClick(categoryId), 250);
                 } else {
                     item.active = !item.active;
-    
+
                     if (item.active) {
                         setTimeout(() => this.handleFilterClick(categoryId), 250);
                     }
-                }}
+                }
+            }
             if (item.active && item.categoryId !== 'favorite') {
                 this.activeCategories.push(categoryId);
             }
