@@ -77,7 +77,7 @@ export default class StudyLegendStore {
     activeItems: TActiveItem[] = [];
     infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
     portalNodeIdChanged? = '';
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             selectedTab: observable,
@@ -101,7 +101,7 @@ export default class StudyLegendStore {
             onSelectTab: action.bound,
             setFilterText: action.bound,
             onInfoItem: action.bound,
-            updatePortalNode: action.bound
+            updatePortalNode: action.bound,
         });
 
         this.excludedStudies = ExcludedStudies;
@@ -129,7 +129,7 @@ export default class StudyLegendStore {
     }
     previousStudies: Record<string, typeof CIQ.Studies.StudyDescriptor> = {};
     searchInputClassName?: string;
-    
+
     onContextReady = () => {
         this.stx.addEventListener('studyOverlayEdit', this.editStudy);
         this.stx.addEventListener('studyPanelEdit', this.editStudy);
@@ -396,7 +396,7 @@ export default class StudyLegendStore {
                     }
                 }
                 const sd = this.stx.layout.studies[id];
-                const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
+                const isSolo = panelObj.solo?.getAttribute?.('class').includes('stx_solo_lit');
                 if (sd) {
                     const nameObj = prepareIndicatorName(sd.name);
                     if (nameObj.name.trim() !== sd.name.trim()) {
@@ -429,7 +429,7 @@ export default class StudyLegendStore {
                 if (panelObj.solo.style.display !== 'none') {
                     const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
                     const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                    if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
+                    if (InnerSoloPanel.querySelector('svg')?.getAttribute?.('id') !== soloIcon.id) {
                         InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
                     }
                 }
