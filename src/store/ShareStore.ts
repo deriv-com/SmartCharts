@@ -119,7 +119,7 @@ export default class ShareStore {
                     if (!is_browser.Firefox() && !is_browser.Safari()) {
                         nodesToRemove.forEach(pair => {
                             if (pair?.parent?.contains(pair.child) && pair.child instanceof HTMLCanvasElement) {
-                                pair?.parent?.removeChild?.(pair.child);
+                                pair.parent?.removeChild?.(pair.child);
                             }
                         });
                         nodesToRecover.forEach(pair => {
