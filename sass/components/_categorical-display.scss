@@ -201,6 +201,9 @@
                 margin: 0 3px 4px 8px;
             }
         }
+        &--synthetic_index {
+            visibility: hidden;
+        }
         &__head {
             display: block;
             font-size: 1.4em;
