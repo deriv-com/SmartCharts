@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, makeObservable } from 'mobx';
+import { action, computed, observable, reaction, makeObservable, toJS } from 'mobx';
 import React from 'react';
 import MainStore from '.';
 import {
@@ -254,7 +254,14 @@ export default class CategoricalDisplayStore {
 
         for (const category of filteredItems) {
             category.active = true;
-            if (category.hasSubcategory) {
+            if (category.hasSubgroup) {
+                category.subgroups = toJS(category.subgroups);
+                for (const subgroup of category.subgroups) {
+                    for (const subcategory of subgroup.data) {
+                        filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
+                    }
+                }
+            } else if (category.hasSubcategory) {
                 for (const subcategory of category.data) {
                     filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
                 }
