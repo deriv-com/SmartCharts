@@ -57,7 +57,13 @@ type TCategoryTitleProps = {
 
 function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
     let count = 0;
-    if ('categoryName' in category && category.hasSubcategory) {
+    if ('categoryName' in category && category.hasSubgroup) {
+        category.subgroups.forEach(subgroup => {
+            for (const sub of subgroup.data) {
+                count += sub.data.length;
+            }
+        })
+    } else if ('categoryName' in category && category.hasSubcategory) {
         for (const sub of category.data) {
             count += sub.data.length;
         }
@@ -227,22 +233,24 @@ const ResultsPanel = ({
                             />
                             {
                                 category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
-                                    return (
-                                        <Category
-                                            key={subgroup.categoryId}
-                                            ItemType={ItemType}
-                                            category={subgroup}
-                                            categoryItemCount={categoryItemCount}
-                                            setCategoryElement={setCategoryElement}
-                                            onSelectItem={onSelectItem}
-                                            activeHeadKey={activeHeadKey}
-                                            disableAll={disableAll}
-                                            isNestedList={isNestedList}
-                                            handleTitleClick={handleTitleClick}
-                                            hasSubgroup={true}
-                                            favoritesId={favoritesId}
-                                        />
-                                    );
+                                    if (getItemCount(subgroup) > 0) {
+                                        return (
+                                            <Category
+                                                key={subgroup.categoryId}
+                                                ItemType={ItemType}
+                                                category={subgroup}
+                                                categoryItemCount={categoryItemCount}
+                                                setCategoryElement={setCategoryElement}
+                                                onSelectItem={onSelectItem}
+                                                activeHeadKey={activeHeadKey}
+                                                disableAll={disableAll}
+                                                isNestedList={isNestedList}
+                                                handleTitleClick={handleTitleClick}
+                                                hasSubgroup={true}
+                                                favoritesId={favoritesId}
+                                            />
+                                        );
+                                    }
                                 })
                             }
                         </>
