@@ -180,10 +180,10 @@ export default class CategoricalDisplayStore {
                 ...this.getFavorites(),
                 data: this.favoritesCategoryData,
             };
-            const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory | any) => {
+            const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
                 const foundItems: TSubCategoryDataItem[] = [];
                 if ((category as TCategorizedSymbolItem).hasSubgroup) {
-                    category.subgroups.forEach((el: TCategorizedSymbolItem) =>
+                    'categoryName' in category && category.subgroups.forEach((el: TCategorizedSymbolItem) =>
                         el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                             const foundSubItems = findFavItem(
                                 subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
