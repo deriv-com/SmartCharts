@@ -1,6 +1,0 @@
-<svg viewBox="0 0 16 16" id="ic-synth-normal">
-	<g fill="none" fill-rule="evenodd">
-		<rect width="15" height="15" x=".5" y=".5" rx="2"></rect>
-		<path stroke-linecap="round" stroke-linejoin="round" d="M.5 9.5l2 2 2-2h2l2-2 3-3 2 4 2-2M2.5 4.5l2 2 2-2-2 2zm2-2v4M13.5 11.5l-2-2-2 2m2-2v4"></path>
-	</g>
-</svg>
