@@ -217,7 +217,7 @@ const ResultsPanel = ({
             } else {
                 return (
                     (categoryItemCount > 0 || category.emptyDescription) && (
-                        <>
+                        <React.Fragment>
                             <Category
                                 key={category.categoryId}
                                 ItemType={ItemType}
@@ -253,7 +253,7 @@ const ResultsPanel = ({
                                     }
                                 })
                             }
-                        </>
+                        </React.Fragment>
                     )
                 )
             }

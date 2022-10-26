@@ -48,7 +48,7 @@ const FilterGroup = React.memo(
         const [isOpen, setIsOpen] = React.useState(false);
 
         return (
-            <>
+            <React.Fragment>
                 <div
                     className={`sc-mcd__filter__item ${isGroupActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
                     onClick={() => setIsOpen(!isOpen)}
@@ -82,7 +82,7 @@ const FilterGroup = React.memo(
                         )
                     })}
                 </div>
-            </>
+            </React.Fragment>
         );
     }
 );
