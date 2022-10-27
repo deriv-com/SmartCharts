@@ -68,8 +68,9 @@ const FilterGroup = React.memo(
 
                         if (isActive && !isGroupActive) {
                             setIsGroupActive(true);
+                            setIsOpen(true);
                         } else if (focusedCategoryKey && !isSubgroupActive && isGroupActive) {
-                            setIsGroupActive(false)
+                            setIsGroupActive(false);
                         }
 
                         return (
