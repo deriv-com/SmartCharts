@@ -16,10 +16,16 @@ import {
 import Menu from './Menu';
 import Timeperiod from './Timeperiod';
 
+type TSettings = {
+    enabled_chart_types?: string[];
+    enabled_intervals_in_seconds?: number[];
+};
+
 type TChartModeProps = {
     portalNodeId?: string;
     onChartType: (chartType?: string | undefined) => void;
     onGranularity: (granularity?: TGranularity) => void;
+    settings?: TSettings;
 };
 
 const TypeMap = {
@@ -29,10 +35,10 @@ const TypeMap = {
     hollow_candle: TypeHollowGrayscaleIcon,
 };
 
-const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps) => {
+const ChartMode = ({ onChartType, onGranularity, portalNodeId, settings = {} }: TChartModeProps) => {
     const { chartMode, chartType, timeperiod } = useStores();
     const { menuStore } = chartMode;
-
+    const { enabled_chart_types, enabled_intervals_in_seconds } = settings;
     const { type } = chartType;
     const { display: displayInterval } = timeperiod;
     const menuOpen = chartMode.menuStore.open;
@@ -58,10 +64,15 @@ const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps
             <Menu.Body>
                 <div className='sc-chart-mode__section'>
                     <div className='sc-chart-mode__section__item'>
-                        <ChartTypes newDesign onChange={onChartType} />
+                        <ChartTypes newDesign onChange={onChartType} enabled_chart_types={enabled_chart_types} />
                     </div>
                     <div className='sc-chart-mode__section__item'>
-                        <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
+                        <Timeperiod
+                            newDesign
+                            portalNodeId={portalNodeId}
+                            onChange={onGranularity}
+                            enabled_intervals_in_seconds={enabled_intervals_in_seconds}
+                        />
                     </div>
                 </div>
             </Menu.Body>

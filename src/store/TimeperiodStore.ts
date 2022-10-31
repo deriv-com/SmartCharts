@@ -40,7 +40,7 @@ export default class TimeperiodStore {
             updateProps: action.bound,
             changeGranularity: action.bound,
             updateDisplay: action.bound,
-            updatePortalNode: action.bound
+            updatePortalNode: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -69,7 +69,6 @@ export default class TimeperiodStore {
             this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
         } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
-
 
     onGranularityChange: (granularity?: TGranularity) => void | null = () => null;
 

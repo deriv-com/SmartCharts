@@ -18,11 +18,12 @@ const TypeIcon = ({ Icon, ...props }: TTypeIcon) => <Icon {...props} />;
 
 type TChartTypesProps = {
     enabled?: boolean;
+    enabled_chart_types?: string[];
     newDesign?: boolean;
     onChange?: (chartType?: string) => void;
 };
 
-const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
+const ChartTypes = ({ enabled, enabled_chart_types, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
     const { chartType, chart } = useStores();
 
     const { listStore, setTypeFromUI, updateProps, types, type, menuStore } = chartType;
@@ -47,15 +48,17 @@ const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesPro
             <div className='sc-chart-type'>
                 {types.map(chart_type => {
                     const Icon = chart_type.icon;
+                    const is_chart_type_disabled =
+                        chart_type.disabled || !enabled_chart_types?.includes(chart_type.text);
                     let className = 'sc-chart-type__item';
                     className += chart_type.active ? ' sc-chart-type__item--active' : '';
-                    className += chart_type.disabled ? ' sc-chart-type__item--disabled' : '';
+                    className += is_chart_type_disabled ? ' sc-chart-type__item--disabled' : '';
 
-                    const onClick = () => (chart_type.disabled ? null : onItemClick(chart_type));
+                    const onClick = () => (is_chart_type_disabled ? null : onItemClick(chart_type));
                     return (
                         <Tooltip
                             key={chart_type.id}
-                            enabled={chart_type.disabled && !isMobile}
+                            enabled={is_chart_type_disabled && !isMobile}
                             className={className}
                             content={t.translate('Available only for non-tick time intervals.')}
                             onClick={onClick}

@@ -15,6 +15,7 @@ type TTimeperiodItemProps = {
         interval: number;
         num: number;
     };
+    is_item_disabled?: boolean;
     onClick: (chart_type_id: string, key: string, inval: number) => void;
 };
 
@@ -23,7 +24,7 @@ const enableLoader = (isLoading: boolean, inval: number, preparingInterval: numb
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
 
-const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
+const TimeperiodItemComponent = ({ item, is_item_disabled, category, onClick }: TTimeperiodItemProps) => {
     const { timeperiod, chartType, loader } = useStores();
     const chartTypeId = chartType.type.id;
     const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
@@ -64,7 +65,7 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
             onClick={handleClick}
             className={classNames('sc-interval__item', {
                 'sc-interval__item--active': is_active,
-                'sc-interval__item--disabled': is_disabled,
+                'sc-interval__item--disabled': is_disabled || is_item_disabled,
                 'pre-loading': is_loading,
             })}
             enabled={enable_tooltip}
@@ -81,9 +82,14 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
 
 const TimeperiodItem = observer(TimeperiodItemComponent);
 
-type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGranularity) => void; newDesign?: boolean };
+type TTimeperiodProps = {
+    enabled_intervals_in_seconds?: number[];
+    portalNodeId?: string;
+    onChange?: (granularity?: TGranularity) => void;
+    newDesign?: boolean;
+};
 
-const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
+const Timeperiod = ({ enabled_intervals_in_seconds, portalNodeId, onChange }: TTimeperiodProps) => {
     const { timeperiod } = useStores();
 
     const { setGranularity, updateProps, changeGranularity, updatePortalNode } = timeperiod;
@@ -110,7 +116,13 @@ const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
             <div className='sc-interval__content'>
                 {Intervals.map(category =>
                     category.items.map(item => (
-                        <TimeperiodItem key={item.interval} item={item} category={category} onClick={onIntervalClick} />
+                        <TimeperiodItem
+                            key={item.interval}
+                            item={item}
+                            is_item_disabled={!enabled_intervals_in_seconds?.includes(item.interval)}
+                            category={category}
+                            onClick={onIntervalClick}
+                        />
                     ))
                 )}
             </div>
