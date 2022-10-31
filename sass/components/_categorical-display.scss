@@ -202,7 +202,9 @@
             }
         }
         &--synthetic_index {
-            visibility: hidden;
+            @media (min-width: 768px) {
+                visibility: hidden;
+            }
             padding: 0;
         }
         &__head {
