@@ -49,7 +49,7 @@ export default class SettingsDialogStore {
             onItemDelete: action.bound,
             onItemChange: action.bound,
             itemGroups: computed,
-            setScrollPanel: action.bound
+            setScrollPanel: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -79,9 +79,6 @@ export default class SettingsDialogStore {
     }
     get context(): Context | null {
         return this.mainStore.chart.context;
-    }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
     }
     get theme() {
         return this.mainStore.chartSetting.theme;

@@ -77,7 +77,7 @@ export default class StudyLegendStore {
     activeItems: TActiveItem[] = [];
     infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
     portalNodeIdChanged? = '';
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             selectedTab: observable,
@@ -101,7 +101,7 @@ export default class StudyLegendStore {
             onSelectTab: action.bound,
             setFilterText: action.bound,
             onInfoItem: action.bound,
-            updatePortalNode: action.bound
+            updatePortalNode: action.bound,
         });
 
         this.excludedStudies = ExcludedStudies;
@@ -129,17 +129,17 @@ export default class StudyLegendStore {
     }
     previousStudies: Record<string, typeof CIQ.Studies.StudyDescriptor> = {};
     searchInputClassName?: string;
-    
+
     onContextReady = () => {
-        this.stx.addEventListener('studyOverlayEdit', this.editStudy);
-        this.stx.addEventListener('studyPanelEdit', this.editStudy);
-        // to remove studies if user has already more than 5
-        // and remove studies which are excluded
-        this.removeExtraStudies();
-        this.stx.append('createDataSet', this.renderLegend);
-        this.stx.append('drawPanels', this.handleDrawPanels);
-        this.stx.append('panelClose', this.onStudyRemoved);
-        this.renderLegend();
+        // this.stx.addEventListener('studyOverlayEdit', this.editStudy);
+        // this.stx.addEventListener('studyPanelEdit', this.editStudy);
+        // // to remove studies if user has already more than 5
+        // // and remove studies which are excluded
+        // this.removeExtraStudies();
+        // this.stx.append('createDataSet', this.renderLegend);
+        // this.stx.append('drawPanels', this.handleDrawPanels);
+        // this.stx.append('panelClose', this.onStudyRemoved);
+        // this.renderLegend();
     };
     get context(): Context | null {
         return this.mainStore.chart.context;

@@ -58,7 +58,7 @@ class CrosshairStore {
             state: observable,
             toggleState: action.bound,
             updateProps: action.bound,
-            setCrosshairState: action.bound
+            setCrosshairState: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -76,13 +76,11 @@ class CrosshairStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
+
     get isChartReady() {
         return this.mainStore.state.isChartReady;
     }
-    
+
     node = null;
     lastBar = {};
     showChange = false;
@@ -90,30 +88,30 @@ class CrosshairStore {
     showStudies = true;
     onCrosshairChanged: (state?: number | null) => void | null = () => null;
     onContextReady = () => {
-        const storedState = this.stx.layout.crosshair;
+        //  const storedState = this.stx.layout.crosshair;
         const state = typeof storedState !== 'number' ? 2 : storedState;
         this.setCrosshairState(state);
-        this.stx.append('headsUpHR', this.renderCrosshairTooltip);
+        // this.stx.append('headsUpHR', this.renderCrosshairTooltip);
     };
     setFloatPriceLabelStyle(theme = this.mainStore.chartSetting.theme) {
-        const crosshair = this.stx.container.querySelector('.cq-crosshair');
-        if (this.state === 2) {
-            this.stx.setStyle('stx-float-price', 'color', 'transparent');
-            this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
-            this.stx.controls.floatDate.style.color = 'transparent';
-            this.stx.controls.floatDate.style.backgroundColor = 'transparent';
-            this.stx.controls.floatDate.style.display = 'none';
-            this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
-            crosshair.classList.add('active');
-        } else {
-            this.stx.setStyle('stx-float-price', 'color', Theme[`${theme}_float_labels_text`]);
-            this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}_float_labels_bg`]);
-            this.stx.controls.floatDate.style.color = Theme[`${theme}_float_labels_text`];
-            this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}_float_labels_bg`];
-            this.stx.controls.floatDate.style.display = 'block';
-            this.stx.controls.crossX.style.height = '100%';
-            crosshair.classList.remove('active');
-        }
+        // const crosshair = this.stx.container.querySelector('.cq-crosshair');
+        // if (this.state === 2) {
+        //     this.stx.setStyle('stx-float-price', 'color', 'transparent');
+        //     this.stx.setStyle('stx-float-price', 'background-color', 'transparent');
+        //     this.stx.controls.floatDate.style.color = 'transparent';
+        //     this.stx.controls.floatDate.style.backgroundColor = 'transparent';
+        //     this.stx.controls.floatDate.style.display = 'none';
+        //     this.stx.controls.crossX.style.height = `calc(100% - ${this.stx.xaxisHeight}px)`;
+        //     crosshair.classList.add('active');
+        // } else {
+        //     this.stx.setStyle('stx-float-price', 'color', Theme[`${theme}_float_labels_text`]);
+        //     this.stx.setStyle('stx-float-price', 'background-color', Theme[`${theme}_float_labels_bg`]);
+        //     this.stx.controls.floatDate.style.color = Theme[`${theme}_float_labels_text`];
+        //     this.stx.controls.floatDate.style.backgroundColor = Theme[`${theme}_float_labels_bg`];
+        //     this.stx.controls.floatDate.style.display = 'block';
+        //     this.stx.controls.crossX.style.height = '100%';
+        //     crosshair.classList.remove('active');
+        // }
     }
     toggleState() {
         const state = ((this.state as number) + 1) % 3;
@@ -127,9 +125,9 @@ class CrosshairStore {
             return;
         }
         this.state = state;
-        this.setFloatPriceLabelStyle();
-        this.stx.layout.crosshair = state;
-        this.stx.doDisplayCrosshairs();
+        //  this.setFloatPriceLabelStyle();
+        // this.stx.layout.crosshair = state;
+        //this.stx.doDisplayCrosshairs();
         this.mainStore.state.crosshairState = state;
         this.mainStore.state.saveLayout();
         this.onCrosshairChanged(this.state);
@@ -400,35 +398,42 @@ class CrosshairStore {
         return rows;
     }
     updateVisibility = (visible: boolean) => {
-        const crosshair = this.stx.container.querySelector('.cq-crosshair');
-        if (this.state === 2 && visible) crosshair.classList.add('active');
-        else if (this.state === 2) crosshair.classList.remove('active');
+        const crosshair = this.context?.topNode?.querySelector('.cq-crosshair');
+        if (crosshair) {
+            if (this.state === 2 && visible) crosshair.classList.add('active');
+            else if (this.state === 2) crosshair.classList.remove('active');
+        }
     };
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
     updateTooltipPosition({ top, left, rows }: TUpdateTooltipPositionParams) {
-        const crosshair = this.stx.container.querySelector('.cq-crosshair');
-        crosshair.style.transform = `translate(${left}px, ${top}px)`;
-        const tooltipRightLimit = this.mainStore.state.crosshairTooltipLeftAllow || MAX_TOOLTIP_WIDTH;
-        const arrow = left <= tooltipRightLimit ? 'arrow-left' : 'arrow-right';
-        if (arrow !== this.prev_arrow) {
-            crosshair.classList.remove(this.prev_arrow);
-            crosshair.classList.add(arrow);
-            this.prev_arrow = arrow;
-        }
-        // if there is a need to update the rows.
-        if (rows !== null) {
-            const content = crosshair.querySelector('.cq-crosshair-content');
-            content.innerHTML = rows
-                .map(
-                    (r: TRow) => `
+        const crosshair: HTMLElement | null | undefined = this.context?.topNode?.querySelector('.cq-crosshair');
+
+        if (crosshair) {
+            crosshair.style.transform = `translate(${left}px, ${top}px)`;
+            const tooltipRightLimit = this.mainStore.state.crosshairTooltipLeftAllow || MAX_TOOLTIP_WIDTH;
+            const arrow = left <= tooltipRightLimit ? 'arrow-left' : 'arrow-right';
+            if (arrow !== this.prev_arrow) {
+                crosshair.classList.remove(this.prev_arrow || '');
+                crosshair.classList.add(arrow);
+                this.prev_arrow = arrow;
+            }
+            // if there is a need to update the rows.
+            if (rows !== null) {
+                const content = crosshair.querySelector('.cq-crosshair-content');
+                if (content) {
+                    content.innerHTML = rows
+                        .map(
+                            (r: TRow) => `
                 <div class="row">
                     <span>${r.name !== 'DT' ? r.name : r.value}</span>
                     <span>${r.name !== 'DT' ? r.value : ''}</span>
                 </div>
             `
-                )
-                .join('');
+                        )
+                        .join('');
+                }
+            }
         }
     }
 }

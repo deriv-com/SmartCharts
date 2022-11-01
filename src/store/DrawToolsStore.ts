@@ -85,7 +85,7 @@ export default class DrawToolsStore {
 
     activeToolsGroup: TDrawToolsGroup[] = [];
     portalNodeIdChanged?: string;
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             activeToolsGroup: observable,
@@ -100,7 +100,7 @@ export default class DrawToolsStore {
             onDeleted: action.bound,
             onSetting: action.bound,
             computeActiveDrawTools: action.bound,
-            updatePortalNode: action.bound
+            updatePortalNode: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -139,8 +139,8 @@ export default class DrawToolsStore {
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
-        this._listenerId = this.stx.addEventListener('drawing', this.noTool);
-        this._injectionId = this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
+        //  this._listenerId = this.stx.addEventListener('drawing', this.noTool);
+        //   this._injectionId = this.stx.prepend('rightClickDrawing', this.onRightClickDrawing);
     };
     closeOnEscape = (e: KeyboardEvent) => {
         const ESCAPE = 27;

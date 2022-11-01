@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/store';
 import { TRefData } from 'src/types';
+import { CIQ } from 'src/utils/CIQ';
 import { getUTCDate } from '../utils';
 import Context from './ui/Context';
 
@@ -142,17 +143,17 @@ const FastMarker = (props: TFastMarkerProps) => {
             if (contextPromise) {
                 contextPromise.then((ctx: Context) => {
                     ctx_ref.current = ctx;
-                    stx_ref.current = ctx_ref.current.stx;
+                    //  stx_ref.current = ctx_ref.current.stx;
 
-                    injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
+                    //   injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
                     updateCSS();
                 });
             }
         } else if (injection_id_ref.current && stx_ref.current) {
             // remove the injection on unmount
-            stx_ref.current.removeInjection(injection_id_ref.current);
+            //   stx_ref.current.removeInjection(injection_id_ref.current);
             ctx_ref.current = null;
-            stx_ref.current = null;
+            //    stx_ref.current = null;
         }
     };
 

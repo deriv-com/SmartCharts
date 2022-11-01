@@ -33,13 +33,13 @@ import Notification from './Notification';
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
-if (process.env.NODE_ENV !== 'production') {
-    whyDidYouRender(React, {
-        collapseGroups: true,
-        include: [/.*/],
-        exclude: [/^RenderInsideChart$/, /^inject-/],
-    });
-}
+// if (process.env.NODE_ENV !== 'production') {
+//     whyDidYouRender(React, {
+//         collapseGroups: true,
+//         include: [/.*/],
+//         exclude: [/^RenderInsideChart$/, /^inject-/],
+//     });
+// }
 const trackJSDomains = ['binary.com', 'binary.me'];
 window.isProductionWebsite = trackJSDomains.some(val => window.location.host.endsWith(val));
 
@@ -124,7 +124,8 @@ const App = () => {
     const memoizedValues = React.useMemo(() => {
         let endEpoch: number | undefined,
             granularity: number | undefined,
-            chartType = '';
+            chartType = '',
+            symbol = '';
         if (settingsRef.current.historical) {
             endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
             chartType = 'mountain';
@@ -142,12 +143,14 @@ const App = () => {
                 } else {
                     chartType = layout.chartType;
                 }
+                symbol = layout.symbol;
             }
         }
         return {
             chartType,
             granularity,
             endEpoch,
+            symbol,
         };
     }, [layout]);
     const [chartType, setChartType] = React.useState<string | undefined>(memoizedValues.chartType);
@@ -155,7 +158,7 @@ const App = () => {
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
     const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
     const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
-    const [symbol, setSymbol] = React.useState<string>('');
+    const [symbol, setSymbol] = React.useState<string>(memoizedValues.symbol);
     const allTicks: keyof AuditDetailsForExpiredContract | [] = [];
     const contractInfo: keyof ProposalOpenContract | {} = {};
     React.useEffect(() => {

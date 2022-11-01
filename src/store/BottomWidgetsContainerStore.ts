@@ -13,9 +13,6 @@ export default class BottomWidgetsContainerStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
     get state(): MainStore['state'] {
         return this.mainStore.state;
     }
@@ -27,7 +24,7 @@ export default class BottomWidgetsContainerStore {
             mainChartHeight: observable,
             top: observable,
             totalHeight: observable,
-            updateChartHeight: action.bound
+            updateChartHeight: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -36,8 +33,8 @@ export default class BottomWidgetsContainerStore {
     }
 
     initial = (): void => {
-        this.stx.append('drawPanels', this.updateChartHeight);
-        this.isReadyToShow = true;
+        // this.stx.append('drawPanels', this.updateChartHeight);
+        //  this.isReadyToShow = true;
     };
 
     updateChartHeight(): void {

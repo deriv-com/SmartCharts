@@ -49,7 +49,7 @@ class HighestLowestStore {
 
     enableMarker = () => {
         if (this.isHighestLowestMarkerEnabled) {
-            this.injectionId = this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
+            //        this.injectionId = this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
         } else {
             this.clearInjection();
         }

@@ -22,8 +22,8 @@ class CurrentSpotStore {
     }
 
     onContextReady = () => {
-        if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.drawSpot);
-        patchPixelFromChart(this.stx);
+        // if (this.mainStore.state.isAnimationEnabled) this.stx.append('draw', this.drawSpot);
+        // patchPixelFromChart(this.stx);
     };
 
     drawSpot = () => {

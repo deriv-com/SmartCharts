@@ -85,28 +85,30 @@ class Feed {
     }
     onRangeChanged = (forceLoad: boolean) => {
         const periodicity = calculateTimeUnitInterval(this.granularity);
-        const rangeTime = (this.granularity || 1) * this._stx.chart.maxTicks;
+        // const rangeTime = (this.granularity || 1) * this._stx.chart.maxTicks;
         let dtLeft = null;
         let dtRight = null;
         this._mainStore.state.setChartIsReady(false);
-        if (!this.endEpoch) {
-            if (this.startEpoch) {
-                dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
-            }
-        } else {
-            dtLeft = CIQ.strToDateTime(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
-            dtRight = CIQ.strToDateTime(getUTCDate(this.endEpoch));
-        }
-        this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
-            if (!this.endEpoch && !this.startEpoch) {
-                this._stx.home();
-                delete this._stx.layout.range;
-            } else {
-                this.scaleChart();
-            }
-            this._mainStore.state.saveLayout();
-            this._mainStore.state.setChartIsReady(true);
-        });
+        // if (!this.endEpoch) {
+        //     if (this.startEpoch) {
+        //         dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
+        //     }
+        // } else {
+        //     dtLeft = CIQ.strToDateTime(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
+        //     dtRight = CIQ.strToDateTime(getUTCDate(this.endEpoch));
+        // }
+        // this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
+        //     if (!this.endEpoch && !this.startEpoch) {
+        //         this._stx.home();
+        //         delete this._stx.layout.range;
+        //     } else {
+        //         this.scaleChart();
+        //     }
+        //     this._mainStore.state.saveLayout();
+        //     this._mainStore.state.setChartIsReady(true);
+        // });
+        this._mainStore.state.saveLayout();
+        this._mainStore.state.setChartIsReady(true);
     };
     scaleChart() {
         if (this.startEpoch) {
@@ -405,9 +407,10 @@ class Feed {
             if (
                 this._activeStreams[key] &&
                 this.granularity === 0 &&
-                !this._mainStore.state.isStaticChart &&
-                CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >=
-                    this._stx.chart.dataSet.slice(-1)[0]?.DT.valueOf()
+                !this._mainStore.state.isStaticChart
+                // &&
+                // CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >=
+                //     this._stx.chart.dataSet.slice(-1)[0]?.DT.valueOf()
             ) {
                 result = false;
             }

@@ -58,7 +58,7 @@ export default class PriceLineStore {
             _startDrag: action.bound,
             _dragLine: action.bound,
             _endDrag: action.bound,
-            _calculateTop: action.bound
+            _calculateTop: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -71,7 +71,7 @@ export default class PriceLineStore {
     }
 
     onContextReady = () => {
-        this._injectionId = this.stx.append('draw', this._draw);
+        // this._injectionId = this.stx.append('draw', this._draw);
     };
 
     init = () => {

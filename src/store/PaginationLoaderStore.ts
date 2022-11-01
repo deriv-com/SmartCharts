@@ -30,7 +30,7 @@ class PaginationLoaderStore {
         makeObservable(this, {
             isOnPagination: observable,
             updateOnPagination: action.bound,
-            setOnPagination: action.bound
+            setOnPagination: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -44,7 +44,7 @@ class PaginationLoaderStore {
         // this injection will slows down the swiping and mouse wheel operations
         // by ignoring requests that are too close from one another or
         // when isOnPagination is true
-        this.stx.prepend('mouseWheel', this.onMouseWheel);
+        //   this.stx.prepend('mouseWheel', this.onMouseWheel);
     };
 
     onMouseWheel = (e: React.MouseEvent) => {

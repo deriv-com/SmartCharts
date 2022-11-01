@@ -27,7 +27,7 @@ export default class NavigationWidgetStore {
             onMouseEnter: action.bound,
             onMouseLeave: action.bound,
             onScale: action.bound,
-            onCrosshairChange: action.bound
+            onCrosshairChange: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -36,7 +36,7 @@ export default class NavigationWidgetStore {
     }
 
     onContextReady = () => {
-        this.stxx.prepend('mouseWheel', this.onMouseWheel);
+        //    this.stxx.prepend('mouseWheel', this.onMouseWheel);
     };
 
     get enableScale() {

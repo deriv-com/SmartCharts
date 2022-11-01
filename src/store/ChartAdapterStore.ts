@@ -34,7 +34,7 @@ export default class ChartAdapterStore {
         const message = {
             type: 'NEW_CHART',
             payload: {
-                granularity: this.mainStore.state.granularity,
+                granularity: this.mainStore.state.granularity || 0,
             },
         };
         console.log(message);
@@ -94,6 +94,24 @@ export default class ChartAdapterStore {
         const message = {
             type: 'UPDATE_CHART_STYLE',
             payload: chartStyle,
+        };
+        console.log(message);
+        this.iframeElement?.contentWindow?.postMessage(message, '*');
+    }
+
+    updateTheme(theme: string) {
+        const message = {
+            type: 'UPDATE_THEME',
+            payload: theme,
+        };
+        console.log(message);
+        this.iframeElement?.contentWindow?.postMessage(message, '*');
+    }
+
+    scale(scale: number) {
+        const message = {
+            type: 'SCALE_CHART',
+            payload: scale,
         };
         console.log(message);
         this.iframeElement?.contentWindow?.postMessage(message, '*');

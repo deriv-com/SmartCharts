@@ -267,16 +267,16 @@ class ChartState {
             this.startEpoch = startEpoch;
             this.endEpoch = endEpoch;
 
-            if (isStaticChart && this.granularity === this.mainStore.chart.granularity) {
-                // Reload the chart if it is a static chart and the granularity hasn't changed
-                this.mainStore.chart.newChart();
-            } else if (this.mainStore.chart.feed) {
-                /* When layout is importing and range is changing as the same time we dont need to set the range,
-                   the imported layout witll take care of it. */
-                if (!this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
-                    this.mainStore.chart.feed.onRangeChanged(true);
-                }
-            }
+            //  if (isStaticChart && this.granularity === this.mainStore.chart.granularity) {
+            // Reload the chart if it is a static chart and the granularity hasn't changed
+            this.mainStore.chart.newChart();
+            // } else if (this.mainStore.chart.feed) {
+            //     /* When layout is importing and range is changing as the same time we dont need to set the range,
+            //        the imported layout witll take care of it. */
+            //     if (!this.scrollToEpoch && !isSymbolChanged && !isGranularityChanged) {
+            //         this.mainStore.chart.feed.onRangeChanged(true);
+            //     }
+            // }
         }
 
         // Please always assign scrollToEpoch after startEpoch and keep this if statement exactly after above if clause
