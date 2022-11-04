@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, makeObservable } from 'mobx';
+import { action, computed, observable, reaction, makeObservable, toJS } from 'mobx';
 import React from 'react';
 import MainStore from '.';
 import {
@@ -88,7 +88,7 @@ export default class CategoricalDisplayStore {
             handleFilterClick: action.bound,
             setScrollPanel: action.bound,
             handleTitleClick: action.bound,
-            scrollToActiveSymbol: action.bound
+            scrollToActiveSymbol: action.bound,
         });
 
         reaction(
@@ -116,7 +116,6 @@ export default class CategoricalDisplayStore {
         this.searchInputClassName = searchInputClassName;
         this.placeholderText = placeholderText;
     }
-
 
     get chart(): MainStore['chart'] {
         return this.mainStore.chart;
@@ -152,7 +151,9 @@ export default class CategoricalDisplayStore {
             categoryName: t.translate('Favorites'),
             categoryId: 'favorite',
             hasSubcategory: false,
+            hasSubgroup: false,
             active: true,
+            subgroups: [],
             emptyDescription: t.translate('There are no favorites yet.'),
         };
         setTimeout(() => {
@@ -181,7 +182,16 @@ export default class CategoricalDisplayStore {
             };
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
                 const foundItems: TSubCategoryDataItem[] = [];
-                if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
+                if ((category as TCategorizedSymbolItem).hasSubgroup) {
+                    'categoryName' in category && category.subgroups.forEach((el: TCategorizedSymbolItem) =>
+                        el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                            const foundSubItems = findFavItem(
+                                subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                            );
+                            foundItems.push(...foundSubItems);
+                        })
+                    );
+                } else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
                             subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
@@ -232,9 +242,9 @@ export default class CategoricalDisplayStore {
             c.data = c.data.filter(item =>
                 hasSearchString(
                     (item as TSubCategoryDataItem).display ||
-                    (typeof (item as TSubCategoryDataItem).dataObject === 'object'
-                        ? (item as TSubCategoryDataItem).dataObject.symbol
-                        : '')
+                        (typeof (item as TSubCategoryDataItem).dataObject === 'object'
+                            ? (item as TSubCategoryDataItem).dataObject.symbol
+                            : '')
                 )
             );
             if (c.data.length) {
@@ -244,7 +254,14 @@ export default class CategoricalDisplayStore {
 
         for (const category of filteredItems) {
             category.active = true;
-            if (category.hasSubcategory) {
+            if (category.hasSubgroup) {
+                category.subgroups = toJS(category.subgroups);
+                for (const subgroup of category.subgroups) {
+                    for (const subcategory of subgroup.data) {
+                        filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
+                    }
+                }
+            } else if (category.hasSubcategory) {
                 for (const subcategory of category.data) {
                     filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
                 }
@@ -273,19 +290,20 @@ export default class CategoricalDisplayStore {
 
         const scrollPanelTop = this.scrollPanel.getBoundingClientRect().top;
         let activeMenuId = null;
-
         for (const category of this.filteredItems) {
             const el = this.categoryElements[category.categoryId];
-
+            const row_gap = 57;
             if (!el) {
                 return;
             }
-            const gap_top = this.filteredItems.indexOf(category) * 40;
+            const gap_top =
+                this.filteredItems.indexOf(category) *
+                (category.hasSubgroup ? category.subgroups.length + 1 * row_gap : row_gap);
 
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
-                activeMenuId = category.categoryId;
+                activeMenuId = category.hasSubgroup ? category.subgroups[+(r.top < 0)].categoryId : category.categoryId;
             }
         }
 
@@ -360,16 +378,30 @@ export default class CategoricalDisplayStore {
     handleTitleClick(categoryId: string): void {
         this.activeCategories = [];
         for (const item of this.filteredItems) {
-            if (item.categoryId === categoryId) {
-                item.active = !item.active;
+            const isItemActive = !item.hasSubgroup
+                ? item.categoryId === categoryId
+                : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId)
+                      .length > 0;
+            if (isItemActive) {
+                if (item.hasSubgroup) {
+                    const triggered_subgroup = item.subgroups.find(
+                        (subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId
+                    );
 
-                if (item.active) {
+                    if (triggered_subgroup != undefined) {
+                        triggered_subgroup.active = !triggered_subgroup.active;
+                    }
                     setTimeout(() => this.handleFilterClick(categoryId), 250);
+                } else {
+                    item.active = !item.active;
+
+                    if (item.active) {
+                        setTimeout(() => this.handleFilterClick(categoryId), 250);
+                    }
                 }
             }
-
             if (item.active && item.categoryId !== 'favorite') {
-                this.activeCategories.push(item.categoryId);
+                this.activeCategories.push(categoryId);
             }
         }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react-lite';
-import { CategoryIconMap } from '../Icons';
+import { CategoryIconMap, ArrowIcon } from '../Icons';
 import { TCategorizedSymbolItem, TCategorizedSymbols } from '../../binaryapi/ActiveSymbols';
 
 export type TFilterPanelProps = {
@@ -42,6 +42,52 @@ const FilterItem = React.memo(
     }
 );
 
+const FilterGroup = React.memo(
+    ({ focusedCategoryKey, activeCategoryKey, handleFilterClick, category, isSearching }: TFilterItemProps) => {
+        const [isGroupActive, setIsGroupActive] = React.useState(false);
+        const [isOpen, setIsOpen] = React.useState(false);
+
+        return (
+            <React.Fragment>
+                <div
+                    className={`sc-mcd__filter__item ${isGroupActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
+                    onClick={() => setIsOpen(!isOpen)}
+                >
+                    <FilterItemIcon categoryId={category.categoryId} />
+                    {category.categoryName}
+                    <ArrowIcon className={`sc-mcd__filter__group-icon ${isOpen && 'sc-mcd__filter__group-icon--open'}`} />
+                </div>
+                
+                <div className={`sc-mcd__filter__subgroups ${isOpen && 'sc-mcd__filter__subgroups--open'}`}>
+                    {category.subgroups.map((subgroup: TCategorizedSymbolItem) => {
+                        const isActive =
+                            focusedCategoryKey && focusedCategoryKey.length
+                                ? focusedCategoryKey === subgroup.categoryId
+                                : activeCategoryKey === subgroup.categoryId;
+                        const isSubgroupActive = category.subgroups.filter((el: TCategorizedSymbolItem) => el.categoryId === focusedCategoryKey).length > 0;
+
+                        if (isActive && !isGroupActive) {
+                            setIsGroupActive(true);
+                            setIsOpen(true);
+                        } else if (focusedCategoryKey && !isSubgroupActive && isGroupActive) {
+                            setIsGroupActive(false);
+                        }
+
+                        return (
+                            <div
+                                className={`sc-mcd__filter__subgroups-item ${isGroupActive ? 'sc-mcd__filter__item--active' : ''} ${isActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
+                                onClick={() => handleFilterClick(subgroup.categoryId)}
+                            >
+                                {t.translate(subgroup.categoryName)}
+                            </div>
+                        )
+                    })}
+                </div>
+            </React.Fragment>
+        );
+    }
+);
+
 const FilterPanel = ({
     filteredItems,
     handleFilterClick,
@@ -50,7 +96,20 @@ const FilterPanel = ({
     isSearching,
 }: TFilterPanelProps) => (
     <div className='sc-mcd__filter'>
-        {filteredItems.map((category: TCategorizedSymbolItem) => (
+        {filteredItems.map((category: TCategorizedSymbolItem) => {
+            if (category.hasSubgroup){
+                return (
+                    <FilterGroup
+                        key={category.categoryId}
+                        category={category}
+                        handleFilterClick={handleFilterClick}
+                        activeCategoryKey={activeCategoryKey}
+                        focusedCategoryKey={focusedCategoryKey}
+                        isSearching={isSearching}
+                    />
+                )
+            }
+            return (
             <FilterItem
                 key={category.categoryId}
                 category={category}
@@ -59,7 +118,7 @@ const FilterPanel = ({
                 focusedCategoryKey={focusedCategoryKey}
                 isSearching={isSearching}
             />
-        ))}
+        )})}
     </div>
 );
 

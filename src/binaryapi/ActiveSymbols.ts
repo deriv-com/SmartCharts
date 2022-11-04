@@ -7,13 +7,15 @@ import { cloneCategories, stableSort } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import { isDeepEqual } from '../utils/object';
 
-const DefaultSymbols = ['forex', 'basket_index', 'indices', 'stocks', 'commodities', 'synthetic_index', 'cryptocurrency'];
+const DefaultSymbols = ['synthetic_index', 'basket_index', 'forex', 'indices', 'stocks', 'cryptocurrency', 'commodities'];
 
 export type TProcessedSymbolItem = {
     symbol: string;
     name: string;
     market: string;
     market_display_name: string;
+    subgroup: string;
+    subgroup_display_name: string;
     submarket_display_name: string;
     exchange_is_open: boolean;
     decimal_places: number;
@@ -40,6 +42,8 @@ export type TCategorizedSymbolItem<T = TSubCategory> = {
     categoryName: string;
     categoryId: string;
     hasSubcategory: boolean;
+    hasSubgroup: boolean;
+    subgroups: TCategorizedSymbolItem[];
     data: T[];
     active?: boolean;
     emptyDescription?: string;
@@ -162,6 +166,11 @@ export default class ActiveSymbols {
                 name: s.display_name,
                 market: s.market,
                 market_display_name: s.market_display_name,
+                // TODO: stop ignoring these types after BE api types are updated
+                // @ts-ignore
+                subgroup: s.subgroup,
+                // @ts-ignore
+                subgroup_display_name: s.subgroup_display_name,
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: !!s.exchange_is_open,
                 decimal_places: s.pip.toString().length - 2,
@@ -195,16 +204,43 @@ export default class ActiveSymbols {
             categoryName: d.market_display_name,
             categoryId: d.market,
             hasSubcategory: true,
+            hasSubgroup: !!(d.subgroup && d.subgroup !== 'none'),
             data: [],
+            subgroups: [],
         });
         let subcategory = getSubcategory(first);
         let category = getCategory(first);
         for (const symbol of activeSymbols) {
-            if (category.categoryName !== symbol.market_display_name) {
+            if (category.categoryName !== symbol.market_display_name && category.categoryName !== symbol.subgroup_display_name) {
                 category.data.push(subcategory);
                 categorizedSymbols.push(category);
                 subcategory = getSubcategory(symbol);
                 category = getCategory(symbol);
+            }
+
+            if (category.hasSubgroup) {
+                if(!category.subgroups?.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
+                    category.subgroups?.push({
+                        data: [],
+                        categoryName: symbol.subgroup_display_name,
+                        categoryId: symbol.subgroup,
+                        hasSubcategory: true,
+                        hasSubgroup: false,
+                        subgroups: [],
+                    });
+                }
+                // should push a subcategory instead of symbol
+                if (!category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)) {
+                    subcategory = getSubcategory(symbol);
+                    category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.push(subcategory);
+                    subcategory = getSubcategory(symbol);
+                }
+                category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)?.data.push({
+                    enabled: true,
+                    itemId: symbol.symbol,
+                    display: symbol.name,
+                    dataObject: symbol,
+                });
             }
             if (subcategory.subcategoryName !== symbol.submarket_display_name) {
                 category.data.push(subcategory);
