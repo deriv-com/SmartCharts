@@ -109,7 +109,7 @@ const IndicatorList = ({
                     }
                     content={
                         Item.isPrediction && isTick
-                            ? TooltipsContent.predictionIndicator
+                            ? t.translate('This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.')
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
