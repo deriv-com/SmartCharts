@@ -115,6 +115,7 @@ export type TBarrierUpdateProps = {
     showOffscreenArrows?: boolean;
     isSingleBarrier?: boolean;
     opacityOnOverlap?: number;
+    key: string;
 };
 
 export type TChartProps = {

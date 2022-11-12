@@ -1,10 +1,11 @@
 import { action, makeObservable } from 'mobx';
-import { TMessage, TQuote } from 'src/types';
+import { TBarrierUpdateProps, TMessage, TQuote } from 'src/types';
 import MainStore from './';
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
     iframeElement?: HTMLIFrameElement;
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             setIFrameElement: action.bound,
@@ -114,6 +115,23 @@ export default class ChartAdapterStore {
             payload: scale,
         };
         console.log(message);
+        this.iframeElement?.contentWindow?.postMessage(message, '*');
+    }
+
+    updateBarriers(barriers: TBarrierUpdateProps[]) {
+        const transformedBarriers = barriers.map(barrier => ({
+            shade: barrier.shade,
+            color: barrier.color,
+            title: barrier.title,
+            high: barrier.high,
+            low: barrier.low,
+            key: barrier.key,
+        }));
+
+        const message = {
+            type: 'UPDATE_BARRIERS',
+            payload: transformedBarriers,
+        };
         this.iframeElement?.contentWindow?.postMessage(message, '*');
     }
 }

@@ -67,7 +67,7 @@ export default class PriceLineStore {
     }
 
     destructor() {
-        this.stx.removeInjection(this._injectionId);
+        // this.stx.removeInjection(this._injectionId);
     }
 
     onContextReady = () => {

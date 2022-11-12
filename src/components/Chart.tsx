@@ -36,6 +36,7 @@ const Chart = (props: TChartProps) => {
     const { isActive: isLoading, show: showChart } = loader;
 
     const rootRef = React.useRef<HTMLDivElement>(null);
+    const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         initGA();
@@ -93,6 +94,11 @@ const Chart = (props: TChartProps) => {
         };
     }, []);
 
+    React.useEffect(() => {
+        console.log(barriers);
+        chartAdapter.updateBarriers(barriers);
+    }, [barriers]);
+
     return (
         <div
             id={id || chartId}
@@ -140,6 +146,7 @@ const Chart = (props: TChartProps) => {
                                 </div>
                                 <div
                                     className='chartContainer'
+                                    ref={chartContainerRef}
                                     style={{
                                         height:
                                             historical && chartContainerHeight && isMobile
@@ -149,7 +156,7 @@ const Chart = (props: TChartProps) => {
                                 >
                                     <iframe
                                         ref={iframeRef}
-                                        style={{ width: '100%', height: window.innerHeight - 32 }}
+                                        style={{ width: '100%', height: '100%' }}
                                         src='http://localhost:8085/'
                                     ></iframe>
                                     <Crosshair />
