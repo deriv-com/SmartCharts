@@ -4,7 +4,7 @@ import Context from '../components/ui/Context';
 
 export default class BottomWidgetsContainerStore {
     mainStore: MainStore;
-    bottom = 0;
+    bottom = 20;
     isReadyToShow = false;
     mainChartHeight = 0;
     top = 0;
@@ -34,7 +34,7 @@ export default class BottomWidgetsContainerStore {
 
     initial = (): void => {
         // this.stx.append('drawPanels', this.updateChartHeight);
-        //  this.isReadyToShow = true;
+        this.isReadyToShow = true;
     };
 
     updateChartHeight(): void {
