@@ -172,6 +172,8 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
+    markers_array: any[];
+    isLive?: boolean;
 };
 
 export type TQuote = {

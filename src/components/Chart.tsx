@@ -76,6 +76,7 @@ const Chart = (props: TChartProps) => {
         toolbarWidget = () => null,
         onCrosshairChange,
         historical,
+        markers_array,
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;
@@ -94,9 +95,12 @@ const Chart = (props: TChartProps) => {
     }, []);
 
     React.useEffect(() => {
-        console.log(barriers);
         chartAdapter.updateBarriers(barriers);
     }, [barriers]);
+
+    React.useEffect(() => {
+        chartAdapter.updateMarkers(markers_array);
+    }, [markers_array]);
 
     return (
         <div

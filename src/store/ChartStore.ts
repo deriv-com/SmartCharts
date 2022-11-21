@@ -115,6 +115,7 @@ class ChartStore {
     yAxiswidth = 0;
     serverTime?: string;
     networkStatus?: TNetworkConfig;
+    isLive = false;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             containerWidth: observable,
@@ -317,6 +318,7 @@ class ChartStore {
             initialData,
             chartData,
             feedCall,
+            isLive,
         } = props;
         this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
@@ -343,6 +345,7 @@ class ChartStore {
         this.state = this.mainStore.state;
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
+        this.isLive = isLive || false;
 
         // let _chartType = chartType || this.defaults.chartType;
 
@@ -575,7 +578,7 @@ class ChartStore {
             }
             this.state?.restoreDrawings();
             if (this.mainStore.chart.feed) {
-                this.mainStore.chart.feed.scaleChart();
+                // this.mainStore.chart.feed.scaleChart();
             }
         };
         this.yAxiswidth = 0;

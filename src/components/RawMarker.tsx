@@ -45,7 +45,7 @@ const RawMarker = (props: TRawMarkerProps) => {
                 ctx_ref.current = ctx;
                 stx_ref.current = ctx_ref.current.stx;
 
-                injection_id_ref.current = stx_ref.current.append('draw', draw);
+                // injection_id_ref.current = stx_ref.current.append('draw', draw);
                 draw();
             });
         }
@@ -82,6 +82,8 @@ const RawMarker = (props: TRawMarkerProps) => {
         if (!ctx_ref.current) {
             return;
         }
+
+        return;
 
         const { threshold = 0, epoch_array, draw_callback, price_array = [] } = props_ref.current;
 

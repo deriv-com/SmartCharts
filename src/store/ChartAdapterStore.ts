@@ -1,10 +1,11 @@
-import { action, makeObservable } from 'mobx';
+import { action, makeObservable, observable, when } from 'mobx';
 import { TBarrierUpdateProps, TMessage, TQuote } from 'src/types';
 import MainStore from './';
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
     iframeElement?: HTMLIFrameElement;
+    isIframeLoaded = false;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -13,6 +14,7 @@ export default class ChartAdapterStore {
             onTickHistory: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
+            isIframeLoaded: observable,
         });
 
         this.mainStore = mainStore;
@@ -22,9 +24,17 @@ export default class ChartAdapterStore {
         this.iframeElement = element;
     }
 
+    onIframeLoad() {
+        this.isIframeLoaded = true;
+    }
+
     onMessage(ev: MessageEvent) {
         const message = ev.data as TMessage;
+        console.log(message);
         switch (message.type) {
+            case 'ON_LOAD':
+                this.onIframeLoad();
+                break;
             case 'LOAD_HISTORY':
                 this.loadHistory(message.payload);
                 break;
@@ -34,15 +44,27 @@ export default class ChartAdapterStore {
         }
     }
 
+    async postMessage(message: any) {
+        if (this.isIframeLoaded) {
+            console.log(message);
+            this.iframeElement?.contentWindow?.postMessage(message, '*');
+        } else {
+            await when(() => this.isIframeLoaded);
+            console.log(message);
+            this.iframeElement?.contentWindow?.postMessage(message, '*');
+        }
+    }
+
     newChart() {
         const message = {
             type: 'NEW_CHART',
             payload: {
                 granularity: this.mainStore.state.granularity || 0,
+                isLive: this.mainStore.chart.isLive || false,
             },
         };
-        console.log(message);
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+        this.postMessage(message);
     }
 
     onTickHistory(quotes: TQuote[]) {
@@ -50,8 +72,8 @@ export default class ChartAdapterStore {
             type: 'TICKS_HISTORY',
             payload: quotes,
         };
-        console.log(message);
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+        this.postMessage(message);
     }
 
     onTick(quote: TQuote) {
@@ -68,7 +90,7 @@ export default class ChartAdapterStore {
                 payload: quote,
             };
         }
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+        this.postMessage(message);
     }
 
     loadHistory(payloadString: string) {
@@ -87,8 +109,8 @@ export default class ChartAdapterStore {
                     type: 'PREPEND_TICKS_HISTORY',
                     payload: quotes,
                 };
-                console.log(message);
-                this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+                this.postMessage(message);
             }
         );
     }
@@ -99,8 +121,8 @@ export default class ChartAdapterStore {
             type: 'UPDATE_CHART_STYLE',
             payload: chartStyle,
         };
-        console.log(message);
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+        this.postMessage(message);
     }
 
     updateTheme(theme: string) {
@@ -108,8 +130,8 @@ export default class ChartAdapterStore {
             type: 'UPDATE_THEME',
             payload: theme,
         };
-        console.log(message);
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+        this.postMessage(message);
     }
 
     scale(scale: number) {
@@ -117,8 +139,8 @@ export default class ChartAdapterStore {
             type: 'SCALE_CHART',
             payload: scale,
         };
-        console.log(message);
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+        this.postMessage(message);
     }
 
     updateBarriers(barriers: TBarrierUpdateProps[]) {
@@ -137,7 +159,20 @@ export default class ChartAdapterStore {
             type: 'UPDATE_BARRIERS',
             payload: transformedBarriers,
         };
-        this.iframeElement?.contentWindow?.postMessage(message, '*');
+        this.postMessage(message);
+    }
+
+    updateMarkers(markers_array: any[]) {
+        console.log('markers_array', markers_array);
+
+        const transformedMarkers = markers_array.filter(m => m.price_array?.length > 0);
+
+        const message = {
+            type: 'UPDATE_MARKERS',
+            payload: transformedMarkers,
+        };
+
+        this.postMessage(message);
     }
 
     onBarrierDrag(payloadString: string) {
