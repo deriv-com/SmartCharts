@@ -265,3 +265,12 @@ export type TLayoutData = {
 
 export type TPaginationCallbackParams = { quotes?: TQuote[]; error?: unknown; moreAvailable?: boolean };
 export type TPaginationCallback = (params: TPaginationCallbackParams) => void;
+
+export type TDartInteop = {
+    postMessage: (payload: string) => void;
+    chartConfig: {
+        getXFromEpoch: (epoch: number) => number;
+        getYFromQuote: (quote: number) => number;
+        updateTheme: (theme: string) => void;
+    };
+};

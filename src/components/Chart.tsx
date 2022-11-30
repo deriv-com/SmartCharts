@@ -86,12 +86,7 @@ const Chart = (props: TChartProps) => {
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
 
     React.useEffect(() => {
-        window.addEventListener('message', chartAdapter.onMessage);
         chartAdapter.setIFrameElement(iframeRef.current as HTMLIFrameElement);
-
-        return () => {
-            window.removeEventListener('message', chartAdapter.onMessage);
-        };
     }, []);
 
     React.useEffect(() => {
@@ -130,9 +125,7 @@ const Chart = (props: TChartProps) => {
                                 <RenderInsideChart at='subholder'>
                                     {!isCandle && !isSpline && isHighestLowestMarkerEnabled && <HighestLowestMarker />}
                                 </RenderInsideChart>
-                                <RenderInsideChart at='subholder' hideInScrollToEpoch>
-                                    {children}
-                                </RenderInsideChart>
+                                <RenderInsideChart at='subholder'>{children}</RenderInsideChart>
                                 <RenderInsideChart at='subholder'>
                                     <PaginationLoader />
                                 </RenderInsideChart>
@@ -152,7 +145,7 @@ const Chart = (props: TChartProps) => {
                                     <iframe
                                         ref={iframeRef}
                                         style={{ width: '100%', height: '100%' }}
-                                        src='http://localhost:8085/'
+                                        src='/chart/index.html'
                                     ></iframe>
                                     <Crosshair />
                                 </div>
@@ -163,6 +156,7 @@ const Chart = (props: TChartProps) => {
                                         {t.translate('Chart data is not available for this symbol.')}
                                     </div>
                                 )}
+                                <div className='cq-inchart-subholder'></div>
                                 <BottomWidgetsContainer>
                                     <BottomWidget bottomWidgets={bottomWidgets} />
                                 </BottomWidgetsContainer>

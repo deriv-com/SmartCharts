@@ -31,6 +31,8 @@ class Feed {
     _mainStore: TMainStore;
     _serverTime: ServerTime;
     _tradingTimes: TradingTimes;
+    quotes: TQuote[] = [];
+
     static get EVENT_MASTER_DATA_UPDATE() {
         return 'EVENT_MASTER_DATA_UPDATE';
     }
@@ -112,30 +114,6 @@ class Feed {
     };
     scaleChart() {
         if (this.startEpoch) {
-            if (this._stx.animations.liveScroll && this._stx.animations.liveScroll.running) {
-                this._stx.animations.liveScroll.stop();
-            }
-            if (!this.endEpoch) {
-                this._stx.maxMasterDataSize = 0;
-                this._stx.chart.lockScroll = true;
-            } else {
-                this._stx.chart.isDisplayFullMode = false;
-                this._stx.chart.lockScroll = false;
-            }
-            this._stx.setMaxTicks(
-                this._stx.chart.dataSet.length + (Math.floor(this._stx.chart.dataSet.length / 5) || 2)
-            );
-            this._stx.chart.scroll = this._stx.chart.dataSet.length;
-            this._stx.chart.isScrollLocationChanged = true;
-            /**
-             * for tick condition with few points, in that case, if your try to zoom in
-             * as the maxTicks is less than minimumZoomTicks, chart zoom out beside of
-             * zoom in, as a result, we try to override the minimumZoomTicks to prevent that
-             */
-            if (this._stx.chart.maxTicks < this._stx.minimumZoomTicks) {
-                this._stx.minimumZoomTicks = this._stx.chart.maxTicks - 1;
-            }
-            this._stx.draw();
         }
     }
     // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
@@ -152,6 +130,38 @@ class Feed {
             delete this._activeStreams[key];
         }
     }
+
+    processQuotes(quotes: TQuote[]) {
+        quotes.forEach((quote: TQuote) => {
+            quote.DT = new Date(`${quote.Date}Z`);
+        });
+    }
+
+    updateQuotes(quotes: TQuote[], append: boolean) {
+        this.processQuotes(quotes);
+        if (append) {
+            this.quotes.unshift(...quotes);
+        } else {
+            this.quotes = quotes;
+        }
+    }
+
+    addQuote(quote: TQuote) {
+        this.quotes.push(quote);
+    }
+
+    getQuoteForEpoch(epoch: number): TQuote | undefined {
+        return this.quotes.find((q: TQuote) => {
+            return q.DT?.getTime() == epoch;
+        });
+    }
+
+    getQuoteIndexForEpoch(epoch: number): number | undefined {
+        return this.quotes.findIndex((q: TQuote) => {
+            return q.DT?.getTime() == epoch;
+        });
+    }
+
     async fetchInitialData(
         symbol: string,
         suggestedStartDate: Date,

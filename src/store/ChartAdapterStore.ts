@@ -1,11 +1,21 @@
 import { action, makeObservable, observable, when } from 'mobx';
-import { TBarrierUpdateProps, TMessage, TQuote } from 'src/types';
+import { TBarrierUpdateProps, TDartInteop, TQuote } from 'src/types';
 import MainStore from './';
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
     iframeElement?: HTMLIFrameElement;
-    isIframeLoaded = false;
+    isChartLoaded = false;
+    isDataInitialized = false;
+    dartInterop?: TDartInteop;
+    epochBounds = {
+        leftEpoch: 0,
+        rightEpoch: 0,
+    };
+    quoteBounds = {
+        topQuote: 0,
+        bottomQuote: 0,
+    };
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -14,26 +24,59 @@ export default class ChartAdapterStore {
             onTickHistory: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
-            isIframeLoaded: observable,
+            onVisibleAreaChanged: action.bound,
+            onQuoteAreaChanged: action.bound,
+            isChartLoaded: observable,
+            isDataInitialized: observable,
+            epochBounds: observable.ref,
+            quoteBounds: observable.ref,
         });
 
         this.mainStore = mainStore;
+
+        // @ts-ignore
+        window.jsInterop = {
+            postMessage: this.onMessage,
+            onChartLoad: this.onChartLoad,
+            onVisibleAreaChanged: this.onVisibleAreaChanged,
+            onQuoteAreaChanged: this.onQuoteAreaChanged,
+        };
     }
 
     setIFrameElement(element: HTMLIFrameElement) {
         this.iframeElement = element;
     }
 
-    onIframeLoad() {
-        this.isIframeLoaded = true;
+    onChartLoad() {
+        // @ts-ignore
+        this.dartInterop = this.iframeElement?.contentWindow.dartInterop;
+        this.isChartLoaded = true;
+        console.log('isChartLoaded', true);
     }
 
-    onMessage(ev: MessageEvent) {
-        const message = ev.data as TMessage;
+    onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
+        if (this.epochBounds.leftEpoch != leftEpoch || this.epochBounds.rightEpoch != rightEpoch) {
+            this.epochBounds = {
+                leftEpoch,
+                rightEpoch,
+            };
+        }
+    }
+
+    onQuoteAreaChanged(topQuote: number, bottomQuote: number) {
+        this.quoteBounds = {
+            topQuote,
+            bottomQuote,
+        };
+    }
+
+    onMessage(data: string) {
+        console.log(data);
+        const message = JSON.parse(data);
         console.log(message);
-        switch (message.type) {
+        switch (message?.type) {
             case 'ON_LOAD':
-                this.onIframeLoad();
+                this.onChartLoad();
                 break;
             case 'LOAD_HISTORY':
                 this.loadHistory(message.payload);
@@ -45,13 +88,16 @@ export default class ChartAdapterStore {
     }
 
     async postMessage(message: any) {
-        if (this.isIframeLoaded) {
+        if (this.isChartLoaded) {
             console.log(message);
-            this.iframeElement?.contentWindow?.postMessage(message, '*');
+            // @ts-ignore
+            this.dartInterop?.postMessage(JSON.stringify(message));
         } else {
-            await when(() => this.isIframeLoaded);
+            await when(() => this.isChartLoaded);
             console.log(message);
-            this.iframeElement?.contentWindow?.postMessage(message, '*');
+
+            // @ts-ignore
+            this.dartInterop?.postMessage(JSON.stringify(message));
         }
     }
 
@@ -72,6 +118,9 @@ export default class ChartAdapterStore {
             type: 'TICKS_HISTORY',
             payload: quotes,
         };
+        this.mainStore.chart.feed?.updateQuotes(quotes, false);
+
+        this.isDataInitialized = true;
 
         this.postMessage(message);
     }
@@ -90,6 +139,8 @@ export default class ChartAdapterStore {
                 payload: quote,
             };
         }
+        this.mainStore.chart.feed?.addQuote(quote);
+
         this.postMessage(message);
     }
 
@@ -109,6 +160,10 @@ export default class ChartAdapterStore {
                     type: 'PREPEND_TICKS_HISTORY',
                     payload: quotes,
                 };
+
+                if (quotes) {
+                    this.mainStore.chart.feed?.updateQuotes(quotes, true);
+                }
 
                 this.postMessage(message);
             }
@@ -143,7 +198,7 @@ export default class ChartAdapterStore {
         this.postMessage(message);
     }
 
-    updateBarriers(barriers: TBarrierUpdateProps[]) {
+    async updateBarriers(barriers: TBarrierUpdateProps[]) {
         const transformedBarriers = barriers.map(barrier => ({
             shade: barrier.shade,
             color: barrier.color,
@@ -159,18 +214,23 @@ export default class ChartAdapterStore {
             type: 'UPDATE_BARRIERS',
             payload: transformedBarriers,
         };
+
+        await when(() => this.isDataInitialized);
+
         this.postMessage(message);
     }
 
-    updateMarkers(markers_array: any[]) {
-        console.log('markers_array', markers_array);
+    async updateMarkers(markers_array: any[]) {
+        // console.log('markers_array', markers_array);
 
-        const transformedMarkers = markers_array.filter(m => m.price_array?.length > 0);
+        const transformedMarkers = markers_array.filter(m => m.markers?.length > 0);
 
         const message = {
             type: 'UPDATE_MARKERS',
             payload: transformedMarkers,
         };
+
+        await when(() => this.isDataInitialized);
 
         this.postMessage(message);
     }
@@ -185,5 +245,13 @@ export default class ChartAdapterStore {
         if (draggableBarrier) {
             draggableBarrier.onChange({ high: payload.high });
         }
+    }
+
+    getXFromEpoch(epoch: number) {
+        return this.dartInterop!.chartConfig.getXFromEpoch(epoch);
+    }
+
+    getYFromQuote(quote: number) {
+        return this.dartInterop!.chartConfig.getYFromQuote(quote);
     }
 }

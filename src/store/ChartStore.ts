@@ -82,7 +82,6 @@ type TDisplayStickyParams = {
     noEdit?: boolean;
     type?: string;
     positioner?: (ref: Element) => void;
-    panel?: typeof CIQ.ChartEngine.Panel;
 };
 type TStxSymbolItem = {
     interval: number;

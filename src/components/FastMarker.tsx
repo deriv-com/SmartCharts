@@ -42,25 +42,33 @@ type TFastMarkerProps = {
 };
 
 const FastMarker = (props: TFastMarkerProps) => {
-    const { chart: chartStore } = useStores();
+    const { chart: chartStore, chartAdapter } = useStores();
     const { contextPromise } = chartStore;
+    const { epochBounds, quoteBounds } = chartAdapter;
     const price_ref = React.useRef<number | null>(null);
     const date_ref = React.useRef<Date | null>(null);
+    const epoch_ref = React.useRef<number | null>(null);
     const elem_ref = React.useRef<HTMLDivElement | null>(null);
-    const ctx_ref = React.useRef<Context | null>(null);
-    const stx_ref = React.useRef<Context['stx']>(null);
-    const injection_id_ref = React.useRef();
+
     const props_ref = React.useRef(props);
     props_ref.current = props;
+
+    React.useEffect(() => {
+        updateCSS();
+    }, [chartAdapter.epochBounds, chartAdapter.quoteBounds]);
 
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;
         date_ref.current = CIQ.strToDateTime(getUTCDate(epoch as number)) as Date;
+        epoch_ref.current = epoch ? epoch * 1000 : null;
+
         updateCSS();
     };
 
     const updateCSS = () => {
-        if (!elem_ref.current || !ctx_ref.current || !stx_ref.current) {
+        if (!chartAdapter.isDataInitialized || !chartAdapter.isChartLoaded) return;
+
+        if (!elem_ref.current) {
             return;
         }
         if (!date_ref.current) {
@@ -71,47 +79,49 @@ const FastMarker = (props: TFastMarkerProps) => {
         const offsetTop = props_ref.current.offsetTop || 0;
         const offsetLeft = props_ref.current.offsetLeft || 0;
         const elem = elem_ref.current;
-        const stx = stx_ref.current;
-        const chart = stx.chart;
 
         let top = 0,
             left = 0,
             show = true;
 
         const threshold = Number(props_ref.current.threshold) || 0;
-        show = !threshold || stx.layout.candleWidth >= threshold;
+        //show = !threshold || stx.layout.candleWidth >= threshold;
 
-        if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
-            let tickIdx = stx.tickFromDate(date_ref.current, chart);
+        if (epoch_ref.current) {
+            let tickIdx = chartStore.feed?.getQuoteIndexForEpoch(epoch_ref.current);
 
-            if (tickIdx > -1 && stx.chart.dataSet[tickIdx] && stx.chart.dataSet[tickIdx].Close !== price_ref.current) {
-                delete stx.chart.tickCache[date_ref.current.getTime()];
-                tickIdx = stx.tickFromDate(date_ref.current, chart);
-            }
+            let x: number = chartAdapter.getXFromEpoch(epoch_ref.current);
 
-            let x = stx.pixelFromTick(tickIdx, chart);
-
-            // ChartIQ doesn't support placing markers in the middle of ticks.
-            const bar = chart.dataSet[tickIdx];
-            // Here we interpolate the pixel distance between two adjacent ticks.
-            if (bar && bar.DT < date_ref.current) {
-                const barNext = chart.dataSet[tickIdx + 1];
-                const barPrev = tickIdx > 0 ? chart.dataSet[tickIdx - 1] : null;
-                if (barNext && barNext.Close && barNext.DT > date_ref.current) {
-                    const pixelToNextBar = stx.pixelFromTick(tickIdx + 1, chart) - x;
-                    x +=
-                        ((((date_ref.current as unknown) as number) - bar.DT) / (barNext.DT - bar.DT)) * pixelToNextBar;
-                } else if (barPrev && barPrev.Close) {
-                    const pixelFromPrevBar = x - stx.pixelFromTick(tickIdx - 1, chart);
-                    x +=
-                        ((((date_ref.current as unknown) as number) - bar.DT) / (bar.DT - barPrev.DT)) *
-                        pixelFromPrevBar;
+            if (typeof tickIdx === 'number' && tickIdx > -1) {
+                // ChartIQ doesn't support placing markers in the middle of ticks.
+                const bar = chartStore.feed?.quotes[tickIdx];
+                // Here we interpolate the pixel distance between two adjacent ticks.
+                if (bar && bar.DT! < date_ref.current) {
+                    const barNext = chartStore.feed?.quotes[tickIdx + 1];
+                    const barPrev = tickIdx > 0 ? chartStore.feed?.quotes[tickIdx - 1] : null;
+                    if (barNext && barNext.Close && barNext.DT! > date_ref.current) {
+                        const pixelToNextBar = chartAdapter.getXFromEpoch(barNext.DT!.getTime()) - x;
+                        x +=
+                            ((((date_ref.current as unknown) as number) - bar.DT!.getTime()) /
+                                (barNext.DT!.getTime() - bar.DT!.getTime())) *
+                            pixelToNextBar;
+                    } else if (barPrev && barPrev.Close) {
+                        const pixelFromPrevBar = x - chartAdapter.getXFromEpoch(barPrev.DT!.getTime());
+                        x +=
+                            ((((date_ref.current as unknown) as number) - bar.DT!.getTime()) /
+                                (bar.DT!.getTime() - barPrev.DT!.getTime())) *
+                            pixelFromPrevBar;
+                    }
                 }
             }
 
-            const y = price_ref.current ? stx.pixelFromPrice(price_ref.current, chart.panel) : 0;
+            const y: number = price_ref.current ? chartAdapter.getYFromQuote(price_ref.current) : 0;
 
-            if (chart.yAxis.left > x && chart.yAxis.top <= y && chart.yAxis.bottom >= y) {
+            if (
+                epochBounds.leftEpoch <= epoch_ref.current &&
+                (price_ref.current == null ||
+                    (quoteBounds.topQuote >= price_ref.current && quoteBounds.bottomQuote <= price_ref.current))
+            ) {
                 top = +y;
                 left = Math.round(x);
             } else {
@@ -142,18 +152,9 @@ const FastMarker = (props: TFastMarkerProps) => {
         if (ref !== null) {
             if (contextPromise) {
                 contextPromise.then((ctx: Context) => {
-                    ctx_ref.current = ctx;
-                    //  stx_ref.current = ctx_ref.current.stx;
-
-                    //   injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
                     updateCSS();
                 });
             }
-        } else if (injection_id_ref.current && stx_ref.current) {
-            // remove the injection on unmount
-            //   stx_ref.current.removeInjection(injection_id_ref.current);
-            ctx_ref.current = null;
-            //    stx_ref.current = null;
         }
     };
 
