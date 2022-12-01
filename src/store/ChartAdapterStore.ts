@@ -254,4 +254,12 @@ export default class ChartAdapterStore {
     getYFromQuote(quote: number) {
         return this.dartInterop!.chartConfig.getYFromQuote(quote);
     }
+
+    getEpochFromX(x: number) {
+        return this.dartInterop!.chartConfig.getEpochFromX(x);
+    }
+
+    getQuoteFromY(x: number) {
+        return this.dartInterop!.chartConfig.getQuoteFromY(x);
+    }
 }

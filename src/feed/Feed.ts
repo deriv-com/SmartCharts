@@ -147,11 +147,13 @@ class Feed {
     }
 
     addQuote(quote: TQuote) {
+        this.processQuotes([quote]);
         this.quotes.push(quote);
     }
 
     getQuoteForEpoch(epoch: number): TQuote | undefined {
         return this.quotes.find((q: TQuote) => {
+            console.log(q.DT?.getTime(), epoch);
             return q.DT?.getTime() == epoch;
         });
     }
@@ -160,6 +162,51 @@ class Feed {
         return this.quotes.findIndex((q: TQuote) => {
             return q.DT?.getTime() == epoch;
         });
+    }
+
+    getClosestQuoteForEpoch(epoch: number) {
+        const index = this.findEpochIndex(epoch);
+
+        if (index < 0) {
+            return this.quotes[0];
+        } else if (index > this.quotes.length - 1) {
+            return this.quotes[this.quotes.length - 1];
+        } else {
+            const leftTick = this.quotes[Math.floor(index)];
+            const rightTick = this.quotes[Math.ceil(index)];
+
+            const distanceToLeft = epoch - leftTick.DT!.getTime();
+            const distanceToRight = rightTick.DT!.getTime() - epoch;
+            return distanceToLeft <= distanceToRight ? leftTick : rightTick;
+        }
+    }
+
+    findEpochIndex(epoch: number): number {
+        let left = -1;
+        let right = this.quotes.length;
+
+        while (right - left > 1) {
+            const mid = Math.trunc((left + right) / 2);
+            const pivot = this.quotes[mid].DT?.getTime();
+            if (!pivot) {
+                return mid;
+            }
+            if (epoch < pivot) {
+                right = mid;
+            } else if (epoch > pivot) {
+                left = mid;
+            } else {
+                return mid;
+            }
+        }
+
+        if (left >= 0 && epoch == this.quotes[left].DT?.getTime()) {
+            return left;
+        } else if (right < this.quotes.length && epoch == this.quotes[right].DT?.getTime()) {
+            return right;
+        } else {
+            return (left + right) / 2;
+        }
     }
 
     async fetchInitialData(

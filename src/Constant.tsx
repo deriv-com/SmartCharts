@@ -43,7 +43,7 @@ import {
     TypeHollowIcon,
     TypeOhlcIcon,
 } from './components/Icons';
-import { TIcon } from './types';
+import { TGranularity, TIcon } from './types';
 
 type TDrawTools = {
     [key: string]: {
@@ -80,8 +80,6 @@ export type TActiveItem = TIndicatorItem & {
             editMode: boolean;
             panelName: string;
         };
-        sd: typeof CIQ.Studies.StudyDescriptor;
-        stx: typeof CIQ.ChartEngine;
     };
 };
 
@@ -439,7 +437,17 @@ export const ChartTypes = [
     { id: 'colored_bar', text: t.translate('OHLC'), candleOnly: true, icon: TypeOhlcIcon },
 ];
 
-export const Intervals = [
+type TInterval = {
+    key: string;
+    single: string;
+    plural?: string;
+    items: {
+        interval: TGranularity;
+        num: number;
+    }[];
+}[];
+
+export const Intervals: TInterval = [
     {
         key: 'tick',
         single: t.translate('tick'),

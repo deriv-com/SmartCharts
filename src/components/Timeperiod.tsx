@@ -12,14 +12,14 @@ import Tooltip from './Tooltip';
 type TTimeperiodItemProps = {
     category: typeof Intervals[0];
     item: {
-        interval: number;
+        interval: TGranularity;
         num: number;
     };
-    onClick: (chart_type_id: string, key: string, inval: number) => void;
+    onClick: (chart_type_id: string, key: string, interval: TGranularity) => void;
 };
 
-const enableLoader = (isLoading: boolean, inval: number, granularity: TGranularity) =>
-    isLoading && inval === granularity;
+const enableLoader = (isLoading: boolean, interval: TGranularity, granularity: TGranularity) =>
+    isLoading && interval === granularity;
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
 
@@ -84,11 +84,11 @@ const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
 
     const onChangeGranularity = onChange || setGranularity;
 
-    const onIntervalClick = (chart_type_id: string, key: string, inval: number) => {
+    const onIntervalClick = (chart_type_id: string, key: string, interval: TGranularity) => {
         if (key === 'tick' && chart_type_id !== 'mountain') {
             return;
         }
-        changeGranularity(inval as TGranularity);
+        changeGranularity(interval);
     };
     React.useEffect(() => updateProps(onChangeGranularity));
     updatePortalNode(portalNodeId);

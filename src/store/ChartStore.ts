@@ -147,6 +147,7 @@ class ChartStore {
             refreshChart: action.bound,
             destroy: action.bound,
             openFullscreen: action.bound,
+            granularity: observable,
         });
 
         this.mainStore = mainStore;
@@ -302,7 +303,6 @@ class ChartStore {
 
         const {
             symbol,
-            chartType,
             granularity,
             requestAPI,
             requestSubscribe,
@@ -408,6 +408,7 @@ class ChartStore {
 
                     this.contextPromise?.resolve?.(this.context);
                     this.resizeScreen();
+
                     reaction(
                         () => [this.state?.symbol, this.state?.granularity],
                         () => {

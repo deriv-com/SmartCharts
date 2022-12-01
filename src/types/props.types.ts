@@ -271,6 +271,8 @@ export type TDartInteop = {
     chartConfig: {
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;
+        getEpochFromX: (x: number) => number;
+        getQuoteFromY: (y: number) => number;
         updateTheme: (theme: string) => void;
     };
 };

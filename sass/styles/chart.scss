@@ -46,9 +46,6 @@ body {
             }
         }
     }
-    :last-child {
-        z-index: 1;
-    }
 }
 .cq-inchart-subholder {
     width: 100%;
@@ -508,41 +505,6 @@ body {
     }
 }
 
-/* -------- Crosshairs lines and labels-------- */
-
-.stx-float-price,
-.stx-float-date {
-    border-radius: $border-radius;
-    font-weight: normal;
-    @include themify($themes) {
-        background-color: themed('CrosshairLabelBg');
-        color: themed('CrosshairLabelText') !important;
-    }
-}
-
-.stx-float-date {
-    /* Crosshair Floating x-axis date label*/
-    position: absolute;
-    font-size: 12px;
-    font-family: 'Helvetica';
-    z-index: 3;
-    padding: 0 8px;
-    text-align: center;
-    width: auto;
-    height: 30px;
-    line-height: 31px;
-    box-size: content-box;
-}
-
-.stx_crosshair {
-    /* Standard Crosshair lines color */
-    position: absolute;
-    z-index: 1;
-    @include themify($themes) {
-        background-color: themed('CrosshairAxis');
-    }
-}
-
 .stx_crosshair_drawing {
     /* Crosshairs lines when drawing */
     position: absolute;
@@ -551,28 +513,6 @@ body {
     @include themify($themes) {
         background-color: themed('CrosshairAxis');
     }
-}
-
-.crossY,
-.stx_crosshair_y {
-    /* Vertical Crosshair line size */
-    left: 0px;
-    height: 1px;
-    width: 98%;
-    margin-top: 0; /* since we're using border-top to draw the actual line */
-}
-
-.crossX,
-.stx_crosshair_x {
-    /* Horizontal Crosshair line size */
-    top: 0px;
-    width: 1px;
-    height: 100%;
-}
-
-.stx-crosshair-on {
-    /* Crosshair pointer icon */
-    cursor: crosshair;
 }
 
 /* -------- Chart and Study Panel Styling -------- */
