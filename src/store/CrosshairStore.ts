@@ -123,19 +123,18 @@ class CrosshairStore {
 
     onMouseOver = () => {
         this.updateVisibility(true);
-        setTimeout(this.setCursor);
     };
 
     onMouseOut = () => {
         this.updateVisibility(false);
     };
 
-    setCursor = () => {
+    setCursor = (is_active: boolean) => {
         const contentWindow = document.querySelector('iframe')?.contentWindow;
         const element = contentWindow?.document?.querySelector('flt-glass-pane') as HTMLElement;
 
         if (element) {
-            element.style.cursor = [1, 2].includes(this.state || 0) ? 'crosshair' : 'default';
+            element.style.cursor = [1, 2].includes(this.state || 0) && is_active ? 'crosshair' : 'default';
         }
     };
 

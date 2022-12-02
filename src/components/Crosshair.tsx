@@ -41,10 +41,12 @@ const Crosshair = () => {
                 // To hide the crosshair when hovered over yAxis
                 if (ev.offsetX > crosshairWrapperRef.current.clientWidth - yAxisWidth) {
                     crosshairRef.current.classList.remove('active');
+                    setTimeout(() => crosshair.setCursor(false));
                     return;
                 } else {
                     if (!crosshairRef.current.classList.contains('active')) {
                         crosshairRef.current.classList.add('active');
+                        setTimeout(() => crosshair.setCursor(true));
                     }
                 }
             }
