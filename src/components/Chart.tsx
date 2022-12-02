@@ -9,6 +9,7 @@ import { TChartProps } from 'src/types';
 /* css + scss */
 import '../../sass/main.scss';
 import { initGA, logPageView } from '../utils/ga';
+import Barrier from './Barrier';
 import BottomWidget from './BottomWidget';
 import BottomWidgetsContainer from './BottomWidgetsContainer';
 import ChartControls from './ChartControls';
@@ -122,6 +123,14 @@ const Chart = (props: TChartProps) => {
                     >
                         <div className='ciq-chart-area'>
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
+                                <RenderInsideChart at='holder'>
+                                    {barriers.map((barr, idx) => (
+                                        <Barrier
+                                            key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
+                                            {...barr}
+                                        />
+                                    ))}
+                                </RenderInsideChart>
                                 <RenderInsideChart at='subholder'>
                                     {!isCandle && !isSpline && isHighestLowestMarkerEnabled && <HighestLowestMarker />}
                                 </RenderInsideChart>

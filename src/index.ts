@@ -1,3 +1,4 @@
+import Barrier from './components/Barrier';
 import PendingPromise from './utils/PendingPromise';
 import ChartTypes from './components/ChartTypes';
 import ChartMode from './components/ChartMode';
@@ -24,6 +25,7 @@ function setSmartChartsPublicPath(path: string) {
 const Marker = FastMarker;
 
 export {
+    Barrier,
     ChartSetting,
     ChartSize,
     ChartTitle,
@@ -47,6 +49,7 @@ export {
 };
 
 export default {
+    Barrier,
     ChartSetting,
     ChartSize,
     ChartTitle,

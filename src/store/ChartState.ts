@@ -1,7 +1,6 @@
 /* eslint-disable no-new */
 import { action, observable, when, makeObservable } from 'mobx';
 import {
-    TBarrierUpdateProps,
     TChartControlsWidgets,
     TChartProps,
     TGetIndicatorHeightRatio,
@@ -65,7 +64,6 @@ class ChartState {
     activeSymbols: string | null = null;
     chartControlsWidgets?: TChartControlsWidgets;
     enabledChartFooter?: boolean;
-    barriers?: TBarrierUpdateProps[];
 
     get context() {
         return this.chartStore.context;
@@ -170,7 +168,6 @@ class ChartState {
         enableZoom = null,
         anchorChartToLeft = false,
         chartData,
-        barriers,
     }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -205,7 +202,6 @@ class ChartState {
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
-        this.barriers = barriers;
 
         if (
             networkStatus &&
@@ -216,10 +212,12 @@ class ChartState {
 
         if (chartControlsWidgets !== this.chartControlsWidgets) {
             this.chartControlsWidgets = chartControlsWidgets;
+            if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
         if (enabledChartFooter !== this.enabledChartFooter) {
             this.enabledChartFooter = enabledChartFooter;
+            if (this.stxx) this.mainStore.chart.updateHeight();
         }
 
         if (symbol !== this.symbol) {

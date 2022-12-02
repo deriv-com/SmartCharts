@@ -81,9 +81,6 @@ export default class ChartAdapterStore {
             case 'LOAD_HISTORY':
                 this.loadHistory(message.payload);
                 break;
-            case 'BARRIER_DRAG':
-                this.onBarrierDrag(message.payload);
-                break;
         }
     }
 
@@ -206,8 +203,6 @@ export default class ChartAdapterStore {
             high: barrier.high,
             low: barrier.low,
             key: barrier.key,
-            relative: barrier.relative,
-            draggable: barrier.draggable,
         }));
 
         const message = {
@@ -233,18 +228,6 @@ export default class ChartAdapterStore {
         await when(() => this.isDataInitialized);
 
         this.postMessage(message);
-    }
-
-    onBarrierDrag(payloadString: string) {
-        const payload: { high: number } = JSON.parse(payloadString);
-
-        const draggableBarrier = this.mainStore.state.barriers?.find(b => b.draggable === true);
-
-        console.log('change', payload, payload.high);
-
-        if (draggableBarrier) {
-            draggableBarrier.onChange({ high: payload.high });
-        }
     }
 
     getXFromEpoch(epoch: number) {

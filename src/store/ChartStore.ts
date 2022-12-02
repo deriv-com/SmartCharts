@@ -34,6 +34,7 @@ import {
     renderSVGString,
 } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
+import BarrierStore from './BarrierStore';
 import ChartState from './ChartState';
 
 type TDefaults = {
@@ -167,6 +168,7 @@ class ChartStore {
     chartControlsNode?: HTMLElement | null = null;
     state?: ChartState;
     onMessage = null;
+    _barriers: BarrierStore[] = [];
 
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
