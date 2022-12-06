@@ -1,7 +1,7 @@
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
 import Context from 'src/components/ui/Context';
 import MarkerStore from 'src/store/MarkerStore';
-import { TGranularity, TQuote } from 'src/types';
+import { TDragEvents, TGranularity, TQuote } from 'src/types';
 
 type TTransferItem = (item: TSubCategoryDataItem | TSubCategory) => TSubCategoryDataItem | TSubCategory;
 
@@ -353,3 +353,29 @@ export const stringToSlug = (str: string) =>
         .toLowerCase()
         .replace(/[^\w ]+/g, '')
         .replace(/ +/g, '-');
+
+export const makeElementDraggable = (
+    el: HTMLElement,
+    zone: HTMLElement,
+    { onDragStart, onDrag, onDragReleased }: TDragEvents
+) => {
+    el.addEventListener('mousedown', dragMouseDown);
+
+    function dragMouseDown(ev: MouseEvent) {
+        zone.addEventListener('mousemove', elementDrag);
+        zone.addEventListener('mouseup', closeDragElement);
+
+        onDragStart?.(ev);
+    }
+
+    function elementDrag(ev: MouseEvent) {
+        onDrag?.(ev);
+    }
+
+    function closeDragElement(ev: MouseEvent) {
+        onDragReleased?.(ev);
+
+        zone.removeEventListener('mousemove', elementDrag);
+        zone.removeEventListener('mouseup', closeDragElement);
+    }
+};

@@ -567,7 +567,7 @@ class Feed {
         const { granularity } = this._unpackKey(keys[0]);
         const elapsedSeconds =
             ((((new Date() as unknown) as number) - ((this._connectionClosedDate as unknown) as number)) / 1000) | 0;
-        const maxIdleSeconds = (granularity || 1) * this._stx.chart.maxTicks;
+        const maxIdleSeconds = (granularity || 1) * 60;
         if (elapsedSeconds >= maxIdleSeconds) {
             this._mainStore.chart.refreshChart();
         } else {
@@ -579,11 +579,10 @@ class Feed {
     }
     _resumeStream(key: string) {
         const { symbol } = this._unpackKey(key);
-        const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
+        const comparisonChartSymbol = this._mainStore.chart.currentActiveSymbol?.symbol !== symbol ? symbol : undefined;
 
         this._activeStreams[key].resume().then((params?: TQuoteResponse) => {
             const { quotes } = params as TQuoteResponse;
-            if (this._stx.isDestroyed) return;
             this._appendChartData(quotes, key, comparisonChartSymbol);
         });
     }

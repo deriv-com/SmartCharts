@@ -112,7 +112,7 @@ class ChartStore {
     isMobile?: boolean = false;
     isScaledOneOne = false;
     shouldRenderDialogs = false;
-    yAxiswidth = 0;
+    yAxiswidth = 60;
     serverTime?: string;
     networkStatus?: TNetworkConfig;
     isLive = false;
@@ -190,21 +190,21 @@ class ChartStore {
     get rootElement() {
         return this.chartId ? document.getElementById(this.chartId) : null;
     }
-    currentCloseQuote = (): TQuote | null => {
-        // let currentQuote = this.stxx.currentQuote();
-        // if (currentQuote && !currentQuote.Close) {
-        //     const dataSegmentClose = [...this.stxx.chart.dataSegment].filter(item => item && item.Close);
-        //     if (dataSegmentClose && dataSegmentClose.length) {
-        //         currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
-        //     } else {
-        //         const dataSetClose = [...this.stxx.chart.dataSet].filter(item => item && item.Close);
-        //         if (dataSetClose && dataSetClose.length) {
-        //             currentQuote = dataSetClose[dataSetClose.length - 1];
-        //         }
-        //     }
-        // }
-        // return currentQuote;
-        return null;
+    currentCloseQuote = (): TQuote | undefined => {
+        const quotes = this.mainStore.chart.feed?.quotes;
+        let currentQuote = quotes?.[quotes.length - 1];
+        if (currentQuote && !currentQuote.Close) {
+            const dataSegmentClose = quotes?.filter(item => item && item.Close);
+            if (dataSegmentClose && dataSegmentClose.length) {
+                currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
+            } else {
+                const dataSetClose = quotes?.filter(item => item && item.Close);
+                if (dataSetClose && dataSetClose.length) {
+                    currentQuote = dataSetClose[dataSetClose.length - 1];
+                }
+            }
+        }
+        return currentQuote;
     };
     updateHeight(position?: string) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
@@ -583,7 +583,6 @@ class ChartStore {
                 // this.mainStore.chart.feed.scaleChart();
             }
         };
-        this.yAxiswidth = 0;
 
         this.feed!.fetchInitialData(
             symbolObj.symbol,

@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, when } from 'mobx';
-import { TBarrierUpdateProps, TDartInteop, TQuote } from 'src/types';
+import { TDartInteop, TQuote } from 'src/types';
 import MainStore from './';
 
 export default class ChartAdapterStore {
@@ -191,26 +191,6 @@ export default class ChartAdapterStore {
             type: 'SCALE_CHART',
             payload: scale,
         };
-
-        this.postMessage(message);
-    }
-
-    async updateBarriers(barriers: TBarrierUpdateProps[]) {
-        const transformedBarriers = barriers.map(barrier => ({
-            shade: barrier.shade,
-            color: barrier.color,
-            title: barrier.title,
-            high: barrier.high,
-            low: barrier.low,
-            key: barrier.key,
-        }));
-
-        const message = {
-            type: 'UPDATE_BARRIERS',
-            payload: transformedBarriers,
-        };
-
-        await when(() => this.isDataInitialized);
 
         this.postMessage(message);
     }

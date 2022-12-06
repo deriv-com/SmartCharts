@@ -5,7 +5,9 @@ import { useStores } from 'src/store';
 import '../../sass/components/_crosshair.scss';
 
 const Crosshair = () => {
-    const { crosshair, chartAdapter, share } = useStores();
+    const { crosshair, chart, chartAdapter, share } = useStores();
+
+    const { yAxiswidth } = chart;
     const { state: crosshairState, getDateTimeFormat } = crosshair;
     const crosshairWrapperRef = React.useRef<HTMLDivElement>(null);
     const crosshairRef = React.useRef<HTMLDivElement>(null);
@@ -37,9 +39,8 @@ const Crosshair = () => {
     const onMouseMove = React.useCallback(
         (ev: MouseEvent) => {
             if (crosshairWrapperRef.current && crosshairRef.current) {
-                const yAxisWidth = 60;
                 // To hide the crosshair when hovered over yAxis
-                if (ev.offsetX > crosshairWrapperRef.current.clientWidth - yAxisWidth) {
+                if (ev.offsetX > crosshairWrapperRef.current.clientWidth - yAxiswidth) {
                     crosshairRef.current.classList.remove('active');
                     setTimeout(() => crosshair.setCursor(false));
                     return;

@@ -278,3 +278,9 @@ export type TDartInteop = {
         updateTheme: (theme: string) => void;
     };
 };
+
+export type TDragEvents = {
+    onDragStart?: (ev: MouseEvent) => void;
+    onDrag?: (ev: MouseEvent) => void;
+    onDragReleased?: (ev: MouseEvent) => void;
+};

@@ -1,4 +1,4 @@
-import { action, computed, observable, makeObservable } from 'mobx';
+import { action, computed, observable, makeObservable, when, reaction, IReactionDisposer } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import { TBarrierChangeParam, TBarrierUpdateProps } from '../types';
@@ -55,6 +55,8 @@ export default class BarrierStore {
 
     _shadeState = '';
 
+    disposeDrawReaction?: IReactionDisposer;
+
     get pip(): number {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
@@ -107,12 +109,18 @@ export default class BarrierStore {
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
-        if (this.context && mainStore.chart.currentCloseQuote()) {
-            this.init();
-        }
+        when(() => this.mainStore.chartAdapter.isChartLoaded, this.onChartLoaded);
 
         this.mainStore.chart._barriers.push(this);
     }
+
+    onChartLoaded = () => {
+        this.init();
+        this.disposeDrawReaction = reaction(
+            () => [this.mainStore.chartAdapter.epochBounds, this.mainStore.chartAdapter.quoteBounds],
+            this._drawShadedArea
+        );
+    };
 
     init(): void {
         this.isInitialized = true;
@@ -206,6 +214,8 @@ export default class BarrierStore {
         // this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
         this._low_barrier.destructor();
+
+        this.disposeDrawReaction?.();
 
         const i = this.mainStore.chart._barriers.findIndex((b: BarrierStore) => b === this);
         if (i !== -1) {

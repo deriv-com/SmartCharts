@@ -91,10 +91,6 @@ const Chart = (props: TChartProps) => {
     }, []);
 
     React.useEffect(() => {
-        chartAdapter.updateBarriers(barriers);
-    }, [barriers]);
-
-    React.useEffect(() => {
         chartAdapter.updateMarkers(markers_array);
     }, [markers_array]);
 
@@ -123,7 +119,7 @@ const Chart = (props: TChartProps) => {
                     >
                         <div className='ciq-chart-area'>
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
-                                <RenderInsideChart at='holder'>
+                                <RenderInsideChart at='subholder'>
                                     {barriers.map((barr, idx) => (
                                         <Barrier
                                             key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
