@@ -1,4 +1,5 @@
 import { action, makeObservable, observable, when } from 'mobx';
+import moment from 'moment';
 import { TDartInteop, TQuote } from 'src/types';
 import MainStore from './';
 
@@ -51,7 +52,6 @@ export default class ChartAdapterStore {
         // @ts-ignore
         this.dartInterop = this.iframeElement?.contentWindow.dartInterop;
         this.isChartLoaded = true;
-        console.log('isChartLoaded', true);
     }
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
@@ -71,9 +71,8 @@ export default class ChartAdapterStore {
     }
 
     onMessage(data: string) {
-        console.log(data);
         const message = JSON.parse(data);
-        console.log(message);
+
         switch (message?.type) {
             case 'ON_LOAD':
                 this.onChartLoad();
@@ -85,17 +84,9 @@ export default class ChartAdapterStore {
     }
 
     async postMessage(message: any) {
-        if (this.isChartLoaded) {
-            console.log(message);
-            // @ts-ignore
-            this.dartInterop?.postMessage(JSON.stringify(message));
-        } else {
-            await when(() => this.isChartLoaded);
-            console.log(message);
-
-            // @ts-ignore
-            this.dartInterop?.postMessage(JSON.stringify(message));
-        }
+        await when(() => this.isChartLoaded);
+        // @ts-ignore
+        this.dartInterop?.postMessage(JSON.stringify(message));
     }
 
     newChart() {
@@ -137,6 +128,8 @@ export default class ChartAdapterStore {
             };
         }
         this.mainStore.chart.feed?.addQuote(quote);
+
+        console.log(message);
 
         this.postMessage(message);
     }
@@ -195,20 +188,89 @@ export default class ChartAdapterStore {
         this.postMessage(message);
     }
 
-    async updateMarkers(markers_array: any[]) {
+    async updateMarkers(contracts_marker: any[]) {
         // console.log('markers_array', markers_array);
 
-        const transformedMarkers = markers_array.filter(m => m.markers?.length > 0);
+        const transformedContractsMarker = contracts_marker
+            .filter(c => c.markers?.length > 0)
+            .map(c => {
+                c.markers.forEach((m: any) => {
+                    if (!m.quote) {
+                        const { price } = this.getInterpolatedPositionAndPrice(m.epoch) || {};
+                        m.quote = price;
+                    }
+                });
+                return c;
+            });
 
         const message = {
             type: 'UPDATE_MARKERS',
-            payload: transformedMarkers,
+            payload: transformedContractsMarker,
         };
+
+        console.log(message);
 
         await when(() => this.isDataInitialized);
 
         this.postMessage(message);
     }
+
+    getInterpolatedPositionAndPrice = (epoch: number) => {
+        if (!epoch) return;
+
+        const date = moment.utc(epoch).toDate();
+
+        let tickIdx = this.mainStore.chart.feed?.getClosestQuoteIndexForEpoch(epoch);
+
+        // To not place markers in the middle of ticks.
+        let x: number = this.getXFromEpoch(epoch);
+
+        if (typeof tickIdx === 'number' && tickIdx > -1) {
+            const bar = this.mainStore.chart.feed?.quotes[tickIdx];
+
+            let price = bar ? bar.Close : null;
+            let delta_x, delta_y, ratio;
+
+            // Here we interpolate the pixel distance between two adjacent ticks.
+            if (bar && bar.DT! < date) {
+                const barNext = this.mainStore.chart.feed?.quotes[tickIdx + 1];
+                const barPrev = tickIdx > 0 ? this.mainStore.chart.feed?.quotes[tickIdx - 1] : null;
+
+                if (barNext && barNext.Close && barNext.DT! > date) {
+                    delta_x = this.getXFromEpoch(barNext.DT!.getTime()) - x;
+
+                    ratio =
+                        (((date as unknown) as number) - bar.DT!.getTime()) /
+                        (barNext.DT!.getTime() - bar.DT!.getTime());
+
+                    if (price) delta_y = barNext.Close - price;
+                } else if (barPrev && barPrev.Close) {
+                    delta_x = x - this.getXFromEpoch(barPrev.DT!.getTime());
+
+                    ratio =
+                        (((date as unknown) as number) - bar.DT!.getTime()) /
+                        (bar.DT!.getTime() - barPrev.DT!.getTime());
+
+                    if (price) delta_y = price - barPrev.Close;
+                }
+            }
+
+            if (ratio) {
+                if (delta_x) {
+                    x += ratio * delta_x;
+                }
+
+                if (price && delta_y) {
+                    price += ratio * delta_y;
+                }
+            }
+
+            return {
+                x,
+                price,
+            };
+        }
+    };
 
     getXFromEpoch(epoch: number) {
         return this.dartInterop!.chartConfig.getXFromEpoch(epoch);

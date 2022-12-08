@@ -120,7 +120,7 @@ const Chart = (props: TChartProps) => {
                         <div className='ciq-chart-area'>
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
                                 <RenderInsideChart at='subholder'>
-                                    {barriers.map((barr, idx) => (
+                                    {barriers.map(({ key, ...barr }, idx) => (
                                         <Barrier
                                             key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}

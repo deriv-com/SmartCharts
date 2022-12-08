@@ -93,7 +93,7 @@ const FastMarker = (props: TFastMarkerProps) => {
             let x: number = chartAdapter.getXFromEpoch(epoch_ref.current);
 
             if (typeof tickIdx === 'number' && tickIdx > -1) {
-                // ChartIQ doesn't support placing markers in the middle of ticks.
+                // To not place markers in the middle of ticks.
                 const bar = chartStore.feed?.quotes[tickIdx];
                 // Here we interpolate the pixel distance between two adjacent ticks.
                 if (bar && bar.DT! < date_ref.current) {

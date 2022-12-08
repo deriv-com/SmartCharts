@@ -181,6 +181,23 @@ class Feed {
         }
     }
 
+    getClosestQuoteIndexForEpoch(epoch: number) {
+        const index = this.findEpochIndex(epoch);
+
+        if (index < 0) {
+            return this.quotes[0];
+        } else if (index > this.quotes.length - 1) {
+            return this.quotes[this.quotes.length - 1];
+        } else {
+            const leftTick = this.quotes[Math.floor(index)];
+            const rightTick = this.quotes[Math.ceil(index)];
+
+            const distanceToLeft = epoch - leftTick.DT!.getTime();
+            const distanceToRight = rightTick.DT!.getTime() - epoch;
+            return distanceToLeft <= distanceToRight ? Math.floor(index) : Math.ceil(index);
+        }
+    }
+
     findEpochIndex(epoch: number): number {
         let left = -1;
         let right = this.quotes.length;
