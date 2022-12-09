@@ -160,6 +160,8 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     const { children, className } = props;
 
+    if (!chartAdapter.isChartLoaded) return null;
+
     return (
         <div className={className} ref={setRef} style={{ position: 'absolute' }}>
             {children}

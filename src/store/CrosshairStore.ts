@@ -159,6 +159,8 @@ class CrosshairStore {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
+        if (!this.mainStore.chartAdapter.isChartLoaded) return;
+
         const { offsetX, offsetY } = ev;
 
         const epoch = this.mainStore.chartAdapter.getEpochFromX(offsetX);

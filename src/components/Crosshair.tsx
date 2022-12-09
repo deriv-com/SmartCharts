@@ -38,6 +38,8 @@ const Crosshair = () => {
 
     const onMouseMove = React.useCallback(
         (ev: MouseEvent) => {
+            if (!chartAdapter.isChartLoaded) return;
+
             if (crosshairWrapperRef.current && crosshairRef.current) {
                 // To hide the crosshair when hovered over yAxis
                 if (ev.offsetX > crosshairWrapperRef.current.clientWidth - yAxiswidth) {
