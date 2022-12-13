@@ -379,3 +379,10 @@ export const makeElementDraggable = (
         zone.removeEventListener('mouseup', closeDragElement);
     }
 };
+
+export const lerp = (a: number, b: number, t: number) => {
+    a = a ?? 0;
+    b = b ?? 0;
+
+    return a * (1.0 - t) + b * t;
+};
