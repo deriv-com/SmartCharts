@@ -116,6 +116,7 @@ class ChartStore {
     serverTime?: string;
     networkStatus?: TNetworkConfig;
     isLive = false;
+    dataFitEnabled = false;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             containerWidth: observable,
@@ -320,6 +321,7 @@ class ChartStore {
             chartData,
             feedCall,
             isLive,
+            dataFitEnabled,
         } = props;
         this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
@@ -347,6 +349,7 @@ class ChartStore {
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
         this.isLive = isLive || false;
+        this.dataFitEnabled = dataFitEnabled || false;
 
         // let _chartType = chartType || this.defaults.chartType;
 

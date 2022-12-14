@@ -176,6 +176,7 @@ export type TChartProps = {
     historical?: boolean;
     markers_array: any[];
     isLive?: boolean;
+    dataFitEnabled?: boolean;
 };
 
 export type TQuote = {
@@ -284,3 +285,5 @@ export type TDragEvents = {
     onDrag?: (ev: MouseEvent) => void;
     onDragReleased?: (ev: MouseEvent) => void;
 };
+
+export type TAllTicks = Exclude<AuditDetailsForExpiredContract, null>['all_ticks'];

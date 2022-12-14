@@ -85,6 +85,7 @@ export default class ChartAdapterStore {
 
     async postMessage(message: any) {
         await when(() => this.isChartLoaded);
+        console.log(message);
         // @ts-ignore
         this.dartInterop?.postMessage(JSON.stringify(message));
     }
@@ -95,6 +96,7 @@ export default class ChartAdapterStore {
             payload: {
                 granularity: this.mainStore.state.granularity || 0,
                 isLive: this.mainStore.chart.isLive || false,
+                dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
             },
         };
 
@@ -207,8 +209,6 @@ export default class ChartAdapterStore {
             type: 'UPDATE_MARKERS',
             payload: transformedContractsMarker,
         };
-
-        console.log(message);
 
         await when(() => this.isDataInitialized);
 
