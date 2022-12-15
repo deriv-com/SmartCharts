@@ -64,6 +64,8 @@ const Crosshair = () => {
         return () => crosshair.onUnmount(onMouseMove);
     }, []);
 
+    if (!chartAdapter.isChartLoaded) return null;
+
     return (
         <div ref={crosshairWrapperRef} className='cq-crosshair-wrapper'>
             <div ref={crosshairRef} className='cq-crosshair'>

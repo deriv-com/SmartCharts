@@ -168,6 +168,8 @@ class ChartState {
         enableZoom = null,
         anchorChartToLeft = false,
         chartData,
+        isLive,
+        dataFitEnabled,
     }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -334,6 +336,18 @@ class ChartState {
 
         if (enableZoom !== null && this.enableZoom !== enableZoom) {
             this.enableZoom = enableZoom;
+        }
+
+        if (isLive != null && isLive != undefined && this.mainStore.chart.isLive != isLive) {
+            this.mainStore.chart.isLive = isLive;
+        }
+
+        if (
+            dataFitEnabled != null &&
+            dataFitEnabled != undefined &&
+            this.mainStore.chart.dataFitEnabled != dataFitEnabled
+        ) {
+            this.mainStore.chart.dataFitEnabled = dataFitEnabled;
         }
     }
 

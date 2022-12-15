@@ -138,8 +138,6 @@ export default class ChartAdapterStore {
         }
         this.mainStore.chart.feed?.addQuote(quote);
 
-        console.log(message);
-
         this.postMessage(message);
     }
 
