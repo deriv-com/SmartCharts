@@ -226,6 +226,24 @@ class Feed {
         }
     }
 
+    getQuotesInterval() {
+        if (this.quotes.length <= 1) return 1;
+
+        const cumulativeDelta = this.quotes.reduce((acc, val, index, array) => {
+            const currentDT = val.DT?.getTime();
+            const prevDT = array[index - 1]?.DT?.getTime();
+
+            if (prevDT && currentDT) {
+                const delta = (currentDT - prevDT) / 1000;
+                return acc + delta;
+            }
+
+            return acc;
+        }, 0);
+
+        return Math.round(cumulativeDelta / (this.quotes.length - 1));
+    }
+
     async fetchInitialData(
         symbol: string,
         suggestedStartDate: Date,

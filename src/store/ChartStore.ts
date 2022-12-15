@@ -597,8 +597,8 @@ class ChartStore {
             },
             ({ quotes, error }: TPaginationCallbackParams) => {
                 this.loader.hide();
-                this.mainStore.chartAdapter.newChart();
                 this.mainStore.chartAdapter.onTickHistory(quotes || []);
+                this.mainStore.chartAdapter.newChart();
                 this.mainStore.chart.feed?.offMasterDataUpdate(this.mainStore.chartAdapter.onTick);
                 this.mainStore.chart.feed?.onMasterDataUpdate(this.mainStore.chartAdapter.onTick);
                 onChartLoad(error as string);

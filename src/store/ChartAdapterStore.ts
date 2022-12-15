@@ -90,18 +90,25 @@ export default class ChartAdapterStore {
         this.dartInterop?.postMessage(JSON.stringify(message));
     }
 
-    newChart() {
+    getGranularity() {
+        let granularity: number =
+            this.mainStore.state.granularity || this.mainStore.chart.feed?.getQuotesInterval() || 1;
+
+        return granularity * 1000;
+    }
+
+    newChart = () => {
         const message = {
             type: 'NEW_CHART',
             payload: {
-                granularity: this.mainStore.state.granularity || 0,
+                granularity: this.getGranularity(),
                 isLive: this.mainStore.chart.isLive || false,
                 dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
             },
         };
 
         this.postMessage(message);
-    }
+    };
 
     onTickHistory(quotes: TQuote[]) {
         const message = {
