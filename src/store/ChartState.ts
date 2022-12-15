@@ -122,6 +122,8 @@ class ChartState {
             enableZoom: observable,
             yAxisMargin: observable,
             updateProps: action.bound,
+            setChartIsReady: action.bound,
+            setChartClosed: action.bound,
         });
 
         this.mainStore = mainStore;
