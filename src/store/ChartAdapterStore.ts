@@ -85,7 +85,7 @@ export default class ChartAdapterStore {
 
     async postMessage(message: any) {
         await when(() => this.isChartLoaded);
-        console.log(message);
+        console.log(JSON.parse(JSON.stringify(message)));
         // @ts-ignore
         this.dartInterop?.postMessage(JSON.stringify(message));
     }
@@ -122,7 +122,12 @@ export default class ChartAdapterStore {
         this.postMessage(message);
     }
 
-    onTick(quote: TQuote) {
+    async onTick(quote: TQuote) {
+        await when(() => this.isChartLoaded);
+
+        const lastQuote = this.mainStore.chart.feed?.quotes[this.mainStore.chart.feed?.quotes.length - 1];
+        if (lastQuote && new Date(lastQuote.Date) >= new Date(quote.Date)) return;
+
         let message;
 
         if (quote.ohlc) {

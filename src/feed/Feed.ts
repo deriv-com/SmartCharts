@@ -153,7 +153,6 @@ class Feed {
 
     getQuoteForEpoch(epoch: number): TQuote | undefined {
         return this.quotes.find((q: TQuote) => {
-            console.log(q.DT?.getTime(), epoch);
             return q.DT?.getTime() == epoch;
         });
     }
