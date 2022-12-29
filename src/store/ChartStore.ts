@@ -381,7 +381,6 @@ class ChartStore {
                 cb: KeystrokeHub.defaultHotKeys,
             });
         }
-        // TODO: excluded studies
         // stxx.addEventListener('studyOverlayEdit', this.studiesStore.editStudy);
         // stxx.addEventListener('studyPanelEdit', this.studiesStore.editStudy);
         this.stateStore.stateChange(STATE.INITIAL);

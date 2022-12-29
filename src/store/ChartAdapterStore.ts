@@ -126,7 +126,7 @@ export default class ChartAdapterStore {
         await when(() => this.isChartLoaded);
 
         const lastQuote = this.mainStore.chart.feed?.quotes[this.mainStore.chart.feed?.quotes.length - 1];
-        if (lastQuote && new Date(lastQuote.Date) >= new Date(quote.Date)) return;
+        if (lastQuote && new Date(lastQuote.Date) > new Date(quote.Date)) return;
 
         let message;
 
