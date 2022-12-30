@@ -1,24 +1,23 @@
+import _ from 'lodash';
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { TObject, TSettingsItem, TSettingsItemGroup } from 'src/types';
+import { TIndicatorParameter, TSettingsItemGroup } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
 
 type TSettingsDialogStoreProps = {
     mainStore: MainStore;
-    onChanged: (items: TSettingsItem[]) => void;
-    getContext?: (stx: typeof CIQ.ChartEngine) => Context;
-    onDeleted?: (indx?: number) => void;
+    onChanged: (items: TIndicatorParameter[]) => void;
+    onDeleted?: (id: string) => void;
     favoritesId?: string;
 };
 
 export default class SettingsDialogStore {
-    getContext?: (stx: typeof CIQ.ChartEngine) => Context;
     mainStore: MainStore;
     menuStore: MenuStore;
-    onChanged: (items: TSettingsItem[]) => void;
-    onDeleted?: () => void;
-    items: TSettingsItem[] = []; // [{id: '', title: '', value: ''}]
+    onChanged: (items: TIndicatorParameter[]) => void;
+    onDeleted?: (id: string) => void;
+    items: TIndicatorParameter[] = []; // [{id: '', title: '', value: ''}]
     title = '';
     formTitle = '';
     formClassname = '';
@@ -30,7 +29,9 @@ export default class SettingsDialogStore {
     scrollPanel?: HTMLElement;
     dialogPortalNodeId?: string;
     freezeScroll = false;
-    constructor({ mainStore, getContext, onChanged, onDeleted }: TSettingsDialogStoreProps) {
+    id = '';
+    name = '';
+    constructor({ mainStore, onChanged, onDeleted }: TSettingsDialogStoreProps) {
         makeObservable(this, {
             items: observable,
             title: observable,
@@ -53,7 +54,6 @@ export default class SettingsDialogStore {
         });
 
         this.mainStore = mainStore;
-        this.getContext = getContext;
         this.onChanged = onChanged;
         this.onDeleted = onDeleted;
         this.menuStore = new MenuStore(mainStore, { route: 'indicator-setting' });
@@ -107,16 +107,15 @@ export default class SettingsDialogStore {
         return this.menuStore.setOpen(value);
     }
     onResetClick() {
-        const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
+        const items = this.items.map(item => ({ ...item, value: _.clone(item.defaultValue) })) as TIndicatorParameter[];
         this.items = items;
         this.onChanged(items);
     }
     onItemDelete() {
         this.menuStore.setOpen(false);
-        if (this.onDeleted) this.onDeleted();
+        if (this.onDeleted) this.onDeleted(this.id);
     }
-    onItemChange(id: string, newValue: string | number | boolean | TObject) {
-        const item = this.items.find(x => x.id === id);
+    onItemChange(item: TIndicatorParameter, newValue: string | number | boolean) {
         if (item && item.value !== newValue) {
             item.value = newValue;
             this.items = this.items.slice(0); // force array update
@@ -124,7 +123,7 @@ export default class SettingsDialogStore {
         }
     }
     get itemGroups() {
-        const restGroup: TSettingsItem[] = [];
+        const restGroup: TIndicatorParameter[] = [];
         const groups: TSettingsItemGroup[] = [];
         groups.push({
             key: '%K',

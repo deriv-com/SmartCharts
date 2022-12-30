@@ -205,20 +205,7 @@ export type TChanges = {
 
 export type TSettingsItemGroup = {
     key: string;
-    fields: TSettingsItem[];
-};
-
-export type TSettingsItem = {
-    id: string;
-    title: string;
-    value: string | number | boolean | TObject;
-    defaultValue: string;
-    type: string;
-    subtitle?: string;
-    min?: number;
-    max?: number;
-    step?: number;
-    options?: Record<string, string>;
+    fields: TIndicatorParameter[];
 };
 
 export type TOpenClose = { date: string; open: Date; close: Date };
@@ -269,6 +256,34 @@ export type TLayoutData = {
 export type TPaginationCallbackParams = { quotes?: TQuote[]; error?: unknown; moreAvailable?: boolean };
 export type TPaginationCallback = (params: TPaginationCallbackParams) => void;
 
+export type TIndicatorConfig = {
+    id: string;
+    name: string;
+};
+
+export type TIndicatorsTree = {
+    icon: TIcon;
+    name: string;
+    category: string;
+    items: TIndicatorItem[];
+    foundItems?: TActiveItem[];
+};
+
+export type TIndicatorItem = {
+    description: string;
+    icon: TIcon;
+    isPrediction?: boolean;
+    name: string;
+    title: string;
+};
+
+export type TActiveItem = TIndicatorItem & {
+    id: string;
+    config?: Record<string, any>;
+    parameters: TIndicatorParameter[];
+    bars?: string;
+};
+
 export type TDartInteop = {
     postMessage: (payload: string) => void;
     chartConfig: {
@@ -277,6 +292,8 @@ export type TDartInteop = {
         getEpochFromX: (x: number) => number;
         getQuoteFromY: (y: number) => number;
         updateTheme: (theme: string) => void;
+        addOrUpdateIndicator: (config: string) => void;
+        removeIndicator: (id: string) => void;
     };
 };
 
@@ -287,3 +304,91 @@ export type TDragEvents = {
 };
 
 export type TAllTicks = Exclude<AuditDetailsForExpiredContract, null>['all_ticks'];
+
+export type TIndicatorParameterType =
+    | 'colorpicker'
+    | 'number'
+    | 'select'
+    | 'numbercolorpicker'
+    | 'switch'
+    | 'pattern'
+    | 'numericinput'
+    | 'font';
+export type TIndicatorCategory = 'inputs' | 'outputs' | 'parameters';
+
+export interface BaseIndicatorParameter {
+    path?: string;
+    paths?: {
+        [x: string]: string;
+    };
+    type: TIndicatorParameterType;
+    title: string;
+    subtitle?: string;
+    category: TIndicatorCategory;
+}
+
+export interface IndicatorParameter<T> extends BaseIndicatorParameter {
+    value?: T;
+    defaultValue: T;
+}
+
+export interface TColorPickerParameter extends IndicatorParameter<string> {
+    type: 'colorpicker';
+}
+
+export interface TNumberParameter extends IndicatorParameter<number> {
+    type: 'number';
+    min?: number;
+    max?: number;
+    step?: number;
+}
+
+export interface TSelectParameter extends IndicatorParameter<string> {
+    type: 'select';
+    options: Record<string, string>;
+}
+
+export type TNumberPickerValue = {
+    color: string;
+    value: number;
+};
+
+export interface TNumberColorPickerParameter extends IndicatorParameter<TNumberPickerValue> {
+    type: 'numbercolorpicker';
+}
+
+export interface TSwitchParameter extends IndicatorParameter<boolean> {
+    type: 'switch';
+}
+
+export interface TPatternParameter extends IndicatorParameter<string> {
+    type: 'pattern';
+}
+
+export interface TFontParameter extends IndicatorParameter<Record<string, string | undefined>> {
+    type: 'font';
+}
+
+export interface TNumericInputParameter extends IndicatorParameter<number> {
+    type: 'numericinput';
+    min?: number;
+    max?: number;
+    step?: number;
+}
+
+export type TIndicatorParameter =
+    | TColorPickerParameter
+    | TNumberParameter
+    | TSelectParameter
+    | TNumberColorPickerParameter
+    | TSwitchParameter
+    | TPatternParameter
+    | TFontParameter
+    | TNumericInputParameter;
+
+export type TDefaultIndicatorConfig = {
+    config?: Record<string, any>;
+    parameters: TIndicatorParameter[];
+};
+
+export type TDefaultIndicatorConfigs = Record<string, TDefaultIndicatorConfig>;

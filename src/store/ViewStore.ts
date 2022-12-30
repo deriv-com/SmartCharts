@@ -47,7 +47,7 @@ export default class ViewStore {
             onToggleNew: action.bound,
             inputRef: action.bound,
             onFocus: action.bound,
-            onBlur: action.bound
+            onBlur: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -70,7 +70,6 @@ export default class ViewStore {
 
     mainStore: MainStore;
     menuStore: MenuStore;
-
 
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -165,7 +164,7 @@ export default class ViewStore {
         const importLayout = () => {
             const finishImportLayout = () => {
                 stx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
+                //    this.mainStore.studies.updateActiveStudies();
                 if (this.loader) {
                     this.loader.hide();
                     this.mainStore.paginationLoader.updateOnPagination(false);

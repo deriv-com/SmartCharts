@@ -3,7 +3,16 @@ import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import SettingsDialogStore from 'src/store/SettingsDialogStore';
-import { TObject, TSettingsItem, TSettingsItemGroup } from 'src/types';
+import {
+    TIndicatorParameter,
+    TSettingsItemGroup,
+    TSwitchParameter,
+    TNumberParameter,
+    TSelectParameter,
+    TNumberColorPickerParameter,
+    TFontParameter,
+    TNumericInputParameter,
+} from 'src/types';
 import '../../sass/components/_settings-dialog.scss';
 import {
     ColorPicker,
@@ -33,14 +42,14 @@ type TSettingsPanelProps = {
     formClassname?: string;
     setScrollPanel?: ((ref: HTMLDivElement) => void) | undefined;
     itemGroups: TSettingsItemGroup[];
-    onItemChange: (id: string, value: string | number | boolean | TObject) => void;
+    onItemChange: (item: TIndicatorParameter, value: string | number | boolean) => void;
 };
 
 type TSettingsPanelGroupProps = {
     title: string;
     theme: string;
-    items: TSettingsItem[];
-    onItemChange: (id: string, value: string | number | boolean | TObject) => void;
+    items: TIndicatorParameter[];
+    onItemChange: (item: TIndicatorParameter, value: string | number | boolean) => void;
 };
 
 type TDoneButtonProps = {
@@ -87,18 +96,19 @@ const SettingsPanelGroup = ({
     onItemChange,
 }: TSettingsPanelGroupProps) => {
     const renderMap = {
-        switch: (item: TSettingsItem) => (
-            <Switch value={item.value as string} onChange={v => onItemChange(item.id, v)} />
-        ),
-        colorpicker: (item: TSettingsItem) => (
+        switch: (props: TIndicatorParameter) => {
+            const item = props as TSwitchParameter;
+            return <Switch value={item.value!} onChange={v => onItemChange(item, v)} />;
+        },
+        colorpicker: (item: TIndicatorParameter) => (
             <ColorPicker
                 theme={theme}
                 color={item.value as string}
                 subtitle={item.subtitle || item.title}
-                setColor={value => onItemChange(item.id, value)}
+                setColor={value => onItemChange(item, value)}
             />
         ),
-        pattern: (item: TSettingsItem) => {
+        pattern: (item: TIndicatorParameter) => {
             const lineWidth = items.find(it => it.id === 'lineWidth')?.value;
             return (
                 <Pattern
@@ -106,57 +116,63 @@ const SettingsPanelGroup = ({
                     lineWidth={lineWidth as string}
                     subtitle={item.title}
                     onChange={v => {
-                        onItemChange('pattern', v.pattern);
-                        onItemChange('lineWidth', v.width);
+                        onItemChange(item, v);
                     }}
                 />
             );
         },
-        select: (item: TSettingsItem) => (
-            <DropDown<string>
-                rows={Object.keys(item.options || {})}
-                value={item.value as string}
-                subtitle={item.subtitle || item.title}
-                onRowClick={value => onItemChange(item.id, value)}
-            >
-                {row => row}
-            </DropDown>
-        ),
-        number: (item: TSettingsItem) => (
-            <Slider
-                min={item.min ?? 1}
-                step={item.step ?? 1}
-                max={item.max ?? 100}
-                value={(item.value as unknown) as number}
-                onChange={val => onItemChange(item.id, val)}
-            />
-        ),
-        numericinput: (item: TSettingsItem) => (
-            <span className='ciq-num-input'>
-                <NumericInput
-                    value={item.value as string}
-                    onChange={val => onItemChange(item.id, val)}
-                    min={item.min}
-                    step={item.step}
-                    max={item.max}
+        select: (props: TIndicatorParameter) => {
+            const item = props as TSelectParameter;
+            return (
+                <DropDown<string>
+                    rows={Object.values(item.options || {})}
+                    value={item.options[item.value as string] as string}
+                    subtitle={item.subtitle || item.title}
+                    onRowClick={value => {
+                        const [key] = Object.entries(item.options).find(([_key, _value]) => _value === value)!;
+                        onItemChange(item, key);
+                    }}
+                >
+                    {row => row}
+                </DropDown>
+            );
+        },
+        number: (props: TIndicatorParameter) => {
+            const item = props as TNumberParameter;
+            return (
+                <Slider
+                    min={item.min ?? 1}
+                    step={item.step ?? 1}
+                    max={item.max ?? 100}
+                    value={(item.value as unknown) as number}
+                    onChange={val => onItemChange(item, val)}
                 />
-            </span>
-        ),
-        numbercolorpicker: (item: TSettingsItem) => (
-            <NumberColorPicker
-                value={
-                    item.value as {
-                        Value: string;
-                        Color: string;
-                    }
-                }
-                theme={theme}
-                onChange={val => onItemChange(item.id, val)}
-            />
-        ),
-        font: (item: TSettingsItem) => (
-            <FontSetting value={item.value as Record<string, string>} onChange={val => onItemChange(item.id, val)} />
-        ),
+            );
+        },
+        numericinput: (props: TIndicatorParameter) => {
+            const item = props as TNumericInputParameter;
+            return (
+                <span className='ciq-num-input'>
+                    <NumericInput
+                        value={item.value!}
+                        onChange={val => onItemChange(item, val)}
+                        min={item.min}
+                        step={item.step}
+                        max={item.max}
+                    />
+                </span>
+            );
+        },
+        numbercolorpicker: (props: TIndicatorParameter) => {
+            const item = props as TNumberColorPickerParameter;
+            return <NumberColorPicker props={item.value!} theme={theme} onChange={val => onItemChange(item, val)} />;
+        },
+        font: (props: TIndicatorParameter) => {
+            const item = props as TFontParameter;
+            return (
+                <FontSetting value={item.value as Record<string, string>} onChange={val => onItemChange(item, val)} />
+            );
+        },
     };
 
     const input_group_name = `form__input-group--${(title || '').toLowerCase().replace(' ', '-')}`;
@@ -165,13 +181,13 @@ const SettingsPanelGroup = ({
         <div className={`form__input-group ${input_group_name}`}>
             {title === 'Show Zones' ? '' : <h4>{title}</h4>}
             {items.map(
-                item =>
+                (item, index) =>
                     renderMap[item.type as keyof typeof renderMap] && (
                         <SettingsPanelItem
-                            key={item.id}
+                            key={index}
                             type={item.type}
                             title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
-                            Field={renderMap[item.type as keyof typeof renderMap](item)}
+                            Field={renderMap[item.type](item)}
                         />
                     )
             )}
