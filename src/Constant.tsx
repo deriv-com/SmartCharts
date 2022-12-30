@@ -718,7 +718,8 @@ const SMIIndicatorConfig: TDefaultIndicatorConfig = {
 const WilliamsRIndicatorConfig: TDefaultIndicatorConfig = {
     config: {
         lineStyle: _.clone(lineStyle),
-        oscillatorLinesConfig: {
+        zeroHorizontalLinesStyle: _.extend(_.clone(lineStyle), { color: '0xFFF44336' }),
+        oscillatorLimits: {
             overboughtStyle: _.clone(lineStyle),
             oversoldStyle: _.clone(lineStyle),
         },
@@ -740,8 +741,8 @@ const WilliamsRIndicatorConfig: TDefaultIndicatorConfig = {
         },
         {
             paths: {
-                value: 'oscillatorLinesConfig.overboughtValue',
-                color: 'oscillatorLinesConfig.overboughtStyle.color',
+                value: 'oscillatorLimits.overboughtValue',
+                color: 'oscillatorLimits.overboughtStyle.color',
             },
             title: t.translate('OverBought'),
             type: 'numbercolorpicker',
@@ -753,8 +754,8 @@ const WilliamsRIndicatorConfig: TDefaultIndicatorConfig = {
         },
         {
             paths: {
-                value: 'oscillatorLinesConfig.oversoldValue',
-                color: 'oscillatorLinesConfig.oversoldStyle.color',
+                value: 'oscillatorLimits.oversoldValue',
+                color: 'oscillatorLimits.oversoldStyle.color',
             },
             title: t.translate('OverSold'),
             type: 'numbercolorpicker',

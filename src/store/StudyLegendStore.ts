@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import React from 'react';
 import Context from 'src/components/ui/Context';
-import { guid } from 'src/components/ui/utils';
+import { guid, hexToInt } from 'src/components/ui/utils';
 import { TActiveItem, TIndicatorConfig, TIndicatorParameter, TObject } from 'src/types';
 import MainStore from '.';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
@@ -164,12 +164,16 @@ export default class StudyLegendStore {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }
 
-    transformValue = (value: string | any) => {
-        // Tranforms hex color code to integer so that dart can create Color object from it.
-        // Eg: #443a49 -> 0xff443a49 -> 4282661449 or 0xff443a49 -> 4282661449
+    transform = (value: any) => {
         if (_.isString(value) && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
-            const colorCode = value.replace('#', '0xff');
-            return parseInt(colorCode, 16);
+            return hexToInt(value);
+        } else if (_.isObject(value)) {
+            const map = value as Record<string, any>;
+            Object.keys(value).forEach(key => {
+                map[key] = this.transform(map[key]);
+            });
+        } else if (_.isArray(value)) {
+            value.map(item => this.transform(item));
         }
 
         return value;
@@ -183,10 +187,10 @@ export default class StudyLegendStore {
                 const map = value as Record<string, any>;
                 const keys = Object.keys(map);
                 keys.forEach(key => {
-                    _.set(acc, paths[key], this.transformValue(map[key]));
+                    _.set(acc, paths[key], map[key]);
                 });
             } else if (path) {
-                _.set(acc, path, this.transformValue(value));
+                _.set(acc, path, value);
             }
 
             return acc;
@@ -195,7 +199,7 @@ export default class StudyLegendStore {
         const config: TIndicatorConfig = {
             id: activeItem.id,
             name: activeItem.name,
-            ...params,
+            ...this.transform(params),
         };
         console.log('Add/Update Indicator', config);
         this.mainStore.chartAdapter.dartInterop?.chartConfig.addOrUpdateIndicator(JSON.stringify(config));

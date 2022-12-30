@@ -56,3 +56,10 @@ export function guid() {
     };
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
+
+export function hexToInt(color: string) {
+    // Tranforms hex color code to integer so that dart can create Color object from it.
+    // Eg: #443a49 -> 0xff443a49 -> 4282661449 or 0xff443a49 -> 4282661449
+    const colorCode = color.replace('#', '0xff');
+    return parseInt(colorCode, 16);
+}
