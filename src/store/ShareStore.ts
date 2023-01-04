@@ -63,7 +63,7 @@ export default class ShareStore {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
-        import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js' as string).then(html2canvas => {
+        import(/* webpackChunkName: "html2canvas" */ 'html2canvas').then(html2canvas => {
             // since react rerenders is not immediate, we use CIQ.appendClassName to
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea?.classList.add('ciq-chart--screenshot');
@@ -112,7 +112,7 @@ export default class ShareStore {
             });
 
             setTimeout(() => {
-                html2canvas.default(this.screenshotArea).then((canvas: HTMLCanvasElement) => {
+                html2canvas.default(this.screenshotArea!).then((canvas: HTMLCanvasElement) => {
                     this._onCanvasReady(canvas, newTab);
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
                     if (!is_browser.Firefox() && !is_browser.Safari()) {
