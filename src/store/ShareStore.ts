@@ -1,6 +1,5 @@
 import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TQuote } from 'src/types';
 import MainStore from '.';
 import { downloadFileInBrowser, is_browser } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
@@ -14,10 +13,10 @@ type TNodeToManipulate = {
 export default class ShareStore {
     mainStore: MainStore;
     menuStore: MenuStore;
-    screenshotArea?: Element | null;
+    screenshotArea?: HTMLElement | null;
 
     isLoadingPNG = false;
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             timeUnit: computed,
@@ -27,7 +26,7 @@ export default class ShareStore {
             isLoadingPNG: observable,
             downloadPNG: action.bound,
             _onCanvasReady: action.bound,
-            downloadCSV: action.bound
+            downloadCSV: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -54,7 +53,6 @@ export default class ShareStore {
     get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places;
     }
-    
 
     createNewTab() {
         // Create a new tab for older iOS browsers that don't support HTML5 download attribute
@@ -143,13 +141,13 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        const totalItemCount = this.stx.masterData.length;
-        const allowableItems =
-            totalItemCount <= 100
-                ? this.stx.masterData
-                : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
+        const quotes = this.mainStore.chart.feed?.quotes || [];
+        const totalItemCount = quotes.length;
+        const allowableItems = totalItemCount <= 100 ? quotes : quotes.slice(totalItemCount - 100, totalItemCount);
 
-        allowableItems.forEach(({ DT, Open, High, Low, Close }: Required<TQuote>) => {
+        allowableItems.forEach(({ DT, Open, High, Low, Close }) => {
+            if (!DT) return;
+
             const year = DT.getFullYear();
             const month = DT.getMonth() + 1; // months from 1-12
             const day = DT.getDate();
