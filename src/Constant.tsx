@@ -577,12 +577,14 @@ const ROCIndicatorConfig: TDefaultIndicatorConfig = {
 
 const StochasticOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: { ..._.clone(lineStyle), color: '#FFFFFF' },
         oscillatorLinesConfig: {
             overboughtStyle: _.clone(lineStyle),
             oversoldStyle: _.clone(lineStyle),
         },
         pinLabels: false,
+        overBoughtPrice: 80,
+        overSoldPrice: 20,
     },
     parameters: [
         {
@@ -676,7 +678,7 @@ const SMIIndicatorConfig: TDefaultIndicatorConfig = {
         {
             path: 'maType',
             title: t.translate('Field'),
-            defaultValue: 'close',
+            defaultValue: 'exponential',
             category: 'inputs',
             type: 'select',
             options: movingAverageTypeOptions,
@@ -1027,6 +1029,7 @@ const DonchianChannelIndicatorConfig: TDefaultIndicatorConfig = {
 const MAIndicatorConfig: TDefaultIndicatorConfig = {
     config: {
         lineStyle: _.clone(lineStyle),
+        isOverlay: true,
     },
     parameters: [
         {
@@ -1119,6 +1122,7 @@ const MAEnvIndicatorConfig: TDefaultIndicatorConfig = {
 const RainbowIndicatorConfig: TDefaultIndicatorConfig = {
     config: {
         bandsCount: 10,
+        movingAverageType: 'simple',
     },
     parameters: [
         {
