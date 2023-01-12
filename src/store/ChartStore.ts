@@ -111,6 +111,7 @@ class ChartStore {
     yAxiswidth = 0;
     serverTime?: string;
     networkStatus?: TNetworkConfig;
+    disableBarriersPipSize? = false;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             containerWidth: observable,
@@ -126,6 +127,7 @@ class ChartStore {
             yAxiswidth: observable,
             serverTime: observable,
             networkStatus: observable,
+            disableBarriersPipSize: observable,
             pip: computed,
             addDeleteElement: action.bound,
             addManageElement: action.bound,
@@ -145,7 +147,7 @@ class ChartStore {
             updateScaledOneOne: action.bound,
             refreshChart: action.bound,
             destroy: action.bound,
-            openFullscreen: action.bound
+            openFullscreen: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -1054,7 +1056,14 @@ class ChartStore {
         if (!price) return;
 
         const { context } = this.context?.stx.chart;
-        const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+        let priceWidth;
+
+        if (this.disableBarriersPipSize) {
+            priceWidth = context.measureText(price.toString()).width + 20;
+            } else {
+            priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+        }
+
         if (priceWidth > this.yAxiswidth) {
             this.yAxiswidth = priceWidth;
 

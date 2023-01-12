@@ -168,6 +168,7 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
+    disableBarriersPipSize?: boolean;
 };
 
 export type TQuote = {

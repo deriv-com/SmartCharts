@@ -234,6 +234,7 @@ const App = () => {
     const [enableNavigationWidget, setEnableNavigationWidget] = React.useState(false);
     const [foregroundColor, setForegroundColor] = React.useState<string>();
     const [hidePriceLines, setHidePriceLines] = React.useState(false);
+    const [disableBarriersPipSize, setDisableBarriersPipSize] = React.useState(false);
     const [shadeColor, setShadeColor] = React.useState<string>();
     const [color, setColor] = React.useState<string>();
     const [refreshActiveSymbols, setRefreshActiveSymbols] = React.useState(false);
@@ -345,6 +346,7 @@ const App = () => {
     };
     const onRelativeChange = (evt: ChangeEvent<HTMLInputElement>) => setRelative(evt.target.checked);
     const onDraggableChange = (evt: ChangeEvent<HTMLInputElement>) => setDraggable(evt.target.checked);
+    const onDisableBarriersPipSize = (evt: ChangeEvent<HTMLInputElement>) => setDisableBarriersPipSize(evt.target.checked);
     const handleBarrierChange = (param: TBarrierChangeParam) => setHighLow(param);
     const onBarrierTypeChange = (evt: ChangeEvent<HTMLSelectElement>) => {
         const { value: _barrierType } = evt.target;
@@ -579,6 +581,7 @@ const App = () => {
                     chartControlsWidgets={null}
                     enabledNavigationWidget={enableNavigationWidget}
                     enabledChartFooter={enableFooter}
+                    disableBarriersPipSize={disableBarriersPipSize}
                     topWidgets={renderTopWidgets}
                     settings={settings}
                     initialData={initial_data}
@@ -813,6 +816,14 @@ const App = () => {
                         type='checkbox'
                         checked={draggable === undefined ? false : draggable}
                         onChange={onDraggableChange}
+                    />
+                </div>
+                <div className='form-row'>
+                    Disable Barriers Pip Size:
+                    <input
+                        type='checkbox'
+                        checked={disableBarriersPipSize === undefined ? false : disableBarriersPipSize}
+                        onChange={onDisableBarriersPipSize}
                     />
                 </div>
                 <div className='form-row'>

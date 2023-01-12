@@ -32,6 +32,8 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         opacityOnOverlap,
     } = store;
 
+    const isPipSizeDisabled = store.mainStore.chart.disableBarriersPipSize;
+
     if (!isInitialized) return null;
 
     return (
@@ -49,6 +51,7 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
                 hideOffscreenLine={hideOffscreenLine}
                 hideBarrierLine={hideBarrierLine}
                 opacityOnOverlap={opacityOnOverlap}
+                disablePipSize={isPipSizeDisabled}
                 {...props}
             />
             {!isSingleBarrier && (
@@ -63,6 +66,7 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
                         hideOffscreenLine={hideOffscreenLine}
                         hideBarrierLine={hideBarrierLine}
                         opacityOnOverlap={opacityOnOverlap}
+                        disablePipSize={isPipSizeDisabled}
                         {...props}
                     />
                     <Shade store={aboveShadeStore} />

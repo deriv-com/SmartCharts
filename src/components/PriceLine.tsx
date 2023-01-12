@@ -15,6 +15,7 @@ type TPriceLineProps = {
     color?: string;
     opacityOnOverlap: number;
     width: number;
+    disablePipSize?: boolean,
 };
 
 const PriceLine = ({
@@ -26,9 +27,11 @@ const PriceLine = ({
     opacityOnOverlap,
     hideOffscreenLine,
     hideBarrierLine,
+    disablePipSize = false,
     store,
 }: TPriceLineProps) => {
     const {
+        price,
         priceDisplay,
         visible,
         setDragLine,
@@ -73,7 +76,7 @@ const PriceLine = ({
                 )}
                 <div className='draggable-area' />
                 <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
-                    <div className='price'>{priceDisplay}</div>
+                    <div className='price'>{disablePipSize ? price : priceDisplay}</div>
                     {offScreen && offScreenDirection && (
                         <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                     )}

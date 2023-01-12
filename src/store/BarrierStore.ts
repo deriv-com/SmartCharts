@@ -88,7 +88,7 @@ export default class BarrierStore {
             priceLabelWidth: computed,
             init: action.bound,
             updateProps: action.bound,
-            destructor: action.bound
+            destructor: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -275,8 +275,15 @@ export default class BarrierStore {
     }
 
     _fireOnBarrierChange = (): void => {
-        const high = this._high_barrier.visible ? +this._high_barrier.price.toFixed(this.pip) : undefined;
-        const low = this._low_barrier.visible ? +this._low_barrier.price.toFixed(this.pip) : undefined;
+        let high, low;
+
+        if (this.mainStore.chart.disableBarriersPipSize) {
+            high = this._high_barrier.visible ? +this._high_barrier.price : undefined;
+            low = this._low_barrier.visible ? +this._low_barrier.price : undefined;
+        } else {
+            high = this._high_barrier.visible ? +this._high_barrier.price.toFixed(this.pip) : undefined;
+            low = this._low_barrier.visible ? +this._low_barrier.price.toFixed(this.pip) : undefined;
+        }
 
         if (typeof this._onBarrierChange === 'function') {
             this._onBarrierChange({ high, low });

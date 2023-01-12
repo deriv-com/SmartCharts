@@ -131,7 +131,7 @@ class ChartState {
             enableScroll: observable,
             enableZoom: observable,
             yAxisMargin: observable,
-            updateProps: action.bound
+            updateProps: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -186,6 +186,7 @@ class ChartState {
             enableZoom = null,
             anchorChartToLeft = false,
             chartData,
+            disableBarriersPipSize = false,
         }: TChartProps
     ) {
         let isSymbolChanged = false;
@@ -221,6 +222,7 @@ class ChartState {
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
+        this.mainStore.chart.disableBarriersPipSize = disableBarriersPipSize;
 
         if (
             networkStatus &&
