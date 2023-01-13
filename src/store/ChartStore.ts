@@ -1061,7 +1061,7 @@ class ChartStore {
         if (this.disableBarriersPipSize) {
             priceWidth = context.measureText(price.toString()).width + 20;
             } else {
-            priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+                priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
         }
 
         if (priceWidth > this.yAxiswidth) {
