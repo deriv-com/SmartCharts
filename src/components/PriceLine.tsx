@@ -29,6 +29,7 @@ const PriceLine = ({
     store,
 }: TPriceLineProps) => {
     const {
+        price,
         priceDisplay,
         visible,
         setDragLine,
@@ -73,7 +74,7 @@ const PriceLine = ({
                 )}
                 <div className='draggable-area' />
                 <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
-                    <div className='price'>{priceDisplay}</div>
+                    <div className='price'>{isDragging? priceDisplay : price}</div>
                     {offScreen && offScreenDirection && (
                         <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                     )}

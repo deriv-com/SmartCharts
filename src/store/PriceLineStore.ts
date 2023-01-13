@@ -181,6 +181,7 @@ export default class PriceLineStore {
     _startDrag() {
         this._modalBegin();
         this.isDragging = true;
+        this.mainStore.chart.isBarrierDragging = true;
         this._initialPosition = this.top;
         this._startDragPrice = this._price;
     }
@@ -206,6 +207,7 @@ export default class PriceLineStore {
     _endDrag() {
         this._modalEnd();
         this.isDragging = false;
+        this.mainStore.chart.isBarrierDragging = false;
 
         if (this._startDragPrice.toFixed(this.pip) !== this._price.toFixed(this.pip)) {
             this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this._price);

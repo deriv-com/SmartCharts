@@ -97,11 +97,11 @@ class ChartStore {
     feed?: Feed | null;
     mainStore: MainStore;
     resizeObserver?: ResizeObserver;
-
     containerWidth: number | null = null;
     context: Context | null = null;
     currentActiveSymbol?: TProcessedSymbolItem | null;
     isChartAvailable = true;
+    isBarrierDragging = false;
     chartHeight?: number;
     chartContainerHeight?: number;
     isMobile?: boolean = false;
@@ -117,6 +117,7 @@ class ChartStore {
             context: observable,
             currentActiveSymbol: observable,
             isChartAvailable: observable,
+            isBarrierDragging: observable,
             chartHeight: observable,
             chartContainerHeight: observable,
             isMobile: observable,
@@ -126,7 +127,6 @@ class ChartStore {
             yAxiswidth: observable,
             serverTime: observable,
             networkStatus: observable,
-            pip: computed,
             addDeleteElement: action.bound,
             addManageElement: action.bound,
             resizeScreen: action.bound,
@@ -184,9 +184,6 @@ class ChartStore {
     }
     get studiesStore() {
         return this.mainStore.studies;
-    }
-    get pip() {
-        return this.currentActiveSymbol?.decimal_places;
     }
     get rootElement() {
         return this.chartId ? document.getElementById(this.chartId) : null;
@@ -1051,10 +1048,10 @@ class ChartStore {
         }
     }
     calculateYaxisWidth = (price: number) => {
-        if (!price) return;
+        if (!price || this.isBarrierDragging) return;
 
         const { context } = this.context?.stx.chart;
-        const priceWidth = context.measureText(price.toFixed(this.pip)).width + 20;
+        const priceWidth = context.measureText(price.toString()).width + 20;
         if (priceWidth > this.yAxiswidth) {
             this.yAxiswidth = priceWidth;
 
