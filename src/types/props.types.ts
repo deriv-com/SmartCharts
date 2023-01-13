@@ -13,6 +13,19 @@ import { TNotification } from 'src/store/Notifier';
 import { TGranularity } from '.';
 import { OHLCStreamResponse } from './api.types';
 
+declare global {
+    interface Window {
+        flutterChart: TFlutterChart;
+        flutterChartElement: HTMLElement;
+        _flutter: {
+            loader: {
+                didCreateEngineInitializer: (engineInitializer: TEngineInitializer) => void;
+            };
+        };
+        jsInterop: JSInterop;
+    }
+}
+
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
     ? ElementType
     : never;
@@ -170,7 +183,9 @@ export type TChartProps = {
     margin?: number;
     isStaticChart?: ChartState['isStaticChart'];
     enabledNavigationWidget?: boolean;
-    onCrosshairChange?: (state?: number | null) => void | null;
+    onCrosshairChange?: (state?: number) => void;
+    onGranularityChange?: (granularity?: TGranularity) => void;
+    onChartTypeChange?: (chartType?: string) => void;
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
@@ -284,17 +299,26 @@ export type TActiveItem = TIndicatorItem & {
     bars?: string;
 };
 
-export type TDartInteop = {
+export type TFlutterChart = {
     postMessage: (payload: string) => void;
-    chartConfig: {
-        getXFromEpoch: (epoch: number) => number;
-        getYFromQuote: (quote: number) => number;
-        getEpochFromX: (x: number) => number;
-        getQuoteFromY: (y: number) => number;
+    config: {
         updateTheme: (theme: string) => void;
         addOrUpdateIndicator: (config: string) => void;
         removeIndicator: (id: string) => void;
     };
+    controller: {
+        getXFromEpoch: (epoch: number) => number;
+        getYFromQuote: (quote: number) => number;
+        getEpochFromX: (x: number) => number;
+        getQuoteFromY: (y: number) => number;
+    };
+};
+
+export type JSInterop = {
+    postMessage: (data: string) => void;
+    onChartLoad: () => void;
+    onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
+    onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
 };
 
 export type TDragEvents = {

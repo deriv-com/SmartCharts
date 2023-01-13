@@ -1,14 +1,22 @@
 import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
-import { TDartInteop, TQuote } from 'src/types';
+import { TFlutterChart, TQuote } from 'src/types';
 import MainStore from './';
+
+type TAppRunner = {
+    runApp: () => void;
+};
+
+type TEngineInitializer = {
+    initializeEngine: ({ hostElement }: { hostElement: HTMLElement }) => Promise<TAppRunner>;
+};
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
-    iframeElement?: HTMLIFrameElement;
     isChartLoaded = false;
+    isChartInitialized = false;
     isDataInitialized = false;
-    dartInterop?: TDartInteop;
+    flutterChart?: TFlutterChart;
     epochBounds = {
         leftEpoch: 0,
         rightEpoch: 0,
@@ -20,9 +28,10 @@ export default class ChartAdapterStore {
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
-            setIFrameElement: action.bound,
+            onMount: action.bound,
             onMessage: action.bound,
             onTickHistory: action.bound,
+            onChartLoad: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
             onVisibleAreaChanged: action.bound,
@@ -35,22 +44,47 @@ export default class ChartAdapterStore {
 
         this.mainStore = mainStore;
 
-        // @ts-ignore
+        this.initFlutterCharts();
+    }
+
+    initFlutterCharts() {
         window.jsInterop = {
             postMessage: this.onMessage,
             onChartLoad: this.onChartLoad,
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
         };
+
+        if (!window.flutterChartElement) {
+            const flutterChartElement = document.createElement('div');
+            flutterChartElement.classList.add('flutter-chart');
+
+            window.flutterChartElement = flutterChartElement;
+
+            window._flutter = {
+                loader: {
+                    didCreateEngineInitializer: async (engineInitializer: TEngineInitializer) => {
+                        const appRunner = await engineInitializer.initializeEngine({
+                            hostElement: window.flutterChartElement,
+                        });
+                        appRunner?.runApp();
+                    },
+                },
+            };
+
+            // @ts-ignore
+            import(/* webpackChunkName: "flutter-chart-adapter", webpackPrefetch: true */ 'src/chart/main.dart.js');
+        } else {
+            this.onChartLoad();
+        }
     }
 
-    setIFrameElement(element: HTMLIFrameElement) {
-        this.iframeElement = element;
+    async onMount(element: HTMLDivElement) {
+        element.appendChild(window.flutterChartElement);
     }
 
     onChartLoad() {
-        // @ts-ignore
-        this.dartInterop = this.iframeElement?.contentWindow.dartInterop;
+        this.flutterChart = window.flutterChart;
         this.isChartLoaded = true;
     }
 
@@ -74,9 +108,6 @@ export default class ChartAdapterStore {
         const message = JSON.parse(data);
 
         switch (message?.type) {
-            case 'ON_LOAD':
-                this.onChartLoad();
-                break;
             case 'LOAD_HISTORY':
                 this.loadHistory(message.payload);
                 break;
@@ -86,8 +117,7 @@ export default class ChartAdapterStore {
     async postMessage(message: any) {
         await when(() => this.isChartLoaded);
         console.log(JSON.parse(JSON.stringify(message)));
-        // @ts-ignore
-        this.dartInterop?.postMessage(JSON.stringify(message));
+        this.flutterChart?.postMessage(JSON.stringify(message));
     }
 
     getGranularity() {
@@ -183,12 +213,7 @@ export default class ChartAdapterStore {
     }
 
     updateTheme(theme: string) {
-        const message = {
-            type: 'UPDATE_THEME',
-            payload: theme,
-        };
-
-        this.postMessage(message);
+        this.flutterChart?.config.updateTheme(theme);
     }
 
     scale(scale: number) {
@@ -283,18 +308,18 @@ export default class ChartAdapterStore {
     };
 
     getXFromEpoch(epoch: number) {
-        return this.dartInterop!.chartConfig.getXFromEpoch(epoch);
+        return this.flutterChart!.controller.getXFromEpoch(epoch);
     }
 
     getYFromQuote(quote: number) {
-        return this.dartInterop!.chartConfig.getYFromQuote(quote);
+        return this.flutterChart!.controller.getYFromQuote(quote);
     }
 
     getEpochFromX(x: number) {
-        return this.dartInterop!.chartConfig.getEpochFromX(x);
+        return this.flutterChart!.controller.getEpochFromX(x);
     }
 
     getQuoteFromY(x: number) {
-        return this.dartInterop!.chartConfig.getQuoteFromY(x);
+        return this.flutterChart!.controller.getQuoteFromY(x);
     }
 }
