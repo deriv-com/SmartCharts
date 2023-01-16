@@ -527,7 +527,7 @@ class Feed {
     offStartPagination(callback: Listener) {
         this._emitter.off(Feed.EVENT_START_PAGINATION, callback);
     }
-    onConnectionChanged() {;
+    onConnectionChanged() {
         const isOpened = this._mainStore.state.isConnectionOpened;
         if (isOpened === undefined || isOpened === this._isConnectionOpened) {
             return;
