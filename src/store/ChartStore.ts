@@ -127,6 +127,7 @@ class ChartStore {
             yAxiswidth: observable,
             serverTime: observable,
             networkStatus: observable,
+            pip: computed,
             addDeleteElement: action.bound,
             addManageElement: action.bound,
             resizeScreen: action.bound,
@@ -184,6 +185,9 @@ class ChartStore {
     }
     get studiesStore() {
         return this.mainStore.studies;
+    }
+    get pip() {
+        return this.currentActiveSymbol?.decimal_places;
     }
     get rootElement() {
         return this.chartId ? document.getElementById(this.chartId) : null;
@@ -1051,7 +1055,8 @@ class ChartStore {
         if (!price || this.isBarrierDragging) return;
 
         const { context } = this.context?.stx.chart;
-        const priceWidth = context.measureText(price.toString()).width + 20;
+        // barrier price can be wider than current tick price for 1 decimal digit
+        const priceWidth = context.measureText(price.toFixed(this.pip as number + 1)).width + 20;
         if (priceWidth > this.yAxiswidth) {
             this.yAxiswidth = priceWidth;
 
