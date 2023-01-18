@@ -17,10 +17,6 @@ export function createObjectFromLocalStorage(key: string) {
     return undefined;
 }
 
-export function isValidProp(p: number) {
-    return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
-}
-
 export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';
