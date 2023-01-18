@@ -26,6 +26,14 @@ declare global {
     }
 }
 
+export type TAppRunner = {
+    runApp: () => void;
+};
+
+export type TEngineInitializer = {
+    initializeEngine: ({ hostElement }: { hostElement: HTMLElement }) => Promise<TAppRunner>;
+};
+
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
     ? ElementType
     : never;
@@ -299,18 +307,34 @@ export type TActiveItem = TIndicatorItem & {
     bars?: string;
 };
 
+export type TNewChartPayload = {
+    granularity: number;
+    isLive: boolean;
+    dataFitEnabled: boolean;
+};
+
 export type TFlutterChart = {
     postMessage: (payload: string) => void;
     config: {
         updateTheme: (theme: string) => void;
         addOrUpdateIndicator: (config: string) => void;
         removeIndicator: (id: string) => void;
+        newChart: (payload: TNewChartPayload) => void;
+        scale: (scale: number) => void;
+        updateChartStyle: (chartStyle: string) => void;
+        updateLiveStatus: (isLive: string) => void;
+        updateMarkers: (markers: any[]) => void;
     };
     controller: {
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;
         getEpochFromX: (x: number) => number;
         getQuoteFromY: (y: number) => number;
+    };
+    dataModel: {
+        onTickHistory: (quotes: TQuote[], append: boolean) => void;
+        onNewTick: (quote: TQuote) => void;
+        onNewCandle: (quote: TQuote) => void;
     };
 };
 
@@ -319,6 +343,12 @@ export type JSInterop = {
     onChartLoad: () => void;
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
+    loadHistory: (request: TLoadHistoryParams) => void;
+};
+
+export type TLoadHistoryParams = {
+    count: number;
+    end: number;
 };
 
 export type TDragEvents = {

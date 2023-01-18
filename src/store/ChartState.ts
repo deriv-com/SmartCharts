@@ -64,6 +64,8 @@ class ChartState {
     activeSymbols: string | null = null;
     chartControlsWidgets?: TChartControlsWidgets;
     enabledChartFooter?: boolean;
+    onGranularityChange?: (granularity: TGranularity) => void;
+    onChartTypeChange?: (chartType?: string) => void;
 
     get context() {
         return this.chartStore.context;
@@ -170,6 +172,8 @@ class ChartState {
         enableZoom = null,
         anchorChartToLeft = false,
         chartData,
+        onGranularityChange,
+        onChartTypeChange,
         isLive,
         dataFitEnabled,
     }: TChartProps) {
@@ -206,6 +210,8 @@ class ChartState {
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
+        this.onGranularityChange = onGranularityChange;
+        this.onChartTypeChange = onChartTypeChange;
 
         if (
             networkStatus &&
@@ -239,7 +245,7 @@ class ChartState {
             this.exportLayout();
         }
 
-        if (chartType !== this.chartType && this.context) {
+        if (chartType !== this.chartType) {
             if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
             this.setChartType(chartType);
         }
@@ -441,8 +447,8 @@ class ChartState {
         if (this.chartType) {
             this.mainStore.chartAdapter.updateChartStyle(this.chartType);
         }
-        if (this.chartTypeStore.onChartTypeChanged) {
-            this.chartTypeStore.onChartTypeChanged(chartType);
+        if (this.chartTypeStore.setType) {
+            this.chartTypeStore.setType(chartType);
         }
     }
 
@@ -618,15 +624,15 @@ class ChartState {
         if (!this.clearChart || !this.isChartReady) return;
 
         // Remove comparsions
-        for (const field in this.stxx.chart.series) {
-            this.stxx.removeSeries(field);
-        }
-        // Remove indiactors
-        for (const id in this.stxx.layout.studies) {
-            const sd = this.stxx.layout.studies[id];
-            CIQ.Studies.removeStudy(this.stxx, sd);
-        }
-        this.stxx.clearDrawings();
+        // for (const field in this.stxx.chart.series) {
+        //     this.stxx.removeSeries(field);
+        // }
+        // // Remove indiactors
+        // for (const id in this.stxx.layout.studies) {
+        //     const sd = this.stxx.layout.studies[id];
+        //     CIQ.Studies.removeStudy(this.stxx, sd);
+        // }
+        // this.stxx.clearDrawings();
 
         // TODO: use constant
         this.mainStore.crosshair.onCrosshairChanged(2);

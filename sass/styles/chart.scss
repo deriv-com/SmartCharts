@@ -26,25 +26,9 @@ body {
     &.ciq-draw-mode {
         cursor: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
     }
-    .stx-panel-study {
-        .stx-subholder {
-            &:after {
-                position: absolute;
-                content: ' ';
-                width: 100%;
-                height: 1px;
-                top: 0px;
-                left: 0px;
-                @include themify($themes) {
-                    background: themed('IndicatorAddedBorder');
-                    background-image: linear-gradient(
-                        to left,
-                        themed('IndicatorAddedBorder') 95%,
-                        themed('ChartBg') 100%
-                    ); /* stylelint-disable-line plugin/no-unsupported-browser-features */
-                }
-            }
-        }
+    .flutter-chart {
+        width: 100%;
+        height: 100%;
     }
 }
 .cq-inchart-subholder {
@@ -68,8 +52,6 @@ body {
         .cq-menu-dropdown,
         .sc-toolbar-widget,
         .sc-navigation-widget,
-        .stx_jump_today.home,
-        .stx-panel-control .stx-btn-panel,
         .time-picker-dropdown {
             /*
             There is a strange bug where dropdowns get displayed (partially)
@@ -78,22 +60,11 @@ body {
             */
             display: none !important;
         }
-        .stx-panel-control {
-            left: 5px;
-        }
-        .sc-studies-list {
-            .stx-btn-panel {
-                display: none !important;
-            }
-        }
     }
 }
 
 /* The Chart */
 .cq-chart-control-left {
-    .stx-panel-control {
-        left: 10px;
-    }
     .chartContainer {
         width: calc(100% - 100px);
         margin-left: 100px;

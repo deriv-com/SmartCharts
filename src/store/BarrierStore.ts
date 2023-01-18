@@ -260,12 +260,6 @@ export default class BarrierStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
-    get chart(): typeof CIQ.ChartEngine.Chart {
-        return this.stx.chart;
-    }
 
     _onBarrierChange: ((arg: TBarrierChangeParam) => void) | null = null;
 

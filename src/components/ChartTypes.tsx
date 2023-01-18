@@ -19,28 +19,23 @@ const TypeIcon = ({ Icon, ...props }: TTypeIcon) => <Icon {...props} />;
 type TChartTypesProps = {
     enabled?: boolean;
     newDesign?: boolean;
-    onChange?: (chartType?: string) => void;
 };
 
-const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
+const ChartTypes = ({ enabled, newDesign }: TChartTypesProps) => {
     const { chartType, chart } = useStores();
 
-    const { listStore, setTypeFromUI, updateProps, types, type, menuStore } = chartType;
+    const { listStore, setChartType, types, type, menuStore } = chartType;
     const { open: menuOpen, setOpen } = chartType.menuStore;
     const { isMobile } = chart;
-
-    const onChange = onChangeFn || setTypeFromUI;
 
     if (type === undefined) return null;
 
     const onItemClick = (chart_type: ChartType) => {
         if (type.id !== chart_type.id) {
-            onChange(chart_type.id);
+            setChartType(chart_type.id);
         }
         setOpen(false);
     };
-
-    updateProps(onChange);
 
     if (newDesign) {
         return (

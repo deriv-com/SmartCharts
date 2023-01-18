@@ -1,15 +1,7 @@
 import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
-import { TFlutterChart, TQuote } from 'src/types';
+import { TEngineInitializer, TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import MainStore from './';
-
-type TAppRunner = {
-    runApp: () => void;
-};
-
-type TEngineInitializer = {
-    initializeEngine: ({ hostElement }: { hostElement: HTMLElement }) => Promise<TAppRunner>;
-};
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
@@ -53,6 +45,7 @@ export default class ChartAdapterStore {
             onChartLoad: this.onChartLoad,
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
+            loadHistory: this.loadHistory,
         };
 
         if (!window.flutterChartElement) {
@@ -128,28 +121,18 @@ export default class ChartAdapterStore {
     }
 
     newChart = () => {
-        const message = {
-            type: 'NEW_CHART',
-            payload: {
-                granularity: this.getGranularity(),
-                isLive: this.mainStore.chart.isLive || false,
-                dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
-            },
-        };
-
-        this.postMessage(message);
+        this.flutterChart?.config.newChart({
+            granularity: this.getGranularity(),
+            isLive: this.mainStore.chart.isLive || false,
+            dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
+        });
     };
 
     onTickHistory(quotes: TQuote[]) {
-        const message = {
-            type: 'TICKS_HISTORY',
-            payload: quotes,
-        };
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
+        this.flutterChart?.dataModel.onTickHistory(quotes, false);
 
         this.isDataInitialized = true;
-
-        this.postMessage(message);
     }
 
     async onTick(quote: TQuote) {
@@ -158,26 +141,16 @@ export default class ChartAdapterStore {
         const lastQuote = this.mainStore.chart.feed?.quotes[this.mainStore.chart.feed?.quotes.length - 1];
         if (lastQuote && new Date(lastQuote.Date) > new Date(quote.Date)) return;
 
-        let message;
-
-        if (quote.ohlc) {
-            message = {
-                type: 'CANDLE',
-                payload: quote,
-            };
-        } else {
-            message = {
-                type: 'TICK',
-                payload: quote,
-            };
-        }
         this.mainStore.chart.feed?.addQuote(quote);
 
-        this.postMessage(message);
+        if (quote.ohlc) {
+            this.flutterChart?.dataModel.onNewCandle(quote);
+        } else {
+            this.flutterChart?.dataModel.onNewTick(quote);
+        }
     }
 
-    loadHistory(payloadString: string) {
-        const payload: { count: number; end: number } = JSON.parse(payloadString);
+    loadHistory(payload: TLoadHistoryParams) {
         const { count, end } = payload;
         const { state, chart } = this.mainStore;
         const { granularity } = state;
@@ -188,28 +161,17 @@ export default class ChartAdapterStore {
             count,
             granularity,
             ({ quotes }) => {
-                const message = {
-                    type: 'PREPEND_TICKS_HISTORY',
-                    payload: quotes,
-                };
+                if (!quotes) return;
 
-                if (quotes) {
-                    this.mainStore.chart.feed?.updateQuotes(quotes, true);
-                }
-
-                this.postMessage(message);
+                this.mainStore.chart.feed?.updateQuotes(quotes, true);
+                this.flutterChart?.dataModel.onTickHistory(quotes, true);
             }
         );
     }
 
     updateChartStyle(chartType?: string) {
         const chartStyle = chartType === 'mountain' ? 'line' : 'candles';
-        const message = {
-            type: 'UPDATE_CHART_STYLE',
-            payload: chartStyle,
-        };
-
-        this.postMessage(message);
+        this.flutterChart?.config.updateChartStyle(chartStyle);
     }
 
     updateTheme(theme: string) {
@@ -217,18 +179,11 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
-        const message = {
-            type: 'SCALE_CHART',
-            payload: scale,
-        };
-
-        this.postMessage(message);
+        this.flutterChart?.config.scale(scale);
     }
 
-    async updateMarkers(contracts_marker: any[]) {
-        // console.log('markers_array', markers_array);
-
-        const transformedContractsMarker = contracts_marker
+    async updateMarkers(contractsMarker: any[]) {
+        const transformedContractsMarker = contractsMarker
             .filter(c => c.markers?.length > 0)
             .map(c => {
                 c.markers.forEach((m: any) => {
@@ -240,14 +195,9 @@ export default class ChartAdapterStore {
                 return c;
             });
 
-        const message = {
-            type: 'UPDATE_MARKERS',
-            payload: transformedContractsMarker,
-        };
-
         await when(() => this.isDataInitialized);
 
-        this.postMessage(message);
+        this.flutterChart?.config.updateMarkers(transformedContractsMarker);
     }
 
     getInterpolatedPositionAndPrice = (epoch: number) => {
