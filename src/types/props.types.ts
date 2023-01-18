@@ -100,8 +100,8 @@ export type TBarrierUpdateProps = {
     draggable: boolean;
     lineStyle: string;
     hidePriceLines: boolean;
-    high?: string;
-    low?: string;
+    high?: number | string;
+    low?: number | string;
     hideBarrierLine?: boolean;
     hideOffscreenBarrier?: boolean;
     hideOffscreenLine?: boolean;

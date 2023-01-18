@@ -17,6 +17,10 @@ export function createObjectFromLocalStorage(key: string) {
     return undefined;
 }
 
+export function getStringValue(p: number | string) {
+    return (typeof p === 'string') ? p : p.toString();
+}
+
 export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
     if (timeUnit === null && interval === 'day') {
         return 'day';

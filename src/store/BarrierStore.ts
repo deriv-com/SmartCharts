@@ -5,6 +5,7 @@ import { TBarrierChangeParam, TBarrierUpdateProps, TCIQAddEventListener, TCIQApp
 import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
+import {getStringValue} from '../utils';
 
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
@@ -180,11 +181,11 @@ export default class BarrierStore {
                 if (draggable !== undefined) {
                     this.draggable = draggable;
                 }
-                if (high !== undefined && (typeof high === 'string')) {
-                    this.high_barrier = high;
+                if (high !== undefined) {
+                    this.high_barrier = getStringValue(high);
                 }
-                if (low !== undefined && (typeof high === 'string')) {
-                    this.low_barrier = low;
+                if (low !== undefined) {
+                    this.low_barrier = getStringValue(low);
                 }
                 if (onChange) {
                     this.onBarrierChange = onChange;
@@ -274,8 +275,8 @@ export default class BarrierStore {
     }
 
     _fireOnBarrierChange = (): void => {
-        const high = this._high_barrier.visible ? (Number(this._high_barrier.price).toFixed(this.pip)).toString() : undefined;
-        const low = this._low_barrier.visible ? (Number(this._low_barrier.price).toFixed(this.pip)).toString() : undefined;
+        const high = this._high_barrier.visible ? Number(this._high_barrier.price).toFixed(this.pip) : undefined;
+        const low = this._low_barrier.visible ? Number(this._low_barrier.price).toFixed(this.pip) : undefined;
 
         if (typeof this._onBarrierChange === 'function') {
             this._onBarrierChange({ high, low });
