@@ -261,18 +261,47 @@ export const formatCamelCase = (s: string) => {
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
+const movingAverageShortCode = {
+    doubleExponential: 'dema',
+    exponential: 'ema',
+    hull: 'hma',
+    simple: 'ma',
+    timeSeries: 'tsma',
+    triangular: 'tma',
+    tripleExponential: 'tema',
+    variable: 'vma',
+    weighted: 'wma',
+    wellesWilder: 'smma',
+    zeroLag: 'zma',
+};
+
+const fieldTypeShortCode = {
+    open: 'O',
+    high: 'H',
+    close: 'C',
+    low: 'L',
+    'Hl/2': 'hl/2',
+    'Hlc/3': 'hlc/3',
+    'Hlcc/4': 'hlcc/4',
+    'Ohlc/4': 'ohlc/4',
+};
+
 export const prepareIndicatorName = (name: string, parameters: TIndicatorParameter[] = []) => {
     const getStudyBars = () => {
         const bars = parameters
-            .filter(p => p.type === 'number')
-            .map(p => p.value || p.defaultValue)
+            .filter(p => p.type === 'number' || p.path === 'movingAverageType' || p.path === 'fieldType')
+            .map(p => {
+                if (p.path === 'movingAverageType') {
+                    return movingAverageShortCode[p.value as keyof typeof movingAverageShortCode];
+                } else if (p.path === 'fieldType') {
+                    return fieldTypeShortCode[p.value as keyof typeof fieldTypeShortCode];
+                }
+                return p.value || p.defaultValue;
+            })
             .join(',');
         return bars ? bars : undefined;
     };
-    // const capitalizeFirstLetter = (string) => {
-    //     const str = string.replace(StudyNameRegex, '');
-    //     return str.charAt(0).toUpperCase() + str.slice(1);
-    // };
+
     const bars = getStudyBars();
     return {
         name: formatCamelCase(name.replace(`(${bars})`, '').replace('-', ' ')).trim(),
