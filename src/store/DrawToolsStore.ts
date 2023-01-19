@@ -124,9 +124,7 @@ export default class DrawToolsStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
+
     get stateStore() {
         return this.mainStore.state;
     }

@@ -3,7 +3,7 @@ import { action, computed, observable, when, makeObservable } from 'mobx';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
-import { TBar, TQuote } from '../types';
+import { TBar } from '../types';
 
 export default class LastDigitStatsStore {
     mainStore: MainStore;
@@ -45,9 +45,7 @@ export default class LastDigitStatsStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
+
     count = 1000;
     digits: number[] = [];
     latestData: number[] = [];
@@ -78,11 +76,7 @@ export default class LastDigitStatsStore {
             this.digits.push(0);
             this.bars.push({ height: 0, cName: '' });
         }
-        // if (this.stx.masterData && this.stx.masterData.length >= this.count) {
-        //     this.latestData = (this.stx.masterData as TQuote[])
-        //         .slice(-this.count)
-        //         .map(x => +x.Close.toFixed(this.decimalPlaces));
-        // } else {
+
         const tickHistory =
             response ||
             (await this.api?.getTickHistory({
@@ -90,7 +84,7 @@ export default class LastDigitStatsStore {
                 count: this.count,
             } as TCreateTickHistoryParams));
         this.latestData = tickHistory?.history?.prices ? tickHistory.history.prices : [];
-        // }
+
         if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
         this.latestData.forEach(price => {
             const lastDigit = (+price).toFixed(this.decimalPlaces).slice(-1);
