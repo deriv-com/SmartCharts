@@ -1,7 +1,11 @@
 # Dart
 .dart_tool/
 .packages
-build/
+build/*
+!build/
+!build/web
+build/web/assets/assets/icons/symbols/
+build/web/assets/packages
 pubspec.lock
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -31,7 +35,6 @@ out/
 
 # Gradle files
 .gradle/
-build/
 
 # Local configuration file (sdk path, etc)
 local.properties
