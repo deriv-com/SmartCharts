@@ -102,10 +102,8 @@ export default class ChartTypeStore {
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             type: observable,
-            setTypeFromUI: action.bound,
+            setChartType: action.bound,
             setType: action.bound,
-            updateProps: action.bound,
-            setChartTypeFromLayout: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -121,7 +119,6 @@ export default class ChartTypeStore {
         });
     }
 
-    onChartTypeChanged?: (chartType?: string) => void;
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
@@ -137,7 +134,6 @@ export default class ChartTypeStore {
     onContextReady = () => {
         this.aggregates = getAggregates();
         this.chartTypes = [...ChartTypes];
-        // this.setChartTypeFromLayout(this.stx.layout);
         reaction(
             () => this.mainStore.state.chartType,
             () => {
@@ -147,15 +143,16 @@ export default class ChartTypeStore {
             }
         );
     };
-    setTypeFromUI(type?: string) {
-        if (this.chartTypeProp !== undefined) {
-            console.error(
-                'Changing chart type does nothing because chartType prop is being set. Consider overriding the onChange prop in <ChartTypes />'
-            );
-            return;
+    setChartType(type?: string) {
+        const { onChartTypeChange } = this.mainStore.state;
+
+        if (onChartTypeChange) {
+            onChartTypeChange(type);
+        } else {
+            this.setType(type);
         }
-        this.setType(type);
     }
+
     setType(type?: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (!type) {
@@ -169,9 +166,6 @@ export default class ChartTypeStore {
         }
         this.type = type;
     }
-    updateProps(onChange: (chartType?: string) => void) {
-        this.onChartTypeChanged = onChange;
-    }
 
     get types() {
         const isTickSelected = this.mainStore.chart.granularity === 0;
@@ -184,10 +178,7 @@ export default class ChartTypeStore {
             disabled: t.candleOnly ? isTickSelected : false,
         }));
     }
-    setChartTypeFromLayout(chartType: string) {
-        const typeIdx = this.chartTypes.findIndex(t => t.id === chartType);
-        this.type = this.chartTypes[typeIdx];
-    }
+
     isTypeCandle(type: ChartType | string) {
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type) as ChartType;

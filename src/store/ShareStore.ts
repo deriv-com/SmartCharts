@@ -37,9 +37,6 @@ export default class ShareStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
 
     get timeUnit() {
         return this.mainStore.timeperiod.timeUnit;

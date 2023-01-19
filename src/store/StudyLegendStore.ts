@@ -80,10 +80,9 @@ export default class StudyLegendStore {
             editStudy: action.bound,
             deleteStudy: action.bound,
             updateStudy: action.bound,
-            //  updateActiveStudies: action.bound,
+
             deletePredictionStudies: action.bound,
             deleteAllStudies: action.bound,
-            clearStudies: action.bound,
             onStudyRemoved: action.bound,
             onSelectTab: action.bound,
             setFilterText: action.bound,
@@ -202,7 +201,7 @@ export default class StudyLegendStore {
             ...this.transform(params),
         };
         console.log('Add/Update Indicator', config);
-        this.mainStore.chartAdapter.dartInterop?.chartConfig.addOrUpdateIndicator(JSON.stringify(config));
+        this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config));
     };
 
     onSelectItem(indicatorName: string) {
@@ -234,6 +233,19 @@ export default class StudyLegendStore {
 
             this.addOrUpdateIndicator(item);
         }
+    }
+
+    restoreStudies(activeItems: TActiveItem[]) {
+        this.deleteAllStudies();
+
+        activeItems.forEach(activeItem => {
+            this.addOrUpdateIndicator(activeItem);
+
+            const props = this.getIndicatorProps(activeItem.name);
+            _.extend(activeItem, props || {});
+        });
+
+        this.activeItems = activeItems;
     }
     // updateIndicatorHeight() {
     //     const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
@@ -277,7 +289,7 @@ export default class StudyLegendStore {
     deleteStudy(id: string) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${id}`);
 
-        this.mainStore.chartAdapter.dartInterop?.chartConfig.removeIndicator(id);
+        this.mainStore.chartAdapter.flutterChart?.config.removeIndicator(id);
 
         _.remove(this.activeItems, item => item.id === id);
         // this.renderLegend();
@@ -401,7 +413,6 @@ export default class StudyLegendStore {
         if (!this.context || !this.shouldRenderLegend()) {
             return;
         }
-        // this.updateActiveStudies();
         // Temporary prevent user from adding more than 5 indicators
         // All traces can be removed after new design for studies
         this.updateStyle();
@@ -428,21 +439,11 @@ export default class StudyLegendStore {
     }
 
     deleteAllStudies() {
-        const stx = this.stx;
-        if (stx) {
-            Object.keys(stx.layout.studies || []).forEach(id => {
-                this.deleteStudy(stx.layout.studies[id]);
-            });
-            //  setTimeout(this.updateIndicatorHeight, 20);
-        }
+        this.activeItems.forEach(activeItem => this.deleteStudy(activeItem.id));
+        this.activeItems = [];
     }
-    clearStudies() {
-        if (this.context) {
-            //   this.context.advertised.Layout.clearStudies();
-        }
-    }
+
     onStudyRemoved() {
-        //  this.updateActiveStudies();
         //  setTimeout(this.updateIndicatorHeight, 20);
     }
     onSelectTab(tabIndex: number) {

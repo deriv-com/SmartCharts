@@ -136,7 +136,7 @@ export default class ViewStore {
     }
 
     overwrite() {
-        const layout = this.stx.exportLayout();
+        const layout = this.getLayout();
         const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         this.views[templateIndex].layout = layout;
         this.views[templateIndex].name = this.templateName.trim();

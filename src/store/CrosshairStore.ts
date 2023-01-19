@@ -97,8 +97,9 @@ class CrosshairStore {
         this.setCrosshairState(state);
     };
 
-    onMount = (onMouseMove: TMouseMoveCallback) => {
-        const contentWindow = document.querySelector('iframe')?.contentWindow;
+    onMount = async (onMouseMove: TMouseMoveCallback) => {
+        await when(() => this.mainStore.chartAdapter.isChartLoaded);
+        const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
             contentWindow.addEventListener('mousemove', this.renderCrosshairTooltip);
             contentWindow.addEventListener('mousemove', onMouseMove);
@@ -108,7 +109,7 @@ class CrosshairStore {
     };
 
     onUnmount = (onMouseMove: TMouseMoveCallback) => {
-        const contentWindow = document.querySelector('iframe')?.contentWindow;
+        const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
             contentWindow.removeEventListener('mousemove', this.renderCrosshairTooltip);
             contentWindow.removeEventListener('mousemove', onMouseMove);
@@ -130,8 +131,9 @@ class CrosshairStore {
     };
 
     setCursor = (is_active: boolean) => {
-        const contentWindow = document.querySelector('iframe')?.contentWindow;
-        const element = contentWindow?.document?.querySelector('flt-glass-pane') as HTMLElement;
+        // @ts-ignore
+        const contentWindow = window.flutterChartElement;
+        const element = contentWindow?.querySelector('flt-glass-pane') as HTMLElement;
 
         if (element) {
             element.style.cursor = [1, 2].includes(this.state || 0) && is_active ? 'crosshair' : 'default';

@@ -78,7 +78,6 @@ export default class PriceLineStore {
     };
 
     destructor() {
-        // this.stx.removeInjection(this._injectionId);
         this.disposeDrawReaction?.();
     }
 
@@ -234,7 +233,8 @@ export default class PriceLineStore {
 
         let top = this._locationFromPrice(this.realPrice);
 
-        const height = this.mainStore.chartAdapter.iframeElement?.clientHeight || 0;
+        // @ts-ignore
+        const height = window.flutterChartElement?.clientHeight || 0;
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {

@@ -31,8 +31,6 @@ export default class TimeperiodStore {
         makeObservable(this, {
             portalNodeIdChanged: observable,
             setGranularity: action.bound,
-            updateProps: action.bound,
-            changeGranularity: action.bound,
             updatePortalNode: action.bound,
         });
 
@@ -169,27 +167,14 @@ export default class TimeperiodStore {
     }
 
     setGranularity(granularity?: TGranularity) {
-        if (this.mainStore.state.granularity !== undefined) {
-            console.error(
-                'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
-            );
-            return;
-        }
+        const { onGranularityChange } = this.mainStore.state;
 
         logEvent(LogCategories.ChartControl, LogActions.Interval, granularity?.toString());
-        this.mainStore.chart.changeSymbol(undefined, granularity);
-    }
 
-    updateProps(onChange: (granularity?: TGranularity) => void) {
-        this.onGranularityChange = onChange;
-    }
-
-    changeGranularity(interval: TGranularity) {
-        if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
-            this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
-            this.predictionIndicator.setOpen(true);
+        if (onGranularityChange) {
+            onGranularityChange(granularity);
         } else {
-            this.onGranularityChange(interval);
+            this.mainStore.chart.changeSymbol(undefined, granularity);
         }
     }
 

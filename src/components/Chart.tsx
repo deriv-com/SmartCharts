@@ -26,7 +26,6 @@ import SettingsDialog from './SettingsDialog';
 
 const Chart = (props: TChartProps) => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader, chartAdapter } = useStores();
-    const iframeRef = React.useRef<HTMLIFrameElement>(null);
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
     const { settingsDialog: studiesSettingsDialog } = studies;
     const { settingsDialog: drawToolsSettingsDialog } = drawTools;
@@ -87,7 +86,7 @@ const Chart = (props: TChartProps) => {
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
 
     React.useEffect(() => {
-        chartAdapter.setIFrameElement(iframeRef.current as HTMLIFrameElement);
+        chartAdapter.onMount(chartContainerRef.current as HTMLDivElement);
     }, []);
 
     React.useEffect(() => {
@@ -147,11 +146,6 @@ const Chart = (props: TChartProps) => {
                                                 : chartContainerHeight,
                                     }}
                                 >
-                                    <iframe
-                                        ref={iframeRef}
-                                        style={{ width: '100%', height: '100%' }}
-                                        src='/chart/index.html'
-                                    ></iframe>
                                     <Crosshair />
                                 </div>
                                 {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}

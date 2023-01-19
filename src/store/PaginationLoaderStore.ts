@@ -22,9 +22,6 @@ class PaginationLoaderStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): ChartStore['stxx'] {
-        return this.mainStore.chart.stxx;
-    }
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
