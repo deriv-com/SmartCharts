@@ -66,7 +66,7 @@ export default class ChartAdapterStore {
             };
 
             // @ts-ignore
-            import(/* webpackChunkName: "flutter-chart-adapter", webpackPrefetch: true */ 'src/chart/main.dart.js');
+            import(/* webpackChunkName: "flutter-chart-adapter", webpackPrefetch: true */ 'chart/main.dart.js');
         } else {
             this.onChartLoad();
         }
@@ -169,9 +169,8 @@ export default class ChartAdapterStore {
         );
     }
 
-    updateChartStyle(chartType?: string) {
-        const chartStyle = chartType === 'mountain' ? 'line' : 'candles';
-        this.flutterChart?.config.updateChartStyle(chartStyle);
+    updateChartStyle(chartType: string) {
+        this.flutterChart?.config.updateChartStyle(chartType);
     }
 
     updateTheme(theme: string) {

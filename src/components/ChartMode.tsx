@@ -20,10 +20,10 @@ type TChartModeProps = {
 };
 
 const TypeMap = {
-    mountain: TypeAreaGrayscaleIcon,
-    candle: TypeCandleGrayscaleIcon,
-    colored_bar: TypeOhlcGrayscaleIcon,
-    hollow_candle: TypeHollowGrayscaleIcon,
+    line: TypeAreaGrayscaleIcon,
+    candles: TypeCandleGrayscaleIcon,
+    ohlc: TypeOhlcGrayscaleIcon,
+    hollow: TypeHollowGrayscaleIcon,
 };
 
 const ChartMode = ({ portalNodeId }: TChartModeProps) => {

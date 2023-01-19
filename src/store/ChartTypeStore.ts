@@ -97,7 +97,7 @@ export default class ChartTypeStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     settingsDialog: SettingsDialogStore;
-    type: ChartType = ChartTypes.find(t => t.id === 'mountain') as ChartType;
+    type: ChartType = ChartTypes.find(t => t.id === 'line') as ChartType;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -156,7 +156,7 @@ export default class ChartTypeStore {
     setType(type?: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
         if (!type) {
-            type = 'mountain';
+            type = 'line';
         }
         if (typeof type === 'string') {
             type = this.types.find(t => t.id === type) as ChartType;

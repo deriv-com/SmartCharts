@@ -1242,10 +1242,10 @@ export const DefaultIndicatorConfigs: TDefaultIndicatorConfigs = {
 };
 
 export const ChartTypes = [
-    { id: 'mountain', text: t.translate('Area'), candleOnly: false, icon: TypeAreaIcon },
-    { id: 'candle', text: t.translate('Candle'), candleOnly: true, icon: TypeCandleIcon },
-    { id: 'hollow_candle', text: t.translate('Hollow'), candleOnly: true, icon: TypeHollowIcon },
-    { id: 'colored_bar', text: t.translate('OHLC'), candleOnly: true, icon: TypeOhlcIcon },
+    { id: 'line', text: t.translate('Area'), candleOnly: false, icon: TypeAreaIcon },
+    { id: 'candles', text: t.translate('Candle'), candleOnly: true, icon: TypeCandleIcon },
+    { id: 'hollow', text: t.translate('Hollow'), candleOnly: true, icon: TypeHollowIcon },
+    { id: 'ohlc', text: t.translate('OHLC'), candleOnly: true, icon: TypeOhlcIcon },
 ];
 
 type TInterval = {

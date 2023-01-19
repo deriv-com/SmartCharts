@@ -49,9 +49,7 @@ class ChartConfigModel extends ChangeNotifier {
 
   /// To update style of the chart
   void updateChartStyle(String chartStyle) {
-    style = chartStyle == ChartStyle.candles.name
-        ? ChartStyle.candles
-        : ChartStyle.line;
+    style = ChartStyle.values.byName(chartStyle);
     notifyListeners();
   }
 

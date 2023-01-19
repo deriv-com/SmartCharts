@@ -21,7 +21,7 @@ type TTimeperiodItemProps = {
 const enableLoader = (isLoading: boolean, interval: TGranularity, granularity: TGranularity) =>
     isLoading && interval === granularity;
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
-    !isMobile && chartType_id !== 'mountain' && key === 'tick';
+    !isMobile && chartType_id !== 'line' && key === 'tick';
 
 const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
     const { timeperiod, chartType, loader, chart } = useStores();
@@ -42,7 +42,7 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
         category.key,
         chartTypeId,
     ]);
-    const is_disabled = React.useMemo(() => is_tick && chartTypeId !== 'mountain', [is_tick, chartTypeId]);
+    const is_disabled = React.useMemo(() => is_tick && chartTypeId !== 'line', [is_tick, chartTypeId]);
     const is_active = item.interval === granularity;
 
     const handleClick = React.useCallback(() => onClick(chartTypeId, category.key, item.interval), [
@@ -83,7 +83,7 @@ const Timeperiod = ({ portalNodeId }: TTimeperiodProps) => {
     const { setGranularity, updatePortalNode } = timeperiod;
 
     const onIntervalClick = (chart_type_id: string, key: string, interval: TGranularity) => {
-        if (key === 'tick' && chart_type_id !== 'mountain') {
+        if (key === 'tick' && chart_type_id !== 'line') {
             return;
         }
         setGranularity(interval);

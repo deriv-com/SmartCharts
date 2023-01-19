@@ -52,6 +52,25 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     super.initState();
   }
 
+  DataSeries<Tick> _getDataSeries(ChartStyle style) {
+    if (chartDataModel.ticks is List<Candle>) {
+      switch (style) {
+        case ChartStyle.candles:
+          return CandleSeries(chartDataModel.ticks as List<Candle>);
+        case ChartStyle.hollow:
+          return HollowCandleSeries(chartDataModel.ticks as List<Candle>);
+        case ChartStyle.ohlc:
+          return OhlcCandleSeries(chartDataModel.ticks as List<Candle>);
+        default:
+          break;
+      }
+    }
+    return LineSeries(
+      chartDataModel.ticks,
+      style: const LineStyle(hasArea: true),
+    );
+  }
+
   @override
   Widget build(BuildContext context) => MultiProvider(
           providers: <ChangeNotifierProvider<dynamic>>[
@@ -70,14 +89,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                               ChartDataModel chartDataModel,
                               Widget? child) =>
                           DerivChart(
-                        mainSeries: chartConfigModel.style ==
-                                    ChartStyle.candles &&
-                                chartDataModel.ticks is List<Candle>
-                            ? CandleSeries(chartDataModel.ticks as List<Candle>)
-                            : LineSeries(
-                                chartDataModel.ticks,
-                                style: const LineStyle(hasArea: true),
-                              ) as DataSeries<Tick>,
+                        mainSeries: _getDataSeries(chartConfigModel.style),
                         annotations: chartDataModel.ticks.length > 4
                             ? <Barrier>[
                                 if (chartConfigModel.isLive)

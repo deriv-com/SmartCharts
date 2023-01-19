@@ -184,12 +184,12 @@ const App = () => {
                               (layout.interval * IntervalEnum[layout.timeUnit as keyof typeof IntervalEnum]).toString(),
                               10
                           );
-                if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
+                if (layout.chartType === 'candles' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
                 } else {
                     chartType = layout.chartType;
                 }
-                if (['mountain', 'line', 'colored_line', 'spline', 'baseline'].indexOf(chartType) === -1) {
+                if (['line', 'colored_line', 'spline', 'baseline'].indexOf(chartType) === -1) {
                     isChartTypeCandle = true;
                 }
             }
@@ -268,7 +268,7 @@ const App = () => {
         console.log('settings updated:', newSettings);
         localStorage.setItem('smartchart-setting', JSON.stringify(newSettings));
         if (!prevSetting.historical && newSettings.historical) {
-            setChartType('mountain');
+            setChartType('line');
             setIsChartTypeCandle(false);
             setGranularity(0);
             setEndEpoch(new Date(`${today}:00Z`).valueOf() / 1000);
@@ -319,10 +319,10 @@ const App = () => {
                         setGranularity(timePeriod);
                         const isCandle = isChartTypeCandle;
                         if (isCandle && timePeriod === 0) {
-                            setChartType('mountain');
+                            setChartType('line');
                             setIsChartTypeCandle(false);
                         } else if (!isCandle && timePeriod !== 0) {
-                            setChartType('candle');
+                            setChartType('candles');
                             setIsChartTypeCandle(true);
                         }
                     }}

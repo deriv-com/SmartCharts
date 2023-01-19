@@ -161,7 +161,7 @@ class ChartStore {
     api: BinaryAPI | null = null;
     defaults: TDefaults = {
         granularity: 0,
-        chartType: 'mountain',
+        chartType: 'line',
     };
     granularity: TGranularity;
     enableRouting?: boolean | null = null;
@@ -355,7 +355,7 @@ class ChartStore {
 
         // if (_chartType === 'spline') {
         //     // cause there's no such thing as spline chart in ChartIQ
-        //     _chartType = 'mountain';
+        //     _chartType = 'line';
         // }
         // this.chartType = _chartType;
         // if (rangeSpan) {
