@@ -42,6 +42,8 @@ class JSNewChart {
   external bool get isLive;
   external bool get dataFitEnabled;
   external int get granularity;
+  external String get chartType;
+  external String get theme;
 }
 
 @JS()

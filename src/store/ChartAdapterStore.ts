@@ -21,7 +21,6 @@ export default class ChartAdapterStore {
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
-            onMessage: action.bound,
             onTickHistory: action.bound,
             onChartLoad: action.bound,
             onTick: action.bound,
@@ -41,7 +40,6 @@ export default class ChartAdapterStore {
 
     initFlutterCharts() {
         window.jsInterop = {
-            postMessage: this.onMessage,
             onChartLoad: this.onChartLoad,
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
@@ -97,16 +95,6 @@ export default class ChartAdapterStore {
         };
     }
 
-    onMessage(data: string) {
-        const message = JSON.parse(data);
-
-        switch (message?.type) {
-            case 'LOAD_HISTORY':
-                this.loadHistory(message.payload);
-                break;
-        }
-    }
-
     async postMessage(message: any) {
         await when(() => this.isChartLoaded);
         console.log(JSON.parse(JSON.stringify(message)));
@@ -123,8 +111,10 @@ export default class ChartAdapterStore {
     newChart = () => {
         this.flutterChart?.config.newChart({
             granularity: this.getGranularity(),
+            chartType: this.mainStore.state.chartType,
             isLive: this.mainStore.chart.isLive || false,
             dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
+            theme: this.mainStore.chartSetting.theme,
         });
     };
 

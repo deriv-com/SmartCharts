@@ -311,6 +311,8 @@ export type TNewChartPayload = {
     granularity: number;
     isLive: boolean;
     dataFitEnabled: boolean;
+    chartType?: string;
+    theme: string;
 };
 
 export type TFlutterChart = {
@@ -339,7 +341,6 @@ export type TFlutterChart = {
 };
 
 export type JSInterop = {
-    postMessage: (data: string) => void;
     onChartLoad: () => void;
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
