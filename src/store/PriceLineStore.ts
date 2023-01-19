@@ -96,12 +96,7 @@ export default class PriceLineStore {
     }
 
     get priceDisplay() {
-        let display: string;
-        if (this.isDragging) {
-        display = Number(this._price).toFixed(this.pip);
-        } else {
-            display = this._price;
-        }
+        let display = this.isDragging ? Number(this._price).toFixed(this.pip) : this._price;
         if (this.relative && +this._price > 0 && display[0] !== '+') {
             display = `+${display}`;
         }
