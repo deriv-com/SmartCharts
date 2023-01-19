@@ -154,7 +154,7 @@
 
 .smartcharts {
     // temp workaround for svg icon that cannot be themed
-    .ic-cryptocurrency > svg {
+    .ic-cryptocurrency > svg, .ic-indices > svg {
         stroke: none !important;
     }
     &-dark {

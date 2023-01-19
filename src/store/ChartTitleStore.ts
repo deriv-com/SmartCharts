@@ -99,10 +99,16 @@ export default class ChartTitleStore {
         return { openTime };
     }
     get currentActiveCategory() {
+        const current_active_symbol = this.mainStore.chart.currentActiveSymbol;
+
         if ((this.openMarket as TOpenMarket).category) {
             return (this.openMarket as TOpenMarket).category;
         }
-        return this.mainStore.chart.currentActiveSymbol ? this.mainStore.chart.currentActiveSymbol.market : 'favorite';
+        if (current_active_symbol?.subgroup !== 'none') {
+            return current_active_symbol?.subgroup;
+        }
+        
+        return current_active_symbol ? current_active_symbol.market : 'favorite';
     }
     get currentActiveSubCategory() {
         if ((this.openMarket as TOpenMarket).subcategory) {

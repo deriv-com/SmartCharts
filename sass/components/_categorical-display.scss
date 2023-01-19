@@ -1,7 +1,9 @@
 // sc-market-categorical-display
 .sc-mcd {
     $self: &;
-    width: 560px;
+    max-width: 600px;
+    min-width: 560px;
+    width: auto;
     display: flex;
     height: 100%;
     @include themify($themes) {
@@ -29,7 +31,8 @@
         }
     }
     &__content {
-        width: 320px;
+        min-width: 320px;
+        width: max-content;
         display: flex;
         flex-direction: column;
 
@@ -61,6 +64,56 @@
         border-bottom: none;
         padding: 0;
 
+        &__group {
+            &-icon {
+                margin-right: 4.5px !important;
+                margin-left: auto;
+
+                &--open {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+        &__subgroups {
+            display: none;
+
+            &-item {
+                width: 100%;
+                display: flex;
+                box-sizing: border-box;
+                padding: 10px 50px;
+                border-radius: 0px;
+                font-size: 14px;
+                font-weight: normal;
+                font-style: normal;
+                line-height: 1.43;
+                letter-spacing: normal;
+                align-items: center;
+                outline: none !important;
+                box-shadow: none !important;
+                cursor: pointer;
+
+                &:hover {
+                    @include themify($themes) {
+                        background-color: themed('CatDisplayHoverFilterBg');
+                        border-left-color: themed('CatDisplayHoverFilterBg');
+                    }
+                }
+                &--selected {
+                    font-weight: 800;
+                    @include themify($themes) {
+                        color: themed('CatDisplayActiveFilterText');
+                        background-color: themed('CatDisplayActiveFilterBg') !important;
+                        border-left-color: themed('CatDisplayActiveFilterBorder') !important;
+                    }
+                }
+            }
+            &--open {
+                display: block;
+                animation: display 2s linear;
+                opacity: 1;
+            }
+        }
         &__item {
             width: 100%;
             display: flex;
@@ -93,6 +146,13 @@
                 @include themify($themes) {
                     background-color: themed('CatDisplayHoverFilterBg');
                     border-left-color: themed('CatDisplayHoverFilterBg');
+                }
+            }
+            &--active {
+                @include themify($themes) {
+                    color: themed('CatDisplayActiveFilterText');
+                    background-color: themed('CatDisplayActiveFilterBg') !important;
+                    border-left-color: themed('CatDisplayActiveFilterBorder') !important;
                 }
             }
             &--selected {
@@ -143,6 +203,12 @@
             .sc-mcd__category__content {
                 margin: 0 3px 4px 8px;
             }
+        }
+        &--synthetic_index {
+            @media (min-width: 1024px) {
+                visibility: hidden;
+            }
+            padding: 0;
         }
         &__head {
             display: block;
@@ -346,6 +412,12 @@
                     display: flex;
                     align-items: center;
 
+                    &__placeholder {
+                        margin-left: 40px;
+                    }
+                    &__subgroup {
+                        font-weight: normal;
+                    }
                     .ic-icon {
                         margin-right: 16px;
                         position: relative;
@@ -416,7 +488,17 @@
                 &--has-subcategory {
                     margin: 0 8px 4px;
                 }
+                .subcategory {
+                    padding: 0 48px;
+                }
             }
+            .empty-category {
+                padding: 0.9em 3.33em;
+            }
+        }
+        &__item {
+            padding-left: 45px;
+            padding-right: 45px;
         }
         &--nested {
             min-height: calc(100% - 38px);
