@@ -1,7 +1,6 @@
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
-import Context from 'src/components/ui/Context';
 import MarkerStore from 'src/store/MarkerStore';
-import { TDragEvents, TGranularity, TQuote } from 'src/types';
+import { TDragEvents, TGranularity, TIndicatorParameter, TQuote } from 'src/types';
 
 type TTransferItem = (item: TSubCategoryDataItem | TSubCategory) => TSubCategoryDataItem | TSubCategory;
 
@@ -262,14 +261,19 @@ export const formatCamelCase = (s: string) => {
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
-export const prepareIndicatorName = (name: string) => {
-    const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
-    const getStudyBars = (str: string) => (str.match(StudyNameRegex) || []).pop();
+export const prepareIndicatorName = (name: string, parameters: TIndicatorParameter[] = []) => {
+    const getStudyBars = () => {
+        const bars = parameters
+            .filter(p => p.type === 'number')
+            .map(p => p.value || p.defaultValue)
+            .join(',');
+        return bars ? bars : undefined;
+    };
     // const capitalizeFirstLetter = (string) => {
     //     const str = string.replace(StudyNameRegex, '');
     //     return str.charAt(0).toUpperCase() + str.slice(1);
     // };
-    const bars = getStudyBars(name);
+    const bars = getStudyBars();
     return {
         name: formatCamelCase(name.replace(`(${bars})`, '').replace('-', ' ')).trim(),
         bars,

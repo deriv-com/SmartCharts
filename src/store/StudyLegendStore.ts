@@ -220,6 +220,7 @@ export default class StudyLegendStore {
 
         if (props && parameters) {
             parameters.map(p => (p.value = _.clone(p.defaultValue)));
+            const nameObj = prepareIndicatorName(this.settingsDialog.name, parameters);
 
             const item: TActiveItem = {
                 ...props,
@@ -227,6 +228,7 @@ export default class StudyLegendStore {
                 name: props.name,
                 config,
                 parameters,
+                bars: nameObj.bars,
             };
 
             this.activeItems.push(item);
@@ -304,9 +306,12 @@ export default class StudyLegendStore {
         const { config } = this.getDefaultIndicatorConfig(this.settingsDialog.name) || {};
 
         if (props && parameters) {
+            const nameObj = prepareIndicatorName(this.settingsDialog.name, parameters);
+
             const item: TActiveItem = {
                 ...props,
                 id: this.settingsDialog.id,
+                bars: nameObj.bars,
                 parameters,
                 config,
             };
