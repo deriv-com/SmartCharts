@@ -15,7 +15,7 @@ import LoaderStore from './LoaderStore';
 import FavoriteStore from './FavoriteStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
-import CurrentSpotStore from './CurrentSpotStore';
+
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 import LastDigitStatsStore from './LastDigitStatsStore';
@@ -45,7 +45,6 @@ export default class MainStore implements TMainStore {
     loader = new LoaderStore();
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
-    currentSpot = new CurrentSpotStore(this);
     lastDigitStats = new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
     navigationWidget = new NavigationWidgetStore(this);

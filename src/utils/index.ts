@@ -245,57 +245,6 @@ export function cloneCategories<T>(
     return categorized;
 }
 
-// Get a raw callback with underlying canvas2dcontext
-// This component is used to render directly into the chart canvas.
-//
-// Props:
-//
-//  - epoch_array: array of epoch values to get coordinates for.
-//  - price_array: array of price values to get y-coordinates for.
-//  - draw_callback: called on every frame with ({ctx, points, prices}).
-//  -- points will be an array of [{left, top, epoch}] in pixels.
-//  -- ctx is the Context2dDrawingContext
-
-// Unfortunately chartiq.js does a Math.floor() on pixel values,
-// Which causes a jerky effect on the markers in auto-scroll,
-// However we need the pixel value down to the decimal points.
-// This is copy from chartiq.js file WITHOUT rounding down the pixel value.
-
-export function patchPixelFromChart(stx: Context['stx']) {
-    stx.pixelFromTick = function (tick: number, _chart: typeof CIQ.ChartEngine.Chart) {
-        const chart = _chart || stx.chart;
-        const dataSegment = chart.dataSegment,
-            dataSet = chart.dataSet,
-            segmentImage = chart.segmentImage,
-            mp = stx.micropixels,
-            length = dataSegment ? dataSegment.length : 0;
-        const panel = chart.panel,
-            scroll = chart.scroll;
-        const bar = tick - dataSet.length + scroll;
-        let quote = length ? dataSegment[bar] : null;
-
-        if (segmentImage) quote = segmentImage[bar];
-        if (quote && quote.leftOffset) {
-            // return Math.floor(panel.left + quote.leftOffset + mp)
-            return panel.left + quote.leftOffset + mp;
-        }
-        let rightOffset = 0,
-            dsTicks = 0;
-        quote = length ? dataSegment[length - 1] : null;
-        if (segmentImage) quote = segmentImage[length - 1];
-        if (quote && quote.leftOffset) {
-            if (length < tick - dataSet.length + scroll) {
-                rightOffset = quote.leftOffset - quote.candleWidth / 2;
-                dsTicks = length;
-            }
-        }
-        // return Math.floor(/* ... */)
-        return (
-            rightOffset + panel.left + (tick - dsTicks - dataSet.length + scroll + 0.5) * stx.layout.candleWidth + mp
-        );
-    };
-}
-
 export const ARROW_HEIGHT = 39;
 
 export const ARROW_COLORS = Object.freeze({
