@@ -49,6 +49,8 @@ const Chart = (props: TChartProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    console.log('t.lang in Chart = ', t.lang);
+
     React.useEffect(() => {
         updateProps(props);
     });
