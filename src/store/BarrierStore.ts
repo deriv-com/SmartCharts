@@ -182,10 +182,10 @@ export default class BarrierStore {
                     this.draggable = draggable;
                 }
                 if (high !== undefined) {
-                    this.high_barrier = getStringValue(high);
+                    this.high_barrier = getStringValue(high, this.pip);
                 }
                 if (low !== undefined) {
-                    this.low_barrier = getStringValue(low);
+                    this.low_barrier = getStringValue(low, this.pip);
                 }
                 if (onChange) {
                     this.onBarrierChange = onChange;
