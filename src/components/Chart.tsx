@@ -56,6 +56,7 @@ const Chart = (props: TChartProps) => {
     const prevLang = usePrevious(t.lang);
     React.useEffect(() => {
         if (prevLang && prevLang !== t.lang && !isLoading) {
+            updateProps(props);
             showChart?.();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -133,7 +134,9 @@ const Chart = (props: TChartProps) => {
                                     className='chartContainer'
                                     style={{
                                         height:
-                                            historical && chartContainerHeight && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                            historical && chartContainerHeight && isMobile
+                                                ? chartContainerHeight - 30
+                                                : chartContainerHeight,
                                     }}
                                 >
                                     <Crosshair />
