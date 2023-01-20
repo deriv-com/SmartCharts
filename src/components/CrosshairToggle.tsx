@@ -25,6 +25,9 @@ const CrosshairToggle = ({ onChange, isVisible = true }: TCrosshairToggleProps) 
         t.translate('Show price info on chart'),
     ];
 
+    console.log('t.lang = ', t.lang);
+    console.log('labels = ', labels);
+
     const onCrosshairToggle = () => {
         setCrosshairState((state + 1) % 3);
     };

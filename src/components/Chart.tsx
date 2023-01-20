@@ -133,7 +133,9 @@ const Chart = (props: TChartProps) => {
                                     className='chartContainer'
                                     style={{
                                         height:
-                                            historical && chartContainerHeight && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                            historical && chartContainerHeight && isMobile
+                                                ? chartContainerHeight - 30
+                                                : chartContainerHeight,
                                     }}
                                 >
                                     <Crosshair />
