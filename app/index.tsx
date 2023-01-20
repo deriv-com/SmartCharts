@@ -211,7 +211,7 @@ const App = () => {
             </React.Fragment>
         );
     }, [notifier]);
-    const renderControls = React.useCallback(() => <ChartSetting />, []);
+    const renderControls = React.useCallback(() => <ChartSetting />, [t.lang]);
     const renderToolbarWidget = React.useCallback(() => {
         const changeGranularity = (timePeriod: TGranularity) => setGranularity(timePeriod);
         const changeChartType = (_chartType?: string) => setChartType(_chartType);
