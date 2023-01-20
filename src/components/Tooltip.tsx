@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { observer } from 'mobx-react-lite';
 
 type TTooltipProps = {
     className?: string;
@@ -33,4 +34,4 @@ const Tooltip = ({
     </div>
 );
 
-export default Tooltip;
+export default observer(Tooltip);
