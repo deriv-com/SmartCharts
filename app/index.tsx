@@ -224,7 +224,7 @@ const App = () => {
                 <Share />
             </ToolbarWidget>
         );
-    }, []);
+    }, [t.lang]);
     const onMessage = (e: TNotification) => {
         notifier.notify(e);
     };
