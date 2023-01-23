@@ -214,10 +214,10 @@ const ResultsPanel = ({
                         />
                     )
                 );
-            } else {
+            } 
                 return (
                     (categoryItemCount > 0 || category.emptyDescription) && (
-                        <React.Fragment>
+                        <React.Fragment key={category.categoryId}>
                             <Category
                                 key={category.categoryId}
                                 ItemType={ItemType}
@@ -246,7 +246,7 @@ const ResultsPanel = ({
                                                 disableAll={disableAll}
                                                 isNestedList={isNestedList}
                                                 handleTitleClick={handleTitleClick}
-                                                hasSubgroup={true}
+                                                hasSubgroup
                                                 favoritesId={favoritesId}
                                             />
                                         );
@@ -256,7 +256,7 @@ const ResultsPanel = ({
                         </React.Fragment>
                     )
                 )
-            }
+            
         })}
     </>
 );
