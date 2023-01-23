@@ -84,7 +84,7 @@ const Chart = (props: TChartProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const MemoizedOnCrosshairChange = React.useCallback(onCrosshairChange, [t.lang]);
+    const memoizedOnCrosshairChange = React.useCallback(onCrosshairChange, [t.lang]);
 
     return (
         <div
@@ -143,7 +143,7 @@ const Chart = (props: TChartProps) => {
                                     <Crosshair />
                                 </div>
                                 {enabledNavigationWidget && (
-                                    <NavigationWidget onCrosshairChange={MemoizedOnCrosshairChange} />
+                                    <NavigationWidget onCrosshairChange={memoizedOnCrosshairChange} />
                                 )}
                                 {ToolbarWidget && <ToolbarWidget />}
                                 {!isChartAvailable && (
