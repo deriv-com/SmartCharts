@@ -84,6 +84,12 @@ const Chart = (props: TChartProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
 
+    const customOnCrosshairChange = React.useMemo(() => {
+        if (onCrosshairChange) return onCrosshairChange;
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        return (state?: number | null | undefined) => {};
+    }, [t.lang, onCrosshairChange]);
+
     return (
         <div
             id={id || chartId}
@@ -133,12 +139,16 @@ const Chart = (props: TChartProps) => {
                                     className='chartContainer'
                                     style={{
                                         height:
-                                            historical && chartContainerHeight && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                            historical && chartContainerHeight && isMobile
+                                                ? chartContainerHeight - 30
+                                                : chartContainerHeight,
                                     }}
                                 >
                                     <Crosshair />
                                 </div>
-                                {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}
+                                {enabledNavigationWidget && (
+                                    <NavigationWidget onCrosshairChange={customOnCrosshairChange} />
+                                )}
                                 {ToolbarWidget && <ToolbarWidget />}
                                 {!isChartAvailable && (
                                     <div className='cq-chart-unavailable'>
