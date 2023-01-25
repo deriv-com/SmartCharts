@@ -17,8 +17,8 @@ export function createObjectFromLocalStorage(key: string) {
     return undefined;
 }
 
-export function isValidProp(p: number) {
-    return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
+export function getStringValue(p: number | string, pipSize: number) {
+    return (typeof p === 'string') ? p : p.toFixed(pipSize);
 }
 
 export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
