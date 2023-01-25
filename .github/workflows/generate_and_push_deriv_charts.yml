@@ -39,7 +39,7 @@ jobs:
                   fi
                     
                   git checkout -b "$package_name"
-                  git reset --hard main
+                  git reset --hard master
                   # Patch the version with minor patch
                   npm version minor
                   npm run clean
