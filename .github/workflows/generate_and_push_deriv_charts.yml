@@ -43,7 +43,7 @@ jobs:
                   # Patch the version with minor patch
                   npm version minor
                   npm run build
-                  npm run publish
+                  npm publish
                   # this is a cloned repo, need to create PR to update package.json version in master
                   # Wait for the new version to be published
                   sleep 30s
