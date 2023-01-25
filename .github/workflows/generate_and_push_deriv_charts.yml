@@ -4,7 +4,7 @@ on:
 
 jobs:
     generate_and_push_deriv_charts:
-        if: github.repository == 'deriv-com/SmartCharts'
+        if: github.repository == 'binary-com/SmartCharts'
         runs-on: 'ubuntu-latest'
         steps:
             - name: Setup node and npm
