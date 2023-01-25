@@ -42,8 +42,8 @@ jobs:
                   git reset --hard master
                   # Patch the version with minor patch
                   npm version minor
-                  npm run clean
-                  npm run build_and_publish
+                  npm run build
+                  npm run publish
                   # this is a cloned repo, need to create PR to update package.json version in master
                   # Wait for the new version to be published
                   sleep 30s
