@@ -44,6 +44,18 @@ export default class ChartAdapterStore {
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
             loadHistory: this.loadHistory,
+            indicators: {
+                onRemove: (indicator_id: String) => {
+                    const [id] = indicator_id.match(/__.*__/) || [];
+                    if (!id) return;
+                    this.mainStore.studies.deleteStudy(id);
+                },
+                onEdit: (indicator_id: String) => {
+                    const [id] = indicator_id.match(/__.*__/) || [];
+                    if (!id) return;
+                    this.mainStore.studies.editStudyById(id);
+                },
+            },
         };
 
         if (!window.flutterChartElement) {
@@ -93,12 +105,6 @@ export default class ChartAdapterStore {
             topQuote,
             bottomQuote,
         };
-    }
-
-    async postMessage(message: any) {
-        await when(() => this.isChartLoaded);
-        console.log(JSON.parse(JSON.stringify(message)));
-        this.flutterChart?.postMessage(JSON.stringify(message));
     }
 
     getGranularity() {

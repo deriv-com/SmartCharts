@@ -129,7 +129,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                               : TickMarkerIconPainter(),
                           activeMarker: chartConfigModel.activeMarker,
                         ),
-                        indicatorsRepo: chartConfigModel.indicatorsRepo,
+                        indicatorsRepo:
+                            chartConfigModel.indicatorsConfig.indicatorsRepo,
                         dataFitEnabled: true,
                         hideCrosshair: true,
                         isLive: chartConfigModel.isLive,

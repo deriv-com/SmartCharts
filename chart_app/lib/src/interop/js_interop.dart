@@ -1,11 +1,9 @@
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:js/js.dart';
 
 /// JS Interop
 @JS('window.jsInterop')
 class JsInterop {
-  /// postMessage
-  external static void postMessage(dynamic object);
-
   /// Called when the chart has loaded
   external static void onChartLoad();
 
@@ -17,6 +15,9 @@ class JsInterop {
 
   ///
   external static void loadHistory(JsLoadHistoryReq request);
+
+  ///
+  external static JsIndicators? indicators;
 }
 
 @JS()
@@ -71,4 +72,16 @@ class JsQuote {
   external double? get Low;
   external double? get Open;
   external String get Date;
+}
+
+@JS()
+@anonymous
+
+/// JsIndicators
+class JsIndicators {
+  /// Called when an indicator is to be removed
+  external OnRemoveCallback? onRemove;
+
+  /// Called when an indicator is to be edited
+  external OnRemoveCallback? onEdit;
 }

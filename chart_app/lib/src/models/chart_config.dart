@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/helper.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
+import 'package:chart_app/src/models/indicators_config.dart';
 
 /// State and methods of chart web adapter config.
 class ChartConfigModel extends ChangeNotifier {
@@ -36,9 +35,8 @@ class ChartConfigModel extends ChangeNotifier {
 
   late final ChartController _controller;
 
-  /// Indicators repo
-  final AddOnsRepository<IndicatorConfig> indicatorsRepo =
-      AddOnsRepository<IndicatorConfig>(IndicatorConfig);
+  /// Indicators config
+  IndicatorsConfig indicatorsConfig = IndicatorsConfig();
 
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
@@ -119,29 +117,5 @@ class ChartConfigModel extends ChangeNotifier {
   void scale(double payload) {
     final double scale = payload;
     _controller.scale(scale);
-  }
-
-  /// To add or update an indicator
-  void addOrUpdateIndicator(String dataString) {
-    final Map<String, dynamic> config = json.decode(dataString);
-
-    final int index = indicatorsRepo.addOns
-        .indexWhere((IndicatorConfig addOn) => addOn.id == config['id']);
-
-    final IndicatorConfig? indicatorConfig =
-        IndicatorConfig.fromJson(config, 'name');
-
-    if (indicatorConfig != null) {
-      index > -1
-          ? indicatorsRepo.updateAt(index, indicatorConfig)
-          : indicatorsRepo.add(indicatorConfig);
-    }
-  }
-
-  /// To remove an existing indicator
-  void removeIndicator(String id) {
-    final int index = indicatorsRepo.addOns
-        .indexWhere((IndicatorConfig addOn) => addOn.id == id);
-    indicatorsRepo.removeAt(index);
   }
 }

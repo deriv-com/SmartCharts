@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import React from 'react';
 import Context from 'src/components/ui/Context';
-import { guid, hexToInt } from 'src/components/ui/utils';
+import { getUniqueId, hexToInt } from 'src/components/ui/utils';
 import { TActiveItem, TIndicatorConfig, TIndicatorParameter, TObject } from 'src/types';
 import MainStore from '.';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
@@ -224,7 +224,7 @@ export default class StudyLegendStore {
 
             const item: TActiveItem = {
                 ...props,
-                id: guid(),
+                id: getUniqueId(),
                 name: props.name,
                 config,
                 parameters,
@@ -272,6 +272,12 @@ export default class StudyLegendStore {
     updateProps({ searchInputClassName }: { searchInputClassName?: string }) {
         this.searchInputClassName = searchInputClassName;
     }
+
+    editStudyById(id: string) {
+        const activeItem = this.activeItems.find(i => i.id === id);
+        if (activeItem) this.editStudy(activeItem);
+    }
+
     editStudy(study: TActiveItem) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${study.name}`);
 

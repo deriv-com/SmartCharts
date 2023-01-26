@@ -48,13 +48,13 @@ export function downloadURI(uri: string, name: string) {
     document.body.removeChild(link);
 }
 
-export function guid() {
+export function getUniqueId() {
     let s4 = () => {
         return Math.floor((1 + Math.random()) * 0x10000)
             .toString(16)
             .substring(1);
     };
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+    return '__' + s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4() + '__';
 }
 
 export function hexToInt(color: string) {

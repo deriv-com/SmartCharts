@@ -316,7 +316,6 @@ export type TNewChartPayload = {
 };
 
 export type TFlutterChart = {
-    postMessage: (payload: string) => void;
     config: {
         updateTheme: (theme: string) => void;
         addOrUpdateIndicator: (config: string) => void;
@@ -345,6 +344,10 @@ export type JSInterop = {
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
     loadHistory: (request: TLoadHistoryParams) => void;
+    indicators: {
+        onRemove: (id: string) => void;
+        onEdit: (id: string) => void;
+    };
 };
 
 export type TLoadHistoryParams = {

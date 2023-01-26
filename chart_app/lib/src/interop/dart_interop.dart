@@ -104,13 +104,13 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
   setProperty(
     chartConfig,
     'addOrUpdateIndicator',
-    allowInterop(model.addOrUpdateIndicator),
+    allowInterop(model.indicatorsConfig.addOrUpdateIndicator),
   );
 
   setProperty(
     chartConfig,
     'removeIndicator',
-    allowInterop(model.removeIndicator),
+    allowInterop(model.indicatorsConfig.removeIndicator),
   );
 
   return chartConfig;
