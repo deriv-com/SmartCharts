@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:chart_app/src/interop/dart_interop.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
@@ -134,6 +135,13 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         dataFitEnabled: true,
                         showCrosshair: chartConfigModel.showCrosshair,
                         isLive: chartConfigModel.isLive,
+                        onCrosshairDisappeared:
+                            JsInterop.onCrosshairDisappeared,
+                        onCrosshairHover:
+                            (PointerHoverEvent ev, int epoch, String quote) {
+                          JsInterop.onCrosshairHover(
+                              ev.position.dx, ev.position.dy, epoch, quote);
+                        },
                       ),
                     ),
                   ),

@@ -44,6 +44,12 @@ export default class ChartAdapterStore {
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
             loadHistory: this.loadHistory,
+            onCrosshairDisappeared: () => {
+                this.mainStore.crosshair.updateVisibility(false);
+            },
+            onCrosshairHover: (dx, dy, epoch, quote) => {
+                this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+            },
             indicators: {
                 onRemove: (indicator_id: String) => {
                     const [id] = indicator_id.match(/__.*__/) || [];

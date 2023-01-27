@@ -344,6 +344,8 @@ export type JSInterop = {
     onChartLoad: () => void;
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
+    onCrosshairDisappeared: () => void;
+    onCrosshairHover: (dx: number, dy: number, epoch: number, quote: String) => void;
     loadHistory: (request: TLoadHistoryParams) => void;
     indicators: {
         onRemove: (id: string) => void;

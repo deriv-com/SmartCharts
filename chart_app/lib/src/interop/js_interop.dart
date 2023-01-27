@@ -13,10 +13,17 @@ class JsInterop {
   /// Called when visible quote area is change
   external static void onQuoteAreaChanged(double topQuote, double bottomQuote);
 
-  ///
+  /// Called to load additional history
   external static void loadHistory(JsLoadHistoryReq request);
 
-  ///
+  /// Called when candle or point is dismissed.
+  external static void onCrosshairDisappeared();
+
+  /// Called when the crosshair is moved.
+  external static void onCrosshairHover(
+      double dx, double dy, int epoch, String quote);
+
+  /// Indicator options
   external static JsIndicators? indicators;
 }
 

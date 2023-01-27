@@ -20,6 +20,14 @@ type TUpdateTooltipPositionParams = {
     rows: TRow[] | null;
 };
 
+type TCrosshairRefs = {
+    crosshairRef: React.RefObject<HTMLDivElement>;
+    crossHairXRef: React.RefObject<HTMLDivElement>;
+    crossHairYRef: React.RefObject<HTMLDivElement>;
+    floatDateRef: React.RefObject<HTMLDivElement>;
+    floatPriceRef: React.RefObject<HTMLDivElement>;
+};
+
 const MAX_TOOLTIP_WIDTH = 315;
 class CrosshairStore {
     mainStore: MainStore;
@@ -62,6 +70,11 @@ class CrosshairStore {
     showChange = false;
     showSeries = false;
     showStudies = false;
+
+    refs?: TCrosshairRefs;
+
+    isOverChartContainer = false;
+
     onCrosshairChanged: (state?: number | null) => void | null = () => null;
     onContextReady = () => {
         // const storedState = this.stx.layout.crosshair;
@@ -70,30 +83,41 @@ class CrosshairStore {
         this.setCrosshairState(state);
     };
 
-    onMount = async (onMouseMove: EventListenerOrEventListenerObject) => {
+    onMount = async (refs: TCrosshairRefs) => {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.addEventListener('mousemove', onMouseMove);
             contentWindow.addEventListener('mouseover', this.onMouseOver);
             contentWindow.addEventListener('mouseout', this.onMouseOut);
         }
+        this.refs = refs;
     };
 
-    onUnmount = (onMouseMove: EventListenerOrEventListenerObject) => {
+    onUnmount = () => {
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.removeEventListener('mousemove', onMouseMove);
             contentWindow.removeEventListener('mouseover', this.onMouseOver);
             contentWindow.removeEventListener('mouseout', this.onMouseOut);
         }
+        this.refs = undefined;
+    };
+
+    onMouseMove = (dx: number, dy: number, epoch: number, quote: String) => {
+        if (!this.isOverChartContainer) return;
+
+        this.setPositions(dx, dy, epoch, quote);
+        this.renderCrosshairTooltip(dx, dy);
+
+        this.mainStore.crosshair.updateVisibility(true);
     };
 
     onMouseOver = () => {
+        this.isOverChartContainer = true;
         this.updateVisibility(true);
     };
 
     onMouseOut = () => {
+        this.isOverChartContainer = false;
         this.updateVisibility(false);
     };
 
@@ -104,6 +128,29 @@ class CrosshairStore {
     updateProps(onChange?: () => void) {
         this.onCrosshairChanged = onChange || (() => null);
     }
+
+    setPositions = (offsetX: number, offsetY: number, epoch: number, quote: String) => {
+        if (!this.refs) return;
+        const { crossHairXRef, crossHairYRef, floatDateRef, floatPriceRef } = this.refs;
+
+        if (crossHairXRef.current) crossHairXRef.current.style.transform = `translate(${offsetX}px, 0px)`;
+        if (crossHairYRef.current) crossHairYRef.current.style.transform = `translate(0px, ${offsetY}px)`;
+        if (floatDateRef.current) {
+            const width = floatDateRef.current.clientWidth;
+            floatDateRef.current.innerText = moment.utc(epoch).format(this.getDateTimeFormat());
+            floatDateRef.current.style.transform = `translate(${offsetX - width / 2}px, 0px)`;
+        }
+        if (floatPriceRef.current) {
+            const height = floatPriceRef.current.clientHeight;
+            const price = this.mainStore.chartAdapter.getQuoteFromY(offsetY);
+
+            if (price >= 0) {
+                floatPriceRef.current.innerText = `${quote}`;
+            }
+            floatPriceRef.current.style.transform = `translate(0px, ${offsetY - height / 2}px)`;
+        }
+    };
+
     setCrosshairState(state: number | null) {
         if (!this.context) {
             return;
@@ -117,13 +164,11 @@ class CrosshairStore {
         const isCrosshairVisible = state !== 0;
         this.mainStore.chartAdapter.flutterChart?.config.updateCrosshairVisibility(isCrosshairVisible);
     }
-    renderCrosshairTooltip = (ev: Event) => {
+    renderCrosshairTooltip = (offsetX: number, offsetY: number) => {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
         if (!this.mainStore.chartAdapter.isChartLoaded) return;
-
-        const { offsetX, offsetY } = ev as MouseEvent;
 
         const epoch = this.mainStore.chartAdapter.getEpochFromX(offsetX);
 
@@ -207,7 +252,7 @@ class CrosshairStore {
         return rows;
     }
     updateVisibility = (visible: boolean) => {
-        const crosshair = this.context?.topNode?.querySelector('.cq-crosshair');
+        const crosshair = this.refs?.crosshairRef.current;
         if (crosshair) {
             if (visible) crosshair.classList.add('active');
             else crosshair.classList.remove('active');
