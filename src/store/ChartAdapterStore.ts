@@ -264,7 +264,7 @@ export default class ChartAdapterStore {
         return this.flutterChart!.controller.getEpochFromX(x);
     }
 
-    getQuoteFromY(x: number) {
-        return this.flutterChart!.controller.getQuoteFromY(x);
+    getQuoteFromY(y: number) {
+        return this.flutterChart!.controller.getQuoteFromY(y);
     }
 }

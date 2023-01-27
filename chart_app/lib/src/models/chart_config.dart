@@ -35,6 +35,9 @@ class ChartConfigModel extends ChangeNotifier {
 
   late final ChartController _controller;
 
+  /// Whether the crosshair cursor should be shown or not.
+  bool showCrosshair = true;
+
   /// Indicators config
   IndicatorsConfig indicatorsConfig = IndicatorsConfig();
 
@@ -91,6 +94,12 @@ class ChartConfigModel extends ChangeNotifier {
   void updateTheme(String _theme) {
     theme =
         _theme == 'dark' ? ChartDefaultDarkTheme() : ChartDefaultLightTheme();
+    notifyListeners();
+  }
+
+  /// To update the theme of the chart
+  void updateCrosshairVisibility(bool _showCrosshair) {
+    showCrosshair = _showCrosshair;
     notifyListeners();
   }
 

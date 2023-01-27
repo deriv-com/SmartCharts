@@ -5,10 +5,9 @@ import { useStores } from 'src/store';
 import '../../sass/components/_crosshair.scss';
 
 const Crosshair = () => {
-    const { crosshair, chart, chartAdapter, share } = useStores();
+    const { crosshair, chartAdapter, share } = useStores();
 
-    const { yAxiswidth } = chart;
-    const { state: crosshairState, getDateTimeFormat } = crosshair;
+    const { state: crosshairState, getDateTimeFormat, renderCrosshairTooltip } = crosshair;
     const crosshairWrapperRef = React.useRef<HTMLDivElement>(null);
     const crosshairRef = React.useRef<HTMLDivElement>(null);
     const crossHairXRef = React.useRef<HTMLDivElement>(null);
@@ -29,32 +28,19 @@ const Crosshair = () => {
             const height = floatPriceRef.current.clientHeight;
             const price = chartAdapter.getQuoteFromY(ev.offsetY);
 
-            if (price >= 0 && share.decimalPlaces != undefined) {
-                floatPriceRef.current.innerText = `${price.toFixed(share.decimalPlaces)}`;
+            if (price >= 0) {
+                floatPriceRef.current.innerText = `${price.toFixed(share.decimalPlaces || 2)}`;
             }
             floatPriceRef.current.style.transform = `translate(0px, ${ev.offsetY - height / 2}px)`;
         }
     }, []);
 
     const onMouseMove = React.useCallback(
-        (ev: MouseEvent) => {
+        (ev: Event) => {
             if (!chartAdapter.isChartLoaded) return;
 
-            if (crosshairWrapperRef.current && crosshairRef.current) {
-                // To hide the crosshair when hovered over yAxis
-                if (ev.offsetX > crosshairWrapperRef.current.clientWidth - yAxiswidth) {
-                    crosshairRef.current.classList.remove('active');
-                    setTimeout(() => crosshair.setCursor(false));
-                    return;
-                } else {
-                    if (!crosshairRef.current.classList.contains('active')) {
-                        crosshairRef.current.classList.add('active');
-                        setTimeout(() => crosshair.setCursor(true));
-                    }
-                }
-            }
-
-            setPositions(ev);
+            renderCrosshairTooltip(ev);
+            setPositions(ev as MouseEvent);
         },
         [setPositions]
     );

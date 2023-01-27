@@ -325,6 +325,7 @@ export type TFlutterChart = {
         updateChartStyle: (chartStyle: string) => void;
         updateLiveStatus: (isLive: string) => void;
         updateMarkers: (markers: any[]) => void;
+        updateCrosshairVisibility: (visibility: boolean) => void;
     };
     controller: {
         getXFromEpoch: (epoch: number) => number;

@@ -20,33 +20,6 @@ type TUpdateTooltipPositionParams = {
     rows: TRow[] | null;
 };
 
-type TBarData = {
-    Ask?: number;
-    Bid?: number;
-    Close: number;
-    DT: Date;
-    Date: string;
-    High?: number;
-    Low?: number;
-    Open?: number;
-    atr: number;
-    cache: { Close: number };
-    candleWidth: number | null;
-    chartJustAdvanced?: boolean;
-    displayDate: Date;
-    'hl/2': number;
-    'hlc/3': number;
-    'hlcc/4': number;
-    iqPrevClose: number;
-    'ohlc/4': number;
-    ratio: number;
-    tick: number;
-    tickAnimationProgress?: number;
-    trueRange: number;
-};
-
-type TMouseMoveCallback = (ev: MouseEvent) => void;
-
 const MAX_TOOLTIP_WIDTH = 315;
 class CrosshairStore {
     mainStore: MainStore;
@@ -97,29 +70,23 @@ class CrosshairStore {
         this.setCrosshairState(state);
     };
 
-    onMount = async (onMouseMove: TMouseMoveCallback) => {
+    onMount = async (onMouseMove: EventListenerOrEventListenerObject) => {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.addEventListener('mousemove', this.renderCrosshairTooltip);
             contentWindow.addEventListener('mousemove', onMouseMove);
             contentWindow.addEventListener('mouseover', this.onMouseOver);
             contentWindow.addEventListener('mouseout', this.onMouseOut);
         }
     };
 
-    onUnmount = (onMouseMove: TMouseMoveCallback) => {
+    onUnmount = (onMouseMove: EventListenerOrEventListenerObject) => {
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.removeEventListener('mousemove', this.renderCrosshairTooltip);
             contentWindow.removeEventListener('mousemove', onMouseMove);
             contentWindow.removeEventListener('mouseover', this.onMouseOver);
             contentWindow.removeEventListener('mouseout', this.onMouseOut);
         }
-    };
-
-    onMouseMove = (ev: MouseEvent) => {
-        this.renderCrosshairTooltip(ev);
     };
 
     onMouseOver = () => {
@@ -128,16 +95,6 @@ class CrosshairStore {
 
     onMouseOut = () => {
         this.updateVisibility(false);
-    };
-
-    setCursor = (is_active: boolean) => {
-        // @ts-ignore
-        const contentWindow = window.flutterChartElement;
-        const element = contentWindow?.querySelector('flt-glass-pane') as HTMLElement;
-
-        if (element) {
-            element.style.cursor = [1, 2].includes(this.state || 0) && is_active ? 'crosshair' : 'default';
-        }
     };
 
     toggleState() {
@@ -156,14 +113,17 @@ class CrosshairStore {
         this.mainStore.state.crosshairState = state;
         this.mainStore.state.saveLayout();
         this.onCrosshairChanged(this.state);
+
+        const isCrosshairVisible = state !== 0;
+        this.mainStore.chartAdapter.flutterChart?.config.updateCrosshairVisibility(isCrosshairVisible);
     }
-    renderCrosshairTooltip = (ev: MouseEvent) => {
+    renderCrosshairTooltip = (ev: Event) => {
         // if no tooltip exists, then skip
         if (this.state !== 2) return;
 
         if (!this.mainStore.chartAdapter.isChartLoaded) return;
 
-        const { offsetX, offsetY } = ev;
+        const { offsetX, offsetY } = ev as MouseEvent;
 
         const epoch = this.mainStore.chartAdapter.getEpochFromX(offsetX);
 

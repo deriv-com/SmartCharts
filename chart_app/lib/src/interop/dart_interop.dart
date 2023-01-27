@@ -103,6 +103,12 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
 
   setProperty(
     chartConfig,
+    'updateCrosshairVisibility',
+    allowInterop(model.updateCrosshairVisibility),
+  );
+
+  setProperty(
+    chartConfig,
     'addOrUpdateIndicator',
     allowInterop(model.indicatorsConfig.addOrUpdateIndicator),
   );

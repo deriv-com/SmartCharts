@@ -132,7 +132,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         indicatorsRepo:
                             chartConfigModel.indicatorsConfig.indicatorsRepo,
                         dataFitEnabled: true,
-                        hideCrosshair: true,
+                        showCrosshair: chartConfigModel.showCrosshair,
                         isLive: chartConfigModel.isLive,
                       ),
                     ),
