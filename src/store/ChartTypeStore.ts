@@ -1,6 +1,6 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { ChartType, TSettingsItem } from 'src/types';
+import { ChartType } from 'src/types';
 import MainStore from '.';
 import { ChartTypes } from '../Constant';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
@@ -155,16 +155,20 @@ export default class ChartTypeStore {
 
     setType(type?: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
-        if (!type) {
-            type = 'line';
+
+        let chartType: ChartType;
+
+        if (type && typeof type != 'string') {
+            chartType = type;
+        } else {
+            type = type || 'line';
+            chartType = this.types.find(t => t.id === type) as ChartType;
         }
-        if (typeof type === 'string') {
-            type = this.types.find(t => t.id === type) as ChartType;
-        }
-        if (type.id === this.type.id) {
+
+        if (chartType.id === this.type.id) {
             return;
         }
-        this.type = type;
+        this.type = chartType;
     }
 
     get types() {
