@@ -6,7 +6,6 @@ import { CIQ } from 'src/utils/CIQ';
 import MainStore from '.';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { TProcessedSymbolItem, TSubCategoryDataItem } from '../binaryapi/ActiveSymbols';
-import inject from '../chartiq_injections';
 import animateChart from '../components/ui/Animation';
 import Context from '../components/ui/Context';
 import KeystrokeHub from '../components/ui/KeystrokeHub';
@@ -294,10 +293,6 @@ class ChartStore {
     };
 
     _initChart(rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartProps>) {
-        // Add custom injections to the CIQ
-        inject({
-            drawToolsStore: this.mainStore.drawTools,
-        });
         this.rootNode = rootNode as (HTMLElement & { CIQ: typeof CIQ }) | null;
 
         this.chartNode = this.rootNode?.querySelector('.ciq-chart-area');
