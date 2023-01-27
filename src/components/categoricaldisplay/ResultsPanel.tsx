@@ -62,7 +62,7 @@ function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
             for (const sub of subgroup.data) {
                 count += sub.data.length;
             }
-        })
+        });
     } else if ('categoryName' in category && category.hasSubcategory) {
         for (const sub of category.data) {
             count += sub.data.length;
@@ -83,10 +83,16 @@ const EmptyCategory = React.memo(({ category }: TEmptyCategoryProps) => (
 const CategoryTitleLeft = React.memo(({ isNestedList, category }: TCategoryTitleLeftProps) => {
     const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
-        <span className={classNames('category-title-left', {
-            'category-title-left__subgroup': !CategoryIcon,
-        })}>
-            {isNestedList && CategoryIcon ? <CategoryIcon className={`ic-${category.categoryId}`} /> : <div className='category-title-left__placeholder' />}
+        <span
+            className={classNames('category-title-left', {
+                'category-title-left__subgroup': !CategoryIcon,
+            })}
+        >
+            {isNestedList && CategoryIcon ? (
+                <CategoryIcon className={`ic-${category.categoryId}`} />
+            ) : (
+                <div className='category-title-left__placeholder' />
+            )}
             {t.translate(category.categoryName)}
         </span>
     );
@@ -165,7 +171,8 @@ const Category = ({
                           ))}
                       </div>
                   ))
-            : !category.hasSubgroup && category.data.length > 0 && (
+            : !category.hasSubgroup &&
+              category.data.length > 0 && (
                   <div className='sc-mcd__category__content'>
                       {(category.data as TSubCategoryData).map((item, idx) => (
                           <ItemType
@@ -217,9 +224,8 @@ const ResultsPanel = ({
             } else {
                 return (
                     (categoryItemCount > 0 || category.emptyDescription) && (
-                        <React.Fragment>
+                        <React.Fragment key={category.categoryId}>
                             <Category
-                                key={category.categoryId}
                                 ItemType={ItemType}
                                 category={category}
                                 categoryItemCount={categoryItemCount}
@@ -231,31 +237,29 @@ const ResultsPanel = ({
                                 handleTitleClick={handleTitleClick}
                                 favoritesId={favoritesId}
                             />
-                            {
-                                category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
-                                    if (getItemCount(subgroup) > 0) {
-                                        return (
-                                            <Category
-                                                key={subgroup.categoryId}
-                                                ItemType={ItemType}
-                                                category={subgroup}
-                                                categoryItemCount={categoryItemCount}
-                                                setCategoryElement={setCategoryElement}
-                                                onSelectItem={onSelectItem}
-                                                activeHeadKey={activeHeadKey}
-                                                disableAll={disableAll}
-                                                isNestedList={isNestedList}
-                                                handleTitleClick={handleTitleClick}
-                                                hasSubgroup={true}
-                                                favoritesId={favoritesId}
-                                            />
-                                        );
-                                    }
-                                })
-                            }
+                            {category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
+                                if (getItemCount(subgroup) > 0) {
+                                    return (
+                                        <Category
+                                            key={subgroup.categoryId}
+                                            ItemType={ItemType}
+                                            category={subgroup}
+                                            categoryItemCount={categoryItemCount}
+                                            setCategoryElement={setCategoryElement}
+                                            onSelectItem={onSelectItem}
+                                            activeHeadKey={activeHeadKey}
+                                            disableAll={disableAll}
+                                            isNestedList={isNestedList}
+                                            handleTitleClick={handleTitleClick}
+                                            hasSubgroup={true}
+                                            favoritesId={favoritesId}
+                                        />
+                                    );
+                                }
+                            })}
                         </React.Fragment>
                     )
-                )
+                );
             }
         })}
     </>
