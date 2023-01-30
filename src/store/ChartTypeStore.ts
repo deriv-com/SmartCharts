@@ -153,15 +153,14 @@ export default class ChartTypeStore {
         }
     }
 
-    setType(type?: ChartType | string) {
+    setType(type: ChartType | string = 'line') {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
 
         let chartType: ChartType;
 
-        if (type && typeof type != 'string') {
+        if (typeof type != 'string') {
             chartType = type;
         } else {
-            type = type || 'line';
             chartType = this.types.find(t => t.id === type) as ChartType;
         }
 
@@ -172,7 +171,7 @@ export default class ChartTypeStore {
     }
 
     get types() {
-        const isTickSelected = this.mainStore.chart.granularity === 0;
+        const isTickSelected = this.mainStore.timeperiod.granularity === 0;
         if (this.chartTypes === undefined || this.chartTypes.length === 0) {
             this.chartTypes = [...ChartTypes];
         }

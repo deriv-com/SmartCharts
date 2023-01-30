@@ -26,12 +26,14 @@ export default class TimeperiodStore {
     mainStore: MainStore;
     portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
+    granularity?: TGranularity;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             portalNodeIdChanged: observable,
             setGranularity: action.bound,
             updatePortalNode: action.bound,
+            granularity: observable,
         });
 
         this.mainStore = mainStore;
@@ -99,10 +101,6 @@ export default class TimeperiodStore {
     clearCountdown() {
         if (this.countdownInterval) {
             clearInterval(this.countdownInterval);
-        }
-
-        if (this._injectionId && this.context) {
-            // this.context.stx.removeInjection(this._injectionId);
         }
 
         this._injectionId = undefined;

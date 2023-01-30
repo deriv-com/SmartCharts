@@ -95,7 +95,7 @@ const IndicatorList = ({
     <div className='sc-studies__list'>
         {items.map(Item => (
             <div
-                key={`item--${Item.id}`}
+                key={`item--${Item.id || Item.name}`}
                 className={classNames('sc-studies__list__item ', {
                     'sc-studies__list__item--disabled': disableAll,
                     'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
@@ -323,41 +323,46 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                 </div>
             </Menu.Title>
             <Menu.Body>
-                {infoItem && (
-                    <div className='sc-studies__info'>
-                        <Scroll autoHide height='360px' className='sc-studies__info__content'>
-                            <p>{infoItem?.description}</p>
-                        </Scroll>
-                        <div className='sc-studies__info__footer'>
-                            <Tooltip enabled={infoItem?.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
-                                <button
-                                    type='button'
-                                    className='sc-btn sc-btn--primary sc-btn--w100'
-                                    onClick={() => onSelectItem(infoItem?.name)}
-                                    disabled={infoItem?.disabledAddBtn}
+                <React.Fragment>
+                    {infoItem && (
+                        <div className='sc-studies__info'>
+                            <Scroll autoHide height='360px' className='sc-studies__info__content'>
+                                <p>{infoItem?.description}</p>
+                            </Scroll>
+                            <div className='sc-studies__info__footer'>
+                                <Tooltip
+                                    enabled={infoItem?.disabledAddBtn}
+                                    content={TooltipsContent.predictionIndicator}
                                 >
-                                    {t.translate('Add')}
-                                </button>
-                            </Tooltip>
+                                    <button
+                                        type='button'
+                                        className='sc-btn sc-btn--primary sc-btn--w100'
+                                        onClick={() => onSelectItem(infoItem?.name)}
+                                        disabled={infoItem?.disabledAddBtn}
+                                    >
+                                        {t.translate('Add')}
+                                    </button>
+                                </Tooltip>
+                            </div>
                         </div>
-                    </div>
-                )}
-                <TabularDisplay
-                    onSelectTab={onSelectTab}
-                    selectedTab={selectedTab}
-                    categories={items}
-                    searchedCategories={searchedItems}
-                    onSelectItem={onSelectItem}
-                    onDeleteItem={deleteStudy}
-                    onEditItem={editStudy}
-                    onInfoItem={onInfoItem}
-                    activeItems={activeItems}
-                    clearAll={deleteAll}
-                    searchQuery={searchQuery}
-                    isMobile={isMobile}
-                    maxAllowedItem={maxAllowedItem}
-                    isTick={isTick}
-                />
+                    )}
+                    <TabularDisplay
+                        onSelectTab={onSelectTab}
+                        selectedTab={selectedTab}
+                        categories={items}
+                        searchedCategories={searchedItems}
+                        onSelectItem={onSelectItem}
+                        onDeleteItem={deleteStudy}
+                        onEditItem={editStudy}
+                        onInfoItem={onInfoItem}
+                        activeItems={activeItems}
+                        clearAll={deleteAll}
+                        searchQuery={searchQuery}
+                        isMobile={isMobile}
+                        maxAllowedItem={maxAllowedItem}
+                        isTick={isTick}
+                    />
+                </React.Fragment>
             </Menu.Body>
         </Menu>
     );

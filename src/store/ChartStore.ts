@@ -571,6 +571,8 @@ class ChartStore {
             this.mainStore.paginationLoader.updateOnPagination(false);
             this.mainStore.drawTools.computeActiveDrawTools();
             this.mainStore.state.setChartIsReady(true);
+            this.mainStore.timeperiod.granularity = this.granularity;
+
             if (err) {
                 /* TODO, symbol not found error */
                 return;
@@ -598,9 +600,6 @@ class ChartStore {
                 onChartLoad(error as string);
             }
         );
-        // CIQ.extend(parameters, { ...params, ...rangeSpan }, true);
-
-        //  this.stxx.loadChart(symbolObj, parameters, onChartLoad);
     }
     /**
      * load the chart with given data

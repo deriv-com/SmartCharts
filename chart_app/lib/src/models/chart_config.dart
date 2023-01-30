@@ -25,7 +25,7 @@ class ChartConfigModel extends ChangeNotifier {
   ActiveMarker? activeMarker;
 
   /// Whether the chart should be showing live data or not.
-  bool isLive = false;
+  bool isLive = true;
 
   /// Starts in data fit mode and adds a data-fit button.
   bool dataFitEnabled = false;
