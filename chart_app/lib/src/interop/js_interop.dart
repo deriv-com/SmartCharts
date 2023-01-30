@@ -47,44 +47,80 @@ class JsLoadHistoryReq {
 
 /// Payload for new chart init
 class JSNewChart {
+  /// Whether the chart should be showing live data or not.
   external bool get isLive;
+
+  /// Whether data fit mode is enabled.
   external bool get dataFitEnabled;
+
+  /// Granularity of the chart data
   external int get granularity;
+
+  /// Style of the chart
   external String get chartType;
+
+  /// Dart theme or light theme
   external String get theme;
 }
 
 @JS()
 @anonymous
+
+/// Marker group props
 class JSMarkerGroupUpdate {
+  /// List of markers belongs to a contract
   external List<JsMarker> markers;
+
+  /// Contract type
   external String type;
+
+  /// Color of the markers
   external String? get color;
 }
 
 @JS()
 @anonymous
+
+/// Marker props
 class JsMarker {
+  /// Quote
   external double get quote;
+
+  /// Epoch
   external int get epoch;
+
+  /// Marker text
   external String get text;
+
+  /// Marker type
   external String get type;
 }
 
 @JS()
 @anonymous
+
+/// Quote props
 class JsQuote {
+  /// Close value of the candle/tick
   external double get Close;
+
+  /// High value of the candle
   external double? get High;
+
+  /// Low value of the candle
   external double? get Low;
+
+  /// Open value of the candle
   external double? get Open;
+
+  /// Date of the quote data
   external String get Date;
 }
 
 @JS()
 @anonymous
 
-/// JsIndicators
+/// Indicator props
 class JsIndicators {
   /// Called when an indicator is to be removed
   external OnRemoveCallback? onRemove;
