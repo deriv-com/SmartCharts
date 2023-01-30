@@ -197,7 +197,6 @@ export default class BarrierStore {
 
     destructor(): void {
         if (!this.context) return;
-        // this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
         this._low_barrier.destructor();
 
@@ -229,7 +228,6 @@ export default class BarrierStore {
                 this._low_barrier.visible && newPrice < this._low_barrier.realPrice
                     ? this._high_barrier.realPrice
                     : newPrice;
-            this.mainStore.chart.calculateYaxisWidth(nextPrice);
 
             return nextPrice;
         };
@@ -238,7 +236,6 @@ export default class BarrierStore {
         this._low_barrier.priceConstrainer = (newPrice: number) => {
             const nextPrice = newPrice > this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
 
-            this.mainStore.chart.calculateYaxisWidth(nextPrice);
             return nextPrice;
         };
     }

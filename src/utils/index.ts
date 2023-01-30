@@ -1,6 +1,5 @@
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
-import MarkerStore from 'src/store/MarkerStore';
-import { TDragEvents, TGranularity, TIndicatorParameter, TQuote } from 'src/types';
+import { TDragEvents, TGranularity, TSettingsParameter, TQuote } from 'src/types';
 
 type TTransferItem = (item: TSubCategoryDataItem | TSubCategory) => TSubCategoryDataItem | TSubCategory;
 
@@ -138,13 +137,6 @@ export function downloadFileInBrowser(filename: string, content: string, type: s
     }
 }
 
-export function stxtap(el: HTMLElement, func: EventListenerOrEventListenerObject) {
-    if (el && !(el as any).safeClickTouchEvents) {
-        CIQ.installTapEvent(el);
-        el.addEventListener('stxtap', func);
-    }
-}
-
 export function getUTCEpoch(date: Date) {
     return (date.getTime() / 1000 - date.getTimezoneOffset() * 60) | 0;
 }
@@ -156,24 +148,6 @@ export function getUTCDate(epoch: number) {
 
 export function getLocalDate(epoch: number) {
     return new Date(epoch * 1000);
-}
-
-export function updatePropIfChanged(
-    source: MarkerStore,
-    props: Record<string, string | number | Date | boolean | undefined>,
-    onChanged: () => void
-) {
-    let isChanged = false;
-    for (const attr in props) {
-        if (props[attr] !== undefined && source[attr as keyof MarkerStore] !== props[attr]) {
-            (source as any)[attr] = props[attr];
-            isChanged = true;
-        }
-    }
-
-    if (isChanged && onChanged) {
-        onChanged();
-    }
 }
 
 export function calculateTimeUnitInterval(granularity: TGranularity | undefined) {
@@ -286,7 +260,7 @@ const fieldTypeShortCode = {
     'Ohlc/4': 'ohlc/4',
 };
 
-export const prepareIndicatorName = (name: string, parameters: TIndicatorParameter[] = []) => {
+export const prepareIndicatorName = (name: string, parameters: TSettingsParameter[] = []) => {
     const getStudyBars = () => {
         const bars = parameters
             .filter(p => p.type === 'number' || p.path === 'movingAverageType' || p.path === 'fieldType')

@@ -2,18 +2,10 @@ import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TActiveItem, TCustomEvent, TGranularity } from '../types';
+import { TCustomEvent, TLayout } from '../types';
 import { createObjectFromLocalStorage } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
-
-export type TLayout = {
-    chartType?: string;
-    timeUnit?: string | number;
-    granularity?: TGranularity;
-    studyItems?: TActiveItem[];
-    crosshair: number | null;
-};
 
 export type TViews = {
     name: string;
@@ -160,6 +152,17 @@ export default class ViewStore {
     }
 
     applyLayout(idx: number, e: TCustomEvent) {
+        if (e.nativeEvent.is_item_removed) {
+            return;
+        }
+
+        const { layout } = this.sortedItems[idx];
+
+        this.restoreLayout(layout);
+        logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
+    }
+
+    restoreLayout(layout: TLayout) {
         const finishImportLayout = () => {
             if (this.loader) {
                 this.loader.hide();
@@ -169,14 +172,10 @@ export default class ViewStore {
             this.mainStore.timeperiod.setGranularity(layout.granularity);
         };
 
-        if (e.nativeEvent.is_item_removed) {
-            return;
-        }
         if (this.loader) {
             this.loader.show();
         }
         this.mainStore.state.setChartIsReady(false);
-        const { layout } = this.sortedItems[idx];
 
         this.mainStore.chartType.setChartType(layout.chartType);
         this.menuStore.setOpen(false);
@@ -188,7 +187,6 @@ export default class ViewStore {
         this.mainStore.studies.restoreStudies(layout.studyItems || []);
 
         finishImportLayout();
-        logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
     }
 
     onToggleNew() {

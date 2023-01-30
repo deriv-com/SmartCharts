@@ -14,7 +14,7 @@ export default class IndicatorPredictionDialogStore {
             open: computed,
             setOpen: action.bound,
             handleCancel: action.bound,
-            handleContinue: action.bound
+            handleContinue: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -39,7 +39,6 @@ export default class IndicatorPredictionDialogStore {
     handleContinue() {
         this.mainStore.studies.deletePredictionStudies();
         setTimeout(() => {
-            this.mainStore.timeperiod.changeGranularity(0);
             this.handleCancel();
         }, 100);
     }

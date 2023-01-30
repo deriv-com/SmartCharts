@@ -42,6 +42,14 @@ export type TObject = {
     [key: string]: unknown;
 };
 
+export type TCustomEvent = React.MouseEvent<HTMLElement> & {
+    isHandledByDialog: boolean;
+    nativeEvent: {
+        isHandledByDialog: boolean;
+        is_item_removed: boolean;
+    };
+};
+
 export type TBinaryAPIRequest = {
     passthrough?: {
         [k: string]: unknown;
@@ -170,7 +178,6 @@ export type TChartProps = {
     showLastDigitStats?: boolean;
     scrollToEpoch?: number | null;
     clearChart?: () => void;
-    onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
@@ -228,7 +235,7 @@ export type TChanges = {
 
 export type TSettingsItemGroup = {
     key: string;
-    fields: TIndicatorParameter[];
+    fields: TSettingsParameter[];
 };
 
 export type TOpenClose = { date: string; open: Date; close: Date };
@@ -270,12 +277,6 @@ export type TMessage = {
     payload: any;
 };
 
-export type TLayoutData = {
-    granularity: TGranularity;
-    chartType: string;
-    symbol?: string;
-};
-
 export type TPaginationCallbackParams = { quotes?: TQuote[]; error?: unknown; moreAvailable?: boolean };
 export type TPaginationCallback = (params: TPaginationCallbackParams) => void;
 
@@ -303,7 +304,7 @@ export type TIndicatorItem = {
 export type TActiveItem = TIndicatorItem & {
     id: string;
     config?: Record<string, any>;
-    parameters: TIndicatorParameter[];
+    parameters: TSettingsParameter[];
     bars?: string;
 };
 
@@ -364,9 +365,17 @@ export type TDragEvents = {
     onDragReleased?: (ev: MouseEvent) => void;
 };
 
+export type TLayout = {
+    chartType?: string;
+    timeUnit?: string | number;
+    granularity?: TGranularity;
+    studyItems?: TActiveItem[];
+    crosshair: number | null;
+};
+
 export type TAllTicks = Exclude<AuditDetailsForExpiredContract, null>['all_ticks'];
 
-export type TIndicatorParameterType =
+export type TSettingsParameterType =
     | 'colorpicker'
     | 'number'
     | 'select'
@@ -382,7 +391,7 @@ export interface BaseIndicatorParameter {
     paths?: {
         [x: string]: string;
     };
-    type: TIndicatorParameterType;
+    type: TSettingsParameterType;
     title: string;
     subtitle?: string;
     category: TIndicatorCategory;
@@ -437,7 +446,7 @@ export interface TNumericInputParameter extends IndicatorParameter<number> {
     step?: number;
 }
 
-export type TIndicatorParameter =
+export type TSettingsParameter =
     | TColorPickerParameter
     | TNumberParameter
     | TSelectParameter
@@ -449,7 +458,7 @@ export type TIndicatorParameter =
 
 export type TDefaultIndicatorConfig = {
     config?: Record<string, any>;
-    parameters: TIndicatorParameter[];
+    parameters: TSettingsParameter[];
 };
 
 export type TDefaultIndicatorConfigs = Record<string, TDefaultIndicatorConfig>;

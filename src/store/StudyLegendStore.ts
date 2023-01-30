@@ -3,57 +3,14 @@ import { action, observable, reaction, when, makeObservable } from 'mobx';
 import React from 'react';
 import Context from 'src/components/ui/Context';
 import { getUniqueId, hexToInt } from 'src/components/ui/utils';
-import { TActiveItem, TIndicatorConfig, TIndicatorParameter, TObject } from 'src/types';
+import { TActiveItem, TIndicatorConfig, TSettingsParameter } from 'src/types';
 import MainStore from '.';
-import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
-import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
 import { getIndicatorsTree, DefaultIndicatorConfigs } from '../Constant';
-import { prepareIndicatorName, renderSVGString } from '../utils';
+import { prepareIndicatorName } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
-
-type THelperInput = {
-    defaultInput: number;
-    heading: string;
-    name: string;
-    type: string;
-    value: number;
-    options?: Record<string, string> | null;
-};
-
-type THelperOutput = {
-    color: string;
-    defaultOutput: string;
-    heading: string;
-    name: string;
-};
-
-type THelperParameter = {
-    color: string;
-    value: string;
-    defaultColor: string;
-    defaultValue: string;
-    heading: string;
-    name: string;
-};
-
-type TValueObject = {
-    [key: string]: string;
-};
-
-type TStudyItems = {
-    category: string;
-    defaultValue: string | number | TValueObject;
-    id: string;
-    min?: number;
-    options?: Record<string, string> | null;
-    step?: number;
-    title: string;
-    type: string;
-    value: string | number | TValueObject;
-};
 
 export default class StudyLegendStore {
     mainStore: MainStore;
@@ -74,7 +31,6 @@ export default class StudyLegendStore {
             infoItem: observable,
             portalNodeIdChanged: observable,
             onSelectItem: action.bound,
-            //  updateIndicatorHeight: action.bound,
             updateStyle: action.bound,
             updateProps: action.bound,
             editStudy: action.bound,
@@ -83,7 +39,6 @@ export default class StudyLegendStore {
 
             deletePredictionStudies: action.bound,
             deleteAllStudies: action.bound,
-            onStudyRemoved: action.bound,
             onSelectTab: action.bound,
             setFilterText: action.bound,
             onInfoItem: action.bound,
@@ -97,7 +52,7 @@ export default class StudyLegendStore {
             mainStore,
             onDeleted: this.deleteStudy,
             favoritesId: 'indicators',
-            onChanged: (items: TIndicatorParameter[]) => this.updateStudy(items),
+            onChanged: (items: TSettingsParameter[]) => this.updateStudy(items),
         });
         this.searchInput = React.createRef();
         reaction(
@@ -112,18 +67,12 @@ export default class StudyLegendStore {
             }
         );
     }
-    previousStudies: Record<string, typeof CIQ.Studies.StudyDescriptor> = {};
     searchInputClassName?: string;
 
     onContextReady = () => {
-        // this.stx.addEventListener('studyOverlayEdit', this.editStudy);
-        // this.stx.addEventListener('studyPanelEdit', this.editStudy);
-        // // to remove studies if user has already more than 5
-        // this.removeExtraStudies();
-        // this.stx.append('createDataSet', this.renderLegend);
-        // this.stx.append('drawPanels', this.handleDrawPanels);
-        // this.stx.append('panelClose', this.onStudyRemoved);
-        // this.renderLegend();
+        // to remove studies if user has already more than 5
+
+        this.renderLegend();
     };
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -200,8 +149,8 @@ export default class StudyLegendStore {
             name: activeItem.name,
             ...this.transform(params),
         };
-        console.log('Add/Update Indicator', config);
         this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config));
+        this.mainStore.state.saveLayout();
     };
 
     onSelectItem(indicatorName: string) {
@@ -209,9 +158,7 @@ export default class StudyLegendStore {
 
         if (this.activeItems.length >= this.maxAllowedItem) return;
 
-        // const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
         this.changeStudyPanelTitle();
-        // setTimeout(this.updateIndicatorHeight, 20);
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${indicatorName}`);
         this.mainStore.chart.setYaxisWidth();
 
@@ -249,24 +196,11 @@ export default class StudyLegendStore {
 
         this.activeItems = activeItems;
     }
-    // updateIndicatorHeight() {
-    //     const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
-    //     const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
-    //     Object.keys(this.stx.panels).forEach((id, index) => {
-    //         if (index === 0) {
-    //             return;
-    //         }
-    //         const panelObj = this.stx.panels[id];
-    //         panelObj.percent = heightRatio.percent;
-    //     });
-    //     this.stx.draw();
-    //     this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
-    //     this.stx.draw();
-    // }
+
     // Temporary prevent user from adding more than 5 indicators
     // TODO All traces can be removed after new design for studies
     updateStyle() {
-        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        const should_minimise_last_digit = this.mainStore.studies.activeItems.length > 2;
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
     updateProps({ searchInputClassName }: { searchInputClassName?: string }) {
@@ -300,11 +234,10 @@ export default class StudyLegendStore {
         this.mainStore.chartAdapter.flutterChart?.config.removeIndicator(id);
 
         _.remove(this.activeItems, item => item.id === id);
-        // this.renderLegend();
-
-        //setTimeout(this.updateIndicatorHeight, 20);
+        this.renderLegend();
+        this.mainStore.state.saveLayout();
     }
-    updateStudy(parameters: TIndicatorParameter[]) {
+    updateStudy(parameters: TSettingsParameter[]) {
         this.changeStudyPanelTitle();
         //  this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
 
@@ -331,97 +264,12 @@ export default class StudyLegendStore {
             this.mainStore.state.saveLayout();
         }
     }
-    shouldRenderLegend() {
-        const stx = this.stx;
-        if (!stx.layout.studies) {
-            return false;
-        }
-        // Logic to determine if the studies have changed, otherwise don't re-create the legend
-        if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
-            let foundAChange = false;
-            for (const id in stx.layout.studies) {
-                if (!this.previousStudies[id]) {
-                    foundAChange = true;
-                    break;
-                }
-            }
-            if (!foundAChange) {
-                return false;
-            }
-        }
-        this.previousStudies = CIQ.shallowClone(stx.layout.studies);
-        return true;
-    }
-    handleDrawPanels = () => {
-        if (this.stx) {
-            const panels = Object.keys(this.stx.panels);
-            const panelsLen = panels.length;
-            panels.forEach((id, index) => {
-                if (index === 0) {
-                    return;
-                }
 
-                const panelObj = this.stx.panels[id];
-                if (this.mainStore.chart.isMobile) {
-                    if (panelObj.up.className.indexOf('show') !== -1) {
-                        panelObj.up.className = 'stx-btn-panel';
-                    }
-                    if (panelObj.down.className.indexOf('show') !== -1) {
-                        panelObj.down.className = 'stx-btn-panel';
-                    }
-                    if (panelObj.solo.className.indexOf('show') !== -1) {
-                        panelObj.solo.className = 'stx-btn-panel';
-                    }
-                    if (panelObj.close.className.indexOf('show') !== -1) {
-                        panelObj.close.className = 'stx-btn-panel';
-                    }
-                }
-                const sd = this.stx.layout.studies[id];
-                const isSolo = panelObj.solo.getAttribute('class').includes('stx_solo_lit');
-                if (sd) {
-                    const nameObj = prepareIndicatorName(sd.name);
-                    if (nameObj.name.trim() !== sd.name.trim()) {
-                        panelObj.title.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
-                    }
-
-                    // Regarding the ChartIQ.js, codes under Line 34217, edit function
-                    // not mapped, this is a force to map edit function for indicators
-                    if (sd.editFunction && panelObj && !panelObj.editFunction) {
-                        this.stx.setPanelEdit(panelObj, sd.editFunction);
-                    }
-                }
-
-                if (index === 1 || isSolo) {
-                    // Hide the up arrow from first indicator to prevent user
-                    // from moving the indicator panel above the main chart
-                    panelObj.up.style.display = 'none';
-                }
-
-                if (index === panelsLen - 1 || isSolo) {
-                    panelObj.down.style.display = 'none';
-                }
-
-                // Mean chart + 1 indicator
-                if (panelsLen === 2) {
-                    panelObj.solo.style.display = 'none';
-                }
-
-                // Updating Max/Min icon
-                if (panelObj.solo.style.display !== 'none') {
-                    const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
-                    const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                    if (InnerSoloPanel.querySelector('svg').getAttribute('id') !== soloIcon.id) {
-                        InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
-                    }
-                }
-            });
-        }
-    };
     /**
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
     renderLegend = () => {
-        if (!this.context || !this.shouldRenderLegend()) {
+        if (!this.context) {
             return;
         }
         // Temporary prevent user from adding more than 5 indicators
@@ -438,15 +286,7 @@ export default class StudyLegendStore {
     };
 
     deletePredictionStudies() {
-        const stx = this.stx;
-        if (stx) {
-            (this.activeItems || [])
-                .filter((item: TActiveItem) => item.isPrediction)
-                .forEach((item: TActiveItem) => {
-                    this.deleteStudy(item.dataObject.sd);
-                });
-            //setTimeout(this.updateIndicatorHeight, 20);
-        }
+        this.deleteAllStudies();
     }
 
     deleteAllStudies() {
@@ -454,9 +294,6 @@ export default class StudyLegendStore {
         this.activeItems = [];
     }
 
-    onStudyRemoved() {
-        //  setTimeout(this.updateIndicatorHeight, 20);
-    }
     onSelectTab(tabIndex: number) {
         this.setFilterText('');
         this.selectedTab = tabIndex;

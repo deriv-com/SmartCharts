@@ -109,11 +109,11 @@ class ChartConfigModel extends ChangeNotifier {
     isLive = payload.isLive;
     dataFitEnabled = payload.dataFitEnabled;
 
-    if (payload.chartType.isNotEmpty) {
-      style = ChartStyle.values.byName(payload.chartType);
+    if (payload.chartType != null && payload.chartType!.isNotEmpty) {
+      style = ChartStyle.values.byName(payload.chartType!);
     }
 
-    if (payload.theme.isNotEmpty) {
+    if (payload.theme != null && payload.theme!.isNotEmpty) {
       theme = payload.theme == 'dark'
           ? ChartDefaultDarkTheme()
           : ChartDefaultLightTheme();

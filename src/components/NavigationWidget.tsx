@@ -14,7 +14,7 @@ type TNavigationWidgetProps = {
 
 const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
     const { chart, chartSize, navigationWidget, chartSetting } = useStores();
-    const { context, isScaledOneOne } = chart;
+    const { context } = chart;
     const { zoomIn, zoomOut } = chartSize;
     const { historical } = chartSetting;
     const { onScale, enableScale, onMouseEnter, onMouseLeave } = navigationWidget;
@@ -30,7 +30,6 @@ const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
             <div
                 className={classNames('sc-navigation-widget__item', 'sc-navigation-widget__item--scale', {
                     'sc-navigation-widget__item--hidden': !enableScale,
-                    'sc-navigation-widget__item--disabled': isScaledOneOne,
                 })}
                 onClick={onScale}
             >

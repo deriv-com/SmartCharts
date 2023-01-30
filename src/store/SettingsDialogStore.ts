@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { TIndicatorParameter, TSettingsItemGroup } from 'src/types';
+import { TSettingsParameter, TSettingsItemGroup } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
 
 type TSettingsDialogStoreProps = {
     mainStore: MainStore;
-    onChanged: (items: TIndicatorParameter[]) => void;
+    onChanged: (items: TSettingsParameter[]) => void;
     onDeleted?: (id: string) => void;
     favoritesId?: string;
 };
@@ -15,9 +15,9 @@ type TSettingsDialogStoreProps = {
 export default class SettingsDialogStore {
     mainStore: MainStore;
     menuStore: MenuStore;
-    onChanged: (items: TIndicatorParameter[]) => void;
+    onChanged: (items: TSettingsParameter[]) => void;
     onDeleted?: (id: string) => void;
-    items: TIndicatorParameter[] = []; // [{id: '', title: '', value: ''}]
+    items: TSettingsParameter[] = []; // [{id: '', title: '', value: ''}]
     title = '';
     formTitle = '';
     formClassname = '';
@@ -107,7 +107,7 @@ export default class SettingsDialogStore {
         return this.menuStore.setOpen(value);
     }
     onResetClick() {
-        const items = this.items.map(item => ({ ...item, value: _.clone(item.defaultValue) })) as TIndicatorParameter[];
+        const items = this.items.map(item => ({ ...item, value: _.clone(item.defaultValue) })) as TSettingsParameter[];
         this.items = items;
         this.onChanged(items);
     }
@@ -115,7 +115,7 @@ export default class SettingsDialogStore {
         this.menuStore.setOpen(false);
         if (this.onDeleted) this.onDeleted(this.id);
     }
-    onItemChange(item: TIndicatorParameter, newValue: string | number | boolean) {
+    onItemChange(item: TSettingsParameter, newValue: string | number | boolean) {
         if (item && item.value !== newValue) {
             item.value = newValue;
             this.items = this.items.slice(0); // force array update
@@ -123,7 +123,7 @@ export default class SettingsDialogStore {
         }
     }
     get itemGroups() {
-        const restGroup: TIndicatorParameter[] = [];
+        const restGroup: TSettingsParameter[] = [];
         const groups: TSettingsItemGroup[] = [];
         groups.push({
             key: '%K',

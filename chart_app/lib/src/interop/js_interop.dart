@@ -57,10 +57,10 @@ class JSNewChart {
   external int get granularity;
 
   /// Style of the chart
-  external String get chartType;
+  external String? get chartType;
 
   /// Dart theme or light theme
-  external String get theme;
+  external String? get theme;
 }
 
 @JS()

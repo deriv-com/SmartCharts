@@ -10,7 +10,7 @@ import { BinaryAPI, TradingTimes } from 'src/binaryapi';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import { Listener, TError, TGranularity, TMainStore, TPaginationCallback, TQuote } from 'src/types';
 import { CIQ } from 'src/utils/CIQ';
-import { calculateTimeUnitInterval, getUTCDate } from '../utils';
+import { getUTCDate } from '../utils';
 import ServerTime from '../utils/ServerTime';
 import { DelayedSubscription, RealtimeSubscription } from './subscription';
 import { TQuoteResponse } from './subscription/Subscription';
@@ -85,30 +85,10 @@ class Feed {
         reaction(() => mainStore.state.isConnectionOpened, this.onConnectionChanged.bind(this));
         this._emitter = new EventEmitter({ emitDelay: 0 });
     }
-    onRangeChanged = (forceLoad: boolean) => {
-        const periodicity = calculateTimeUnitInterval(this.granularity);
-        // const rangeTime = (this.granularity || 1) * this._stx.chart.maxTicks;
-        let dtLeft = null;
-        let dtRight = null;
+    onRangeChanged = () => {
+        // TODO: load the range data
+
         this._mainStore.state.setChartIsReady(false);
-        // if (!this.endEpoch) {
-        //     if (this.startEpoch) {
-        //         dtLeft = this.startEpoch ? CIQ.strToDateTime(getUTCDate(this.startEpoch)) : undefined;
-        //     }
-        // } else {
-        //     dtLeft = CIQ.strToDateTime(getUTCDate(this.startEpoch || this.endEpoch - rangeTime));
-        //     dtRight = CIQ.strToDateTime(getUTCDate(this.endEpoch));
-        // }
-        // this._stx.setRange({ dtLeft, dtRight, periodicity, forceLoad }, () => {
-        //     if (!this.endEpoch && !this.startEpoch) {
-        //         this._stx.home();
-        //         delete this._stx.layout.range;
-        //     } else {
-        //         this.scaleChart();
-        //     }
-        //     this._mainStore.state.saveLayout();
-        //     this._mainStore.state.setChartIsReady(true);
-        // });
         this._mainStore.state.saveLayout();
         this._mainStore.state.setChartIsReady(true);
     };
@@ -324,9 +304,6 @@ class Feed {
                 }
                 const { quotes: new_quotes, response } = await subscription.initialFetch();
                 quotes = new_quotes;
-                // quotes = new_quotes.filter(quote => {
-                //     return new Date(`${quote.Date}Z`).getTime() / 1000 >= start;
-                // });
 
                 if (!this.endEpoch) {
                     this._mainStore.lastDigitStats.updateLastDigitStats(response);
@@ -381,10 +358,8 @@ class Feed {
 
         quotes = this._trimQuotes(quotes);
         callback({ quotes });
-        this._mainStore.chart.updateYaxisWidth();
         this.scaleChart();
         this._emitDataUpdate(quotes, comparisonChartSymbol, true);
-        this._mainStore.state.setMaxtTick();
         this.paginationLoader.updateOnPagination(false);
     }
     async fetchPaginationData(
@@ -498,10 +473,8 @@ class Feed {
             if (
                 this._activeStreams[key] &&
                 this.granularity === 0 &&
-                !this._mainStore.state.isStaticChart
-                // &&
-                // CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >=
-                //     this._stx.chart.dataSet.slice(-1)[0]?.DT.valueOf()
+                !this._mainStore.state.isStaticChart &&
+                CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >= this.quotes.slice(-1)[0]?.Date.valueOf()
             ) {
                 result = false;
             }

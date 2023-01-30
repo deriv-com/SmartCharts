@@ -32,6 +32,7 @@ export default class MainStore implements TMainStore {
     favorites = FavoriteStore.getInstance();
     chart = new ChartStore(this);
     state = new ChartState(this);
+    chartAdapter = new ChartAdapterStore(this);
     chartType = new ChartTypeStore(this);
     chartMode = new ChartModeStore(this);
     studies = new StudyLegendStore(this);
@@ -52,7 +53,6 @@ export default class MainStore implements TMainStore {
     paginationLoader = new PaginationLoaderStore(this);
     toolbarWidget = new ToolbarWidgetStore(this);
     scroll = new ScrollStore();
-    chartAdapter = new ChartAdapterStore(this);
 }
 
 let stores_context: React.Context<TMainStore>;

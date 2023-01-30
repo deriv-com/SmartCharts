@@ -4,7 +4,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import SettingsDialogStore from 'src/store/SettingsDialogStore';
 import {
-    TIndicatorParameter,
+    TSettingsParameter,
     TSettingsItemGroup,
     TSwitchParameter,
     TNumberParameter,
@@ -42,14 +42,14 @@ type TSettingsPanelProps = {
     formClassname?: string;
     setScrollPanel?: ((ref: HTMLDivElement) => void) | undefined;
     itemGroups: TSettingsItemGroup[];
-    onItemChange: (item: TIndicatorParameter, value: string | number | boolean) => void;
+    onItemChange: (item: TSettingsParameter, value: string | number | boolean) => void;
 };
 
 type TSettingsPanelGroupProps = {
     title: string;
     theme: string;
-    items: TIndicatorParameter[];
-    onItemChange: (item: TIndicatorParameter, value: string | number | boolean) => void;
+    items: TSettingsParameter[];
+    onItemChange: (item: TSettingsParameter, value: string | number | boolean) => void;
 };
 
 type TDoneButtonProps = {
@@ -96,11 +96,11 @@ const SettingsPanelGroup = ({
     onItemChange,
 }: TSettingsPanelGroupProps) => {
     const renderMap = {
-        switch: (props: TIndicatorParameter) => {
+        switch: (props: TSettingsParameter) => {
             const item = props as TSwitchParameter;
             return <Switch value={item.value!} onChange={v => onItemChange(item, v)} />;
         },
-        colorpicker: (item: TIndicatorParameter) => (
+        colorpicker: (item: TSettingsParameter) => (
             <ColorPicker
                 theme={theme}
                 color={item.value as string}
@@ -108,8 +108,8 @@ const SettingsPanelGroup = ({
                 setColor={value => onItemChange(item, value)}
             />
         ),
-        pattern: (item: TIndicatorParameter) => {
-            const lineWidth = items.find(it => it.id === 'lineWidth')?.value;
+        pattern: (item: TSettingsParameter) => {
+            const lineWidth = items.find(it => 'id' in it && it.id === 'lineWidth')?.value;
             return (
                 <Pattern
                     pattern={item.value as string}
@@ -121,7 +121,7 @@ const SettingsPanelGroup = ({
                 />
             );
         },
-        select: (props: TIndicatorParameter) => {
+        select: (props: TSettingsParameter) => {
             const item = props as TSelectParameter;
             return (
                 <DropDown<string>
@@ -137,7 +137,7 @@ const SettingsPanelGroup = ({
                 </DropDown>
             );
         },
-        number: (props: TIndicatorParameter) => {
+        number: (props: TSettingsParameter) => {
             const item = props as TNumberParameter;
             return (
                 <Slider
@@ -149,7 +149,7 @@ const SettingsPanelGroup = ({
                 />
             );
         },
-        numericinput: (props: TIndicatorParameter) => {
+        numericinput: (props: TSettingsParameter) => {
             const item = props as TNumericInputParameter;
             return (
                 <span className='ciq-num-input'>
@@ -163,11 +163,11 @@ const SettingsPanelGroup = ({
                 </span>
             );
         },
-        numbercolorpicker: (props: TIndicatorParameter) => {
+        numbercolorpicker: (props: TSettingsParameter) => {
             const item = props as TNumberColorPickerParameter;
             return <NumberColorPicker props={item.value!} theme={theme} onChange={val => onItemChange(item, val)} />;
         },
-        font: (props: TIndicatorParameter) => {
+        font: (props: TSettingsParameter) => {
             const item = props as TFontParameter;
             return (
                 <FontSetting value={item.value as Record<string, string>} onChange={val => onItemChange(item, val)} />

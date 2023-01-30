@@ -6,7 +6,6 @@ import MainStore from './';
 export default class ChartAdapterStore {
     private mainStore: MainStore;
     isChartLoaded = false;
-    isChartInitialized = false;
     isDataInitialized = false;
     flutterChart?: TFlutterChart;
     epochBounds = {
@@ -146,10 +145,10 @@ export default class ChartAdapterStore {
     };
 
     onTickHistory(quotes: TQuote[]) {
+        this.isDataInitialized = true;
+
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
         this.flutterChart?.dataModel.onTickHistory(quotes, false);
-
-        this.isDataInitialized = true;
     }
 
     async onTick(quote: TQuote) {

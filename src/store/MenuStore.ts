@@ -47,11 +47,6 @@ export default class MenuStore {
     }
     blurInput() {
         setTimeout(this.handleDialogStatus, 300);
-        if (!this.open) {
-            this.mainStore.state.setEnableScroll();
-        } else {
-            this.mainStore.state.setDisableScroll();
-        }
     }
     onTitleClick(e: React.MouseEvent) {
         if (e) {
