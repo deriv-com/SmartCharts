@@ -81,6 +81,19 @@ export default class ChartAdapterStore {
                 },
             };
 
+            flutterChartElement.addEventListener(
+                'wheel',
+                e => {
+                    e.preventDefault();
+
+                    const scale = (100 - e.deltaY) / 100;
+                    this.flutterChart?.config.scale(scale);
+
+                    return false;
+                },
+                { capture: true, passive: false }
+            );
+
             // @ts-ignore
             import(/* webpackChunkName: "flutter-chart-adapter", webpackPrefetch: true */ 'chart/main.dart.js');
         } else {
@@ -120,7 +133,9 @@ export default class ChartAdapterStore {
         return granularity * 1000;
     }
 
-    newChart = () => {
+    newChart = async () => {
+        await when(() => this.isChartLoaded);
+
         this.flutterChart?.config.newChart({
             granularity: this.getGranularity(),
             chartType: this.mainStore.state.chartType,
