@@ -125,20 +125,6 @@ export default class BarrierStore {
     init(): void {
         this.isInitialized = true;
         this.initializePromise.resolve();
-
-        // Enable this to test barriers; high low values are mandatory
-        // for library user to provide
-        // this.setDefaultBarrier();
-    }
-
-    setDefaultBarrier(): void {
-        const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote()?.Close;
-        const distance = this.chart.yAxis.priceTick;
-        this._high_barrier.price = price + distance;
-        this._low_barrier.price = (price as number) - distance;
-        this._high_barrier._calculateTop();
-        this._low_barrier._calculateTop();
-        this._drawShadedArea();
     }
 
     updateProps({
@@ -318,9 +304,9 @@ export default class BarrierStore {
         this._low_barrier.visible = showLowBarrier;
 
         if (this.isInitialized && showLowBarrier && !wasLowBarrierVisible) {
-            if (this._low_barrier.realPrice >= this._high_barrier.realPrice) {
+            if (this._low_barrier.realPrice >= this._high_barrier.realPrice && this.mainStore.chart.currentClose) {
                 // fix position if _low_barrier above _high_barrier, since _low_barrier position is not updated when not visible
-                this._low_barrier.price = this._high_barrier.price - this.chart.yAxis.priceTick;
+                this._low_barrier.price = this._high_barrier.price - this.mainStore.chart.currentClose;
             }
         }
     }

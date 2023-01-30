@@ -169,7 +169,7 @@ export default class PriceLineStore {
     get realPrice(): number {
         const price = this.isDragging ? this.dragPrice : this.price;
 
-        return this.relative ? (this.mainStore.chart.currentCloseQuote()?.Close as number) + price : price;
+        return this.relative ? (this.mainStore.chart.currentClose as number) + price : price;
     }
 
     get yAxiswidth() {
@@ -203,7 +203,7 @@ export default class PriceLineStore {
             newPrice = this._priceConstrainer(newPrice);
         }
         if (this.relative) {
-            newPrice -= this.mainStore.chart.currentCloseQuote()?.Close as number;
+            newPrice -= this.mainStore.chart.currentClose as number;
         }
 
         this.dragPrice = newPrice;

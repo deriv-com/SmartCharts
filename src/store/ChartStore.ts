@@ -190,6 +190,11 @@ class ChartStore {
     get rootElement() {
         return this.chartId ? document.getElementById(this.chartId) : null;
     }
+
+    get currentClose() {
+        return this.currentCloseQuote()?.Close;
+    }
+
     currentCloseQuote = (): TQuote | undefined => {
         const quotes = this.mainStore.chart.feed?.quotes;
         let currentQuote = quotes?.[quotes.length - 1];
