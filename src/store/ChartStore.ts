@@ -8,7 +8,6 @@ import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { TProcessedSymbolItem, TSubCategoryDataItem } from '../binaryapi/ActiveSymbols';
 
 import Context from '../components/ui/Context';
-import KeystrokeHub from '../components/ui/KeystrokeHub';
 import { STATE } from '../Constant';
 import { Feed } from '../feed';
 import {
@@ -60,7 +59,6 @@ type TNewChartParams = {
 };
 
 class ChartStore {
-    static keystrokeHub: KeystrokeHub;
     static chartCount = 0;
     static tradingTimes: TradingTimes | null;
     static activeSymbols: ActiveSymbols;
@@ -106,7 +104,6 @@ class ChartStore {
             setChartAvailability: action.bound,
             changeSymbol: action.bound,
             newChart: action.bound,
-            setYaxisWidth: action.bound,
             updateScaledOneOne: action.bound,
             refreshChart: action.bound,
             destroy: action.bound,
@@ -305,12 +302,6 @@ class ChartStore {
             this.routingStore.handleRouting();
         }
         const context = new Context(this.rootNode);
-        // only one instance of keystrokeHub should exist
-        if (ChartStore.keystrokeHub === undefined) {
-            ChartStore.keystrokeHub = new KeystrokeHub(document.body, null, {
-                cb: KeystrokeHub.defaultHotKeys,
-            });
-        }
         this.stateStore.stateChange(STATE.INITIAL);
         this.loader.setState('market-symbol');
         this.activeSymbols?.retrieveActiveSymbols().then(() => {
@@ -430,8 +421,6 @@ class ChartStore {
 
     updateCurrentActiveSymbol(symbolObj: TProcessedSymbolItem) {
         this.currentActiveSymbol = symbolObj;
-        // this.stxx.chart.yAxis.decimalPlaces = symbolObject.decimal_places;
-        this.setMainSeriesDisplay(symbolObj.name);
     }
     setChartAvailability(status: boolean) {
         this.isChartAvailable = status;
@@ -475,7 +464,6 @@ class ChartStore {
         this.loader.show();
         this.mainStore.state.setChartIsReady(false);
         const onChartLoad = (err: string) => {
-            this.setMainSeriesDisplay(symbolObj.name);
             this.loader.hide();
             this.chartClosedOpenThemeChange(!symbolObj.exchange_is_open);
             this.mainStore.paginationLoader.updateOnPagination(false);
@@ -531,57 +519,11 @@ class ChartStore {
             console.error('symbol is not specificed, without it, chart is unable to be loaded!');
             return;
         }
-
-        // this.stxx.loadChart(
-        //     symbol || layout_symbol,
-        //     {
-        //         masterData,
-        //         periodicity: {
-        //             period: layoutData.periodicity,
-        //             interval: layoutData.interval,
-        //             timeUnit: layoutData.timeUnit,
-        //         },
-        //     },
-        //     () => {
-        //         this.loader.hide();
-        //     }
-        // );
     }
     remainLabelY = (): number => {
-        // const stx = this.context?.stx;
-        const topPos = 36;
-        const labelHeight = 24;
-        const bottomPos = 66;
-        // let y = stx.chart.currentPriceLabelY + labelHeight;
-        // if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
-        //     y = stx.chart.panel.bottom - bottomPos;
-        //     y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
-        // } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
-        //     y = topPos;
-        // }
         return 0;
     };
-    setYaxisWidth = (width?: number) => {
-        this.yAxiswidth = width || this.yAxiswidth;
 
-        // this.stxx.chart.yAxis.width = width || this.yAxiswidth;
-
-        // this.stxx.calculateYAxisPositions();
-
-        // this.stxx.draw();
-    };
-
-    setMainSeriesDisplay(name: string) {
-        // if (this.stxx && this.stxx.chart) {
-        //     // Set display name of main series (to be shown in crosshair tooltip)
-        //     this.stxx.chart.seriesRenderers._main_series.seriesParams[0].display = name;
-        //     // TODO, we use to use `field` field to recgnize main seris and show
-        //     // it's crosshair, as in ChartIQ 6.2.2 they are going to remove this field
-        //     // we should find another way of detecting main series price, till then
-        //     // we found this temporary solution.
-        //     this.stxx.chart.seriesRenderers._main_series.seriesParams[0].field = 'Close';
-        // }
-    }
     updateScaledOneOne(state: boolean) {
         this.isScaledOneOne = state;
     }
@@ -605,19 +547,7 @@ class ChartStore {
             this.feed.unsubscribeAll();
             this.feed = null;
         }
-        // if (ChartStore.keystrokeHub && ChartStore.keystrokeHub.context === this.context) {
-        //     ChartStore.keystrokeHub.setActiveContext(null);
-        // }
-        // if (this.stxx) {
 
-        //     // eslint-disable-next-line @typescript-eslint/no-empty-function
-        //     this.stxx.updateChartData = function () {}; // prevent any data from entering the chart
-
-        //     this.stxx.isDestroyed = true;
-
-        //     this.stxx.destroy();
-        //     this.stxx = null;
-        // }
         this.mainStore.drawTools.destructor();
         this.currentActiveSymbol = null;
         this.contextPromise = null;

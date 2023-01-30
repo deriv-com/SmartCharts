@@ -1,5 +1,6 @@
 import Context from 'src/components/ui/Context';
 import { TQuote, TRefData } from 'src/types';
+import { CIQ } from 'src/utils/CIQ';
 import MainStore from '.';
 import { getUTCEpoch } from '../utils';
 import ChartStore from './ChartStore';

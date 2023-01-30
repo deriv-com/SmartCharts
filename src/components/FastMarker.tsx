@@ -4,7 +4,6 @@ import { useStores } from 'src/store';
 import { TRefData } from 'src/types';
 import { CIQ } from 'src/utils/CIQ';
 import { getUTCDate } from '../utils';
-import Context from './ui/Context';
 
 // Render given Components under stx-subholder.
 // This component is used to position a marker on the chart.
@@ -84,9 +83,6 @@ const FastMarker = (props: TFastMarkerProps) => {
             left = 0,
             show = true;
 
-        const threshold = Number(props_ref.current.threshold) || 0;
-        //show = !threshold || stx.layout.candleWidth >= threshold;
-
         if (epoch_ref.current) {
             let tickIdx = chartStore.feed?.getQuoteIndexForEpoch(epoch_ref.current);
 
@@ -151,7 +147,7 @@ const FastMarker = (props: TFastMarkerProps) => {
 
         if (ref !== null) {
             if (contextPromise) {
-                contextPromise.then((ctx: Context) => {
+                contextPromise.then(() => {
                     updateCSS();
                 });
             }

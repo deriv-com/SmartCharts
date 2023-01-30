@@ -46,8 +46,6 @@ export default class ChartSettingStore {
             () => {
                 mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true).then(() => {
                     mainStore?.chart?.changeSymbol?.(mainStore.state.symbol, mainStore.state.granularity, true);
-                    mainStore?.chart?.addDeleteElement();
-                    mainStore?.chart?.addManageElement();
                 });
             }
         );

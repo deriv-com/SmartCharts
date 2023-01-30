@@ -76,7 +76,7 @@ const Chart = (props: TChartProps) => {
         toolbarWidget = () => null,
         onCrosshairChange,
         historical,
-        markers_array,
+        markers_array = [],
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;

@@ -12,6 +12,7 @@ import {
     TNumberColorPickerParameter,
     TFontParameter,
     TNumericInputParameter,
+    TObject,
 } from 'src/types';
 import '../../sass/components/_settings-dialog.scss';
 import {
@@ -42,14 +43,14 @@ type TSettingsPanelProps = {
     formClassname?: string;
     setScrollPanel?: ((ref: HTMLDivElement) => void) | undefined;
     itemGroups: TSettingsItemGroup[];
-    onItemChange: (item: TSettingsParameter, value: string | number | boolean) => void;
+    onItemChange: (item: TSettingsParameter, value: string | number | boolean | TObject) => void;
 };
 
 type TSettingsPanelGroupProps = {
     title: string;
     theme: string;
     items: TSettingsParameter[];
-    onItemChange: (item: TSettingsParameter, value: string | number | boolean) => void;
+    onItemChange: (item: TSettingsParameter, value: string | number | boolean | TObject) => void;
 };
 
 type TDoneButtonProps = {
@@ -109,11 +110,11 @@ const SettingsPanelGroup = ({
             />
         ),
         pattern: (item: TSettingsParameter) => {
-            const lineWidth = items.find(it => 'id' in it && it.id === 'lineWidth')?.value;
+            const lineWidth = '';
             return (
                 <Pattern
                     pattern={item.value as string}
-                    lineWidth={lineWidth as string}
+                    lineWidth={lineWidth}
                     subtitle={item.title}
                     onChange={v => {
                         onItemChange(item, v);

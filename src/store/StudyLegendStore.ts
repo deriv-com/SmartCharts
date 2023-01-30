@@ -160,7 +160,6 @@ export default class StudyLegendStore {
 
         this.changeStudyPanelTitle();
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${indicatorName}`);
-        this.mainStore.chart.setYaxisWidth();
 
         const props = this.getIndicatorProps(indicatorName);
         const { parameters, config } = this.getDefaultIndicatorConfig(indicatorName);

@@ -85,7 +85,7 @@ const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: TActiveDrawTools
         <Info Icon={item.icon} text={item.text} bars={item.bars} num={item.num} />
         <div className='actions'>
             <SettingIcon onClick={() => onSetting(item.index)} />
-            <DeleteIcon onClick={() => onDelete(item.index)} />
+            <DeleteIcon onClick={() => onDelete(item.name)} />
         </div>
     </div>
 );

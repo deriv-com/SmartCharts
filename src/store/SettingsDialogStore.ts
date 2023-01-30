@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { TSettingsParameter, TSettingsItemGroup } from 'src/types';
+import { TSettingsParameter, TSettingsItemGroup, TObject } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
@@ -115,9 +115,9 @@ export default class SettingsDialogStore {
         this.menuStore.setOpen(false);
         if (this.onDeleted) this.onDeleted(this.id);
     }
-    onItemChange(item: TSettingsParameter, newValue: string | number | boolean) {
+    onItemChange(item: TSettingsParameter, newValue: string | number | boolean | TObject) {
         if (item && item.value !== newValue) {
-            item.value = newValue;
+            item.value = newValue as string | number | boolean;
             this.items = this.items.slice(0); // force array update
             this.onChanged(this.items);
         }

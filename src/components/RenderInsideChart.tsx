@@ -27,7 +27,6 @@ const RenderInsideChart = ({ at = 'holder', children, hideInScrollToEpoch }: TRe
             let elem = context.topNode?.querySelector(`.${nodeName}`);
             if (!elem) {
                 elem = createElement(`<div class="${nodeName}"></div>`) as HTMLElement;
-                //    context.stx.chart.panel[at].appendChild(elem);
             }
 
             setContainer(elem as HTMLElement);

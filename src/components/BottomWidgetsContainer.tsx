@@ -7,9 +7,7 @@ const BottomWidgetsContainer = ({ children }: { children?: React.ReactNode }) =>
     const { bottomWidgetsContainer } = useStores();
     const { bottom, isReadyToShow, top, updateChartMargin } = bottomWidgetsContainer;
     React.useEffect(() => {
-        const component = React.Children.only(children) as React.ReactElement;
-
-        updateChartMargin(!!(component && component.props.bottomWidgets));
+        updateChartMargin();
     }, [children, updateChartMargin]);
 
     if (!isReadyToShow) {

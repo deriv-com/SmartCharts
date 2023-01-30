@@ -6,7 +6,7 @@ import { TMainStore } from 'src/types';
 import CrosshairToggle from './CrosshairToggle';
 import '../../sass/components/_navigation-widget.scss';
 
-import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons';
+import { ZoominIcon, ZoomoutIcon } from './Icons';
 
 type TNavigationWidgetProps = {
     onCrosshairChange?: TMainStore['crosshair']['onCrosshairChanged'];
@@ -17,7 +17,7 @@ const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
     const { context } = chart;
     const { zoomIn, zoomOut } = chartSize;
     const { historical } = chartSetting;
-    const { onScale, enableScale, onMouseEnter, onMouseLeave } = navigationWidget;
+    const { onMouseEnter, onMouseLeave } = navigationWidget;
 
     return context ? (
         <div
@@ -27,14 +27,6 @@ const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
         >
-            <div
-                className={classNames('sc-navigation-widget__item', 'sc-navigation-widget__item--scale', {
-                    'sc-navigation-widget__item--hidden': !enableScale,
-                })}
-                onClick={onScale}
-            >
-                <ScaleIcon />
-            </div>
             <div className='sc-navigation-widget__item sc-navigation-widget__item--zoom'>
                 <ZoominIcon onClick={zoomIn} />
                 <CrosshairToggle onChange={onCrosshairChange} />

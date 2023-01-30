@@ -1,5 +1,6 @@
 import { ServerTimeResponse } from '@deriv/api-types';
 import { BinaryAPI } from 'src/binaryapi';
+import { CIQ } from './CIQ';
 import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 import PendingPromise from './PendingPromise';
 

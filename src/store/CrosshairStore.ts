@@ -33,7 +33,7 @@ class CrosshairStore {
     mainStore: MainStore;
     prev_arrow?: string;
 
-    state: number | null = 2;
+    state?: number = 2;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -75,10 +75,8 @@ class CrosshairStore {
 
     isOverChartContainer = false;
 
-    onCrosshairChanged: (state?: number | null) => void | null = () => null;
+    onCrosshairChanged: (state?: number) => void = () => null;
     onContextReady = () => {
-        // const storedState = this.stx.layout.crosshair;
-        // const state = typeof storedState !== 'number' ? 2 : storedState;
         const state = 2;
         this.setCrosshairState(state);
     };
@@ -151,7 +149,7 @@ class CrosshairStore {
         }
     };
 
-    setCrosshairState(state: number | null) {
+    setCrosshairState(state?: number) {
         if (!this.context) {
             return;
         }
@@ -203,7 +201,6 @@ class CrosshairStore {
             });
             dupMap.DT = dupMap.Close = 1;
             if (this.showChange) {
-                //CIQ.ChartEngine.isDailyInterval(stx.layout.interval)
                 fields.push({
                     member: 'Change',
                     display: 'Change',

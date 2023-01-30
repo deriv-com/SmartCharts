@@ -204,7 +204,7 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
-    markers_array: any[];
+    markers_array?: any[];
     isLive?: boolean;
     dataFitEnabled?: boolean;
 };
@@ -370,7 +370,7 @@ export type TLayout = {
     timeUnit?: string | number;
     granularity?: TGranularity;
     studyItems?: TActiveItem[];
-    crosshair: number | null;
+    crosshair?: number;
 };
 
 export type TAllTicks = Exclude<AuditDetailsForExpiredContract, null>['all_ticks'];

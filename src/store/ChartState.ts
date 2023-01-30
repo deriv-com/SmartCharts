@@ -46,7 +46,7 @@ class ChartState {
     hasReachedEndOfData = false;
     prevChartType?: string;
     isChartScrollingToEpoch = false;
-    crosshairState: number | null = 1;
+    crosshairState?: number = 1;
     crosshairTooltipLeftAllow: number | null = null;
     maxTick?: number;
     enableScroll: boolean | null = true;

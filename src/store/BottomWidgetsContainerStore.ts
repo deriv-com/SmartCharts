@@ -35,18 +35,5 @@ export default class BottomWidgetsContainerStore {
         this.isReadyToShow = true;
     };
 
-    updateChartMargin = (hasBottomWidget: boolean): void => {
-        if (this.context) {
-            const marginTop = this.state.yAxisMargin.top || 106;
-            let marginBottom = this.state.yAxisMargin.bottom || 64;
-
-            if (hasBottomWidget) {
-                marginBottom += 64;
-            }
-
-            // if (!this.mainStore.state.shouldMinimiseLastDigits) {
-            //     this.mainStore.state.setShouldMinimiseLastDigit(this.stx.chart.panel.height < 460);
-            // }
-        }
-    };
+    updateChartMargin = (): void => {};
 }

@@ -1,5 +1,4 @@
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { TQuote } from 'src/types';
 import MainStore from '.';
 import ChartStore from './ChartStore';
 
@@ -22,7 +21,6 @@ export default class NavigationWidgetStore {
             enableScale: computed,
             onMouseEnter: action.bound,
             onMouseLeave: action.bound,
-            onScale: action.bound,
             onCrosshairChange: action.bound,
         });
 
@@ -42,12 +40,6 @@ export default class NavigationWidgetStore {
     onMouseLeave() {
         this.mouse_in = false;
         this.crosshairStore.updateVisibility(true);
-    }
-
-    onScale() {
-        let point: TQuote | null = null;
-        const dataSet = this.mainStore.chart.feed?.quotes;
-        if (dataSet && dataSet.length) point = dataSet[0];
     }
 
     onCrosshairChange() {

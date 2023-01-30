@@ -33,13 +33,13 @@ import Notification from './Notification';
 
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
-// if (process.env.NODE_ENV !== 'production') {
-//     whyDidYouRender(React, {
-//         collapseGroups: true,
-//         include: [/.*/],
-//         exclude: [/^RenderInsideChart$/, /^inject-/],
-//     });
-// }
+if (process.env.NODE_ENV !== 'production') {
+    whyDidYouRender(React, {
+        collapseGroups: true,
+        include: [/.*/],
+        exclude: [/^RenderInsideChart$/, /^inject-/],
+    });
+}
 const trackJSDomains = ['binary.com', 'binary.me'];
 window.isProductionWebsite = trackJSDomains.some(val => window.location.host.endsWith(val));
 

@@ -370,11 +370,10 @@ class Feed {
         callback: TPaginationCallback
     ) {
         this.paginationLoader.updateOnPagination(true);
-        const isMainChart = true; //this._stx.chart.symbol === symbol;
-        if (isMainChart) {
-            // ignore comparisons
-            this._emitter.emit(Feed.EVENT_START_PAGINATION, { end });
-        }
+
+        // ignore comparisons
+        this._emitter.emit(Feed.EVENT_START_PAGINATION, { end });
+
         await this._getPaginationData(symbol, granularity, count, end, callback);
         this.paginationLoader.updateOnPagination(false);
     }
@@ -386,15 +385,14 @@ class Feed {
         end: number,
         callback: TPaginationCallback
     ) {
-        const isMainChart = true; //this._stx.chart.symbol === symbol;
+        const isMainChart = true;
         // TODO There is no need to get historical data before startTime
         if (this.startEpoch /* && start < this.startEpoch */ || (this.endEpoch && end > this.endEpoch)) {
             callback({ moreAvailable: false, quotes: [] });
-            if (isMainChart) {
-                // ignore comparisons
-                this._emitter.emit(Feed.EVENT_ON_PAGINATION, { end });
-                this.setHasReachedEndOfData(true);
-            }
+
+            // ignore comparisons
+            this._emitter.emit(Feed.EVENT_ON_PAGINATION, { end });
+            this.setHasReachedEndOfData(true);
             return;
         }
         const now = this._serverTime.getEpoch();
