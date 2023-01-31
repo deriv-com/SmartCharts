@@ -213,7 +213,7 @@ const App = () => {
     const [symbol, setSymbol] = React.useState<string>();
     const [relative, setRelative] = React.useState(false);
     const [draggable, setDraggable] = React.useState(true);
-    const [highLow, setHighLow] = React.useState<{ high?: number; low?: number }>({});
+    const [highLow, setHighLow] = React.useState<{ high?: number | string; low?: number | string }>({});
     const [barrierType, setBarrierType] = React.useState('');
     const [zoom, setZoom] = React.useState<number>();
     const [maxTick, setMaxTick] = React.useState<number | null>();

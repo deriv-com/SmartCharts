@@ -66,11 +66,11 @@ class ChartStore {
     feed?: Feed | null;
     mainStore: MainStore;
     resizeObserver?: ResizeObserver;
-
     containerWidth: number | null = null;
     context: Context | null = null;
     currentActiveSymbol?: TProcessedSymbolItem | null;
     isChartAvailable = true;
+    isBarrierDragging = false;
     chartHeight?: number;
     chartContainerHeight?: number;
     isMobile?: boolean = false;
@@ -87,6 +87,7 @@ class ChartStore {
             context: observable,
             currentActiveSymbol: observable,
             isChartAvailable: observable,
+            isBarrierDragging: observable,
             chartHeight: observable,
             chartContainerHeight: observable,
             isMobile: observable,
@@ -452,7 +453,6 @@ class ChartStore {
             this.updateCurrentActiveSymbol(symbolObj);
         }
     }
-
     // Calling newChart with symbolObj as undefined refreshes the chart
     newChart(symbolObj = this.currentActiveSymbol) {
         if (!symbolObj) return;

@@ -135,8 +135,8 @@ export type TBarrierUpdateProps = {
     draggable: boolean;
     lineStyle: string;
     hidePriceLines: boolean;
-    high?: number;
-    low?: number;
+    high?: number | string;
+    low?: number | string;
     hideBarrierLine?: boolean;
     hideOffscreenBarrier?: boolean;
     hideOffscreenLine?: boolean;
@@ -254,7 +254,7 @@ export type TTradingTimesItem = {
     isOpened?: boolean;
 };
 
-export type TBarrierChangeParam = { high?: number; low?: number };
+export type TBarrierChangeParam = { high?: string; low?: string };
 
 export type TOpenMarket = {
     category?: string;

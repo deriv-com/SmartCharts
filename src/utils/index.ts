@@ -20,8 +20,8 @@ export function saveToLocalStorage(key: string, value: any) {
     localStorage.setItem(key, string);
 }
 
-export function isValidProp(p: number) {
-    return p !== undefined && !isNaN(p); // eslint-disable-line no-restricted-globals
+export function getStringValue(p: number | string, pipSize: number) {
+    return typeof p === 'string' ? p : p.toFixed(pipSize);
 }
 
 export const getTimeUnit = (granularity: TGranularity) => {
@@ -317,21 +317,43 @@ export const makeElementDraggable = (
 ) => {
     el.addEventListener('mousedown', dragMouseDown);
 
+    let isDragging = false;
+
     function dragMouseDown(ev: MouseEvent) {
-        zone.addEventListener('mousemove', elementDrag);
+        window.addEventListener('mousemove', elementDrag);
         zone.addEventListener('mouseup', closeDragElement);
+
+        isDragging = true;
 
         onDragStart?.(ev);
     }
 
+    function isEventWithinTheElement(ev: MouseEvent) {
+        const bounds = el.getBoundingClientRect();
+
+        return (
+            ev.clientX >= bounds.left &&
+            ev.clientX <= bounds.right &&
+            ev.clientY >= bounds.top &&
+            ev.clientY <= bounds.bottom
+        );
+    }
+
     function elementDrag(ev: MouseEvent) {
-        onDrag?.(ev);
+        if (isDragging) {
+            if (isEventWithinTheElement(ev)) {
+                onDrag?.(ev);
+            } else {
+                closeDragElement(ev);
+            }
+        }
     }
 
     function closeDragElement(ev: MouseEvent) {
+        isDragging = false;
         onDragReleased?.(ev);
 
-        zone.removeEventListener('mousemove', elementDrag);
+        window.removeEventListener('mousemove', elementDrag);
         zone.removeEventListener('mouseup', closeDragElement);
     }
 };

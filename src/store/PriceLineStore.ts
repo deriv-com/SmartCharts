@@ -12,7 +12,7 @@ export default class PriceLineStore {
     _emitter: EventEmitter;
     _line?: HTMLElement;
     _priceConstrainer: number | ((val: number) => number) = 0;
-    _startDragPrice = 0;
+    _startDragPrice = '0';
     className?: string;
     hideBarrierLine?: boolean;
     hideOffscreenLine?: boolean;
@@ -23,8 +23,8 @@ export default class PriceLineStore {
     draggable = true;
     isDragging = false;
     visible = true;
-    _price = 0;
-    _dragPrice = 0;
+    _price = '0';
+    _dragPrice = '0';
     offScreen = false;
     title?: string;
     isOverlapping = false;
@@ -107,9 +107,8 @@ export default class PriceLineStore {
     }
 
     get priceDisplay() {
-        const price = this.isDragging ? this.dragPrice : this.price;
-        let display = price.toFixed(this.pip);
-        if (this.relative && price > 0) {
+        let display = this.isDragging ? Number(this.dragPrice).toFixed(this.pip) : this._price;
+        if (this.relative && +this._price > 0 && display[0] !== '+') {
             display = `+${display}`;
         }
         return display;
@@ -155,7 +154,7 @@ export default class PriceLineStore {
         if (this._relative) {
             currentPrice = -currentPrice;
         }
-        this.price = this._price + currentPrice;
+        this.price = (+this._price + currentPrice).toString();
     }
 
     get context(): Context | null {
@@ -166,10 +165,13 @@ export default class PriceLineStore {
         this._priceConstrainer = value;
     }
 
-    get realPrice(): number {
+    get realPrice(): string {
         const price = this.isDragging ? this.dragPrice : this.price;
 
-        return this.relative ? (this.mainStore.chart.currentClose as number) + price : price;
+        const real_price = this.relative
+            ? (this.mainStore.chart.currentCloseQuote()?.Close as number) + Number(price)
+            : Number(price);
+        return real_price.toString();
     }
 
     get yAxiswidth() {
@@ -186,6 +188,7 @@ export default class PriceLineStore {
     _startDrag = () => {
         this.isDragging = true;
 
+        this.mainStore.chart.isBarrierDragging = true;
         this.dragPrice = this.price;
         this._startDragPrice = this._price;
     };
@@ -206,15 +209,16 @@ export default class PriceLineStore {
             newPrice -= this.mainStore.chart.currentClose as number;
         }
 
-        this.dragPrice = newPrice;
+        this.dragPrice = `${newPrice}`;
     };
 
     _endDrag = () => {
         this.isDragging = false;
+        this.mainStore.chart.isBarrierDragging = false;
 
-        if (this._startDragPrice.toFixed(this.pip) !== this.dragPrice.toFixed(this.pip)) {
+        if (Number(this._startDragPrice).toFixed(this.pip) !== Number(this.dragPrice).toFixed(this.pip)) {
             this.price = this.dragPrice;
-            this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this.price);
+            this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this._price);
         }
     };
 
@@ -231,7 +235,7 @@ export default class PriceLineStore {
             return;
         }
 
-        let top = this._locationFromPrice(this.realPrice);
+        let top = this._locationFromPrice(+this.realPrice);
 
         // @ts-ignore
         const height = window.flutterChartElement?.clientHeight || 0;
@@ -301,7 +305,7 @@ export default class PriceLineStore {
     overlapCheck(top: number) {
         const { _barriers } = this.mainStore.chart;
 
-        const filtered_barriers = _barriers.filter(a => a._high_barrier.price !== 0);
+        const filtered_barriers = _barriers.filter(a => +a._high_barrier.price !== 0);
         const current_barrier_idx = filtered_barriers.findIndex(b => b._high_barrier === this);
 
         for (let i = 0; i < filtered_barriers.length; i++) {

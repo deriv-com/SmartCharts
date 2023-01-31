@@ -2,10 +2,10 @@ import { action, computed, observable, makeObservable, when, reaction, IReaction
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import { TBarrierChangeParam, TBarrierUpdateProps } from '../types';
-import { isValidProp } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
+import { getStringValue } from '../utils';
 
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
@@ -167,11 +167,11 @@ export default class BarrierStore {
                 if (draggable !== undefined) {
                     this.draggable = draggable;
                 }
-                if (high !== undefined && isValidProp(high)) {
-                    this.high_barrier = high;
+                if (high !== undefined) {
+                    this.high_barrier = getStringValue(high, this.pip);
                 }
-                if (low !== undefined && isValidProp(low)) {
-                    this.low_barrier = low;
+                if (low !== undefined) {
+                    this.low_barrier = getStringValue(low, this.pip);
                 }
                 if (onChange) {
                     this.onBarrierChange = onChange;
@@ -208,16 +208,16 @@ export default class BarrierStore {
         }
     }
 
-    get high_barrier(): number {
+    get high_barrier(): string {
         return this._high_barrier.price;
     }
-    set high_barrier(price: number) {
+    set high_barrier(price: string) {
         this._high_barrier.price = price;
     }
-    get low_barrier(): number {
+    get low_barrier(): string {
         return this._low_barrier.price;
     }
-    set low_barrier(price: number) {
+    set low_barrier(price: string) {
         this._low_barrier.price = price;
     }
 
@@ -225,18 +225,18 @@ export default class BarrierStore {
         // barrier 1 cannot go below barrier 2
         this._high_barrier.priceConstrainer = (newPrice: number) => {
             const nextPrice =
-                this._low_barrier.visible && newPrice < this._low_barrier.realPrice
+                this._low_barrier.visible && newPrice < +this._low_barrier.realPrice
                     ? this._high_barrier.realPrice
                     : newPrice;
 
-            return nextPrice;
+            return +nextPrice;
         };
 
         // barrier 2 cannot go above barrier 1
         this._low_barrier.priceConstrainer = (newPrice: number) => {
-            const nextPrice = newPrice > this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
+            const nextPrice = newPrice > +this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
 
-            return nextPrice;
+            return +nextPrice;
         };
     }
 
@@ -253,8 +253,8 @@ export default class BarrierStore {
     }
 
     _fireOnBarrierChange = (): void => {
-        const high = this._high_barrier.visible ? +this._high_barrier.price.toFixed(this.pip) : undefined;
-        const low = this._low_barrier.visible ? +this._low_barrier.price.toFixed(this.pip) : undefined;
+        const high = this._high_barrier.visible ? Number(this._high_barrier.price).toFixed(this.pip) : undefined;
+        const low = this._low_barrier.visible ? Number(this._low_barrier.price).toFixed(this.pip) : undefined;
 
         if (typeof this._onBarrierChange === 'function') {
             this._onBarrierChange({ high, low });
@@ -303,7 +303,7 @@ export default class BarrierStore {
         if (this.isInitialized && showLowBarrier && !wasLowBarrierVisible) {
             if (this._low_barrier.realPrice >= this._high_barrier.realPrice && this.mainStore.chart.currentClose) {
                 // fix position if _low_barrier above _high_barrier, since _low_barrier position is not updated when not visible
-                this._low_barrier.price = this._high_barrier.price - this.mainStore.chart.currentClose;
+                this._low_barrier.price = (+this._high_barrier.price - this.mainStore.chart.currentClose).toString();
             }
         }
     }
