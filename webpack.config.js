@@ -23,7 +23,7 @@ const output = {
 };
 
 const config = {
-    devtool: 'inline-source-map',
+    devtool: 'source-map',
     entry: path.resolve(__dirname, './src/index.ts'),
     output,
     resolve: {
