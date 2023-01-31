@@ -30,6 +30,7 @@ const config = {
         alias: {
             '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
             src: path.resolve(__dirname, 'src'),
+            chart: path.resolve(__dirname, 'chart_app/build/web'),
         },
         extensions: ['.ts', '.tsx', '.js'],
     },
@@ -92,7 +93,7 @@ const config = {
             { parser: { amd: false } },
             {
                 test: /\.(js|jsx)$/,
-                exclude: [/node_modules/, /\\scripts/],
+                exclude: [/node_modules/, /\\scripts/, /main\.dart\.js$/, /.*\.smartcharts\.js$/],
                 loader: 'eslint-loader',
                 enforce: 'pre',
                 options: { fix: true },
@@ -132,9 +133,9 @@ const config = {
         new StyleLintPlugin(),
         new SpriteLoaderPlugin(),
         new CopyWebpackPlugin({
-            patterns: [{ from: './chart', to: './chart' }],
+            patterns: [{ from: './chart_app/build/web', to: './chart' }],
         }),
-        // new ForkTsCheckerWebpackPlugin(),
+        new ForkTsCheckerWebpackPlugin(),
     ],
     externals: {
         react: {

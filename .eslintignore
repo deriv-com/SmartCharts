@@ -1,5 +1,4 @@
 dist
-chartiq
 node_modules
 design
 /**/*.d.ts

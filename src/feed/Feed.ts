@@ -96,7 +96,7 @@ class Feed {
         if (this.startEpoch) {
         }
     }
-    // although not used, subscribe is overridden so that unsubscribe will be called by ChartIQ
+    // although not used, subscribe is overridden so that unsubscribe will be called by Chart Engine
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     subscribe() {}
     unsubscribe({ symbol, granularity }: { symbol: string; granularity: TGranularity }) {

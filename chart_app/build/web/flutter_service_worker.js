@@ -3,13 +3,13 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "version.json": "8f437d7e85493c457f7714ae9164957d",
-"index.html": "e110659e27d9fd7fe3307e192007e330",
-"/": "e110659e27d9fd7fe3307e192007e330",
-"main.dart.js": "15386b94b05052459261a9840e4014da",
+  "version.json": "1756499d77011c0be564a414e567db76",
+"index.html": "ffc7611c1a2127ac142979bc01f15859",
+"/": "ffc7611c1a2127ac142979bc01f15859",
+"main.dart.js": "0d091861b4c7fb98bfada376472d7248",
 "flutter.js": "1cfe996e845b3a8a33f57607e8b09ee4",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"manifest.json": "f2def0c42b39aba4174badc40d36a64b",
+"manifest.json": "a06b13fcde5dfd1e240278072e116d12",
 "assets/AssetManifest.json": "ad0c1b8937d33b2c17b7472ab5d4c4e5",
 "assets/NOTICES": "6e236301011331de64912e63faf619d4",
 "assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
@@ -112,7 +112,7 @@ const RESOURCES = {
 "assets/packages/deriv_chart/assets/icons/symbols/ethusd.png": "bcdd0cd2cfcaa223c3d4ccef318fd503",
 "assets/packages/deriv_chart/assets/icons/symbols/otc_sx5e.png": "ea3bd71efec331d541705e2271b3b766",
 "assets/packages/deriv_chart/assets/icons/symbols/frxeurchf.png": "1a66826ef57b967efeb3e67673609eac",
-"assets/fonts/MaterialIcons-Regular.otf": "db4f94cf4dbd5c71001c1da4bc68d6b3",
+"assets/fonts/MaterialIcons-Regular.otf": "69eac75d484a0881bd9cb574da342d22",
 "assets/assets/icons/symbols/1hz300v.png": "90527d87c8da43c78bcad66528b09581",
 "assets/assets/icons/symbols/otc_aex.png": "84ab872d7286a67f2633cbbcff89f0bb",
 "assets/assets/icons/symbols/frxusdpln.png": "d980230b5ea98c9b5d002a3cb8c84c13",
