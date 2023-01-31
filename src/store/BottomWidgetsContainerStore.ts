@@ -7,7 +7,6 @@ export default class BottomWidgetsContainerStore {
     bottom = 20;
     isReadyToShow = false;
     mainChartHeight = 0;
-    top = 0;
     totalHeight = 0;
 
     get context(): Context | null {
@@ -22,7 +21,6 @@ export default class BottomWidgetsContainerStore {
             bottom: observable,
             isReadyToShow: observable,
             mainChartHeight: observable,
-            top: observable,
             totalHeight: observable,
         });
 

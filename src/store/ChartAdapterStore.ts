@@ -94,7 +94,7 @@ export default class ChartAdapterStore {
             );
 
             // @ts-ignore
-            import(/* webpackChunkName: "flutter-chart-adapter", webpackPrefetch: true */ 'chart/main.dart.js');
+            import(/* webpackChunkName: "flutter-chart-adapter" */ 'chart/main.dart.js');
         } else {
             this.onChartLoad();
         }

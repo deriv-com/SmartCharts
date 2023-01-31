@@ -153,18 +153,20 @@ export default class ChartTypeStore {
         }
     }
 
-    setType(type: ChartType | string = 'line') {
+    setType(type?: ChartType | string) {
         logEvent(LogCategories.ChartControl, LogActions.ChartType, type);
 
-        let chartType: ChartType;
+        let chartType: ChartType | undefined;
+
+        type = type || 'line';
 
         if (typeof type != 'string') {
             chartType = type;
         } else {
-            chartType = this.types.find(t => t.id === type) as ChartType;
+            chartType = this.types.find(t => t.id === type);
         }
 
-        if (chartType.id === this.type.id) {
+        if (!chartType || chartType.id === this.type.id) {
             return;
         }
         this.type = chartType;
