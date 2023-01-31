@@ -31,6 +31,7 @@ body {
         height: 100%;
     }
 }
+
 .cq-inchart-subholder {
     width: 100%;
     height: 100%;
@@ -564,35 +565,19 @@ body {
 
 .stx_baseline_delta_mountain {
     /* Default color for baseline delta mountain Charts */
-    background-color: rgba(
-        163,
-        102,
-        255,
-        0.5
-    ); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(
-        163,
-        102,
-        255,
-        0.01
-    ); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+    background-color: rgba(163, 102, 255, 0.5);
+    /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+    color: rgba(163, 102, 255, 0.01);
+    /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
     padding: 3px; /* Optional padding between the baseline and the mountain shading*/
 }
 
 .stx_colored_mountain_chart {
     /* Default color for colored mountain Charts */
-    background-color: rgba(
-        163,
-        102,
-        255,
-        0.5
-    ); /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(
-        163,
-        102,
-        255,
-        0.01
-    ); /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
+    background-color: rgba(163, 102, 255, 0.5);
+    /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
+    color: rgba(163, 102, 255, 0.01);
+    /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
     width: 2px; /* Optional line width */
     padding: 4px; /* Optional padding between the baseline and the mountain shading*/
 }
