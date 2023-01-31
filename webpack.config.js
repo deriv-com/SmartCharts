@@ -219,6 +219,7 @@ if (isApp) {
                     from: './node_modules/react-transition-group/dist/react-transition-group.js',
                     to: 'react-transition-group.js',
                 },
+                { from: './chart_app/build/web/assets', to: './assets' },
             ],
         })
     );
