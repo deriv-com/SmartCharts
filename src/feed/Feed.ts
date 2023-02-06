@@ -39,9 +39,6 @@ class Feed {
     static get EVENT_MASTER_DATA_REINITIALIZE() {
         return 'EVENT_MASTER_DATA_REASSIGN';
     }
-    static get EVENT_COMPARISON_DATA_UPDATE() {
-        return 'EVENT_COMPARISON_DATA_UPDATE';
-    }
     static get EVENT_START_PAGINATION() {
         return 'EVENT_START_PAGINATION';
     }
@@ -223,31 +220,14 @@ class Feed {
         return Math.round(cumulativeDelta / (this.quotes.length - 1));
     }
 
-    async fetchInitialData(
-        symbol: string,
-        suggestedStartDate: Date,
-        _suggestedEndDate: Date,
-        params: TPaginationParams,
-        callback: TPaginationCallback
-    ) {
+    async fetchInitialData(symbol: string, params: TPaginationParams, callback: TPaginationCallback) {
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { granularity, symbolObject } = params;
         const key = this._getKey({ symbol, granularity });
-        const localDate = this._serverTime.getLocalDate();
-        if (suggestedStartDate > localDate) suggestedStartDate = localDate;
-        if (!this.startEpoch && ((suggestedStartDate as unknown) as number) > (this.endEpoch as number)) {
-            suggestedStartDate = CIQ.strToDateTime(getUTCDate((this.endEpoch as number) - 200000));
-        }
-        const isComparisonChart = false;
-        let start = this.startEpoch || Math.floor((((suggestedStartDate as unknown) as number) / 1000) | 0);
-        start = this.margin && this.startEpoch ? start - this.margin : start;
+        let start = this.margin && this.startEpoch ? this.startEpoch - this.margin : this.startEpoch;
         const end = this.margin && this.endEpoch ? this.endEpoch + this.margin : this.endEpoch;
-        if (isComparisonChart) {
-            // Strange issue where comparison series is offset by timezone...
-            start -= suggestedStartDate.getTimezoneOffset() * 60;
-        }
-        const comparisonChartSymbol = isComparisonChart ? symbol : undefined;
+
         const symbolName = symbolObject.name;
         this.loader.setState('chart-data');
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
@@ -257,22 +237,19 @@ class Feed {
                 suppressAlert?: boolean;
                 quotes: TQuote[];
             } = { quotes: [] };
-            if (isComparisonChart) {
-                // Passing error will prevent the chart from being shown; for
-                // main chart we still want the chart to be shown, just disabled
-                dataCallback = { error: 'StreamingNotAllowed', suppressAlert: true, ...dataCallback };
-            } else {
-                this._mainStore.chart.setChartAvailability(false);
-            }
+
+            this._mainStore.chart.setChartAvailability(false);
             callback(dataCallback);
             return;
         }
         const tickHistoryRequest: Partial<TCreateTickHistoryParams> = {
             symbol,
             granularity: granularity as TicksHistoryRequest['granularity'],
-            start: this.endEpoch ? start : undefined,
+            start,
             count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
+
+        console.log(tickHistoryRequest, start, this.startEpoch, this.endEpoch, this._mainStore.lastDigitStats.count);
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {
@@ -298,10 +275,6 @@ class Feed {
                 );
             }
             try {
-                // The chart should forget all ticks_history subscriptions when the symbol/granularity of the main chart is changed before sending the new request.
-                if (!isComparisonChart) {
-                    this.unsubscribeAll();
-                }
                 const { quotes: new_quotes, response } = await subscription.initialFetch();
                 quotes = new_quotes;
 
@@ -321,16 +294,17 @@ class Feed {
             }
             subscription.onChartData((tickResponse: TQuote[]) => {
                 // Append comming ticks to chart only if it belongs to selected symbol after symbol changes
-                if (isComparisonChart || symbol === symbolObject.symbol) {
-                    this._appendChartData(tickResponse, key, comparisonChartSymbol);
+                if (symbol === symbolObject.symbol) {
+                    this._appendChartData(tickResponse, key);
                 }
             });
-            // // if symbol is changed before request is completed, past request needs to be forgotten:
-            // if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
-            //     callback({ quotes: [] });
-            //     subscription.forget();
-            //     return;
-            // }
+
+            // if symbol is changed before request is completed, past request needs to be forgotten:
+            if (this._mainStore.state.symbol !== symbol) {
+                callback({ quotes: [] });
+                subscription.forget();
+                return;
+            }
             this._activeStreams[key] = subscription;
         } else {
             this._mainStore.notifier.notifyMarketClose(symbolName);
@@ -359,7 +333,7 @@ class Feed {
         quotes = this._trimQuotes(quotes);
         callback({ quotes });
         this.scaleChart();
-        this._emitDataUpdate(quotes, comparisonChartSymbol, true);
+        this._emitDataUpdate(quotes, true);
         this.paginationLoader.updateOnPagination(false);
     }
     async fetchPaginationData(
@@ -482,32 +456,25 @@ class Feed {
         }
         return result;
     }
-    _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
+    _appendChartData(quotes: TQuote[], key: string) {
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
         }
-        this._emitDataUpdate(quotes, comparisonChartSymbol);
+        this._emitDataUpdate(quotes);
     }
-    _emitDataUpdate(quotes: TQuote[], comparisonChartSymbol?: string, isChartReinitialized = false) {
+    _emitDataUpdate(quotes: TQuote[], isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
         const prevClose = prev !== undefined ? prev.Close : undefined;
         const dataUpdate = {
             ...quotes[quotes.length - 1],
             prevClose,
         };
-        if (!comparisonChartSymbol) {
-            if (isChartReinitialized) {
-                this._emitter.emit(Feed.EVENT_MASTER_DATA_REINITIALIZE);
-                this._mainStore.chart.setChartAvailability(true);
-            } else {
-                this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
-            }
+        if (isChartReinitialized) {
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_REINITIALIZE);
+            this._mainStore.chart.setChartAvailability(true);
         } else {
-            this._emitter.emit(Feed.EVENT_COMPARISON_DATA_UPDATE, {
-                symbol: comparisonChartSymbol,
-                ...dataUpdate,
-            });
+            this._emitter.emit(Feed.EVENT_MASTER_DATA_UPDATE, dataUpdate);
         }
     }
     static getFirstEpoch({ candles, history }: TicksHistoryResponse) {
@@ -530,9 +497,6 @@ class Feed {
     }
     offMasterDataReinitialize(callback: Listener) {
         this._emitter.off(Feed.EVENT_MASTER_DATA_REINITIALIZE, callback);
-    }
-    onComparisonDataUpdate(callback: Listener) {
-        this._emitter.on(Feed.EVENT_COMPARISON_DATA_UPDATE, callback);
     }
     onPagination(callback: Listener) {
         this._emitter.on(Feed.EVENT_ON_PAGINATION, callback);
@@ -583,12 +547,9 @@ class Feed {
         this._connectionClosedDate = undefined;
     }
     _resumeStream(key: string) {
-        const { symbol } = this._unpackKey(key);
-        const comparisonChartSymbol = this._mainStore.chart.currentActiveSymbol?.symbol !== symbol ? symbol : undefined;
-
         this._activeStreams[key].resume().then((params?: TQuoteResponse) => {
             const { quotes } = params as TQuoteResponse;
-            this._appendChartData(quotes, key, comparisonChartSymbol);
+            this._appendChartData(quotes, key);
         });
     }
     _getKey({ symbol, granularity }: { symbol: string; granularity: TGranularity }) {

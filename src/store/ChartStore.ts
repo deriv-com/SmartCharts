@@ -449,6 +449,7 @@ class ChartStore {
         }
 
         this.newChart(symbolObj);
+
         if (symbolObj) {
             this.updateCurrentActiveSymbol(symbolObj);
         }
@@ -483,8 +484,6 @@ class ChartStore {
 
         this.feed!.fetchInitialData(
             symbolObj.symbol,
-            this.feed!._serverTime.getLocalDate(),
-            new Date(),
             {
                 granularity: this.mainStore.state.granularity,
                 symbolObject: symbolObj,
