@@ -74,7 +74,7 @@ const Chart = (props: TChartProps) => {
         enabledChartFooter = true,
         enabledNavigationWidget = true,
         toolbarWidget = () => null,
-        onCrosshairChange,
+        onCrosshairChange = () => null,
         historical,
     } = props;
 
@@ -83,6 +83,8 @@ const Chart = (props: TChartProps) => {
     // if there are any markers, then increase the subholder z-index
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const memoizedOnCrosshairChange = React.useCallback(onCrosshairChange, [t.lang]);
 
     return (
         <div
@@ -133,12 +135,16 @@ const Chart = (props: TChartProps) => {
                                     className='chartContainer'
                                     style={{
                                         height:
-                                            historical && chartContainerHeight && isMobile ? chartContainerHeight - 30 : chartContainerHeight,
+                                            historical && chartContainerHeight && isMobile
+                                                ? chartContainerHeight - 30
+                                                : chartContainerHeight,
                                     }}
                                 >
                                     <Crosshair />
                                 </div>
-                                {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}
+                                {enabledNavigationWidget && (
+                                    <NavigationWidget onCrosshairChange={memoizedOnCrosshairChange} />
+                                )}
                                 {ToolbarWidget && <ToolbarWidget />}
                                 {!isChartAvailable && (
                                     <div className='cq-chart-unavailable'>
