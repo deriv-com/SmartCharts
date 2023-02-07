@@ -64,12 +64,12 @@ const FilterGroup = React.memo(
                             focusedCategoryKey && focusedCategoryKey.length
                                 ? focusedCategoryKey === subgroup.categoryId
                                 : activeCategoryKey === subgroup.categoryId;
-                        const isSubgroupActive = category.subgroups.filter((el: TCategorizedSymbolItem) => el.categoryId === focusedCategoryKey).length > 0;
+                        const isSubgroupActive = category.subgroups.filter((el: TCategorizedSymbolItem) => el.categoryId === focusedCategoryKey || !focusedCategoryKey && el.categoryId === activeCategoryKey).length > 0;
 
-                        if (isActive && !isGroupActive) {
+                        if (isActive && isSubgroupActive && !isGroupActive) {
                             setIsGroupActive(true);
                             setIsOpen(true);
-                        } else if (focusedCategoryKey && !isSubgroupActive && isGroupActive) {
+                        } else if (!isSubgroupActive && isGroupActive) {
                             setIsGroupActive(false);
                         }
 
