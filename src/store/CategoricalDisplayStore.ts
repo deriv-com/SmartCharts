@@ -303,7 +303,7 @@ export default class CategoricalDisplayStore {
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
-                activeMenuId = category.hasSubgroup ? category.subgroups[+(r.top < 0)].categoryId : category.categoryId;
+                activeMenuId = category.hasSubgroup ? category.subgroups[+(r.top < 0)]?.categoryId : category.categoryId;
             }
         }
 
