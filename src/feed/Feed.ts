@@ -567,6 +567,7 @@ class Feed {
         const { symbol } = this._unpackKey(key);
         const comparisonChartSymbol = this._stx.chart.symbol !== symbol ? symbol : undefined;
 
+        this._activeStreams[key].pause();
         this._activeStreams[key].resume().then((params?: TQuoteResponse) => {
             const { quotes } = params as TQuoteResponse;
             if (this._stx.isDestroyed) return;

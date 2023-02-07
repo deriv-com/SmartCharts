@@ -17,7 +17,7 @@ export default class ShareStore {
     screenshotArea?: Element | null;
 
     isLoadingPNG = false;
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             timeUnit: computed,
@@ -27,7 +27,7 @@ export default class ShareStore {
             isLoadingPNG: observable,
             downloadPNG: action.bound,
             _onCanvasReady: action.bound,
-            downloadCSV: action.bound
+            downloadCSV: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -54,7 +54,6 @@ export default class ShareStore {
     get decimalPlaces() {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places;
     }
-    
 
     createNewTab() {
         // Create a new tab for older iOS browsers that don't support HTML5 download attribute
@@ -93,7 +92,7 @@ export default class ShareStore {
                     }
                 }
                 const image = new Image();
-                image.src = svg.querySelector('use')?.getAttribute('xlink:href') || '';
+                image.src = svg.querySelector('use')?.getAttribute?.('xlink:href') || '';
                 image.onload = () => {
                     if (context) {
                         context.drawImage(image, 0, 0);
@@ -119,7 +118,9 @@ export default class ShareStore {
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
                     if (!is_browser.Firefox() && !is_browser.Safari()) {
                         nodesToRemove.forEach(pair => {
-                            pair.parent?.removeChild(pair.child);
+                            if (pair?.parent?.contains(pair.child) && pair.child instanceof HTMLCanvasElement) {
+                                pair.parent?.removeChild?.(pair.child);
+                            }
                         });
                         nodesToRecover.forEach(pair => {
                             pair.parent?.appendChild(pair.child);
@@ -128,7 +129,6 @@ export default class ShareStore {
                 });
             }, 100);
         });
-
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 

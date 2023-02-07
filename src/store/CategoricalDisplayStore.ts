@@ -183,14 +183,15 @@ export default class CategoricalDisplayStore {
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
                 const foundItems: TSubCategoryDataItem[] = [];
                 if ((category as TCategorizedSymbolItem).hasSubgroup) {
-                    'categoryName' in category && category.subgroups.forEach((el: TCategorizedSymbolItem) =>
-                        el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
-                            const foundSubItems = findFavItem(
-                                subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
-                            );
-                            foundItems.push(...foundSubItems);
-                        })
-                    );
+                    'categoryName' in category &&
+                        category.subgroups.forEach((el: TCategorizedSymbolItem) =>
+                            el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                                const foundSubItems = findFavItem(
+                                    subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                                );
+                                foundItems.push(...foundSubItems);
+                            })
+                        );
                 } else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
@@ -303,7 +304,9 @@ export default class CategoricalDisplayStore {
             const r = el.getBoundingClientRect();
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
-                activeMenuId = category.hasSubgroup ? category.subgroups[+(r.top < 0)]?.categoryId : category?.categoryId;
+                activeMenuId = category.hasSubgroup
+                    ? category.subgroups[+(r.top < 0)]?.categoryId
+                    : category?.categoryId;
             }
         }
 
