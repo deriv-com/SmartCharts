@@ -74,7 +74,7 @@ const FilterGroup = React.memo(
                         }
 
                         return (
-                            <div
+                            <div key={subgroup?.categoryId}
                                 className={`sc-mcd__filter__subgroups-item ${isGroupActive ? 'sc-mcd__filter__item--active' : ''} ${isActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
                                 onClick={() => handleFilterClick(subgroup.categoryId)}
                             >
