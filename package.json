@@ -99,7 +99,7 @@
         "fs": "^0.0.1-security",
         "gettext-loader2": "^0.3.0",
         "gh-pages": "^2.1.1",
-        "husky": "^4.2.5",
+        "husky": "^4.3.8",
         "json-loader": "^0.5.7",
         "lint-staged": "^10.4.0",
         "md5-file": "^4.0.0",
