@@ -115,7 +115,7 @@ export function downloadFileInBrowser(filename: string, content: string, type: s
         link.style.visibility = 'hidden';
         document.body.appendChild(link);
         link.click();
-        document.body.removeChild(link);
+        document.body?.removeChild?.(link);
         return;
     }
     if (newTab) {
