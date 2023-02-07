@@ -42,7 +42,7 @@
         "precommit": "lint-staged --allow-empty"
     },
     "devDependencies": {
-        "@babel/cli": "^7.5.5",
+        "@babel/cli": "^7.18.10",
         "@babel/core": "^7.5.5",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "@babel/plugin-proposal-decorators": "^7.4.4",
@@ -99,7 +99,7 @@
         "fs": "^0.0.1-security",
         "gettext-loader2": "^0.3.0",
         "gh-pages": "^2.1.1",
-        "husky": "^4.2.5",
+        "husky": "^4.3.7",
         "json-loader": "^0.5.7",
         "lint-staged": "^10.4.0",
         "md5-file": "^4.0.0",
@@ -134,8 +134,8 @@
         "ts-node": "^10.4.0",
         "typescript": "^4.3.4",
         "url-loader": "^2.1.0",
-        "webpack": "^4.39.1",
-        "webpack-bundle-analyzer": "^3.4.1",
+        "webpack": "^4.46.0",
+        "webpack-bundle-analyzer": "^4.5.0",
         "webpack-cli": "^3.3.6",
         "webpack-dev-server": "^3.11.0",
         "mobx-undecorate": "^1.2.0"
@@ -145,9 +145,8 @@
         "classnames": "^2.3.1",
         "event-emitter-es6": "^1.1.5",
         "lodash.debounce": "^4.0.8",
-        "mobx": "^6.5.0",
-        "mobx-react-lite": "^3.4.0",
-        "moment": "^2.24.0",
+        "mobx": "^5.0.3",
+        "moment": "^2.29.4",
         "prop-types": "^15.7.2",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
@@ -158,7 +157,7 @@
         "url-search-params-polyfill": "^7.0.0"
     },
     "resolutions": {
-        "js-yaml": "^3.13.1",
+        "js-yaml": "^3.2.7",
         "@babel/parser": "7.7.5"
     },
     "husky": {
