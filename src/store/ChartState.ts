@@ -374,7 +374,7 @@ class ChartState {
             (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
 
         if (this.context && isTimeUnitSecond && isChartTypeCandle) {
-            this.setChartType('line'); // if granularity is zero, set the chartType to 'mountain'
+            this.setChartType('line'); // if granularity is zero, set the chartType to 'line'
         }
         this.granularity = granularity === null ? undefined : granularity;
     }

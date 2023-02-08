@@ -30,34 +30,6 @@ type TDefaults = {
     chartType: string;
 };
 
-type TRange = {
-    dtLeft?: Date;
-    dtRight?: Date;
-    padding?: number;
-    chart?: any;
-    goIntoFuture?: boolean;
-    goIntoPast?: boolean;
-    periodicity?: TNewChartParams['periodicity'];
-    pixelsPerBar?: number;
-    dontSaveRangeToLayout?: boolean;
-    forceLoad?: boolean;
-};
-type TSpan = {
-    base: string;
-    multiplier?: number;
-    maintainPeriodicity?: boolean;
-    padding?: number;
-    forceLoad?: boolean;
-    chart?: any;
-    periodicity?: TNewChartParams['periodicity'];
-};
-type TNewChartParams = {
-    range?: TRange;
-    span?: TSpan;
-    periodicity?: { period?: number; timeUnit?: string; interval?: number };
-    stretchToFillScreen?: boolean;
-};
-
 class ChartStore {
     static chartCount = 0;
     static tradingTimes: TradingTimes | null;
