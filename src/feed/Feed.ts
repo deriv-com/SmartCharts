@@ -249,7 +249,6 @@ class Feed {
             count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
 
-        console.log(tickHistoryRequest, start, this.startEpoch, this.endEpoch, this._mainStore.lastDigitStats.count);
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {

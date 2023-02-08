@@ -169,7 +169,10 @@ export default class ViewStore {
                 this.mainStore.paginationLoader.updateOnPagination(false);
             }
             this.mainStore.state.setChartIsReady(true);
-            this.mainStore.timeperiod.setGranularity(layout.granularity);
+
+            if (layout.granularity != undefined) {
+                this.mainStore.timeperiod.setGranularity(layout.granularity);
+            }
         };
 
         if (this.loader) {
