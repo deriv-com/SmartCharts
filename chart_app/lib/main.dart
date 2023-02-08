@@ -1,6 +1,4 @@
 import 'dart:collection';
-import 'dart:convert';
-
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,10 +45,33 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   final ChartDataModel chartDataModel = ChartDataModel();
   late final ChartConfigModel chartConfigModel;
+  late int rightBoundEpoch;
+  late bool isFollowMode;
+
+  void onVisibilityChange(html.Event ev) {
+    if (chartConfigModel.dataFitEnabled || chartDataModel.ticks.isEmpty) {
+      return;
+    }
+
+    if (html.document.visibilityState == 'visible' && isFollowMode) {
+      chartConfigModel.scrollToLastTick();
+    }
+
+    if (html.document.visibilityState == 'hidden') {
+      isFollowMode = rightBoundEpoch > chartDataModel.ticks.last.epoch;
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    html.document.addEventListener('visibilitychange', onVisibilityChange);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    html.document.removeEventListener('visibilitychange', onVisibilityChange);
   }
 
   DataSeries<Tick> _getDataSeries(ChartStyle style) {
@@ -116,6 +137,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                               leftEpoch < chartDataModel.ticks.first.epoch) {
                             chartDataModel.loadHistory(2500);
                           }
+                          rightBoundEpoch = rightEpoch;
                           JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
                         },
                         onQuoteAreaChanged:

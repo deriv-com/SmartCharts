@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:chart_app/src/helper.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:chart_app/src/models/indicators_config.dart';
+import 'package:flutter/scheduler.dart';
 
 /// State and methods of chart web adapter config.
 class ChartConfigModel extends ChangeNotifier {
@@ -98,6 +99,7 @@ class ChartConfigModel extends ChangeNotifier {
   }
 
   /// To update the theme of the chart
+  // ignore: avoid_positional_boolean_parameters
   void updateCrosshairVisibility(bool _showCrosshair) {
     showCrosshair = _showCrosshair;
     notifyListeners();
@@ -119,6 +121,10 @@ class ChartConfigModel extends ChangeNotifier {
           : ChartDefaultLightTheme();
     }
 
+    if (!dataFitEnabled && isLive) {
+      scrollToLastTick();
+    }
+
     notifyListeners();
   }
 
@@ -127,4 +133,8 @@ class ChartConfigModel extends ChangeNotifier {
     final double scale = payload;
     _controller.scale(scale);
   }
+
+  /// Scroll chart visible area to the newest data.
+  void scrollToLastTick() => SchedulerBinding.instance
+      .addPostFrameCallback((_) => _controller.scrollToLastTick());
 }
