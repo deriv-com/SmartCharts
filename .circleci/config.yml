@@ -91,8 +91,8 @@ commands:
     steps:
       - slack/status:
           include_project_field: false
-          failure_message: "Release failed for Smartchart with version *$(cat version)*"
-          success_message: "Release succeeded for Smartchart with version *$(cat version)*"
+          failure_message: "Release failed for Smartchart with version *$(cat public/version)*"
+          success_message: "Release succeeded for Smartchart with version *$(cat public/version)*"
           webhook: ${SLACK_WEBHOOK}
 
   publish_to_pages_staging:
