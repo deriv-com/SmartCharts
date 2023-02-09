@@ -112,13 +112,13 @@ const IndicatorList = ({
                             ? t.translate(
                                   'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
                               )
-                            : `${Item.title} ${Item.bars ? `(${Item.bars})` : ''}`
+                            : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
                     <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
-                            <span>{Item.title}</span>
+                            <span>{Item.name}</span>
                             {Item.bars && <small>({Item.bars})</small>}
                         </div>
                     </div>

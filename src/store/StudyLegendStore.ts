@@ -166,7 +166,7 @@ export default class StudyLegendStore {
 
         if (props && parameters) {
             parameters.map(p => (p.value = _.clone(p.defaultValue)));
-            const nameObj = prepareIndicatorName(this.settingsDialog.name, parameters);
+            const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
 
             const item: TActiveItem = {
                 ...props,
@@ -217,9 +217,9 @@ export default class StudyLegendStore {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${study.flutter_chart_id}`);
 
         this.settingsDialog.id = study.id;
-        this.settingsDialog.name = study.flutter_chart_id;
+        this.settingsDialog.flutter_chart_id = study.flutter_chart_id;
         this.settingsDialog.items = study.parameters;
-        this.settingsDialog.title = study.title;
+        this.settingsDialog.title = study.name;
         this.settingsDialog.formTitle = t.translate('Result');
         this.settingsDialog.formClassname = `form--${study.id.toLowerCase().replace(/ /g, '-')}`;
         // TODO:
@@ -244,11 +244,11 @@ export default class StudyLegendStore {
         this.changeStudyPanelTitle();
         //  this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
 
-        const props = this.getIndicatorProps(this.settingsDialog.name);
-        const { config } = this.getDefaultIndicatorConfig(this.settingsDialog.name) || {};
+        const props = this.getIndicatorProps(this.settingsDialog.flutter_chart_id);
+        const { config } = this.getDefaultIndicatorConfig(this.settingsDialog.flutter_chart_id) || {};
 
         if (props && parameters) {
-            const nameObj = prepareIndicatorName(this.settingsDialog.name, parameters);
+            const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
 
             const item: TActiveItem = {
                 ...props,

@@ -30,7 +30,7 @@ export default class SettingsDialogStore {
     dialogPortalNodeId?: string;
     freezeScroll = false;
     id = '';
-    name = '';
+    flutter_chart_id = '';
     constructor({ mainStore, onChanged, onDeleted }: TSettingsDialogStoreProps) {
         makeObservable(this, {
             items: observable,
