@@ -299,6 +299,7 @@ export type TIndicatorItem = {
     isPrediction?: boolean;
     flutter_chart_id: string;
     name: string;
+    shortname: string;
 };
 
 export type TActiveItem = TIndicatorItem & {
