@@ -88,7 +88,7 @@ export default class ShareStore {
                     }
                 }
                 const image = new Image();
-                image.src = svg.querySelector('use')?.getAttribute('xlink:href') || '';
+                image.src = svg.querySelector('use')?.getAttribute?.('xlink:href') || '';
                 image.onload = () => {
                     if (context) {
                         context.drawImage(image, 0, 0);
@@ -114,7 +114,9 @@ export default class ShareStore {
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
                     if (!is_browser.Firefox() && !is_browser.Safari()) {
                         nodesToRemove.forEach(pair => {
-                            pair.parent?.removeChild(pair.child);
+                            if (pair?.parent?.contains(pair.child) && pair.child instanceof HTMLCanvasElement) {
+                                pair.parent?.removeChild?.(pair.child);
+                            }
                         });
                         nodesToRecover.forEach(pair => {
                             pair.parent?.appendChild(pair.child);
@@ -123,7 +125,6 @@ export default class ShareStore {
                 });
             }, 100);
         });
-
         logEvent(LogCategories.ChartControl, LogActions.Download, 'Download PNG');
     }
 

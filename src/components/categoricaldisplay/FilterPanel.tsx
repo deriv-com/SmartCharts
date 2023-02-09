@@ -70,23 +70,25 @@ const FilterGroup = React.memo(
                                 : activeCategoryKey === subgroup.categoryId;
                         const isSubgroupActive =
                             category.subgroups.filter(
-                                (el: TCategorizedSymbolItem) => el.categoryId === focusedCategoryKey
+                                (el: TCategorizedSymbolItem) =>
+                                    el.categoryId === focusedCategoryKey ||
+                                    (!focusedCategoryKey && el.categoryId === activeCategoryKey)
                             ).length > 0;
 
-                        if (isActive && !isGroupActive) {
+                        if (isActive && isSubgroupActive && !isGroupActive) {
                             setIsGroupActive(true);
                             setIsOpen(true);
-                        } else if (focusedCategoryKey && !isSubgroupActive && isGroupActive) {
+                        } else if (!isSubgroupActive && isGroupActive) {
                             setIsGroupActive(false);
                         }
 
                         return (
                             <div
+                                key={subgroup?.categoryId}
                                 className={`sc-mcd__filter__subgroups-item ${
                                     isGroupActive ? 'sc-mcd__filter__item--active' : ''
                                 } ${isActive && !isSearching ? 'sc-mcd__filter__item--selected' : ''}`}
                                 onClick={() => handleFilterClick(subgroup.categoryId)}
-                                key={subgroup.categoryId}
                             >
                                 {t.translate(subgroup.categoryName)}
                             </div>

@@ -546,6 +546,7 @@ class Feed {
         this._connectionClosedDate = undefined;
     }
     _resumeStream(key: string) {
+        this._activeStreams[key].pause();
         this._activeStreams[key].resume().then((params?: TQuoteResponse) => {
             const { quotes } = params as TQuoteResponse;
             this._appendChartData(quotes, key);

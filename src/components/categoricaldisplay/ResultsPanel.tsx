@@ -221,46 +221,45 @@ const ResultsPanel = ({
                         />
                     )
                 );
-            } else {
-                return (
-                    (categoryItemCount > 0 || category.emptyDescription) && (
-                        <React.Fragment key={category.categoryId}>
-                            <Category
-                                ItemType={ItemType}
-                                category={category}
-                                categoryItemCount={categoryItemCount}
-                                setCategoryElement={setCategoryElement}
-                                onSelectItem={onSelectItem}
-                                activeHeadKey={activeHeadKey}
-                                disableAll={disableAll}
-                                isNestedList={isNestedList}
-                                handleTitleClick={handleTitleClick}
-                                favoritesId={favoritesId}
-                            />
-                            {category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
-                                if (getItemCount(subgroup) > 0) {
-                                    return (
-                                        <Category
-                                            key={subgroup.categoryId}
-                                            ItemType={ItemType}
-                                            category={subgroup}
-                                            categoryItemCount={categoryItemCount}
-                                            setCategoryElement={setCategoryElement}
-                                            onSelectItem={onSelectItem}
-                                            activeHeadKey={activeHeadKey}
-                                            disableAll={disableAll}
-                                            isNestedList={isNestedList}
-                                            handleTitleClick={handleTitleClick}
-                                            hasSubgroup={true}
-                                            favoritesId={favoritesId}
-                                        />
-                                    );
-                                }
-                            })}
-                        </React.Fragment>
-                    )
-                );
             }
+            return (
+                (categoryItemCount > 0 || category.emptyDescription) && (
+                    <React.Fragment key={category.categoryId}>
+                        <Category
+                            ItemType={ItemType}
+                            category={category}
+                            categoryItemCount={categoryItemCount}
+                            setCategoryElement={setCategoryElement}
+                            onSelectItem={onSelectItem}
+                            activeHeadKey={activeHeadKey}
+                            disableAll={disableAll}
+                            isNestedList={isNestedList}
+                            handleTitleClick={handleTitleClick}
+                            favoritesId={favoritesId}
+                        />
+                        {category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
+                            if (getItemCount(subgroup) > 0) {
+                                return (
+                                    <Category
+                                        key={subgroup.categoryId}
+                                        ItemType={ItemType}
+                                        category={subgroup}
+                                        categoryItemCount={categoryItemCount}
+                                        setCategoryElement={setCategoryElement}
+                                        onSelectItem={onSelectItem}
+                                        activeHeadKey={activeHeadKey}
+                                        disableAll={disableAll}
+                                        isNestedList={isNestedList}
+                                        handleTitleClick={handleTitleClick}
+                                        hasSubgroup
+                                        favoritesId={favoritesId}
+                                    />
+                                );
+                            }
+                        })}
+                    </React.Fragment>
+                )
+            );
         })}
     </>
 );

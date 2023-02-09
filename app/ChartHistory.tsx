@@ -57,8 +57,9 @@ const ChartHistory = React.memo(({ onChange }: TChartHistoryProps) => {
                     value={date}
                     onChange={onChangeDate}
                     min_date={moment.utc().subtract(1, 'years').toDate().toString()}
-                    max_date={moment.utc().toDate().toString()} 
-                    display_format={'DD MMM YYYY'} />
+                    max_date={moment.utc().toDate().toString()}
+                    display_format='DD MMM YYYY'
+                />
                 <TimePicker
                     placeholder='time'
                     name='time'

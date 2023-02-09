@@ -74,7 +74,7 @@ const Chart = (props: TChartProps) => {
         enabledChartFooter = true,
         enabledNavigationWidget = true,
         toolbarWidget = () => null,
-        onCrosshairChange,
+        onCrosshairChange = () => null,
         historical,
         markers_array = [],
     } = props;
@@ -84,6 +84,8 @@ const Chart = (props: TChartProps) => {
     // if there are any markers, then increase the subholder z-index
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const memoizedOnCrosshairChange = React.useCallback(onCrosshairChange, [t.lang]);
 
     React.useEffect(() => {
         chartAdapter.onMount(chartContainerRef.current as HTMLDivElement);
@@ -133,9 +135,11 @@ const Chart = (props: TChartProps) => {
                                 <RenderInsideChart at='subholder'>
                                     <PaginationLoader />
                                 </RenderInsideChart>
-                                <div className='cq-top-ui-widgets'>
-                                    <TopWidgets />
-                                </div>
+                                {!loader.isActive && (
+                                    <div className='cq-top-ui-widgets'>
+                                        <TopWidgets />
+                                    </div>
+                                )}
                                 <div
                                     className='chartContainer'
                                     ref={chartContainerRef}
@@ -148,7 +152,9 @@ const Chart = (props: TChartProps) => {
                                 >
                                     <Crosshair />
                                 </div>
-                                {enabledNavigationWidget && <NavigationWidget onCrosshairChange={onCrosshairChange} />}
+                                {enabledNavigationWidget && (
+                                    <NavigationWidget onCrosshairChange={memoizedOnCrosshairChange} />
+                                )}
                                 {ToolbarWidget && <ToolbarWidget />}
                                 {!isChartAvailable && (
                                     <div className='cq-chart-unavailable'>
