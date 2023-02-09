@@ -43,8 +43,6 @@ export default class BottomWidgetsContainerStore {
 
             const { bottomQuote } = chartAdapter.quoteBounds;
 
-            console.log(chartAdapter.quoteBounds);
-
             const mainChartHeight = chartAdapter.getYFromQuote(bottomQuote);
 
             const addedIndicatorsHeight = this.mainStore.chart.chartContainerHeight - mainChartHeight;
