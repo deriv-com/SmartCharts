@@ -95,7 +95,7 @@ const IndicatorList = ({
     <div className='sc-studies__list'>
         {items.map(Item => (
             <div
-                key={`item--${Item.id || Item.name}`}
+                key={`item--${Item.id || Item.flutter_chart_id}`}
                 className={classNames('sc-studies__list__item ', {
                     'sc-studies__list__item--disabled': disableAll,
                     'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
@@ -115,7 +115,7 @@ const IndicatorList = ({
                             : `${Item.title} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
-                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.name) : null)}>
+                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
                             <span>{Item.title}</span>
@@ -301,7 +301,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                 infoItem ? (
                     <div className='sc-dialog__head--info'>
                         <BackIcon onClick={() => onInfoItem(null)} />
-                        {infoItem.name}
+                        {infoItem.flutter_chart_id}
                     </div>
                 ) : (
                     <div className='sc-dialog__head--search'>
@@ -337,7 +337,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                                     <button
                                         type='button'
                                         className='sc-btn sc-btn--primary sc-btn--w100'
-                                        onClick={() => onSelectItem(infoItem?.name)}
+                                        onClick={() => onSelectItem(infoItem?.flutter_chart_id)}
                                         disabled={infoItem?.disabledAddBtn}
                                     >
                                         {t.translate('Add')}

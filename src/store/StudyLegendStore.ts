@@ -97,7 +97,7 @@ export default class StudyLegendStore {
         return [...getIndicatorsTree()]
             .map(category => {
                 category.foundItems = (category.items.filter(
-                    item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
+                    item => item.flutter_chart_id.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
                 ) as unknown) as TActiveItem[];
                 return category;
             })
@@ -146,7 +146,7 @@ export default class StudyLegendStore {
 
         const config: TIndicatorConfig = {
             id: activeItem.id,
-            name: activeItem.name,
+            name: activeItem.flutter_chart_id,
             ...this.transform(params),
         };
         this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config));
@@ -171,7 +171,6 @@ export default class StudyLegendStore {
             const item: TActiveItem = {
                 ...props,
                 id: getUniqueId(),
-                name: props.name,
                 config,
                 parameters,
                 bars: nameObj.bars,
@@ -190,7 +189,7 @@ export default class StudyLegendStore {
         activeItems.forEach(activeItem => {
             this.addOrUpdateIndicator(activeItem);
 
-            const props = this.getIndicatorProps(activeItem.name);
+            const props = this.getIndicatorProps(activeItem.flutter_chart_id);
             _.extend(activeItem, props || {});
         });
 
@@ -215,10 +214,10 @@ export default class StudyLegendStore {
     }
 
     editStudy(study: TActiveItem) {
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${study.name}`);
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${study.flutter_chart_id}`);
 
         this.settingsDialog.id = study.id;
-        this.settingsDialog.name = study.name;
+        this.settingsDialog.name = study.flutter_chart_id;
         this.settingsDialog.items = study.parameters;
         this.settingsDialog.title = study.title;
         this.settingsDialog.formTitle = t.translate('Result');
@@ -282,7 +281,9 @@ export default class StudyLegendStore {
     };
 
     getIndicatorProps = (indicator: string) => {
-        return _.flatMap(getIndicatorsTree(), collection => collection.items).find(item => item?.name === indicator);
+        return _.flatMap(getIndicatorsTree(), collection => collection.items).find(
+            item => item?.flutter_chart_id === indicator
+        );
     };
 
     getDefaultIndicatorConfig = (indicator: keyof typeof DefaultIndicatorConfigs) => {
