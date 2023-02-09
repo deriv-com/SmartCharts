@@ -1,10 +1,10 @@
-import { observable, when, makeObservable } from 'mobx';
+import { observable, when, makeObservable, action } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 
 export default class BottomWidgetsContainerStore {
     mainStore: MainStore;
-    bottom = 20;
+    bottom = 30;
     isReadyToShow = false;
     mainChartHeight = 0;
     totalHeight = 0;
@@ -22,6 +22,7 @@ export default class BottomWidgetsContainerStore {
             isReadyToShow: observable,
             mainChartHeight: observable,
             totalHeight: observable,
+            updateChartHeight: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -33,5 +34,25 @@ export default class BottomWidgetsContainerStore {
         this.isReadyToShow = true;
     };
 
-    updateChartMargin = (): void => {};
+    updateChartHeight = async () => {
+        // Todo: Find a better way to calculate indicators height.
+        setTimeout(() => {
+            if (!this.mainStore.chart.chartContainerHeight) return;
+
+            const chartAdapter = this.mainStore.chartAdapter;
+
+            const { bottomQuote } = chartAdapter.quoteBounds;
+
+            console.log(chartAdapter.quoteBounds);
+
+            const mainChartHeight = chartAdapter.getYFromQuote(bottomQuote);
+
+            const addedIndicatorsHeight = this.mainStore.chart.chartContainerHeight - mainChartHeight;
+
+            this.bottom =
+                this.mainStore.chartAdapter.isDataInitialized && addedIndicatorsHeight > 80
+                    ? addedIndicatorsHeight
+                    : 30;
+        }, 300);
+    };
 }

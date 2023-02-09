@@ -5,10 +5,7 @@ import '../../sass/components/_bottom-widget-container.scss';
 
 const BottomWidgetsContainer = ({ children }: { children?: React.ReactNode }) => {
     const { bottomWidgetsContainer } = useStores();
-    const { bottom, isReadyToShow, updateChartMargin } = bottomWidgetsContainer;
-    React.useEffect(() => {
-        updateChartMargin();
-    }, [children, updateChartMargin]);
+    const { bottom, isReadyToShow } = bottomWidgetsContainer;
 
     if (!isReadyToShow) {
         return null;

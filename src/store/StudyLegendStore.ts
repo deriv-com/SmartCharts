@@ -178,8 +178,9 @@ export default class StudyLegendStore {
             };
 
             this.activeItems.push(item);
-
             this.addOrUpdateIndicator(item);
+
+            this.mainStore.bottomWidgetsContainer.updateChartHeight();
         }
     }
 
@@ -194,6 +195,8 @@ export default class StudyLegendStore {
         });
 
         this.activeItems = activeItems;
+
+        this.mainStore.bottomWidgetsContainer.updateChartHeight();
     }
 
     // Temporary prevent user from adding more than 5 indicators
@@ -233,6 +236,8 @@ export default class StudyLegendStore {
         this.mainStore.chartAdapter.flutterChart?.config.removeIndicator(id);
 
         _.remove(this.activeItems, item => item.id === id);
+
+        this.mainStore.bottomWidgetsContainer.updateChartHeight();
         this.renderLegend();
         this.mainStore.state.saveLayout();
     }
