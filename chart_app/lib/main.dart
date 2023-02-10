@@ -1,6 +1,6 @@
 import 'dart:collection';
-import 'package:chart_app/src/markers/digit_marker_icon_painter.dart';
-import 'package:chart_app/src/markers/tick_marker_icon_painter.dart';
+import 'package:chart_app/src/markers/marker_icon_painters/digit_marker_icon_painter.dart';
+import 'package:chart_app/src/markers/marker_icon_painters/tick_marker_icon_painter.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
