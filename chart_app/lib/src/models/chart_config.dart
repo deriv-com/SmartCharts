@@ -1,4 +1,5 @@
 import 'package:chart_app/src/markers/marker_group.dart';
+import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/helper.dart';
@@ -58,12 +59,12 @@ class ChartConfigModel extends ChangeNotifier {
     markerGroupList = <MarkerGroup>[];
 
     for (final JSMarkerGroupUpdate _markerGroup in _markerGroupList) {
-      final List<Marker> markers = <Marker>[];
+      final List<WebMarker> markers = <WebMarker>[];
 
       isDigitContract = _markerGroup.type == 'DigitContract';
 
       for (final JsMarker _marker in _markerGroup.markers) {
-        markers.add(Marker(
+        markers.add(WebMarker(
           quote: _marker.quote,
           epoch: _marker.epoch,
           text: _marker.text,

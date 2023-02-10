@@ -1,3 +1,4 @@
+import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// Chart open position marker.
@@ -10,7 +11,7 @@ class MarkerGroup implements Comparable<MarkerGroup> {
   });
 
   /// Marker entries.
-  final List<Marker> markers;
+  final List<WebMarker> markers;
 
   /// Marker group id.
   final String? id;

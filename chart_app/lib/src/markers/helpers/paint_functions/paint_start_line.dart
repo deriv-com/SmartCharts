@@ -1,9 +1,10 @@
+import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 
 /// Paints start time line
-void paintStartLine(
-    Canvas canvas, Size size, Marker marker, Offset anchor, MarkerStyle style) {
+void paintStartLine(Canvas canvas, Size size, WebMarker marker, Offset anchor,
+    MarkerStyle style) {
   paintVerticalDashedLine(
     canvas,
     anchor.dx,

@@ -1,5 +1,6 @@
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
+import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_end_marker.dart';
@@ -21,7 +22,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
 
     final Map<MarkerType, Offset> points = <MarkerType, Offset>{};
 
-    for (final Marker marker in markerGroup.markers) {
+    for (final WebMarker marker in markerGroup.markers) {
       final Offset center = Offset(
         epochToX(marker.epoch),
         quoteToY(marker.quote),
@@ -37,7 +38,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     canvas.restore();
   }
 
-  void _drawMarker(Canvas canvas, Size size, ChartTheme theme, Marker marker,
+  void _drawMarker(Canvas canvas, Size size, ChartTheme theme, WebMarker marker,
       Offset anchor, MarkerStyle style) {
     switch (marker.markerType) {
       case MarkerType.activeStart:
@@ -104,7 +105,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
   }
 
   void _drawStartPoint(Canvas canvas, Size size, ChartTheme theme,
-      Marker marker, Offset anchor, MarkerStyle style) {
+      WebMarker marker, Offset anchor, MarkerStyle style) {
     if (marker.quote != 0) {
       paintStartMarker(canvas, anchor - const Offset(10, 20), style, 20);
     }
