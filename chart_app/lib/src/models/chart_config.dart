@@ -1,3 +1,4 @@
+import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/helper.dart';
@@ -21,9 +22,6 @@ class ChartConfigModel extends ChangeNotifier {
 
   /// Markers
   List<MarkerGroup> markerGroupList = <MarkerGroup>[];
-
-  /// Active marker
-  ActiveMarker? activeMarker;
 
   /// Whether the chart should be showing live data or not.
   bool isLive = true;

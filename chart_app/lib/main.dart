@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:chart_app/src/markers/marker_group_series.dart';
 import 'package:chart_app/src/markers/marker_icon_painters/digit_marker_icon_painter.dart';
 import 'package:chart_app/src/markers/marker_icon_painters/tick_marker_icon_painter.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -146,13 +147,13 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             (double topQuote, double bottomQuote) {
                           JsInterop.onQuoteAreaChanged(topQuote, bottomQuote);
                         },
-                        markerSeries: MarkerSeries(
+                        markerSeries: MarkerGroupSeries(
                           SplayTreeSet<Marker>(),
                           markerGroupList: chartConfigModel.markerGroupList,
-                          markerIconPainter: chartConfigModel.isDigitContract
-                              ? DigitMarkerIconPainter()
-                              : TickMarkerIconPainter(),
-                          activeMarker: chartConfigModel.activeMarker,
+                          markerGroupIconPainter:
+                              chartConfigModel.isDigitContract
+                                  ? DigitMarkerIconPainter()
+                                  : TickMarkerIconPainter(),
                         ),
                         indicatorsRepo:
                             chartConfigModel.indicatorsConfig.indicatorsRepo,

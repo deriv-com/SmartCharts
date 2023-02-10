@@ -1,3 +1,5 @@
+import 'package:chart_app/src/markers/marker_group.dart';
+import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_end_marker.dart';
@@ -5,16 +7,7 @@ import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_marker
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_line.dart';
 
 /// Icon painter for Multipliers trade type
-class DigitMarkerIconPainter extends MarkerIconPainter {
-  @override
-  void paintMarker(
-    Canvas canvas,
-    Offset center,
-    Offset anchor,
-    MarkerDirection direction,
-    MarkerStyle style,
-  ) {}
-
+class DigitMarkerIconPainter extends MarkerGroupIconPainter {
   @override
   void paintMarkerGroup(
     Canvas canvas,
