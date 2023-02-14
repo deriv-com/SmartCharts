@@ -50,15 +50,11 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
             },
             indicators: {
-                onRemove: (indicator_id: String) => {
-                    const [id] = indicator_id.match(/__.*__/) || [];
-                    if (!id) return;
-                    this.mainStore.studies.deleteStudy(id);
+                onRemove: (index: number) => {
+                    this.mainStore.studies.deleteStudy(index);
                 },
-                onEdit: (indicator_id: String) => {
-                    const [id] = indicator_id.match(/__.*__/) || [];
-                    if (!id) return;
-                    this.mainStore.studies.editStudyById(id);
+                onEdit: (index: number) => {
+                    this.mainStore.studies.editStudyByIndex(index);
                 },
             },
         };

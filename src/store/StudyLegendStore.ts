@@ -34,9 +34,10 @@ export default class StudyLegendStore {
             updateStyle: action.bound,
             updateProps: action.bound,
             editStudy: action.bound,
+            editStudyByIndex: action.bound,
             deleteStudy: action.bound,
+            deleteStudyById: action.bound,
             updateStudy: action.bound,
-
             deletePredictionStudies: action.bound,
             deleteAllStudies: action.bound,
             onSelectTab: action.bound,
@@ -50,7 +51,7 @@ export default class StudyLegendStore {
         this.menuStore = new MenuStore(mainStore, { route: 'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            onDeleted: this.deleteStudy,
+            onDeleted: this.deleteStudyById,
             favoritesId: 'indicators',
             onChanged: (items: TSettingsParameter[]) => this.updateStudy(items),
         });
@@ -127,7 +128,7 @@ export default class StudyLegendStore {
         return value;
     };
 
-    addOrUpdateIndicator = (activeItem: TActiveItem) => {
+    addOrUpdateIndicator = (activeItem: TActiveItem, index?: number) => {
         const params = activeItem.parameters.reduce((acc, item) => {
             const { path, paths, value } = item;
 
@@ -149,7 +150,7 @@ export default class StudyLegendStore {
             name: activeItem.flutter_chart_id,
             ...this.transform(params),
         };
-        this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config));
+        this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config), index);
         this.mainStore.state.saveLayout();
     };
 
@@ -183,7 +184,7 @@ export default class StudyLegendStore {
         }
     }
 
-    restoreStudies(activeItems: TActiveItem[]) {
+    async restoreStudies(activeItems: TActiveItem[]) {
         this.deleteAllStudies();
 
         activeItems.forEach(activeItem => {
@@ -208,8 +209,8 @@ export default class StudyLegendStore {
         this.searchInputClassName = searchInputClassName;
     }
 
-    editStudyById(id: string) {
-        const activeItem = this.activeItems.find(i => i.id === id);
+    editStudyByIndex(index: number) {
+        const activeItem = this.activeItems[index];
         if (activeItem) this.editStudy(activeItem);
     }
 
@@ -229,20 +230,21 @@ export default class StudyLegendStore {
         this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.setOpen(true);
     }
-    deleteStudy(id: string) {
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${id}`);
+    deleteStudyById(id: string) {
+        const index = _.findIndex(this.activeItems, item => item.id === id);
+        this.mainStore.chartAdapter.flutterChart?.config.removeIndicator(index);
+        this.deleteStudy(index);
+    }
+    deleteStudy(index: number) {
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${index}`);
 
-        this.mainStore.chartAdapter.flutterChart?.config.removeIndicator(id);
-
-        _.remove(this.activeItems, item => item.id === id);
-
+        _.pullAt(this.activeItems, index);
         this.mainStore.bottomWidgetsContainer.updateChartHeight();
         this.renderLegend();
         this.mainStore.state.saveLayout();
     }
     updateStudy(parameters: TSettingsParameter[]) {
         this.changeStudyPanelTitle();
-        //  this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
 
         const props = this.getIndicatorProps(this.settingsDialog.flutter_chart_id);
         const { config } = this.getDefaultIndicatorConfig(this.settingsDialog.flutter_chart_id) || {};
@@ -258,7 +260,9 @@ export default class StudyLegendStore {
                 config,
             };
 
-            this.addOrUpdateIndicator(item);
+            const index = _.findIndex(this.activeItems, item => item.id === this.settingsDialog.id);
+
+            this.addOrUpdateIndicator(item, index);
         }
     }
     changeStudyPanelTitle() {
@@ -295,7 +299,8 @@ export default class StudyLegendStore {
     }
 
     deleteAllStudies() {
-        this.activeItems.forEach(activeItem => this.deleteStudy(activeItem.id));
+        this.activeItems.forEach(item => this.deleteStudyById(item.id));
+
         this.activeItems = [];
     }
 

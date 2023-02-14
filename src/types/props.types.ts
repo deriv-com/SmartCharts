@@ -320,8 +320,8 @@ export type TNewChartPayload = {
 export type TFlutterChart = {
     config: {
         updateTheme: (theme: string) => void;
-        addOrUpdateIndicator: (config: string) => void;
-        removeIndicator: (id: string) => void;
+        addOrUpdateIndicator: (config: string, index?: number) => void;
+        removeIndicator: (index: number) => void;
         newChart: (payload: TNewChartPayload) => void;
         scale: (scale: number) => void;
         updateChartStyle: (chartStyle: string) => void;
@@ -350,8 +350,8 @@ export type JSInterop = {
     onCrosshairHover: (dx: number, dy: number, epoch: number, quote: String) => void;
     loadHistory: (request: TLoadHistoryParams) => void;
     indicators: {
-        onRemove: (id: string) => void;
-        onEdit: (id: string) => void;
+        onRemove: (index: number) => void;
+        onEdit: (index: number) => void;
     };
 };
 

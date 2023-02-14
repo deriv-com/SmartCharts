@@ -273,7 +273,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
         onSelectTab,
         onSelectItem,
         activeItems,
-        deleteStudy,
+        deleteStudyById,
         editStudy,
         onInfoItem,
         infoItem,
@@ -352,7 +352,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                         categories={items}
                         searchedCategories={searchedItems}
                         onSelectItem={onSelectItem}
-                        onDeleteItem={deleteStudy}
+                        onDeleteItem={deleteStudyById}
                         onEditItem={editStudy}
                         onInfoItem={onInfoItem}
                         activeItems={activeItems}

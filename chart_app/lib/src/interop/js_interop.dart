@@ -1,4 +1,4 @@
-import 'package:deriv_chart/deriv_chart.dart';
+import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 import 'package:js/js.dart';
 
 /// JS Interop
@@ -123,8 +123,8 @@ class JsQuote {
 /// Indicator props
 class JsIndicators {
   /// Called when an indicator is to be removed
-  external OnRemoveCallback? onRemove;
+  external OnEditCallback? onRemove;
 
   /// Called when an indicator is to be edited
-  external OnRemoveCallback? onEdit;
+  external OnEditCallback? onEdit;
 }
