@@ -134,7 +134,9 @@ import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light
 import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
 import Vol1S75 from '../../sass/icons/active-symbols/volatility/1s75 index/light-75(1s) index.svg';
 import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
+import Vol1S150 from '../../sass/icons/active-symbols/volatility/1s150 index/ic-150-1s-index.svg';
 import Vol1S200 from '../../sass/icons/active-symbols/volatility/1s200 index/ic-200-1s-index.svg';
+import Vol1S250 from '../../sass/icons/active-symbols/volatility/1s250 index/ic-250-1s-index.svg';
 import Vol1S300 from '../../sass/icons/active-symbols/volatility/1s300 index/ic-300-1s-index.svg';
 import Crash300 from '../../sass/icons/active-symbols/volatility/crash300 index/crash300 index.svg';
 import Crash500 from '../../sass/icons/active-symbols/volatility/crash500 index/crash500 index.svg';
@@ -517,7 +519,9 @@ export const ItemIconMap = {
     '1HZ50V': Wrapper(Vol1S50),
     '1HZ75V': Wrapper(Vol1S75),
     '1HZ100V': Wrapper(Vol1S100),
+    '1HZ150V': Wrapper(Vol1S150),
     '1HZ200V': Wrapper(Vol1S200),
+    '1HZ250V': Wrapper(Vol1S250),
     '1HZ300V': Wrapper(Vol1S300),
     BOOM300N: Wrapper(Boom300),
     BOOM500: Wrapper(Boom500),
