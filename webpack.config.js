@@ -32,7 +32,7 @@ const config = {
             chartiq: path.resolve(__dirname, `chartiq/${production ? 'production' : 'development'}/index.js`),
             src: path.resolve(__dirname, 'src'),
         },
-        extensions: ['.ts', '.tsx', '.js'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     devServer: {
         publicPath: '/dist/',
