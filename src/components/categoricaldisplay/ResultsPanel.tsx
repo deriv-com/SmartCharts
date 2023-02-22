@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { ArrowIcon, CategoryIconMap } from '../Icons';
+import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
 import { stringToSlug } from '../../utils';
 import {
     TCategorizedSymbolItem,
@@ -62,7 +62,7 @@ function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
             for (const sub of subgroup.data) {
                 count += sub.data.length;
             }
-        })
+        });
     } else if ('categoryName' in category && category.hasSubcategory) {
         for (const sub of category.data) {
             count += sub.data.length;
@@ -85,7 +85,8 @@ const CategoryTitleLeft = React.memo(({ isNestedList, category }: TCategoryTitle
     return (
         <span className={classNames('category-title-left', {
             'category-title-left__subgroup': !CategoryIcon,
-        })}>
+        })}
+        >
             {isNestedList && CategoryIcon ? <CategoryIcon className={`ic-${category.categoryId}`} /> : <div className='category-title-left__placeholder' />}
             {t.translate(category.categoryName)}
         </span>
@@ -109,6 +110,37 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
         {category.categorySubtitle && <div className='category-subtitle'>{t.translate(category.categorySubtitle)}</div>}
         {!category.hasSubgroup && isNestedList ? <ArrowIcon className='arrow' /> : ''}
     </div>
+);
+
+const subCategoryMapper: {[key: string]: string} = {
+    commodity_basket: 'basket-indices/#options',
+    forex_basket: 'basket-indices/#options',
+    random_index: 'synthetic/#options',
+    crash_index: 'synthetic/#multipliers',
+    random_daily: 'synthetic/#options',
+    jump_index: 'synthetic/#options',
+    step_index: 'synthetic/#multipliers',
+    major_pairs: 'forex/#options',
+    minor_pairs: 'forex/#options',
+    americas_OTC: 'stock/#options',
+    asia_oceania_OTC: 'stock/#options',
+    europe_OTC: 'stock/#options',
+    non_stable_coin: 'cryptocurrencies/#multipliers',
+    energy: 'commodities/#options',
+    metals: 'commodities/#options',
+};
+
+const redirectLink = (subCategoryId: string) => {
+    const DEFAULT_LANGUAGE = 'EN';
+    const lang_from_url = new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
+
+    return `https://deriv.com/${lang_from_url}/markets/${subCategoryMapper[subCategoryId]}/`;
+};
+
+const RedirectIcon = ({ link }: { link: string }) => (
+     <a href={link} target='_blank' rel='noreferrer'>
+        <InfoCircleIcon />
+     </a>
 );
 
 const Category = ({
@@ -153,7 +185,10 @@ const Category = ({
                           )}
                           key={subcategory.subcategoryName}
                       >
-                          <div className='subcategory'>{t.translate(subcategory.subcategoryName)}</div>
+                          <div className='subcategory'>
+                            {t.translate(subcategory.subcategoryName)}
+                            <RedirectIcon link={redirectLink(subcategory.subcategoryId)} />
+                          </div>
                           {subcategory.data.map(item => (
                               <ItemType
                                   key={item.display}
@@ -255,7 +290,7 @@ const ResultsPanel = ({
                             }
                         </React.Fragment>
                     )
-                )
+                );
             
         })}
     </>
