@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useStores } from 'src/store';
 import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
 import { stringToSlug } from '../../utils';
 import {
@@ -11,7 +12,6 @@ import {
     TSubCategoryDataItem,
 } from '../../binaryapi/ActiveSymbols';
 import { TNormalItemProps } from './Item';
-import { useStores } from 'src/store';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
@@ -138,7 +138,6 @@ const EUsubCategoryMapper: {[key: string]: string} = {
     non_stable_coin: 'cryptocurrencies/#multipliers',
 };
 
-
 const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
     const DEFAULT_LANGUAGE = 'EN';
     const lang_from_url = new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
@@ -154,8 +153,6 @@ const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
     } else {
         link = `https://${add_EU_suffix}deriv.com/${lang_from_url}/markets/${link_mapper}/`;
     }
-
-
     return link;
 };
 
@@ -318,8 +315,7 @@ const ResultsPanel = ({
                             }
                         </React.Fragment>
                     )
-                );
-            
+                ); 
         })}
     </>
 );
