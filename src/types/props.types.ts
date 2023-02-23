@@ -137,6 +137,7 @@ export type TChartProps = {
     enableRouting?: boolean;
     enable?: boolean;
     isConnectionOpened?: boolean;
+    is_eu_country?: ChartState['is_eu_country'];
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
     showLastDigitStats?: boolean;

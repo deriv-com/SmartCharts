@@ -11,6 +11,7 @@ import {
     TSubCategoryDataItem,
 } from '../../binaryapi/ActiveSymbols';
 import { TNormalItemProps } from './Item';
+import { useStores } from 'src/store';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
@@ -112,7 +113,7 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
     </div>
 );
 
-const subCategoryMapper: {[key: string]: string} = {
+const ROWsubCategoryMapper: {[key: string]: string} = {
     commodity_basket: 'basket-indices/#options',
     forex_basket: 'basket-indices/#options',
     random_index: 'synthetic/#options',
@@ -130,18 +131,45 @@ const subCategoryMapper: {[key: string]: string} = {
     metals: 'commodities/#options',
 };
 
-const redirectLink = (subCategoryId: string) => {
-    const DEFAULT_LANGUAGE = 'EN';
-    const lang_from_url = new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
-
-    return `https://deriv.com/${lang_from_url}/markets/${subCategoryMapper[subCategoryId]}/`;
+const EUsubCategoryMapper: {[key: string]: string} = {
+    random_index: 'synthetic/#multipliers',
+    crash_index: 'synthetic/#multipliers',
+    major_pairs: 'forex/#multipliers',
+    non_stable_coin: 'cryptocurrencies/#multipliers',
 };
 
-const RedirectIcon = ({ link }: { link: string }) => (
-     <a href={link} target='_blank' rel='noreferrer'>
-        <InfoCircleIcon />
-     </a>
-);
+
+const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
+    const DEFAULT_LANGUAGE = 'EN';
+    const lang_from_url = new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
+    const add_EU_suffix = is_eu_client ? 'eu.' : '';
+    const link_mapper = is_eu_client ? EUsubCategoryMapper[subCategoryId] : ROWsubCategoryMapper[subCategoryId];
+    let link;
+    if (!link_mapper) {
+        if(is_eu_client) {
+            link = `https://eu.deriv.com/${lang_from_url}`;
+        }else {
+            link = `https://deriv.com/${lang_from_url}`;
+        }
+    } else {
+        link = `https://${add_EU_suffix}deriv.com/${lang_from_url}/markets/${link_mapper}/`;
+    }
+
+
+    return link;
+};
+
+const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
+    const { state } = useStores();
+    const { is_eu_country } = state;
+    const derivComLink = redirectLink(subcategoryId, !!is_eu_country);
+
+    return ( 
+        <a href={derivComLink} target='_blank' rel='noreferrer'>
+            <InfoCircleIcon />
+        </a>
+    );
+};
 
 const Category = ({
     category,
@@ -187,7 +215,7 @@ const Category = ({
                       >
                           <div className='subcategory'>
                             {t.translate(subcategory.subcategoryName)}
-                            <RedirectIcon link={redirectLink(subcategory.subcategoryId)} />
+                            <RedirectIcon subcategoryId={subcategory.subcategoryId} />
                           </div>
                           {subcategory.data.map(item => (
                               <ItemType
