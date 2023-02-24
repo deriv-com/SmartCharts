@@ -114,28 +114,28 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
 );
 
 const ROWsubCategoryMapper: {[key: string]: string} = {
-    commodity_basket: 'basket-indices/#options',
-    forex_basket: 'basket-indices/#options',
-    random_index: 'synthetic/#options',
-    crash_index: 'synthetic/#multipliers',
-    random_daily: 'synthetic/#options',
-    jump_index: 'synthetic/#options',
-    step_index: 'synthetic/#multipliers',
-    major_pairs: 'forex/#options',
-    minor_pairs: 'forex/#options',
-    americas_OTC: 'stock/#options',
-    asia_oceania_OTC: 'stock/#options',
-    europe_OTC: 'stock/#options',
-    non_stable_coin: 'cryptocurrencies/#multipliers',
-    energy: 'commodities/#options',
-    metals: 'commodities/#options',
+    commodity_basket: 'basket-indices/?tab=options#commodities-basket',
+    forex_basket: 'basket-indices/?tab=options#forex-basket',
+    random_index: 'synthetic/?tab=options#continuous-indices',
+    crash_index: 'synthetic/?tab=multipliers#crash-boom',
+    random_daily: 'synthetic/?tab=options#daily-reset-indices',
+    jump_index: 'synthetic/?tab=options#jump-indices',
+    step_index: 'synthetic/?tab=multipliers#step-indices',
+    major_pairs: 'forex/?tab=options#major-pairs',
+    minor_pairs: 'forex/?tab=options#minor-pairs',
+    americas_OTC: 'stock/?tab=options#american-indices',
+    asia_oceania_OTC: 'stock/?tab=options#asian-indices',
+    europe_OTC: 'stock/?tab=options#european-indices',
+    non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
+    energy: 'commodities/?tab=options#energy',
+    metals: 'commodities/?tab=options#metals',
 };
 
 const EUsubCategoryMapper: {[key: string]: string} = {
-    random_index: 'synthetic/#multipliers',
-    crash_index: 'synthetic/#multipliers',
-    major_pairs: 'forex/#multipliers',
-    non_stable_coin: 'cryptocurrencies/#multipliers',
+    random_index: 'synthetic/?tab=multipliers#continuous-indices',
+    crash_index: 'synthetic/?tab=multipliers#crash-boom',
+    major_pairs: 'forex/?tab=multipliers#major-pairs',
+    non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
 };
 
 const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
