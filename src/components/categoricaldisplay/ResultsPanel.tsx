@@ -151,6 +151,8 @@ const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
     const link_mapper = is_eu_client ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
     let language = `${lang_from_url}/`;
     if (is_eu_client && lang_from_url === 'en') language = '';
+    const modified_lang_code = lang_from_url.replace('_', '-');
+    if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
     let link = `https://${add_EU_suffix}deriv.com/${language}`;
     if (link_mapper) link += `markets/${link_mapper}/`;
     return link;
