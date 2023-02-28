@@ -149,20 +149,11 @@ const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
         new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
     const add_EU_suffix = is_eu_client ? 'eu.' : '';
     const link_mapper = is_eu_client ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
-    let link: string;
-    let language: string;
+    let language = `${lang_from_url}/`;
+    let link = `https://${add_EU_suffix}deriv.com/${language}`;
 
-    if (is_eu_client && lang_from_url === 'EN') {
-        language = '';
-    } else {
-        language = `${lang_from_url}/`;
-    }
-
-    if (!link_mapper) {
-        link = `https://${add_EU_suffix}deriv.com/${language}`;
-    } else {
-        link = `https://${add_EU_suffix}deriv.com/${language}markets/${link_mapper}/`;
-    }
+    if (is_eu_client && lang_from_url === 'EN') language = '';
+    if (link_mapper) link += `markets/${link_mapper}/`;
     return link;
 };
 
