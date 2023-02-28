@@ -159,7 +159,7 @@ const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
     }
 
     if (!link_mapper) {
-        link = `https://${is_eu_client ? 'eu' : ''}.deriv.com/${language}`;
+        link = `https://${add_EU_suffix}deriv.com/${language}`;
     } else {
         link = `https://${add_EU_suffix}deriv.com/${language}markets/${link_mapper}/`;
     }
