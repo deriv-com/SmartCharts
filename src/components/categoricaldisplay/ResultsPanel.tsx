@@ -84,11 +84,16 @@ const EmptyCategory = React.memo(({ category }: TEmptyCategoryProps) => (
 const CategoryTitleLeft = React.memo(({ isNestedList, category }: TCategoryTitleLeftProps) => {
     const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
-        <span className={classNames('category-title-left', {
-            'category-title-left__subgroup': !CategoryIcon,
-        })}
+        <span
+            className={classNames('category-title-left', {
+                'category-title-left__subgroup': !CategoryIcon,
+            })}
         >
-            {isNestedList && CategoryIcon ? <CategoryIcon className={`ic-${category.categoryId}`} /> : <div className='category-title-left__placeholder' />}
+            {isNestedList && CategoryIcon ? (
+                <CategoryIcon className={`ic-${category.categoryId}`} />
+            ) : (
+                <div className='category-title-left__placeholder' />
+            )}
             {t.translate(category.categoryName)}
         </span>
     );
@@ -113,7 +118,7 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
     </div>
 );
 
-const ROWsubCategoryMapper: {[key: string]: string} = {
+const row_subcategory_mapper: { [key: string]: string } = {
     commodity_basket: 'basket-indices/?tab=options#commodities-basket',
     forex_basket: 'basket-indices/?tab=options#forex-basket',
     random_index: 'synthetic/?tab=options#continuous-indices',
@@ -131,7 +136,7 @@ const ROWsubCategoryMapper: {[key: string]: string} = {
     metals: 'commodities/?tab=options#metals',
 };
 
-const EUsubCategoryMapper: {[key: string]: string} = {
+const eu_subcategory_mapper: { [key: string]: string } = {
     random_index: 'synthetic/?tab=multipliers#continuous-indices',
     crash_index: 'synthetic/?tab=multipliers#crash-boom',
     major_pairs: 'forex/?tab=multipliers#major-pairs',
@@ -140,18 +145,23 @@ const EUsubCategoryMapper: {[key: string]: string} = {
 
 const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
     const DEFAULT_LANGUAGE = 'EN';
-    const lang_from_url = new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
+    const lang_from_url =
+        new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
     const add_EU_suffix = is_eu_client ? 'eu.' : '';
-    const link_mapper = is_eu_client ? EUsubCategoryMapper[subCategoryId] : ROWsubCategoryMapper[subCategoryId];
-    let link;
-    if (!link_mapper) {
-        if(is_eu_client) {
-            link = `https://eu.deriv.com/${lang_from_url}`;
-        }else {
-            link = `https://deriv.com/${lang_from_url}`;
-        }
+    const link_mapper = is_eu_client ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    let link: string;
+    let language: string;
+
+    if (is_eu_client && lang_from_url === 'EN') {
+        language = '';
     } else {
-        link = `https://${add_EU_suffix}deriv.com/${lang_from_url}/markets/${link_mapper}/`;
+        language = `${lang_from_url}/`;
+    }
+
+    if (!link_mapper) {
+        link = `https://${is_eu_client ? 'eu' : ''}.deriv.com/${language}`;
+    } else {
+        link = `https://${add_EU_suffix}deriv.com/${language}markets/${link_mapper}/`;
     }
     return link;
 };
@@ -161,7 +171,7 @@ const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
     const { is_eu_country } = state;
     const derivComLink = redirectLink(subcategoryId, !!is_eu_country);
 
-    return ( 
+    return (
         <a href={derivComLink} target='_blank' rel='noreferrer'>
             <InfoCircleIcon />
         </a>
@@ -211,8 +221,8 @@ const Category = ({
                           key={subcategory.subcategoryName}
                       >
                           <div className='subcategory'>
-                            {t.translate(subcategory.subcategoryName)}
-                            <RedirectIcon subcategoryId={subcategory.subcategoryId} />
+                              {t.translate(subcategory.subcategoryName)}
+                              <RedirectIcon subcategoryId={subcategory.subcategoryId} />
                           </div>
                           {subcategory.data.map(item => (
                               <ItemType
@@ -225,7 +235,8 @@ const Category = ({
                           ))}
                       </div>
                   ))
-            : !category.hasSubgroup && category.data.length > 0 && (
+            : !category.hasSubgroup &&
+              category.data.length > 0 && (
                   <div className='sc-mcd__category__content'>
                       {(category.data as TSubCategoryData).map((item, idx) => (
                           <ItemType
@@ -274,48 +285,46 @@ const ResultsPanel = ({
                         />
                     )
                 );
-            } 
-                return (
-                    (categoryItemCount > 0 || category.emptyDescription) && (
-                        <React.Fragment key={category.categoryId}>
-                            <Category
-                                key={category.categoryId}
-                                ItemType={ItemType}
-                                category={category}
-                                categoryItemCount={categoryItemCount}
-                                setCategoryElement={setCategoryElement}
-                                onSelectItem={onSelectItem}
-                                activeHeadKey={activeHeadKey}
-                                disableAll={disableAll}
-                                isNestedList={isNestedList}
-                                handleTitleClick={handleTitleClick}
-                                favoritesId={favoritesId}
-                            />
-                            {
-                                category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
-                                    if (getItemCount(subgroup) > 0) {
-                                        return (
-                                            <Category
-                                                key={subgroup.categoryId}
-                                                ItemType={ItemType}
-                                                category={subgroup}
-                                                categoryItemCount={categoryItemCount}
-                                                setCategoryElement={setCategoryElement}
-                                                onSelectItem={onSelectItem}
-                                                activeHeadKey={activeHeadKey}
-                                                disableAll={disableAll}
-                                                isNestedList={isNestedList}
-                                                handleTitleClick={handleTitleClick}
-                                                hasSubgroup
-                                                favoritesId={favoritesId}
-                                            />
-                                        );
-                                    }
-                                })
+            }
+            return (
+                (categoryItemCount > 0 || category.emptyDescription) && (
+                    <React.Fragment key={category.categoryId}>
+                        <Category
+                            key={category.categoryId}
+                            ItemType={ItemType}
+                            category={category}
+                            categoryItemCount={categoryItemCount}
+                            setCategoryElement={setCategoryElement}
+                            onSelectItem={onSelectItem}
+                            activeHeadKey={activeHeadKey}
+                            disableAll={disableAll}
+                            isNestedList={isNestedList}
+                            handleTitleClick={handleTitleClick}
+                            favoritesId={favoritesId}
+                        />
+                        {category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
+                            if (getItemCount(subgroup) > 0) {
+                                return (
+                                    <Category
+                                        key={subgroup.categoryId}
+                                        ItemType={ItemType}
+                                        category={subgroup}
+                                        categoryItemCount={categoryItemCount}
+                                        setCategoryElement={setCategoryElement}
+                                        onSelectItem={onSelectItem}
+                                        activeHeadKey={activeHeadKey}
+                                        disableAll={disableAll}
+                                        isNestedList={isNestedList}
+                                        handleTitleClick={handleTitleClick}
+                                        hasSubgroup
+                                        favoritesId={favoritesId}
+                                    />
+                                );
                             }
-                        </React.Fragment>
-                    )
-                ); 
+                        })}
+                    </React.Fragment>
+                )
+            );
         })}
     </>
 );
