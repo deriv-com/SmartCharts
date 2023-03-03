@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { ArrowIcon, CategoryIconMap } from '../Icons';
+import { useStores } from 'src/store';
+import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
 import { stringToSlug } from '../../utils';
 import {
     TCategorizedSymbolItem,
@@ -62,7 +63,7 @@ function getItemCount(category: TSubCategory | TCategorizedSymbolItem) {
             for (const sub of subgroup.data) {
                 count += sub.data.length;
             }
-        })
+        });
     } else if ('categoryName' in category && category.hasSubcategory) {
         for (const sub of category.data) {
             count += sub.data.length;
@@ -83,10 +84,16 @@ const EmptyCategory = React.memo(({ category }: TEmptyCategoryProps) => (
 const CategoryTitleLeft = React.memo(({ isNestedList, category }: TCategoryTitleLeftProps) => {
     const CategoryIcon = CategoryIconMap[category.categoryId as keyof typeof CategoryIconMap];
     return (
-        <span className={classNames('category-title-left', {
-            'category-title-left__subgroup': !CategoryIcon,
-        })}>
-            {isNestedList && CategoryIcon ? <CategoryIcon className={`ic-${category.categoryId}`} /> : <div className='category-title-left__placeholder' />}
+        <span
+            className={classNames('category-title-left', {
+                'category-title-left__subgroup': !CategoryIcon,
+            })}
+        >
+            {isNestedList && CategoryIcon ? (
+                <CategoryIcon className={`ic-${category.categoryId}`} />
+            ) : (
+                <div className='category-title-left__placeholder' />
+            )}
             {t.translate(category.categoryName)}
         </span>
     );
@@ -110,6 +117,57 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
         {!category.hasSubgroup && isNestedList ? <ArrowIcon className='arrow' /> : ''}
     </div>
 );
+
+const row_subcategory_mapper: { [key: string]: string } = {
+    commodity_basket: 'basket-indices/?tab=options#commodities-basket',
+    forex_basket: 'basket-indices/?tab=options#forex-basket',
+    random_index: 'synthetic/?tab=options#continuous-indices',
+    crash_index: 'synthetic/?tab=multipliers#crash-boom',
+    random_daily: 'synthetic/?tab=options#daily-reset-indices',
+    jump_index: 'synthetic/?tab=options#jump-indices',
+    step_index: 'synthetic/?tab=multipliers#step-indices',
+    major_pairs: 'forex/?tab=options#major-pairs',
+    minor_pairs: 'forex/?tab=options#minor-pairs',
+    americas_OTC: 'stock/?tab=options#american-indices',
+    asia_oceania_OTC: 'stock/?tab=options#asian-indices',
+    europe_OTC: 'stock/?tab=options#european-indices',
+    non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
+    energy: 'commodities/?tab=options#energy',
+    metals: 'commodities/?tab=options#metals',
+};
+
+const eu_subcategory_mapper: { [key: string]: string } = {
+    random_index: 'synthetic/?tab=multipliers#continuous-indices',
+    crash_index: 'synthetic/?tab=multipliers#crash-boom',
+    major_pairs: 'forex/?tab=multipliers#major-pairs',
+    non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
+};
+
+const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
+    const DEFAULT_LANGUAGE = 'EN';
+    const lang_from_url =
+        new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
+    const link_mapper = is_eu_client ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    let language = `${lang_from_url}/`;
+    if (is_eu_client && lang_from_url === 'en') language = '';
+    const modified_lang_code = lang_from_url.replace('_', '-');
+    if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
+    let link = `https://${is_eu_client ? 'eu.' : ''}deriv.com/${language}`;
+    if (link_mapper) link += `markets/${link_mapper}/`;
+    return link;
+};
+
+const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
+    const { state } = useStores();
+    const { is_eu_country } = state;
+    const derivComLink = redirectLink(subcategoryId, !!is_eu_country);
+
+    return (
+        <a href={derivComLink} target='_blank' rel='noreferrer'>
+            <InfoCircleIcon />
+        </a>
+    );
+};
 
 const Category = ({
     category,
@@ -153,7 +211,10 @@ const Category = ({
                           )}
                           key={subcategory.subcategoryName}
                       >
-                          <div className='subcategory'>{t.translate(subcategory.subcategoryName)}</div>
+                          <div className='subcategory'>
+                              {t.translate(subcategory.subcategoryName)}
+                              <RedirectIcon subcategoryId={subcategory.subcategoryId} />
+                          </div>
                           {subcategory.data.map(item => (
                               <ItemType
                                   key={item.display}
@@ -165,7 +226,8 @@ const Category = ({
                           ))}
                       </div>
                   ))
-            : !category.hasSubgroup && category.data.length > 0 && (
+            : !category.hasSubgroup &&
+              category.data.length > 0 && (
                   <div className='sc-mcd__category__content'>
                       {(category.data as TSubCategoryData).map((item, idx) => (
                           <ItemType
@@ -214,49 +276,46 @@ const ResultsPanel = ({
                         />
                     )
                 );
-            } 
-                return (
-                    (categoryItemCount > 0 || category.emptyDescription) && (
-                        <React.Fragment key={category.categoryId}>
-                            <Category
-                                key={category.categoryId}
-                                ItemType={ItemType}
-                                category={category}
-                                categoryItemCount={categoryItemCount}
-                                setCategoryElement={setCategoryElement}
-                                onSelectItem={onSelectItem}
-                                activeHeadKey={activeHeadKey}
-                                disableAll={disableAll}
-                                isNestedList={isNestedList}
-                                handleTitleClick={handleTitleClick}
-                                favoritesId={favoritesId}
-                            />
-                            {
-                                category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
-                                    if (getItemCount(subgroup) > 0) {
-                                        return (
-                                            <Category
-                                                key={subgroup.categoryId}
-                                                ItemType={ItemType}
-                                                category={subgroup}
-                                                categoryItemCount={categoryItemCount}
-                                                setCategoryElement={setCategoryElement}
-                                                onSelectItem={onSelectItem}
-                                                activeHeadKey={activeHeadKey}
-                                                disableAll={disableAll}
-                                                isNestedList={isNestedList}
-                                                handleTitleClick={handleTitleClick}
-                                                hasSubgroup
-                                                favoritesId={favoritesId}
-                                            />
-                                        );
-                                    }
-                                })
+            }
+            return (
+                (categoryItemCount > 0 || category.emptyDescription) && (
+                    <React.Fragment key={category.categoryId}>
+                        <Category
+                            key={category.categoryId}
+                            ItemType={ItemType}
+                            category={category}
+                            categoryItemCount={categoryItemCount}
+                            setCategoryElement={setCategoryElement}
+                            onSelectItem={onSelectItem}
+                            activeHeadKey={activeHeadKey}
+                            disableAll={disableAll}
+                            isNestedList={isNestedList}
+                            handleTitleClick={handleTitleClick}
+                            favoritesId={favoritesId}
+                        />
+                        {category.subgroups?.map((subgroup: TCategorizedSymbolItem) => {
+                            if (getItemCount(subgroup) > 0) {
+                                return (
+                                    <Category
+                                        key={subgroup.categoryId}
+                                        ItemType={ItemType}
+                                        category={subgroup}
+                                        categoryItemCount={categoryItemCount}
+                                        setCategoryElement={setCategoryElement}
+                                        onSelectItem={onSelectItem}
+                                        activeHeadKey={activeHeadKey}
+                                        disableAll={disableAll}
+                                        isNestedList={isNestedList}
+                                        handleTitleClick={handleTitleClick}
+                                        hasSubgroup
+                                        favoritesId={favoritesId}
+                                    />
+                                );
                             }
-                        </React.Fragment>
-                    )
+                        })}
+                    </React.Fragment>
                 )
-            
+            );
         })}
     </>
 );
