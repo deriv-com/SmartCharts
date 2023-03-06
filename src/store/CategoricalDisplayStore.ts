@@ -258,6 +258,7 @@ export default class CategoricalDisplayStore {
             if (category.hasSubgroup) {
                 category.subgroups = toJS(category.subgroups);
                 for (const subgroup of category.subgroups) {
+                    subgroup.active = true;
                     for (const subcategory of subgroup.data) {
                         filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
                     }
