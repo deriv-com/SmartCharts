@@ -16,6 +16,7 @@ export type TProcessedSymbolItem = {
     market_display_name: string;
     subgroup: string;
     subgroup_display_name: string;
+    submarket: string;
     submarket_display_name: string;
     exchange_is_open: boolean;
     decimal_places: number;
@@ -34,6 +35,7 @@ export type TSubCategoryDataItem = {
 export type TSubCategoryData = TSubCategoryDataItem[];
 
 export type TSubCategory = {
+    subcategoryId: string;
     subcategoryName: string;
     data: TSubCategoryDataItem[];
 };
@@ -171,6 +173,7 @@ export default class ActiveSymbols {
                 subgroup: s.subgroup,
                 // @ts-ignore
                 subgroup_display_name: s.subgroup_display_name,
+                submarket: s.submarket,
                 submarket_display_name: s.submarket_display_name,
                 exchange_is_open: !!s.exchange_is_open,
                 decimal_places: s.pip.toString().length - 2,
@@ -197,6 +200,7 @@ export default class ActiveSymbols {
         const categorizedSymbols: TCategorizedSymbols = [];
         const first = activeSymbols[0];
         const getSubcategory = (d: TProcessedSymbolItem): TSubCategory => ({
+            subcategoryId: d.submarket,
             subcategoryName: d.submarket_display_name,
             data: [],
         });
