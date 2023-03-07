@@ -93,60 +93,62 @@ class ChartStore {
     static chartCount = 0;
     static tradingTimes: TradingTimes | null;
     static activeSymbols: ActiveSymbols;
+    chartContainerHeight?: number;
+    chartHeight?: number;
     chartId?: string;
-    feed?: Feed | null;
-    mainStore: MainStore;
-    resizeObserver?: ResizeObserver;
     containerWidth: number | null = null;
     context: Context | null = null;
     currentActiveSymbol?: TProcessedSymbolItem | null;
-    isChartAvailable = true;
+    currentLanguage?: string;
+    cursorInChart = false;
+    feed?: Feed | null;
     isBarrierDragging = false;
-    chartHeight?: number;
-    chartContainerHeight?: number;
+    isChartAvailable = true;
     isMobile?: boolean = false;
     isScaledOneOne = false;
-    cursorInChart = false;
+    mainStore: MainStore;
+    networkStatus?: TNetworkConfig;
+    resizeObserver?: ResizeObserver;
+    serverTime?: string;
     shouldRenderDialogs = false;
     yAxiswidth = 0;
-    serverTime?: string;
-    networkStatus?: TNetworkConfig;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            chartContainerHeight: observable,
+            chartHeight: observable,
             containerWidth: observable,
             context: observable,
             currentActiveSymbol: observable,
-            isChartAvailable: observable,
+            currentLanguage: observable,
+            cursorInChart: observable,
             isBarrierDragging: observable,
-            chartHeight: observable,
-            chartContainerHeight: observable,
+            isChartAvailable: observable,
             isMobile: observable,
             isScaledOneOne: observable,
-            cursorInChart: observable,
+            networkStatus: observable,
+            serverTime: observable,
             shouldRenderDialogs: observable,
             yAxiswidth: observable,
-            serverTime: observable,
-            networkStatus: observable,
-            pip: computed,
+            _initChart: action.bound,
             addDeleteElement: action.bound,
             addManageElement: action.bound,
-            resizeScreen: action.bound,
-            _initChart: action.bound,
+            calculateYaxisWidth: action.bound,
             categorizedSymbols: computed,
-            onServerTimeChange: action.bound,
+            changeSymbol: action.bound,
+            destroy: action.bound,
+            newChart: action.bound,
             onMouseEnter: action.bound,
             onMouseLeave: action.bound,
-            updateCurrentActiveSymbol: action.bound,
-            setChartAvailability: action.bound,
-            changeSymbol: action.bound,
-            calculateYaxisWidth: action.bound,
-            updateYaxisWidth: action.bound,
-            newChart: action.bound,
-            setYaxisWidth: action.bound,
-            updateScaledOneOne: action.bound,
+            onServerTimeChange: action.bound,
+            openFullscreen: action.bound,
+            pip: computed,
             refreshChart: action.bound,
-            destroy: action.bound,
-            openFullscreen: action.bound
+            resizeScreen: action.bound,
+            setChartAvailability: action.bound,
+            setYaxisWidth: action.bound,
+            updateCurrentActiveSymbol: action.bound,
+            updateScaledOneOne: action.bound,
+            updateYaxisWidth: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -748,7 +750,7 @@ class ChartStore {
                 tradingTimes: initialData?.tradingTimes,
             }));
         this.activeSymbols =
-            ChartStore.activeSymbols ||
+            (this.currentLanguage === settings?.language && ChartStore.activeSymbols) ||
             (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
@@ -759,6 +761,7 @@ class ChartStore {
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
+        this.currentLanguage = settings?.language;
         this.state = this.mainStore.state;
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
