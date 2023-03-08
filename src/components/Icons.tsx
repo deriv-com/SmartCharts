@@ -179,7 +179,7 @@ import USD500 from '../../sass/icons/active-symbols/stock-indices/ic-usd-500.svg
 import UST100 from '../../sass/icons/active-symbols/stock-indices/ic-usd-tech-100.svg';
 import WST30 from '../../sass/icons/active-symbols/stock-indices/ic-wallstreet-30.svg';
 import UK100 from '../../sass/icons/active-symbols/stock-indices/ic-uk-100.svg';
-import SWS20 from '../../sass/icons/active-symbols/stock-indices/ic-swiss-20.svg';
+import CHF20 from '../../sass/icons/active-symbols/stock-indices/ic-swiss-20.svg';
 import DUT25 from '../../sass/icons/active-symbols/stock-indices/ic-netherland-25.svg';
 import JPY225 from '../../sass/icons/active-symbols/stock-indices/ic-japan-225.svg';
 import HKG50 from '../../sass/icons/active-symbols/stock-indices/ic-hong-kong-50.svg';
@@ -495,7 +495,7 @@ const StockIndicesnMap = {
     EUR: Wrapper(EUR50),
     GBP: Wrapper(UK100),
     JPY: Wrapper(JPY225),
-    SWS: Wrapper(SWS20),
+    CHF: Wrapper(CHF20),
     USD: Wrapper(USD500),
     USDT: Wrapper(UST100),
     HongKong: Wrapper(HKG50),
@@ -611,8 +611,8 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 export const OTCBadgeIcon = Wrapper(OTCBadge);
 const BasketIndexIcon = Wrapper(BasketIndexPlaceholder);
 
-function otc(flag: keyof typeof FlagIconMap, symbol: string) {
-    const FlagIcon = FlagIconMap[flag];
+function otc(flag: keyof typeof StockIndicesnMap, symbol: string) {
+    const FlagIcon = StockIndicesnMap[flag];
     ItemIconMap[symbol as keyof typeof ItemIconMap] = FlagIcon;
 }
 
@@ -670,13 +670,14 @@ otc('EUR', 'OTC_SX5E');
 otc('French', 'OTC_FCHI');
 otc('German', 'OTC_GDAXI');
 otc('JPY', 'OTC_N225');
-otc('Spanish', 'OTC_IBEX35');
+// otc('Spanish', 'OTC_IBEX35');
 otc('USD', 'OTC_SPC');
 otc('WallStreet', 'OTC_DJI');
-otc('USD', 'OTC_NDX');
+otc('USDT', 'OTC_NDX');
 otc('CHF', 'OTC_SSMI');
 otc('HongKong', 'OTC_HSI');
 otc('AUD', 'OTC_AS51');
+
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,
