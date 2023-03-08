@@ -180,9 +180,9 @@ import UST100 from '../../sass/icons/active-symbols/stock-indices/ic-usd-tech-10
 import WST30 from '../../sass/icons/active-symbols/stock-indices/ic-wallstreet-30.svg';
 import UK100 from '../../sass/icons/active-symbols/stock-indices/ic-uk-100.svg';
 import SWS20 from '../../sass/icons/active-symbols/stock-indices/ic-swiss-20.svg';
-import ND25 from '../../sass/icons/active-symbols/stock-indices/ic-netherland-25.svg';
+import DUT25 from '../../sass/icons/active-symbols/stock-indices/ic-netherland-25.svg';
 import JPY225 from '../../sass/icons/active-symbols/stock-indices/ic-japan-225.svg';
-import HK50 from '../../sass/icons/active-symbols/stock-indices/ic-hong-kong-50.svg';
+import HKG50 from '../../sass/icons/active-symbols/stock-indices/ic-hong-kong-50.svg';
 import DE40 from '../../sass/icons/active-symbols/stock-indices/ic-germany-40.svg';
 import FR40 from '../../sass/icons/active-symbols/stock-indices/ic-france-40.svg';
 import EUR50 from '../../sass/icons/active-symbols/stock-indices/ic-euro-50.svg';
@@ -488,6 +488,21 @@ const FlagIconMap = {
     French: Wrapper(French),
     Spanish: Wrapper(Spanish),
     WallStreet: Wrapper(WallStreet),
+};
+
+const StockIndicesnMap = {
+    AUD: Wrapper(AUD200),
+    EUR: Wrapper(EUR50),
+    GBP: Wrapper(UK100),
+    JPY: Wrapper(JPY225),
+    SWS: Wrapper(SWS20),
+    USD: Wrapper(USD500),
+    USDT: Wrapper(UST100),
+    HongKong: Wrapper(HKG50),
+    Dutch: Wrapper(DUT25),
+    German: Wrapper(DE40),
+    French: Wrapper(FR40),
+    WallStreet: Wrapper(WST30),
 };
 
 export const FlagIcons = {
