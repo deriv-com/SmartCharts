@@ -497,7 +497,7 @@ const StockIndicesMap = {
     JPY: Wrapper(JPY225),
     CHF: Wrapper(CHF20),
     USD: Wrapper(USD500),
-    USDT: Wrapper(UST100),
+    UST: Wrapper(UST100),
     HongKong: Wrapper(HKG50),
     Dutch: Wrapper(DUT25),
     German: Wrapper(DE40),
@@ -672,7 +672,7 @@ otc('German', 'OTC_GDAXI');
 otc('JPY', 'OTC_N225');
 otc('USD', 'OTC_SPC');
 otc('WallStreet', 'OTC_DJI');
-otc('USDT', 'OTC_NDX');
+otc('UST', 'OTC_NDX');
 otc('CHF', 'OTC_SSMI');
 otc('HongKong', 'OTC_HSI');
 otc('AUD', 'OTC_AS51');
