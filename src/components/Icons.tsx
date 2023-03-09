@@ -490,7 +490,7 @@ const FlagIconMap = {
     WallStreet: Wrapper(WallStreet),
 };
 
-const StockIndicesnMap = {
+const StockIndicesMap = {
     AUD: Wrapper(AUD200),
     EUR: Wrapper(EUR50),
     GBP: Wrapper(UK100),
@@ -611,8 +611,8 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 export const OTCBadgeIcon = Wrapper(OTCBadge);
 const BasketIndexIcon = Wrapper(BasketIndexPlaceholder);
 
-function otc(flag: keyof typeof StockIndicesnMap, symbol: string) {
-    const FlagIcon = StockIndicesnMap[flag];
+function otc(flag: keyof typeof StockIndicesMap, symbol: string) {
+    const FlagIcon = StockIndicesMap[flag];
     ItemIconMap[symbol as keyof typeof ItemIconMap] = FlagIcon;
 }
 
@@ -670,7 +670,6 @@ otc('EUR', 'OTC_SX5E');
 otc('French', 'OTC_FCHI');
 otc('German', 'OTC_GDAXI');
 otc('JPY', 'OTC_N225');
-// otc('Spanish', 'OTC_IBEX35');
 otc('USD', 'OTC_SPC');
 otc('WallStreet', 'OTC_DJI');
 otc('USDT', 'OTC_NDX');
