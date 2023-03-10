@@ -176,7 +176,7 @@ import BTCUSD from '../../sass/icons/active-symbols/cryptos/ic-btcusd.svg';
 
 /* Stock Indices */
 import USD500 from '../../sass/icons/active-symbols/stock-indices/ic-usd-500.svg';
-import UST100 from '../../sass/icons/active-symbols/stock-indices/ic-usd-tech-100.svg';
+import USTech100 from '../../sass/icons/active-symbols/stock-indices/ic-usd-tech-100.svg';
 import WST30 from '../../sass/icons/active-symbols/stock-indices/ic-wallstreet-30.svg';
 import UK100 from '../../sass/icons/active-symbols/stock-indices/ic-uk-100.svg';
 import CHF20 from '../../sass/icons/active-symbols/stock-indices/ic-swiss-20.svg';
@@ -490,21 +490,6 @@ const FlagIconMap = {
     WallStreet: Wrapper(WallStreet),
 };
 
-const StockIndicesMap = {
-    AUD: Wrapper(AUD200),
-    EUR: Wrapper(EUR50),
-    GBP: Wrapper(UK100),
-    JPY: Wrapper(JPY225),
-    CHF: Wrapper(CHF20),
-    USD: Wrapper(USD500),
-    UST: Wrapper(UST100),
-    HongKong: Wrapper(HKG50),
-    Dutch: Wrapper(DUT25),
-    German: Wrapper(DE40),
-    French: Wrapper(FR40),
-    WallStreet: Wrapper(WST30),
-};
-
 export const FlagIcons = {
     USD: Wrapper(USD),
     GBP: Wrapper(GBP),
@@ -586,6 +571,19 @@ export const ItemIconMap = {
     cryEOSUSD: Wrapper(EOSUSD),
     cryXRPUSD: Wrapper(XRPUSD),
     cryBTCUSD: Wrapper(BTCUSD),
+    /* Stock Indices */
+    'OTC_AEX':Wrapper(DUT25),
+    'OTC_FTSE':Wrapper(UK100),
+    'OTC_SX5E':Wrapper(EUR50),
+    'OTC_FCHI':Wrapper(FR40),
+    'OTC_GDAXI':Wrapper(DE40),
+    'OTC_N225':Wrapper(JPY225),
+    'OTC_SPC':Wrapper(USD500),
+    'OTC_DJI':Wrapper(WST30),
+    'OTC_NDX':Wrapper(USTech100),
+    'OTC_SSMI':Wrapper(CHF20),
+    'OTC_HSI':Wrapper(HKG50),
+    'OTC_AS51':Wrapper(AUD200),
 };
 
 const createCompositeIcon = (A: TIcon, B: TIcon, icId: string) => {
@@ -611,10 +609,6 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 export const OTCBadgeIcon = Wrapper(OTCBadge);
 const BasketIndexIcon = Wrapper(BasketIndexPlaceholder);
 
-function otc(flag: keyof typeof StockIndicesMap, symbol: string) {
-    const FlagIcon = StockIndicesMap[flag];
-    ItemIconMap[symbol as keyof typeof ItemIconMap] = FlagIcon;
-}
 
 function wld(flag: keyof typeof FlagIconMap) {
     const FlagIcon = FlagIconMap[flag];
@@ -663,19 +657,6 @@ frx('USD', 'MXN');
 frx('USD', 'NOK');
 frx('USD', 'PLN');
 frx('USD', 'SEK');
-/* OTC Indicies */
-otc('Dutch', 'OTC_AEX');
-otc('GBP', 'OTC_FTSE');
-otc('EUR', 'OTC_SX5E');
-otc('French', 'OTC_FCHI');
-otc('German', 'OTC_GDAXI');
-otc('JPY', 'OTC_N225');
-otc('USD', 'OTC_SPC');
-otc('WallStreet', 'OTC_DJI');
-otc('UST', 'OTC_NDX');
-otc('CHF', 'OTC_SSMI');
-otc('HongKong', 'OTC_HSI');
-otc('AUD', 'OTC_AS51');
 
 
 export const ActiveOptionsIconMap = {
