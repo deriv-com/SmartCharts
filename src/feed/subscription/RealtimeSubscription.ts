@@ -22,17 +22,20 @@ class RealtimeSubscription extends Subscription {
     }
 
     async _startSubscribe(tickHistoryRequest: TCreateTickHistoryParams) {
+        const contract_info = this.contractInfo as ProposalOpenContract;
         //here we include duration = 'ticks' && exclude duration = 'seconds' which hasn't tick_stream, all_ticks, tick_count (consist of 15-86.400 ticks)
-        if(!this.shouldFetchTickHistory && !!(this.contractInfo as ProposalOpenContract).tick_stream){
+        if(!this.shouldFetchTickHistory && !!contract_info.tick_stream){
             const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
-            this._binaryApi.subscribeTickHistory(Object.assign(tickHistoryRequest, { count: (this.contractInfo as ProposalOpenContract).tick_count} ), processTickHistory);
+            this._binaryApi.subscribeTickHistory(Object.assign(tickHistoryRequest, { count: contract_info.tick_count} ), processTickHistory);
             const response = await tickHistoryPromise;
             const quotes = this._processHistoryResponse(response);
             this._tickCallback = processTickHistory;
             return { quotes, response };
         }else{
             const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
-            this._binaryApi.subscribeTickHistory(tickHistoryRequest, processTickHistory);
+            const tick_count = (contract_info.current_spot_time && contract_info.date_start) ? contract_info.current_spot_time - contract_info.date_start : 0;
+            const min_tick_count = 1000;
+            this._binaryApi.subscribeTickHistory(Object.assign(tickHistoryRequest, { count: tick_count > min_tick_count? tick_count : tick_count} ), processTickHistory);
             const response = await tickHistoryPromise;
             const quotes = this._processHistoryResponse(response);
             this._tickCallback = processTickHistory;
