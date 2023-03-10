@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowGreenIcon, ArrowOrangeIcon } from './Icons';
-import { DIRECTIONS } from '../utils';
+import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
 
 type TPriceLineArrowProps = {
     offScreenDirection: keyof typeof DIRECTIONS;
@@ -8,7 +8,7 @@ type TPriceLineArrowProps = {
 };
 
 const PriceLineArrow = ({ offScreenDirection }: TPriceLineArrowProps) => {
-    const top = offScreenDirection === DIRECTIONS.UP ? `24px` : '-41px';
+    const top = offScreenDirection === DIRECTIONS.UP ? `23px` : `${-ARROW_HEIGHT}px`;
     const transform = offScreenDirection === DIRECTIONS.DOWN ? 'rotate(180deg)' : '';
 
     return offScreenDirection === DIRECTIONS.UP ? (
