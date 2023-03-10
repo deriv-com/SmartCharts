@@ -8,7 +8,7 @@ type TPriceLineArrowProps = {
 };
 
 const PriceLineArrow = ({ offScreenDirection }: TPriceLineArrowProps) => {
-    const top = offScreenDirection === DIRECTIONS.UP ? `23px` : `${-ARROW_HEIGHT}px`;
+    const top = offScreenDirection === DIRECTIONS.UP ? '23px' : `${-ARROW_HEIGHT}px`;
     const transform = offScreenDirection === DIRECTIONS.DOWN ? 'rotate(180deg)' : '';
 
     return offScreenDirection === DIRECTIONS.UP ? (
