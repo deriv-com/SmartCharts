@@ -305,7 +305,7 @@ export default class CategoricalDisplayStore {
             const top = r.top - scrollPanelTop - gap_top;
             if (top < 0) {
                 activeMenuId = category.hasSubgroup
-                    ? category.subgroups[+(r.top < 0)]?.categoryId
+                    ? category.subgroups[category.subgroups.length > 1 ? +(r.top < 0) : 0]?.categoryId
                     : category?.categoryId;
             }
         }
@@ -456,7 +456,7 @@ export default class CategoricalDisplayStore {
         if (!this.mainStore.chart.isMobile) {
             const categories = Object.keys(this.categoryElements);
             const filtered_categories = categories.filter(item => this.categoryElements[item] !== null);
-            const last_category = this.filteredItems?.slice(-1)[0].categoryId;
+            const last_category = categories[categories.length - 1];
             const last_category_bottom_gap = this.height - (64 + (filtered_categories.length - 1) * 40); // to make the last category height reach it's filter tab
             const last_category_element = this.categoryElements[last_category];
             if (last_category_element) last_category_element.style.minHeight = `${last_category_bottom_gap}px`;
