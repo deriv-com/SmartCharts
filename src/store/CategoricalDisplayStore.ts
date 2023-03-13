@@ -279,6 +279,7 @@ export default class CategoricalDisplayStore {
         if (!this.pauseScrollSpy) {
             this.lastFilteredItems = filteredItems;
         }
+
         return filteredItems;
     }
 
@@ -386,25 +387,24 @@ export default class CategoricalDisplayStore {
                 ? item.categoryId === categoryId
                 : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId)
                       .length > 0;
+
             if (isItemActive) {
                 if (item.hasSubgroup) {
                     const triggered_subgroup = item.subgroups.find(
                         (subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId
                     );
 
-                    if (triggered_subgroup != undefined) {
+                    if (triggered_subgroup !== undefined) {
                         triggered_subgroup.active = !triggered_subgroup.active;
                     }
-                    setTimeout(() => this.handleFilterClick(categoryId), 250);
                 } else {
                     item.active = !item.active;
-
-                    if (item.active) {
-                        setTimeout(() => this.handleFilterClick(categoryId), 250);
-                    }
                 }
             }
-            if (item.active && item.categoryId !== 'favorite') {
+            if (item.active) {
+                setTimeout(() => this.handleFilterClick(categoryId), 250);
+            }
+            if (item.active && item.categoryId !== 'favorite' && !this.activeCategories.includes(categoryId)) {
                 this.activeCategories.push(categoryId);
             }
         }
