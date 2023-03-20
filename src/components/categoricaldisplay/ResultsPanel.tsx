@@ -153,10 +153,11 @@ const redirectLink = (subCategoryId: string, is_in_eu_country: boolean, is_eu_re
     if (!active_loginId) {
         link_mapper = is_in_eu_country ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
     }
-    link_mapper =
-        is_eu_resident || (is_eu_account && eu_subcategory_mapper[subCategoryId])
-            ? eu_subcategory_mapper[subCategoryId]
-            : row_subcategory_mapper[subCategoryId];
+    if (is_eu_resident) {
+        link_mapper = eu_subcategory_mapper[subCategoryId];
+    } else {
+        link_mapper = is_eu_account ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    }
     let language = `${lang_from_url}/`;
     const modified_lang_code = lang_from_url.replace('_', '-');
     if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
