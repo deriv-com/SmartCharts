@@ -43,8 +43,6 @@ class ChartState {
     symbol?: string;
     isConnectionOpened? = false;
     isChartReady = false;
-    is_eu_country?: boolean;
-    is_eu?: boolean;
     chartStatusListener?: (isChartReady: boolean) => boolean;
     stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
     settings?: TSettings;
@@ -54,6 +52,7 @@ class ChartState {
     clearChart?: () => void;
     isChartClosed = false;
     shouldMinimiseLastDigits = false;
+    should_show_eu_content?: boolean;
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
@@ -109,10 +108,9 @@ class ChartState {
             symbol: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
-            is_eu_country: observable,
-            is_eu: observable,
             chartStatusListener: observable,
             stateChangeListener: observable,
+            should_show_eu_content: observable,
             settings: observable,
             showLastDigitStats: observable,
             scrollToEpoch: observable,
@@ -167,8 +165,6 @@ class ChartState {
             endEpoch,
             isAnimationEnabled = true,
             isConnectionOpened,
-            is_eu_country,
-            is_eu,
             isStaticChart,
             granularity,
             margin = 0,
@@ -178,6 +174,7 @@ class ChartState {
             settings,
             shouldFetchTradingTimes = true,
             shouldFetchTickHistory = true,
+            should_show_eu_content,
             allTicks = [],
             contractInfo = {},
             showLastDigitStats = false,
@@ -219,10 +216,9 @@ class ChartState {
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
-        this.is_eu_country = is_eu_country;
-        this.is_eu = is_eu;
         this.margin = margin;
         this.settings = settings;
+        this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
         this.allTicks = allTicks;
