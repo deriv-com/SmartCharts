@@ -143,24 +143,32 @@ const eu_subcategory_mapper: { [key: string]: string } = {
     non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
 };
 
-const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
+const redirectLink = (subCategoryId: string, is_in_eu_country: boolean, is_eu_resident: boolean) => {
+    let link_mapper;
+    const active_loginId = localStorage.getItem('active_loginid');
     const DEFAULT_LANGUAGE = 'EN';
     const lang_from_url =
         new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
-    const link_mapper = is_eu_client ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    const is_eu_account = active_loginId?.startsWith('MF');
+    if (!active_loginId) {
+        link_mapper = is_in_eu_country ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    }
+    link_mapper =
+        is_eu_resident || (is_eu_account && eu_subcategory_mapper[subCategoryId])
+            ? eu_subcategory_mapper[subCategoryId]
+            : row_subcategory_mapper[subCategoryId];
     let language = `${lang_from_url}/`;
-    if (is_eu_client && lang_from_url === 'en') language = '';
     const modified_lang_code = lang_from_url.replace('_', '-');
     if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
-    let link = `https://${is_eu_client ? 'eu.' : ''}deriv.com/${language}`;
+    let link = `https://deriv.com/${language}`;
     if (link_mapper) link += `markets/${link_mapper}/`;
     return link;
 };
 
 const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
     const { state } = useStores();
-    const { is_eu_country } = state;
-    const derivComLink = redirectLink(subcategoryId, !!is_eu_country);
+    const { is_eu_country, is_eu } = state;
+    const derivComLink = redirectLink(subcategoryId, !!is_eu_country, !!is_eu);
 
     return (
         <a href={derivComLink} target='_blank' rel='noreferrer'>

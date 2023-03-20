@@ -138,6 +138,7 @@ export type TChartProps = {
     enable?: boolean;
     isConnectionOpened?: boolean;
     is_eu_country?: boolean;
+    is_eu?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
     showLastDigitStats?: boolean;

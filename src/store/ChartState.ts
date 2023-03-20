@@ -44,6 +44,7 @@ class ChartState {
     isConnectionOpened? = false;
     isChartReady = false;
     is_eu_country?: boolean;
+    is_eu?: boolean;
     chartStatusListener?: (isChartReady: boolean) => boolean;
     stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
     settings?: TSettings;
@@ -109,6 +110,7 @@ class ChartState {
             isConnectionOpened: observable,
             isChartReady: observable,
             is_eu_country: observable,
+            is_eu: observable,
             chartStatusListener: observable,
             stateChangeListener: observable,
             settings: observable,
@@ -166,6 +168,7 @@ class ChartState {
             isAnimationEnabled = true,
             isConnectionOpened,
             is_eu_country,
+            is_eu,
             isStaticChart,
             granularity,
             margin = 0,
@@ -217,6 +220,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
         this.is_eu_country = is_eu_country;
+        this.is_eu = is_eu;
         this.margin = margin;
         this.settings = settings;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
