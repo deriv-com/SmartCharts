@@ -590,7 +590,7 @@ class Feed {
             startTickIndex = trimmedQuotes.findIndex(
                 tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch as number))
             );
-            if (startTickIndex > -1) {
+            if (startTickIndex > 0) {
                 trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
             }
         }
