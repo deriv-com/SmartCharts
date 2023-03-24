@@ -69,7 +69,7 @@ class RealtimeSubscription extends Subscription {
         let hasHistory = false;
         const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
-            if (this._stx.isDestroyed) {
+            if (this._stx?.isDestroyed) {
                 const subscriptionId = resp.subscription?.id as string;
                 this._binaryApi.forgetStream(subscriptionId);
                 return;

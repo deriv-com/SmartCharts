@@ -213,7 +213,7 @@ class Feed {
             // When there is end; no streaming required
             tickHistoryRequest.end = String(end);
             getHistoryOnly = true;
-        } else if (this._tradingTimes.isMarketOpened(symbol)) {
+        } else if (!(this.contractInfo as ProposalOpenContract).validation_error) {
             let subscription: DelayedSubscription | RealtimeSubscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
