@@ -207,13 +207,14 @@ class Feed {
             start: this.endEpoch ? start : undefined,
             count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
+        const validation_error = (this.contractInfo as ProposalOpenContract).validation_error_code;
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {
             // When there is end; no streaming required
             tickHistoryRequest.end = String(end);
             getHistoryOnly = true;
-        } else if (!(this.contractInfo as ProposalOpenContract).validation_error) {
+        } else if (validation_error !== 'MarketIsClosed' && validation_error !== 'MarketIsClosedTryVolatility') {
             let subscription: DelayedSubscription | RealtimeSubscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
