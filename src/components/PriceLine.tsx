@@ -29,18 +29,19 @@ const PriceLine = ({
     store,
 }: TPriceLineProps) => {
     const {
-        priceDisplay,
-        visible,
-        setDragLine,
         className,
         draggable,
-        isDragging,
         init,
-        title,
-        yAxiswidth,
+        isDragging,
+        isOverlapping,
         offScreen,
         offScreenDirection,
-        isOverlapping,
+        price,
+        priceDisplay,
+        setDragLine,
+        title,
+        visible,
+        yAxiswidth,
     } = store;
 
     const showBarrier = React.useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
@@ -50,6 +51,8 @@ const PriceLine = ({
     );
     const opacity = React.useMemo(() => (isOverlapping ? opacityOnOverlap : ''), [isOverlapping, opacityOnOverlap]);
 
+    const isBarrierZero = price === '0.00';
+
     React.useEffect(() => {
         init();
     }, [init]);
@@ -57,7 +60,7 @@ const PriceLine = ({
     if (!showBarrier) return null;
 
     return (
-        <div className='barrier-area' style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
+        <div className={classNames('barrier-area', { 'barrier-area--zero': isBarrierZero })} style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
             <div
                 className={classNames('chart-line', 'horizontal', className || '', {
                     draggable,
@@ -72,7 +75,7 @@ const PriceLine = ({
                     <div className='drag-line' style={{ borderTopStyle: lineStyle as 'solid' | 'dotted' }} />
                 )}
                 <div className='draggable-area' />
-                <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
+                <div className='drag-price' style={{ backgroundColor: color, width, opacity, display: isBarrierZero ? 'none' : 'block' }}>
                     <div className='price'>{priceDisplay}</div>
                     {offScreen && offScreenDirection && (
                         <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
