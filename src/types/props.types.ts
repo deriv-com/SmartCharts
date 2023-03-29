@@ -137,7 +137,6 @@ export type TChartProps = {
     enableRouting?: boolean;
     enable?: boolean;
     isConnectionOpened?: boolean;
-    is_eu_country?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
     showLastDigitStats?: boolean;
@@ -145,6 +144,7 @@ export type TChartProps = {
     clearChart?: () => void;
     onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
     importedLayout?: typeof CIQ.UI.Layout;
+    should_show_eu_content?: boolean;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];

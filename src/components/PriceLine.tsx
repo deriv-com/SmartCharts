@@ -68,11 +68,12 @@ const PriceLine = ({
                 })}
                 style={{
                     color: foregroundColor,
-                    backgroundImage: `linear-gradient(to left, ${color} 90%, ${color}00`,
+                    backgroundImage:
+                        lineStyle && lineStyle !== 'solid' ? '' : `linear-gradient(to left, ${color} 90%, ${color}00`,
                 }}
             >
                 {showBarrierDragLine && (
-                    <div className='drag-line' style={{ borderTopStyle: lineStyle as 'solid' | 'dotted' }} />
+                    <div className='drag-line' style={{ borderTop: `${lineStyle} ${color} 1px` }} />
                 )}
                 <div className='draggable-area' />
                 <div className='drag-price' style={{ backgroundColor: color, width, opacity, display: isBarrierZero ? 'none' : 'block' }}>
