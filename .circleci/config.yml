@@ -120,14 +120,14 @@ commands:
 jobs:
   test:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:14.18.2
     steps:
       - checkout
       - npm_install
       - test
   release_staging:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:14.18.2
     steps:
       - checkout
       - npm_install
@@ -144,7 +144,7 @@ jobs:
       - notify_slack
   release_production:
     docker:
-      - image: circleci/node:14.17.1
+      - image: circleci/node:14.18.2
     steps:
       - checkout
       - npm_install
