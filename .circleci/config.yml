@@ -187,7 +187,7 @@ workflows:
           filters:
              branches:
                ignore: /^master$/
-  release:
+  release_staging:
     jobs:
       - release_staging:
           filters:
@@ -201,6 +201,8 @@ workflows:
             branches:
               only: /^master$/
           context: binary-frontend-artifact-upload
+  release_production:
+    jobs:
       - release_production:
           filters:
             branches:
