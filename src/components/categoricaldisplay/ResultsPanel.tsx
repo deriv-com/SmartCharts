@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { ArrowIcon, CategoryIconMap } from '../Icons';
+import { useStores } from 'src/store';
+import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
 import { stringToSlug } from '../../utils';
 import {
     TCategorizedSymbolItem,
@@ -117,6 +118,58 @@ const CategoryTitle = ({ category, activeHeadKey, isNestedList, handleTitleClick
     </div>
 );
 
+const row_subcategory_mapper: { [key: string]: string } = {
+    commodity_basket: 'basket-indices/?tab=options#commodities-basket',
+    forex_basket: 'basket-indices/?tab=options#forex-basket',
+    random_index: 'synthetic/?tab=options#continuous-indices',
+    crash_index: 'synthetic/?tab=multipliers#crash-boom',
+    random_daily: 'synthetic/?tab=options#daily-reset-indices',
+    jump_index: 'synthetic/?tab=options#jump-indices',
+    step_index: 'synthetic/?tab=multipliers#step-indices',
+    major_pairs: 'forex/?tab=options#major-pairs',
+    minor_pairs: 'forex/?tab=options#minor-pairs',
+    americas_OTC: 'stock/?tab=options#american-indices',
+    asia_oceania_OTC: 'stock/?tab=options#asian-indices',
+    europe_OTC: 'stock/?tab=options#european-indices',
+    non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
+    energy: 'commodities/?tab=options#energy',
+    metals: 'commodities/?tab=options#metals',
+};
+
+const eu_subcategory_mapper: { [key: string]: string } = {
+    random_index: 'synthetic/?tab=multipliers#continuous-indices',
+    crash_index: 'synthetic/?tab=multipliers#crash-boom',
+    major_pairs: 'forex/?tab=multipliers#major-pairs',
+    non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
+};
+
+const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) => {
+    const DEFAULT_LANGUAGE = 'EN';
+    const lang_from_url =
+        new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
+    const link_mapper = should_show_eu_content
+        ? eu_subcategory_mapper[subCategoryId]
+        : row_subcategory_mapper[subCategoryId];
+    let language = `${lang_from_url}/`;
+    const modified_lang_code = lang_from_url.replace('_', '-');
+    if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
+    let link = `https://deriv.com/${language}`;
+    if (link_mapper) link += `markets/${link_mapper}/`;
+    return link;
+};
+
+const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
+    const { state } = useStores();
+    const { should_show_eu_content } = state;
+    const derivComLink = redirectLink(subcategoryId, !!should_show_eu_content);
+
+    return (
+        <a href={derivComLink} target='_blank' rel='noreferrer'>
+            <InfoCircleIcon />
+        </a>
+    );
+};
+
 const Category = ({
     category,
     categoryItemCount,
@@ -159,7 +212,10 @@ const Category = ({
                           )}
                           key={subcategory.subcategoryName}
                       >
-                          <div className='subcategory'>{t.translate(subcategory.subcategoryName)}</div>
+                          <div className='subcategory'>
+                              {t.translate(subcategory.subcategoryName)}
+                              <RedirectIcon subcategoryId={subcategory.subcategoryId} />
+                          </div>
                           {subcategory.data.map(item => (
                               <ItemType
                                   key={item.display}
@@ -226,6 +282,7 @@ const ResultsPanel = ({
                 (categoryItemCount > 0 || category.emptyDescription) && (
                     <React.Fragment key={category.categoryId}>
                         <Category
+                            key={category.categoryId}
                             ItemType={ItemType}
                             category={category}
                             categoryItemCount={categoryItemCount}

@@ -32,7 +32,7 @@ class TradingTimes {
     timeUpdateCallback?: () => void;
     constructor(api: BinaryAPI, params?: TTradingTimesParam) {
         this._params = params || {};
-        this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes || true;
+        this._shouldFetchTradingTimes = params?.shouldFetchTradingTimes !== false;
         this._api = api;
         this._serverTime = ServerTime.getInstance();
         this._emitter = new EventEmitter({ emitDelay: 0 });

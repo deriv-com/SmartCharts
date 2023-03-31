@@ -27,61 +27,65 @@ import ChartState from './ChartState';
 
 type TDefaults = {
     granularity: TGranularity;
-    chartType: string;
+    chartType: React.ReactNode;
 };
 
 class ChartStore {
     static chartCount = 0;
     static tradingTimes: TradingTimes | null;
     static activeSymbols: ActiveSymbols;
+    chartContainerHeight?: number;
+    chartHeight?: number;
     chartId?: string;
-    feed?: Feed | null;
-    mainStore: MainStore;
-    resizeObserver?: ResizeObserver;
     containerWidth: number | null = null;
     context: Context | null = null;
     currentActiveSymbol?: TProcessedSymbolItem | null;
-    isChartAvailable = true;
+    currentLanguage?: string;
+    cursorInChart = false;
+    dataFitEnabled = false;
+    feed?: Feed | null;
     isBarrierDragging = false;
-    chartHeight?: number;
-    chartContainerHeight?: number;
+    isChartAvailable = true;
+    isLive = false;
     isMobile?: boolean = false;
     isScaledOneOne = false;
+    mainStore: MainStore;
+    networkStatus?: TNetworkConfig;
+    resizeObserver?: ResizeObserver;
+    serverTime?: string;
     shouldRenderDialogs = false;
     yAxiswidth = 60;
-    serverTime?: string;
-    networkStatus?: TNetworkConfig;
-    isLive = false;
-    dataFitEnabled = false;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            chartContainerHeight: observable,
+            chartHeight: observable,
             containerWidth: observable,
             context: observable,
             currentActiveSymbol: observable,
-            isChartAvailable: observable,
+            currentLanguage: observable,
+            cursorInChart: observable,
             isBarrierDragging: observable,
-            chartHeight: observable,
-            chartContainerHeight: observable,
+            isChartAvailable: observable,
             isMobile: observable,
             isScaledOneOne: observable,
+            networkStatus: observable,
+            serverTime: observable,
             shouldRenderDialogs: observable,
             yAxiswidth: observable,
-            serverTime: observable,
-            networkStatus: observable,
-            pip: computed,
-            resizeScreen: action.bound,
             _initChart: action.bound,
             categorizedSymbols: computed,
-            onServerTimeChange: action.bound,
-            updateCurrentActiveSymbol: action.bound,
-            setChartAvailability: action.bound,
             changeSymbol: action.bound,
-            newChart: action.bound,
-            updateScaledOneOne: action.bound,
-            refreshChart: action.bound,
             destroy: action.bound,
-            openFullscreen: action.bound,
             granularity: observable,
+            newChart: action.bound,
+            onServerTimeChange: action.bound,
+            openFullscreen: action.bound,
+            pip: computed,
+            refreshChart: action.bound,
+            resizeScreen: action.bound,
+            setChartAvailability: action.bound,
+            updateCurrentActiveSymbol: action.bound,
+            updateScaledOneOne: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -249,7 +253,7 @@ class ChartStore {
                 tradingTimes: initialData?.tradingTimes,
             }));
         this.activeSymbols =
-            ChartStore.activeSymbols ||
+            (this.currentLanguage === settings?.language && ChartStore.activeSymbols) ||
             (ChartStore.activeSymbols = new ActiveSymbols(this.api, this.tradingTimes, {
                 enable: this.feedCall.activeSymbols,
                 getMarketsOrder,
@@ -260,6 +264,7 @@ class ChartStore {
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
         this.isMobile = isMobile;
+        this.currentLanguage = settings?.language;
         this.state = this.mainStore.state;
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;

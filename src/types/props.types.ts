@@ -178,6 +178,7 @@ export type TChartProps = {
     showLastDigitStats?: boolean;
     scrollToEpoch?: number | null;
     clearChart?: () => void;
+    should_show_eu_content?: boolean;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
