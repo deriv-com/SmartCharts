@@ -94,6 +94,9 @@ class JsMarker {
 
   /// Marker type
   external String get type;
+
+  /// Marker color
+  external String? get color;
 }
 
 @JS()

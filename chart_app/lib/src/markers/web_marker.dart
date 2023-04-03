@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// Type of marker.
@@ -34,6 +35,7 @@ class WebMarker extends Marker {
     required MarkerDirection direction,
     this.markerType,
     this.text,
+    this.color,
   }) : super(epoch: epoch, quote: quote, direction: direction);
 
   /// Type of marker.
@@ -41,4 +43,7 @@ class WebMarker extends Marker {
 
   /// Text displayed on the marker.
   final String? text;
+
+  /// Color of the marker
+  final Color? color;
 }

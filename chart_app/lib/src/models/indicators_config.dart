@@ -18,8 +18,7 @@ class IndicatorsConfig extends ChangeNotifier {
   void addOrUpdateIndicator(String dataString, int? index) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
 
-    final IndicatorConfig? indicatorConfig =
-        IndicatorConfig.fromJson(config, 'name');
+    final IndicatorConfig? indicatorConfig = IndicatorConfig.fromJson(config);
 
     if (indicatorConfig != null) {
       index != null && index > -1

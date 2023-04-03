@@ -140,7 +140,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
 
     if (marker.text != null) {
       final TextStyle textStyle = TextStyle(
-        color: style.backgroundColor,
+        color: marker.color ?? style.backgroundColor,
         fontSize: style.activeMarkerText.fontSize,
         fontWeight: FontWeight.bold,
         backgroundColor: theme.base08Color,

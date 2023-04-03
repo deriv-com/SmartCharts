@@ -70,6 +70,7 @@ class ChartConfigModel extends ChangeNotifier {
           text: _marker.text,
           markerType: MarkerType.values.byName(_marker.type),
           direction: MarkerDirection.up,
+          color: _marker.color != null ? getColorFromHex(_marker.color!) : null,
         ));
       }
 
