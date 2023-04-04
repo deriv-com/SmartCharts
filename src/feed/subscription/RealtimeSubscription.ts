@@ -53,7 +53,7 @@ class RealtimeSubscription extends Subscription {
     }
 
     forget() {
-        if (this._tickCallback) {
+        if (true) {
             const { symbol, granularity } = this._request;
             this._binaryApi.forget({
                 symbol,
@@ -74,9 +74,12 @@ class RealtimeSubscription extends Subscription {
                 this._binaryApi.forgetStream(subscriptionId);
                 return;
             }
-            // We assume that 1st response is the history, and subsequent
+            // We assume that 1st response is the history, and subsequent // anchor this is wrong
             // responses are tick stream data.
-            if (hasHistory) {
+            if (resp.msg_type === 'tick') {
+                if (!hasHistory) {
+                    this.forget();
+                }
                 this._onTick(resp);
                 return;
             }
