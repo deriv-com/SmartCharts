@@ -53,7 +53,7 @@ class RealtimeSubscription extends Subscription {
     }
 
     forget() {
-        if (true) {
+        if (this._tickCallback) {
             const { symbol, granularity } = this._request;
             this._binaryApi.forget({
                 symbol,
@@ -66,7 +66,6 @@ class RealtimeSubscription extends Subscription {
     }
 
     _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse, void>, (resp: TicksStreamResponse) => void] {
-        let hasHistory = false;
         const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
             if (this._stx.isDestroyed) {
@@ -74,17 +73,13 @@ class RealtimeSubscription extends Subscription {
                 this._binaryApi.forgetStream(subscriptionId);
                 return;
             }
-            // We assume that 1st response is the history, and subsequent // anchor this is wrong
+            // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
             if (resp.msg_type === 'tick') {
-                if (!hasHistory) {
-                    this.forget();
-                }
                 this._onTick(resp);
                 return;
             }
             tickHistoryPromise.resolve(resp);
-            hasHistory = true;
         };
         return [tickHistoryPromise, processTickHistory];
     }
