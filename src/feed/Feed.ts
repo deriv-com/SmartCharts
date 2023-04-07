@@ -1,4 +1,10 @@
-import { AuditDetailsForExpiredContract, TicksHistoryRequest, TicksHistoryResponse, ProposalOpenContract } from '@deriv/api-types';
+import {
+    AuditDetailsForExpiredContract,
+    TicksHistoryRequest,
+    TicksHistoryResponse,
+    ProposalOpenContract,
+    PriceProposalOpenContractsResponse,
+} from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
@@ -29,6 +35,7 @@ class Feed {
     _mainStore: TMainStore;
     _serverTime: ServerTime;
     _stx: Context['stx'];
+    tickQueue: TQuote[] = [];
     _tradingTimes: TradingTimes;
     static get EVENT_MASTER_DATA_UPDATE() {
         return 'EVENT_MASTER_DATA_UPDATE';
@@ -71,6 +78,9 @@ class Feed {
     }
     get margin() {
         return this._mainStore.state.margin;
+    }
+    get hasAlternativeSource() {
+        return !!this._mainStore.state.handlePOCResponse;
     }
     get paginationLoader() {
         return this._mainStore.paginationLoader;
@@ -163,6 +173,7 @@ class Feed {
         params: TPaginationParams,
         callback: TPaginationCallback
     ) {
+        this.tickQueue = [];
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { period, interval, symbolObject } = params;
@@ -287,7 +298,7 @@ class Feed {
                 const allTicksContract = await this.allTicks;
                 quotes = TickHistoryFormatter.formatAllTicks(
                     allTicksContract as keyof AuditDetailsForExpiredContract | []
-                    );
+                );
             }
         }
         if (!quotes) {
@@ -435,7 +446,7 @@ class Feed {
         }
         return result;
     }
-    _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
+    _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string, fromAlternativeSource = false) {
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
@@ -462,13 +473,35 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
+        } else if (this.hasAlternativeSource && !fromAlternativeSource) {
+            this.tickQueue.push(...quotes);
         } else {
+            if (this.tickQueue && this.tickQueue.length) {
+                if (this.tickQueue.slice(-1)[0].Date <= quotes.slice(-1)[0].Date) {
+                    quotes = this.tickQueue.slice(-1);
+
+                    this._stx.updateChartData(this.tickQueue.slice(0, -1), null, {
+                        noCreateDataSet: true,
+                        allowReplaceOHL: true,
+                    });
+
+                    this.tickQueue = [];
+                }
+            } else if (fromAlternativeSource) {
+                return;
+            }
             this._stx.updateChartData(quotes, null, {
                 allowReplaceOHL: true,
             });
             this._stx.createDataSet();
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
+    }
+    appendChartDataByPOCResponse(quote: PriceProposalOpenContractsResponse) {
+        const tick = TickHistoryFormatter.formatPOCTick(quote);
+        if (tick) {
+            this._appendChartData([tick], tick.tick.symbol, undefined, true);
+        }
     }
     _emitDataUpdate(quotes: TQuote[], comparisonChartSymbol?: string, isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];

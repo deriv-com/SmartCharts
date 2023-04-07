@@ -1,4 +1,9 @@
-import { TicksHistoryResponse, TicksStreamResponse, AuditDetailsForExpiredContract } from '@deriv/api-types';
+import {
+    TicksHistoryResponse,
+    TicksStreamResponse,
+    AuditDetailsForExpiredContract,
+    PriceProposalOpenContractsResponse,
+} from '@deriv/api-types';
 import { OHLCStreamResponse, TQuote } from 'src/types';
 import { getUTCDate } from '../utils';
 
@@ -59,9 +64,33 @@ export class TickHistoryFormatter {
         return undefined;
     }
     static formatAllTicks(allTicksContract: keyof AuditDetailsForExpiredContract | []): TQuote[] | undefined {
-        return allTicksContract?.map((res: any,) => ({
+        return allTicksContract?.map((res: any) => ({
             Date: getUTCDate(+res.epoch),
             Close: +res.tick,
         }));
-    };
-};
+    }
+    static formatPOCTick(response: PriceProposalOpenContractsResponse) {
+        const {
+            proposal_open_contract: {
+                current_spot = 0,
+                current_spot_display_value = '',
+                current_spot_time = 0,
+                underlying = '',
+            } = {},
+        } = response || {};
+
+        if (current_spot && current_spot_display_value && current_spot_time && underlying) {
+            return {
+                Date: getUTCDate(current_spot_time),
+                Close: current_spot,
+                tick: {
+                    epoch: current_spot_time,
+                    quote: current_spot,
+                    symbol: underlying,
+                    pip_size: current_spot_display_value.split('.')[1]?.length || 0,
+                },
+            };
+        }
+        return null;
+    }
+}

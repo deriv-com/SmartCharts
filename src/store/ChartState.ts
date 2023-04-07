@@ -8,6 +8,7 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
+import { PriceProposalOpenContractsResponse } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -33,6 +34,7 @@ type TScrollListenerParamsData = {
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
+    handlePOCResponse?: (handler: (response: PriceProposalOpenContractsResponse) => void) => void;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -124,6 +126,7 @@ class ChartState {
             allTicks: observable,
             contractInfo: observable,
             refreshActiveSymbols: observable,
+            handlePOCResponse: action.bound,
             hasReachedEndOfData: observable,
             prevChartType: observable,
             isChartScrollingToEpoch: observable,
@@ -133,7 +136,7 @@ class ChartState {
             enableScroll: observable,
             enableZoom: observable,
             yAxisMargin: observable,
-            updateProps: action.bound
+            updateProps: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -150,47 +153,52 @@ class ChartState {
         this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
         this.granularity = this.chartStore.granularity;
+
+        if (typeof this.handlePOCResponse === 'function' && this.mainStore.chart.feed) {
+            this.handlePOCResponse(
+                this.mainStore.chart.feed.appendChartDataByPOCResponse.bind(this.mainStore.chart.feed)
+            );
+        }
     };
 
-    updateProps(
-        {
-            networkStatus,
-            chartControlsWidgets,
-            enabledChartFooter,
-            chartStatusListener,
-            stateChangeListener,
-            getIndicatorHeightRatio,
-            chartType,
-            clearChart,
-            endEpoch,
-            isAnimationEnabled = true,
-            isConnectionOpened,
-            isStaticChart,
-            granularity,
-            margin = 0,
-            onExportLayout,
-            refreshActiveSymbols,
-            scrollToEpoch,
-            settings,
-            shouldFetchTradingTimes = true,
-            shouldFetchTickHistory = true,
-            should_show_eu_content,
-            allTicks = [],
-            contractInfo = {},
-            showLastDigitStats = false,
-            startEpoch,
-            symbol,
-            crosshairState,
-            zoom,
-            maxTick,
-            crosshairTooltipLeftAllow,
-            yAxisMargin,
-            enableScroll = null,
-            enableZoom = null,
-            anchorChartToLeft = false,
-            chartData,
-        }: TChartProps
-    ) {
+    updateProps({
+        networkStatus,
+        chartControlsWidgets,
+        enabledChartFooter,
+        chartStatusListener,
+        handlePOCResponse,
+        stateChangeListener,
+        getIndicatorHeightRatio,
+        chartType,
+        clearChart,
+        endEpoch,
+        isAnimationEnabled = true,
+        isConnectionOpened,
+        isStaticChart,
+        granularity,
+        margin = 0,
+        onExportLayout,
+        refreshActiveSymbols,
+        scrollToEpoch,
+        settings,
+        shouldFetchTradingTimes = true,
+        shouldFetchTickHistory = true,
+        should_show_eu_content,
+        allTicks = [],
+        contractInfo = {},
+        showLastDigitStats = false,
+        startEpoch,
+        symbol,
+        crosshairState,
+        zoom,
+        maxTick,
+        crosshairTooltipLeftAllow,
+        yAxisMargin,
+        enableScroll = null,
+        enableZoom = null,
+        anchorChartToLeft = false,
+        chartData,
+    }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
@@ -212,6 +220,7 @@ class ChartState {
         }
 
         this.chartStatusListener = chartStatusListener;
+        this.handlePOCResponse = handlePOCResponse;
         this.stateChangeListener = stateChangeListener;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
