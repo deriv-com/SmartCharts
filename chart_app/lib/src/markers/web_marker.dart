@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
-/// Type of marker.
+/// Type of the marker.
 enum MarkerType {
   /// Active start marker.
   activeStart,

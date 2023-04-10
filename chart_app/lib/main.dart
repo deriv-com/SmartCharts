@@ -1,18 +1,18 @@
 import 'dart:collection';
-import 'package:chart_app/src/markers/marker_group_series.dart';
-import 'package:chart_app/src/markers/marker_icon_painters/digit_marker_icon_painter.dart';
-import 'package:chart_app/src/markers/marker_icon_painters/tick_marker_icon_painter.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:chart_app/src/interop/dart_interop.dart';
-import 'package:chart_app/src/interop/js_interop.dart';
+
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
+import 'src/helper.dart';
 import 'src/models/chart_data.dart';
 import 'src/models/chart_config.dart';
+import 'src/interop/dart_interop.dart';
+import 'src/interop/js_interop.dart';
+import 'src/markers/marker_group_series.dart';
 
 void main() {
   runApp(const DerivChartApp());
@@ -150,10 +150,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         markerSeries: MarkerGroupSeries(
                           SplayTreeSet<Marker>(),
                           markerGroupList: chartConfigModel.markerGroupList,
-                          markerGroupIconPainter:
-                              chartConfigModel.isDigitContract
-                                  ? DigitMarkerIconPainter()
-                                  : TickMarkerIconPainter(),
+                          markerGroupIconPainter: getMarkerGroupPainter(
+                            context,
+                            chartConfigModel.contractType,
+                          ),
                         ),
                         indicatorsRepo:
                             chartConfigModel.indicatorsConfig.indicatorsRepo,

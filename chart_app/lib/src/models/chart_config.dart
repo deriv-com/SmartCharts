@@ -30,8 +30,8 @@ class ChartConfigModel extends ChangeNotifier {
   /// Starts in data fit mode and adds a data-fit button.
   bool dataFitEnabled = false;
 
-  /// Whether to use digit contract painter or non-digit contract painter
-  bool isDigitContract = false;
+  /// Type of the contract
+  String? contractType;
 
   late final ChartController _controller;
 
@@ -61,7 +61,7 @@ class ChartConfigModel extends ChangeNotifier {
     for (final JSMarkerGroupUpdate _markerGroup in _markerGroupList) {
       final List<WebMarker> markers = <WebMarker>[];
 
-      isDigitContract = _markerGroup.type == 'DigitContract';
+      contractType = _markerGroup.type;
 
       for (final JsMarker _marker in _markerGroup.markers) {
         markers.add(WebMarker(
