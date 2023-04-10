@@ -75,7 +75,7 @@ class RealtimeSubscription extends Subscription {
             }
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
-            if (resp.msg_type === 'tick') {
+            if (['tick', 'ohlc'].includes(resp.msg_type)) {
                 this._onTick(resp);
                 return;
             }
