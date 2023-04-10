@@ -70,14 +70,15 @@ class ChartConfigModel extends ChangeNotifier {
           text: _marker.text,
           markerType: MarkerType.values.byName(_marker.type),
           direction: MarkerDirection.up,
-          color: _marker.color != null ? getColorFromHex(_marker.color!) : null,
+          color:
+              _marker.color != null ? getColorFromString(_marker.color!) : null,
         ));
       }
 
       Color _bgColor = Colors.white;
 
       if (_markerGroup.color != null) {
-        _bgColor = getColorFromHex(_markerGroup.color!);
+        _bgColor = getColorFromString(_markerGroup.color!);
       }
 
       markerGroupList.add(
