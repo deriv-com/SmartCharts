@@ -2,7 +2,7 @@ import {
     TicksHistoryResponse,
     TicksStreamResponse,
     AuditDetailsForExpiredContract,
-    PriceProposalOpenContractsResponse,
+    ProposalOpenContract,
 } from '@deriv/api-types';
 import { OHLCStreamResponse, TQuote } from 'src/types';
 import { getUTCDate } from '../utils';
@@ -69,15 +69,9 @@ export class TickHistoryFormatter {
             Close: +res.tick,
         }));
     }
-    static formatPOCTick(response: PriceProposalOpenContractsResponse) {
-        const {
-            proposal_open_contract: {
-                current_spot = 0,
-                current_spot_display_value = '',
-                current_spot_time = 0,
-                underlying = '',
-            } = {},
-        } = response || {};
+    static formatPOCTick(contract_info: ProposalOpenContract) {
+        const { current_spot = 0, current_spot_display_value = '', current_spot_time = 0, underlying = '' } =
+            contract_info || {};
 
         if (current_spot && current_spot_display_value && current_spot_time && underlying) {
             return {

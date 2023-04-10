@@ -126,7 +126,7 @@ class ChartState {
             allTicks: observable,
             contractInfo: observable,
             refreshActiveSymbols: observable,
-            handlePOCResponse: action.bound,
+            handlePOCResponse: observable,
             hasReachedEndOfData: observable,
             prevChartType: observable,
             isChartScrollingToEpoch: observable,
