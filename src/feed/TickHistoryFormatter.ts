@@ -70,20 +70,18 @@ export class TickHistoryFormatter {
         }));
     }
     static formatPOCTick(contract_info: ProposalOpenContract) {
-        const { current_spot = 0, current_spot_display_value = '', current_spot_time = 0, underlying = '' } =
-            contract_info || {};
-
-        if (current_spot && current_spot_display_value && current_spot_time && underlying) {
-            return {
-                Date: getUTCDate(current_spot_time),
-                Close: current_spot,
+        const { tick_stream = [], underlying = '' } = contract_info || {};
+        if (tick_stream.length && underlying) {
+            return tick_stream.map(({ epoch = 0, tick, tick_display_value }) => ({
+                Date: getUTCDate(epoch),
+                Close: tick || 0,
                 tick: {
-                    epoch: current_spot_time,
-                    quote: current_spot,
+                    epoch,
+                    quote: tick || 0,
                     symbol: underlying,
-                    pip_size: current_spot_display_value.split('.')[1]?.length || 0,
+                    pip_size: tick_display_value?.split('.')[1]?.length || 0,
                 },
-            };
+            }));
         }
         return null;
     }

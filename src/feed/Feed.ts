@@ -498,9 +498,9 @@ class Feed {
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
     appendChartDataByPOCResponse(quote: PriceProposalOpenContractsResponse) {
-        const tick = TickHistoryFormatter.formatPOCTick(quote);
-        if (tick) {
-            this._appendChartData([tick], tick.tick.symbol, undefined, true);
+        const ticks = TickHistoryFormatter.formatPOCTick(quote);
+        if (ticks) {
+            this._appendChartData(ticks, ticks[0].tick.symbol, undefined, true);
         }
     }
     _emitDataUpdate(quotes: TQuote[], comparisonChartSymbol?: string, isChartReinitialized = false) {
