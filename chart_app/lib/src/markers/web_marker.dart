@@ -12,6 +12,9 @@ enum MarkerType {
   /// Entry marker.
   entry,
 
+  /// Entry marker tick.
+  entryTick,
+
   /// Latest tick marker.
   latestTick,
 
@@ -23,6 +26,12 @@ enum MarkerType {
 
   /// Exit marker.
   exit,
+
+  /// High Barrier.
+  highBarrier,
+
+  /// Low Barrier.
+  lowBarrier,
 }
 
 /// Chart open position marker.

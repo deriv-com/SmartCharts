@@ -7,7 +7,7 @@ import 'package:chart_app/src/markers/helpers/paint_functions/paint_end_marker.d
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_marker.dart';
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_line.dart';
 
-/// Icon painter for Multipliers trade type
+/// Digits contract painter
 class DigitMarkerIconPainter extends MarkerGroupIconPainter {
   @override
   void paintMarkerGroup(
@@ -20,17 +20,11 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
   ) {
     canvas.save();
 
-    final Map<MarkerType, Offset> points = <MarkerType, Offset>{};
-
     for (final WebMarker marker in markerGroup.markers) {
       final Offset center = Offset(
         epochToX(marker.epoch),
         quoteToY(marker.quote),
       );
-
-      if (marker.markerType != null) {
-        points[marker.markerType!] = center;
-      }
 
       _drawMarker(canvas, size, theme, marker, center, markerGroup.style);
     }

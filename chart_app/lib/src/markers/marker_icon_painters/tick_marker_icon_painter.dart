@@ -1,3 +1,4 @@
+import 'package:chart_app/src/markers/helpers/paint_functions/paint_vertical_line.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
@@ -7,7 +8,7 @@ import 'package:chart_app/src/markers/helpers/paint_functions/paint_end_marker.d
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_marker.dart';
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_line.dart';
 
-/// Icon painter for Multipliers trade type
+/// Tick contract painter
 class TickMarkerIconPainter extends MarkerGroupIconPainter {
   @override
   void paintMarkerGroup(
@@ -43,18 +44,19 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
   void _drawBarriers(
       Canvas canvas, Map<MarkerType, Offset> points, MarkerStyle style) {
     final Paint paint = Paint()..color = style.backgroundColor;
-    final Offset? _entryTickOffset = points[MarkerType.entry];
-    final Offset? _startTickOffset = points[MarkerType.start];
-    final Offset? _latestTickOffset = points[MarkerType.latestTick];
-    final Offset? _endTickOffset = points[MarkerType.end];
-    final Offset? _exitTickOffset = points[MarkerType.exit];
+    final Offset? _entryOffset = points[MarkerType.entry];
+    final Offset? _entryTickOffset = points[MarkerType.entryTick];
+    final Offset? _startOffset = points[MarkerType.start];
+    final Offset? _latestOffset = points[MarkerType.latestTick];
+    final Offset? _endOffset = points[MarkerType.end];
+    final Offset? _exitOffset = points[MarkerType.exit];
 
-    if (_entryTickOffset != null) {
+    if (_entryOffset != null) {
       paintHorizontalDashedLine(
         canvas,
-        _startTickOffset!.dx,
-        _entryTickOffset.dx,
-        _startTickOffset.dy,
+        _startOffset!.dx,
+        _entryOffset.dx,
+        _startOffset.dy,
         style.backgroundColor,
         1,
         dashWidth: 1,
@@ -62,26 +64,28 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
       );
     }
 
-    if (_entryTickOffset != null &&
-        (_latestTickOffset != null || _endTickOffset != null)) {
-      canvas.drawLine(
-          _entryTickOffset, _latestTickOffset ?? _endTickOffset!, paint);
+    if (_entryOffset != null && (_latestOffset != null || _endOffset != null)) {
+      canvas.drawLine(_entryOffset, _latestOffset ?? _endOffset!, paint);
     }
 
-    if (_exitTickOffset != null) {
-      final Offset? _topOffset = _exitTickOffset.dy < _endTickOffset!.dy
-          ? _exitTickOffset
-          : _endTickOffset;
-      final Offset? _bottomOffset = _exitTickOffset.dy > _endTickOffset.dy
-          ? _exitTickOffset
-          : _endTickOffset;
-
-      paintVerticalDashedLine(
+    if (_entryOffset != null && _entryTickOffset != null) {
+      paintVerticalLine(
         canvas,
-        _exitTickOffset.dx,
-        _topOffset!.dy,
-        _bottomOffset!.dy,
-        style.backgroundColor,
+        _entryOffset,
+        _entryTickOffset,
+        style,
+        1,
+        dashWidth: 2,
+        dashSpace: 2,
+      );
+    }
+
+    if (_exitOffset != null && _endOffset != null) {
+      paintVerticalLine(
+        canvas,
+        _exitOffset,
+        _endOffset,
+        style,
         1,
         dashWidth: 2,
         dashSpace: 2,
