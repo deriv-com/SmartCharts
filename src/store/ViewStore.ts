@@ -158,16 +158,11 @@ export default class ViewStore {
 
         const { layout } = this.sortedItems[idx];
 
-        when(
-            () => this.mainStore.chartAdapter.isChartLoaded,
-            () => {
-                this.restoreLayout(layout);
-                logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
-            }
-        );
+        this.restoreLayout(layout);
+        logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
     }
 
-    restoreLayout(layout: TLayout) {
+    async restoreLayout(layout: TLayout) {
         const finishImportLayout = () => {
             if (this.loader) {
                 this.loader.hide();
@@ -183,7 +178,10 @@ export default class ViewStore {
         if (this.loader) {
             this.loader.show();
         }
+
         this.mainStore.state.setChartIsReady(false);
+
+        await when(() => this.mainStore.chartAdapter.isChartLoaded);
 
         this.mainStore.chartType.setChartType(layout.chartType);
         this.menuStore.setOpen(false);
