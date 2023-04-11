@@ -1,4 +1,4 @@
-import { action, computed, observable, reaction, makeObservable } from 'mobx';
+import { action, computed, observable, reaction, makeObservable, when } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -158,8 +158,13 @@ export default class ViewStore {
 
         const { layout } = this.sortedItems[idx];
 
-        this.restoreLayout(layout);
-        logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
+        when(
+            () => this.mainStore.chartAdapter.isChartLoaded,
+            () => {
+                this.restoreLayout(layout);
+                logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
+            }
+        );
     }
 
     restoreLayout(layout: TLayout) {
