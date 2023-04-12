@@ -98,80 +98,81 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   @override
   Widget build(BuildContext context) => MultiProvider(
-          providers: <ChangeNotifierProvider<dynamic>>[
-            ChangeNotifierProvider<ChartConfigModel>.value(
-                value: chartConfigModel),
-            ChangeNotifierProvider<ChartDataModel>.value(value: chartDataModel)
-          ],
-          child: Scaffold(
-            body: Center(
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Consumer2<ChartConfigModel, ChartDataModel>(
-                      builder: (BuildContext context,
-                              ChartConfigModel chartConfigModel,
-                              ChartDataModel chartDataModel,
-                              Widget? child) =>
-                          DerivChart(
-                        mainSeries: _getDataSeries(chartConfigModel.style),
-                        annotations: chartDataModel.ticks.length > 4
-                            ? <Barrier>[
-                                if (chartConfigModel.isLive)
-                                  TickIndicator(
-                                    chartDataModel.ticks.last,
-                                    style: const HorizontalBarrierStyle(
-                                      color: Colors.redAccent,
-                                      labelShape: LabelShape.pentagon,
-                                      hasBlinkingDot: true,
-                                      hasArrow: false,
-                                    ),
-                                    visibility: HorizontalBarrierVisibility
-                                        .keepBarrierLabelVisible,
+        providers: <ChangeNotifierProvider<dynamic>>[
+          ChangeNotifierProvider<ChartConfigModel>.value(
+              value: chartConfigModel),
+          ChangeNotifierProvider<ChartDataModel>.value(value: chartDataModel)
+        ],
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Consumer2<ChartConfigModel, ChartDataModel>(
+                    builder: (BuildContext context,
+                            ChartConfigModel chartConfigModel,
+                            ChartDataModel chartDataModel,
+                            Widget? child) =>
+                        DerivChart(
+                      mainSeries: _getDataSeries(chartConfigModel.style),
+                      annotations: chartDataModel.ticks.length > 4
+                          ? <Barrier>[
+                              if (chartConfigModel.isLive)
+                                TickIndicator(
+                                  chartDataModel.ticks.last,
+                                  style: const HorizontalBarrierStyle(
+                                    color: Colors.redAccent,
+                                    labelShape: LabelShape.pentagon,
+                                    hasBlinkingDot: true,
+                                    hasArrow: false,
                                   ),
-                              ]
-                            : null,
-                        granularity: chartConfigModel.granularity ?? 1000,
-                        controller: _controller,
-                        theme: chartConfigModel.theme,
-                        onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {
-                          if (!chartDataModel.waitingForHistory &&
-                              chartDataModel.ticks.isNotEmpty &&
-                              leftEpoch < chartDataModel.ticks.first.epoch) {
-                            chartDataModel.loadHistory(2500);
-                          }
-                          rightBoundEpoch = rightEpoch;
-                          JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
-                        },
-                        onQuoteAreaChanged:
-                            (double topQuote, double bottomQuote) {
-                          JsInterop.onQuoteAreaChanged(topQuote, bottomQuote);
-                        },
-                        markerSeries: MarkerGroupSeries(
-                          SplayTreeSet<Marker>(),
-                          markerGroupList: chartConfigModel.markerGroupList,
-                          markerGroupIconPainter: getMarkerGroupPainter(
-                            context,
-                            chartConfigModel.contractType,
-                          ),
+                                  visibility: HorizontalBarrierVisibility
+                                      .keepBarrierLabelVisible,
+                                ),
+                            ]
+                          : null,
+                      granularity: chartConfigModel.granularity ?? 1000,
+                      controller: _controller,
+                      theme: chartConfigModel.theme,
+                      onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {
+                        if (!chartDataModel.waitingForHistory &&
+                            chartDataModel.ticks.isNotEmpty &&
+                            leftEpoch < chartDataModel.ticks.first.epoch) {
+                          chartDataModel.loadHistory(2500);
+                        }
+                        rightBoundEpoch = rightEpoch;
+                        JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
+                      },
+                      onQuoteAreaChanged:
+                          (double topQuote, double bottomQuote) {
+                        JsInterop.onQuoteAreaChanged(topQuote, bottomQuote);
+                      },
+                      markerSeries: MarkerGroupSeries(
+                        SplayTreeSet<Marker>(),
+                        markerGroupList: chartConfigModel.markerGroupList,
+                        markerGroupIconPainter: getMarkerGroupPainter(
+                          context,
+                          chartConfigModel.contractType,
                         ),
-                        indicatorsRepo:
-                            chartConfigModel.indicatorsConfig.indicatorsRepo,
-                        dataFitEnabled: chartConfigModel.dataFitEnabled,
-                        showCrosshair: chartConfigModel.showCrosshair,
-                        isLive: chartConfigModel.isLive,
-                        onCrosshairDisappeared:
-                            JsInterop.onCrosshairDisappeared,
-                        onCrosshairHover:
-                            (PointerHoverEvent ev, int epoch, String quote) {
-                          JsInterop.onCrosshairHover(
-                              ev.position.dx, ev.position.dy, epoch, quote);
-                        },
                       ),
+                      indicatorsRepo:
+                          chartConfigModel.indicatorsConfig.indicatorsRepo,
+                      dataFitEnabled: chartConfigModel.dataFitEnabled,
+                      showCrosshair: chartConfigModel.showCrosshair,
+                      isLive: chartConfigModel.isLive,
+                      onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,
+                      onCrosshairHover:
+                          (PointerHoverEvent ev, int epoch, String quote) {
+                        JsInterop.onCrosshairHover(
+                            ev.position.dx, ev.position.dy, epoch, quote);
+                      },
+                      maxCurrentTickOffset: 300,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ));
+          ),
+        ),
+      );
 }
