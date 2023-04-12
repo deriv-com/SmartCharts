@@ -67,6 +67,13 @@ MarkerGroupIconPainter getMarkerGroupPainter(
 
     case 'AccumulatorContract':
       return AccumulatorMarkerIconPainter(width, height);
+
+    case 'AccumulatorContractInContractDetails':
+      return AccumulatorMarkerIconPainter(
+        width,
+        height,
+        hasPersistentBorders: true,
+      );
   }
 
   return TickMarkerIconPainter();

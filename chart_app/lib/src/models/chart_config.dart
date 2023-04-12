@@ -84,12 +84,14 @@ class ChartConfigModel extends ChangeNotifier {
       markerGroupList.add(
         MarkerGroup(
           markers,
+          type: _markerGroup.type,
           style: MarkerStyle(
             backgroundColor: _bgColor,
           ),
         ),
       );
     }
+    notifyListeners();
   }
 
   /// To update the theme of the chart

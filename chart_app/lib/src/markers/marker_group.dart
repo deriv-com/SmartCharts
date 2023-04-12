@@ -6,6 +6,7 @@ class MarkerGroup implements Comparable<MarkerGroup> {
   /// Initialize marker group
   MarkerGroup(
     this.markers, {
+    required this.type,
     this.id,
     this.style = const MarkerStyle(),
   });
@@ -18,6 +19,9 @@ class MarkerGroup implements Comparable<MarkerGroup> {
 
   /// The `MarkerStyle` to paint the markers.
   final MarkerStyle style;
+
+  /// Marker group type.
+  final String type;
 
   @override
   int compareTo(covariant MarkerGroup other) {
