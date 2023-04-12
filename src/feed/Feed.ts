@@ -3,7 +3,6 @@ import {
     TicksHistoryRequest,
     TicksHistoryResponse,
     ProposalOpenContract,
-    PriceProposalOpenContractsResponse,
 } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
@@ -497,8 +496,8 @@ class Feed {
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
-    appendChartDataByPOCResponse(quote: PriceProposalOpenContractsResponse) {
-        const ticks = TickHistoryFormatter.formatPOCTick(quote);
+    appendChartDataByPOCResponse(contract_info: ProposalOpenContract) {
+        const ticks = TickHistoryFormatter.formatPOCTick(contract_info);
         if (ticks) {
             this._appendChartData(ticks, ticks[0].tick.symbol, undefined, true);
         }

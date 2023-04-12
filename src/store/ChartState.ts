@@ -8,7 +8,7 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
-import { PriceProposalOpenContractsResponse } from '@deriv/api-types';
+import { ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -34,7 +34,7 @@ type TScrollListenerParamsData = {
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
-    handlePOCResponse?: (handler: (response: PriceProposalOpenContractsResponse) => void) => void;
+    handlePOCResponse?: (handler: (contract_info: ProposalOpenContract) => void) => void;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -153,12 +153,6 @@ class ChartState {
         this.stxx.append('zoomIn', this.setEnableScroll.bind(this));
 
         this.granularity = this.chartStore.granularity;
-
-        if (typeof this.handlePOCResponse === 'function' && this.mainStore.chart.feed) {
-            this.handlePOCResponse(
-                this.mainStore.chart.feed.appendChartDataByPOCResponse.bind(this.mainStore.chart.feed)
-            );
-        }
     };
 
     updateProps({
@@ -220,7 +214,6 @@ class ChartState {
         }
 
         this.chartStatusListener = chartStatusListener;
-        this.handlePOCResponse = handlePOCResponse;
         this.stateChangeListener = stateChangeListener;
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
@@ -234,6 +227,16 @@ class ChartState {
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
+
+        const feed = this.mainStore.chart.feed;
+        if (typeof handlePOCResponse === 'function' && feed) {
+            handlePOCResponse((...args) => {
+                if (args[0].tick_stream) {
+                    this.handlePOCResponse = handlePOCResponse;
+                    feed.appendChartDataByPOCResponse.call(feed, ...args);
+                }
+            });
+        }
 
         if (
             networkStatus &&

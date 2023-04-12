@@ -4,7 +4,6 @@ import {
     TradingTimesResponse,
     AuditDetailsForExpiredContract,
     ProposalOpenContract,
-    PriceProposalOpenContractsResponse,
 } from '@deriv/api-types';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
@@ -143,7 +142,7 @@ export type TChartProps = {
     barriers?: TBarrierUpdateProps[];
     enableRouting?: boolean;
     enable?: boolean;
-    handlePOCResponse?: (handler: (response: PriceProposalOpenContractsResponse) => void) => void;
+    handlePOCResponse?: (handler: (contract_info: ProposalOpenContract) => void) => void;
     isConnectionOpened?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
