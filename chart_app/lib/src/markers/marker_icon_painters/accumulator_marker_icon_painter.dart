@@ -7,13 +7,20 @@ import 'package:flutter/material.dart';
 /// Accumulator contract painter
 class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   /// Constructor
-  AccumulatorMarkerIconPainter(this.width, this.height);
+  AccumulatorMarkerIconPainter(
+    this.width,
+    this.height, {
+    this.hasPersistentBorders = false,
+  });
 
   /// Width of the canvas
   double width;
 
   /// Height of the canvas
   double height;
+
+  /// Closed borders
+  bool hasPersistentBorders;
 
   @override
   void paintMarkerGroup(
@@ -70,14 +77,14 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     required double high,
     required MarkerStyle style,
     required double low,
-    bool hasPersistentBorders = false,
     Color? fillColor,
-    int? scale,
   }) {
-    final Paint paint = Paint()..color = style.backgroundColor;
+    final Paint paint = Paint()
+      ..color = style.backgroundColor
+      ..style = PaintingStyle.stroke;
 
     final double right = width - 60;
-    final double bottom = height - 20;
+    final double bottom = height - 30;
 
     final bool isTopVisible =
         high < bottom && (high >= 0 || !hasPersistentBorders);
@@ -131,6 +138,8 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     final Paint rectPaint = Paint()
       ..color = fillColor ?? const Color.fromRGBO(55, 124, 252, 0.08);
 
-    canvas.drawRect(Rect.fromLTRB(startLeft, high, right, low), rectPaint);
+    canvas.drawRect(
+        Rect.fromLTRB(startLeft, displayedTop, right, displayedBottom),
+        rectPaint);
   }
 }
