@@ -49,7 +49,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   final ChartDataModel chartDataModel = ChartDataModel();
   late final ChartConfigModel chartConfigModel;
   late int rightBoundEpoch;
-  late bool isFollowMode;
+  bool isFollowMode = false;
 
   void onVisibilityChange(html.Event ev) {
     if (chartConfigModel.dataFitEnabled || chartDataModel.ticks.isEmpty) {
