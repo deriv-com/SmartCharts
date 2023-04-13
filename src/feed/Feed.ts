@@ -496,7 +496,7 @@ class Feed {
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
     }
-    appendChartDataByPOCResponse(contract_info: ProposalOpenContract) {
+    appendChartDataFromPOCResponse(contract_info: ProposalOpenContract) {
         const ticks = TickHistoryFormatter.formatPOCTick(contract_info);
         if (ticks) {
             this._appendChartData(ticks, ticks[0].tick.symbol, undefined, true);

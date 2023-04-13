@@ -233,7 +233,7 @@ class ChartState {
             handlePOCResponse((...args) => {
                 if (args[0].tick_stream) {
                     this.handlePOCResponse = handlePOCResponse;
-                    feed.appendChartDataByPOCResponse.call(feed, ...args);
+                    feed.appendChartDataFromPOCResponse.call(feed, ...args);
                 }
             });
         }
