@@ -29,6 +29,6 @@ class IndicatorsConfig extends ChangeNotifier {
 
   /// To remove an existing indicator
   void removeIndicator(int index) {
-    indicatorsRepo.removeAt(index);
+    indicatorsRepo.remove(indicatorsRepo.items[index]);
   }
 }
