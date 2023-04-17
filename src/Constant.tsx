@@ -567,7 +567,39 @@ const GatorIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const MACDIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        lineStyle: _.clone(lineStyle),
+        signalLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'lineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'signalLineStyle.color',
+            title: t.translate('Signal'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'barStyle.positiveColor',
+            title: t.translate('Increasing Bar'),
+            defaultValue: '#00DD00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'barStyle.negativeColor',
+            title: t.translate('Decreasing Bar'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'fastMAPeriod',
             title: t.translate('Fast MA Period'),
