@@ -508,6 +508,20 @@ const DPOIndicatorConfig: TDefaultIndicatorConfig = {
 const GatorIndicatorConfig: TDefaultIndicatorConfig = {
     parameters: [
         {
+            path: 'barStyle.positiveColor',
+            title: t.translate('Increasing Bar'),
+            defaultValue: '#00DD00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'barStyle.negativeColor',
+            title: t.translate('Decreasing Bar'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
             path: 'jawPeriod',
             title: t.translate('Jaw Period'),
             defaultValue: 13,
