@@ -421,11 +421,12 @@ class ChartStore {
         ) {
             return;
         }
+
+        this.newChart(symbolObj);
+
         if (granularity !== undefined) {
             this.granularity = granularity;
         }
-
-        this.newChart(symbolObj);
 
         if (symbolObj) {
             this.updateCurrentActiveSymbol(symbolObj);
