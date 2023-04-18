@@ -157,7 +157,7 @@ export default class ChartAdapterStore {
 
         if (quote.ohlc) {
             this.flutterChart?.dataModel.onNewCandle(quote);
-        } else if (this.getGranularity() == 0) {
+        } else if (this.getGranularity() <= 1000) {
             this.flutterChart?.dataModel.onNewTick(quote);
         }
     }
@@ -202,6 +202,7 @@ export default class ChartAdapterStore {
                         const { price } = this.getInterpolatedPositionAndPrice(m.epoch) || {};
                         m.quote = price;
                     }
+                    m.epoch = m.epoch * 1000;
                 });
                 return c;
             });
