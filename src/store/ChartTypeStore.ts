@@ -144,6 +144,8 @@ export default class ChartTypeStore {
         );
     };
     setChartType(type?: string) {
+        if (!type) return;
+
         const { onChartTypeChange } = this.mainStore.state;
 
         if (onChartTypeChange) {

@@ -229,7 +229,7 @@ class ChartState {
             this.mainStore.chartTitle.hidePrice();
         }
 
-        if (chartType !== this.chartType) {
+        if (chartType && chartType !== this.chartType) {
             if (chartType === 'table') this.prevChartType = this.chartTypeStore.type.id;
             this.setChartType(chartType);
         }
