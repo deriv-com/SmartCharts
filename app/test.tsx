@@ -145,7 +145,7 @@ const App = () => {
     const startingLanguageRef = React.useRef('en');
     const openMarketRef = React.useRef<TOpenMarket>({});
     const [notifier] = React.useState(new ChartNotifier());
-    const [layoutString] = React.useState(localStorage.getItem(`layout-${chartId}`) || '');
+    const [layoutString] = React.useState(localStorage.getItem(`layout-new-${chartId}`) || '');
     const [layout] = React.useState(JSON.parse(layoutString !== '' ? layoutString : '{}'));
     const initialSettings = React.useMemo(() => {
         let _settings: TSettings = createObjectFromLocalStorage('smartchart-setting');
