@@ -202,7 +202,6 @@ export default class ChartAdapterStore {
                         const { price } = this.getInterpolatedPositionAndPrice(m.epoch) || {};
                         m.quote = price;
                     }
-                    m.epoch = m.epoch * 1000;
                 });
                 return c;
             });

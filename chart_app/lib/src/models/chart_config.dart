@@ -66,7 +66,7 @@ class ChartConfigModel extends ChangeNotifier {
       for (final JsMarker _marker in _markerGroup.markers) {
         markers.add(WebMarker(
           quote: _marker.quote,
-          epoch: _marker.epoch,
+          epoch: _marker.epoch * 1000,
           text: _marker.text,
           markerType: MarkerType.values.byName(_marker.type),
           direction: MarkerDirection.up,
