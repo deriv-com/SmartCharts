@@ -416,7 +416,47 @@ const RSIIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const ADXIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        lineStyle: _.clone(lineStyle),
+        positiveLineStyle: _.clone(lineStyle),
+        negativeLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'positiveLineStyle.color',
+            title: t.translate('+DI'),
+            defaultValue: '#00DD00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'negativeLineStyle.color',
+            title: t.translate('-DI'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'lineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'barStyle.positiveColor',
+            title: t.translate('Positive Bar'),
+            defaultValue: '#00DD00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'barStyle.negativeColor',
+            title: t.translate('Negative Bar'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),
@@ -625,7 +665,17 @@ const MACDIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const ROCIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        lineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'lineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),
@@ -647,6 +697,8 @@ const ROCIndicatorConfig: TDefaultIndicatorConfig = {
 const StochasticOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
     config: {
         lineStyle: { ..._.clone(lineStyle), color: '#FFFFFF' },
+        fastLineStyle: _.clone(lineStyle),
+        slowLineStyle: _.clone(lineStyle),
         oscillatorLinesConfig: {
             overboughtStyle: _.clone(lineStyle),
             oversoldStyle: _.clone(lineStyle),
@@ -656,6 +708,20 @@ const StochasticOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
         overSoldPrice: 20,
     },
     parameters: [
+        {
+            path: 'fastLineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'slowLineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),
@@ -847,7 +913,25 @@ const WilliamsRIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const AroonIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        upLineStyle: _.clone(lineStyle),
+        downLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'upLineStyle.color',
+            title: t.translate('Aroon Up'),
+            defaultValue: '#00DD00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'downLineStyle.color',
+            title: t.translate('Aroon Down'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),
@@ -918,7 +1002,49 @@ const CCIIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const IchimokuIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        conversionLineStyle: _.clone(lineStyle),
+        baseLineStyle: _.clone(lineStyle),
+        spanALineStyle: _.clone(lineStyle),
+        spanBLineStyle: _.clone(lineStyle),
+        conversionLinePeriod: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'conversionLineStyle.color',
+            title: t.translate('Conversion Line'),
+            defaultValue: '#0000FF',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'baseLineStyle.color',
+            title: t.translate('Base Line'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'spanALineStyle.color',
+            title: t.translate('Leading Span A'),
+            defaultValue: '#00FF00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'spanBLineStyle.color',
+            title: t.translate('Leading Span B'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'laggingSpanStyle.color',
+            title: t.translate('Lagging Span'),
+            defaultValue: '#808000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'conversionLinePeriod',
             title: t.translate('Conversion Line Period'),
@@ -1008,7 +1134,33 @@ const ZigzagIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const BollingerBandsIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        upperLineStyle: _.clone(lineStyle),
+        middleLineStyle: _.clone(lineStyle),
+        lowerLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'upperLineStyle.color',
+            title: t.translate('Bollinger Bands Top'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'middleLineStyle.color',
+            title: t.translate('Bollinger Bands Median'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'lowerLineStyle.color',
+            title: t.translate('Bollinger Bands Bottom'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),
@@ -1104,7 +1256,7 @@ const MAIndicatorConfig: TDefaultIndicatorConfig = {
         {
             path: 'lineStyle.color',
             title: t.translate('Color'),
-            defaultValue: '#000000',
+            defaultValue: '#FF0000',
             category: 'inputs',
             type: 'colorpicker',
         },
@@ -1142,7 +1294,33 @@ const MAIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const MAEnvIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        upperLineStyle: _.clone(lineStyle),
+        middleLineStyle: _.clone(lineStyle),
+        lowerLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'upperLineStyle.color',
+            title: t.translate('MA Env Top'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'middleLineStyle.color',
+            title: t.translate('MA Env Median'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'lowerLineStyle.color',
+            title: t.translate('MA Env Bottom'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),
@@ -1197,7 +1375,7 @@ const RainbowIndicatorConfig: TDefaultIndicatorConfig = {
         {
             path: 'period',
             title: t.translate('Period'),
-            defaultValue: 50,
+            defaultValue: 2,
             category: 'inputs',
             type: 'number',
         },
@@ -1213,7 +1391,33 @@ const RainbowIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const AlligatorIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        jawLineStyle: _.clone(lineStyle),
+        teethLineStyle: _.clone(lineStyle),
+        lipsLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'jawLineStyle.color',
+            title: t.translate('Jaw'),
+            defaultValue: '#0000FF',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'teethLineStyle.color',
+            title: t.translate('Teeth'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'lipsLineStyle.color',
+            title: t.translate('Lips'),
+            defaultValue: '#00FF00',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'showLines',
             title: t.translate('Show Lines'),
@@ -1274,7 +1478,33 @@ const AlligatorIndicatorConfig: TDefaultIndicatorConfig = {
 };
 
 const FractalChaosBandIndicatorConfig: TDefaultIndicatorConfig = {
+    config: {
+        highLineStyle: _.clone(lineStyle),
+        lowLineStyle: _.clone(lineStyle),
+        channelLineStyle: _.clone(lineStyle),
+    },
     parameters: [
+        {
+            path: 'highLineStyle.color',
+            title: t.translate('Fractal High'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'lowLineStyle.color',
+            title: t.translate('Fractal Low'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'channelLineStyle.color',
+            title: t.translate('Fractal Channel'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'channelFill',
             title: t.translate('Channel Fill'),
