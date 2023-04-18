@@ -143,24 +143,23 @@ const eu_subcategory_mapper: { [key: string]: string } = {
     non_stable_coin: 'cryptocurrencies/?tab=multipliers#crypto-pairs',
 };
 
-const redirectLink = (subCategoryId: string, is_eu_client: boolean) => {
+const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) => {
     const DEFAULT_LANGUAGE = 'EN';
     const lang_from_url =
         new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
-    const link_mapper = is_eu_client ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    const link_mapper = should_show_eu_content ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
     let language = `${lang_from_url}/`;
-    if (is_eu_client && lang_from_url === 'en') language = '';
     const modified_lang_code = lang_from_url.replace('_', '-');
     if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
-    let link = `https://${is_eu_client ? 'eu.' : ''}deriv.com/${language}`;
+    let link = `https://deriv.com/${language}`;
     if (link_mapper) link += `markets/${link_mapper}/`;
     return link;
 };
 
 const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
     const { state } = useStores();
-    const { is_eu_country } = state;
-    const derivComLink = redirectLink(subcategoryId, !!is_eu_country);
+    const { should_show_eu_content } = state;
+    const derivComLink = redirectLink(subcategoryId, !!should_show_eu_content);
 
     return (
         <a href={derivComLink} target='_blank' rel='noreferrer'>
