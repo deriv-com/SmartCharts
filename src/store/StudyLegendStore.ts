@@ -6,7 +6,7 @@ import { getUniqueId, hexToInt } from 'src/components/ui/utils';
 import { TActiveItem, TIndicatorConfig, TSettingsParameter } from 'src/types';
 import MainStore from '.';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
-import { getIndicatorsTree, DefaultIndicatorConfigs } from '../Constant';
+import { getIndicatorsTree, getDefaultIndicatorConfig } from '../Constant';
 import { prepareIndicatorName } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -163,7 +163,7 @@ export default class StudyLegendStore {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${indicatorName}`);
 
         const props = this.getIndicatorProps(indicatorName);
-        const { parameters, config } = this.getDefaultIndicatorConfig(indicatorName);
+        const { parameters, config } = getDefaultIndicatorConfig(indicatorName);
 
         if (props && parameters) {
             parameters.map(p => (p.value = _.clone(p.defaultValue)));
@@ -247,7 +247,7 @@ export default class StudyLegendStore {
         this.changeStudyPanelTitle();
 
         const props = this.getIndicatorProps(this.settingsDialog.flutter_chart_id);
-        const { config } = this.getDefaultIndicatorConfig(this.settingsDialog.flutter_chart_id) || {};
+        const { config } = getDefaultIndicatorConfig(this.settingsDialog.flutter_chart_id) || {};
 
         if (props && parameters) {
             const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
@@ -288,10 +288,6 @@ export default class StudyLegendStore {
         return _.flatMap(getIndicatorsTree(), collection => collection.items).find(
             item => item?.flutter_chart_id === indicator
         );
-    };
-
-    getDefaultIndicatorConfig = (indicator: keyof typeof DefaultIndicatorConfigs) => {
-        return DefaultIndicatorConfigs[indicator];
     };
 
     deletePredictionStudies() {

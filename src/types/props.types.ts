@@ -463,4 +463,4 @@ export type TDefaultIndicatorConfig = {
     parameters: TSettingsParameter[];
 };
 
-export type TDefaultIndicatorConfigs = Record<string, TDefaultIndicatorConfig>;
+export type TDefaultIndicatorConfigs = Record<string, () => TDefaultIndicatorConfig>;

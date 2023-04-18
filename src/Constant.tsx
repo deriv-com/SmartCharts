@@ -322,7 +322,7 @@ const lineStyle = {
     hasArea: false,
 };
 
-const fieldTypeOptions = {
+const getFieldTypeOptions = () => ({
     open: t.translate('Open'),
     high: t.translate('High'),
     low: t.translate('Low'),
@@ -331,9 +331,9 @@ const fieldTypeOptions = {
     'Hlc/3': t.translate('Hlc/3'),
     'Hlcc/4': t.translate('Hlcc/4'),
     'Ohlc/4': t.translate('Ohlc/4'),
-};
+});
 
-const movingAverageTypeOptions = {
+const getMovingAverageTypeOptions = () => ({
     simple: t.translate('Simple'),
     exponential: t.translate('Exponential'),
     weighted: t.translate('Weighted'),
@@ -345,9 +345,9 @@ const movingAverageTypeOptions = {
     triangular: t.translate('Triangular'),
     doubleExponential: t.translate('2-Exponential'),
     tripleExponential: t.translate('3-Exponential'),
-};
+});
 
-const RSIIndicatorConfig: TDefaultIndicatorConfig = {
+const getRSIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         oscillatorLinesConfig: {
@@ -377,7 +377,7 @@ const RSIIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
         {
             paths: {
@@ -413,9 +413,9 @@ const RSIIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
-};
+});
 
-const ADXIndicatorConfig: TDefaultIndicatorConfig = {
+const getADXIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         positiveLineStyle: _.clone(lineStyle),
@@ -493,9 +493,9 @@ const ADXIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: false,
         },
     ],
-};
+});
 
-const AwesomeOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
+const getAwesomeOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     parameters: [
         {
             path: 'barStyle.positiveColor',
@@ -512,9 +512,9 @@ const AwesomeOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
             type: 'colorpicker',
         },
     ],
-};
+});
 
-const DPOIndicatorConfig: TDefaultIndicatorConfig = {
+const getDPOIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         isCentered: true,
     },
@@ -532,7 +532,7 @@ const DPOIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
         {
             path: 'movingAverageType',
@@ -540,12 +540,12 @@ const DPOIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'simple',
             category: 'inputs',
             type: 'select',
-            options: movingAverageTypeOptions,
+            options: getMovingAverageTypeOptions(),
         },
     ],
-};
+});
 
-const GatorIndicatorConfig: TDefaultIndicatorConfig = {
+const getGatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     parameters: [
         {
             path: 'barStyle.positiveColor',
@@ -604,9 +604,9 @@ const GatorIndicatorConfig: TDefaultIndicatorConfig = {
             type: 'number',
         },
     ],
-};
+});
 
-const MACDIndicatorConfig: TDefaultIndicatorConfig = {
+const getMACDIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         signalLineStyle: _.clone(lineStyle),
@@ -662,9 +662,9 @@ const MACDIndicatorConfig: TDefaultIndicatorConfig = {
             type: 'number',
         },
     ],
-};
+});
 
-const ROCIndicatorConfig: TDefaultIndicatorConfig = {
+const getROCIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
     },
@@ -689,12 +689,12 @@ const ROCIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
     ],
-};
+});
 
-const StochasticOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
+const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: { ..._.clone(lineStyle), color: '#FFFFFF' },
         fastLineStyle: _.clone(lineStyle),
@@ -735,7 +735,7 @@ const StochasticOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
         {
             path: 'isSmooth',
@@ -778,9 +778,9 @@ const StochasticOscillatorIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
-};
+});
 
-const SMIIndicatorConfig: TDefaultIndicatorConfig = {
+const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     parameters: [
         {
             path: 'period',
@@ -816,7 +816,7 @@ const SMIIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'exponential',
             category: 'inputs',
             type: 'select',
-            options: movingAverageTypeOptions,
+            options: getMovingAverageTypeOptions(),
         },
         {
             paths: {
@@ -850,9 +850,9 @@ const SMIIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
-};
+});
 
-const WilliamsRIndicatorConfig: TDefaultIndicatorConfig = {
+const getWilliamsRIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         zeroHorizontalLinesStyle: _.extend(_.clone(lineStyle), { color: '0xFFF44336' }),
@@ -910,9 +910,9 @@ const WilliamsRIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
-};
+});
 
-const AroonIndicatorConfig: TDefaultIndicatorConfig = {
+const getAroonIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         upLineStyle: _.clone(lineStyle),
         downLineStyle: _.clone(lineStyle),
@@ -940,9 +940,9 @@ const AroonIndicatorConfig: TDefaultIndicatorConfig = {
             type: 'number',
         },
     ],
-};
+});
 
-const CCIIndicatorConfig: TDefaultIndicatorConfig = {
+const getCCIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         oscillatorLinesConfig: {
@@ -999,9 +999,9 @@ const CCIIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
-};
+});
 
-const IchimokuIndicatorConfig: TDefaultIndicatorConfig = {
+const getIchimokuIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         conversionLineStyle: _.clone(lineStyle),
         baseLineStyle: _.clone(lineStyle),
@@ -1076,9 +1076,9 @@ const IchimokuIndicatorConfig: TDefaultIndicatorConfig = {
             max: 0,
         },
     ],
-};
+});
 
-const ParabolicSARIndicatorConfig: TDefaultIndicatorConfig = {
+const getParabolicSARIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         scatterStyle: {
             radius: 1.5,
@@ -1109,9 +1109,9 @@ const ParabolicSARIndicatorConfig: TDefaultIndicatorConfig = {
             step: 0.01,
         },
     ],
-};
+});
 
-const ZigzagIndicatorConfig: TDefaultIndicatorConfig = {
+const getZigzagIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
     },
@@ -1131,9 +1131,9 @@ const ZigzagIndicatorConfig: TDefaultIndicatorConfig = {
             type: 'number',
         },
     ],
-};
+});
 
-const BollingerBandsIndicatorConfig: TDefaultIndicatorConfig = {
+const getBollingerBandsIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
@@ -1174,7 +1174,7 @@ const BollingerBandsIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
         {
             path: 'standardDeviation',
@@ -1189,12 +1189,12 @@ const BollingerBandsIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'simple',
             category: 'inputs',
             type: 'select',
-            options: movingAverageTypeOptions,
+            options: getMovingAverageTypeOptions(),
         },
     ],
-};
+});
 
-const DonchianChannelIndicatorConfig: TDefaultIndicatorConfig = {
+const getDonchianChannelIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
@@ -1245,9 +1245,9 @@ const DonchianChannelIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
-};
+});
 
-const MAIndicatorConfig: TDefaultIndicatorConfig = {
+const getMAIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         isOverlay: true,
@@ -1273,7 +1273,7 @@ const MAIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
         {
             path: 'movingAverageType',
@@ -1281,7 +1281,7 @@ const MAIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'simple',
             category: 'inputs',
             type: 'select',
-            options: movingAverageTypeOptions,
+            options: getMovingAverageTypeOptions(),
         },
         {
             path: 'offset',
@@ -1291,9 +1291,9 @@ const MAIndicatorConfig: TDefaultIndicatorConfig = {
             type: 'number',
         },
     ],
-};
+});
 
-const MAEnvIndicatorConfig: TDefaultIndicatorConfig = {
+const getMAEnvIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
@@ -1334,7 +1334,7 @@ const MAEnvIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
         {
             path: 'shiftType',
@@ -1361,12 +1361,12 @@ const MAEnvIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'simple',
             category: 'inputs',
             type: 'select',
-            options: movingAverageTypeOptions,
+            options: getMovingAverageTypeOptions(),
         },
     ],
-};
+});
 
-const RainbowIndicatorConfig: TDefaultIndicatorConfig = {
+const getRainbowIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         bandsCount: 10,
         movingAverageType: 'simple',
@@ -1385,12 +1385,12 @@ const RainbowIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: 'close',
             category: 'inputs',
             type: 'select',
-            options: fieldTypeOptions,
+            options: getFieldTypeOptions(),
         },
     ],
-};
+});
 
-const AlligatorIndicatorConfig: TDefaultIndicatorConfig = {
+const getAlligatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         jawLineStyle: _.clone(lineStyle),
         teethLineStyle: _.clone(lineStyle),
@@ -1475,9 +1475,9 @@ const AlligatorIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: false,
         },
     ],
-};
+});
 
-const FractalChaosBandIndicatorConfig: TDefaultIndicatorConfig = {
+const getFractalChaosBandIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
         highLineStyle: _.clone(lineStyle),
         lowLineStyle: _.clone(lineStyle),
@@ -1513,31 +1513,36 @@ const FractalChaosBandIndicatorConfig: TDefaultIndicatorConfig = {
             defaultValue: true,
         },
     ],
+});
+
+export const defaultIndicatorConfigs: TDefaultIndicatorConfigs = {
+    // Keys are mapped to the flutter indicators name. Don't change it.
+    RSI: getRSIIndicatorConfig,
+    adx: getADXIndicatorConfig,
+    AwesomeOscillator: getAwesomeOscillatorIndicatorConfig,
+    dpo: getDPOIndicatorConfig,
+    gator: getGatorIndicatorConfig,
+    macd: getMACDIndicatorConfig,
+    ROC: getROCIndicatorConfig,
+    StochasticOscillator: getStochasticOscillatorIndicatorConfig,
+    SMI: getSMIIndicatorConfig,
+    WilliamsR: getWilliamsRIndicatorConfig,
+    Aroon: getAroonIndicatorConfig,
+    commodity_channel_index: getCCIIndicatorConfig,
+    ichimoku: getIchimokuIndicatorConfig,
+    ParabolicSAR: getParabolicSARIndicatorConfig,
+    zigzag: getZigzagIndicatorConfig,
+    bollinger_bands: getBollingerBandsIndicatorConfig,
+    donchian_channel: getDonchianChannelIndicatorConfig,
+    moving_average: getMAIndicatorConfig,
+    moving_envelope_average: getMAEnvIndicatorConfig,
+    rainbow: getRainbowIndicatorConfig,
+    alligator: getAlligatorIndicatorConfig,
+    fcb: getFractalChaosBandIndicatorConfig,
 };
 
-export const DefaultIndicatorConfigs: TDefaultIndicatorConfigs = {
-    RSI: RSIIndicatorConfig,
-    adx: ADXIndicatorConfig,
-    AwesomeOscillator: AwesomeOscillatorIndicatorConfig,
-    dpo: DPOIndicatorConfig,
-    gator: GatorIndicatorConfig,
-    macd: MACDIndicatorConfig,
-    ROC: ROCIndicatorConfig,
-    StochasticOscillator: StochasticOscillatorIndicatorConfig,
-    SMI: SMIIndicatorConfig,
-    WilliamsR: WilliamsRIndicatorConfig,
-    Aroon: AroonIndicatorConfig,
-    commodity_channel_index: CCIIndicatorConfig,
-    ichimoku: IchimokuIndicatorConfig,
-    ParabolicSAR: ParabolicSARIndicatorConfig,
-    zigzag: ZigzagIndicatorConfig,
-    bollinger_bands: BollingerBandsIndicatorConfig,
-    donchian_channel: DonchianChannelIndicatorConfig,
-    moving_average: MAIndicatorConfig,
-    moving_envelope_average: MAEnvIndicatorConfig,
-    rainbow: RainbowIndicatorConfig,
-    alligator: AlligatorIndicatorConfig,
-    fcb: FractalChaosBandIndicatorConfig,
+export const getDefaultIndicatorConfig = (indicator: keyof typeof defaultIndicatorConfigs) => {
+    return defaultIndicatorConfigs[indicator]();
 };
 
 export const ChartTypes = [
