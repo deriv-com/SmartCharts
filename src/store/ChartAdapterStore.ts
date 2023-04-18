@@ -157,7 +157,7 @@ export default class ChartAdapterStore {
 
         if (quote.ohlc) {
             this.flutterChart?.dataModel.onNewCandle(quote);
-        } else {
+        } else if (this.getGranularity() == 0) {
             this.flutterChart?.dataModel.onNewTick(quote);
         }
     }
