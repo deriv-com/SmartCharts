@@ -46,7 +46,7 @@ type TActiveDrawToolsListItemProps = {
 };
 
 type TDrawToolsListProps = {
-    items: DrawToolsStore['drawToolsItems'];
+    items: ReturnType<DrawToolsStore['getDrawToolsItems']>;
     onClick: DrawToolsStore['selectTool'];
 };
 
@@ -131,7 +131,7 @@ const DrawTools = ({ portalNodeId }: DrawToolsProps) => {
     const {
         clearAll,
         selectTool,
-        drawToolsItems,
+        getDrawToolsItems,
         activeToolsNo: activeDrawToolsItemsNo,
         activeToolsGroup: activeDrawToolsGroup,
         onDeleted: onDelete,
@@ -139,6 +139,8 @@ const DrawTools = ({ portalNodeId }: DrawToolsProps) => {
         updatePortalNode,
         menuStore,
     } = drawTools;
+
+    const drawToolsItems = getDrawToolsItems();
 
     const menuOpen = menuStore.open;
 

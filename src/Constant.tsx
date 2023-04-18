@@ -54,7 +54,7 @@ type TDrawTools = {
     };
 };
 
-export const drawTools: TDrawTools = {
+export const getDrawTools: () => TDrawTools = () => ({
     channel: { id: 'channel', text: t.translate('Channel [num]'), icon: DrawToolsChannelIcon },
     segment: { id: 'continuous', text: t.translate('Continuous [num]'), icon: DrawToolsContinuousIcon },
     fibfan: { id: 'fibfan', text: t.translate('Fib Fan [num]'), icon: DrawToolsFibonaccifanIcon },
@@ -64,7 +64,7 @@ export const drawTools: TDrawTools = {
     rectangle: { id: 'rectangle', text: t.translate('Rectangle [num]'), icon: DrawToolsRectangleIcon },
     tirone: { id: 'tirone', text: t.translate('Trend [num]'), icon: DrawToolsTrendIcon },
     vertical: { id: 'vertical', text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
-};
+});
 
 //
 export const getIndicatorsTree = (): TIndicatorsTree[] => [

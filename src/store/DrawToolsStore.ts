@@ -2,7 +2,7 @@ import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TIcon, TSettingsParameter } from 'src/types';
 import MainStore from '.';
-import { drawTools } from '../Constant';
+import { getDrawTools } from '../Constant';
 import { formatCamelCase } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -124,7 +124,10 @@ export default class DrawToolsStore {
     }
     activeDrawing: TDrawingObject | null = null;
     isContinuous = false;
-    drawToolsItems = Object.keys(drawTools).map(key => drawTools[key]);
+    getDrawToolsItems = () => {
+        const drawTools = getDrawTools();
+        return Object.keys(drawTools).map(key => drawTools[key]);
+    };
     onContextReady = () => {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
