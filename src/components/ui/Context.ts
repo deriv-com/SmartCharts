@@ -1,7 +1,6 @@
 /**
- * UI context helper class. Construct with an {@link CIQ.ChartEngine} object
+ * UI context helper class.
  * @param {HTMLElement} topNode The top node of the DOM tree for this context. That node should contain
- * all of the UI elements associated with the CIQ.ChartEngine
  * @param {object} [params] Optional parameters
  * @constructor
  */

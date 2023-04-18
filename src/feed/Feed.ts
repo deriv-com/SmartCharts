@@ -9,7 +9,7 @@ import { reaction } from 'mobx';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import { Listener, TError, TGranularity, TMainStore, TPaginationCallback, TQuote } from 'src/types';
-import { CIQ } from 'src/utils/CIQ';
+import { strToDateTime } from 'src/utils/date';
 import { getUTCDate } from '../utils';
 import ServerTime from '../utils/ServerTime';
 import { DelayedSubscription, RealtimeSubscription } from './subscription';
@@ -445,7 +445,7 @@ class Feed {
                 this._activeStreams[key] &&
                 this.granularity === 0 &&
                 !this._mainStore.state.isStaticChart &&
-                CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() >= this.quotes.slice(-1)[0]?.Date.valueOf()
+                strToDateTime(getUTCDate(this.endEpoch)).valueOf() >= this.quotes.slice(-1)[0]?.Date.valueOf()
             ) {
                 result = false;
             }
@@ -566,7 +566,7 @@ class Feed {
         if (!trimmedQuotes.length) return [];
         if (this.startEpoch && this.margin) {
             startTickIndex = trimmedQuotes.findIndex(
-                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.startEpoch as number))
+                tick => strToDateTime(tick.Date) >= strToDateTime(getUTCDate(this.startEpoch as number))
             );
             if (startTickIndex > 0) {
                 trimmedQuotes = trimmedQuotes.slice(startTickIndex - 1);
@@ -574,7 +574,7 @@ class Feed {
         }
         if (this.endEpoch && this.margin) {
             endTickIndex = trimmedQuotes.findIndex(
-                tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch as number))
+                tick => strToDateTime(tick.Date) >= strToDateTime(getUTCDate(this.endEpoch as number))
             );
             if (endTickIndex > -1) {
                 const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;

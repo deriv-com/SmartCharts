@@ -61,7 +61,7 @@ export default class ShareStore {
         const newTab = this.createNewTab();
 
         import(/* webpackChunkName: "html2canvas" */ 'html2canvas').then(html2canvas => {
-            // since react rerenders is not immediate, we use CIQ.appendClassName to
+            // since react rerenders is not immediate, we
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea?.classList.add('ciq-chart--screenshot');
             // There is no html2canvas version able to render our svgs on a screenshot (tried 0.5.0-beta4 as well),

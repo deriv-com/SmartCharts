@@ -1,6 +1,6 @@
 import Context from 'src/components/ui/Context';
 import { TQuote, TRefData } from 'src/types';
-import { CIQ } from 'src/utils/CIQ';
+import { strToDateTime } from 'src/utils/date';
 import MainStore from '.';
 import { getUTCEpoch } from '../utils';
 import ChartStore from './ChartStore';
@@ -79,7 +79,7 @@ class HighestLowestStore {
             const price = this.highest.Close.toFixed(this.decimalPlaces);
 
             this.highestRef.setPosition({
-                epoch: getUTCEpoch(CIQ.strToDateTime(this.highest.Date)),
+                epoch: getUTCEpoch(strToDateTime(this.highest.Date)),
                 price: +price,
             });
 
@@ -88,7 +88,7 @@ class HighestLowestStore {
         if (this.lowest) {
             const price = this.lowest.Close.toFixed(this.decimalPlaces);
             this.lowestRef.setPosition({
-                epoch: getUTCEpoch(CIQ.strToDateTime(this.lowest.Date)),
+                epoch: getUTCEpoch(strToDateTime(this.lowest.Date)),
                 price: +price,
             });
             (this.lowestRef.value as HTMLElement).textContent = price;

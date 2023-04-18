@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import moment from 'moment';
-import { CIQ } from 'src/utils/CIQ';
 import MainStore from '.';
 import { ActiveSymbols, BinaryAPI, TradingTimes } from '../binaryapi';
 import { TProcessedSymbolItem, TSubCategoryDataItem } from '../binaryapi/ActiveSymbols';
@@ -217,7 +216,7 @@ class ChartStore {
     };
 
     _initChart(rootNode: HTMLElement | null, props: React.PropsWithChildren<TChartProps>) {
-        this.rootNode = rootNode as (HTMLElement & { CIQ: typeof CIQ }) | null;
+        this.rootNode = rootNode as HTMLElement | null;
 
         this.chartNode = this.rootNode?.querySelector('.ciq-chart-area');
 

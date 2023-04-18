@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/store';
 import { TRefData } from 'src/types';
-import { CIQ } from 'src/utils/CIQ';
+import { strToDateTime } from 'src/utils/date';
 import { getUTCDate } from '../utils';
 
 // Render given Components under stx-subholder.
@@ -58,7 +58,7 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;
-        date_ref.current = CIQ.strToDateTime(getUTCDate(epoch as number)) as Date;
+        date_ref.current = strToDateTime(getUTCDate(epoch as number)) as Date;
         epoch_ref.current = epoch ? epoch * 1000 : null;
 
         updateCSS();
