@@ -1,23 +1,23 @@
-/**
+/**!
  *	8.2.0
- *	Generation date: 2022-02-18T13:21:32.984Z
+ *	Generation date: 2023-03-23T15:05:01.971Z
  *	Client name: deriv limited
  *	Package Type: Technical Analysis
  *	License type: annual
- *	Expiration date: "2023/04/01"
+ *	Expiration date: "2024/04/01"
  *	Domain lock: ["127.0.0.1","localhost","deriv.com","deriv.app","deriv.me","binary.com","binary.sx","binary.me","binary.bot","deriv.be"]
  *	iFrame lock: true
  */
 
-/***********************************************************
+/***********************************************************!
  * Copyright by ChartIQ, Inc.
  * Licensed under the ChartIQ, Inc. Developer License Agreement https://www.chartiq.com/developer-license-agreement
 *************************************************************/
-/*************************************** DO NOT MAKE CHANGES TO THIS LIBRARY FILE!! **************************************/
-/* If you wish to overwrite default functionality, create a separate file with a copy of the methods you are overwriting */
-/* and load that file right after the library has been loaded, but before the chart engine is instantiated.              */
-/* Directly modifying library files will prevent upgrades and the ability for ChartIQ to support your solution.          */
-/*************************************************************************************************************************/
+/*************************************! DO NOT MAKE CHANGES TO THIS LIBRARY FILE!! !*************************************
+* If you wish to overwrite default functionality, create a separate file with a copy of the methods you are overwriting *
+* and load that file right after the library has been loaded, but before the chart engine is instantiated.              *
+* Directly modifying library files will prevent upgrades and the ability for ChartIQ to support your solution.          *
+*************************************************************************************************************************/
 /* eslint-disable no-extra-parens */
 
 
