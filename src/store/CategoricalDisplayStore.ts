@@ -182,16 +182,15 @@ export default class CategoricalDisplayStore {
             };
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
                 const foundItems: TSubCategoryDataItem[] = [];
-                if ((category as TCategorizedSymbolItem).hasSubgroup) {
-                    'categoryName' in category &&
-                        category.subgroups.forEach((el: TCategorizedSymbolItem) =>
-                            el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
-                                const foundSubItems = findFavItem(
-                                    subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
-                                );
-                                foundItems.push(...foundSubItems);
-                            })
-                        );
+                if ((category as TCategorizedSymbolItem).hasSubgroup && 'categoryName' in category) {
+                    category.subgroups.forEach((el: TCategorizedSymbolItem) =>
+                        el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                            const foundSubItems = findFavItem(
+                                subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                            );
+                            foundItems.push(...foundSubItems);
+                        })
+                    );
                 } else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
@@ -252,7 +251,6 @@ export default class CategoricalDisplayStore {
                 searchHasResult = true;
             }
         };
-
         for (const category of filteredItems) {
             category.active = true;
             if (category.hasSubgroup) {
@@ -397,15 +395,14 @@ export default class CategoricalDisplayStore {
                     if (triggered_subgroup !== undefined) {
                         triggered_subgroup.active = !triggered_subgroup.active;
                     }
-                } else {
-                    item.active = !item.active;
                 }
+                item.active = !item.active;
             }
             if (item.active) {
-                setTimeout(() => this.handleFilterClick(categoryId), 250);
+                setTimeout(() => this.handleFilterClick(item.categoryId), 250);
             }
             if (item.active && item.categoryId !== 'favorite' && !this.activeCategories.includes(categoryId)) {
-                this.activeCategories.push(categoryId);
+                this.activeCategories.push(item.categoryId);
             }
         }
 
