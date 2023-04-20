@@ -251,6 +251,7 @@ export default class CategoricalDisplayStore {
                 searchHasResult = true;
             }
         };
+
         for (const category of filteredItems) {
             category.active = true;
             if (category.hasSubgroup) {
