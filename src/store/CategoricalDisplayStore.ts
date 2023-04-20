@@ -277,7 +277,6 @@ export default class CategoricalDisplayStore {
         if (!this.pauseScrollSpy) {
             this.lastFilteredItems = filteredItems;
         }
-
         return filteredItems;
     }
 
@@ -385,7 +384,6 @@ export default class CategoricalDisplayStore {
                 ? item.categoryId === categoryId
                 : item.subgroups?.filter((subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId)
                       .length > 0;
-
             if (isItemActive) {
                 if (item.hasSubgroup) {
                     const triggered_subgroup = item.subgroups.find(
