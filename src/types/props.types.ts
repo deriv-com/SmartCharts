@@ -147,6 +147,7 @@ export type TChartProps = {
     should_show_eu_content?: boolean;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
+    showTicksOnly?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
     contractInfo?: keyof ProposalOpenContract | {};
     maxTick?: number | null;

@@ -30,9 +30,10 @@ const TypeMap = {
 };
 
 const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps) => {
-    const { chartMode, chartType, timeperiod } = useStores();
+    const { chart, chartMode, chartType, timeperiod, state } = useStores();
     const { menuStore } = chartMode;
-
+    const { showTicksOnly } = state;
+    const { isMobile } = chart;
     const { type } = chartType;
     const { display: displayInterval } = timeperiod;
     const menuOpen = chartMode.menuStore.open;
@@ -64,6 +65,13 @@ const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps
                         <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
                     </div>
                 </div>
+                {showTicksOnly ? (
+                    <div className={classNames('sc-chart-mode__section__text', { 'sc-chart-mode__section__text--mobile': isMobile })}>
+                        {t.translate('Only selected charts and time intervals are available for this trade type.')}
+                    </div>
+                ) : (
+                    <React.Fragment />
+                )}
             </Menu.Body>
         </Menu>
     );
