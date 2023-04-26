@@ -396,8 +396,8 @@ export default class CategoricalDisplayStore {
                     }
                 }
                 item.active = !item.active;
+                setTimeout(() => this.handleFilterClick(item.categoryId), 250);
             }
-            setTimeout(() => this.handleFilterClick(item.categoryId), 250);
             if (item.active) {
                 this.activeCategories.push(item.categoryId);
             }
