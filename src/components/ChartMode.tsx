@@ -65,12 +65,14 @@ const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps
                         <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
                     </div>
                 </div>
-                {showTicksOnly ? (
-                    <div className={classNames('sc-chart-mode__section__text', { 'sc-chart-mode__section__text--mobile': isMobile })}>
+                {showTicksOnly && (
+                    <div
+                        className={classNames('sc-chart-mode__section__text', {
+                            'sc-chart-mode__section__text--mobile': isMobile,
+                        })}
+                    >
                         {t.translate('Only selected charts and time intervals are available for this trade type.')}
                     </div>
-                ) : (
-                    <React.Fragment />
                 )}
             </Menu.Body>
         </Menu>
