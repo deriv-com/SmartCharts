@@ -51,7 +51,7 @@ const PriceLine = ({
     );
     const opacity = React.useMemo(() => (isOverlapping ? opacityOnOverlap : ''), [isOverlapping, opacityOnOverlap]);
 
-    const isBarrierZero = price === '+0.00';
+    const isBarrierZero = parseFloat(price) === 0.00;
 
     React.useEffect(() => {
         init();
