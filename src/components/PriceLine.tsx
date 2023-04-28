@@ -51,7 +51,7 @@ const PriceLine = ({
     );
     const opacity = React.useMemo(() => (isOverlapping ? opacityOnOverlap : ''), [isOverlapping, opacityOnOverlap]);
 
-    const isBarrierZero = price === '0.00';
+    const isBarrierZero = price === '+0.00';
 
     React.useEffect(() => {
         init();
@@ -60,7 +60,12 @@ const PriceLine = ({
     if (!showBarrier) return null;
 
     return (
-        <div className={classNames('barrier-area', { 'barrier-area--zero': isBarrierZero })} style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
+        <div
+            className={classNames('barrier-area', { 'barrier-area--zero': isBarrierZero })}
+            style={{ top: 0 }}
+            ref={setDragLine}
+            hidden={!visible}
+        >
             <div
                 className={classNames('chart-line', 'horizontal', className || '', {
                     draggable,
@@ -76,12 +81,14 @@ const PriceLine = ({
                     <div className='drag-line' style={{ borderTop: `${lineStyle} ${color} 1px` }} />
                 )}
                 <div className='draggable-area' />
-                <div className='drag-price' style={{ backgroundColor: color, width, opacity, display: isBarrierZero ? 'none' : 'block' }}>
-                    <div className='price'>{priceDisplay}</div>
-                    {offScreen && offScreenDirection && (
-                        <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
-                    )}
-                </div>
+                {!isBarrierZero && (
+                    <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
+                        <div className='price'>{priceDisplay}</div>
+                        {offScreen && offScreenDirection && (
+                            <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
+                        )}
+                    </div>
+                )}
                 {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
             </div>
         </div>
