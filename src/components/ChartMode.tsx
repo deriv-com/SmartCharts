@@ -32,7 +32,7 @@ const TypeMap = {
 const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps) => {
     const { chart, chartMode, chartType, timeperiod, state } = useStores();
     const { menuStore } = chartMode;
-    const { showTicksOnly } = state;
+    const { allowTickChartTypeOnly } = state;
     const { isMobile } = chart;
     const { type } = chartType;
     const { display: displayInterval } = timeperiod;
@@ -65,7 +65,7 @@ const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps
                         <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
                     </div>
                 </div>
-                {showTicksOnly && (
+                {allowTickChartTypeOnly && (
                     <div
                         className={classNames('sc-chart-mode__section__text', {
                             'sc-chart-mode__section__text--mobile': isMobile,

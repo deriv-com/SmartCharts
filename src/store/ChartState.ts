@@ -53,7 +53,7 @@ class ChartState {
     isChartClosed = false;
     shouldMinimiseLastDigits = false;
     should_show_eu_content?: boolean;
-    showTicksOnly?: boolean;
+    allowTickChartTypeOnly?: boolean;
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
@@ -114,7 +114,7 @@ class ChartState {
             should_show_eu_content: observable,
             settings: observable,
             showLastDigitStats: observable,
-            showTicksOnly: observable,
+            allowTickChartTypeOnly: observable,
             scrollToEpoch: observable,
             onExportLayout: observable,
             clearChart: observable,
@@ -180,7 +180,7 @@ class ChartState {
             allTicks = [],
             contractInfo = {},
             showLastDigitStats = false,
-            showTicksOnly = false,
+            allowTickChartTypeOnly = false,
             startEpoch,
             symbol,
             crosshairState,
@@ -224,7 +224,7 @@ class ChartState {
         this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
-        this.showTicksOnly = showTicksOnly;
+        this.allowTickChartTypeOnly = allowTickChartTypeOnly;
         this.allTicks = allTicks;
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
