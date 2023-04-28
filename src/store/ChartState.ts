@@ -643,7 +643,7 @@ class ChartState {
             this.stxx.chart.entryTick = this.stxx.tickFromDate(
                 getUTCDate(this.startEpoch || (scrollToEpoch as number))
             );
-            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+            const scrollToTarget = this.stxx.chart.dataSet?.length - this.stxx.chart.entryTick;
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
