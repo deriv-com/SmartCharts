@@ -346,6 +346,7 @@ export default class CategoricalDisplayStore {
     }
 
     handleFilterClick(categoryId: string): void {
+        this.focusedCategoryKey = '';
         const el = this.categoryElements[categoryId];
         const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
@@ -397,10 +398,7 @@ export default class CategoricalDisplayStore {
                 }
                 item.active = !item.active;
                 setTimeout(() => this.handleFilterClick(item.categoryId), 250);
-            } else {
-                setTimeout(() => this.handleFilterClick(categoryId), 250);
             }
-
             if (item.active && item.categoryId !== 'favorite') {
                 this.activeCategories.push(item.categoryId);
             }
