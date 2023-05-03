@@ -182,16 +182,15 @@ export default class CategoricalDisplayStore {
             };
             const findFavItem = (category: TCategorizedSymbolItem<TSubCategory | string> | TSubCategory) => {
                 const foundItems: TSubCategoryDataItem[] = [];
-                if ((category as TCategorizedSymbolItem).hasSubgroup) {
-                    'categoryName' in category &&
-                        category.subgroups.forEach((el: TCategorizedSymbolItem) =>
-                            el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
-                                const foundSubItems = findFavItem(
-                                    subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
-                                );
-                                foundItems.push(...foundSubItems);
-                            })
-                        );
+                if ((category as TCategorizedSymbolItem).hasSubgroup && 'categoryName' in category) {
+                    category.subgroups.forEach((el: TCategorizedSymbolItem) =>
+                        el.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
+                            const foundSubItems = findFavItem(
+                                subcategory as TCategorizedSymbolItem<TSubCategory | string> | TSubCategory
+                            );
+                            foundItems.push(...foundSubItems);
+                        })
+                    );
                 } else if ((category as TCategorizedSymbolItem<TSubCategory | string>).hasSubcategory) {
                     category.data.forEach((subcategory: TSubCategory | TSubCategoryDataItem | string) => {
                         const foundSubItems = findFavItem(
@@ -258,6 +257,7 @@ export default class CategoricalDisplayStore {
             if (category.hasSubgroup) {
                 category.subgroups = toJS(category.subgroups);
                 for (const subgroup of category.subgroups) {
+                    subgroup.active = true;
                     for (const subcategory of subgroup.data) {
                         filterCategory((subcategory as unknown) as TCategorizedSymbolItem<TSubCategory>);
                     }
@@ -346,6 +346,7 @@ export default class CategoricalDisplayStore {
     }
 
     handleFilterClick(categoryId: string): void {
+        this.focusedCategoryKey = '';
         const el = this.categoryElements[categoryId];
         const gap_top = Object.keys(this.categoryElements).indexOf(categoryId) * 40;
 
@@ -391,20 +392,15 @@ export default class CategoricalDisplayStore {
                         (subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId
                     );
 
-                    if (triggered_subgroup != undefined) {
+                    if (triggered_subgroup !== undefined) {
                         triggered_subgroup.active = !triggered_subgroup.active;
                     }
-                    setTimeout(() => this.handleFilterClick(categoryId), 250);
-                } else {
-                    item.active = !item.active;
-
-                    if (item.active) {
-                        setTimeout(() => this.handleFilterClick(categoryId), 250);
-                    }
                 }
+                item.active = !item.active;
+                setTimeout(() => this.handleFilterClick(item.categoryId), 250);
             }
             if (item.active && item.categoryId !== 'favorite') {
-                this.activeCategories.push(categoryId);
+                this.activeCategories.push(item.categoryId);
             }
         }
 
