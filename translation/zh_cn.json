@@ -83,6 +83,7 @@
   "Network status": "网络状态",
   "No results for": "没有结果",
   "OHLC": "OHLC条形图",
+  "Only selected charts and time intervals are available for this trade type.": "",
   "Opens in:": "离开盘时间还有：",
   "Others": "其他",
   "Overwrite": "覆盖",
