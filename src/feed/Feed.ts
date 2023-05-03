@@ -452,6 +452,7 @@ class Feed {
         }
         if (
             this.endEpoch &&
+            this._stx.chart.dataSet &&
             this._stx.chart.dataSet.slice(-1)[0] &&
             CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
         ) {
@@ -472,22 +473,20 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
-        } else if (this.hasAlternativeSource && !fromAlternativeSource) {
-            this.tickQueue.push(...quotes);
-        } else {
-            if (this.tickQueue && this.tickQueue.length) {
-                if (this.tickQueue.slice(-1)[0].Date <= quotes.slice(-1)[0].Date) {
-                    quotes = this.tickQueue.slice(-1);
-
-                    this._stx.updateChartData(this.tickQueue.slice(0, -1), null, {
-                        noCreateDataSet: true,
-                        allowReplaceOHL: true,
-                    });
-
-                    this.tickQueue = [];
+        } else if (!this.hasAlternativeSource || fromAlternativeSource) {
+            if (fromAlternativeSource) {
+                if (!this.tickQueue.length) {
+                    this.tickQueue = [quotes[quotes.length - 1]];
+                    return;
                 }
-            } else if (fromAlternativeSource) {
-                return;
+                if (this.tickQueue[0].tick?.epoch === quotes[quotes.length - 1].tick?.epoch) return;
+                this.tickQueue = [quotes[quotes.length - 1]];
+
+                this._stx.updateChartData(quotes.slice(0, -1), null, {
+                    noCreateDataSet: true,
+                    allowReplaceOHL: true,
+                });
+                quotes = [quotes[quotes.length - 1]];
             }
             this._stx.updateChartData(quotes, null, {
                 allowReplaceOHL: true,

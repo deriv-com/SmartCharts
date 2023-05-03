@@ -155,7 +155,7 @@ export type TChartProps = {
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
-    contractInfo?: keyof ProposalOpenContract | {};
+    contractInfo?: ProposalOpenContract;
     maxTick?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;

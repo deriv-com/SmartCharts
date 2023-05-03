@@ -59,7 +59,7 @@ class ChartState {
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
     allTicks = [];
-    contractInfo = {};
+    contractInfo: ProposalOpenContract = {};
     refreshActiveSymbols?: boolean;
     hasReachedEndOfData = false;
     prevChartType?: string;
