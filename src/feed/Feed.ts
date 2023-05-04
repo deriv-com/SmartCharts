@@ -79,7 +79,7 @@ class Feed {
         return this._mainStore.state.margin;
     }
     get hasAlternativeSource() {
-        return !!this._mainStore.state.handlePOCResponse;
+        return this._mainStore.state.shouldDrawTicksFromContractInfo;
     }
     get paginationLoader() {
         return this._mainStore.paginationLoader;
@@ -630,7 +630,10 @@ class Feed {
                 tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch as number))
             );
             if (endTickIndex > -1) {
-                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
+                const addon =
+                    CIQ.strToDateTime(trimmedQuotes[endTickIndex].Date) === CIQ.strToDateTime(getUTCDate(this.endEpoch))
+                        ? 2
+                        : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
         }

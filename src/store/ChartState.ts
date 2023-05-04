@@ -34,7 +34,7 @@ type TScrollListenerParamsData = {
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
-    handlePOCResponse?: (handler: (contract_info: ProposalOpenContract) => void) => void;
+    shouldDrawTicksFromContractInfo? = false;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -128,7 +128,7 @@ class ChartState {
             allTicks: observable,
             contractInfo: observable,
             refreshActiveSymbols: observable,
-            handlePOCResponse: observable,
+            shouldDrawTicksFromContractInfo: observable,
             hasReachedEndOfData: observable,
             prevChartType: observable,
             isChartScrollingToEpoch: observable,
@@ -162,7 +162,7 @@ class ChartState {
         chartControlsWidgets,
         enabledChartFooter,
         chartStatusListener,
-        handlePOCResponse,
+        shouldDrawTicksFromContractInfo,
         stateChangeListener,
         getIndicatorHeightRatio,
         chartType,
@@ -233,13 +233,9 @@ class ChartState {
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
 
         const feed = this.mainStore.chart.feed;
-        if (typeof handlePOCResponse === 'function' && feed) {
-            handlePOCResponse((...args) => {
-                if (args[0].tick_stream) {
-                    this.handlePOCResponse = handlePOCResponse;
-                    feed.appendChartDataFromPOCResponse.call(feed, ...args);
-                }
-            });
+        if (shouldDrawTicksFromContractInfo && feed && contractInfo.tick_stream) {
+            this.shouldDrawTicksFromContractInfo = shouldDrawTicksFromContractInfo;
+            feed.appendChartDataFromPOCResponse.call(feed, contractInfo);
         }
 
         if (

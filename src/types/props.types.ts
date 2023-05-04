@@ -142,7 +142,7 @@ export type TChartProps = {
     barriers?: TBarrierUpdateProps[];
     enableRouting?: boolean;
     enable?: boolean;
-    handlePOCResponse?: (handler: (contract_info: ProposalOpenContract) => void) => void;
+    shouldDrawTicksFromContractInfo?: boolean;
     isConnectionOpened?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
