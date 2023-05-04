@@ -81,7 +81,7 @@ export default function animateChart(stx: Context['stx'], animationParameters: a
         chart = chart || this.chart;
         if (chart.lockScroll) {
             const lastAppendQuote = appendQuotes[appendQuotes.length - 1];
-            const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
+            const lastDataSegmentItem = chart.dataSegment?.[chart.dataSegment?.length - 1];
             if (!lastAppendQuote || !lastDataSegmentItem) {
                 return;
             }
