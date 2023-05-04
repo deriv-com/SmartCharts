@@ -83,7 +83,7 @@
   "Network status": "สถานะเครือข่าย",
   "No results for": "ไม่พบผลลัพธ์สําหรับ",
   "OHLC": "กราฟ OHLC",
-  "Only selected charts and time intervals are available for this trade type.": "",
+  "Only selected charts and time intervals are available for this trade type.": "เฉพาะแผนภูมิและช่วงเวลาที่เลือกเท่านั้นที่สามารถใช้ได้สำหรับการซื้อขายประเภทนี้",
   "Opens in:": "เปิดใน:",
   "Others": "อื่นๆ",
   "Overwrite": "เขียนทับ",
