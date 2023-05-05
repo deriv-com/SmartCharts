@@ -24,8 +24,9 @@ const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'mountain' && key === 'tick';
 
 const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
-    const { timeperiod, chartType, loader } = useStores();
+    const { timeperiod, chartType, loader, state } = useStores();
     const chartTypeId = chartType.type.id;
+    const { allowTickChartTypeOnly } = state;
     const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
     const isMobile = mainStore.chart.isMobile as boolean;
     const { isActive: isLoading } = loader;
@@ -41,7 +42,10 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
         category.key,
         chartTypeId,
     ]);
-    const is_disabled = React.useMemo(() => is_tick && chartTypeId !== 'mountain', [is_tick, chartTypeId]);
+    const is_disabled = React.useMemo(
+        () => (is_tick && chartTypeId !== 'mountain') || (!is_tick && allowTickChartTypeOnly),
+        [is_tick, chartTypeId, allowTickChartTypeOnly]
+    );
     const is_active = React.useMemo(
         () =>
             timeUnit === category.key &&
