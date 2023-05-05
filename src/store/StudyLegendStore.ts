@@ -148,8 +148,10 @@ export default class StudyLegendStore {
         const config: TIndicatorConfig = {
             id: activeItem.id,
             name: activeItem.flutter_chart_id,
+            title: `${activeItem.shortname} (${activeItem.bars})`,
             ...this.transform(params),
         };
+
         this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config), index);
         this.mainStore.state.saveLayout();
     };
