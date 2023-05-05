@@ -353,6 +353,7 @@ export type JSInterop = {
     indicators: {
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
+        onSwap: (index1: number, index2: number) => void;
     };
 };
 

@@ -130,4 +130,7 @@ class JsIndicators {
 
   /// Called when an indicator is to be edited
   external OnEditCallback? onEdit;
+
+  /// Callback to swap two elements of a list.
+  external OnSwapCallback? onSwap;
 }

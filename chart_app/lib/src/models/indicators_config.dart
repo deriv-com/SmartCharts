@@ -12,6 +12,7 @@ class IndicatorsConfig extends ChangeNotifier {
       AddOnsRepository<IndicatorConfig>(
     onEditCallback: JsInterop.indicators?.onEdit,
     onRemoveCallback: JsInterop.indicators?.onRemove,
+    onSwapCallback: JsInterop.indicators?.onSwap,
   );
 
   /// To add or update an indicator

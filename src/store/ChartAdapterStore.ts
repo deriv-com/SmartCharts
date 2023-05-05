@@ -56,6 +56,10 @@ export default class ChartAdapterStore {
                 onEdit: (index: number) => {
                     this.mainStore.studies.editStudyByIndex(index);
                 },
+                onSwap: (index1: number, index2: number) => {
+                    const { activeItems } = this.mainStore.studies;
+                    [activeItems[index1], activeItems[index2]] = [activeItems[index2], activeItems[index1]];
+                },
             },
         };
 

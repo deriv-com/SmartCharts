@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// Storage key of saved indicators.
@@ -9,12 +10,18 @@ const String addOnsKey = 'addOns';
 /// [id] is the id of the addOn to be edited
 typedef OnEditCallback = void Function(int index);
 
+/// Swaps two elements of a list.
+typedef OnSwapCallback = void Function(int index1, int index2);
+
 /// Holds indicators/drawing tools that were added to the Chart during runtime.
 class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     implements Repository<T> {
   /// Initializes
-  AddOnsRepository({this.onEditCallback, this.onRemoveCallback})
-      : _addOns = <T>[];
+  AddOnsRepository({
+    this.onEditCallback,
+    this.onRemoveCallback,
+    this.onSwapCallback,
+  }) : _addOns = <T>[];
 
   final List<T> _addOns;
 
@@ -27,6 +34,9 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
   /// Callback to remove an indicator.
   OnEditCallback? onRemoveCallback;
+
+  /// Callback to swap two elements of a list.
+  OnSwapCallback? onSwapCallback;
 
   /// Adds a new indicator or drawing tool and updates storage.
   @override
@@ -65,6 +75,14 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
     onRemoveCallback?.call(index);
 
+    notifyListeners();
+  }
+
+  /// Swaps two elements of this list.
+  @override
+  void swap(int index1, int index2) {
+    _addOns.swap(index1, index2);
+    onSwapCallback?.call(index1, index2);
     notifyListeners();
   }
 }
