@@ -64,7 +64,7 @@ export class TickHistoryFormatter {
         return undefined;
     }
     static formatAllTicks(
-        allTicksContract: NonNullable<NonNullable<AuditDetailsForExpiredContract>['all_ticks']>
+        allTicksContract: NonNullable<AuditDetailsForExpiredContract>['all_ticks']
     ): TQuote[] | undefined {
         return allTicksContract?.map(res => ({
             Date: getUTCDate(+(res.epoch || 0)),

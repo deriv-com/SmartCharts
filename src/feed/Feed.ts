@@ -1,9 +1,4 @@
-import {
-    AuditDetailsForExpiredContract,
-    TicksHistoryRequest,
-    TicksHistoryResponse,
-    ProposalOpenContract,
-} from '@deriv/api-types';
+import { TicksHistoryRequest, TicksHistoryResponse, ProposalOpenContract } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
@@ -295,9 +290,7 @@ class Feed {
             } else {
                 // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
                 const allTicksContract = await this.allTicks;
-                quotes = TickHistoryFormatter.formatAllTicks(
-                    allTicksContract as keyof AuditDetailsForExpiredContract | []
-                );
+                quotes = TickHistoryFormatter.formatAllTicks(allTicksContract);
             }
         }
         if (!quotes) {

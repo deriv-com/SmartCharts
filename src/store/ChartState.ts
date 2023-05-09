@@ -8,7 +8,7 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
-import { ProposalOpenContract } from '@deriv/api-types';
+import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -59,7 +59,7 @@ class ChartState {
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
-    allTicks = [];
+    allTicks: NonNullable<AuditDetailsForExpiredContract>['all_ticks'] = [];
     contractInfo: ProposalOpenContract = {};
     refreshActiveSymbols?: boolean;
     hasReachedEndOfData = false;
