@@ -38,21 +38,21 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   /// Callback to swap two elements of a list.
   OnSwapCallback? onSwapCallback;
 
-  /// Adds a new indicator or drawing tool and updates storage.
+  /// Adds a new indicator or drawing tool.
   @override
   void add(T addOnConfig) {
     _addOns.add(addOnConfig);
     notifyListeners();
   }
 
-  /// Updates indicator or drawing tool at [index] and updates storage.
+  /// Updates indicator or drawing tool at [index].
   @override
   void edit(T config) {
     final int index = items.indexOf(config);
     onEditCallback?.call(index);
   }
 
-  /// Updates indicator or drawing tool at [index] and updates storage.
+  /// Updates indicator or drawing tool at [index].
   @override
   void updateAt(int index, T addOnConfig) {
     if (index < 0 || index >= _addOns.length) {
@@ -63,7 +63,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     notifyListeners();
   }
 
-  /// Removes indicator/drawing tool at [index] from repository and updates storage.
+  /// Removes indicator/drawing tool at [index] from repository.
   @override
   void remove(T config) {
     final int index = items.indexOf(config);
@@ -74,6 +74,16 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     _addOns.removeAt(index);
 
     onRemoveCallback?.call(index);
+
+    notifyListeners();
+  }
+
+  /// Removes indicator/drawing tool at [index] from repository.
+  void removeAt(int index) {
+    if (index < 0 || index >= _addOns.length) {
+      return;
+    }
+    _addOns.removeAt(index);
 
     notifyListeners();
   }
