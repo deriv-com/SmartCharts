@@ -144,7 +144,8 @@ export default class ChartAdapterStore {
         });
     };
 
-    onTickHistory(quotes: TQuote[]) {
+    async onTickHistory(quotes: TQuote[]) {
+        await when(() => this.isChartLoaded);
         this.isDataInitialized = true;
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);

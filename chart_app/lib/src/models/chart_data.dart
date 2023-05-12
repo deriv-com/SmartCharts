@@ -1,9 +1,6 @@
-import 'dart:convert';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
 
 /// State and methods of chart web adapter data.
 class ChartDataModel extends ChangeNotifier {
@@ -79,11 +76,6 @@ class ChartDataModel extends ChangeNotifier {
       waitingForHistory = false;
     }
 
-    notifyListeners();
-  }
-
-  void _onClearTicks() {
-    ticks = <Tick>[];
     notifyListeners();
   }
 

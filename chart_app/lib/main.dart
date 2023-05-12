@@ -108,13 +108,18 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: Consumer2<ChartConfigModel, ChartDataModel>(
-                    builder: (BuildContext context,
-                            ChartConfigModel chartConfigModel,
-                            ChartDataModel chartDataModel,
-                            Widget? child) =>
-                        DerivChart(
-                      mainSeries: _getDataSeries(chartConfigModel.style),
+                  child: Consumer2<ChartConfigModel, ChartDataModel>(builder:
+                      (BuildContext context, ChartConfigModel chartConfigModel,
+                          ChartDataModel chartDataModel, Widget? child) {
+                    if (chartDataModel.ticks.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final DataSeries<Tick> mainSeries =
+                        _getDataSeries(chartConfigModel.style);
+
+                    return DerivChart(
+                      mainSeries: mainSeries,
                       annotations: chartDataModel.ticks.length > 4
                           ? <Barrier>[
                               if (chartConfigModel.isLive)
@@ -167,8 +172,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             ev.position.dx, ev.position.dy, epoch, quote);
                       },
                       maxCurrentTickOffset: 300,
-                    ),
-                  ),
+                    );
+                  }),
                 ),
               ],
             ),
