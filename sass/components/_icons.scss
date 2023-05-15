@@ -170,7 +170,8 @@
             filter: brightness(3);
         }
         .sc-mcd__filter__item--selected {
-            .ic-cryptocurrency > svg {
+            .ic-cryptocurrency > svg,
+            .ic-indices > svg {
                 filter: brightness(6);
             }
         }
