@@ -47,8 +47,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
   /// Updates indicator or drawing tool at [index].
   @override
-  void edit(T config) {
-    final int index = items.indexOf(config);
+  void editAt(int index) {
     onEditCallback?.call(index);
   }
 
@@ -63,23 +62,15 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     notifyListeners();
   }
 
-  /// Removes indicator/drawing tool at [index] from repository.
+  /// Removes indicator/drawing tool at [index] from repository and calls `onRemoveCallback`
   @override
-  void remove(T config) {
-    final int index = items.indexOf(config);
-
-    if (index < 0 || index >= _addOns.length) {
-      return;
-    }
-    _addOns.removeAt(index);
-
+  void removeAt(int index) {
+    remove(index);
     onRemoveCallback?.call(index);
-
-    notifyListeners();
   }
 
   /// Removes indicator/drawing tool at [index] from repository.
-  void removeAt(int index) {
+  void remove(int index) {
     if (index < 0 || index >= _addOns.length) {
       return;
     }
