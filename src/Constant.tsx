@@ -516,9 +516,17 @@ const getAwesomeOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = () =>
 
 const getDPOIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     config: {
+        lineStyle: _.clone(lineStyle),
         isCentered: true,
     },
     parameters: [
+        {
+            path: 'lineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
         {
             path: 'period',
             title: t.translate('Period'),

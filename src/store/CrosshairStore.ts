@@ -46,7 +46,6 @@ class CrosshairStore {
         });
 
         this.mainStore = mainStore;
-        when(() => !!this.context, this.onContextReady);
     }
     get activeSymbol() {
         return this.mainStore.chart.currentActiveSymbol;
@@ -76,10 +75,6 @@ class CrosshairStore {
     isOverChartContainer = false;
 
     onCrosshairChanged: (state?: number) => void = () => null;
-    onContextReady = () => {
-        const state = 2;
-        this.setCrosshairState(state);
-    };
 
     onMount = async (refs: TCrosshairRefs) => {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);

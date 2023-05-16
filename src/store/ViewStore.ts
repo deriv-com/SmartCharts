@@ -184,13 +184,13 @@ export default class ViewStore {
         this.mainStore.chartType.setChartType(layout.chartType);
         this.menuStore.setOpen(false);
 
-        if (typeof layout.crosshair === 'number') {
-            this.mainStore.crosshair.setCrosshairState(layout.crosshair);
-        }
-
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
 
         this.mainStore.studies.restoreStudies(layout.studyItems || []);
+
+        if (typeof layout.crosshair === 'number') {
+            this.mainStore.crosshair.setCrosshairState(layout.crosshair);
+        }
 
         finishImportLayout();
     }
