@@ -14,6 +14,7 @@ const appEntryFile = isApp && process.env.APP_ENTRY ? process.env.APP_ENTRY : 'i
 
 const output = {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '',
     filename: 'smartcharts.js',
     chunkFilename: '[name]-[chunkhash:6].smartcharts.js',
     libraryExport: 'default',
@@ -35,8 +36,16 @@ const config = {
         extensions: ['.ts', '.tsx', '.js'],
     },
     devServer: {
-        publicPath: '/dist/',
-        writeToDisk: true,
+        static: {
+            directory: path.join(__dirname, '.'),
+            serveIndex: true,
+            staticOptions: {
+                redirect: true,
+            },
+        },
+        devMiddleware: {
+            writeToDisk: true,
+        },
     },
     module: {
         rules: [
@@ -58,6 +67,7 @@ const config = {
                         },
                     },
                 ],
+                type: 'javascript/auto',
             },
             {
                 test: /\.(s*)css$/,
@@ -90,7 +100,10 @@ const config = {
                     },
                 ],
             },
-            { parser: { amd: false } },
+            /**
+             * this is a temporary fix for chartiq's AMD module
+             */
+            // { parser: {  amd: false  } },
             {
                 test: /\.(js|jsx)$/,
                 exclude: [/node_modules/, /\\chartiq/, /\\scripts/],
@@ -105,11 +118,31 @@ const config = {
             },
             {
                 test: /\.po$/,
-                loader: [path.resolve('./loaders/translation-loader.js'), 'json-loader', 'po-loader'],
+                use: [
+                    {
+                        loader: path.resolve('./loaders/translation-loader.js'),
+                    },
+                    {
+                        loader: 'json-loader',
+                    },
+                    {
+                        loader: 'po-loader',
+                    },
+                ],
             },
             {
                 test: /\.pot$/,
-                loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
+                use: [
+                    {
+                        loader: path.resolve('./loaders/pot-loader.js'),
+                    },
+                    {
+                        loader: 'json-loader',
+                    },
+                    {
+                        loader: 'po-loader',
+                    },
+                ],
             },
             {
                 include: path.resolve(__dirname, 'src/utils/ga.js'),
