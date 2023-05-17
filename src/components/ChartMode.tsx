@@ -27,9 +27,10 @@ const TypeMap = {
 };
 
 const ChartMode = ({ portalNodeId }: TChartModeProps) => {
-    const { chartMode, chartType, timeperiod } = useStores();
+    const { chart, chartMode, chartType, timeperiod, state } = useStores();
     const { menuStore } = chartMode;
-
+    const { allowTickChartTypeOnly } = state;
+    const { isMobile } = chart;
     const { type } = chartType;
     const { display: displayInterval } = timeperiod;
     const menuOpen = chartMode.menuStore.open;
@@ -61,6 +62,15 @@ const ChartMode = ({ portalNodeId }: TChartModeProps) => {
                         <Timeperiod newDesign portalNodeId={portalNodeId} />
                     </div>
                 </div>
+                {allowTickChartTypeOnly && (
+                    <div
+                        className={classNames('sc-chart-mode__section__text', {
+                            'sc-chart-mode__section__text--mobile': isMobile,
+                        })}
+                    >
+                        {t.translate('Only selected charts and time intervals are available for this trade type.')}
+                    </div>
+                )}
             </Menu.Body>
         </Menu>
     );

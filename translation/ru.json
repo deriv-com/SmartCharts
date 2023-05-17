@@ -83,6 +83,7 @@
   "Network status": "Статус сети",
   "No results for": "Не найдено результатов для",
   "OHLC": "OHLC",
+  "Only selected charts and time intervals are available for this trade type.": "Не все графики и временные интервалы доступны для этого типа контракта.",
   "Opens in:": "Откроется через:",
   "Others": "Другое",
   "Overwrite": "Переписать",

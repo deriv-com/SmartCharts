@@ -73,7 +73,11 @@ const Info = ({ Icon, text, num, bars }: InfoProps) => (
 const DrawToolsList = ({ items, onClick }: TDrawToolsListProps) => (
     <div className='sc-dtools__list'>
         {items.map(Item => (
-            <div key={Item.id} className='sc-dtools__list__item' onClick={() => onClick(Item.id)}>
+            <div
+                key={Item.id}
+                className={classNames('sc-dtools__list__item', `sc-dtools__${Item.id}`)}
+                onClick={() => onClick(Item.id)}
+            >
                 <Info Icon={Item.icon} text={Item.text} />
             </div>
         ))}
