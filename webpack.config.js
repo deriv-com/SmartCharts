@@ -72,14 +72,6 @@ const config = {
             {
                 test: /\.(s*)css$/,
                 use: [
-                    // 'css-hot-loader',
-                    // 'style-loader',
-                    // {
-                    //     loader: 'file-loader',
-                    //     // options: {
-                    //     //     name: '[path][name].module.[ext]',
-                    //     // },
-                    // },
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
@@ -91,14 +83,9 @@ const config = {
                         options: {
                             sourceMap: true,
                             esModule: true,
-                            importLoaders: 1,
                             modules: {
-                                mode: "icss",
+                                mode: 'icss',
                             },
-                            // modules: {
-                            //     // namedExport: true,
-                            //     // exportLocalsConvention: ''
-                            // },
                         },
                     },
                     {
@@ -113,25 +100,17 @@ const config = {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
-                            implementation: require('sass'),
-                            // additionalData: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
                             additionalData: (content, loaderContext) => {
                                 const { resourcePath, rootContext } = loaderContext;
 
                                 const relativeFilePath = path.relative(rootContext, resourcePath);
-                                // const isExcluded = relativeFilePath.match(/^src\/store*\./);
                                 const isExcluded = relativeFilePath.match(/\/_themes\.scss$/);
 
-                                // ^src\\store\\.*|
-
-                                // return '@import "sass/_variables.scss";@import "sass/_themes.scss";' + content;
-
                                 return isExcluded
-                                    ? '@import "sass/_variables.scss";' + content
-                                    : '@import "sass/_variables.scss";@import "sass/_themes.scss";' + content;
+                                    ? `@import "sass/_variables.scss"; ${content}`
+                                    : `@import "sass/_variables.scss";@import "sass/_themes.scss"; ${content}`;
                             },
                             sassOptions: {
-                                // includePaths: [path.resolve(__dirname, './src')],
                                 filePaths: [path.resolve(__dirname, './src')],
                             },
                         },
