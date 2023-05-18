@@ -58,7 +58,7 @@ class CrosshairStore {
             state: observable,
             toggleState: action.bound,
             updateProps: action.bound,
-            setCrosshairState: action.bound
+            setCrosshairState: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -82,7 +82,7 @@ class CrosshairStore {
     get isChartReady() {
         return this.mainStore.state.isChartReady;
     }
-    
+
     node = null;
     lastBar = {};
     showChange = false;

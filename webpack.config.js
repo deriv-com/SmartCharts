@@ -72,30 +72,68 @@ const config = {
             {
                 test: /\.(s*)css$/,
                 use: [
-                    'css-hot-loader',
-                    MiniCssExtractPlugin.loader,
+                    // 'css-hot-loader',
+                    // 'style-loader',
+                    // {
+                    //     loader: 'file-loader',
+                    //     // options: {
+                    //     //     name: '[path][name].module.[ext]',
+                    //     // },
+                    // },
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            esModule: false,
+                        },
+                    },
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true },
+                        options: {
+                            sourceMap: true,
+                            esModule: true,
+                            importLoaders: 1,
+                            modules: {
+                                mode: "icss",
+                            },
+                            // modules: {
+                            //     // namedExport: true,
+                            //     // exportLocalsConvention: ''
+                            // },
+                        },
                     },
                     {
                         loader: 'postcss-loader',
                         options: {
-                            ident: 'postcss',
-                            plugins: loader => [
-                                require('postcss-import')({ root: loader.resourcePath }),
-                                require('postcss-preset-env')(),
-                                require('postcss-inline-svg'),
-                                require('postcss-svgo'),
-                            ],
+                            postcssOptions: {
+                                plugins: ['postcss-import', 'postcss-preset-env', 'postcss-inline-svg', 'postcss-svgo'],
+                            },
                         },
                     },
                     {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
-                            data: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
-                            includePaths: [path.resolve(__dirname, './src')],
+                            implementation: require('sass'),
+                            // additionalData: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
+                            additionalData: (content, loaderContext) => {
+                                const { resourcePath, rootContext } = loaderContext;
+
+                                const relativeFilePath = path.relative(rootContext, resourcePath);
+                                // const isExcluded = relativeFilePath.match(/^src\/store*\./);
+                                const isExcluded = relativeFilePath.match(/\/_themes\.scss$/);
+
+                                // ^src\\store\\.*|
+
+                                // return '@import "sass/_variables.scss";@import "sass/_themes.scss";' + content;
+
+                                return isExcluded
+                                    ? '@import "sass/_variables.scss";' + content
+                                    : '@import "sass/_variables.scss";@import "sass/_themes.scss";' + content;
+                            },
+                            sassOptions: {
+                                // includePaths: [path.resolve(__dirname, './src')],
+                                filePaths: [path.resolve(__dirname, './src')],
+                            },
                         },
                     },
                 ],
@@ -118,31 +156,11 @@ const config = {
             },
             {
                 test: /\.po$/,
-                use: [
-                    {
-                        loader: path.resolve('./loaders/translation-loader.js'),
-                    },
-                    {
-                        loader: 'json-loader',
-                    },
-                    {
-                        loader: 'po-loader',
-                    },
-                ],
+                use: [path.resolve('./loaders/translation-loader.js'), 'json-loader', 'po-loader'],
             },
             {
                 test: /\.pot$/,
-                use: [
-                    {
-                        loader: path.resolve('./loaders/pot-loader.js'),
-                    },
-                    {
-                        loader: 'json-loader',
-                    },
-                    {
-                        loader: 'po-loader',
-                    },
-                ],
+                use: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
             },
             {
                 include: path.resolve(__dirname, 'src/utils/ga.js'),
