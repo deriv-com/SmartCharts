@@ -4,7 +4,7 @@
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library.
 
-[![npm (scoped)](https://img.shields.io/npm/v/@deriv/deriv-charts.svg)](https://www.npmjs.com/package/@deriv/deriv-charts) ![node](https://img.shields.io/badge/node-%3E%3D18.16.0-blue.svg) [![Build Status](https://travis-ci.org/binary-com/SmartCharts.svg?branch=master)](https://travis-ci.org/binary-com/SmartCharts)
+![npm](https://img.shields.io/npm/v/npm-9.5.1) ![node](https://img.shields.io/badge/node-%3E%3D18.16.0-blue.svg) [![Build Status](https://travis-ci.org/binary-com/SmartCharts.svg?branch=master)](https://travis-ci.org/binary-com/SmartCharts)
 
 ## In this document:
 
