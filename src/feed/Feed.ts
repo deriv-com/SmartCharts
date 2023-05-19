@@ -1,4 +1,9 @@
-import { AuditDetailsForExpiredContract, TicksHistoryRequest, TicksHistoryResponse, ProposalOpenContract } from '@deriv/api-types';
+import {
+    AuditDetailsForExpiredContract,
+    TicksHistoryRequest,
+    TicksHistoryResponse,
+    ProposalOpenContract,
+} from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
@@ -265,7 +270,7 @@ class Feed {
                 }
             });
             // if symbol is changed before request is completed, past request needs to be forgotten:
-            if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+            if (this._stx.isDestroyed || (!isComparisonChart && this._stx.chart.symbol !== symbol)) {
                 callback({ quotes: [] });
                 subscription.forget();
                 return;
@@ -287,7 +292,7 @@ class Feed {
                 const allTicksContract = await this.allTicks;
                 quotes = TickHistoryFormatter.formatAllTicks(
                     allTicksContract as keyof AuditDetailsForExpiredContract | []
-                    );
+                );
             }
         }
         if (!quotes) {
