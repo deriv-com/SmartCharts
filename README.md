@@ -4,7 +4,7 @@
 
 SmartCharts is both the name of the app ([charts.binary.com](https://charts.binary.com/)) and the charting library.
 
-[![npm](https://img.shields.io/badge/npm-v9.5.1-blue)](https://www.npmjs.com/package/@deriv/deriv-charts) ![node](https://img.shields.io/badge/node-%3E%3D18.16.0-blue.svg)
+[![npm](https://img.shields.io/badge/npm->=9-blue)](https://www.npmjs.com/package/@deriv/deriv-charts) ![node](https://img.shields.io/badge/node-%3E%3D18-blue.svg)
 
 ## In this document:
 
