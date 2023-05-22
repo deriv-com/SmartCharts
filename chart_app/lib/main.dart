@@ -160,6 +160,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                           chartConfigModel.contractType,
                         ),
                       ),
+                      drawingToolsRepo:
+                          chartConfigModel.indicatorsConfig.drawingToolsRepo,
                       indicatorsRepo:
                           chartConfigModel.indicatorsConfig.indicatorsRepo,
                       dataFitEnabled: chartConfigModel.dataFitEnabled,

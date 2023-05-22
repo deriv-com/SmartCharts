@@ -15,6 +15,10 @@ class IndicatorsConfig extends ChangeNotifier {
     onSwapCallback: JsInterop.indicators?.onSwap,
   );
 
+  /// Drawing tools repo
+  final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
+      AddOnsRepository<DrawingToolConfig>();
+
   /// To add or update an indicator
   void addOrUpdateIndicator(String dataString, int? index) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
