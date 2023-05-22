@@ -35,6 +35,18 @@ JsObject _exposeController(ChartController controller) {
   setProperty(jsObject, 'getQuoteFromY',
       allowInterop((double y) => controller.getQuoteFromY?.call(y)));
 
+  setProperty(
+    jsObject,
+    'scale',
+    allowInterop(controller.scale),
+  );
+
+  setProperty(
+    jsObject,
+    'scroll',
+    allowInterop(controller.scroll),
+  );
+
   return jsObject;
 }
 
@@ -75,12 +87,6 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     chartConfig,
     'newChart',
     allowInterop(model.newChart),
-  );
-
-  setProperty(
-    chartConfig,
-    'scale',
-    allowInterop(model.scale),
   );
 
   setProperty(

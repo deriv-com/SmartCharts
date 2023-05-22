@@ -85,8 +85,12 @@ export default class ChartAdapterStore {
                 e => {
                     e.preventDefault();
 
-                    const scale = (100 - e.deltaY) / 100;
-                    this.flutterChart?.config.scale(scale);
+                    if (e.deltaX == 0 && e.deltaZ == 0) {
+                        const scale = (100 - e.deltaY) / 100;
+                        this.flutterChart?.controller.scale(scale);
+                    } else {
+                        this.flutterChart?.controller.scroll(e.deltaX);
+                    }
 
                     return false;
                 },
@@ -195,7 +199,7 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
-        this.flutterChart?.config.scale(scale);
+        this.flutterChart?.controller.scale(scale);
     }
 
     async updateMarkers(contractsMarker: any[]) {

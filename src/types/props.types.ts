@@ -325,7 +325,6 @@ export type TFlutterChart = {
         addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
         newChart: (payload: TNewChartPayload) => void;
-        scale: (scale: number) => void;
         updateChartStyle: (chartStyle: string) => void;
         updateLiveStatus: (isLive: string) => void;
         updateMarkers: (markers: any[]) => void;
@@ -336,6 +335,8 @@ export type TFlutterChart = {
         getYFromQuote: (quote: number) => number;
         getEpochFromX: (x: number) => number;
         getQuoteFromY: (y: number) => number;
+        scale: (scale: number) => void;
+        scroll: (pxShift: number) => void;
     };
     dataModel: {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;
