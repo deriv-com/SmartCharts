@@ -270,7 +270,7 @@ class Feed {
                 }
             });
             // if symbol is changed before request is completed, past request needs to be forgotten:
-            if (!isComparisonChart && this._stx.chart.symbol !== symbol) {
+            if (this._stx.isDestroyed || (!isComparisonChart && this._stx.chart.symbol !== symbol)) {
                 callback({ quotes: [] });
                 subscription.forget();
                 return;
