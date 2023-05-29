@@ -172,6 +172,7 @@ class ChartState {
         onChartTypeChange,
         isLive,
         dataFitEnabled,
+        leftMargin,
     }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
@@ -336,6 +337,11 @@ class ChartState {
         ) {
             this.mainStore.chart.dataFitEnabled = dataFitEnabled;
         }
+
+        if (this.mainStore.chart.leftMargin != leftMargin) {
+            this.mainStore.chart.leftMargin = leftMargin;
+            this.mainStore.chartAdapter.updateLeftMargin(leftMargin);
+        }
     }
 
     setIsChartScrollingToEpoch(isScrollingToEpoch: boolean) {
@@ -405,15 +411,16 @@ class ChartState {
     saveLayout() {
         if (!this.chartStore.chartId) return;
         const layoutData: TLayout = this.mainStore.view.getLayout();
-        saveToLocalStorage(`chart-layout-${this.chartStore.chartId}`, {
+        saveToLocalStorage(`chart-layout-trade`, {
             studyItems: layoutData.studyItems,
             crosshair: layoutData.crosshair,
+            msPerPx: layoutData.msPerPx,
         });
     }
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${this.chartStore.chartId}`);
+        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-trade`);
 
         if (!layout) return false;
 

@@ -30,6 +30,12 @@ class ChartConfigModel extends ChangeNotifier {
   /// Starts in data fit mode and adds a data-fit button.
   bool dataFitEnabled = false;
 
+  /// Specifies the zoom level of the chart.
+  double? msPerPx;
+
+  /// Specifies the left margin to prevent overlap.
+  double? leftMargin;
+
   /// Type of the contract
   String? contractType;
 
@@ -108,11 +114,18 @@ class ChartConfigModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// To update leftMargin
+  void updateLeftMargin(double _leftMargin) {
+    leftMargin = _leftMargin;
+    notifyListeners();
+  }
+
   /// Initialize new chart
   void newChart(JSNewChart payload) {
     granularity = payload.granularity;
     isLive = payload.isLive;
     dataFitEnabled = payload.dataFitEnabled;
+    msPerPx = payload.msPerPx;
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);
@@ -129,12 +142,6 @@ class ChartConfigModel extends ChangeNotifier {
     }
 
     notifyListeners();
-  }
-
-  /// Scroll chart visible area to the newest data.
-  void scale(double payload) {
-    final double scale = payload;
-    _controller.scale(scale);
   }
 
   /// Scroll chart visible area to the newest data.

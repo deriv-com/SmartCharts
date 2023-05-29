@@ -61,6 +61,9 @@ class JSNewChart {
 
   /// Dart theme or light theme
   external String? get theme;
+
+  /// Specifies the zoom level of the chart.
+  external double? get msPerPx;
 }
 
 @JS()

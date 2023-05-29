@@ -1,6 +1,7 @@
 import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
-import { TEngineInitializer, TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
+import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
+import { createChartElement } from 'src/flutter-chart';
 import MainStore from './';
 
 export default class ChartAdapterStore {
@@ -16,6 +17,7 @@ export default class ChartAdapterStore {
         topQuote: 0,
         bottomQuote: 0,
     };
+    msPerPx?: number;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -26,10 +28,12 @@ export default class ChartAdapterStore {
             loadHistory: action.bound,
             onVisibleAreaChanged: action.bound,
             onQuoteAreaChanged: action.bound,
+            setMsPerPx: action.bound,
             isChartLoaded: observable,
             isDataInitialized: observable,
             epochBounds: observable.ref,
             quoteBounds: observable.ref,
+            msPerPx: observable,
         });
 
         this.mainStore = mainStore;
@@ -64,21 +68,7 @@ export default class ChartAdapterStore {
         };
 
         if (!window.flutterChartElement) {
-            const flutterChartElement = document.createElement('div');
-            flutterChartElement.classList.add('flutter-chart');
-
-            window.flutterChartElement = flutterChartElement;
-
-            window._flutter = {
-                loader: {
-                    didCreateEngineInitializer: async (engineInitializer: TEngineInitializer) => {
-                        const appRunner = await engineInitializer.initializeEngine({
-                            hostElement: window.flutterChartElement,
-                        });
-                        appRunner?.runApp();
-                    },
-                },
-            };
+            const flutterChartElement = createChartElement();
 
             flutterChartElement.addEventListener(
                 'wheel',
@@ -87,7 +77,7 @@ export default class ChartAdapterStore {
 
                     if (e.deltaX == 0 && e.deltaZ == 0) {
                         const scale = (100 - e.deltaY) / 100;
-                        this.flutterChart?.controller.scale(scale);
+                        this.scale(scale);
                     } else {
                         this.flutterChart?.controller.scroll(e.deltaX);
                     }
@@ -145,6 +135,7 @@ export default class ChartAdapterStore {
             isLive: this.mainStore.chart.isLive || false,
             dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
             theme: this.mainStore.chartSetting.theme,
+            msPerPx: this.msPerPx,
         });
     };
 
@@ -198,8 +189,14 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.updateTheme(theme);
     }
 
+    async updateLeftMargin(leftMargin?: number) {
+        await when(() => this.isChartLoaded);
+        this.flutterChart?.config.updateLeftMargin(leftMargin);
+    }
+
     scale(scale: number) {
-        this.flutterChart?.controller.scale(scale);
+        this.msPerPx = this.flutterChart?.controller.scale(scale);
+        this.mainStore.state.saveLayout();
     }
 
     async updateMarkers(contractsMarker: any[]) {
@@ -276,6 +273,10 @@ export default class ChartAdapterStore {
             };
         }
     };
+
+    setMsPerPx(msPerPx?: number) {
+        this.msPerPx = msPerPx;
+    }
 
     getXFromEpoch(epoch: number) {
         return this.flutterChart!.controller.getXFromEpoch(epoch);

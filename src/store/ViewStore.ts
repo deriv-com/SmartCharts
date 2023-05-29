@@ -112,6 +112,7 @@ export default class ViewStore {
             timeUnit: this.mainStore.state.timeperiodStore.timeUnit,
             studyItems: this.mainStore.studies.activeItems,
             crosshair: this.mainStore.crosshair.state,
+            msPerPx: this.mainStore.chartAdapter.msPerPx,
         };
     }
 
@@ -178,6 +179,8 @@ export default class ViewStore {
         if (this.loader) {
             this.loader.show();
         }
+
+        this.mainStore.chartAdapter.setMsPerPx(layout.msPerPx);
 
         this.mainStore.state.setChartIsReady(false);
 

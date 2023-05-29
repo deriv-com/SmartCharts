@@ -115,6 +115,12 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
 
   setProperty(
     chartConfig,
+    'updateLeftMargin',
+    allowInterop(model.updateLeftMargin),
+  );
+
+  setProperty(
+    chartConfig,
     'addOrUpdateIndicator',
     allowInterop(model.indicatorsConfig.addOrUpdateIndicator),
   );

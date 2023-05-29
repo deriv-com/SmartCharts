@@ -174,6 +174,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             ev.position.dx, ev.position.dy, epoch, quote);
                       },
                       maxCurrentTickOffset: 300,
+                      msPerPx: chartConfigModel.msPerPx,
+                      leftMargin: chartConfigModel.leftMargin,
                     );
                   }),
                 ),

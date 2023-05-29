@@ -30,8 +30,13 @@ export type TAppRunner = {
     runApp: () => void;
 };
 
+export type TFlutterChartConfiguration = {
+    hostElement?: HTMLElement;
+    renderer?: 'html' | 'canvaskit';
+};
+
 export type TEngineInitializer = {
-    initializeEngine: ({ hostElement }: { hostElement: HTMLElement }) => Promise<TAppRunner>;
+    initializeEngine: ({ hostElement }: TFlutterChartConfiguration) => Promise<TAppRunner>;
 };
 
 export type ArrayElement<ArrayType extends readonly unknown[]> = ArrayType extends readonly (infer ElementType)[]
@@ -209,6 +214,7 @@ export type TChartProps = {
     markers_array?: any[];
     isLive?: boolean;
     dataFitEnabled?: boolean;
+    leftMargin?: number;
 };
 
 export type TQuote = {
@@ -317,6 +323,7 @@ export type TNewChartPayload = {
     dataFitEnabled: boolean;
     chartType?: string;
     theme: string;
+    msPerPx?: number;
 };
 
 export type TFlutterChart = {
@@ -329,13 +336,14 @@ export type TFlutterChart = {
         updateLiveStatus: (isLive: string) => void;
         updateMarkers: (markers: any[]) => void;
         updateCrosshairVisibility: (visibility: boolean) => void;
+        updateLeftMargin: (leftMargin?: number) => void;
     };
     controller: {
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;
         getEpochFromX: (x: number) => number;
         getQuoteFromY: (y: number) => number;
-        scale: (scale: number) => void;
+        scale: (scale: number) => number;
         scroll: (pxShift: number) => void;
     };
     dataModel: {
@@ -376,6 +384,7 @@ export type TLayout = {
     granularity?: TGranularity;
     studyItems?: TActiveItem[];
     crosshair?: number;
+    msPerPx?: number;
 };
 
 export type TAllTicks = Exclude<AuditDetailsForExpiredContract, null>['all_ticks'];

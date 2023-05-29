@@ -54,6 +54,7 @@ class ChartStore {
     serverTime?: string;
     shouldRenderDialogs = false;
     yAxiswidth = 60;
+    leftMargin?: number;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             chartContainerHeight: observable,
@@ -240,6 +241,7 @@ class ChartStore {
             feedCall,
             isLive,
             dataFitEnabled,
+            leftMargin,
         } = props;
         this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
@@ -269,6 +271,7 @@ class ChartStore {
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
         this.isLive = isLive || false;
         this.dataFitEnabled = dataFitEnabled || false;
+        this.leftMargin = leftMargin;
 
         ChartStore.chartCount += 1;
 
