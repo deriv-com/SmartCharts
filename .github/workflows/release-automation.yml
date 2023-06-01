@@ -51,4 +51,3 @@ jobs:
                   SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
                   SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
                   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
