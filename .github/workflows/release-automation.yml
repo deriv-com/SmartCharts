@@ -1,7 +1,6 @@
 name: Release automation for SmartCharts
 permissions:
     pull-requests: write
-    workflows: write
 on:
     workflow_dispatch:
         inputs:
