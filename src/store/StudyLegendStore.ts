@@ -297,9 +297,9 @@ export default class StudyLegendStore {
     }
 
     deleteAllStudies() {
-        this.activeItems.forEach(item => this.deleteStudyById(item.id));
-
         this.activeItems = [];
+        window.flutterChart?.config.clearIndicators();
+        this.mainStore.state.saveLayout();
     }
 
     onSelectTab(tabIndex: number) {
