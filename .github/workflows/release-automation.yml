@@ -35,14 +35,14 @@ jobs:
               run: |
                 sleep 10
             - name: Release issues in SmartCharts
-              uses: binary-com/fe-toolbox@production_V20230601_0
+              uses: binary-com/fe-toolbox@production_V20230601_1
               with:
                   tag: ${{ inputs.tag }}
                   list_id: ${{ secrets.LIST_ID }}
                   platform: 'deriv-charts'
                   release_tags_list_id: ${{ secrets.RELEASE_TAGS_LIST_ID }}
                   regression_testing_template_id: ${{ secrets.REGRESSION_TESTING_TEMPLATE_ID }}
-                  circleci_project_slug: 'gh/binary-com/deriv-app'
+                  circleci_project_slug: 'gh/binary-com/SmartCharts'
                   circleci_workflow_name: 'release_staging'
                   skip_circleci_checks: ${{ inputs.skip_circleci_checks }}
                   skip_pending_checks: ${{ inputs.skip_pending_checks }}
@@ -51,3 +51,4 @@ jobs:
                   SLACK_APP_TOKEN: ${{ secrets.SLACK_APP_TOKEN }}
                   SLACK_USER_TOKEN: ${{ secrets.SLACK_USER_TOKEN }}
                   SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
