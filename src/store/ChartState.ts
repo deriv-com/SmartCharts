@@ -429,6 +429,10 @@ class ChartState {
         return true;
     }
 
+    clearLayout() {
+        window.flutterChart?.config.clearIndicators();
+    }
+
     saveDrawings() {
         // TODO: implement save drawings
     }

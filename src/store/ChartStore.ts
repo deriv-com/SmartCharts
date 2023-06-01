@@ -288,7 +288,11 @@ class ChartStore {
             this.loader.setState('trading-time');
             this.tradingTimes?.initialize().then(
                 action(() => {
-                    this.state?.restoreLayout();
+                    if (this.dataFitEnabled) {
+                        this.state?.clearLayout();
+                    } else {
+                        this.state?.restoreLayout();
+                    }
                     this.loadChartWithInitalData(symbol, initialData?.masterData);
                     this.changeSymbol(
                         // default to first available symbol

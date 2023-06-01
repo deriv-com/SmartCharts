@@ -36,4 +36,9 @@ class IndicatorsConfig extends ChangeNotifier {
   void removeIndicator(int index) {
     indicatorsRepo.remove(index);
   }
+
+  /// To clear all indicators
+  void clearIndicators() {
+    indicatorsRepo.clear();
+  }
 }

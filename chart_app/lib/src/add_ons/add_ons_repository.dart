@@ -86,4 +86,10 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     onSwapCallback?.call(index1, index2);
     notifyListeners();
   }
+
+  /// To clear all indicators
+  void clear() {
+    _addOns.clear();
+    notifyListeners();
+  }
 }

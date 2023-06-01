@@ -131,5 +131,11 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     allowInterop(model.indicatorsConfig.removeIndicator),
   );
 
+  setProperty(
+    chartConfig,
+    'clearIndicators',
+    allowInterop(model.indicatorsConfig.clearIndicators),
+  );
+
   return chartConfig;
 }

@@ -331,6 +331,7 @@ export type TFlutterChart = {
         updateTheme: (theme: string) => void;
         addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
+        clearIndicators: () => void;
         newChart: (payload: TNewChartPayload) => void;
         updateChartStyle: (chartStyle: string) => void;
         updateLiveStatus: (isLive: string) => void;
