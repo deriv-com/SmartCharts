@@ -120,14 +120,14 @@ commands:
 jobs:
   test:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:18.16.0
     steps:
       - checkout
       - npm_install
       - test
   release_staging:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:18.16.0
     steps:
       - checkout
       - npm_install
@@ -144,7 +144,7 @@ jobs:
       - notify_slack
   release_production:
     docker:
-      - image: circleci/node:14.18.2
+      - image: circleci/node:18.16.0
     steps:
       - checkout
       - npm_install
@@ -166,7 +166,7 @@ jobs:
 
   publish_cloudflare_staging:
     docker:
-      - image: circleci/node:16.13.1-stretch
+      - image: circleci/node:18.16.0-stretch
     steps:
       - attach_workspace:
           at: public
@@ -174,7 +174,7 @@ jobs:
 
   publish_cloudflare_production:
     docker:
-      - image: circleci/node:16.13.1-stretch
+      - image: circleci/node:18.16.0-stretch
     steps:
       - attach_workspace:
           at: public
