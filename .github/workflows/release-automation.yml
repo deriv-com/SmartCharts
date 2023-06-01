@@ -34,16 +34,15 @@ jobs:
             - name: Wait for logs to accumulate
               run: |
                 sleep 10
-              uses: actions/setup-node@v2
             - name: Release issues in SmartCharts
-              uses: binary-com/fe-release-automation@v3.5.7
+              uses: binary-com/fe-toolbox@production_V20230601_1
               with:
                   tag: ${{ inputs.tag }}
                   list_id: ${{ secrets.LIST_ID }}
                   platform: 'deriv-charts'
                   release_tags_list_id: ${{ secrets.RELEASE_TAGS_LIST_ID }}
                   regression_testing_template_id: ${{ secrets.REGRESSION_TESTING_TEMPLATE_ID }}
-                  circleci_project_slug: 'gh/binary-com/deriv-app'
+                  circleci_project_slug: 'gh/binary-com/SmartCharts'
                   circleci_workflow_name: 'release_staging'
                   skip_circleci_checks: ${{ inputs.skip_circleci_checks }}
                   skip_pending_checks: ${{ inputs.skip_pending_checks }}
