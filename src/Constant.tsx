@@ -439,6 +439,7 @@ export const ChartTypes = [
     { id: 'colored_bar', text: t.translate('OHLC'), candleOnly: true, icon: TypeOhlcIcon },
 ];
 
+
 export const Intervals = [
     {
         key: 'tick',
