@@ -34,7 +34,6 @@ jobs:
             - name: Wait for logs to accumulate
               run: |
                 sleep 10
-              uses: actions/setup-node@v2
             - name: Release issues in SmartCharts
               uses: binary-com/fe-toolbox@production_V20230601_0
               with:
