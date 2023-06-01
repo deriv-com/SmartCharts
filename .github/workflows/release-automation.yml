@@ -36,7 +36,7 @@ jobs:
                 sleep 10
               uses: actions/setup-node@v2
             - name: Release issues in SmartCharts
-              uses: binary-com/fe-release-automation@v3.5.7
+              uses: binary-com/fe-toolbox@production_V20230601_0
               with:
                   tag: ${{ inputs.tag }}
                   list_id: ${{ secrets.LIST_ID }}
