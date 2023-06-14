@@ -11,7 +11,7 @@ const default_options = {
 };
 
 const parseCode = source => espree.parse(source, {
-    ecmaVersion: 10,
+    ecmaVersion: 'latest',
     sourceType: 'script',
     loc: true,
 }).body;
