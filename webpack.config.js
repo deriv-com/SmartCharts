@@ -14,6 +14,7 @@ const appEntryFile = isApp && process.env.APP_ENTRY ? process.env.APP_ENTRY : 'i
 
 const output = {
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '',
     filename: 'smartcharts.js',
     chunkFilename: '[name]-[chunkhash:6].smartcharts.js',
     libraryExport: 'default',
@@ -35,8 +36,16 @@ const config = {
         extensions: ['.ts', '.tsx', '.js'],
     },
     devServer: {
-        publicPath: '/dist/',
-        writeToDisk: true,
+        static: {
+            directory: path.join(__dirname, '.'),
+            serveIndex: true,
+            staticOptions: {
+                redirect: true,
+            },
+        },
+        devMiddleware: {
+            writeToDisk: true,
+        },
     },
     module: {
         rules: [
@@ -54,7 +63,16 @@ const config = {
                     {
                         loader: 'svgo-loader',
                         options: {
-                            plugins: [{ removeUselessStrokeAndFill: false }, { removeUnknownsAndDefaults: false }],
+                            plugins: [
+                                {
+                                    name: "removeUselessStrokeAndFill",
+                                    removeUselessStrokeAndFill: false,
+                                },
+                                {
+                                    name: "removeUnknownsAndDefaults",
+                                    removeUnknownsAndDefaults: false,
+                                },
+                            ],
                         },
                     },
                 ],
@@ -62,41 +80,61 @@ const config = {
             {
                 test: /\.(s*)css$/,
                 use: [
-                    'css-hot-loader',
-                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            esModule: false,
+                        },
+                    },
                     {
                         loader: 'css-loader',
-                        options: { sourceMap: true },
+                        options: {
+                            sourceMap: true,
+                            esModule: true,
+                            modules: {
+                                mode: 'icss',
+                            },
+                        },
                     },
                     {
                         loader: 'postcss-loader',
                         options: {
-                            ident: 'postcss',
-                            plugins: loader => [
-                                require('postcss-import')({ root: loader.resourcePath }),
-                                require('postcss-preset-env')(),
-                                require('postcss-inline-svg'),
-                                require('postcss-svgo'),
-                            ],
+                            postcssOptions: {
+                                plugins: ['postcss-import', 'postcss-preset-env', 'postcss-inline-svg', 'postcss-svgo'],
+                            },
                         },
                     },
                     {
                         loader: 'sass-loader',
                         options: {
                             sourceMap: true,
-                            data: '@import "sass/_variables.scss";@import "sass/_themes.scss";',
-                            includePaths: [path.resolve(__dirname, './src')],
+                            additionalData: (content, loaderContext) => {
+                                const {resourcePath, rootContext} = loaderContext;
+
+                                const relativeFilePath = path.relative(rootContext, resourcePath);
+                                const isExcluded = relativeFilePath.match(/\/_themes\.scss$/);
+
+                                return isExcluded
+                                    ? `@import "sass/_variables.scss"; ${content}`
+                                    : `@import "sass/_variables.scss";@import "sass/_themes.scss"; ${content}`;
+                            },
+                            sassOptions: {
+                                filePaths: [path.resolve(__dirname, './src')],
+                            },
                         },
                     },
                 ],
             },
-            { parser: { amd: false } },
+            /**
+             * this is a temporary fix for chartiq's AMD module
+             */
+            // { parser: {  amd: false  } },
             {
                 test: /\.(js|jsx)$/,
                 exclude: [/node_modules/, /\\chartiq/, /\\scripts/],
                 loader: 'eslint-loader',
                 enforce: 'pre',
-                options: { fix: true },
+                options: {fix: true},
             },
             {
                 test: /\.(js|jsx|ts|tsx)$/,
@@ -105,11 +143,11 @@ const config = {
             },
             {
                 test: /\.po$/,
-                loader: [path.resolve('./loaders/translation-loader.js'), 'json-loader', 'po-loader'],
+                use: [path.resolve('./loaders/translation-loader.js'), 'json-loader', 'po-loader'],
             },
             {
                 test: /\.pot$/,
-                loader: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
+                use: [path.resolve('./loaders/pot-loader.js'), 'json-loader', 'po-loader'],
             },
             {
                 include: path.resolve(__dirname, 'src/utils/ga.js'),
@@ -129,7 +167,7 @@ const config = {
         new webpack.ProvidePlugin({
             t: [path.resolve(__dirname, './src/Translation.ts'), 't'],
         }),
-        new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
+        new MiniCssExtractPlugin({filename: 'smartcharts.css'}),
         new StyleLintPlugin(),
         new SpriteLoaderPlugin(),
         new ForkTsCheckerWebpackPlugin(),
@@ -178,10 +216,10 @@ if (isApp) {
     config.plugins.push(
         new CopyWebpackPlugin({
             patterns: [
-                { from: './sass/favicons/*.png' },
-                { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
-                { from: './app/assets/*.svg' },
-                { from: './nojs-smartcharts.css' },
+                {from: './sass/favicons/*.png'},
+                {from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js'},
+                {from: './app/assets/*.svg'},
+                {from: './nojs-smartcharts.css'},
                 {
                     from: production
                         ? './node_modules/react/umd/react.production.min.js'
