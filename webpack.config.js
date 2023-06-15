@@ -65,11 +65,11 @@ const config = {
                         options: {
                             plugins: [
                                 {
-                                    name: "removeUselessStrokeAndFill",
+                                    name: 'removeUselessStrokeAndFill',
                                     removeUselessStrokeAndFill: false,
                                 },
                                 {
-                                    name: "removeUnknownsAndDefaults",
+                                    name: 'removeUnknownsAndDefaults',
                                     removeUnknownsAndDefaults: false,
                                 },
                             ],
@@ -109,7 +109,7 @@ const config = {
                         options: {
                             sourceMap: true,
                             additionalData: (content, loaderContext) => {
-                                const {resourcePath, rootContext} = loaderContext;
+                                const { resourcePath, rootContext } = loaderContext;
 
                                 const relativeFilePath = path.relative(rootContext, resourcePath);
                                 const isExcluded = relativeFilePath.match(/\/_themes\.scss$/);
@@ -134,7 +134,7 @@ const config = {
                 exclude: [/node_modules/, /\\chartiq/, /\\scripts/],
                 loader: 'eslint-loader',
                 enforce: 'pre',
-                options: {fix: true},
+                options: { fix: true },
             },
             {
                 test: /\.(js|jsx|ts|tsx)$/,
@@ -167,8 +167,8 @@ const config = {
         new webpack.ProvidePlugin({
             t: [path.resolve(__dirname, './src/Translation.ts'), 't'],
         }),
-        new MiniCssExtractPlugin({filename: 'smartcharts.css'}),
-        new StyleLintPlugin(),
+        new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
+        new StyleLintPlugin({ exclude: ['node_modules', 'dist'] }),
         new SpriteLoaderPlugin(),
         new ForkTsCheckerWebpackPlugin(),
     ],
@@ -216,10 +216,10 @@ if (isApp) {
     config.plugins.push(
         new CopyWebpackPlugin({
             patterns: [
-                {from: './sass/favicons/*.png'},
-                {from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js'},
-                {from: './app/assets/*.svg'},
-                {from: './nojs-smartcharts.css'},
+                { from: './sass/favicons/*.png' },
+                { from: './node_modules/@babel/polyfill/dist/polyfill.min.js', to: 'babel-polyfill.min.js' },
+                { from: './app/assets/*.svg' },
+                { from: './nojs-smartcharts.css' },
                 {
                     from: production
                         ? './node_modules/react/umd/react.production.min.js'
