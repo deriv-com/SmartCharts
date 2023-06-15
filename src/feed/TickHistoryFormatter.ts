@@ -67,8 +67,8 @@ export class TickHistoryFormatter {
         allTicksContract: NonNullable<AuditDetailsForExpiredContract>['all_ticks']
     ): TQuote[] | undefined {
         return allTicksContract?.map(res => ({
-            Date: getUTCDate(+(res.epoch || 0)),
-            Close: +(res.tick || 0),
+            Date: getUTCDate(Number(res.epoch)),
+            Close: Number(res.tick),
         }));
     }
     static formatPOCTick(contract_info: ProposalOpenContract) {
