@@ -144,8 +144,10 @@ export type TChartProps = {
     clearChart?: () => void;
     onExportLayout?: (currentLayout: typeof CIQ.UI.Layout) => void;
     importedLayout?: typeof CIQ.UI.Layout;
+    should_show_eu_content?: boolean;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
+    allowTickChartTypeOnly?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
     contractInfo?: keyof ProposalOpenContract | {};
     maxTick?: number | null;

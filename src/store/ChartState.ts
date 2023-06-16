@@ -52,6 +52,8 @@ class ChartState {
     clearChart?: () => void;
     isChartClosed = false;
     shouldMinimiseLastDigits = false;
+    should_show_eu_content?: boolean;
+    allowTickChartTypeOnly?: boolean;
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
@@ -109,8 +111,10 @@ class ChartState {
             isChartReady: observable,
             chartStatusListener: observable,
             stateChangeListener: observable,
+            should_show_eu_content: observable,
             settings: observable,
             showLastDigitStats: observable,
+            allowTickChartTypeOnly: observable,
             scrollToEpoch: observable,
             onExportLayout: observable,
             clearChart: observable,
@@ -131,7 +135,7 @@ class ChartState {
             enableScroll: observable,
             enableZoom: observable,
             yAxisMargin: observable,
-            updateProps: action.bound
+            updateProps: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -150,44 +154,44 @@ class ChartState {
         this.granularity = this.chartStore.granularity;
     };
 
-    updateProps(
-        {
-            networkStatus,
-            chartControlsWidgets,
-            enabledChartFooter,
-            chartStatusListener,
-            stateChangeListener,
-            getIndicatorHeightRatio,
-            chartType,
-            clearChart,
-            endEpoch,
-            isAnimationEnabled = true,
-            isConnectionOpened,
-            isStaticChart,
-            granularity,
-            margin = 0,
-            onExportLayout,
-            refreshActiveSymbols,
-            scrollToEpoch,
-            settings,
-            shouldFetchTradingTimes = true,
-            shouldFetchTickHistory = true,
-            allTicks = [],
-            contractInfo = {},
-            showLastDigitStats = false,
-            startEpoch,
-            symbol,
-            crosshairState,
-            zoom,
-            maxTick,
-            crosshairTooltipLeftAllow,
-            yAxisMargin,
-            enableScroll = null,
-            enableZoom = null,
-            anchorChartToLeft = false,
-            chartData,
-        }: TChartProps
-    ) {
+    updateProps({
+        networkStatus,
+        chartControlsWidgets,
+        enabledChartFooter,
+        chartStatusListener,
+        stateChangeListener,
+        getIndicatorHeightRatio,
+        chartType,
+        clearChart,
+        endEpoch,
+        isAnimationEnabled = true,
+        isConnectionOpened,
+        isStaticChart,
+        granularity,
+        margin = 0,
+        onExportLayout,
+        refreshActiveSymbols,
+        scrollToEpoch,
+        settings,
+        shouldFetchTradingTimes = true,
+        shouldFetchTickHistory = true,
+        should_show_eu_content,
+        allTicks = [],
+        contractInfo = {},
+        showLastDigitStats = false,
+        allowTickChartTypeOnly = false,
+        startEpoch,
+        symbol,
+        crosshairState,
+        zoom,
+        maxTick,
+        crosshairTooltipLeftAllow,
+        yAxisMargin,
+        enableScroll = null,
+        enableZoom = null,
+        anchorChartToLeft = false,
+        chartData,
+    }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
@@ -215,8 +219,10 @@ class ChartState {
         this.isStaticChart = isStaticChart;
         this.margin = margin;
         this.settings = settings;
+        this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
+        this.allowTickChartTypeOnly = allowTickChartTypeOnly;
         this.allTicks = allTicks;
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
@@ -639,7 +645,7 @@ class ChartState {
             this.stxx.chart.entryTick = this.stxx.tickFromDate(
                 getUTCDate(this.startEpoch || (scrollToEpoch as number))
             );
-            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+            const scrollToTarget = this.stxx.chart.dataSet?.length - this.stxx.chart.entryTick;
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;

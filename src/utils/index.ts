@@ -299,7 +299,7 @@ export function patchPixelFromChart(stx: Context['stx']) {
     };
 }
 
-export const ARROW_HEIGHT = 39;
+export const ARROW_HEIGHT = 41;
 
 export const ARROW_COLORS = Object.freeze({
     GREEN: '#4bb4b3',

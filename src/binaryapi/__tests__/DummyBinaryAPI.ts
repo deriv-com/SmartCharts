@@ -917,17 +917,6 @@ const friday_trading_times = {
                             },
                             {
                                 events: [],
-                                name: 'Spanish OTC Index',
-                                symbol: 'OTC_IBEX35',
-                                times: {
-                                    close: ['17:00:00'],
-                                    open: ['06:00:00'],
-                                    settlement: '19:00:00',
-                                },
-                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                            },
-                            {
-                                events: [],
                                 name: 'Swiss OTC Index',
                                 symbol: 'OTC_SSMI',
                                 times: {
@@ -2130,17 +2119,6 @@ const saturday_trading_times = {
                                 ],
                                 name: 'Japanese OTC Index',
                                 symbol: 'OTC_N225',
-                                times: {
-                                    close: ['--'],
-                                    open: ['--'],
-                                    settlement: '--',
-                                },
-                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                            },
-                            {
-                                events: [],
-                                name: 'Spanish OTC Index',
-                                symbol: 'OTC_IBEX35',
                                 times: {
                                     close: ['--'],
                                     open: ['--'],
@@ -3361,17 +3339,6 @@ const sunday_trading_times = {
                             },
                             {
                                 events: [],
-                                name: 'Spanish OTC Index',
-                                symbol: 'OTC_IBEX35',
-                                times: {
-                                    close: ['--'],
-                                    open: ['--'],
-                                    settlement: '--',
-                                },
-                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                            },
-                            {
-                                events: [],
                                 name: 'Swiss OTC Index',
                                 symbol: 'OTC_SSMI',
                                 times: {
@@ -4578,17 +4545,6 @@ const monday_trading_times = {
                                     close: ['20:00:00'],
                                     open: ['00:00:00'],
                                     settlement: '22:00:00',
-                                },
-                                trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
-                            },
-                            {
-                                events: [],
-                                name: 'Spanish OTC Index',
-                                symbol: 'OTC_IBEX35',
-                                times: {
-                                    close: ['17:00:00'],
-                                    open: ['06:00:00'],
-                                    settlement: '19:00:00',
                                 },
                                 trading_days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
                             },
