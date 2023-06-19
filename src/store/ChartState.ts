@@ -430,7 +430,7 @@ class ChartState {
     }
 
     clearLayout() {
-        window.flutterChart?.config.clearIndicators();
+        window.flutterChart?.indicators.clearIndicators();
     }
 
     saveDrawings() {

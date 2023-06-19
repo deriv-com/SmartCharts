@@ -66,7 +66,16 @@ export const getDrawTools: () => TDrawTools = () => ({
     vertical: { id: 'vertical', text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
 });
 
-//
+export const getTooltipLabels = (key: string) => {
+    const labels = {
+        AwesomeOscillator: {
+            labels: [t.translate('AWESOME_HIST')],
+        },
+    };
+
+    return labels[key as keyof typeof labels];
+};
+
 export const getIndicatorsTree = (): TIndicatorsTree[] => [
     {
         category: 'momentum',

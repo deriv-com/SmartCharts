@@ -4,13 +4,14 @@ import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/helper.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
-import 'package:chart_app/src/models/indicators_config.dart';
+import 'package:chart_app/src/models/indicators.dart';
 import 'package:flutter/scheduler.dart';
 
 /// State and methods of chart web adapter config.
 class ChartConfigModel extends ChangeNotifier {
   /// Initialize
-  ChartConfigModel(this._controller);
+  ChartConfigModel(this._controller)
+      : indicators = IndicatorsModel(_controller);
 
   /// Style of the chart
   ChartStyle style = ChartStyle.line;
@@ -45,7 +46,7 @@ class ChartConfigModel extends ChangeNotifier {
   bool showCrosshair = true;
 
   /// Indicators config
-  IndicatorsConfig indicatorsConfig = IndicatorsConfig();
+  IndicatorsModel indicators;
 
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters

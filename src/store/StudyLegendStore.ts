@@ -152,7 +152,7 @@ export default class StudyLegendStore {
             ...this.transform(params),
         };
 
-        this.mainStore.chartAdapter.flutterChart?.config.addOrUpdateIndicator(JSON.stringify(config), index);
+        this.mainStore.chartAdapter.flutterChart?.indicators.addOrUpdateIndicator(JSON.stringify(config), index);
         this.mainStore.state.saveLayout();
     };
 
@@ -234,7 +234,7 @@ export default class StudyLegendStore {
     }
     deleteStudyById(id: string) {
         const index = _.findIndex(this.activeItems, item => item.id === id);
-        this.mainStore.chartAdapter.flutterChart?.config.removeIndicator(index);
+        this.mainStore.chartAdapter.flutterChart?.indicators.removeIndicator(index);
         this.deleteStudy(index);
     }
     deleteStudy(index: number) {
@@ -298,7 +298,7 @@ export default class StudyLegendStore {
 
     deleteAllStudies() {
         this.activeItems = [];
-        window.flutterChart?.config.clearIndicators();
+        window.flutterChart?.indicators.clearIndicators();
         this.mainStore.state.saveLayout();
     }
 

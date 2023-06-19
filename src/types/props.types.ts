@@ -326,12 +326,14 @@ export type TNewChartPayload = {
     msPerPx?: number;
 };
 
+export type TIndicatorTooltipContent = {
+    name: string;
+    values: string[];
+};
+
 export type TFlutterChart = {
     config: {
         updateTheme: (theme: string) => void;
-        addOrUpdateIndicator: (config: string, index?: number) => void;
-        removeIndicator: (index: number) => void;
-        clearIndicators: () => void;
         newChart: (payload: TNewChartPayload) => void;
         updateChartStyle: (chartStyle: string) => void;
         updateLiveStatus: (isLive: string) => void;
@@ -351,6 +353,12 @@ export type TFlutterChart = {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;
         onNewTick: (quote: TQuote) => void;
         onNewCandle: (quote: TQuote) => void;
+    };
+    indicators: {
+        addOrUpdateIndicator: (config: string, index?: number) => void;
+        removeIndicator: (index: number) => void;
+        clearIndicators: () => void;
+        getTootipContent: (epoch: number) => TIndicatorTooltipContent[];
     };
 };
 

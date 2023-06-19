@@ -137,3 +137,18 @@ class JsIndicators {
   /// Callback to swap two elements of a list.
   external OnSwapCallback? onSwap;
 }
+
+@JS()
+@anonymous
+
+/// JsIndicatorTooltip
+class JsIndicatorTooltip {
+  /// JsLoadHistoryReq Object
+  external factory JsIndicatorTooltip({String name, List<String> values});
+
+  /// Name
+  external String name;
+
+  /// Value
+  external List<String> values;
+}

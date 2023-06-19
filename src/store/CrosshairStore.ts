@@ -4,6 +4,7 @@ import Context from 'src/components/ui/Context';
 import { TQuote } from 'src/types';
 import MainStore from '.';
 import { sameBar } from '../utils';
+import { getTooltipLabels } from 'src/Constant';
 
 type TDupMap = {
     [key: string]: number;
@@ -241,6 +242,20 @@ class CrosshairStore {
                 });
             }
         }
+
+        const tooltipContent = window.flutterChart.indicators.getTootipContent(data.DT!.getTime());
+
+        tooltipContent?.forEach(item => {
+            const labels = getTooltipLabels(item.name)?.labels || [];
+
+            labels.forEach((label, i) => {
+                rows.push({
+                    name: label,
+                    value: item.values[i],
+                });
+            });
+        });
+
         return rows;
     }
     updateVisibility = (visible: boolean) => {

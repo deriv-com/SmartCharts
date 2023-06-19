@@ -3,6 +3,7 @@ import 'dart:js';
 import 'dart:html' as html;
 import 'dart:js_util';
 
+import 'package:chart_app/src/models/indicators.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_data.dart';
@@ -15,6 +16,8 @@ void initDartInterop(ChartConfigModel configModel, ChartDataModel dataModel,
     ChartController controller) {
   final JsObject dartInterop = JsObject(context['Object']);
   setProperty(dartInterop, 'config', _exposeConfigModel(configModel));
+  setProperty(dartInterop, 'indicators',
+      _exposeIndicatorsModel(configModel.indicators));
   setProperty(dartInterop, 'dataModel', _exposeDataModel(dataModel));
   setProperty(dartInterop, 'controller', _exposeController(controller));
   setProperty(html.window, 'flutterChart', dartInterop);
@@ -119,22 +122,34 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     allowInterop(model.updateLeftMargin),
   );
 
+  return chartConfig;
+}
+
+JsObject _exposeIndicatorsModel(IndicatorsModel model) {
+  final JsObject chartConfig = JsObject(context['Object']);
+
   setProperty(
     chartConfig,
     'addOrUpdateIndicator',
-    allowInterop(model.indicatorsConfig.addOrUpdateIndicator),
+    allowInterop(model.addOrUpdateIndicator),
   );
 
   setProperty(
     chartConfig,
     'removeIndicator',
-    allowInterop(model.indicatorsConfig.removeIndicator),
+    allowInterop(model.removeIndicator),
   );
 
   setProperty(
     chartConfig,
     'clearIndicators',
-    allowInterop(model.indicatorsConfig.clearIndicators),
+    allowInterop(model.clearIndicators),
+  );
+
+  setProperty(
+    chartConfig,
+    'getTootipContent',
+    allowInterop(model.getTootipContent),
   );
 
   return chartConfig;
