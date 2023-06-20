@@ -358,7 +358,7 @@ export type TFlutterChart = {
         addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
         clearIndicators: () => void;
-        getTootipContent: (epoch: number) => TIndicatorTooltipContent[];
+        getTooltipContent: (epoch: number) => TIndicatorTooltipContent[];
     };
 };
 

@@ -148,8 +148,8 @@ JsObject _exposeIndicatorsModel(IndicatorsModel model) {
 
   setProperty(
     chartConfig,
-    'getTootipContent',
-    allowInterop(model.getTootipContent),
+    'getTooltipContent',
+    allowInterop(model.getTooltipContent),
   );
 
   return chartConfig;

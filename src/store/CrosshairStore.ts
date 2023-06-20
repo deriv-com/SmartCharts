@@ -243,7 +243,7 @@ class CrosshairStore {
             }
         }
 
-        const tooltipContent = window.flutterChart.indicators.getTootipContent(data.DT!.getTime());
+        const tooltipContent = window.flutterChart.indicators.getTooltipContent(data.DT!.getTime());
 
         const activeItems = this.mainStore.studies.activeItems || [];
 

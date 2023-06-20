@@ -83,6 +83,9 @@ export const getTooltipLabels = (key: string, activeItem?: TActiveItem) => {
         dpo: {
             labels: [`${t.translate('DETRENDED')} ${getBars()}`],
         },
+        gator: {
+            labels: [`${t.translate('GATOR')} ${getBars()}_HIST1`, `${t.translate('GATOR')} ${getBars()}_HIST2`],
+        },
     };
 
     return labels[key as keyof typeof labels];

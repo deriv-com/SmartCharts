@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
@@ -64,7 +65,7 @@ class IndicatorsModel extends ChangeNotifier {
   }
 
   /// Gets the tooltip content for indicator series
-  List<JsIndicatorTooltip?>? getTootipContent(int epoch) {
+  List<JsIndicatorTooltip?>? getTooltipContent(int epoch) {
     final List<Series> seriesList =
         _controller.getSeriesList?.call() ?? <Series>[];
     final List<IndicatorConfig> indicatorConfigsList =
@@ -83,14 +84,33 @@ class IndicatorsModel extends ChangeNotifier {
 
     for (final ChartData item in sortedSeriesList) {
       if (item is AwesomeOscillatorSeries) {
-        final String? quote = _getQuote(item.entries, epoch);
         tooltipContent.add(JsIndicatorTooltip(
-            name: 'AwesomeOscillator', values: <String?>[quote]));
+          name: 'AwesomeOscillator',
+          values: <String?>[_getQuote(item.entries, epoch)],
+        ));
       } else if (item is DPOSeries) {
-        final String? quote = _getQuote(item.dpoSeries.entries, epoch,
-            offset: item.dpoSeries.offset);
-        tooltipContent
-            .add(JsIndicatorTooltip(name: 'dpo', values: <String?>[quote]));
+        tooltipContent.add(JsIndicatorTooltip(name: 'dpo', values: <String?>[
+          _getQuote(
+            item.dpoSeries.entries,
+            epoch,
+            offset: item.dpoSeries.offset,
+          )
+        ]));
+      } else if (item is GatorSeries) {
+        tooltipContent.add(JsIndicatorTooltip(name: 'gator', values: <String?>[
+          _getQuote(
+            item.gatorTopSeries.entries,
+            epoch,
+            offset:
+                min(item.gatorConfig.jawOffset, item.gatorConfig.teethOffset),
+          ),
+          _getQuote(
+            item.gatorBottomSeries.entries,
+            epoch,
+            offset:
+                min(item.gatorConfig.teethOffset, item.gatorConfig.lipsOffset),
+          )
+        ]));
       } else {
         tooltipContent.add(null);
       }
