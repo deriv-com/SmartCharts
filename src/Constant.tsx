@@ -44,7 +44,14 @@ import {
     TypeHollowIcon,
     TypeOhlcIcon,
 } from './components/Icons';
-import { TGranularity, TIcon, TDefaultIndicatorConfigs, TIndicatorsTree, TDefaultIndicatorConfig } from './types';
+import {
+    TGranularity,
+    TIcon,
+    TDefaultIndicatorConfigs,
+    TIndicatorsTree,
+    TDefaultIndicatorConfig,
+    TActiveItem,
+} from './types';
 
 type TDrawTools = {
     [key: string]: {
@@ -66,10 +73,15 @@ export const getDrawTools: () => TDrawTools = () => ({
     vertical: { id: 'vertical', text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
 });
 
-export const getTooltipLabels = (key: string) => {
+export const getTooltipLabels = (key: string, activeItem?: TActiveItem) => {
+    const getBars = () => `${activeItem?.bars ? `(${activeItem.bars})` : ''}`.toUpperCase();
+
     const labels = {
         AwesomeOscillator: {
             labels: [t.translate('AWESOME_HIST')],
+        },
+        dpo: {
+            labels: [`${t.translate('DETRENDED')} ${getBars()}`],
         },
     };
 

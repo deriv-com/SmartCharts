@@ -48,25 +48,51 @@ class IndicatorsModel extends ChangeNotifier {
     indicatorsRepo.clear();
   }
 
-  /// Gets the tooltip content for indicator series
-  List<JsIndicatorTooltip>? getTootipContent(int epoch) {
-    final List<ChartData>? chartDataList = _controller.getChartDataList?.call();
+  String? _getQuote(List<Tick>? entries, int epoch,
+      {int pipSize = 2, int offset = 0}) {
+    final Tick? tickAtEpoch =
+        entries?.firstWhereOrNull((Tick t) => t.epoch == epoch);
 
-    final List<JsIndicatorTooltip> tooltipContent = <JsIndicatorTooltip>[];
+    Tick? tick = tickAtEpoch;
 
-    if (chartDataList == null) {
-      return null;
+    if (offset != 0 && tickAtEpoch != null) {
+      final int index = entries!.indexOf(tickAtEpoch);
+      tick = entries[index - offset];
     }
 
-    for (final ChartData item in chartDataList) {
+    return tick?.quote.toStringAsFixed(pipSize);
+  }
+
+  /// Gets the tooltip content for indicator series
+  List<JsIndicatorTooltip?>? getTootipContent(int epoch) {
+    final List<Series> seriesList =
+        _controller.getSeriesList?.call() ?? <Series>[];
+    final List<IndicatorConfig> indicatorConfigsList =
+        _controller.getIndicatorConfigsList?.call() ?? <IndicatorConfig>[];
+
+    final List<Series> sortedSeriesList = <Series>[];
+
+    indicatorConfigsList.forEachIndexed((int index, IndicatorConfig config) {
+      final int configIndex = indicatorsRepo.items.indexOf(config);
+      if (configIndex > -1) {
+        sortedSeriesList.insert(configIndex, seriesList[index]);
+      }
+    });
+
+    final List<JsIndicatorTooltip?> tooltipContent = <JsIndicatorTooltip>[];
+
+    for (final ChartData item in sortedSeriesList) {
       if (item is AwesomeOscillatorSeries) {
-        final Tick? tick =
-            item.entries?.firstWhereOrNull((Tick t) => t.epoch == epoch);
-
-        final String quote = tick?.quote.toStringAsFixed(2) ?? '';
-
+        final String? quote = _getQuote(item.entries, epoch);
         tooltipContent.add(JsIndicatorTooltip(
-            name: 'AwesomeOscillator', values: <String>[quote]));
+            name: 'AwesomeOscillator', values: <String?>[quote]));
+      } else if (item is DPOSeries) {
+        final String? quote = _getQuote(item.dpoSeries.entries, epoch,
+            offset: item.dpoSeries.offset);
+        tooltipContent
+            .add(JsIndicatorTooltip(name: 'dpo', values: <String?>[quote]));
+      } else {
+        tooltipContent.add(null);
       }
     }
     return tooltipContent;

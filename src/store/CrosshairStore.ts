@@ -245,16 +245,23 @@ class CrosshairStore {
 
         const tooltipContent = window.flutterChart.indicators.getTootipContent(data.DT!.getTime());
 
-        tooltipContent?.forEach(item => {
-            const labels = getTooltipLabels(item.name)?.labels || [];
+        const activeItems = this.mainStore.studies.activeItems || [];
 
-            labels.forEach((label, i) => {
-                rows.push({
-                    name: label,
-                    value: item.values[i],
+        tooltipContent
+            .filter(c => c)
+            .forEach((item, index) => {
+                const labels = getTooltipLabels(item.name, activeItems[index])?.labels || [];
+
+                labels.forEach((label, i) => {
+                    const value = item.values[i];
+                    if (!value) return;
+
+                    rows.push({
+                        name: label,
+                        value: item.values[i],
+                    });
                 });
             });
-        });
 
         return rows;
     }

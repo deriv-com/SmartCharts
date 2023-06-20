@@ -144,7 +144,7 @@ class JsIndicators {
 /// JsIndicatorTooltip
 class JsIndicatorTooltip {
   /// JsLoadHistoryReq Object
-  external factory JsIndicatorTooltip({String name, List<String> values});
+  external factory JsIndicatorTooltip({String name, List<String?> values});
 
   /// Name
   external String name;
