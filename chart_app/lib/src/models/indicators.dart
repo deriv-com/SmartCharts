@@ -111,6 +111,12 @@ class IndicatorsModel extends ChangeNotifier {
                 min(item.gatorConfig.teethOffset, item.gatorConfig.lipsOffset),
           )
         ]));
+      } else if (item is MACDSeries) {
+        tooltipContent.add(JsIndicatorTooltip(name: 'macd', values: <String?>[
+          _getQuote(item.macdSeries.entries, epoch),
+          _getQuote(item.signalMACDSeries.entries, epoch),
+          _getQuote(item.macdHistogramSeries.entries, epoch)
+        ]));
       } else {
         tooltipContent.add(null);
       }

@@ -66,7 +66,6 @@ class CrosshairStore {
     }
 
     node = null;
-    lastBar = {};
     showChange = false;
     showSeries = false;
     showStudies = false;
@@ -166,22 +165,36 @@ class CrosshairStore {
 
         const epoch = this.mainStore.chartAdapter.getEpochFromX(offsetX);
 
-        const data = this.mainStore.chart.feed?.getClosestQuoteForEpoch(epoch);
-        if (!data || !this.isChartReady) {
-            this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
-            return;
+        const quotes = this.mainStore.chart.feed?.quotes || [];
+        const lastQuote = quotes[quotes.length - 1];
+        const lastQuoteEpoch = lastQuote?.DT?.getTime();
+        const granularity = this.mainStore.chartAdapter.getGranularity();
+        const nextQuoteEpoch = lastQuoteEpoch ? lastQuoteEpoch + granularity : epoch;
+
+        const quoteBar =
+            epoch <= nextQuoteEpoch ? this.mainStore.chart.feed?.getClosestQuoteForEpoch(epoch) : undefined;
+
+        let rows = [] as TRow[];
+
+        if (quoteBar) {
+            rows = this.calculateRows(quoteBar);
         }
 
-        let rows = null;
-        if (!sameBar(data, this.lastBar as TQuote)) {
-            rows = this.calculateRows(data);
-            this.lastBar = data;
+        const closestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch(epoch, granularity);
+
+        const indicatorsRows = this.getIndicatorRows(quoteBar?.DT?.getTime() || closestEpoch || epoch);
+        rows.push(...indicatorsRows);
+
+        if (rows.length == 0 || !this.isChartReady) {
+            this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
+            return;
+        } else {
+            this.updateTooltipPosition({
+                left: offsetX,
+                top: offsetY,
+                rows,
+            });
         }
-        this.updateTooltipPosition({
-            left: offsetX,
-            top: offsetY,
-            rows,
-        });
     };
     calculateRows(data: TQuote) {
         const dupMap = {} as TDupMap;
@@ -243,7 +256,12 @@ class CrosshairStore {
             }
         }
 
-        const tooltipContent = window.flutterChart.indicators.getTooltipContent(data.DT!.getTime());
+        return rows;
+    }
+
+    getIndicatorRows = (epoch: number) => {
+        const rows: TRow[] = [];
+        const tooltipContent = window.flutterChart.indicators.getTooltipContent(epoch);
 
         const activeItems = this.mainStore.studies.activeItems || [];
 
@@ -264,7 +282,7 @@ class CrosshairStore {
             });
 
         return rows;
-    }
+    };
     updateVisibility = (visible: boolean) => {
         const crosshair = this.refs?.crosshairRef.current;
         if (crosshair) {

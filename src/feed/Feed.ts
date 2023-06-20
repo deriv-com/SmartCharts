@@ -140,6 +140,10 @@ class Feed {
         });
     }
 
+    getClosestValidEpoch(epoch: number, granularity: number) {
+        return Math.round(epoch / granularity) * granularity;
+    }
+
     getClosestQuoteForEpoch(epoch: number) {
         const index = this.findEpochIndex(epoch);
 
