@@ -126,29 +126,34 @@ export default class SettingsDialogStore {
         const restGroup: TSettingsParameter[] = [];
         const groups: TSettingsItemGroup[] = [];
         groups.push({
-            key: '%K',
+            key: '%k',
+            title: '%K',
             fields: [],
         });
         groups.push({
-            key: '%D',
+            key: '%d',
+            title: '%D',
             fields: [],
         });
         groups.push({
-            key: 'OverBought',
+            key: 'over_bought',
+            title: 'Over Bought',
             fields: [],
         });
         groups.push({
-            key: 'OverSold',
+            key: 'over_sold',
+            title: 'OverSold',
             fields: [],
         });
         groups.push({
-            key: 'Show Zones',
+            key: 'show_zones',
+            title: 'Show Zones',
             fields: [],
         });
         for (const index in this.items) {
             const item = this.items[index];
-            const title = item.title;
-            const group = groups.find(x => title.indexOf(x.key) !== -1);
+            const { group_key, title } = item;
+            const group = groups.find(x => group_key === x.key);
             if (group) {
                 item.subtitle = title.replace(group.key, '').trim();
                 group.fields.push(item);
@@ -157,7 +162,8 @@ export default class SettingsDialogStore {
             }
         }
         groups.unshift({
-            key: this.formTitle || this.title,
+            key: 'others',
+            title: this.formTitle || this.title,
             fields: restGroup,
         });
         return groups;

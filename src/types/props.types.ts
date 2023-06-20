@@ -243,6 +243,7 @@ export type TChanges = {
 
 export type TSettingsItemGroup = {
     key: string;
+    title: string;
     fields: TSettingsParameter[];
 };
 
@@ -418,6 +419,7 @@ export interface BaseIndicatorParameter {
     title: string;
     subtitle?: string;
     category: TIndicatorCategory;
+    group_key?: string;
 }
 
 export interface IndicatorParameter<T> extends BaseIndicatorParameter {

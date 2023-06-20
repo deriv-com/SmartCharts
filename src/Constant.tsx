@@ -78,20 +78,28 @@ export const getTooltipLabels = (key: string, activeItem?: TActiveItem) => {
 
     const labels = {
         AwesomeOscillator: {
-            labels: [t.translate('AWESOME_HIST')],
+            labels: ['AWESOME_HIST'],
         },
         dpo: {
-            labels: [`${t.translate('DETRENDED')} ${getBars()}`],
+            labels: [`DETRENDED ${getBars()}`],
         },
         gator: {
-            labels: [`${t.translate('GATOR')} ${getBars()}_HIST1`, `${t.translate('GATOR')} ${getBars()}_HIST2`],
+            labels: [`GATOR ${getBars()}_HIST1`, `GATOR ${getBars()}_HIST2`],
         },
         macd: {
-            labels: [
-                `${t.translate('MACD MACD')} ${getBars()}`,
-                `${t.translate('SIGNAL MACD')} ${getBars()}`,
-                `${t.translate('MACD')} ${getBars()}_HIST`,
-            ],
+            labels: [`MACD MACD ${getBars()}`, `SIGNAL MACD ${getBars()}`, `MACD ${getBars()}_HIST`],
+        },
+        ROC: {
+            labels: [`PRICE ROC ${getBars()}`],
+        },
+        RSI: {
+            labels: [`RSI ${getBars()}`],
+        },
+        StochasticOscillator: {
+            labels: [`%K STOCHASTICS ${getBars()}`, `%D STOCHASTICS ${getBars()}`],
+        },
+        SMI: {
+            labels: [`%K STCH MTM ${getBars()}`, `%D STCH MTM ${getBars()}`],
         },
     };
 
@@ -415,6 +423,7 @@ const getRSIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
                 value: 'oscillatorLinesConfig.overboughtValue',
                 color: 'oscillatorLinesConfig.overboughtStyle.color',
             },
+            group_key: 'over_bought',
             title: t.translate('OverBought'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -428,6 +437,7 @@ const getRSIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
                 value: 'oscillatorLinesConfig.oversoldValue',
                 color: 'oscillatorLinesConfig.oversoldStyle.color',
             },
+            group_key: 'over_sold',
             title: t.translate('OverSold'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -438,6 +448,7 @@ const getRSIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'showZones',
+            group_key: 'show_zones',
             title: t.translate('Show Zones'),
             type: 'switch',
             category: 'parameters',
@@ -749,14 +760,14 @@ const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = ()
     parameters: [
         {
             path: 'fastLineStyle.color',
-            title: t.translate('Color'),
+            title: t.translate('Fast'),
             defaultValue: '#000000',
             category: 'inputs',
             type: 'colorpicker',
         },
         {
             path: 'slowLineStyle.color',
-            title: t.translate('Color'),
+            title: t.translate('Slow'),
             defaultValue: '#FF0000',
             category: 'inputs',
             type: 'colorpicker',
@@ -788,6 +799,7 @@ const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = ()
                 value: 'oscillatorLinesConfig.overboughtValue',
                 color: 'oscillatorLinesConfig.overboughtStyle.color',
             },
+            group_key: 'over_bought',
             title: t.translate('OverBought'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -801,6 +813,7 @@ const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = ()
                 value: 'oscillatorLinesConfig.oversoldValue',
                 color: 'oscillatorLinesConfig.oversoldStyle.color',
             },
+            group_key: 'over_sold',
             title: t.translate('OverSold'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -811,6 +824,7 @@ const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = ()
         },
         {
             path: 'showZones',
+            group_key: 'show_zones',
             title: t.translate('Show Zones'),
             type: 'switch',
             category: 'parameters',
@@ -820,9 +834,22 @@ const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = ()
 });
 
 const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+    config: {
+        lineStyle: _.clone(lineStyle),
+        signalLineStyle: _.clone(lineStyle),
+    },
     parameters: [
         {
+            path: 'lineStyle.color',
+            group_key: '%k',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
             path: 'period',
+            group_key: '%k',
             title: t.translate('Period'),
             defaultValue: 10,
             category: 'inputs',
@@ -830,6 +857,7 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'smoothingPeriod',
+            group_key: '%k',
             title: t.translate('Smoothing Period'),
             defaultValue: 3,
             category: 'inputs',
@@ -837,13 +865,23 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'doubleSmoothingPeriod',
+            group_key: '%k',
             title: t.translate('Double Smoothing Period'),
             defaultValue: 3,
             category: 'inputs',
             type: 'number',
         },
         {
+            path: 'signalLineStyle.color',
+            group_key: '%d',
+            title: t.translate('Color'),
+            defaultValue: '#FF0000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
             path: 'signalPeriod',
+            group_key: '%d',
             title: t.translate('Signal Period'),
             defaultValue: 10,
             category: 'inputs',
@@ -851,6 +889,7 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'maType',
+            group_key: '%d',
             title: t.translate('Field'),
             defaultValue: 'exponential',
             category: 'inputs',
@@ -861,6 +900,7 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
             paths: {
                 value: 'overboughtValue',
             },
+            group_key: 'over_bought',
             title: t.translate('OverBought'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -873,6 +913,7 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
             paths: {
                 value: 'oversoldValue',
             },
+            group_key: 'over_sold',
             title: t.translate('OverSold'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -883,6 +924,7 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'showZones',
+            group_key: 'show_zones',
             title: t.translate('Show Zones'),
             type: 'switch',
             category: 'parameters',
@@ -920,6 +962,7 @@ const getWilliamsRIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
                 value: 'oscillatorLimits.overboughtValue',
                 color: 'oscillatorLimits.overboughtStyle.color',
             },
+            group_key: 'over_bought',
             title: t.translate('OverBought'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -933,6 +976,7 @@ const getWilliamsRIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
                 value: 'oscillatorLimits.oversoldValue',
                 color: 'oscillatorLimits.oversoldStyle.color',
             },
+            group_key: 'over_sold',
             title: t.translate('OverSold'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -943,6 +987,7 @@ const getWilliamsRIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'showZones',
+            group_key: 'show_zones',
             title: t.translate('Show Zones'),
             type: 'switch',
             category: 'parameters',
@@ -1009,6 +1054,7 @@ const getCCIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
                 value: 'oscillatorLinesConfig.overboughtValue',
                 color: 'oscillatorLinesConfig.overboughtStyle.color',
             },
+            group_key: 'over_bought',
             title: t.translate('OverBought'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -1022,6 +1068,7 @@ const getCCIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
                 value: 'oscillatorLinesConfig.oversoldValue',
                 color: 'oscillatorLinesConfig.oversoldStyle.color',
             },
+            group_key: 'over_sold',
             title: t.translate('OverSold'),
             type: 'numbercolorpicker',
             category: 'parameters',
@@ -1032,6 +1079,7 @@ const getCCIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         },
         {
             path: 'showZones',
+            group_key: 'show_zones',
             title: t.translate('Show Zones'),
             type: 'switch',
             category: 'parameters',

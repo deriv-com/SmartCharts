@@ -222,7 +222,7 @@ const SettingsPanel = ({
                     group.fields.length > 0 && (
                         <SettingsPanelGroup
                             key={group.key}
-                            title={group.key}
+                            title={group.title}
                             items={group.fields}
                             theme={theme}
                             onItemChange={onItemChange}

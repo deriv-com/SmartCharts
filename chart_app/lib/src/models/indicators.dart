@@ -117,6 +117,25 @@ class IndicatorsModel extends ChangeNotifier {
           _getQuote(item.signalMACDSeries.entries, epoch),
           _getQuote(item.macdHistogramSeries.entries, epoch)
         ]));
+      } else if (item is ROCSeries) {
+        tooltipContent.add(JsIndicatorTooltip(name: 'ROC', values: <String?>[
+          _getQuote(item.entries, epoch),
+        ]));
+      } else if (item is RSISeries) {
+        tooltipContent.add(JsIndicatorTooltip(name: 'RSI', values: <String?>[
+          _getQuote(item.entries, epoch),
+        ]));
+      } else if (item is StochasticOscillatorSeries) {
+        tooltipContent.add(
+            JsIndicatorTooltip(name: 'StochasticOscillator', values: <String?>[
+          _getQuote(item.fastPercentStochasticIndicatorSeries.entries, epoch),
+          _getQuote(item.slowStochasticIndicatorSeries.entries, epoch),
+        ]));
+      } else if (item is SMISeries) {
+        tooltipContent.add(JsIndicatorTooltip(name: 'SMI', values: <String?>[
+          _getQuote(item.smiSeries.entries, epoch),
+          _getQuote(item.smiSignalSeries.entries, epoch),
+        ]));
       } else {
         tooltipContent.add(null);
       }

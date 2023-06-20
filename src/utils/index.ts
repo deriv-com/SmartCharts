@@ -236,17 +236,17 @@ export const formatCamelCase = (s: string) => {
 };
 
 const movingAverageShortCode = {
-    doubleExponential: 'dema',
-    exponential: 'ema',
-    hull: 'hma',
-    simple: 'ma',
-    timeSeries: 'tsma',
-    triangular: 'tma',
-    tripleExponential: 'tema',
-    variable: 'vma',
-    weighted: 'wma',
-    wellesWilder: 'smma',
-    zeroLag: 'zma',
+    doubleExponential: 'DEMA',
+    exponential: 'EMA',
+    hull: 'HMA',
+    simple: 'MA',
+    timeSeries: 'TSMA',
+    triangular: 'TMA',
+    tripleExponential: 'TEMA',
+    variable: 'VMA',
+    weighted: 'WMA',
+    wellesWilder: 'SMMA',
+    zeroLag: 'ZMA',
 };
 
 const fieldTypeShortCode = {
@@ -263,9 +263,9 @@ const fieldTypeShortCode = {
 export const prepareIndicatorName = (name: string, parameters: TSettingsParameter[] = []) => {
     const getStudyBars = () => {
         const bars = parameters
-            .filter(p => p.type === 'number' || p.path === 'movingAverageType' || p.path === 'fieldType')
+            .filter(p => ['movingAverageType', 'maType', 'fieldType'].includes(p.path || '') || p.type === 'number')
             .map(p => {
-                if (p.path === 'movingAverageType') {
+                if (p.path === 'movingAverageType' || p.path === 'maType') {
                     return movingAverageShortCode[p.value as keyof typeof movingAverageShortCode];
                 } else if (p.path === 'fieldType') {
                     return fieldTypeShortCode[p.value as keyof typeof fieldTypeShortCode];
