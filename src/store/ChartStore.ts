@@ -782,11 +782,11 @@ class ChartStore {
                     initialMarginTop: this.stateStore.yAxisMargin.top,
                     initialMarginBottom: this.stateStore.yAxisMargin.bottom,
                     // position: 'left',
-                    displayBorder: true,
+                    displayBorder: false,
                     justifyRight: false,
                 },
                 xAxis: {
-                    displayBorder: true,
+                    displayBorder: false,
                 },
                 gaplines: true,
                 dynamicYAxis: true,

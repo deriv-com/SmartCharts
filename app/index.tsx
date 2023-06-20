@@ -1,19 +1,8 @@
 import {
-    ChartMode,
-    ChartSetting,
-    ChartTitle,
     createObjectFromLocalStorage,
-    DrawTools,
-    LogActions,
-    LogCategories,
-    logEvent,
     Marker,
     setSmartChartsPublicPath,
-    Share,
     SmartChart,
-    StudyLegend,
-    ToolbarWidget,
-    Views,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { configure } from 'mobx';
@@ -25,14 +14,12 @@ import { TGranularity, TNetworkConfig, TRefData, TStateChangeListener } from 'sr
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import 'url-search-params-polyfill';
 import './app.scss';
-import ChartHistory from './ChartHistory';
 import ChartNotifier from './ChartNotifier';
 import { ConnectionManager, StreamManager } from './connection';
 import NetworkMonitor from './connection/NetworkMonitor';
-import Notification from './Notification';
 
 setSmartChartsPublicPath('./dist/');
-const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
+const isMobile = true;
 if (process.env.NODE_ENV !== 'production') {
     whyDidYouRender(React, {
         collapseGroups: true,
@@ -49,16 +36,7 @@ if (window.isProductionWebsite) {
     s.src = 'https://cdn.trackjs.com/releases/current/tracker.js';
     document.body.appendChild(s);
 }
-/* // PWA support is temporarily removed until its issues can be sorted out
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register(`${window.location.origin + window.location.pathname}sw.js`)
-        .then(() => {
-            console.log('Service Worker Registered');
-        }).catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
-        });
-}
-*/
+
 configure({ enforceActions: 'observed' });
 function getLanguageStorage() {
     const default_language = 'en';
@@ -164,12 +142,7 @@ const App = () => {
         const networkMonitor = NetworkMonitor.getInstance();
         networkMonitor.init(requestAPI, handleNetworkStatus);
     }, []);
-    /*
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.symbol !== nextState.symbol
-            || JSON.stringify(this.state.settings) !== JSON.stringify(nextState.settings);
-    }
-    */
+
     const handleNetworkStatus = (status: TNetworkConfig) => setNetworkStatus(status);
     const saveSettings = React.useCallback(newSettings => {
         const prevSetting = settingsRef.current;
@@ -184,7 +157,6 @@ const App = () => {
         }
         setSettings(newSettings);
         if (startingLanguageRef.current !== newSettings.language) {
-            // Place language in URL:
             const { origin, search, pathname } = window.location;
             const url = new URLSearchParams(search);
             url.delete('l');
@@ -197,34 +169,7 @@ const App = () => {
     };
     const handleStateChange: TStateChangeListener = (tag, option) =>
         console.log(`chart state changed to ${tag} with the option of ${option ? JSON.stringify(option) : '{}'}`);
-    const renderTopWidgets = React.useCallback(() => {
-        const symbolChange = (new_symbol: string) => {
-            logEvent(LogCategories.ChartTitle, LogActions.MarketSelector, new_symbol);
-            notifier.removeByCategory('activesymbol');
-            setSymbol(new_symbol);
-        };
-        return (
-            <React.Fragment>
-                <ChartTitle onChange={symbolChange} isNestedList={isMobile} />
-                {settingsRef.current.historical ? <ChartHistory onChange={handleDateChange} /> : ''}
-                <Notification notifier={notifier} />
-            </React.Fragment>
-        );
-    }, [notifier]);
-    const renderControls = React.useCallback(() => <ChartSetting />, []);
-    const renderToolbarWidget = React.useCallback(() => {
-        const changeGranularity = (timePeriod: TGranularity) => setGranularity(timePeriod);
-        const changeChartType = (_chartType?: string) => setChartType(_chartType);
-        return (
-            <ToolbarWidget>
-                <ChartMode onChartType={changeChartType} onGranularity={changeGranularity} />
-                <StudyLegend />
-                <Views />
-                <DrawTools />
-                <Share />
-            </ToolbarWidget>
-        );
-    }, []);
+
     const onMessage = (e: TNotification) => {
         notifier.notify(e);
     };
@@ -236,6 +181,12 @@ const App = () => {
             });
         }
     };
+
+    const handleSetSymbol = (newSymbol: string) => {
+      setSymbol(newSymbol);
+    };
+    React.useEffect(() => {}, [handleSetSymbol]);
+
     return (
         <SmartChart
             id={chartId}
@@ -246,9 +197,7 @@ const App = () => {
             settings={settings}
             onMessage={onMessage}
             enableRouting
-            topWidgets={renderTopWidgets}
-            toolbarWidget={renderToolbarWidget}
-            chartControlsWidgets={renderControls}
+            chartControlsWidgets={null}
             requestAPI={requestAPI}
             requestSubscribe={requestSubscribe}
             requestForget={requestForget}
@@ -262,7 +211,7 @@ const App = () => {
             networkStatus={networkStatus}
             shouldFetchTradingTimes
             shouldFetchTickHistory
-            enabledChartFooter
+            enabledChartFooter={false}
             allTicks={allTicks}
             contractInfo={contractInfo}
             getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
@@ -276,8 +225,7 @@ const App = () => {
                     height: indicatorsHeight,
                     percent: indicatorsHeight / chart_height,
                 };
-            }}
-        >
+            }}>
             {endEpoch ? (
                 <Marker className='chart-marker-historical' markerRef={onMarkerRef}>
                     <span>
@@ -286,9 +234,9 @@ const App = () => {
                             .format('DD MMMM YYYY - HH:mm')}
                     </span>
                 </Marker>
-            ) : (
-                ''
-            )}
+              ) : ('')
+            }
+
         </SmartChart>
     );
 };

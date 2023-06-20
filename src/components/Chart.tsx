@@ -14,7 +14,6 @@ import BottomWidget from './BottomWidget';
 import BottomWidgetsContainer from './BottomWidgetsContainer';
 import ChartControls from './ChartControls';
 import ChartFooter from './ChartFooter';
-import ChartTitle from './ChartTitle';
 import Crosshair from './Crosshair';
 import HighestLowestMarker from './HighestLowestMarker';
 import IndicatorPredictionDialog from './IndicatorPredictionDialog';
@@ -61,7 +60,6 @@ const Chart = (props: TChartProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [t.lang]);
 
-    const defaultTopWidgets = () => <ChartTitle />;
 
     const {
         id,
@@ -69,17 +67,15 @@ const Chart = (props: TChartProps) => {
         barriers = [],
         children,
         chartControlsWidgets,
-        topWidgets,
         bottomWidgets,
-        enabledChartFooter = true,
-        enabledNavigationWidget = true,
+        enabledChartFooter = false,
+        enabledNavigationWidget = false,
         toolbarWidget = () => null,
         onCrosshairChange = () => null,
         historical,
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;
-    const TopWidgets = topWidgets || defaultTopWidgets;
     // if there are any markers, then increase the subholder z-index
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
@@ -130,7 +126,6 @@ const Chart = (props: TChartProps) => {
                                 </RenderInsideChart>
                                 {!loader.isActive && (
                                     <div className='cq-top-ui-widgets'>
-                                        <TopWidgets />
                                     </div>
                                 )}
                                 <div

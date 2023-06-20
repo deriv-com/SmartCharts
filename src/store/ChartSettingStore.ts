@@ -12,12 +12,12 @@ export default class ChartSettingStore {
 
     language: TLanguage | string = '';
     position = 'bottom';
-    theme = 'light';
+    theme = 'dark';
     countdown = false;
     historical = false;
     isAutoScale = true;
-    isHighestLowestMarkerEnabled = true;
-    
+    isHighestLowestMarkerEnabled = false;
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             language: observable,
