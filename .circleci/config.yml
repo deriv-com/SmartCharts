@@ -65,7 +65,8 @@ commands:
           name: Pushing Image to docker hub
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:<< parameters.docker_image_tag >>
+            docker push ${DOCKHUB_ORGANISATION}/binary-static-charts:<< parameters.docker_latest_image_tag >>
   k8s_deploy:
     description: "Deploy to k8s cluster"
     parameters:
@@ -120,14 +121,14 @@ commands:
 jobs:
   test:
     docker:
-      - image: circleci/node:14.18.2
+      - image: cimg/node:18.16.0
     steps:
       - checkout
       - npm_install
       - test
   release_staging:
     docker:
-      - image: circleci/node:14.18.2
+      - image: cimg/node:18.16.0
     steps:
       - checkout
       - npm_install
@@ -144,7 +145,7 @@ jobs:
       - notify_slack
   release_production:
     docker:
-      - image: circleci/node:14.18.2
+      - image: cimg/node:18.16.0
     steps:
       - checkout
       - npm_install
@@ -166,7 +167,7 @@ jobs:
 
   publish_cloudflare_staging:
     docker:
-      - image: circleci/node:16.13.1-stretch
+      - image: cimg/node:18.16.0
     steps:
       - attach_workspace:
           at: public
@@ -174,7 +175,7 @@ jobs:
 
   publish_cloudflare_production:
     docker:
-      - image: circleci/node:16.13.1-stretch
+      - image: cimg/node:18.16.0
     steps:
       - attach_workspace:
           at: public
