@@ -71,12 +71,12 @@ class IndicatorsModel extends ChangeNotifier {
     final List<IndicatorConfig> indicatorConfigsList =
         _controller.getIndicatorConfigsList?.call() ?? <IndicatorConfig>[];
 
-    final List<Series> sortedSeriesList = <Series>[];
+    final List<Series> sortedSeriesList = <Series>[...seriesList];
 
     indicatorConfigsList.forEachIndexed((int index, IndicatorConfig config) {
       final int configIndex = indicatorsRepo.items.indexOf(config);
       if (configIndex > -1) {
-        sortedSeriesList.insert(configIndex, seriesList[index]);
+        sortedSeriesList[configIndex] = seriesList[index];
       }
     });
 
