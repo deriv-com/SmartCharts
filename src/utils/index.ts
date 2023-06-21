@@ -263,12 +263,19 @@ const fieldTypeShortCode = {
 export const prepareIndicatorName = (name: string, parameters: TSettingsParameter[] = []) => {
     const getStudyBars = () => {
         const bars = parameters
-            .filter(p => ['movingAverageType', 'maType', 'fieldType'].includes(p.path || '') || p.type === 'number')
+            .filter(
+                p =>
+                    ['movingAverageType', 'maType', 'fieldType'].includes(p.path || '') ||
+                    ['number', 'switch'].includes(p.type)
+            )
             .map(p => {
                 if (p.path === 'movingAverageType' || p.path === 'maType') {
                     return movingAverageShortCode[p.value as keyof typeof movingAverageShortCode];
                 } else if (p.path === 'fieldType') {
                     return fieldTypeShortCode[p.value as keyof typeof fieldTypeShortCode];
+                }
+                if (p.type === 'switch') {
+                    return p.value ? 'Y' : 'N';
                 }
                 return p.value || p.defaultValue;
             })

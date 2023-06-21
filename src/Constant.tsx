@@ -101,6 +101,56 @@ export const getTooltipLabels = (key: string, activeItem?: TActiveItem) => {
         SMI: {
             labels: [`%K STCH MTM ${getBars()}`, `%D STCH MTM ${getBars()}`],
         },
+        WilliamsR: {
+            labels: [`Williams %R ${getBars()}`],
+        },
+        Aroon: {
+            labels: [`AROON UP ${getBars()}`, `AROON DOWN ${getBars()}`],
+        },
+        adx: {
+            labels: [`+DI ADX ${getBars()}`, `-DI ADX ${getBars()}`, `ADX ${getBars()}`, `ADX ${getBars()}_HIST`],
+        },
+        commodity_channel_index: {
+            labels: [`CCI ${getBars()}`],
+        },
+        ichimoku: {
+            labels: [
+                `CONVERSION LINE ICHIMOKU CLOUDS ${getBars()}`,
+                `BASE LINE ICHIMOKU CLOUDS ${getBars()}`,
+                `LEADING SPAN A ICHIMOKU CLOUDS ${getBars()}`,
+                `LEADING SPAN B ICHIMOKU CLOUDS ${getBars()}`,
+                `LAGGING SPAN ICHIMOKU CLOUDS ${getBars()}`,
+            ],
+        },
+        ParabolicSAR: {
+            labels: [`PSAR ${getBars()}`],
+        },
+        bollinger_bands: {
+            labels: [
+                `BOLLINGER BANDS TOP ${getBars()}`,
+                `BOLLINGER BANDS MEDIAN ${getBars()}`,
+                `BOLLINGER BANDS BOTTOM ${getBars()}`,
+            ],
+        },
+        donchian_channel: {
+            labels: [
+                `DONCHIAN HIGH DONCHIAN CHANNEL ${getBars()}`,
+                `DONCHIAN MEDIAN DONCHIAN CHANNEL ${getBars()}`,
+                `DONCHIAN LOW DONCHIAN CHANNEL ${getBars()}`,
+            ],
+        },
+        moving_average: {
+            labels: [`MA ${getBars()}`],
+        },
+        moving_envelope_average: {
+            labels: [`MA ENV TOP ${getBars()}`, `MA ENV MEDIAN ${getBars()}`, `MA ENV BOTTOM ${getBars()}`],
+        },
+        rainbow: {
+            labels: _.range(1, 10).map(index => `SMA${index} RAINBOW MA ${getBars()}`),
+        },
+        alligator: {
+            labels: [`JAW ALLIGATOR ${getBars()}`, `TEETH ALLIGATOR ${getBars()}`, `LIPS ALLIGATOR ${getBars()}`],
+        },
     };
 
     return labels[key as keyof typeof labels];
@@ -1251,7 +1301,7 @@ const getBollingerBandsIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
         {
             path: 'period',
             title: t.translate('Period'),
-            defaultValue: 50,
+            defaultValue: 20,
             category: 'inputs',
             type: 'number',
         },
