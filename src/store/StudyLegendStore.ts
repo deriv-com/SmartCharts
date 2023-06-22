@@ -7,7 +7,7 @@ import { TActiveItem, TIndicatorConfig, TSettingsParameter } from 'src/types';
 import MainStore from '.';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
 import { getIndicatorsTree, getDefaultIndicatorConfig } from '../Constant';
-import { prepareIndicatorName } from '../utils';
+import { prepareIndicatorName, transformStudiesforTheme } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -153,7 +153,6 @@ export default class StudyLegendStore {
         };
 
         this.mainStore.chartAdapter.flutterChart?.indicators.addOrUpdateIndicator(JSON.stringify(config), index);
-        this.mainStore.state.saveLayout();
     };
 
     onSelectItem(indicatorName: string) {
@@ -179,10 +178,13 @@ export default class StudyLegendStore {
                 bars: nameObj.bars,
             };
 
-            this.activeItems.push(item);
+            transformStudiesforTheme(parameters, this.mainStore.chartSetting.theme);
+
             this.addOrUpdateIndicator(item);
+            this.activeItems.push(item);
 
             this.mainStore.bottomWidgetsContainer.updateChartHeight();
+            this.mainStore.state.saveLayout();
         }
     }
 
@@ -199,6 +201,14 @@ export default class StudyLegendStore {
         this.activeItems = activeItems;
 
         this.mainStore.bottomWidgetsContainer.updateChartHeight();
+    }
+
+    updateTheme() {
+        this.activeItems.forEach((activeItem, index) => {
+            transformStudiesforTheme(activeItem.parameters, this.mainStore.chartSetting.theme);
+            this.addOrUpdateIndicator(activeItem, index);
+        });
+        this.mainStore.state.saveLayout();
     }
 
     // Temporary prevent user from adding more than 5 indicators
@@ -265,6 +275,7 @@ export default class StudyLegendStore {
             const index = _.findIndex(this.activeItems, item => item.id === this.settingsDialog.id);
 
             this.addOrUpdateIndicator(item, index);
+            this.mainStore.state.saveLayout();
         }
     }
     changeStudyPanelTitle() {

@@ -47,10 +47,10 @@ import {
 import {
     TGranularity,
     TIcon,
-    TDefaultIndicatorConfigs,
     TIndicatorsTree,
-    TDefaultIndicatorConfig,
     TActiveItem,
+    TDefaultIndicatorConfigMap,
+    TDefaultIndicatorConfigFn,
 } from './types';
 
 type TDrawTools = {
@@ -436,7 +436,7 @@ const getMovingAverageTypeOptions = () => ({
     tripleExponential: t.translate('3-Exponential'),
 });
 
-const getRSIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getRSIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         oscillatorLinesConfig: {
@@ -507,7 +507,7 @@ const getRSIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getADXIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getADXIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         positiveLineStyle: _.clone(lineStyle),
@@ -587,7 +587,7 @@ const getADXIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getAwesomeOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getAwesomeOscillatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     parameters: [
         {
             path: 'barStyle.positiveColor',
@@ -606,7 +606,7 @@ const getAwesomeOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = () =>
     ],
 });
 
-const getDPOIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getDPOIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         isCentered: true,
@@ -645,7 +645,7 @@ const getDPOIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getGatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getGatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     parameters: [
         {
             path: 'barStyle.positiveColor',
@@ -706,7 +706,7 @@ const getGatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getMACDIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getMACDIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         signalLineStyle: _.clone(lineStyle),
@@ -764,7 +764,7 @@ const getMACDIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getROCIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getROCIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
     },
@@ -794,7 +794,7 @@ const getROCIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getStochasticOscillatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: { ..._.clone(lineStyle), color: '#FFFFFF' },
         fastLineStyle: _.clone(lineStyle),
@@ -883,7 +883,7 @@ const getStochasticOscillatorIndicatorConfig: () => TDefaultIndicatorConfig = ()
     ],
 });
 
-const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         signalLineStyle: _.clone(lineStyle),
@@ -983,7 +983,7 @@ const getSMIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getWilliamsRIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getWilliamsRIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         zeroHorizontalLinesStyle: _.extend(_.clone(lineStyle), { color: '0xFFF44336' }),
@@ -1046,7 +1046,7 @@ const getWilliamsRIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getAroonIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getAroonIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         upLineStyle: _.clone(lineStyle),
         downLineStyle: _.clone(lineStyle),
@@ -1076,7 +1076,7 @@ const getAroonIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getCCIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getCCIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         oscillatorLinesConfig: {
@@ -1138,7 +1138,7 @@ const getCCIIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getIchimokuIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getIchimokuIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         conversionLineStyle: _.clone(lineStyle),
         baseLineStyle: _.clone(lineStyle),
@@ -1215,7 +1215,7 @@ const getIchimokuIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getParabolicSARIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getParabolicSARIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         scatterStyle: {
             radius: 1.5,
@@ -1248,7 +1248,7 @@ const getParabolicSARIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getZigzagIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getZigzagIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
     },
@@ -1270,7 +1270,7 @@ const getZigzagIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getBollingerBandsIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getBollingerBandsIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
@@ -1331,7 +1331,7 @@ const getBollingerBandsIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getDonchianChannelIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getDonchianChannelIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
@@ -1384,7 +1384,7 @@ const getDonchianChannelIndicatorConfig: () => TDefaultIndicatorConfig = () => (
     ],
 });
 
-const getMAIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getMAIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: _.clone(lineStyle),
         isOverlay: true,
@@ -1430,7 +1430,7 @@ const getMAIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getMAEnvIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getMAEnvIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
@@ -1503,7 +1503,7 @@ const getMAEnvIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getRainbowIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getRainbowIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         bandsCount: 10,
         movingAverageType: 'simple',
@@ -1598,7 +1598,7 @@ const getRainbowIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getAlligatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getAlligatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         jawLineStyle: _.clone(lineStyle),
         teethLineStyle: _.clone(lineStyle),
@@ -1685,7 +1685,7 @@ const getAlligatorIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
     ],
 });
 
-const getFractalChaosBandIndicatorConfig: () => TDefaultIndicatorConfig = () => ({
+const getFractalChaosBandIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         highLineStyle: _.clone(lineStyle),
         lowLineStyle: _.clone(lineStyle),
@@ -1723,7 +1723,7 @@ const getFractalChaosBandIndicatorConfig: () => TDefaultIndicatorConfig = () => 
     ],
 });
 
-export const defaultIndicatorConfigs: TDefaultIndicatorConfigs = {
+export const defaultIndicatorConfigs: TDefaultIndicatorConfigMap = {
     // Keys are mapped to the flutter indicators name. Don't change it.
     RSI: getRSIIndicatorConfig,
     adx: getADXIndicatorConfig,

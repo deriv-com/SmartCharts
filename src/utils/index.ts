@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
 import { TDragEvents, TGranularity, TSettingsParameter, TQuote } from 'src/types';
 
@@ -370,4 +371,27 @@ export const lerp = (a: number, b: number, t: number) => {
     b = b ?? 0;
 
     return a * (1.0 - t) + b * t;
+};
+
+export const transformStudiesforTheme = (value: any, theme: string) => {
+    if (_.isString(value) && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+        let color = value;
+
+        if (theme === 'light' && color === '#FFFFFF') {
+            return '#000000';
+        } else if (theme === 'dark' && color === '#000000') {
+            return '#FFFFFF';
+        }
+
+        return color;
+    } else if (_.isObject(value)) {
+        const map = value as Record<string, any>;
+        Object.keys(value).forEach(key => {
+            map[key] = transformStudiesforTheme(map[key], theme);
+        });
+    } else if (_.isArray(value)) {
+        value.map(item => transformStudiesforTheme(item, theme));
+    }
+
+    return value;
 };
