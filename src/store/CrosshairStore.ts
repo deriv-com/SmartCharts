@@ -3,7 +3,6 @@ import moment from 'moment';
 import Context from 'src/components/ui/Context';
 import { TQuote } from 'src/types';
 import MainStore from '.';
-import { sameBar } from '../utils';
 import { getTooltipLabels } from 'src/Constant';
 
 type TDupMap = {
