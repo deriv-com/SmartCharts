@@ -1299,6 +1299,13 @@ const getBollingerBandsIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             type: 'colorpicker',
         },
         {
+            path: 'fillColor',
+            title: t.translate('Fill Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
             path: 'period',
             title: t.translate('Period'),
             defaultValue: 20,
@@ -1328,6 +1335,13 @@ const getBollingerBandsIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             type: 'select',
             options: getMovingAverageTypeOptions(),
         },
+        {
+            path: 'showChannelFill',
+            title: t.translate('Channel Fill'),
+            type: 'switch',
+            category: 'parameters',
+            defaultValue: true,
+        },
     ],
 });
 
@@ -1336,7 +1350,6 @@ const getDonchianChannelIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         upperLineStyle: _.clone(lineStyle),
         middleLineStyle: _.clone(lineStyle),
         lowerLineStyle: _.clone(lineStyle),
-        fillColor: '0x1affffff',
     },
     parameters: [
         {
@@ -1356,6 +1369,13 @@ const getDonchianChannelIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         {
             path: 'lowerLineStyle.color',
             title: t.translate('Donchian Low'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'fillColor',
+            title: t.translate('Fill Color'),
             defaultValue: '#000000',
             category: 'inputs',
             type: 'colorpicker',
