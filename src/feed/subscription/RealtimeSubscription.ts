@@ -66,7 +66,6 @@ class RealtimeSubscription extends Subscription {
     }
 
     _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse, void>, (resp: TicksStreamResponse) => void] {
-        let hasHistory = false;
         const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
             if (this._stx?.isDestroyed) {
@@ -76,12 +75,11 @@ class RealtimeSubscription extends Subscription {
             }
             // We assume that 1st response is the history, and subsequent
             // responses are tick stream data.
-            if (hasHistory) {
+            if (['tick', 'ohlc'].includes(resp.msg_type)) {
                 this._onTick(resp);
                 return;
             }
             tickHistoryPromise.resolve(resp);
-            hasHistory = true;
         };
         return [tickHistoryPromise, processTickHistory];
     }

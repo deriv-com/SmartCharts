@@ -71,6 +71,7 @@ export default function animateChart(stx: Context['stx'], animationParameters: a
         }
     });
     stx.append('updateChartData', function (appendQuotes: any, chart: any, params: any) {
+        if (params.noCreateDataSet) return false;
         // These chart types are the only types supported by animation
         const supportedChartType = this.mainSeriesRenderer && this.mainSeriesRenderer.supportsAnimation;
         // This injection is just for charts which are not supported by animation.
@@ -80,7 +81,7 @@ export default function animateChart(stx: Context['stx'], animationParameters: a
         chart = chart || this.chart;
         if (chart.lockScroll) {
             const lastAppendQuote = appendQuotes[appendQuotes.length - 1];
-            const lastDataSegmentItem = chart.dataSegment[chart.dataSegment.length - 1];
+            const lastDataSegmentItem = chart.dataSegment?.[chart.dataSegment?.length - 1];
             if (!lastAppendQuote || !lastDataSegmentItem) {
                 return;
             }
@@ -90,6 +91,7 @@ export default function animateChart(stx: Context['stx'], animationParameters: a
         }
     });
     stx.prepend('updateChartData', function (appendQuotes: any, chart: any, params: any) {
+        if (params.noCreateDataSet) return false;
         const self = this;
         if (!chart) {
             chart = self.chart;

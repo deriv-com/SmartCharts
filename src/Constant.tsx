@@ -439,6 +439,7 @@ export const ChartTypes = [
     { id: 'colored_bar', text: t.translate('OHLC'), candleOnly: true, icon: TypeOhlcIcon },
 ];
 
+
 export const Intervals = [
     {
         key: 'tick',
@@ -488,11 +489,6 @@ export const Languages = [
         key: 'en',
         name: 'English',
         icon: <FlagIcons.GBP />,
-    },
-    {
-        key: 'pt',
-        name: 'Português',
-        icon: <FlagIcons.Portugal />,
     },
     {
         key: 'fr',
@@ -552,6 +548,7 @@ export const STATE = {
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
     MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
 };
+
 
 export const TooltipsContent = {
     predictionIndicator: t.translate(

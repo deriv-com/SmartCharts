@@ -8,6 +8,7 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
+import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -33,6 +34,7 @@ type TScrollListenerParamsData = {
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
+    shouldDrawTicksFromContractInfo? = false;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -53,11 +55,12 @@ class ChartState {
     isChartClosed = false;
     shouldMinimiseLastDigits = false;
     should_show_eu_content?: boolean;
+    allowTickChartTypeOnly?: boolean;
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
-    allTicks = [];
-    contractInfo = {};
+    allTicks: NonNullable<AuditDetailsForExpiredContract>['all_ticks'] = [];
+    contractInfo: ProposalOpenContract = {};
     refreshActiveSymbols?: boolean;
     hasReachedEndOfData = false;
     prevChartType?: string;
@@ -113,6 +116,7 @@ class ChartState {
             should_show_eu_content: observable,
             settings: observable,
             showLastDigitStats: observable,
+            allowTickChartTypeOnly: observable,
             scrollToEpoch: observable,
             onExportLayout: observable,
             clearChart: observable,
@@ -124,6 +128,7 @@ class ChartState {
             allTicks: observable,
             contractInfo: observable,
             refreshActiveSymbols: observable,
+            shouldDrawTicksFromContractInfo: observable,
             hasReachedEndOfData: observable,
             prevChartType: observable,
             isChartScrollingToEpoch: observable,
@@ -133,7 +138,7 @@ class ChartState {
             enableScroll: observable,
             enableZoom: observable,
             yAxisMargin: observable,
-            updateProps: action.bound
+            updateProps: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -152,45 +157,45 @@ class ChartState {
         this.granularity = this.chartStore.granularity;
     };
 
-    updateProps(
-        {
-            networkStatus,
-            chartControlsWidgets,
-            enabledChartFooter,
-            chartStatusListener,
-            stateChangeListener,
-            getIndicatorHeightRatio,
-            chartType,
-            clearChart,
-            endEpoch,
-            isAnimationEnabled = true,
-            isConnectionOpened,
-            isStaticChart,
-            granularity,
-            margin = 0,
-            onExportLayout,
-            refreshActiveSymbols,
-            scrollToEpoch,
-            settings,
-            shouldFetchTradingTimes = true,
-            shouldFetchTickHistory = true,
-            should_show_eu_content,
-            allTicks = [],
-            contractInfo = {},
-            showLastDigitStats = false,
-            startEpoch,
-            symbol,
-            crosshairState,
-            zoom,
-            maxTick,
-            crosshairTooltipLeftAllow,
-            yAxisMargin,
-            enableScroll = null,
-            enableZoom = null,
-            anchorChartToLeft = false,
-            chartData,
-        }: TChartProps
-    ) {
+    updateProps({
+        networkStatus,
+        chartControlsWidgets,
+        enabledChartFooter,
+        chartStatusListener,
+        shouldDrawTicksFromContractInfo,
+        stateChangeListener,
+        getIndicatorHeightRatio,
+        chartType,
+        clearChart,
+        endEpoch,
+        isAnimationEnabled = true,
+        isConnectionOpened,
+        isStaticChart,
+        granularity,
+        margin = 0,
+        onExportLayout,
+        refreshActiveSymbols,
+        scrollToEpoch,
+        settings,
+        shouldFetchTradingTimes = true,
+        shouldFetchTickHistory = true,
+        should_show_eu_content,
+        allTicks = [],
+        contractInfo = {},
+        showLastDigitStats = false,
+        allowTickChartTypeOnly = false,
+        startEpoch,
+        symbol,
+        crosshairState,
+        zoom,
+        maxTick,
+        crosshairTooltipLeftAllow,
+        yAxisMargin,
+        enableScroll = null,
+        enableZoom = null,
+        anchorChartToLeft = false,
+        chartData,
+    }: TChartProps) {
         let isSymbolChanged = false;
         let isGranularityChanged = false;
 
@@ -221,10 +226,17 @@ class ChartState {
         this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
+        this.allowTickChartTypeOnly = allowTickChartTypeOnly;
         this.allTicks = allTicks;
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
+
+        const feed = this.mainStore.chart.feed;
+        if (shouldDrawTicksFromContractInfo && feed && contractInfo.tick_stream) {
+            this.shouldDrawTicksFromContractInfo = shouldDrawTicksFromContractInfo;
+            feed.appendChartDataFromPOCResponse.call(feed, contractInfo);
+        }
 
         if (
             networkStatus &&
@@ -643,7 +655,7 @@ class ChartState {
             this.stxx.chart.entryTick = this.stxx.tickFromDate(
                 getUTCDate(this.startEpoch || (scrollToEpoch as number))
             );
-            const scrollToTarget = this.stxx.chart.dataSet.length - this.stxx.chart.entryTick;
+            const scrollToTarget = this.stxx.chart.dataSet?.length - this.stxx.chart.entryTick;
             if (!this.endEpoch) {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;

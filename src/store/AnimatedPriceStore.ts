@@ -6,7 +6,6 @@ export default class AnimatedPriceStore {
     isIncrease = false;
     status = '';
     oldPrice = 0;
-
     constructor() {
         makeObservable(this, {
             price: observable,
