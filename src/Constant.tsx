@@ -1479,6 +1479,13 @@ const getMAEnvIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             type: 'colorpicker',
         },
         {
+            path: 'fillColor',
+            title: t.translate('Fill Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
             path: 'period',
             title: t.translate('Period'),
             defaultValue: 50,
@@ -1519,6 +1526,13 @@ const getMAEnvIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             category: 'inputs',
             type: 'select',
             options: getMovingAverageTypeOptions(),
+        },
+        {
+            path: 'showChannelFill',
+            title: t.translate('Channel Fill'),
+            type: 'switch',
+            category: 'parameters',
+            defaultValue: true,
         },
     ],
 });

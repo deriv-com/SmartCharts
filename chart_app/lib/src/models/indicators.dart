@@ -232,19 +232,19 @@ class IndicatorsModel extends ChangeNotifier {
                 _getQuote(
                   item.jawSeries!.entries,
                   epoch,
-                  offset: item.jawOffset,
+                  offset: item.alligatorOptions.jawOffset,
                 ),
               if (item.teethSeries != null)
                 _getQuote(
                   item.teethSeries!.entries,
                   epoch,
-                  offset: item.teethOffset,
+                  offset: item.alligatorOptions.teethOffset,
                 ),
               if (item.lipsSeries != null)
                 _getQuote(
                   item.lipsSeries!.entries,
                   epoch,
-                  offset: item.lipsOffset,
+                  offset: item.alligatorOptions.lipsOffset,
                 )
             ]));
       } else {

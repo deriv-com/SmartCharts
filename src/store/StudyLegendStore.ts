@@ -273,6 +273,7 @@ export default class StudyLegendStore {
             };
 
             const index = _.findIndex(this.activeItems, item => item.id === this.settingsDialog.id);
+            this.activeItems[index] = item;
 
             this.addOrUpdateIndicator(item, index);
             this.mainStore.state.saveLayout();
