@@ -40,6 +40,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Type of the contract
   String? contractType;
 
+  /// Pip size of the chart
+  int? pipSize;
+
   late final ChartController _controller;
 
   /// Whether the crosshair cursor should be shown or not.
@@ -127,6 +130,7 @@ class ChartConfigModel extends ChangeNotifier {
     isLive = payload.isLive;
     dataFitEnabled = payload.dataFitEnabled;
     msPerPx = payload.msPerPx;
+    pipSize = payload.pipSize;
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);

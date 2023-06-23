@@ -64,6 +64,9 @@ class JSNewChart {
 
   /// Specifies the zoom level of the chart.
   external double? get msPerPx;
+
+  /// Pipsize of the chart.
+  external int? get pipSize;
 }
 
 @JS()

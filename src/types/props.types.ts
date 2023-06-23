@@ -325,6 +325,7 @@ export type TNewChartPayload = {
     chartType?: string;
     theme: string;
     msPerPx?: number;
+    pipSize?: number;
 };
 
 export type TIndicatorTooltipContent = {

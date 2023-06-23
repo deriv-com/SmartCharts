@@ -136,6 +136,7 @@ export default class ChartAdapterStore {
             dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
             theme: this.mainStore.chartSetting.theme,
             msPerPx: this.msPerPx,
+            pipSize: this.mainStore.chart.pip,
         });
     };
 

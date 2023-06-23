@@ -136,6 +136,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 ),
                             ]
                           : null,
+                      pipSize: chartConfigModel.pipSize ?? 2,
                       granularity: chartConfigModel.granularity ?? 1000,
                       controller: _controller,
                       theme: chartConfigModel.theme,
