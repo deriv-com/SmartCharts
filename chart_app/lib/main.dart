@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:ui';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -126,11 +127,19 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 TickIndicator(
                                   chartDataModel.ticks.last,
                                   style: const HorizontalBarrierStyle(
-                                    color: Colors.redAccent,
-                                    labelShape: LabelShape.pentagon,
-                                    hasBlinkingDot: true,
-                                    hasArrow: false,
-                                  ),
+                                      color: Color(0xFFFF444F),
+                                      labelShape: LabelShape.pentagon,
+                                      hasBlinkingDot: true,
+                                      hasArrow: false,
+                                      textStyle: TextStyle(
+                                        fontSize: 12,
+                                        height: 1.3,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFeatures: <FontFeature>[
+                                          FontFeature.tabularFigures()
+                                        ],
+                                      )),
                                   visibility: HorizontalBarrierVisibility
                                       .keepBarrierLabelVisible,
                                 ),
