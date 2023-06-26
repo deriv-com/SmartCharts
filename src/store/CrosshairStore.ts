@@ -167,7 +167,7 @@ class CrosshairStore {
         const quotes = this.mainStore.chart.feed?.quotes || [];
         const lastQuote = quotes[quotes.length - 1];
         const lastQuoteEpoch = lastQuote?.DT?.getTime();
-        const granularity = this.mainStore.chartAdapter.getGranularity();
+        const granularity = this.mainStore.chartAdapter.getGranularityInMs();
         const nextQuoteEpoch = lastQuoteEpoch ? lastQuoteEpoch + granularity / 2 : epoch;
 
         const quoteBar =

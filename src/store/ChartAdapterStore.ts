@@ -119,7 +119,7 @@ export default class ChartAdapterStore {
         };
     }
 
-    getGranularity() {
+    getGranularityInMs() {
         let granularity: number =
             this.mainStore.state.granularity || this.mainStore.chart.feed?.getQuotesInterval() || 1;
 
@@ -130,7 +130,7 @@ export default class ChartAdapterStore {
         await when(() => this.isChartLoaded);
 
         this.flutterChart?.config.newChart({
-            granularity: this.getGranularity(),
+            granularity: this.getGranularityInMs(),
             chartType: this.mainStore.state.chartType,
             isLive: this.mainStore.chart.isLive || false,
             dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
@@ -158,7 +158,7 @@ export default class ChartAdapterStore {
 
         if (quote.ohlc) {
             this.flutterChart?.dataModel.onNewCandle(quote);
-        } else if (this.getGranularity() <= 1000) {
+        } else if (this.getGranularityInMs() < 60000) {
             this.flutterChart?.dataModel.onNewTick(quote);
         }
     }
