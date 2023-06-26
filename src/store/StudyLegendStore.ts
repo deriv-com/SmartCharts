@@ -148,7 +148,7 @@ export default class StudyLegendStore {
         const config: TIndicatorConfig = {
             id: activeItem.id,
             name: activeItem.flutter_chart_id,
-            title: activeItem.shortname + (activeItem.bars ? ` (${activeItem.bars})` : ''),
+            title: (activeItem.shortname + (activeItem.bars ? ` (${activeItem.bars})` : '')).toUpperCase(),
             ...this.transform(params),
         };
 
