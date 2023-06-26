@@ -137,7 +137,8 @@ class CrosshairStore {
             const price = this.mainStore.chartAdapter.getQuoteFromY(offsetY);
 
             if (price >= 0) {
-                floatPriceRef.current.innerText = `${quote}`;
+                const quoteLabel = Number(quote).toFixed(this.mainStore.chart.pip);
+                floatPriceRef.current.innerText = `${quoteLabel}`;
             }
             floatPriceRef.current.style.transform = `translate(0px, ${offsetY - height / 2}px)`;
         }
@@ -237,6 +238,10 @@ class CrosshairStore {
             const { member: name, display: displayName } = obj;
 
             let dsField = data[name as keyof typeof data];
+
+            if (['Open', 'Close', 'High', 'Low'].includes(name)) {
+                dsField = Number(dsField).toFixed(this.mainStore.chart.pip);
+            }
 
             const fieldName = displayName?.replace(/^(Result )(.*)/, '$2');
             if (dsField && (name === 'DT' || typeof dsField !== 'object')) {
