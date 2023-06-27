@@ -113,7 +113,12 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       (BuildContext context, ChartConfigModel chartConfigModel,
                           ChartDataModel chartDataModel, Widget? child) {
                     if (chartDataModel.ticks.isEmpty) {
-                      return const SizedBox.shrink();
+                      return Container(
+                        color: chartConfigModel.theme is ChartDefaultLightTheme
+                            ? Colors.white
+                            : Colors.black,
+                        constraints: const BoxConstraints.expand(),
+                      );
                     }
 
                     final DataSeries<Tick> mainSeries =

@@ -186,7 +186,8 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.updateChartStyle(chartType);
     }
 
-    updateTheme(theme: string) {
+    async updateTheme(theme: string) {
+        await when(() => this.isChartLoaded);
         this.flutterChart?.config.updateTheme(theme);
     }
 
