@@ -88,7 +88,7 @@ export default class PriceLineStore {
             }
         };
 
-        const subholder: HTMLElement | null = document.querySelector('.cq-inchart-subholder');
+        const subholder: HTMLElement | null = document.querySelector('.ciq-chart-area');
 
         if (this._line && subholder) {
             makeElementDraggable(this._line, subholder, {

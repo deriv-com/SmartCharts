@@ -336,24 +336,9 @@ export const makeElementDraggable = (
         onDragStart?.(ev);
     }
 
-    function isEventWithinTheElement(ev: MouseEvent) {
-        const bounds = el.getBoundingClientRect();
-
-        return (
-            ev.clientX >= bounds.left &&
-            ev.clientX <= bounds.right &&
-            ev.clientY >= bounds.top &&
-            ev.clientY <= bounds.bottom
-        );
-    }
-
     function elementDrag(ev: MouseEvent) {
         if (isDragging) {
-            if (isEventWithinTheElement(ev)) {
-                onDrag?.(ev);
-            } else {
-                closeDragElement(ev);
-            }
+            onDrag?.(ev);
         }
     }
 
