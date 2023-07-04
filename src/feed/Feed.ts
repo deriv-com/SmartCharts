@@ -297,7 +297,7 @@ class Feed {
             }
             subscription.onChartData((tickResponse: TQuote[]) => {
                 // Append comming ticks to chart only if it belongs to selected symbol after symbol changes
-                if (symbol === symbolObject.symbol) {
+                if (symbol === this._mainStore.chart.currentActiveSymbol?.symbol) {
                     this._appendChartData(tickResponse, key);
                 }
             });
