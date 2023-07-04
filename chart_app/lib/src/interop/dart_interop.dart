@@ -122,6 +122,12 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     allowInterop(model.updateLeftMargin),
   );
 
+  setProperty(
+    chartConfig,
+    'setSymbolClosed',
+    allowInterop(model.setSymbolClosed),
+  );
+
   return chartConfig;
 }
 

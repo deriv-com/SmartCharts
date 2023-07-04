@@ -31,6 +31,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Starts in data fit mode and adds a data-fit button.
   bool dataFitEnabled = false;
 
+  /// Specifies whether the symbol is closed or not.
+  bool isSymbolClosed = false;
+
   /// Specifies the zoom level of the chart.
   double? msPerPx;
 
@@ -121,6 +124,13 @@ class ChartConfigModel extends ChangeNotifier {
   /// To update leftMargin
   void updateLeftMargin(double _leftMargin) {
     leftMargin = _leftMargin;
+    notifyListeners();
+  }
+
+  /// To update the symbol open status
+  // ignore: avoid_positional_boolean_parameters
+  void setSymbolClosed(bool _isSymbolClosed) {
+    isSymbolClosed = _isSymbolClosed;
     notifyListeners();
   }
 

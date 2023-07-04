@@ -196,6 +196,11 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.updateLeftMargin(leftMargin);
     }
 
+    async setSymbolClosed(isClosed: boolean) {
+        await when(() => this.isChartLoaded);
+        this.flutterChart?.config.setSymbolClosed(isClosed);
+    }
+
     scale(scale: number) {
         this.msPerPx = this.flutterChart?.controller.scale(scale);
         this.mainStore.state.saveLayout();

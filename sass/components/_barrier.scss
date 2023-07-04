@@ -4,6 +4,9 @@
     padding: 13px 0;
     position: absolute;
     width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
 }
 /* Drag Lines and Prices */
 .chart-line {
@@ -84,7 +87,7 @@
 
 .drag-price {
     display: block;
-    height: 24px;
+    height: 23px;
     top: -11px;
     position: absolute;
     right: -1px;

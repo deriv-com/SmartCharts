@@ -342,6 +342,7 @@ export type TFlutterChart = {
         updateMarkers: (markers: any[]) => void;
         updateCrosshairVisibility: (visibility: boolean) => void;
         updateLeftMargin: (leftMargin?: number) => void;
+        setSymbolClosed: (isClosed: boolean) => void;
     };
     controller: {
         getXFromEpoch: (epoch: number) => number;

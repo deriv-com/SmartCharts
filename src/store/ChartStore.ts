@@ -389,6 +389,7 @@ class ChartStore {
     chartClosedOpenThemeChange(isChartClosed: boolean) {
         this.mainStore.state.setChartClosed(isChartClosed);
         this.mainStore.state.setChartTheme(this.mainStore.chartSetting.theme);
+        this.mainStore.chartAdapter.setSymbolClosed(isChartClosed);
     }
     get categorizedSymbols() {
         if (!this.activeSymbols || this.activeSymbols.categorizedSymbols.length === 0) return [];

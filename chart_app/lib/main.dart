@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:ui';
+import 'package:chart_app/src/helpers/series.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -78,25 +79,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     html.document.removeEventListener('visibilitychange', onVisibilityChange);
   }
 
-  DataSeries<Tick> _getDataSeries(ChartStyle style) {
-    if (chartDataModel.ticks is List<Candle>) {
-      switch (style) {
-        case ChartStyle.candles:
-          return CandleSeries(chartDataModel.ticks as List<Candle>);
-        case ChartStyle.hollow:
-          return HollowCandleSeries(chartDataModel.ticks as List<Candle>);
-        case ChartStyle.ohlc:
-          return OhlcCandleSeries(chartDataModel.ticks as List<Candle>);
-        default:
-          break;
-      }
-    }
-    return LineSeries(
-      chartDataModel.ticks,
-      style: const LineStyle(hasArea: true),
-    );
-  }
-
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
@@ -122,7 +104,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                     }
 
                     final DataSeries<Tick> mainSeries =
-                        _getDataSeries(chartConfigModel.style);
+                        getDataSeries(chartDataModel, chartConfigModel);
+
+                    final Color latestTickColor = Color.fromRGBO(255, 68, 81,
+                        chartConfigModel.isSymbolClosed ? 0.32 : 1);
 
                     return DerivChart(
                       mainSeries: mainSeries,
@@ -131,12 +116,13 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                               if (chartConfigModel.isLive)
                                 TickIndicator(
                                   chartDataModel.ticks.last,
-                                  style: const HorizontalBarrierStyle(
-                                      color: Color(0xFFFF444F),
+                                  style: HorizontalBarrierStyle(
+                                      color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
-                                      hasBlinkingDot: true,
+                                      hasBlinkingDot:
+                                          !chartConfigModel.isSymbolClosed,
                                       hasArrow: false,
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontSize: 12,
                                         height: 1.3,
                                         fontWeight: FontWeight.w600,
