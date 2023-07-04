@@ -60,11 +60,9 @@ export default class BarrierStore {
     get pip(): number {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
-    get yAxisWidth(): number {
-        return this.mainStore.chart.yAxiswidth;
-    }
+
     get priceLabelWidth(): number {
-        return this.yAxisWidth + 1;
+        return this.mainStore.chart.yAxisWidth;
     }
 
     constructor(mainStore: MainStore) {
@@ -84,7 +82,6 @@ export default class BarrierStore {
             hideOffscreenBarrier: observable,
             isSingleBarrier: observable,
             pip: computed,
-            yAxisWidth: computed,
             priceLabelWidth: computed,
             init: action.bound,
             updateProps: action.bound,
@@ -371,7 +368,7 @@ export default class BarrierStore {
         this.betweenShadeStore.setPosition({
             top: this._high_barrier.top,
             bottom: this._low_barrier.top,
-            right: this.yAxisWidth,
+            right: this.mainStore.chart.yAxisWidth,
         });
     }
 
@@ -379,7 +376,7 @@ export default class BarrierStore {
         this.belowShadeStore.setPosition({
             top: barrier.top,
             bottom: 0,
-            right: this.yAxisWidth,
+            right: this.mainStore.chart.yAxisWidth,
         });
     }
 
@@ -387,7 +384,7 @@ export default class BarrierStore {
         this.aboveShadeStore.setPosition({
             top: 0,
             bottom: barrier.top,
-            right: this.yAxisWidth,
+            right: this.mainStore.chart.yAxisWidth,
         });
     }
 

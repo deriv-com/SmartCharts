@@ -53,7 +53,6 @@ class ChartStore {
     resizeObserver?: ResizeObserver;
     serverTime?: string;
     shouldRenderDialogs = false;
-    yAxiswidth = 60;
     leftMargin?: number;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -71,7 +70,7 @@ class ChartStore {
             networkStatus: observable,
             serverTime: observable,
             shouldRenderDialogs: observable,
-            yAxiswidth: observable,
+            yAxisWidth: computed,
             _initChart: action.bound,
             categorizedSymbols: computed,
             changeSymbol: action.bound,
@@ -130,6 +129,13 @@ class ChartStore {
 
     get currentClose() {
         return this.currentCloseQuote()?.Close;
+    }
+
+    get yAxisWidth(): number {
+        if (!this.currentClose) return 60;
+
+        // TODO: measure the quote text or get the width from the chart
+        return this.currentClose.toString().length * 8 + 16;
     }
 
     currentCloseQuote = (): TQuote | undefined => {

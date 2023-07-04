@@ -175,7 +175,7 @@ export default class PriceLineStore {
     }
 
     get yAxiswidth() {
-        return this.mainStore.chart.yAxiswidth;
+        return this.mainStore.chart.yAxisWidth;
     }
 
     setDragLine(el: HTMLDivElement) {
