@@ -328,7 +328,6 @@ class ChartStore {
                             }
                         }
                     );
-                    this.tradingTimes?.onMarketOpenCloseChanged(this.onMarketOpenClosedChange);
                     this.tradingTimes?.onTimeChanged(this.onServerTimeChange);
                     setTimeout(
                         action(() => {
