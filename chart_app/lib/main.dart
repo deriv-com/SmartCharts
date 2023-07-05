@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:ui';
+import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,6 @@ import 'package:provider/provider.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-import 'src/helper.dart';
 import 'src/models/chart_data.dart';
 import 'src/models/chart_config.dart';
 import 'src/interop/dart_interop.dart';

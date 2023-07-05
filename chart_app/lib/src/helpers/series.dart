@@ -21,7 +21,6 @@ DataSeries<Tick> getDataSeries(
             negativeColor: Color.fromRGBO(204, 46, 62, opacity),
             neutralColor: Color.fromRGBO(110, 110, 110, opacity),
           );
-    ;
 
     switch (chartConfigModel.style) {
       case ChartStyle.candles:

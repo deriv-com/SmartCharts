@@ -1,8 +1,8 @@
+import 'package:chart_app/src/helpers/color.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:chart_app/src/helper.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:flutter/scheduler.dart';
