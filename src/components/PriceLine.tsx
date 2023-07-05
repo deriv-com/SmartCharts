@@ -14,14 +14,12 @@ type TPriceLineProps = {
     foregroundColor: string;
     color?: string;
     opacityOnOverlap: number;
-    width: number;
 };
 
 const PriceLine = ({
     lineStyle,
     color,
     foregroundColor,
-    width,
     hideOffscreenBarrier,
     opacityOnOverlap,
     hideOffscreenLine,
@@ -37,7 +35,7 @@ const PriceLine = ({
         isDragging,
         init,
         title,
-        yAxiswidth,
+        priceLineWidth,
         offScreen,
         offScreenDirection,
         isOverlapping,
@@ -73,13 +71,13 @@ const PriceLine = ({
                     <div className='drag-line' style={{ borderTop: `${lineStyle} ${color} 1px` }} />
                 )}
                 <div className='draggable-area' />
-                <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
+                <div className='drag-price' style={{ backgroundColor: color, width: priceLineWidth, opacity }}>
                     <div className='price'>{priceDisplay}</div>
                     {offScreen && offScreenDirection && (
                         <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                     )}
                 </div>
-                {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
+                {title && <PriceLineTitle color={color} title={title} yAxiswidth={priceLineWidth} opacity={opacity} />}
             </div>
         </div>
     );

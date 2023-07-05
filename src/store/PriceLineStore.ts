@@ -174,8 +174,9 @@ export default class PriceLineStore {
         return real_price.toString();
     }
 
-    get yAxiswidth() {
-        return this.mainStore.chart.yAxisWidth;
+    get priceLineWidth() {
+        // TODO: measure the price label width
+        return Math.max(this.priceDisplay.length * 9 + 16, 60);
     }
 
     setDragLine(el: HTMLDivElement) {

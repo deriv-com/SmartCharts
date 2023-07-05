@@ -135,7 +135,7 @@ class ChartStore {
         if (!this.currentClose) return 60;
 
         // TODO: measure the quote text or get the width from the chart
-        return this.currentClose.toString().length * 8 + 16;
+        return this.currentClose.toString().length * 8.5 + 16;
     }
 
     currentCloseQuote = (): TQuote | undefined => {

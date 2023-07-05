@@ -27,7 +27,6 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         hidePriceLines,
         lineStyle,
         isInitialized,
-        priceLabelWidth,
         isSingleBarrier,
         opacityOnOverlap,
     } = store;
@@ -53,7 +52,6 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         >
             <PriceLine
                 store={_high_barrier}
-                width={priceLabelWidth}
                 lineStyle={lineStyle}
                 color={color}
                 foregroundColor={foregroundColor}
@@ -67,7 +65,6 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
                 <>
                     <PriceLine
                         store={_low_barrier}
-                        width={priceLabelWidth}
                         lineStyle={lineStyle}
                         color={color}
                         foregroundColor={foregroundColor}

@@ -61,10 +61,6 @@ export default class BarrierStore {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
 
-    get priceLabelWidth(): number {
-        return this.mainStore.chart.yAxisWidth;
-    }
-
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             shadeColor: observable,
@@ -82,7 +78,6 @@ export default class BarrierStore {
             hideOffscreenBarrier: observable,
             isSingleBarrier: observable,
             pip: computed,
-            priceLabelWidth: computed,
             init: action.bound,
             updateProps: action.bound,
             destructor: action.bound,
