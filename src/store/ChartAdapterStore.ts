@@ -196,6 +196,11 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.updateLeftMargin(leftMargin);
     }
 
+    async updateLiveStatus(isLive: boolean) {
+        await when(() => this.isChartLoaded);
+        this.flutterChart?.config.updateLiveStatus(isLive);
+    }
+
     async setSymbolClosed(isClosed: boolean) {
         await when(() => this.isChartLoaded);
         this.flutterChart?.config.setSymbolClosed(isClosed);

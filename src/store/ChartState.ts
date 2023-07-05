@@ -328,6 +328,7 @@ class ChartState {
 
         if (isLive != null && isLive != undefined && this.mainStore.chart.isLive != isLive) {
             this.mainStore.chart.isLive = isLive;
+            this.mainStore.chartAdapter.updateLiveStatus(isLive);
         }
 
         if (
