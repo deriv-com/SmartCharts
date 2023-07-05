@@ -1350,6 +1350,7 @@ const getDonchianChannelIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         upperLineStyle: clone(lineStyle),
         middleLineStyle: clone(lineStyle),
         lowerLineStyle: clone(lineStyle),
+        showLastIndicator: true,
     },
     parameters: [
         {
