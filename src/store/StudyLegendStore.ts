@@ -1,13 +1,13 @@
-import _ from 'lodash';
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import React from 'react';
+import set from 'lodash.set';
 import Context from 'src/components/ui/Context';
 import { getUniqueId, hexToInt } from 'src/components/ui/utils';
 import { TActiveItem, TIndicatorConfig, TSettingsParameter } from 'src/types';
 import MainStore from '.';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
 import { getIndicatorsTree, getDefaultIndicatorConfig } from '../Constant';
-import { prepareIndicatorName, transformStudiesforTheme } from '../utils';
+import { clone, flatMap, isLiteralObject, prepareIndicatorName, transformStudiesforTheme } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -114,15 +114,17 @@ export default class StudyLegendStore {
     }
 
     transform = (value: any) => {
-        if (_.isString(value) && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+        if (typeof value == 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
             return hexToInt(value);
-        } else if (_.isObject(value)) {
+        } else if (isLiteralObject(value)) {
             const map = value as Record<string, any>;
             Object.keys(value).forEach(key => {
                 map[key] = this.transform(map[key]);
             });
-        } else if (_.isArray(value)) {
-            value.map(item => this.transform(item));
+        } else if (Array.isArray(value)) {
+            for (let i = 0; i < value.length; i++) {
+                value[i] = this.transform(value[i]);
+            }
         }
 
         return value;
@@ -132,14 +134,14 @@ export default class StudyLegendStore {
         const params = activeItem.parameters.reduce((acc, item) => {
             const { path, paths, value } = item;
 
-            if (_.isObject(value) && paths) {
+            if (isLiteralObject(value) && paths) {
                 const map = value as Record<string, any>;
                 const keys = Object.keys(map);
                 keys.forEach(key => {
-                    _.set(acc, paths[key], map[key]);
+                    set(acc, paths[key], map[key]);
                 });
             } else if (path) {
-                _.set(acc, path, value);
+                set(acc, path, value);
             }
 
             return acc;
@@ -167,7 +169,7 @@ export default class StudyLegendStore {
         const { parameters, config } = getDefaultIndicatorConfig(indicatorName);
 
         if (props && parameters) {
-            parameters.map(p => (p.value = _.clone(p.defaultValue)));
+            parameters.map(p => (p.value = clone(p.defaultValue)));
             const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
 
             const item: TActiveItem = {
@@ -195,7 +197,7 @@ export default class StudyLegendStore {
             this.addOrUpdateIndicator(activeItem);
 
             const props = this.getIndicatorProps(activeItem.flutter_chart_id);
-            _.extend(activeItem, props || {});
+            Object.assign(activeItem, props || {});
         });
 
         this.activeItems = activeItems;
@@ -243,14 +245,14 @@ export default class StudyLegendStore {
         this.settingsDialog.setOpen(true);
     }
     deleteStudyById(id: string) {
-        const index = _.findIndex(this.activeItems, item => item.id === id);
+        const index = this.activeItems.findIndex(item => item.id === id);
         this.mainStore.chartAdapter.flutterChart?.indicators.removeIndicator(index);
         this.deleteStudy(index);
     }
     deleteStudy(index: number) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${index}`);
 
-        _.pullAt(this.activeItems, index);
+        this.activeItems.splice(index, 1);
         this.mainStore.bottomWidgetsContainer.updateChartHeight();
         this.renderLegend();
         this.mainStore.state.saveLayout();
@@ -272,7 +274,7 @@ export default class StudyLegendStore {
                 config,
             };
 
-            const index = _.findIndex(this.activeItems, item => item.id === this.settingsDialog.id);
+            const index = this.activeItems.findIndex(item => item.id === this.settingsDialog.id);
             this.activeItems[index] = item;
 
             this.addOrUpdateIndicator(item, index);
@@ -299,7 +301,7 @@ export default class StudyLegendStore {
     };
 
     getIndicatorProps = (indicator: string) => {
-        return _.flatMap(getIndicatorsTree(), collection => collection.items).find(
+        return flatMap(getIndicatorsTree(), collection => collection.items).find(
             item => item?.flutter_chart_id === indicator
         );
     };

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
 import { TDragEvents, TGranularity, TSettingsParameter, TQuote } from 'src/types';
 
@@ -359,7 +358,7 @@ export const lerp = (a: number, b: number, t: number) => {
 };
 
 export const transformStudiesforTheme = (value: any, theme: string) => {
-    if (_.isString(value) && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+    if (typeof value == 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
         let color = value;
 
         if (theme === 'light' && color === '#FFFFFF') {
@@ -369,14 +368,54 @@ export const transformStudiesforTheme = (value: any, theme: string) => {
         }
 
         return color;
-    } else if (_.isObject(value)) {
+    } else if (isLiteralObject(value)) {
         const map = value as Record<string, any>;
         Object.keys(value).forEach(key => {
             map[key] = transformStudiesforTheme(map[key], theme);
         });
-    } else if (_.isArray(value)) {
-        value.map(item => transformStudiesforTheme(item, theme));
+    } else if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+            value[i] = transformStudiesforTheme(value[i], theme);
+        }
     }
 
     return value;
+};
+
+export const clone = (obj: any): any => {
+    var copy: any;
+
+    if (null == obj || 'object' != typeof obj) return obj;
+
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw obj;
+};
+
+export const flatMap = <T, U>(array: T[], callback: (value: T) => U[]): U[] => {
+    return array.reduce((x, y) => [...x, ...callback(y)], [] as U[]) as U[];
+};
+
+export const isLiteralObject = function (a: any) {
+    return !!a && a.constructor === Object;
 };

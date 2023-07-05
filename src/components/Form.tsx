@@ -8,7 +8,6 @@ import { ArrayElement, TIcon, TNumberPickerValue, TObject } from 'src/types';
 import Scroll from './Scroll';
 import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon, CheckboxIcon, CheckboxActiveIcon } from './Icons';
 import '../../sass/components/_form.scss';
-import _ from 'lodash';
 
 type TFormGroupProps = {
     title?: string | null;
@@ -136,7 +135,7 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }: TSlider
         (el: ChangeEvent<HTMLInputElement>) => {
             let value = (el.currentTarget as HTMLInputElement).value;
             if (value.length > 0) {
-                onChange(_.toNumber(value));
+                onChange(Number(value));
             }
         },
         [onChange]

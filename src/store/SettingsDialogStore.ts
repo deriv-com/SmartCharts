@@ -1,9 +1,9 @@
-import _ from 'lodash';
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { TSettingsParameter, TSettingsItemGroup, TObject } from 'src/types';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
+import { clone } from 'src/utils';
 
 type TSettingsDialogStoreProps = {
     mainStore: MainStore;
@@ -107,7 +107,7 @@ export default class SettingsDialogStore {
         return this.menuStore.setOpen(value);
     }
     onResetClick() {
-        const items = this.items.map(item => ({ ...item, value: _.clone(item.defaultValue) })) as TSettingsParameter[];
+        const items = this.items.map(item => ({ ...item, value: clone(item.defaultValue) })) as TSettingsParameter[];
         this.items = items;
         this.onChanged(items);
     }

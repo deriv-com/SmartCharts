@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import {
     DrawToolsChannelIcon,
@@ -52,6 +51,7 @@ import {
     TDefaultIndicatorConfigMap,
     TDefaultIndicatorConfigFn,
 } from './types';
+import { clone } from './utils';
 
 type TDrawTools = {
     [key: string]: {
@@ -146,7 +146,7 @@ export const getTooltipLabels = (key: string, activeItem?: TActiveItem) => {
             labels: [`MA ENV TOP ${getBars()}`, `MA ENV MEDIAN ${getBars()}`, `MA ENV BOTTOM ${getBars()}`],
         },
         rainbow: {
-            labels: _.range(1, 10).map(index => `SMA${index} RAINBOW MA ${getBars()}`),
+            labels: Array.from(Array(10), (_, index) => index + 1).map(index => `SMA${index} RAINBOW MA ${getBars()}`),
         },
         alligator: {
             labels: [`JAW ALLIGATOR ${getBars()}`, `TEETH ALLIGATOR ${getBars()}`, `LIPS ALLIGATOR ${getBars()}`],
@@ -438,10 +438,10 @@ const getMovingAverageTypeOptions = () => ({
 
 const getRSIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
         oscillatorLinesConfig: {
-            overboughtStyle: _.clone(lineStyle),
-            oversoldStyle: _.clone(lineStyle),
+            overboughtStyle: clone(lineStyle),
+            oversoldStyle: clone(lineStyle),
         },
         pinLabels: false,
     },
@@ -509,9 +509,9 @@ const getRSIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getADXIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
-        positiveLineStyle: _.clone(lineStyle),
-        negativeLineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
+        positiveLineStyle: clone(lineStyle),
+        negativeLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -608,7 +608,7 @@ const getAwesomeOscillatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getDPOIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
         isCentered: true,
     },
     parameters: [
@@ -708,8 +708,8 @@ const getGatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getMACDIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
-        signalLineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
+        signalLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -766,7 +766,7 @@ const getMACDIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getROCIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -796,12 +796,12 @@ const getROCIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getStochasticOscillatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: { ..._.clone(lineStyle), color: '#FFFFFF' },
-        fastLineStyle: _.clone(lineStyle),
-        slowLineStyle: _.clone(lineStyle),
+        lineStyle: { ...clone(lineStyle), color: '#FFFFFF' },
+        fastLineStyle: clone(lineStyle),
+        slowLineStyle: clone(lineStyle),
         oscillatorLinesConfig: {
-            overboughtStyle: _.clone(lineStyle),
-            oversoldStyle: _.clone(lineStyle),
+            overboughtStyle: clone(lineStyle),
+            oversoldStyle: clone(lineStyle),
         },
         pinLabels: false,
         overBoughtPrice: 80,
@@ -885,8 +885,8 @@ const getStochasticOscillatorIndicatorConfig: TDefaultIndicatorConfigFn = () => 
 
 const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
-        signalLineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
+        signalLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -985,11 +985,11 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getWilliamsRIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
-        zeroHorizontalLinesStyle: _.extend(_.clone(lineStyle), { color: '0xFFF44336' }),
+        lineStyle: clone(lineStyle),
+        zeroHorizontalLinesStyle: { ...clone(lineStyle), color: '0xFFF44336' },
         oscillatorLimits: {
-            overboughtStyle: _.clone(lineStyle),
-            oversoldStyle: _.clone(lineStyle),
+            overboughtStyle: clone(lineStyle),
+            oversoldStyle: clone(lineStyle),
         },
     },
     parameters: [
@@ -1048,8 +1048,8 @@ const getWilliamsRIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getAroonIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        upLineStyle: _.clone(lineStyle),
-        downLineStyle: _.clone(lineStyle),
+        upLineStyle: clone(lineStyle),
+        downLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -1078,10 +1078,10 @@ const getAroonIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getCCIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
         oscillatorLinesConfig: {
-            overboughtStyle: _.clone(lineStyle),
-            oversoldStyle: _.clone(lineStyle),
+            overboughtStyle: clone(lineStyle),
+            oversoldStyle: clone(lineStyle),
         },
     },
     parameters: [
@@ -1140,11 +1140,11 @@ const getCCIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getIchimokuIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        conversionLineStyle: _.clone(lineStyle),
-        baseLineStyle: _.clone(lineStyle),
-        spanALineStyle: _.clone(lineStyle),
-        spanBLineStyle: _.clone(lineStyle),
-        conversionLinePeriod: _.clone(lineStyle),
+        conversionLineStyle: clone(lineStyle),
+        baseLineStyle: clone(lineStyle),
+        spanALineStyle: clone(lineStyle),
+        spanBLineStyle: clone(lineStyle),
+        conversionLinePeriod: clone(lineStyle),
     },
     parameters: [
         {
@@ -1250,7 +1250,7 @@ const getParabolicSARIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getZigzagIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -1272,9 +1272,9 @@ const getZigzagIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getBollingerBandsIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        upperLineStyle: _.clone(lineStyle),
-        middleLineStyle: _.clone(lineStyle),
-        lowerLineStyle: _.clone(lineStyle),
+        upperLineStyle: clone(lineStyle),
+        middleLineStyle: clone(lineStyle),
+        lowerLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -1347,9 +1347,9 @@ const getBollingerBandsIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getDonchianChannelIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        upperLineStyle: _.clone(lineStyle),
-        middleLineStyle: _.clone(lineStyle),
-        lowerLineStyle: _.clone(lineStyle),
+        upperLineStyle: clone(lineStyle),
+        middleLineStyle: clone(lineStyle),
+        lowerLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -1406,7 +1406,7 @@ const getDonchianChannelIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getMAIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        lineStyle: _.clone(lineStyle),
+        lineStyle: clone(lineStyle),
         isOverlay: true,
     },
     parameters: [
@@ -1452,9 +1452,9 @@ const getMAIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getMAEnvIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        upperLineStyle: _.clone(lineStyle),
-        middleLineStyle: _.clone(lineStyle),
-        lowerLineStyle: _.clone(lineStyle),
+        upperLineStyle: clone(lineStyle),
+        middleLineStyle: clone(lineStyle),
+        lowerLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -1634,9 +1634,9 @@ const getRainbowIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getAlligatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        jawLineStyle: _.clone(lineStyle),
-        teethLineStyle: _.clone(lineStyle),
-        lipsLineStyle: _.clone(lineStyle),
+        jawLineStyle: clone(lineStyle),
+        teethLineStyle: clone(lineStyle),
+        lipsLineStyle: clone(lineStyle),
     },
     parameters: [
         {
@@ -1721,9 +1721,9 @@ const getAlligatorIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 
 const getFractalChaosBandIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
-        highLineStyle: _.clone(lineStyle),
-        lowLineStyle: _.clone(lineStyle),
-        channelLineStyle: _.clone(lineStyle),
+        highLineStyle: clone(lineStyle),
+        lowLineStyle: clone(lineStyle),
+        channelLineStyle: clone(lineStyle),
     },
     parameters: [
         {
