@@ -176,7 +176,7 @@ export default class PriceLineStore {
 
     get priceLineWidth() {
         // TODO: measure the price label width
-        return Math.max(this.priceDisplay.length * 9 + 16, 60);
+        return Math.max(this.priceDisplay.length * 8, 60);
     }
 
     setDragLine(el: HTMLDivElement) {

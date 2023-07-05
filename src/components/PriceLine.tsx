@@ -54,6 +54,8 @@ const PriceLine = ({
 
     if (!showBarrier) return null;
 
+    const width = showBarrierDragLine ? priceLineWidth + 16 : priceLineWidth;
+
     return (
         <div className='barrier-area' style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
             <div
@@ -71,13 +73,13 @@ const PriceLine = ({
                     <div className='drag-line' style={{ borderTop: `${lineStyle} ${color} 1px` }} />
                 )}
                 <div className='draggable-area' />
-                <div className='drag-price' style={{ backgroundColor: color, width: priceLineWidth, opacity }}>
+                <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
                     <div className='price'>{priceDisplay}</div>
                     {offScreen && offScreenDirection && (
                         <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                     )}
                 </div>
-                {title && <PriceLineTitle color={color} title={title} yAxiswidth={priceLineWidth} opacity={opacity} />}
+                {title && <PriceLineTitle color={color} title={title} yAxiswidth={width} opacity={opacity} />}
             </div>
         </div>
     );
