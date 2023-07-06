@@ -65,7 +65,7 @@ class IndicatorsModel extends ChangeNotifier {
   }
 
   /// Gets the tooltip content for indicator series
-  List<JsIndicatorTooltip?>? getTooltipContent(int epoch) {
+  List<JsIndicatorTooltip?>? getTooltipContent(int epoch, int pipSize) {
     final List<Series> seriesList =
         _controller.getSeriesList?.call() ?? <Series>[];
     final List<IndicatorConfig> indicatorConfigsList =
@@ -174,50 +174,120 @@ class IndicatorsModel extends ChangeNotifier {
         tooltipContent.add(JsIndicatorTooltip(
             name: IchimokuCloudIndicatorConfig.name,
             values: <String?>[
-              _getQuote(item.conversionLineSeries.entries, epoch),
-              _getQuote(item.baseLineSeries.entries, epoch),
-              _getQuote(item.spanASeries.entries, epoch,
-                  offset: item.config.baseLinePeriod),
-              _getQuote(item.spanBSeries.entries, epoch,
-                  offset: item.config.baseLinePeriod),
-              _getQuote(item.laggingSpanSeries.entries, epoch,
-                  offset: item.config.laggingSpanOffset),
+              _getQuote(
+                item.conversionLineSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.baseLineSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.spanASeries.entries,
+                epoch,
+                pipSize: pipSize,
+                offset: item.config.baseLinePeriod,
+              ),
+              _getQuote(
+                item.spanBSeries.entries,
+                epoch,
+                pipSize: pipSize,
+                offset: item.config.baseLinePeriod,
+              ),
+              _getQuote(
+                item.laggingSpanSeries.entries,
+                epoch,
+                pipSize: pipSize,
+                offset: item.config.laggingSpanOffset,
+              ),
             ]));
       } else if (item is ParabolicSARSeries) {
-        tooltipContent.add(JsIndicatorTooltip(
-            name: ParabolicSARConfig.name,
-            values: <String?>[_getQuote(item.entries, epoch)]));
+        tooltipContent.add(
+            JsIndicatorTooltip(name: ParabolicSARConfig.name, values: <String?>[
+          _getQuote(
+            item.entries,
+            epoch,
+            pipSize: pipSize,
+          )
+        ]));
       } else if (item is BollingerBandSeries) {
         tooltipContent.add(JsIndicatorTooltip(
             name: BollingerBandsIndicatorConfig.name,
             values: <String?>[
-              _getQuote(item.upperSeries.entries, epoch),
-              _getQuote(item.middleSeries.entries, epoch),
-              _getQuote(item.lowerSeries.entries, epoch)
+              _getQuote(
+                item.upperSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.middleSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.lowerSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              )
             ]));
       } else if (item is DonchianChannelsSeries) {
         tooltipContent.add(JsIndicatorTooltip(
             name: DonchianChannelIndicatorConfig.name,
             values: <String?>[
-              _getQuote(item.upperChannelSeries.entries, epoch),
-              _getQuote(item.middleChannelSeries.entries, epoch),
-              _getQuote(item.lowerChannelSeries.entries, epoch)
+              _getQuote(
+                item.upperChannelSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.middleChannelSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.lowerChannelSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              )
             ]));
       } else if (item is MASeries) {
-        tooltipContent.add(JsIndicatorTooltip(
-            name: MAIndicatorConfig.name,
-            values: <String?>[_getQuote(item.entries, epoch)]));
+        tooltipContent.add(
+            JsIndicatorTooltip(name: MAIndicatorConfig.name, values: <String?>[
+          _getQuote(
+            item.entries,
+            epoch,
+            pipSize: pipSize,
+          )
+        ]));
       } else if (item is MAEnvSeries) {
         tooltipContent.add(JsIndicatorTooltip(
             name: MAEnvIndicatorConfig.name,
             values: <String?>[
-              _getQuote(item.upperSeries.entries, epoch),
-              _getQuote(item.middleSeries.entries, epoch),
-              _getQuote(item.lowerSeries.entries, epoch)
+              _getQuote(
+                item.upperSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.middleSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.lowerSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              )
             ]));
       } else if (item is RainbowSeries) {
         final List<String?> values = item.rainbowSeries
-            .map((DataSeries<Tick> series) => _getQuote(series.entries, epoch))
+            .map((DataSeries<Tick> series) => _getQuote(
+                  series.entries,
+                  epoch,
+                  pipSize: pipSize,
+                ))
             .toList();
 
         tooltipContent.add(JsIndicatorTooltip(
@@ -233,19 +303,37 @@ class IndicatorsModel extends ChangeNotifier {
                   item.jawSeries!.entries,
                   epoch,
                   offset: item.alligatorOptions.jawOffset,
+                  pipSize: pipSize,
                 ),
               if (item.teethSeries != null)
                 _getQuote(
                   item.teethSeries!.entries,
                   epoch,
                   offset: item.alligatorOptions.teethOffset,
+                  pipSize: pipSize,
                 ),
               if (item.lipsSeries != null)
                 _getQuote(
                   item.lipsSeries!.entries,
                   epoch,
                   offset: item.alligatorOptions.lipsOffset,
+                  pipSize: pipSize,
                 )
+            ]));
+      } else if (item is FractalChaosBandSeries) {
+        tooltipContent.add(JsIndicatorTooltip(
+            name: FractalChaosBandIndicatorConfig.name,
+            values: <String?>[
+              _getQuote(
+                item.fcbHighSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              ),
+              _getQuote(
+                item.fcbLowSeries.entries,
+                epoch,
+                pipSize: pipSize,
+              )
             ]));
       } else {
         tooltipContent.add(null);

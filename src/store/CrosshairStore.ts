@@ -265,7 +265,7 @@ class CrosshairStore {
 
     getIndicatorRows = (epoch: number) => {
         const rows: TRow[] = [];
-        const tooltipContent = window.flutterChart.indicators.getTooltipContent(epoch);
+        const tooltipContent = window.flutterChart.indicators.getTooltipContent(epoch, this.decimalPlaces || 2);
 
         const activeItems = this.mainStore.studies.activeItems || [];
 
@@ -280,7 +280,7 @@ class CrosshairStore {
 
                     rows.push({
                         name: label,
-                        value: item.values[i],
+                        value: value,
                     });
                 });
             });
