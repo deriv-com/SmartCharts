@@ -164,10 +164,19 @@
                 }
 
                 .ic-icon {
-                    svg {
-                        @include themify($themes) {
-                            fill: themed('CatDisplayActiveFilterIcon');
-                            stroke: themed('CatDisplayActiveFilterIcon');
+                    &:is(.ic-synthetic_index, .ic-cryptocurrency) {
+                        svg {
+                            @include themify($themes) {
+                                fill: themed('CatDisplayActiveFilterIcon');
+                            }
+                        }
+                    }
+                    &:not(.ic-synthetic_index, .ic-cryptocurrency) {
+                        svg {
+                            @include themify($themes) {
+                                fill: themed('CatDisplayActiveFilterIcon');
+                                stroke: themed('CatDisplayActiveFilterIcon');
+                            }
                         }
                     }
                 }
