@@ -231,7 +231,7 @@ class TradingTimes {
             console.error('Symbol not in _tradingTimesMap:', symbol, ' trading map:', this._tradingTimesMap);
             return false;
         }
-        return this._tradingTimesMap[symbol].feed_license === TradingTimes.FEED_UNAVAILABLE;
+        return this._tradingTimesMap[symbol]?.feed_license === TradingTimes.FEED_UNAVAILABLE;
     }
     getDelayedMinutes(symbol: string): number {
         return this._tradingTimesMap?.[symbol].delay_amount as number;
