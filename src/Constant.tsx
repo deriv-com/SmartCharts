@@ -578,7 +578,7 @@ const getADXIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             defaultValue: true,
         },
         {
-            path: 'showChannelFill',
+            path: 'showShading',
             title: t.translate('Shading'),
             type: 'switch',
             category: 'parameters',
