@@ -66,14 +66,13 @@
 .sc-mcd__category__head .category-title-left,
 .sc-mcd__category__head {
     .ic-icon {
-        &:is(.ic-synthetic_index, .ic-cryptocurrency) > svg {
+        & > svg {
             @include themify($themes) {
                 fill: themed('MenuIcon');
             }
         }
         &:not(.ic-synthetic_index, .ic-cryptocurrency) > svg {
             @include themify($themes) {
-                fill: themed('MenuIcon');
                 stroke: themed('MenuIcon');
             }
         }

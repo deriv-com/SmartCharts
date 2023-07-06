@@ -164,19 +164,14 @@
                 }
 
                 .ic-icon {
-                    &:is(.ic-synthetic_index, .ic-cryptocurrency) {
-                        svg {
-                            @include themify($themes) {
-                                fill: themed('CatDisplayActiveFilterIcon');
-                            }
+                    svg {
+                        @include themify($themes) {
+                            fill: themed('CatDisplayActiveFilterIcon');
                         }
                     }
-                    &:not(.ic-synthetic_index, .ic-cryptocurrency) {
-                        svg {
-                            @include themify($themes) {
-                                fill: themed('CatDisplayActiveFilterIcon');
-                                stroke: themed('CatDisplayActiveFilterIcon');
-                            }
+                    &:not(.ic-synthetic_index, .ic-cryptocurrency) svg {
+                        @include themify($themes) {
+                            stroke: themed('CatDisplayActiveFilterIcon');
                         }
                     }
                 }
