@@ -40,7 +40,7 @@ export default class TimeperiodStore {
         });
 
         this._serverTime = ServerTime.getInstance();
-        when(() => this.mainStore.chartAdapter.isDataInitialized, this.onDataInitialized);
+        when(() => this.mainStore.chartAdapter.isInitialChartDataLoaded, this.onDataInitialized);
     }
 
     get loader() {

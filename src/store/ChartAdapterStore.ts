@@ -7,7 +7,7 @@ import MainStore from './';
 export default class ChartAdapterStore {
     private mainStore: MainStore;
     isChartLoaded = false;
-    isDataInitialized = false;
+    isInitialChartDataLoaded = false;
     flutterChart?: TFlutterChart;
     epochBounds = {
         leftEpoch: 0,
@@ -30,7 +30,7 @@ export default class ChartAdapterStore {
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
             isChartLoaded: observable,
-            isDataInitialized: observable,
+            isInitialChartDataLoaded: observable,
             epochBounds: observable.ref,
             quoteBounds: observable.ref,
             msPerPx: observable,
@@ -138,14 +138,15 @@ export default class ChartAdapterStore {
             msPerPx: this.msPerPx,
             pipSize: this.mainStore.chart.pip,
         });
+        this.isInitialChartDataLoaded = false;
     };
 
     async onTickHistory(quotes: TQuote[]) {
         await when(() => this.isChartLoaded);
-        this.isDataInitialized = true;
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
         this.flutterChart?.dataModel.onTickHistory(quotes, false);
+        this.isInitialChartDataLoaded = true;
     }
 
     async onTick(quote: TQuote) {
@@ -224,7 +225,7 @@ export default class ChartAdapterStore {
                 return c;
             });
 
-        await when(() => this.isDataInitialized);
+        await when(() => this.isInitialChartDataLoaded);
 
         this.flutterChart?.config.updateMarkers(transformedContractsMarker);
     }
