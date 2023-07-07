@@ -65,10 +65,16 @@
 .sc-mcd__filter,
 .sc-mcd__category__head .category-title-left,
 .sc-mcd__category__head {
-    .ic-icon > svg {
-        @include themify($themes) {
-            fill: themed('MenuIcon');
-            stroke: themed('MenuIcon');
+    .ic-icon {
+        & > svg {
+            @include themify($themes) {
+                fill: themed('MenuIcon');
+            }
+        }
+        &:not(.ic-synthetic_index, .ic-cryptocurrency) > svg {
+            @include themify($themes) {
+                stroke: themed('MenuIcon');
+            }
         }
     }
 }
