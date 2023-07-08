@@ -10,6 +10,9 @@ class ChartDataModel extends ChangeNotifier {
   /// Flag to indicate the status of ticks network request.
   bool waitingForHistory = false;
 
+  /// Flag to indicate the status of ticks load of a new symbol.
+  bool isInitialChartDataLoaded = false;
+
   Tick _parseTick(JsQuote item) => Tick(
         epoch: DateTime.parse('${item.Date}Z').millisecondsSinceEpoch,
         quote: item.Close,
@@ -22,6 +25,12 @@ class ChartDataModel extends ChangeNotifier {
         open: item.Open!,
         close: item.Close,
       );
+
+  /// Updates isInitialChartDataLoaded
+  void setChartDataLoadStatus({bool isDataLoaded = false}) {
+    isInitialChartDataLoaded = isDataLoaded;
+    notifyListeners();
+  }
 
   /// Updates the chart with new tick
   void onNewTick(JsQuote quote) {
@@ -70,6 +79,7 @@ class ChartDataModel extends ChangeNotifier {
       ticks.insertAll(0, newTicks);
     } else {
       ticks = newTicks;
+      setChartDataLoadStatus(isDataLoaded: true);
     }
 
     if (append) {

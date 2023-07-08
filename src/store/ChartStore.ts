@@ -472,16 +472,15 @@ class ChartStore {
             }
         };
 
-        this.feed!.fetchInitialData(
+        this.mainStore.chartAdapter.newChart();
+        this.feed?.fetchInitialData(
             symbolObj.symbol,
             {
                 granularity: this.mainStore.state.granularity,
                 symbolObject: symbolObj,
             },
             ({ quotes, error }: TPaginationCallbackParams) => {
-                this.loader.hide();
                 this.mainStore.chartAdapter.onTickHistory(quotes || []);
-                this.mainStore.chartAdapter.newChart();
                 this.mainStore.chart.feed?.offMasterDataUpdate(this.mainStore.chartAdapter.onTick);
                 this.mainStore.chart.feed?.onMasterDataUpdate(this.mainStore.chartAdapter.onTick);
                 onChartLoad(error as string);

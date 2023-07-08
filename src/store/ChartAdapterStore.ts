@@ -146,7 +146,12 @@ export default class ChartAdapterStore {
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
         this.flutterChart?.dataModel.onTickHistory(quotes, false);
-        this.isInitialChartDataLoaded = true;
+
+        // Waits for dart to intialize the chart
+        // TODO: remove the timeout
+        setTimeout(() => {
+            this.isInitialChartDataLoaded = true;
+        }, 100);
     }
 
     async onTick(quote: TQuote) {

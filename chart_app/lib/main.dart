@@ -41,7 +41,7 @@ class _DerivChartWebAdapter extends StatefulWidget {
 
 class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   _DerivChartWebAdapterState() {
-    chartConfigModel = ChartConfigModel(_controller);
+    chartConfigModel = ChartConfigModel(chartDataModel, _controller);
     initDartInterop(chartConfigModel, chartDataModel, _controller);
     JsInterop.onChartLoad();
   }
@@ -94,7 +94,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                   child: Consumer2<ChartConfigModel, ChartDataModel>(builder:
                       (BuildContext context, ChartConfigModel chartConfigModel,
                           ChartDataModel chartDataModel, Widget? child) {
-                    if (chartDataModel.ticks.isEmpty) {
+                    if (chartDataModel.ticks.isEmpty ||
+                        chartDataModel.isInitialChartDataLoaded == false) {
                       return Container(
                         color: chartConfigModel.theme is ChartDefaultLightTheme
                             ? Colors.white
@@ -111,7 +112,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
                     return DerivChart(
                       mainSeries: mainSeries,
-                      annotations: chartDataModel.ticks.length > 4
+                      annotations: chartDataModel.ticks.isNotEmpty
                           ? <Barrier>[
                               if (chartConfigModel.isLive)
                                 TickIndicator(
@@ -165,7 +166,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                           chartConfigModel.indicators.drawingToolsRepo,
                       indicatorsRepo:
                           chartConfigModel.indicators.indicatorsRepo,
-                      dataFitEnabled: chartConfigModel.dataFitEnabled,
+                      dataFitEnabled: !chartConfigModel.isLive &&
+                          chartConfigModel.dataFitEnabled,
                       showCrosshair: chartConfigModel.showCrosshair,
                       isLive: chartConfigModel.isLive,
                       onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,

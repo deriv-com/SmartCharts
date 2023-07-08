@@ -1,6 +1,7 @@
 import 'package:chart_app/src/helpers/color.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
+import 'package:chart_app/src/models/chart_data.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/scheduler.dart';
 /// State and methods of chart web adapter config.
 class ChartConfigModel extends ChangeNotifier {
   /// Initialize
-  ChartConfigModel(this._controller)
+  ChartConfigModel(this._chartDataModel, this._controller)
       : indicators = IndicatorsModel(_controller);
 
   /// Style of the chart
@@ -47,6 +48,8 @@ class ChartConfigModel extends ChangeNotifier {
   int? pipSize;
 
   late final ChartController _controller;
+
+  late final ChartDataModel _chartDataModel;
 
   /// Whether the crosshair cursor should be shown or not.
   bool showCrosshair = true;
@@ -152,9 +155,7 @@ class ChartConfigModel extends ChangeNotifier {
           : ChartDefaultLightTheme();
     }
 
-    if (!dataFitEnabled && isLive) {
-      scrollToLastTick();
-    }
+    _chartDataModel.setChartDataLoadStatus();
 
     notifyListeners();
   }
