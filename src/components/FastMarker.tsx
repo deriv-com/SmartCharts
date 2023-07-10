@@ -65,7 +65,7 @@ const FastMarker = (props: TFastMarkerProps) => {
     };
 
     const updateCSS = () => {
-        if (!chartAdapter.isInitialChartDataLoaded || !chartAdapter.isChartLoaded) return;
+        if (!chartAdapter.isChartMounted || !chartAdapter.isChartLoaded) return;
 
         if (!elem_ref.current) {
             return;

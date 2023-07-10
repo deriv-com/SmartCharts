@@ -53,6 +53,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   late int rightBoundEpoch;
   bool isFollowMode = false;
 
+  bool prevShowChart = false;
+
   void onVisibilityChange(html.Event ev) {
     if (chartConfigModel.dataFitEnabled || chartDataModel.ticks.isEmpty) {
       return;
@@ -79,6 +81,27 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     html.document.removeEventListener('visibilitychange', onVisibilityChange);
   }
 
+  bool getChartVisibilitity() {
+    final bool showChart = chartDataModel.ticks.isNotEmpty &&
+        chartDataModel.isInitialChartDataLoaded;
+
+    if (showChart != prevShowChart) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (showChart) {
+          // 300 millisecond for the chart to complete animation
+          Future<void>.delayed(const Duration(milliseconds: 300), () {
+            JsInterop.onChartMountChange(showChart);
+          });
+        } else {
+          JsInterop.onChartMountChange(showChart);
+        }
+      });
+    }
+
+    prevShowChart = showChart;
+    return showChart;
+  }
+
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
@@ -94,8 +117,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                   child: Consumer2<ChartConfigModel, ChartDataModel>(builder:
                       (BuildContext context, ChartConfigModel chartConfigModel,
                           ChartDataModel chartDataModel, Widget? child) {
-                    if (chartDataModel.ticks.isEmpty ||
-                        chartDataModel.isInitialChartDataLoaded == false) {
+                    final bool showChart = getChartVisibilitity();
+
+                    if (showChart == false) {
                       return Container(
                         color: chartConfigModel.theme is ChartDefaultLightTheme
                             ? Colors.white

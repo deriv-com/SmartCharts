@@ -7,7 +7,6 @@ import MainStore from './';
 export default class ChartAdapterStore {
     private mainStore: MainStore;
     isChartLoaded = false;
-    isInitialChartDataLoaded = false;
     flutterChart?: TFlutterChart;
     epochBounds = {
         leftEpoch: 0,
@@ -17,6 +16,7 @@ export default class ChartAdapterStore {
         topQuote: 0,
         bottomQuote: 0,
     };
+    isChartMounted = false;
     msPerPx?: number;
 
     constructor(mainStore: MainStore) {
@@ -24,16 +24,17 @@ export default class ChartAdapterStore {
             onMount: action.bound,
             onTickHistory: action.bound,
             onChartLoad: action.bound,
+            onChartMountChange: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
             onVisibleAreaChanged: action.bound,
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
             isChartLoaded: observable,
-            isInitialChartDataLoaded: observable,
             epochBounds: observable.ref,
             quoteBounds: observable.ref,
             msPerPx: observable,
+            isChartMounted: observable,
         });
 
         this.mainStore = mainStore;
@@ -44,6 +45,7 @@ export default class ChartAdapterStore {
     initFlutterCharts() {
         window.jsInterop = {
             onChartLoad: this.onChartLoad,
+            onChartMountChange: this.onChartMountChange,
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
             loadHistory: this.loadHistory,
@@ -103,6 +105,10 @@ export default class ChartAdapterStore {
         this.isChartLoaded = true;
     }
 
+    onChartMountChange(isMounted: boolean) {
+        this.isChartMounted = isMounted;
+    }
+
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
         if (this.epochBounds.leftEpoch != leftEpoch || this.epochBounds.rightEpoch != rightEpoch) {
             this.epochBounds = {
@@ -138,7 +144,6 @@ export default class ChartAdapterStore {
             msPerPx: this.msPerPx,
             pipSize: this.mainStore.chart.pip,
         });
-        this.isInitialChartDataLoaded = false;
     };
 
     async onTickHistory(quotes: TQuote[]) {
@@ -146,12 +151,6 @@ export default class ChartAdapterStore {
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
         this.flutterChart?.dataModel.onTickHistory(quotes, false);
-
-        // Waits for dart to intialize the chart
-        // TODO: remove the timeout
-        setTimeout(() => {
-            this.isInitialChartDataLoaded = true;
-        }, 100);
     }
 
     async onTick(quote: TQuote) {
@@ -230,7 +229,7 @@ export default class ChartAdapterStore {
                 return c;
             });
 
-        await when(() => this.isInitialChartDataLoaded);
+        await when(() => this.isChartMounted);
 
         this.flutterChart?.config.updateMarkers(transformedContractsMarker);
     }
