@@ -7,20 +7,22 @@ import 'package:flutter/material.dart';
 /// Accumulator contract painter
 class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   /// Constructor
-  AccumulatorMarkerIconPainter(
-    this.width,
-    this.height, {
+  AccumulatorMarkerIconPainter({
     this.hasPersistentBorders = false,
   });
 
-  /// Width of the canvas
-  double width;
-
-  /// Height of the canvas
-  double height;
-
   /// Closed borders
   bool hasPersistentBorders;
+
+  Offset _getOffset(
+    WebMarker marker,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+  ) =>
+      Offset(
+        epochToX(marker.epoch),
+        quoteToY(marker.quote),
+      );
 
   @override
   void paintMarkerGroup(
@@ -36,35 +38,33 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
     canvas.save();
 
-    final Map<MarkerType, Offset> points = <MarkerType, Offset>{};
-    Color? fillColor;
+    final Map<MarkerType, WebMarker> markers = <MarkerType, WebMarker>{};
 
     for (final WebMarker marker in markerGroup.markers) {
-      final Offset center = Offset(
-        epochToX(marker.epoch),
-        quoteToY(marker.quote),
-      );
-
       if (marker.markerType != null) {
-        points[marker.markerType!] = center;
-      }
-
-      if (marker.markerType == MarkerType.highBarrier) {
-        fillColor = marker.color;
+        markers[marker.markerType!] = marker;
       }
     }
 
-    final Offset? _lowBarrier = points[MarkerType.lowBarrier];
-    final Offset? _highBarrier = points[MarkerType.highBarrier];
+    final WebMarker? lowMarker = markers[MarkerType.lowBarrier];
+    final WebMarker? highMarker = markers[MarkerType.highBarrier];
 
-    if (_lowBarrier != null && _highBarrier != null) {
+    final WebMarker? previousTickMarker = markers[MarkerType.previousTick];
+
+    if (lowMarker != null && highMarker != null) {
+      final Offset lowOffset = _getOffset(lowMarker, epochToX, quoteToY);
+      final Offset highOffset = _getOffset(highMarker, epochToX, quoteToY);
+
       _drawShadedBarriers(
         canvas: canvas,
-        startLeft: _lowBarrier.dx,
-        high: _highBarrier.dy,
+        size: size,
+        lowMarker: lowMarker,
+        highMarker: highMarker,
+        startLeft: lowOffset.dx,
+        top: highOffset.dy,
         style: markerGroup.style,
-        low: _lowBarrier.dy,
-        fillColor: fillColor,
+        bottom: lowOffset.dy,
+        previousTickMarker: previousTickMarker,
       );
     }
 
@@ -73,73 +73,153 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
   void _drawShadedBarriers({
     required Canvas canvas,
+    required Size size,
+    required WebMarker lowMarker,
+    required WebMarker highMarker,
     required double startLeft,
-    required double high,
+    required double top,
     required MarkerStyle style,
-    required double low,
-    Color? fillColor,
+    required double bottom,
+    WebMarker? previousTickMarker,
   }) {
-    final Paint paint = Paint()
-      ..color = style.backgroundColor
-      ..style = PaintingStyle.stroke;
-
-    final double right = width - 60;
-    final double bottom = height - 30;
+    final double endLeft = size.width - 60;
+    final double endTop = size.height - 30;
 
     final bool isTopVisible =
-        high < bottom && (high >= 0 || !hasPersistentBorders);
-    final bool isBottomVisible = low < bottom;
+        top < endTop && (top >= 0 || !hasPersistentBorders);
+    final bool isBottomVisible = bottom < endTop;
     // using 2 instead of 0 to distance the top barrier line
     // from the top of the chart and make it clearly visible:
-    final double persistentTop = high < 0 && hasPersistentBorders ? 2 : bottom;
-    final double displayedTop = isTopVisible ? high : persistentTop;
-    final double displayedBottom = isBottomVisible ? low : bottom;
-    final bool isStartLeftVisible = startLeft < right;
+    final double persistentTop = top < 0 && hasPersistentBorders ? 2 : endTop;
+    final double displayedTop = isTopVisible ? top : persistentTop;
+    final double displayedBottom = isBottomVisible ? bottom : endTop;
+    final bool isStartLeftVisible = startLeft < endLeft;
+
+    final double middleTop = bottom - (bottom - top).abs() / 2;
+
+    final Color barrierColor = lowMarker.color ?? Colors.blue;
+    final Paint paint = Paint()
+      ..color = barrierColor
+      ..style = PaintingStyle.fill;
 
     if (!isStartLeftVisible) {
       return;
     }
 
-    if (isTopVisible || hasPersistentBorders) {
-      canvas.drawCircle(
-        Offset(startLeft, displayedTop),
-        1.5,
-        paint,
+    final TextStyle textStyle = TextStyle(
+      color: barrierColor,
+      fontSize: 14,
+    );
+
+    if (previousTickMarker != null && previousTickMarker.color != null) {
+      _drawPreviousTickBarrier(
+        canvas,
+        startLeft,
+        endLeft,
+        middleTop,
+        previousTickMarker.color!,
+        barrierColor,
       );
+    }
+
+    if (isTopVisible || hasPersistentBorders) {
+      final Path path = Path()
+        ..moveTo(startLeft + 2.5, displayedTop)
+        ..lineTo(startLeft - 2.5, displayedTop)
+        ..lineTo(startLeft, displayedTop + 4.5)
+        ..lineTo(startLeft + 2.5, displayedTop)
+        ..close();
+
+      canvas.drawPath(path, paint);
 
       paintHorizontalDashedLine(
         canvas,
-        startLeft,
-        right,
+        startLeft - 2.5,
+        endLeft,
         displayedTop,
-        style.backgroundColor,
+        barrierColor,
         1.5,
-        dashWidth: 2,
+        dashSpace: 0,
       );
+
+      // draw difference between high barrier and previous spot price
+      if (highMarker.text != null) {
+        final TextPainter textPainter =
+            makeTextPainter(highMarker.text!, textStyle);
+
+        paintWithTextPainter(
+          canvas,
+          painter: textPainter,
+          anchor: Offset(endLeft - 1, displayedTop - 10),
+          anchorAlignment: Alignment.centerRight,
+        );
+      }
     }
     if (isBottomVisible || hasPersistentBorders) {
-      canvas.drawCircle(
-        Offset(startLeft, displayedBottom),
-        1.5,
-        paint,
-      );
+      final Path path = Path()
+        ..moveTo(startLeft + 2.5, displayedBottom)
+        ..lineTo(startLeft - 2.5, displayedBottom)
+        ..lineTo(startLeft, displayedBottom - 4.5)
+        ..lineTo(startLeft + 2.5, displayedBottom)
+        ..close();
+
+      canvas.drawPath(path, paint);
 
       paintHorizontalDashedLine(
         canvas,
-        startLeft,
-        right,
+        startLeft - 2.5,
+        endLeft,
         displayedBottom,
-        style.backgroundColor,
+        barrierColor,
         1.5,
-        dashWidth: 2,
+        dashSpace: 0,
       );
+
+      // draw difference between low barrier and previous spot price
+      if (lowMarker.text != null) {
+        final TextPainter textPainter =
+            makeTextPainter(lowMarker.text!, textStyle);
+
+        paintWithTextPainter(
+          canvas,
+          painter: textPainter,
+          anchor: Offset(endLeft - 1, displayedBottom + 12),
+          anchorAlignment: Alignment.centerRight,
+        );
+      }
     }
 
-    final Paint rectPaint = Paint()
-      ..color = fillColor ?? const Color.fromRGBO(55, 124, 252, 0.08);
+    final Paint rectPaint = Paint()..color = style.backgroundColor;
 
     canvas.drawRect(
-        Rect.fromLTRB(startLeft, displayedTop, right, displayedBottom),
-        rectPaint);
+      Rect.fromLTRB(startLeft, displayedTop, endLeft, displayedBottom),
+      rectPaint,
+    );
+  }
+
+  void _drawPreviousTickBarrier(
+    Canvas canvas,
+    double startX,
+    double endX,
+    double y,
+    Color circleColor,
+    Color barrierColor,
+  ) {
+    canvas.drawCircle(
+      Offset(startX, y),
+      1.5,
+      Paint()..color = circleColor,
+    );
+
+    paintHorizontalDashedLine(
+      canvas,
+      startX,
+      endX,
+      y,
+      barrierColor,
+      1.5,
+      dashWidth: 2,
+      dashSpace: 4,
+    );
   }
 }

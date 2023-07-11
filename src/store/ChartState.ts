@@ -8,6 +8,7 @@ import {
     TLayout,
     TSettings,
 } from 'src/types';
+import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -19,6 +20,7 @@ type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
+    shouldDrawTicksFromContractInfo? = false;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -42,8 +44,8 @@ class ChartState {
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
-    allTicks = [];
-    contractInfo = {};
+    allTicks: NonNullable<AuditDetailsForExpiredContract>['all_ticks'] = [];
+    contractInfo: ProposalOpenContract = {};
     refreshActiveSymbols?: boolean;
     hasReachedEndOfData = false;
     prevChartType?: string;
@@ -109,6 +111,7 @@ class ChartState {
             allTicks: observable,
             contractInfo: observable,
             refreshActiveSymbols: observable,
+            shouldDrawTicksFromContractInfo: observable,
             hasReachedEndOfData: observable,
             prevChartType: observable,
             isChartScrollingToEpoch: observable,
@@ -137,6 +140,7 @@ class ChartState {
         chartControlsWidgets,
         enabledChartFooter,
         chartStatusListener,
+        shouldDrawTicksFromContractInfo,
         stateChangeListener,
         getIndicatorHeightRatio,
         chartType,
@@ -211,6 +215,12 @@ class ChartState {
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
         this.onGranularityChange = onGranularityChange;
         this.onChartTypeChange = onChartTypeChange;
+
+        const feed = this.mainStore.chart.feed;
+        if (shouldDrawTicksFromContractInfo && feed && contractInfo.tick_stream) {
+            this.shouldDrawTicksFromContractInfo = shouldDrawTicksFromContractInfo;
+            feed.appendChartDataFromPOCResponse.call(feed, contractInfo);
+        }
 
         if (
             networkStatus &&

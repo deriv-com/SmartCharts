@@ -45,7 +45,7 @@ class ChartConfigModel extends ChangeNotifier {
   String? contractType;
 
   /// Pip size of the chart
-  int? pipSize;
+  int pipSize = 4;
 
   late final ChartController _controller;
 
@@ -143,7 +143,7 @@ class ChartConfigModel extends ChangeNotifier {
     isLive = payload.isLive;
     dataFitEnabled = payload.dataFitEnabled;
     msPerPx = payload.msPerPx;
-    pipSize = payload.pipSize;
+    pipSize = payload.pipSize ?? 4;
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);

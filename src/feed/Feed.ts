@@ -1,9 +1,4 @@
-import {
-    AuditDetailsForExpiredContract,
-    TicksHistoryRequest,
-    TicksHistoryResponse,
-    ProposalOpenContract,
-} from '@deriv/api-types';
+import { TicksHistoryRequest, TicksHistoryResponse, ProposalOpenContract } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
@@ -30,6 +25,7 @@ class Feed {
     _emitter: EventEmitter;
     _mainStore: TMainStore;
     _serverTime: ServerTime;
+    tickQueue: TQuote[] = [];
     _tradingTimes: TradingTimes;
     quotes: TQuote[] = [];
 
@@ -68,6 +64,9 @@ class Feed {
     }
     get margin() {
         return this._mainStore.state.margin;
+    }
+    get hasAlternativeSource() {
+        return this._mainStore.state.shouldDrawTicksFromContractInfo;
     }
     get paginationLoader() {
         return this._mainStore.paginationLoader;
@@ -225,6 +224,7 @@ class Feed {
     }
 
     async fetchInitialData(symbol: string, params: TPaginationParams, callback: TPaginationCallback) {
+        this.tickQueue = [];
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { granularity, symbolObject } = params;
@@ -252,14 +252,14 @@ class Feed {
             start,
             count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
-
+        const validation_error = (this.contractInfo as ProposalOpenContract).validation_error_code;
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {
             // When there is end; no streaming required
             tickHistoryRequest.end = String(end);
             getHistoryOnly = true;
-        } else if (this._tradingTimes.isMarketOpened(symbol)) {
+        } else if (validation_error !== 'MarketIsClosed' && validation_error !== 'MarketIsClosedTryVolatility') {
             let subscription: DelayedSubscription | RealtimeSubscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
@@ -304,6 +304,7 @@ class Feed {
 
             // if symbol is changed before request is completed, past request needs to be forgotten:
             if (this._mainStore.state.symbol !== symbol) {
+                //     if (this._stx.isDestroyed || this._mainStore.state.symbol !== symbol) {
                 callback({ quotes: [] });
                 subscription.forget();
                 return;
@@ -323,9 +324,7 @@ class Feed {
             } else {
                 // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
                 const allTicksContract = await this.allTicks;
-                quotes = TickHistoryFormatter.formatAllTicks(
-                    allTicksContract as keyof AuditDetailsForExpiredContract | []
-                );
+                quotes = TickHistoryFormatter.formatAllTicks(allTicksContract);
             }
         }
         if (!quotes) {
@@ -459,12 +458,38 @@ class Feed {
         }
         return result;
     }
-    _appendChartData(quotes: TQuote[], key: string) {
+    _appendChartData(quotes: TQuote[], key: string, fromAlternativeSource = false) {
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
         }
+        if (!this.hasAlternativeSource || fromAlternativeSource) {
+            if (fromAlternativeSource) {
+                if (!this.tickQueue.length) {
+                    this.tickQueue = [quotes[quotes.length - 1]];
+                    return;
+                }
+                if (this.tickQueue[0].tick?.epoch === quotes[quotes.length - 1].tick?.epoch) return;
+                this.tickQueue = [quotes[quotes.length - 1]];
+
+                // this._stx.updateChartData(quotes.slice(0, -1), null, {
+                //     noCreateDataSet: true,
+                //     allowReplaceOHL: true,
+                // });
+                quotes = [quotes[quotes.length - 1]];
+            }
+            // this._stx.updateChartData(quotes, null, {
+            //     allowReplaceOHL: true,
+            // });
+            // this._stx.createDataSet();
+        }
         this._emitDataUpdate(quotes);
+    }
+    appendChartDataFromPOCResponse(contract_info: ProposalOpenContract) {
+        const ticks = TickHistoryFormatter.formatPOCTick(contract_info);
+        if (ticks) {
+            this._appendChartData(ticks, ticks[0].tick.symbol, true);
+        }
     }
     _emitDataUpdate(quotes: TQuote[], isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
@@ -581,7 +606,10 @@ class Feed {
                 tick => strToDateTime(tick.Date) >= strToDateTime(getUTCDate(this.endEpoch as number))
             );
             if (endTickIndex > -1) {
-                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
+                const addon =
+                    strToDateTime(trimmedQuotes[endTickIndex].Date) === strToDateTime(getUTCDate(this.endEpoch))
+                        ? 2
+                        : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
         }

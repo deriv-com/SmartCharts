@@ -177,6 +177,7 @@ export type TChartProps = {
     barriers?: TBarrierUpdateProps[];
     enableRouting?: boolean;
     enable?: boolean;
+    shouldDrawTicksFromContractInfo?: boolean;
     isConnectionOpened?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
@@ -188,7 +189,7 @@ export type TChartProps = {
     shouldFetchTickHistory?: boolean;
     allowTickChartTypeOnly?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
-    contractInfo?: keyof ProposalOpenContract | {};
+    contractInfo?: ProposalOpenContract;
     maxTick?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;

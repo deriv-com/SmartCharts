@@ -182,7 +182,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         SplayTreeSet<Marker>(),
                         markerGroupList: chartConfigModel.markerGroupList,
                         markerGroupIconPainter: getMarkerGroupPainter(
-                          context,
                           chartConfigModel.contractType,
                         ),
                       ),

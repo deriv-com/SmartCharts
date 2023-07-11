@@ -4,7 +4,7 @@
 
 var fs = require('fs');
 
-let languages = ['en','ar','fr','de','hu','it','pt','ru','es','zh_cn','ja'];
+const languages = ['en','ar','fr','de','hu','it','ru','es','zh_cn','ja'];
 const lang_map = {};
 let i = 0;
 for (const l of languages) {

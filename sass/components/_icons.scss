@@ -1,6 +1,7 @@
 @import '../_variables';
 
-.ic-icon, .cq-text-icon {
+.ic-icon,
+.cq-text-icon {
     display: block;
     height: $normal-icon-size;
     width: $normal-icon-size;
@@ -10,7 +11,8 @@
     box-sizing: border-box;
     text-align: center;
 
-    &.ciq-favorite, &.ic-favorite {
+    &.ciq-favorite,
+    &.ic-favorite {
         svg {
             fill: none !important;
             @include themify($themes) {
@@ -32,7 +34,8 @@
     svg {
         position: relative;
     }
-    br, .ic-subtitle {
+    br,
+    .ic-subtitle {
         display: none;
     }
 }
@@ -42,7 +45,8 @@
     width: auto !important;
     line-height: 15px;
 
-    br, .ic-subtitle {
+    br,
+    .ic-subtitle {
         display: inline;
     }
 }
@@ -61,10 +65,16 @@
 .sc-mcd__filter,
 .sc-mcd__category__head .category-title-left,
 .sc-mcd__category__head {
-    .ic-icon > svg {
-        @include themify($themes) {
-            fill: themed('MenuIcon');
-            stroke: themed('MenuIcon');
+    .ic-icon {
+        & > svg {
+            @include themify($themes) {
+                fill: themed('MenuIcon');
+            }
+        }
+        &:not(.ic-synthetic_index, .ic-cryptocurrency) > svg {
+            @include themify($themes) {
+                stroke: themed('MenuIcon');
+            }
         }
     }
 }
@@ -85,7 +95,9 @@
     }
 }
 
-.ic-frx, .ic-otc, .ic-wld {
+.ic-frx,
+.ic-otc,
+.ic-wld {
     width: 32px;
     min-width: 32px;
     height: 32px;
@@ -154,15 +166,18 @@
 
 .smartcharts {
     // temp workaround for svg icon that cannot be themed
-    .ic-cryptocurrency > svg, .ic-indices > svg {
+    .ic-cryptocurrency > svg,
+    .ic-indices > svg {
         stroke: none !important;
     }
     &-dark {
-        .ic-cryptocurrency > svg {
+        .ic-cryptocurrency > svg,
+        .ic-indices > svg {
             filter: brightness(3);
         }
         .sc-mcd__filter__item--selected {
-            .ic-cryptocurrency > svg {
+            .ic-cryptocurrency > svg,
+            .ic-indices > svg {
                 filter: brightness(6);
             }
         }
@@ -171,7 +186,8 @@
         .cq-chart-controls .ciq-menu {
             padding: 0px;
         }
-        br, .ic-subtitle {
+        br,
+        .ic-subtitle {
             display: none;
         }
     }

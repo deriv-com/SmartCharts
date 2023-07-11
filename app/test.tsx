@@ -136,7 +136,7 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguagesList = ['ID', 'FR', 'IT', 'PT', 'DE'];
+const activeLanguagesList = ['ID', 'FR', 'IT', 'DE'];
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);
@@ -720,7 +720,6 @@ const App = () => {
                     <select onChange={onLanguage}>
                         <option value=''>None</option>
                         <option value='en'>English</option>
-                        <option value='pt'>Português</option>
                         <option value='de'>Deutsch</option>
                         <option value='fr'>French</option>
                         <option value='pl'>Polish</option>

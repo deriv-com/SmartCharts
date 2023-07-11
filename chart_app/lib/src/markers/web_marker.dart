@@ -18,6 +18,9 @@ enum MarkerType {
   /// Latest tick marker.
   latestTick,
 
+  /// Previous tick marker.
+  previousTick,
+
   /// Tick marker.
   tick,
 

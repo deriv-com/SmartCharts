@@ -1,4 +1,4 @@
-import { TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
+import { TicksHistoryResponse, TicksStreamResponse, ProposalOpenContract } from '@deriv/api-types';
 import { OHLCStreamResponse, TAllTicks, TQuote } from 'src/types';
 import { getUTCDate, lerp } from '../utils';
 
@@ -70,5 +70,21 @@ export class TickHistoryFormatter {
             Date: getUTCDate(+(res.epoch as number)),
             Close: +(res.tick || getNearestTick(index)),
         }));
+    }
+    static formatPOCTick(contract_info: ProposalOpenContract) {
+        const { tick_stream = [], underlying = '' } = contract_info || {};
+        if (tick_stream.length && underlying) {
+            return tick_stream.map(({ epoch = 0, tick, tick_display_value }) => ({
+                Date: getUTCDate(epoch),
+                Close: tick || 0,
+                tick: {
+                    epoch,
+                    quote: tick || 0,
+                    symbol: underlying,
+                    pip_size: tick_display_value?.split('.')[1]?.length || 0,
+                },
+            }));
+        }
+        return null;
     }
 }
