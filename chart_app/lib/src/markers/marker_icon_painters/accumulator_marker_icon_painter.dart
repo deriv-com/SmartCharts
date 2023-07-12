@@ -90,7 +90,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     required double bottom,
     WebMarker? previousTickMarker,
   }) {
-    final double endLeft = size.width - yAxiswidth;
+    final double endLeft = size.width - yAxiswidth - 15;
     final double endTop = size.height - 30;
 
     final bool isTopVisible =

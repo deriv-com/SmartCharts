@@ -472,16 +472,8 @@ class Feed {
                 if (this.tickQueue[0].tick?.epoch === quotes[quotes.length - 1].tick?.epoch) return;
                 this.tickQueue = [quotes[quotes.length - 1]];
 
-                // this._stx.updateChartData(quotes.slice(0, -1), null, {
-                //     noCreateDataSet: true,
-                //     allowReplaceOHL: true,
-                // });
                 quotes = [quotes[quotes.length - 1]];
             }
-            // this._stx.updateChartData(quotes, null, {
-            //     allowReplaceOHL: true,
-            // });
-            // this._stx.createDataSet();
         }
         this._emitDataUpdate(quotes);
     }

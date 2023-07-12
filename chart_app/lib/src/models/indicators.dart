@@ -14,9 +14,9 @@ class IndicatorsModel {
   /// Indicators repo
   final AddOnsRepository<IndicatorConfig> indicatorsRepo =
       AddOnsRepository<IndicatorConfig>(
-    onEditCallback: JsInterop.indicators?.onEdit,
-    onRemoveCallback: JsInterop.indicators?.onRemove,
-    onSwapCallback: JsInterop.indicators?.onSwap,
+    onEditCallback: (int i) => JsInterop.indicators?.onEdit?.call(i),
+    onRemoveCallback: (int i) => JsInterop.indicators?.onRemove?.call(i),
+    onSwapCallback: (int x, int y) => JsInterop.indicators?.onSwap?.call(x, y),
   );
 
   /// Drawing tools repo
