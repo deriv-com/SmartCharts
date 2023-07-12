@@ -71,6 +71,9 @@ class JSNewChart {
 
   /// Pipsize of the chart.
   external int? get pipSize;
+
+  /// Specified if it is in mobile mode.
+  external bool get isMobile;
 }
 
 @JS()

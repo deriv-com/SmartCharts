@@ -40,7 +40,7 @@ JsObject _exposeApp(ChartApp app) {
   setProperty(
     jsObject,
     'newChart',
-    allowInterop(() => app.newChart),
+    allowInterop(app.newChart),
   );
 
   setProperty(

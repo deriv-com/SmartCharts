@@ -9,6 +9,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   /// Constructor
   AccumulatorMarkerIconPainter({
     required this.yAxiswidth,
+    this.isMobile = false,
     this.hasPersistentBorders = false,
   });
 
@@ -17,6 +18,9 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
   /// Width of yAxis
   double yAxiswidth;
+
+  /// Specifies mobile mode.
+  bool isMobile;
 
   Offset _getOffset(
     WebMarker marker,
@@ -112,7 +116,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
     final TextStyle textStyle = TextStyle(
       color: barrierColor,
-      fontSize: 14,
+      fontSize: isMobile ? 10 : 14,
     );
 
     if (previousTickMarker != null && previousTickMarker.color != null) {

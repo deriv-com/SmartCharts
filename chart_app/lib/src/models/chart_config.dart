@@ -46,6 +46,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Whether the crosshair cursor should be shown or not.
   bool showCrosshair = true;
 
+  /// Specifies if it is in mobile mode
+  bool isMobile = false;
+
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
   void updateLiveStatus(bool _isLive) {
@@ -133,6 +136,7 @@ class ChartConfigModel extends ChangeNotifier {
     dataFitEnabled = payload.dataFitEnabled;
     msPerPx = payload.msPerPx;
     pipSize = payload.pipSize ?? 4;
+    isMobile = payload.isMobile;
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);

@@ -143,6 +143,7 @@ export default class ChartAdapterStore {
             theme: this.mainStore.chartSetting.theme,
             msPerPx: this.msPerPx,
             pipSize: this.mainStore.chart.pip,
+            isMobile: this.mainStore.chart.isMobile || false,
         });
     };
 

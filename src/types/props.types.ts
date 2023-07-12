@@ -327,6 +327,7 @@ export type TNewChartPayload = {
     theme: string;
     msPerPx?: number;
     pipSize?: number;
+    isMobile: boolean;
 };
 
 export type TIndicatorTooltipContent = {
