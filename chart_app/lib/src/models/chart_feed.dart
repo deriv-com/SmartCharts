@@ -13,6 +13,15 @@ class ChartFeedModel extends ChangeNotifier {
   /// Flag to indicate the status of ticks load of a new symbol.
   bool isChartDataLoaded = false;
 
+  /// Reinitialize
+  void newChart() {
+    ticks = <Tick>[];
+    waitingForHistory = false;
+    isChartDataLoaded = false;
+
+    notifyListeners();
+  }
+
   Tick _parseTick(JsQuote item) => Tick(
         epoch: DateTime.parse('${item.Date}Z').millisecondsSinceEpoch,
         quote: item.Close,
@@ -25,12 +34,6 @@ class ChartFeedModel extends ChangeNotifier {
         open: item.Open!,
         close: item.Close,
       );
-
-  /// Updates isInitialChartDataLoaded
-  void setChartDataLoadStatus({bool isDataLoaded = false}) {
-    isChartDataLoaded = isDataLoaded;
-    notifyListeners();
-  }
 
   /// Updates the chart with new tick
   void onNewTick(JsQuote quote) {

@@ -69,7 +69,7 @@ class ChartApp {
   /// Initialize new chart
   void newChart(JSNewChart payload) {
     configModel.newChart(payload);
-    feedModel.setChartDataLoadStatus();
+    feedModel.newChart();
   }
 
   /// Scroll chart visible area to the newest data.
