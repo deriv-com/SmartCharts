@@ -303,8 +303,7 @@ class Feed {
             });
 
             // if symbol is changed before request is completed, past request needs to be forgotten:
-            if (this._mainStore.state.symbol !== symbol) {
-                //     if (this._stx.isDestroyed || this._mainStore.state.symbol !== symbol) {
+            if (this._mainStore.chart.isDestroyed || this._mainStore.state.symbol !== symbol) {
                 callback({ quotes: [] });
                 subscription.forget();
                 return;

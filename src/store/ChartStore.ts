@@ -108,6 +108,9 @@ class ChartStore {
 
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
+
+    isDestroyed = false;
+
     get loader() {
         return this.mainStore.loader;
     }
@@ -520,6 +523,7 @@ class ChartStore {
     }
     destroy() {
         ChartStore.chartCount -= 1;
+        this.isDestroyed = true;
         if (this.resizeObserver) {
             this.resizeObserver.disconnect();
         }
