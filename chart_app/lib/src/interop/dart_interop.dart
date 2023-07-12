@@ -3,8 +3,9 @@ import 'dart:js';
 import 'dart:html' as html;
 import 'dart:js_util';
 
-import 'package:chart_app/src/models/indicators.dart';
+import 'package:chart_app/src/chart_app.dart';
 import 'package:deriv_chart/deriv_chart.dart';
+import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_data.dart';
 
@@ -13,14 +14,31 @@ import 'package:chart_app/src/models/chart_data.dart';
 
 /// Initialize
 void initDartInterop(ChartConfigModel configModel, ChartDataModel dataModel,
-    ChartController controller) {
+    ChartController controller, ChartApp app) {
   final JsObject dartInterop = JsObject(context['Object']);
   setProperty(dartInterop, 'config', _exposeConfigModel(configModel));
   setProperty(dartInterop, 'indicators',
       _exposeIndicatorsModel(configModel.indicators));
   setProperty(dartInterop, 'dataModel', _exposeDataModel(dataModel));
-  setProperty(dartInterop, 'controller', _exposeController(controller));
+  setProperty(
+    dartInterop,
+    'controller',
+    _exposeController(controller),
+  );
+  setProperty(dartInterop, 'app', _exposeApp(app));
   setProperty(html.window, 'flutterChart', dartInterop);
+}
+
+JsObject _exposeApp(ChartApp app) {
+  final JsObject jsObject = JsObject(context['Object']);
+
+  setProperty(
+    jsObject,
+    'getYAxisWidth',
+    allowInterop(() => app.yAxisWidth),
+  );
+
+  return jsObject;
 }
 
 JsObject _exposeController(ChartController controller) {

@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:ui';
+import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -42,7 +43,8 @@ class _DerivChartWebAdapter extends StatefulWidget {
 class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   _DerivChartWebAdapterState() {
     chartConfigModel = ChartConfigModel(chartDataModel, _controller);
-    initDartInterop(chartConfigModel, chartDataModel, _controller);
+    app = ChartApp(chartConfigModel, chartDataModel, _controller);
+    initDartInterop(chartConfigModel, chartDataModel, _controller, app);
     JsInterop.onChartLoad();
   }
 
@@ -50,10 +52,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   final ChartDataModel chartDataModel = ChartDataModel();
   late final ChartConfigModel chartConfigModel;
+  late final ChartApp app;
   late int rightBoundEpoch;
   bool isFollowMode = false;
-
-  bool prevShowChart = false;
 
   void onVisibilityChange(html.Event ev) {
     if (chartConfigModel.dataFitEnabled || chartDataModel.ticks.isEmpty) {
@@ -81,27 +82,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     html.document.removeEventListener('visibilitychange', onVisibilityChange);
   }
 
-  bool getChartVisibilitity() {
-    final bool showChart = chartDataModel.ticks.isNotEmpty &&
-        chartDataModel.isInitialChartDataLoaded;
-
-    if (showChart != prevShowChart) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (showChart) {
-          // 300 millisecond for the chart to complete animation
-          Future<void>.delayed(const Duration(milliseconds: 300), () {
-            JsInterop.onChartMountChange(showChart);
-          });
-        } else {
-          JsInterop.onChartMountChange(showChart);
-        }
-      });
-    }
-
-    prevShowChart = showChart;
-    return showChart;
-  }
-
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
@@ -117,7 +97,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                   child: Consumer2<ChartConfigModel, ChartDataModel>(builder:
                       (BuildContext context, ChartConfigModel chartConfigModel,
                           ChartDataModel chartDataModel, Widget? child) {
-                    final bool showChart = getChartVisibilitity();
+                    final bool showChart = app.getChartVisibilitity();
 
                     if (showChart == false) {
                       return Container(
@@ -161,7 +141,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 ),
                             ]
                           : null,
-                      pipSize: chartConfigModel.pipSize ?? 2,
+                      pipSize: chartConfigModel.pipSize,
                       granularity: chartConfigModel.granularity ?? 1000,
                       controller: _controller,
                       theme: chartConfigModel.theme,
@@ -182,7 +162,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         SplayTreeSet<Marker>(),
                         markerGroupList: chartConfigModel.markerGroupList,
                         markerGroupIconPainter: getMarkerGroupPainter(
-                          chartConfigModel.contractType,
+                          app,
                         ),
                       ),
                       drawingToolsRepo:

@@ -132,10 +132,7 @@ class ChartStore {
     }
 
     get yAxisWidth(): number {
-        if (!this.currentClose) return 60;
-
-        // TODO: measure the quote text or get the width from the chart
-        return this.currentClose.toString().length * 8.5 + 16;
+        return window.flutterChart?.app.getYAxisWidth() || 60;
     }
 
     currentCloseQuote = (): TQuote | undefined => {

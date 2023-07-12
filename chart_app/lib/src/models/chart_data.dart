@@ -11,7 +11,7 @@ class ChartDataModel extends ChangeNotifier {
   bool waitingForHistory = false;
 
   /// Flag to indicate the status of ticks load of a new symbol.
-  bool isInitialChartDataLoaded = false;
+  bool isChartDataLoaded = false;
 
   Tick _parseTick(JsQuote item) => Tick(
         epoch: DateTime.parse('${item.Date}Z').millisecondsSinceEpoch,
@@ -28,7 +28,7 @@ class ChartDataModel extends ChangeNotifier {
 
   /// Updates isInitialChartDataLoaded
   void setChartDataLoadStatus({bool isDataLoaded = false}) {
-    isInitialChartDataLoaded = isDataLoaded;
+    isChartDataLoaded = isDataLoaded;
     notifyListeners();
   }
 
@@ -79,7 +79,7 @@ class ChartDataModel extends ChangeNotifier {
       ticks.insertAll(0, newTicks);
     } else {
       ticks = newTicks;
-      setChartDataLoadStatus(isDataLoaded: true);
+      isChartDataLoaded = true;
     }
 
     if (append) {

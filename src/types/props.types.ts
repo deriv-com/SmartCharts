@@ -335,6 +335,9 @@ export type TIndicatorTooltipContent = {
 };
 
 export type TFlutterChart = {
+    app: {
+        getYAxisWidth: () => number;
+    };
     config: {
         updateTheme: (theme: string) => void;
         newChart: (payload: TNewChartPayload) => void;

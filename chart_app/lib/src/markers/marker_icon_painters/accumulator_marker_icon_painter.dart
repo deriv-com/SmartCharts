@@ -8,11 +8,15 @@ import 'package:flutter/material.dart';
 class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   /// Constructor
   AccumulatorMarkerIconPainter({
+    required this.yAxiswidth,
     this.hasPersistentBorders = false,
   });
 
   /// Closed borders
   bool hasPersistentBorders;
+
+  /// Width of yAxis
+  double yAxiswidth;
 
   Offset _getOffset(
     WebMarker marker,
@@ -82,7 +86,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     required double bottom,
     WebMarker? previousTickMarker,
   }) {
-    final double endLeft = size.width - 60;
+    final double endLeft = size.width - yAxiswidth;
     final double endTop = size.height - 30;
 
     final bool isTopVisible =
