@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
+import 'package:chart_app/src/models/indicators.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +12,7 @@ import 'package:provider/provider.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-import 'src/models/chart_data.dart';
+import 'src/models/chart_feed.dart';
 import 'src/models/chart_config.dart';
 import 'src/interop/dart_interop.dart';
 import 'src/interop/js_interop.dart';
@@ -42,31 +43,37 @@ class _DerivChartWebAdapter extends StatefulWidget {
 
 class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   _DerivChartWebAdapterState() {
-    chartConfigModel = ChartConfigModel(chartDataModel, _controller);
-    app = ChartApp(chartConfigModel, chartDataModel, _controller);
-    initDartInterop(chartConfigModel, chartDataModel, _controller, app);
+    indicatorsModel = IndicatorsModel(_controller);
+    app = ChartApp(
+      configModel,
+      feedModel,
+      indicatorsModel,
+      _controller,
+    );
+    initDartInterop(app);
     JsInterop.onChartLoad();
   }
 
   final ChartController _controller = ChartController();
 
-  final ChartDataModel chartDataModel = ChartDataModel();
-  late final ChartConfigModel chartConfigModel;
+  final ChartFeedModel feedModel = ChartFeedModel();
+  final ChartConfigModel configModel = ChartConfigModel();
+  late final IndicatorsModel indicatorsModel;
   late final ChartApp app;
   late int rightBoundEpoch;
   bool isFollowMode = false;
 
   void onVisibilityChange(html.Event ev) {
-    if (chartConfigModel.dataFitEnabled || chartDataModel.ticks.isEmpty) {
+    if (configModel.dataFitEnabled || feedModel.ticks.isEmpty) {
       return;
     }
 
     if (html.document.visibilityState == 'visible' && isFollowMode) {
-      chartConfigModel.scrollToLastTick();
+      app.scrollToLastTick();
     }
 
     if (html.document.visibilityState == 'hidden') {
-      isFollowMode = rightBoundEpoch > chartDataModel.ticks.last.epoch;
+      isFollowMode = rightBoundEpoch > feedModel.ticks.last.epoch;
     }
   }
 
@@ -85,23 +92,22 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   @override
   Widget build(BuildContext context) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
-          ChangeNotifierProvider<ChartConfigModel>.value(
-              value: chartConfigModel),
-          ChangeNotifierProvider<ChartDataModel>.value(value: chartDataModel)
+          ChangeNotifierProvider<ChartConfigModel>.value(value: configModel),
+          ChangeNotifierProvider<ChartFeedModel>.value(value: feedModel)
         ],
         child: Scaffold(
           body: Center(
             child: Column(
               children: <Widget>[
                 Expanded(
-                  child: Consumer2<ChartConfigModel, ChartDataModel>(builder:
-                      (BuildContext context, ChartConfigModel chartConfigModel,
-                          ChartDataModel chartDataModel, Widget? child) {
+                  child: Consumer2<ChartConfigModel, ChartFeedModel>(builder:
+                      (BuildContext context, ChartConfigModel configModel,
+                          ChartFeedModel feedModel, Widget? child) {
                     final bool showChart = app.getChartVisibilitity();
 
                     if (showChart == false) {
                       return Container(
-                        color: chartConfigModel.theme is ChartDefaultLightTheme
+                        color: configModel.theme is ChartDefaultLightTheme
                             ? Colors.white
                             : Colors.black,
                         constraints: const BoxConstraints.expand(),
@@ -109,23 +115,23 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                     }
 
                     final DataSeries<Tick> mainSeries =
-                        getDataSeries(chartDataModel, chartConfigModel);
+                        getDataSeries(feedModel, configModel);
 
-                    final Color latestTickColor = Color.fromRGBO(255, 68, 81,
-                        chartConfigModel.isSymbolClosed ? 0.32 : 1);
+                    final Color latestTickColor = Color.fromRGBO(
+                        255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
 
                     return DerivChart(
                       mainSeries: mainSeries,
-                      annotations: chartDataModel.ticks.isNotEmpty
+                      annotations: feedModel.ticks.isNotEmpty
                           ? <Barrier>[
-                              if (chartConfigModel.isLive)
+                              if (configModel.isLive)
                                 TickIndicator(
-                                  chartDataModel.ticks.last,
+                                  feedModel.ticks.last,
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
                                       hasBlinkingDot:
-                                          !chartConfigModel.isSymbolClosed,
+                                          !configModel.isSymbolClosed,
                                       hasArrow: false,
                                       textStyle: const TextStyle(
                                         fontSize: 12,
@@ -141,15 +147,15 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 ),
                             ]
                           : null,
-                      pipSize: chartConfigModel.pipSize,
-                      granularity: chartConfigModel.granularity ?? 1000,
+                      pipSize: configModel.pipSize,
+                      granularity: configModel.granularity ?? 1000,
                       controller: _controller,
-                      theme: chartConfigModel.theme,
+                      theme: configModel.theme,
                       onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {
-                        if (!chartDataModel.waitingForHistory &&
-                            chartDataModel.ticks.isNotEmpty &&
-                            leftEpoch < chartDataModel.ticks.first.epoch) {
-                          chartDataModel.loadHistory(2500);
+                        if (!feedModel.waitingForHistory &&
+                            feedModel.ticks.isNotEmpty &&
+                            leftEpoch < feedModel.ticks.first.epoch) {
+                          feedModel.loadHistory(2500);
                         }
                         rightBoundEpoch = rightEpoch;
                         JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
@@ -160,19 +166,17 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       },
                       markerSeries: MarkerGroupSeries(
                         SplayTreeSet<Marker>(),
-                        markerGroupList: chartConfigModel.markerGroupList,
+                        markerGroupList: configModel.markerGroupList,
                         markerGroupIconPainter: getMarkerGroupPainter(
                           app,
                         ),
                       ),
-                      drawingToolsRepo:
-                          chartConfigModel.indicators.drawingToolsRepo,
-                      indicatorsRepo:
-                          chartConfigModel.indicators.indicatorsRepo,
-                      dataFitEnabled: !chartConfigModel.isLive &&
-                          chartConfigModel.dataFitEnabled,
-                      showCrosshair: chartConfigModel.showCrosshair,
-                      isLive: chartConfigModel.isLive,
+                      drawingToolsRepo: indicatorsModel.drawingToolsRepo,
+                      indicatorsRepo: indicatorsModel.indicatorsRepo,
+                      dataFitEnabled:
+                          !configModel.isLive && configModel.dataFitEnabled,
+                      showCrosshair: configModel.showCrosshair,
+                      isLive: configModel.isLive,
                       onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,
                       onCrosshairHover:
                           (PointerHoverEvent ev, int epoch, String quote) {
@@ -180,8 +184,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             ev.position.dx, ev.position.dy, epoch, quote);
                       },
                       maxCurrentTickOffset: 300,
-                      msPerPx: chartConfigModel.msPerPx,
-                      leftMargin: chartConfigModel.leftMargin,
+                      msPerPx: configModel.msPerPx,
+                      leftMargin: configModel.leftMargin,
                     );
                   }),
                 ),

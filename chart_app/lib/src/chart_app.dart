@@ -1,20 +1,30 @@
 import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:chart_app/src/models/chart_config.dart';
-import 'package:chart_app/src/models/chart_data.dart';
+import 'package:chart_app/src/models/chart_feed.dart';
+import 'package:chart_app/src/models/indicators.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 /// ChartApp
 class ChartApp {
   /// Constructor
-  ChartApp(this.configModel, this.dataModel, this.controller);
+  ChartApp(
+    this.configModel,
+    this.feedModel,
+    this.indicatorsModel,
+    this.controller,
+  );
 
   /// ChartConfigModel
   ChartConfigModel configModel;
 
-  /// ChartDataModel
-  ChartDataModel dataModel;
+  /// ChartFeedModel
+  ChartFeedModel feedModel;
+
+  /// Indicators config
+  IndicatorsModel indicatorsModel;
 
   /// ChartController
   ChartController controller;
@@ -26,7 +36,7 @@ class ChartApp {
 
   void _processChartVisibilityChange() {
     yAxisWidth = calculateYAxisWidth(
-      dataModel.ticks,
+      feedModel.ticks,
       configModel.theme,
       configModel.pipSize,
     );
@@ -35,7 +45,7 @@ class ChartApp {
   /// Gets the chart visibility
   bool getChartVisibilitity() {
     final bool showChart =
-        dataModel.ticks.isNotEmpty && dataModel.isChartDataLoaded;
+        feedModel.ticks.isNotEmpty && feedModel.isChartDataLoaded;
 
     if (showChart != _prevShowChart) {
       _processChartVisibilityChange();
@@ -55,4 +65,14 @@ class ChartApp {
     _prevShowChart = showChart;
     return showChart;
   }
+
+  /// Initialize new chart
+  void newChart(JSNewChart payload) {
+    configModel.newChart(payload);
+    feedModel.setChartDataLoadStatus();
+  }
+
+  /// Scroll chart visible area to the newest data.
+  void scrollToLastTick() => SchedulerBinding.instance
+      .addPostFrameCallback((_) => controller.scrollToLastTick());
 }

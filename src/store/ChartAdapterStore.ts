@@ -135,7 +135,7 @@ export default class ChartAdapterStore {
     newChart = async () => {
         await when(() => this.isChartLoaded);
 
-        this.flutterChart?.config.newChart({
+        this.flutterChart?.app.newChart({
             granularity: this.getGranularityInMs(),
             chartType: this.mainStore.state.chartType,
             isLive: this.mainStore.chart.isLive || false,
@@ -150,7 +150,7 @@ export default class ChartAdapterStore {
         await when(() => this.isChartLoaded);
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
-        this.flutterChart?.dataModel.onTickHistory(quotes, false);
+        this.flutterChart?.feed.onTickHistory(quotes, false);
     }
 
     async onTick(quote: TQuote) {
@@ -162,9 +162,9 @@ export default class ChartAdapterStore {
         this.mainStore.chart.feed?.addQuote(quote);
 
         if (quote.ohlc) {
-            this.flutterChart?.dataModel.onNewCandle(quote);
+            this.flutterChart?.feed.onNewCandle(quote);
         } else if (this.getGranularityInMs() < 60000) {
-            this.flutterChart?.dataModel.onNewTick(quote);
+            this.flutterChart?.feed.onNewTick(quote);
         }
     }
 
@@ -182,7 +182,7 @@ export default class ChartAdapterStore {
                 if (!quotes) return;
 
                 this.mainStore.chart.feed?.updateQuotes(quotes, true);
-                this.flutterChart?.dataModel.onTickHistory(quotes, true);
+                this.flutterChart?.feed.onTickHistory(quotes, true);
             }
         );
     }
@@ -296,18 +296,18 @@ export default class ChartAdapterStore {
     }
 
     getXFromEpoch(epoch: number) {
-        return this.flutterChart!.controller.getXFromEpoch(epoch);
+        return this.isChartMounted ? this.flutterChart!.controller.getXFromEpoch(epoch) : 0;
     }
 
     getYFromQuote(quote: number) {
-        return this.flutterChart!.controller.getYFromQuote(quote);
+        return this.isChartMounted ? this.flutterChart!.controller.getYFromQuote(quote) : 0;
     }
 
     getEpochFromX(x: number) {
-        return this.flutterChart!.controller.getEpochFromX(x);
+        return this.isChartMounted ? this.flutterChart!.controller.getEpochFromX(x) : 0;
     }
 
     getQuoteFromY(y: number) {
-        return this.flutterChart!.controller.getQuoteFromY(y);
+        return this.isChartMounted ? this.flutterChart!.controller.getQuoteFromY(y) : 0;
     }
 }

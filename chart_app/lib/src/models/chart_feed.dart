@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 
 /// State and methods of chart web adapter data.
-class ChartDataModel extends ChangeNotifier {
+class ChartFeedModel extends ChangeNotifier {
   /// Tick data.
   List<Tick> ticks = <Tick>[];
 

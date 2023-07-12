@@ -7,23 +7,22 @@ import 'package:chart_app/src/chart_app.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/models/chart_config.dart';
-import 'package:chart_app/src/models/chart_data.dart';
+import 'package:chart_app/src/models/chart_feed.dart';
 
 /// Refactor the code later with JSExport once the below issue is resolved.
 /// https://github.com/dart-lang/sdk/issues/50721
 
 /// Initialize
-void initDartInterop(ChartConfigModel configModel, ChartDataModel dataModel,
-    ChartController controller, ChartApp app) {
+void initDartInterop(ChartApp app) {
   final JsObject dartInterop = JsObject(context['Object']);
-  setProperty(dartInterop, 'config', _exposeConfigModel(configModel));
-  setProperty(dartInterop, 'indicators',
-      _exposeIndicatorsModel(configModel.indicators));
-  setProperty(dartInterop, 'dataModel', _exposeDataModel(dataModel));
+  setProperty(dartInterop, 'config', _exposeConfigModel(app.configModel));
+  setProperty(
+      dartInterop, 'indicators', _exposeIndicatorsModel(app.indicatorsModel));
+  setProperty(dartInterop, 'feed', _exposeDataModel(app.feedModel));
   setProperty(
     dartInterop,
     'controller',
-    _exposeController(controller),
+    _exposeController(app.controller),
   );
   setProperty(dartInterop, 'app', _exposeApp(app));
   setProperty(html.window, 'flutterChart', dartInterop);
@@ -36,6 +35,12 @@ JsObject _exposeApp(ChartApp app) {
     jsObject,
     'getYAxisWidth',
     allowInterop(() => app.yAxisWidth),
+  );
+
+  setProperty(
+    jsObject,
+    'newChart',
+    allowInterop(() => app.newChart),
   );
 
   return jsObject;
@@ -71,28 +76,28 @@ JsObject _exposeController(ChartController controller) {
   return jsObject;
 }
 
-JsObject _exposeDataModel(ChartDataModel model) {
-  final JsObject dataModel = JsObject(context['Object']);
+JsObject _exposeDataModel(ChartFeedModel model) {
+  final JsObject feedModel = JsObject(context['Object']);
 
   setProperty(
-    dataModel,
+    feedModel,
     'onTickHistory',
     allowInterop(model.onTickHistory),
   );
 
   setProperty(
-    dataModel,
+    feedModel,
     'onNewTick',
     allowInterop(model.onNewTick),
   );
 
   setProperty(
-    dataModel,
+    feedModel,
     'onNewCandle',
     allowInterop(model.onNewCandle),
   );
 
-  return dataModel;
+  return feedModel;
 }
 
 JsObject _exposeConfigModel(ChartConfigModel model) {

@@ -1,18 +1,14 @@
 import 'package:chart_app/src/helpers/color.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
-import 'package:chart_app/src/models/chart_data.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
-import 'package:chart_app/src/models/indicators.dart';
-import 'package:flutter/scheduler.dart';
 
 /// State and methods of chart web adapter config.
 class ChartConfigModel extends ChangeNotifier {
   /// Initialize
-  ChartConfigModel(this._chartDataModel, this._controller)
-      : indicators = IndicatorsModel(_controller);
+  ChartConfigModel();
 
   /// Style of the chart
   ChartStyle style = ChartStyle.line;
@@ -47,15 +43,8 @@ class ChartConfigModel extends ChangeNotifier {
   /// Pip size of the chart
   int pipSize = 4;
 
-  late final ChartController _controller;
-
-  late final ChartDataModel _chartDataModel;
-
   /// Whether the crosshair cursor should be shown or not.
   bool showCrosshair = true;
-
-  /// Indicators config
-  IndicatorsModel indicators;
 
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
@@ -155,12 +144,6 @@ class ChartConfigModel extends ChangeNotifier {
           : ChartDefaultLightTheme();
     }
 
-    _chartDataModel.setChartDataLoadStatus();
-
     notifyListeners();
   }
-
-  /// Scroll chart visible area to the newest data.
-  void scrollToLastTick() => SchedulerBinding.instance
-      .addPostFrameCallback((_) => _controller.scrollToLastTick());
 }

@@ -337,10 +337,10 @@ export type TIndicatorTooltipContent = {
 export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
+        newChart: (payload: TNewChartPayload) => void;
     };
     config: {
         updateTheme: (theme: string) => void;
-        newChart: (payload: TNewChartPayload) => void;
         updateChartStyle: (chartStyle: string) => void;
         updateLiveStatus: (isLive: boolean) => void;
         updateMarkers: (markers: any[]) => void;
@@ -356,7 +356,7 @@ export type TFlutterChart = {
         scale: (scale: number) => number;
         scroll: (pxShift: number) => void;
     };
-    dataModel: {
+    feed: {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;
         onNewTick: (quote: TQuote) => void;
         onNewCandle: (quote: TQuote) => void;

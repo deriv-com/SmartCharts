@@ -1,16 +1,16 @@
 import 'package:chart_app/src/models/chart_config.dart';
-import 'package:chart_app/src/models/chart_data.dart';
+import 'package:chart_app/src/models/chart_feed.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 
 /// Gets the data series
 DataSeries<Tick> getDataSeries(
-    ChartDataModel chartDataModel, ChartConfigModel chartConfigModel) {
-  final List<Tick> ticks = chartDataModel.ticks;
-  final double opacity = chartConfigModel.isSymbolClosed ? 0.32 : 1;
+    ChartFeedModel feedModel, ChartConfigModel configModel) {
+  final List<Tick> ticks = feedModel.ticks;
+  final double opacity = configModel.isSymbolClosed ? 0.32 : 1;
 
   if (ticks is List<Candle>) {
-    final CandleStyle? style = chartConfigModel.theme is ChartDefaultLightTheme
+    final CandleStyle? style = configModel.theme is ChartDefaultLightTheme
         ? CandleStyle(
             positiveColor: Color.fromRGBO(76, 175, 79, opacity),
             negativeColor: Color.fromRGBO(249, 83, 83, opacity),
@@ -22,7 +22,7 @@ DataSeries<Tick> getDataSeries(
             neutralColor: Color.fromRGBO(110, 110, 110, opacity),
           );
 
-    switch (chartConfigModel.style) {
+    switch (configModel.style) {
       case ChartStyle.candles:
         return CandleSeries(ticks, style: style);
       case ChartStyle.hollow:
