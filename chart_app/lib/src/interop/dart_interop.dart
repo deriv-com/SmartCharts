@@ -43,6 +43,12 @@ JsObject _exposeApp(ChartApp app) {
     allowInterop(() => app.newChart),
   );
 
+  setProperty(
+    jsObject,
+    'getTooltipContent',
+    allowInterop(app.getTooltipContent),
+  );
+
   return jsObject;
 }
 
@@ -173,12 +179,6 @@ JsObject _exposeIndicatorsModel(IndicatorsModel model) {
     chartConfig,
     'clearIndicators',
     allowInterop(model.clearIndicators),
-  );
-
-  setProperty(
-    chartConfig,
-    'getTooltipContent',
-    allowInterop(model.getTooltipContent),
   );
 
   return chartConfig;

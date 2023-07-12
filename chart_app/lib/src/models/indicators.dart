@@ -4,15 +4,12 @@ import 'dart:math';
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
 /// State and methods of chart web adapter config.
-class IndicatorsModel extends ChangeNotifier {
+class IndicatorsModel {
   /// Initialize
-  IndicatorsModel(this._controller);
-
-  late final ChartController _controller;
+  IndicatorsModel();
 
   /// Indicators repo
   final AddOnsRepository<IndicatorConfig> indicatorsRepo =
@@ -65,12 +62,12 @@ class IndicatorsModel extends ChangeNotifier {
   }
 
   /// Gets the tooltip content for indicator series
-  List<JsIndicatorTooltip?>? getTooltipContent(int epoch, int pipSize) {
-    final List<Series> seriesList =
-        _controller.getSeriesList?.call() ?? <Series>[];
-    final List<IndicatorConfig> indicatorConfigsList =
-        _controller.getIndicatorConfigsList?.call() ?? <IndicatorConfig>[];
-
+  List<JsIndicatorTooltip?>? getTooltipContent(
+    List<Series> seriesList,
+    List<IndicatorConfig> indicatorConfigsList,
+    int epoch,
+    int pipSize,
+  ) {
     final List<Series> sortedSeriesList = <Series>[...seriesList];
 
     indicatorConfigsList.forEachIndexed((int index, IndicatorConfig config) {

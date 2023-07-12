@@ -338,6 +338,7 @@ export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
+        getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
     };
     config: {
         updateTheme: (theme: string) => void;
@@ -365,7 +366,6 @@ export type TFlutterChart = {
         addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
         clearIndicators: () => void;
-        getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
     };
 };
 

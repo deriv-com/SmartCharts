@@ -75,4 +75,19 @@ class ChartApp {
   /// Scroll chart visible area to the newest data.
   void scrollToLastTick() => SchedulerBinding.instance
       .addPostFrameCallback((_) => controller.scrollToLastTick());
+
+  /// Gets the tooltip content for indicator series
+  List<JsIndicatorTooltip?>? getTooltipContent(int epoch, int pipSize) {
+    final List<Series> seriesList =
+        controller.getSeriesList?.call() ?? <Series>[];
+    final List<IndicatorConfig> indicatorConfigsList =
+        controller.getIndicatorConfigsList?.call() ?? <IndicatorConfig>[];
+
+    return indicatorsModel.getTooltipContent(
+      seriesList,
+      indicatorConfigsList,
+      epoch,
+      pipSize,
+    );
+  }
 }

@@ -43,7 +43,6 @@ class _DerivChartWebAdapter extends StatefulWidget {
 
 class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   _DerivChartWebAdapterState() {
-    indicatorsModel = IndicatorsModel(_controller);
     app = ChartApp(
       configModel,
       feedModel,
@@ -58,7 +57,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   final ChartFeedModel feedModel = ChartFeedModel();
   final ChartConfigModel configModel = ChartConfigModel();
-  late final IndicatorsModel indicatorsModel;
+  final IndicatorsModel indicatorsModel = IndicatorsModel();
+
   late final ChartApp app;
   late int rightBoundEpoch;
   bool isFollowMode = false;
