@@ -4,7 +4,6 @@ import 'dart:html' as html;
 import 'dart:js_util';
 
 import 'package:chart_app/src/chart_app.dart';
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
@@ -19,11 +18,6 @@ void initDartInterop(ChartApp app) {
   setProperty(
       dartInterop, 'indicators', _exposeIndicatorsModel(app.indicatorsModel));
   setProperty(dartInterop, 'feed', _exposeDataModel(app.feedModel));
-  setProperty(
-    dartInterop,
-    'controller',
-    _exposeController(app.controller),
-  );
   setProperty(dartInterop, 'app', _exposeApp(app));
   setProperty(html.window, 'flutterChart', dartInterop);
 }
@@ -49,35 +43,17 @@ JsObject _exposeApp(ChartApp app) {
     allowInterop(app.getTooltipContent),
   );
 
-  return jsObject;
-}
+  setProperty(jsObject, 'getXFromEpoch', allowInterop(app.getXFromEpoch));
 
-JsObject _exposeController(ChartController controller) {
-  final JsObject jsObject = JsObject(context['Object']);
+  setProperty(jsObject, 'getYFromQuote', allowInterop(app.getYFromQuote));
 
-  setProperty(jsObject, 'getXFromEpoch',
-      allowInterop((int epoch) => controller.getXFromEpoch?.call(epoch)));
+  setProperty(jsObject, 'getEpochFromX', allowInterop(app.getEpochFromX));
 
-  setProperty(jsObject, 'getYFromQuote',
-      allowInterop((double quote) => controller.getYFromQuote?.call(quote)));
+  setProperty(jsObject, 'getQuoteFromY', allowInterop(app.getQuoteFromY));
 
-  setProperty(jsObject, 'getEpochFromX',
-      allowInterop((double x) => controller.getEpochFromX?.call(x)));
+  setProperty(jsObject, 'scale', allowInterop(app.scale));
 
-  setProperty(jsObject, 'getQuoteFromY',
-      allowInterop((double y) => controller.getQuoteFromY?.call(y)));
-
-  setProperty(
-    jsObject,
-    'scale',
-    allowInterop(controller.scale),
-  );
-
-  setProperty(
-    jsObject,
-    'scroll',
-    allowInterop(controller.scroll),
-  );
+  setProperty(jsObject, 'scroll', allowInterop(app.scroll));
 
   return jsObject;
 }

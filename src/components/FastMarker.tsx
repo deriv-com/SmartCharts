@@ -54,7 +54,7 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     React.useEffect(() => {
         updateCSS();
-    }, [chartAdapter.epochBounds, chartAdapter.quoteBounds]);
+    }, [chartAdapter.epochBounds, chartAdapter.quoteBounds, chartAdapter.isFeedLoaded]);
 
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;
@@ -65,7 +65,9 @@ const FastMarker = (props: TFastMarkerProps) => {
     };
 
     const updateCSS = () => {
-        if (!chartAdapter.isChartMounted || !chartAdapter.isChartLoaded) return;
+        if (!chartAdapter.isFeedLoaded || !chartAdapter.isChartLoaded) {
+            return;
+        }
 
         if (!elem_ref.current) {
             return;

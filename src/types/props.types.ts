@@ -340,6 +340,12 @@ export type TFlutterChart = {
         getYAxisWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
         getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
+        getXFromEpoch: (epoch: number) => number;
+        getYFromQuote: (quote: number) => number;
+        getEpochFromX: (x: number) => number;
+        getQuoteFromY: (y: number) => number;
+        scale: (scale: number) => number;
+        scroll: (pxShift: number) => void;
     };
     config: {
         updateTheme: (theme: string) => void;
@@ -349,14 +355,6 @@ export type TFlutterChart = {
         updateCrosshairVisibility: (visibility: boolean) => void;
         updateLeftMargin: (leftMargin?: number) => void;
         setSymbolClosed: (isClosed: boolean) => void;
-    };
-    controller: {
-        getXFromEpoch: (epoch: number) => number;
-        getYFromQuote: (quote: number) => number;
-        getEpochFromX: (x: number) => number;
-        getQuoteFromY: (y: number) => number;
-        scale: (scale: number) => number;
-        scroll: (pxShift: number) => void;
     };
     feed: {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;
@@ -372,7 +370,6 @@ export type TFlutterChart = {
 
 export type JSInterop = {
     onChartLoad: () => void;
-    onChartMountChange: (isMounted: boolean) => void;
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
     onCrosshairDisappeared: () => void;

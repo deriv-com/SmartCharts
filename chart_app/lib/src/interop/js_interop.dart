@@ -7,10 +7,6 @@ class JsInterop {
   /// Called when the chart has loaded
   external static void onChartLoad();
 
-  /// Called when the chart mount status is changed.
-  // ignore: avoid_positional_boolean_parameters
-  external static void onChartMountChange(bool isMounted);
-
   /// Called when visible area is change
   external static void onVisibleAreaChanged(int leftEpoch, int rightEpoch);
 

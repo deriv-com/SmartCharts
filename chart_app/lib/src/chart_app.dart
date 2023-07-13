@@ -5,7 +5,6 @@ import 'package:chart_app/src/models/chart_feed.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 /// ChartApp
 class ChartApp {
@@ -34,32 +33,32 @@ class ChartApp {
   /// width of yAxis
   double yAxisWidth = 60;
 
-  void _processChartVisibilityChange() {
+  /// Whether chart is mounted or not.
+  bool isMounted = false;
+
+  void _processChartVisibilityChange(bool showChart) {
     yAxisWidth = calculateYAxisWidth(
       feedModel.ticks,
       configModel.theme,
       configModel.pipSize,
     );
+
+    if (showChart) {
+      /// To prevent controller functions being called before mount.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        isMounted = true;
+      });
+    } else {
+      isMounted = false;
+    }
   }
 
   /// Gets the chart visibility
   bool getChartVisibilitity() {
-    final bool showChart =
-        feedModel.ticks.isNotEmpty && feedModel.isChartDataLoaded;
+    final bool showChart = feedModel.ticks.isNotEmpty && feedModel.isFeedLoaded;
 
     if (showChart != _prevShowChart) {
-      _processChartVisibilityChange();
-
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (showChart) {
-          // 300 millisecond for the chart to complete animation
-          Future<void>.delayed(const Duration(milliseconds: 300), () {
-            JsInterop.onChartMountChange(showChart);
-          });
-        } else {
-          JsInterop.onChartMountChange(showChart);
-        }
-      });
+      _processChartVisibilityChange(showChart);
     }
 
     _prevShowChart = showChart;
@@ -72,16 +71,14 @@ class ChartApp {
     feedModel.newChart();
   }
 
-  /// Scroll chart visible area to the newest data.
-  void scrollToLastTick() => SchedulerBinding.instance
-      .addPostFrameCallback((_) => controller.scrollToLastTick());
-
   /// Gets the tooltip content for indicator series
   List<JsIndicatorTooltip?>? getTooltipContent(int epoch, int pipSize) {
     final List<Series> seriesList =
         controller.getSeriesList?.call() ?? <Series>[];
     final List<IndicatorConfig> indicatorConfigsList =
-        controller.getIndicatorConfigsList?.call() ?? <IndicatorConfig>[];
+        controller.getConfigsList != null
+            ? controller.getConfigsList!.call() as List<IndicatorConfig>
+            : <IndicatorConfig>[];
 
     return indicatorsModel.getTooltipContent(
       seriesList,
@@ -89,5 +86,59 @@ class ChartApp {
       epoch,
       pipSize,
     );
+  }
+
+  /// Scales the chart.
+  double? scale(double scale) {
+    if (isMounted) {
+      return controller.scale(scale);
+    }
+    return null;
+  }
+
+  /// Scroll chart visible area.
+  void scroll(double pxShift) {
+    if (isMounted) {
+      controller.scroll(pxShift);
+    }
+  }
+
+  /// Scroll chart visible area to the newest data.
+  void scrollToLastTick() {
+    if (isMounted) {
+      controller.scrollToLastTick();
+    }
+  }
+
+  /// Called to get epoch from x position
+  int? getEpochFromX(double x) {
+    if (isMounted) {
+      return controller.getEpochFromX?.call(x);
+    }
+    return null;
+  }
+
+  /// Called to get quote from y position
+  double? getQuoteFromY(double y) {
+    if (isMounted) {
+      return controller.getQuoteFromY?.call(y);
+    }
+    return null;
+  }
+
+  /// Called to get X position from epoch
+  double? getXFromEpoch(int epoch) {
+    if (isMounted) {
+      return controller.getXFromEpoch?.call(epoch);
+    }
+    return null;
+  }
+
+  /// Called to get Y position from quote
+  double? getYFromQuote(double quote) {
+    if (isMounted) {
+      return controller.getYFromQuote?.call(quote);
+    }
+    return null;
   }
 }

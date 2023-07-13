@@ -48,7 +48,7 @@ export default class BottomWidgetsContainerStore {
             const addedIndicatorsHeight = this.mainStore.chart.chartContainerHeight - mainChartHeight;
 
             this.bottom =
-                this.mainStore.chartAdapter.isChartMounted && addedIndicatorsHeight > 80 ? addedIndicatorsHeight : 30;
+                this.mainStore.chartAdapter.isFeedLoaded && addedIndicatorsHeight > 80 ? addedIndicatorsHeight : 30;
         }, 300);
     };
 }

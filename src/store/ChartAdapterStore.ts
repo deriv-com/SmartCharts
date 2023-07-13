@@ -16,7 +16,7 @@ export default class ChartAdapterStore {
         topQuote: 0,
         bottomQuote: 0,
     };
-    isChartMounted = false;
+    isFeedLoaded = false;
     msPerPx?: number;
 
     constructor(mainStore: MainStore) {
@@ -24,7 +24,6 @@ export default class ChartAdapterStore {
             onMount: action.bound,
             onTickHistory: action.bound,
             onChartLoad: action.bound,
-            onChartMountChange: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
             onVisibleAreaChanged: action.bound,
@@ -34,7 +33,7 @@ export default class ChartAdapterStore {
             epochBounds: observable.ref,
             quoteBounds: observable.ref,
             msPerPx: observable,
-            isChartMounted: observable,
+            isFeedLoaded: observable,
         });
 
         this.mainStore = mainStore;
@@ -45,7 +44,6 @@ export default class ChartAdapterStore {
     initFlutterCharts() {
         window.jsInterop = {
             onChartLoad: this.onChartLoad,
-            onChartMountChange: this.onChartMountChange,
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
             loadHistory: this.loadHistory,
@@ -81,7 +79,7 @@ export default class ChartAdapterStore {
                         const scale = (100 - e.deltaY) / 100;
                         this.scale(scale);
                     } else {
-                        this.flutterChart?.controller.scroll(e.deltaX);
+                        this.flutterChart?.app.scroll(e.deltaX);
                     }
 
                     return false;
@@ -103,10 +101,6 @@ export default class ChartAdapterStore {
     onChartLoad() {
         this.flutterChart = window.flutterChart;
         this.isChartLoaded = true;
-    }
-
-    onChartMountChange(isMounted: boolean) {
-        this.isChartMounted = isMounted;
     }
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
@@ -135,6 +129,8 @@ export default class ChartAdapterStore {
     newChart = async () => {
         await when(() => this.isChartLoaded);
 
+        this.isFeedLoaded = false;
+
         this.flutterChart?.app.newChart({
             granularity: this.getGranularityInMs(),
             chartType: this.mainStore.state.chartType,
@@ -149,6 +145,8 @@ export default class ChartAdapterStore {
 
     async onTickHistory(quotes: TQuote[]) {
         await when(() => this.isChartLoaded);
+
+        this.isFeedLoaded = true;
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
         this.flutterChart?.feed.onTickHistory(quotes, false);
@@ -180,10 +178,8 @@ export default class ChartAdapterStore {
             count,
             granularity,
             ({ quotes }) => {
-                if (!quotes) return;
-
-                this.mainStore.chart.feed?.updateQuotes(quotes, true);
-                this.flutterChart?.feed.onTickHistory(quotes, true);
+                this.mainStore.chart.feed?.updateQuotes(quotes || [], true);
+                this.flutterChart?.feed.onTickHistory(quotes || [], true);
             }
         );
     }
@@ -213,7 +209,7 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
-        this.msPerPx = this.flutterChart?.controller.scale(scale);
+        this.msPerPx = this.flutterChart?.app.scale(scale);
         this.mainStore.state.saveLayout();
     }
 
@@ -230,7 +226,9 @@ export default class ChartAdapterStore {
                 return c;
             });
 
-        await when(() => this.isChartMounted);
+        await when(() => this.isFeedLoaded);
+
+        //  console.log(transformedContractsMarker);
 
         this.flutterChart?.config.updateMarkers(transformedContractsMarker);
     }
@@ -297,18 +295,18 @@ export default class ChartAdapterStore {
     }
 
     getXFromEpoch(epoch: number) {
-        return this.isChartMounted ? this.flutterChart!.controller.getXFromEpoch(epoch) : 0;
+        return this.flutterChart!.app.getXFromEpoch(epoch);
     }
 
     getYFromQuote(quote: number) {
-        return this.isChartMounted ? this.flutterChart!.controller.getYFromQuote(quote) : 0;
+        return this.flutterChart!.app.getYFromQuote(quote);
     }
 
     getEpochFromX(x: number) {
-        return this.isChartMounted ? this.flutterChart!.controller.getEpochFromX(x) : 0;
+        return this.flutterChart!.app.getEpochFromX(x);
     }
 
     getQuoteFromY(y: number) {
-        return this.isChartMounted ? this.flutterChart!.controller.getQuoteFromY(y) : 0;
+        return this.flutterChart!.app.getQuoteFromY(y);
     }
 }

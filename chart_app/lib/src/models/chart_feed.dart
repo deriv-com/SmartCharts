@@ -11,13 +11,13 @@ class ChartFeedModel extends ChangeNotifier {
   bool waitingForHistory = false;
 
   /// Flag to indicate the status of ticks load of a new symbol.
-  bool isChartDataLoaded = false;
+  bool isFeedLoaded = false;
 
   /// Reinitialize
   void newChart() {
     ticks = <Tick>[];
     waitingForHistory = false;
-    isChartDataLoaded = false;
+    isFeedLoaded = false;
 
     notifyListeners();
   }
@@ -82,7 +82,7 @@ class ChartFeedModel extends ChangeNotifier {
       ticks.insertAll(0, newTicks);
     } else {
       ticks = newTicks;
-      isChartDataLoaded = true;
+      isFeedLoaded = true;
     }
 
     if (append) {
