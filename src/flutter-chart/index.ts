@@ -1,6 +1,16 @@
+import ChartAdapterStore from 'src/store/ChartAdapterStore';
 import { TEngineInitializer } from 'src/types';
 
-export const createChartElement = () => {
+type TProps = {
+    onChartLoad: ChartAdapterStore['onChartLoad'];
+};
+
+export const createChartElement = ({ onChartLoad }: TProps) => {
+    if (window.flutterChartElement) {
+        onChartLoad();
+        return;
+    }
+
     const flutterChartElement = document.createElement('div');
     flutterChartElement.classList.add('flutter-chart');
 
@@ -16,6 +26,9 @@ export const createChartElement = () => {
             },
         },
     };
+
+    // @ts-ignore
+    import(/* webpackChunkName: "flutter-chart-adapter" */ 'chart/main.dart.js');
 
     return flutterChartElement;
 };

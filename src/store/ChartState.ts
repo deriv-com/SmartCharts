@@ -422,7 +422,9 @@ class ChartState {
     saveLayout() {
         if (!this.chartStore.chartId) return;
         const layoutData: TLayout = this.mainStore.view.getLayout();
-        saveToLocalStorage(`chart-layout-trade`, {
+        const id = this.mainStore.chart.chartId;
+
+        saveToLocalStorage(`chart-layout-${id}`, {
             studyItems: layoutData.studyItems,
             crosshair: layoutData.crosshair,
             msPerPx: layoutData.msPerPx,
@@ -431,7 +433,8 @@ class ChartState {
 
     // returns false if restoring layout fails
     restoreLayout() {
-        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-trade`);
+        const id = this.mainStore.chart.chartId;
+        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
 
         if (!layout) return false;
 

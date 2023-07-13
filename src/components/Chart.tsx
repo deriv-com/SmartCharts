@@ -89,6 +89,9 @@ const Chart = (props: TChartProps) => {
 
     React.useEffect(() => {
         chartAdapter.onMount(chartContainerRef.current as HTMLDivElement);
+        return () => {
+            chartAdapter.onUnmount();
+        };
     }, []);
 
     React.useEffect(() => {

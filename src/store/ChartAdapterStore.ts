@@ -67,41 +67,38 @@ export default class ChartAdapterStore {
             },
         };
 
-        if (!window.flutterChartElement) {
-            const flutterChartElement = createChartElement();
-
-            flutterChartElement.addEventListener(
-                'wheel',
-                e => {
-                    e.preventDefault();
-
-                    if (e.deltaX == 0 && e.deltaZ == 0) {
-                        const scale = (100 - e.deltaY) / 100;
-                        this.scale(scale);
-                    } else {
-                        this.flutterChart?.app.scroll(e.deltaX);
-                    }
-
-                    return false;
-                },
-                { capture: true, passive: false }
-            );
-
-            // @ts-ignore
-            import(/* webpackChunkName: "flutter-chart-adapter" */ 'chart/main.dart.js');
-        } else {
-            this.onChartLoad();
-        }
+        createChartElement({
+            onChartLoad: this.onChartLoad,
+        });
     }
 
-    async onMount(element: HTMLDivElement) {
+    onMount(element: HTMLDivElement) {
         element.appendChild(window.flutterChartElement);
+
+        window.flutterChartElement.addEventListener('wheel', this.onWheel, { capture: true });
+    }
+
+    onUnmount() {
+        window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
     }
 
     onChartLoad() {
         this.flutterChart = window.flutterChart;
         this.isChartLoaded = true;
     }
+
+    onWheel = (e: WheelEvent) => {
+        e.preventDefault();
+
+        if (e.deltaX == 0 && e.deltaZ == 0) {
+            const value = (100 - e.deltaY) / 100;
+            this.scale(value);
+        } else {
+            window.flutterChart?.app.scroll(e.deltaX);
+        }
+
+        return false;
+    };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
         if (this.epochBounds.leftEpoch != leftEpoch || this.epochBounds.rightEpoch != rightEpoch) {
