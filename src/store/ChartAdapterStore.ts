@@ -75,11 +75,17 @@ export default class ChartAdapterStore {
     onMount(element: HTMLDivElement) {
         element.appendChild(window.flutterChartElement);
 
-        window.flutterChartElement.addEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
+        ['pointerdown', 'touchstart'].forEach(e => {
+            window.flutterChartElement?.addEventListener(e, this.onPointerDown, { capture: true });
+        });
     }
 
     onUnmount() {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
+        ['pointerdown', 'touchstart'].forEach(e => {
+            window.flutterChartElement?.removeEventListener(e, this.onPointerDown, { capture: true });
+        });
     }
 
     onChartLoad() {
@@ -98,6 +104,13 @@ export default class ChartAdapterStore {
         }
 
         return false;
+    };
+
+    onPointerDown = (e: Event) => {
+        if (this.mainStore.chart.dataFitEnabled && !this.mainStore.chart.isLive) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+        }
     };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
