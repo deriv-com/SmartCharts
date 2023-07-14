@@ -18,6 +18,7 @@ export default class ChartAdapterStore {
     };
     isFeedLoaded = false;
     msPerPx?: number;
+    isDataFitModeEnabled = false;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -29,6 +30,10 @@ export default class ChartAdapterStore {
             onVisibleAreaChanged: action.bound,
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
+            newChart: action.bound,
+            scale: action.bound,
+            toggleDataFitMode: action.bound,
+            isDataFitModeEnabled: observable,
             isChartLoaded: observable,
             epochBounds: observable.ref,
             quoteBounds: observable.ref,
@@ -107,7 +112,7 @@ export default class ChartAdapterStore {
     };
 
     onPointerDown = (e: Event) => {
-        if (this.mainStore.chart.dataFitEnabled && !this.mainStore.chart.isLive) {
+        if (this.mainStore.chart.startWithDataFitMode && !this.mainStore.chart.isLive) {
             e.preventDefault();
             e.stopImmediatePropagation();
         }
@@ -137,26 +142,28 @@ export default class ChartAdapterStore {
     }
 
     newChart = async () => {
-        await when(() => this.isChartLoaded);
-
         this.isFeedLoaded = false;
+        this.isDataFitModeEnabled = this.mainStore.chart.startWithDataFitMode || false;
+
+        await when(() => this.isChartLoaded);
 
         this.flutterChart?.app.newChart({
             granularity: this.getGranularityInMs(),
             chartType: this.mainStore.state.chartType,
             isLive: this.mainStore.chart.isLive || false,
-            dataFitEnabled: this.mainStore.chart.dataFitEnabled || false,
+            startWithDataFitMode: this.isDataFitModeEnabled,
             theme: this.mainStore.chartSetting.theme,
             msPerPx: this.msPerPx,
             pipSize: this.mainStore.chart.pip,
             isMobile: this.mainStore.chart.isMobile || false,
+            yAxisMargin: this.mainStore.state.yAxisMargin,
         });
     };
 
     async onTickHistory(quotes: TQuote[]) {
-        await when(() => this.isChartLoaded);
-
         this.isFeedLoaded = true;
+
+        await when(() => this.isChartLoaded);
 
         this.mainStore.chart.feed?.updateQuotes(quotes, false);
         this.flutterChart?.feed.onTickHistory(quotes, false);
@@ -219,9 +226,15 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
+        this.isDataFitModeEnabled = false;
         this.msPerPx = this.flutterChart?.app.scale(scale);
         this.mainStore.state.saveLayout();
     }
+
+    toggleDataFitMode = () => {
+        this.isDataFitModeEnabled = !this.isDataFitModeEnabled;
+        window.flutterChart?.app.toggleDataFitMode(this.isDataFitModeEnabled);
+    };
 
     async updateMarkers(contractsMarker: any[]) {
         const transformedContractsMarker = contractsMarker

@@ -88,10 +88,7 @@ class Feed {
         this._mainStore.state.saveLayout();
         this._mainStore.state.setChartIsReady(true);
     };
-    scaleChart() {
-        if (this.startEpoch) {
-        }
-    }
+
     // although not used, subscribe is overridden so that unsubscribe will be called by Chart Engine
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     subscribe() {}
@@ -333,7 +330,6 @@ class Feed {
 
         quotes = this._trimQuotes(quotes);
         callback({ quotes });
-        this.scaleChart();
         this._emitDataUpdate(quotes, true);
         this.paginationLoader.updateOnPagination(false);
     }

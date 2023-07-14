@@ -41,7 +41,7 @@ class ChartStore {
     currentActiveSymbol?: TProcessedSymbolItem | null;
     currentLanguage?: string;
     cursorInChart = false;
-    dataFitEnabled = false;
+    startWithDataFitMode = false;
     feed?: Feed | null;
     isBarrierDragging = false;
     isChartAvailable = true;
@@ -246,7 +246,7 @@ class ChartStore {
             chartData,
             feedCall,
             isLive,
-            dataFitEnabled,
+            startWithDataFitMode,
             leftMargin,
         } = props;
         this.feedCall = feedCall || {};
@@ -277,7 +277,7 @@ class ChartStore {
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
         this.isLive = isLive || false;
-        this.dataFitEnabled = dataFitEnabled || false;
+        this.startWithDataFitMode = startWithDataFitMode || false;
         this.leftMargin = leftMargin;
 
         ChartStore.chartCount += 1;
@@ -295,7 +295,7 @@ class ChartStore {
             this.loader.setState('trading-time');
             this.tradingTimes?.initialize().then(
                 action(() => {
-                    if (this.dataFitEnabled) {
+                    if (this.startWithDataFitMode) {
                         this.state?.clearLayout();
                     } else {
                         this.state?.restoreLayout();
@@ -468,9 +468,6 @@ class ChartStore {
                 return;
             }
             this.state?.restoreDrawings();
-            if (this.mainStore.chart.feed) {
-                // this.mainStore.chart.feed.scaleChart();
-            }
         };
 
         this.mainStore.chartAdapter.newChart();

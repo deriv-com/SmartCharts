@@ -110,6 +110,14 @@ class ChartApp {
     }
   }
 
+  /// Scroll chart visible area to the newest data.
+  // ignore: avoid_positional_boolean_parameters
+  void toggleDataFitMode(bool dataFitMode) {
+    if (isMounted) {
+      controller.toggleDataFitMode?.call(dataFitMode);
+    }
+  }
+
   /// Called to get epoch from x position
   int? getEpochFromX(double x) {
     if (isMounted) {

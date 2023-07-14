@@ -175,7 +175,7 @@ class ChartState {
         onGranularityChange,
         onChartTypeChange,
         isLive,
-        dataFitEnabled,
+        startWithDataFitMode,
         leftMargin,
     }: TChartProps) {
         let isSymbolChanged = false;
@@ -342,11 +342,11 @@ class ChartState {
         }
 
         if (
-            dataFitEnabled != null &&
-            dataFitEnabled != undefined &&
-            this.mainStore.chart.dataFitEnabled != dataFitEnabled
+            startWithDataFitMode != null &&
+            startWithDataFitMode != undefined &&
+            this.mainStore.chart.startWithDataFitMode != startWithDataFitMode
         ) {
-            this.mainStore.chart.dataFitEnabled = dataFitEnabled;
+            this.mainStore.chart.startWithDataFitMode = startWithDataFitMode;
         }
 
         if (this.mainStore.chart.leftMargin != leftMargin) {

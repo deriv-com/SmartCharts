@@ -51,7 +51,7 @@ class JSNewChart {
   external bool get isLive;
 
   /// Whether data fit mode is enabled.
-  external bool get dataFitEnabled;
+  external bool get startWithDataFitMode;
 
   /// Granularity of the chart data
   external int get granularity;
@@ -70,6 +70,9 @@ class JSNewChart {
 
   /// Specified if it is in mobile mode.
   external bool get isMobile;
+
+  /// Specifies the margin of yAxis.
+  external JSYAxisMargin get yAxisMargin;
 }
 
 @JS()
@@ -157,4 +160,16 @@ class JsIndicatorTooltip {
 
   /// Value
   external List<String> values;
+}
+
+@JS()
+@anonymous
+
+/// JSYAxisMargin
+class JSYAxisMargin {
+  /// Top
+  external double top;
+
+  /// Bottom
+  external double bottom;
 }

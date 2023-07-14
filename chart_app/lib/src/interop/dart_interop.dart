@@ -55,6 +55,12 @@ JsObject _exposeApp(ChartApp app) {
 
   setProperty(jsObject, 'scroll', allowInterop(app.scroll));
 
+  setProperty(
+    jsObject,
+    'toggleDataFitMode',
+    allowInterop(app.toggleDataFitMode),
+  );
+
   return jsObject;
 }
 

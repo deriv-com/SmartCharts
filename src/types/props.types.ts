@@ -214,7 +214,7 @@ export type TChartProps = {
     historical?: boolean;
     markers_array?: any[];
     isLive?: boolean;
-    dataFitEnabled?: boolean;
+    startWithDataFitMode?: boolean;
     leftMargin?: number;
 };
 
@@ -322,12 +322,16 @@ export type TActiveItem = TIndicatorItem & {
 export type TNewChartPayload = {
     granularity: number;
     isLive: boolean;
-    dataFitEnabled: boolean;
+    startWithDataFitMode: boolean;
     chartType?: string;
     theme: string;
     msPerPx?: number;
     pipSize?: number;
     isMobile: boolean;
+    yAxisMargin?: {
+        top: number;
+        bottom: number;
+    };
 };
 
 export type TIndicatorTooltipContent = {
@@ -346,6 +350,7 @@ export type TFlutterChart = {
         getQuoteFromY: (y: number) => number;
         scale: (scale: number) => number;
         scroll: (pxShift: number) => void;
+        toggleDataFitMode: (isDataFitEnabled: boolean) => void;
     };
     config: {
         updateTheme: (theme: string) => void;

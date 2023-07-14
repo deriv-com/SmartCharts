@@ -26,7 +26,7 @@ class ChartConfigModel extends ChangeNotifier {
   bool isLive = true;
 
   /// Starts in data fit mode and adds a data-fit button.
-  bool dataFitEnabled = false;
+  bool startWithDataFitMode = false;
 
   /// Specifies whether the symbol is closed or not.
   bool isSymbolClosed = false;
@@ -48,6 +48,9 @@ class ChartConfigModel extends ChangeNotifier {
 
   /// Specifies if it is in mobile mode
   bool isMobile = false;
+
+  /// Specifies the margin of yAxis.
+  JSYAxisMargin? yAxisMargin;
 
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
@@ -133,10 +136,11 @@ class ChartConfigModel extends ChangeNotifier {
   void newChart(JSNewChart payload) {
     granularity = payload.granularity;
     isLive = payload.isLive;
-    dataFitEnabled = payload.dataFitEnabled;
+    startWithDataFitMode = payload.startWithDataFitMode;
     msPerPx = payload.msPerPx;
     pipSize = payload.pipSize ?? 4;
     isMobile = payload.isMobile;
+    yAxisMargin = payload.yAxisMargin;
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);

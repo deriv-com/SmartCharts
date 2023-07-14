@@ -64,7 +64,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   bool isFollowMode = false;
 
   void onVisibilityChange(html.Event ev) {
-    if (configModel.dataFitEnabled || feedModel.ticks.isEmpty) {
+    if (configModel.startWithDataFitMode || feedModel.ticks.isEmpty) {
       return;
     }
 
@@ -173,8 +173,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       ),
                       drawingToolsRepo: indicatorsModel.drawingToolsRepo,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,
-                      dataFitEnabled:
-                          !configModel.isLive && configModel.dataFitEnabled,
+                      dataFitEnabled: configModel.startWithDataFitMode,
                       showCrosshair: configModel.showCrosshair,
                       isLive: configModel.isLive,
                       onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,
@@ -184,8 +183,20 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             ev.position.dx, ev.position.dy, epoch, quote);
                       },
                       maxCurrentTickOffset: 300,
-                      msPerPx: configModel.msPerPx,
-                      leftMargin: configModel.leftMargin,
+                      msPerPx: configModel.startWithDataFitMode
+                          ? null
+                          : configModel.msPerPx,
+                      bottomChartTitleMargin: configModel.leftMargin != null
+                          ? EdgeInsets.only(left: configModel.leftMargin!)
+                          : null,
+                      padding: configModel.yAxisMargin != null
+                          ? EdgeInsets.only(
+                              top: configModel.yAxisMargin!.top,
+                              bottom: configModel.yAxisMargin!.bottom,
+                            )
+                          : null,
+                      showDataFitButton: false,
+                      showLoadingAnimationForHistoricalData: true,
                     );
                   }),
                 ),
