@@ -319,7 +319,10 @@ class Feed {
                 quotes = TickHistoryFormatter.formatHistory(response);
             } else {
                 // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
-                const allTicksContract = await this.allTicks;
+                // Waits for the flutter chart to unmount previous chart
+                const allTicksContract: Feed['allTicks'] = await new Promise(resolve => {
+                    setTimeout(() => resolve(this.allTicks), 50);
+                });
                 quotes = TickHistoryFormatter.formatAllTicks(allTicksContract);
             }
         }
