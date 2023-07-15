@@ -184,7 +184,9 @@ export default class ViewStore {
 
         this.mainStore.state.setChartIsReady(false);
 
-        this.mainStore.chartType.setChartType(layout.chartType);
+        if (layout.chartType != undefined) {
+            this.mainStore.chartType.setChartType(layout.chartType);
+        }
         this.menuStore.setOpen(false);
 
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
