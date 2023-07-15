@@ -81,15 +81,17 @@ export default class ChartAdapterStore {
         element.appendChild(window.flutterChartElement);
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
+
+        // To stop swiping for digit contracts
         ['pointerdown', 'touchstart'].forEach(e => {
-            window.flutterChartElement?.addEventListener(e, this.onPointerDown, { capture: true });
+            window.flutterChartElement?.addEventListener(e, this.onPointerDown);
         });
     }
 
     onUnmount() {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
         ['pointerdown', 'touchstart'].forEach(e => {
-            window.flutterChartElement?.removeEventListener(e, this.onPointerDown, { capture: true });
+            window.flutterChartElement?.removeEventListener(e, this.onPointerDown);
         });
     }
 
@@ -112,10 +114,7 @@ export default class ChartAdapterStore {
     };
 
     onPointerDown = (e: Event) => {
-        if (this.mainStore.chart.startWithDataFitMode && !this.mainStore.chart.isLive) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-        }
+        e.stopPropagation();
     };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
@@ -316,18 +315,18 @@ export default class ChartAdapterStore {
     }
 
     getXFromEpoch(epoch: number) {
-        return this.flutterChart!.app.getXFromEpoch(epoch);
+        return this.flutterChart?.app.getXFromEpoch(epoch) ?? 0;
     }
 
     getYFromQuote(quote: number) {
-        return this.flutterChart!.app.getYFromQuote(quote);
+        return this.flutterChart?.app.getYFromQuote(quote) ?? 0;
     }
 
     getEpochFromX(x: number) {
-        return this.flutterChart!.app.getEpochFromX(x);
+        return this.flutterChart?.app.getEpochFromX(x) ?? 0;
     }
 
     getQuoteFromY(y: number) {
-        return this.flutterChart!.app.getQuoteFromY(y);
+        return this.flutterChart?.app.getQuoteFromY(y) ?? 0;
     }
 }

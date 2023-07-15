@@ -102,6 +102,12 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     return null;
   }
 
+  double _getMaxCurrentTickOffset() {
+    final double currentTickOffset =
+        configModel.startWithDataFitMode ? 150 : 300;
+    return configModel.isMobile ? currentTickOffset / 1.25 : currentTickOffset;
+  }
+
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
@@ -195,7 +201,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         JsInterop.onCrosshairHover(
                             ev.position.dx, ev.position.dy, epoch, quote);
                       },
-                      maxCurrentTickOffset: 300,
+                      maxCurrentTickOffset: _getMaxCurrentTickOffset(),
                       msPerPx: configModel.startWithDataFitMode
                           ? null
                           : configModel.msPerPx,
