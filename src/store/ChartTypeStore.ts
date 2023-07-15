@@ -8,90 +8,9 @@ import ListStore from './ListStore';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
-type TInputs = {
-    id: string;
-    title: string;
-    type: string;
-    max?: number;
-    step?: number;
-    min?: number;
-};
-
-type TAggregate = {
-    title: string;
-    inputs: Array<TInputs>;
-};
-type TAggregates = {
-    [key: string]: TAggregate | boolean;
-};
-
 const notCandles = [...ChartTypes].filter(t => !t.candleOnly).map(t => t.id);
 
-function getAggregates(): TAggregates {
-    return {
-        heikinashi: true,
-        kagi: {
-            title: t.translate('Kagi'),
-            inputs: [
-                {
-                    id: 'kagi',
-                    title: t.translate('Reversal Percentage'),
-                    type: 'numericinput',
-                },
-            ],
-        },
-        renko: {
-            title: t.translate('Renko'),
-            inputs: [
-                {
-                    id: 'renko',
-                    title: t.translate('Range'),
-                    type: 'numericinput',
-                },
-            ],
-        },
-        linebreak: {
-            title: t.translate('Line Break'),
-            inputs: [
-                {
-                    id: 'priceLines',
-                    title: t.translate('Price Lines'),
-                    type: 'numericinput',
-                    max: 10,
-                    step: 1,
-                    min: 1,
-                },
-            ],
-        },
-        rangebars: {
-            title: t.translate('Range Bars'),
-            inputs: [
-                {
-                    id: 'range',
-                    title: t.translate('Range'),
-                    type: 'numericinput',
-                },
-            ],
-        },
-        pandf: {
-            title: t.translate('Point & Figure'),
-            inputs: [
-                {
-                    id: 'box',
-                    title: t.translate('Box Size'),
-                    type: 'numericinput',
-                },
-                {
-                    id: 'reversal',
-                    title: t.translate('Reversal'),
-                    type: 'numericinput',
-                },
-            ],
-        },
-    };
-}
 export default class ChartTypeStore {
-    aggregates?: TAggregates;
     chartTypes: Array<ChartType> = [];
     listStore: ListStore;
     mainStore: MainStore;
@@ -118,6 +37,15 @@ export default class ChartTypeStore {
             mainStore,
             onChanged: () => null,
         });
+
+        reaction(
+            () => this.mainStore.state.chartType,
+            () => {
+                if (this.mainStore.state.chartType !== undefined) {
+                    this.setType(this.mainStore.state.chartType);
+                }
+            }
+        );
     }
 
     onChartTypeChanged?: (chartType?: string) => void;
@@ -135,16 +63,7 @@ export default class ChartTypeStore {
         return this.type.id === 'spline';
     }
     onContextReady = () => {
-        this.aggregates = getAggregates();
         this.chartTypes = [...ChartTypes];
-        reaction(
-            () => this.mainStore.state.chartType,
-            () => {
-                if (this.mainStore.state.chartType !== undefined) {
-                    this.setType(this.mainStore.state.chartType);
-                }
-            }
-        );
     };
     setChartType(type?: string) {
         if (!type) return;
