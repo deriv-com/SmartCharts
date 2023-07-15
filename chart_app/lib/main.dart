@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 import 'dart:ui';
 import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
@@ -89,16 +90,28 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     html.document.removeEventListener('visibilitychange', onVisibilityChange);
   }
 
+  double? _getVerticalPaddingFraction(double height) {
+    if (configModel.yAxisMargin != null && height != 0) {
+      final double verticalPaddingFraction = max(
+              configModel.yAxisMargin!.top ?? 0,
+              configModel.yAxisMargin!.bottom ?? 0) /
+          height;
+
+      return max(verticalPaddingFraction, 0.1);
+    }
+    return null;
+  }
+
   @override
-  Widget build(BuildContext context) => MultiProvider(
+  Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
           ChangeNotifierProvider<ChartConfigModel>.value(value: configModel),
           ChangeNotifierProvider<ChartFeedModel>.value(value: feedModel)
         ],
         child: Scaffold(
-          body: Center(
-            child: Column(
-              children: <Widget>[
+          body: LayoutBuilder(
+            builder: (BuildContext _, BoxConstraints constraints) => Center(
+              child: Column(children: <Widget>[
                 Expanded(
                   child: Consumer2<ChartConfigModel, ChartFeedModel>(builder:
                       (BuildContext context, ChartConfigModel configModel,
@@ -189,18 +202,14 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       bottomChartTitleMargin: configModel.leftMargin != null
                           ? EdgeInsets.only(left: configModel.leftMargin!)
                           : null,
-                      padding: configModel.yAxisMargin != null
-                          ? EdgeInsets.only(
-                              top: configModel.yAxisMargin!.top,
-                              bottom: configModel.yAxisMargin!.bottom,
-                            )
-                          : null,
+                      verticalPaddingFraction:
+                          _getVerticalPaddingFraction(constraints.maxHeight),
                       showDataFitButton: false,
                       showLoadingAnimationForHistoricalData: true,
                     );
                   }),
                 ),
-              ],
+              ]),
             ),
           ),
         ),

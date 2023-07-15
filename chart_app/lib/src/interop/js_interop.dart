@@ -168,8 +168,8 @@ class JsIndicatorTooltip {
 /// JSYAxisMargin
 class JSYAxisMargin {
   /// Top
-  external double top;
+  external double? top;
 
   /// Bottom
-  external double bottom;
+  external double? bottom;
 }
