@@ -310,7 +310,23 @@ const App = () => {
     const renderToolbarWidget = React.useCallback(
         () => (
             <ToolbarWidget>
-                <ChartMode portalNodeId='portal-node' />
+                <ChartMode
+                    portalNodeId='portal-node'
+                    onChartType={(_chartType?: string) => {
+                        setChartType(_chartType);
+                    }}
+                    onGranularity={(timePeriod: TGranularity) => {
+                        setGranularity(timePeriod);
+                        const isCandle = isChartTypeCandle;
+                        if (isCandle && timePeriod === 0) {
+                            setChartType('mountain');
+                            setIsChartTypeCandle(false);
+                        } else if (!isCandle && timePeriod !== 0) {
+                            setChartType('candle');
+                            setIsChartTypeCandle(true);
+                        }
+                    }}
+                />
                 <StudyLegend portalNodeId='portal-node' />
                 <Views portalNodeId='portal-node' />
                 <DrawTools portalNodeId='portal-node' />
@@ -586,20 +602,6 @@ const App = () => {
                     maxTick={maxTick}
                     networkStatus={networkStatus}
                     refreshActiveSymbols={refreshActiveSymbols}
-                    onChartTypeChange={(_chartType?: string) => {
-                        setChartType(_chartType);
-                    }}
-                    onGranularityChange={(timePeriod: TGranularity) => {
-                        setGranularity(timePeriod);
-                        const isCandle = isChartTypeCandle;
-                        if (isCandle && timePeriod === 0) {
-                            setChartType('line');
-                            setIsChartTypeCandle(false);
-                        } else if (!isCandle && timePeriod !== 0) {
-                            setChartType('candles');
-                            setIsChartTypeCandle(true);
-                        }
-                    }}
                 >
                     {endEpoch ? (
                         <Marker className='chart-marker-historical' x={endEpoch} xPositioner='epoch' yPositioner='top'>

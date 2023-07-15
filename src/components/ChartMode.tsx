@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/store';
+import { TGranularity } from 'src/types';
 import '../../sass/components/_chart-mode.scss';
 import ChartTypes from './ChartTypes';
 import {
@@ -15,8 +16,11 @@ import {
 import Menu from './Menu';
 import Timeperiod from './Timeperiod';
 
+
 type TChartModeProps = {
     portalNodeId?: string;
+    onChartType: (chartType?: string | undefined) => void;
+    onGranularity: (granularity?: TGranularity) => void;
 };
 
 const TypeMap = {
@@ -26,7 +30,7 @@ const TypeMap = {
     hollow: TypeHollowGrayscaleIcon,
 };
 
-const ChartMode = ({ portalNodeId }: TChartModeProps) => {
+const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps) => {
     const { chart, chartMode, chartType, timeperiod, state } = useStores();
     const { menuStore } = chartMode;
     const { allowTickChartTypeOnly } = state;
@@ -56,10 +60,10 @@ const ChartMode = ({ portalNodeId }: TChartModeProps) => {
             <Menu.Body>
                 <div className='sc-chart-mode__section'>
                     <div className='sc-chart-mode__section__item'>
-                        <ChartTypes newDesign />
+                        <ChartTypes newDesign onChange={onChartType} />
                     </div>
                     <div className='sc-chart-mode__section__item'>
-                        <Timeperiod newDesign portalNodeId={portalNodeId} />
+                        <Timeperiod newDesign portalNodeId={portalNodeId} onChange={onGranularity} />
                     </div>
                 </div>
                 {allowTickChartTypeOnly && (

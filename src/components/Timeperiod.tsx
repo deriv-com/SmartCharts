@@ -80,20 +80,23 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
 
 const TimeperiodItem = observer(TimeperiodItemComponent);
 
-type TTimeperiodProps = { portalNodeId?: string; newDesign?: boolean };
+type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGranularity) => void; newDesign?: boolean };
 
-const Timeperiod = ({ portalNodeId }: TTimeperiodProps) => {
+const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
     const { timeperiod } = useStores();
 
-    const { setGranularity, updatePortalNode } = timeperiod;
+    const { setGranularity, updateProps, updatePortalNode } = timeperiod;
+
+    const onChangeGranularity = onChange || setGranularity;
 
     const onIntervalClick = (chart_type_id: string, key: string, interval: TGranularity) => {
         if (key === 'tick' && chart_type_id !== 'line') {
             return;
         }
-        setGranularity(interval);
+        onChangeGranularity(interval);
     };
 
+    React.useEffect(() => updateProps(onChangeGranularity));
     updatePortalNode(portalNodeId);
 
     return (

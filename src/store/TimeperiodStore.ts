@@ -24,14 +24,13 @@ export default class TimeperiodStore {
     mainStore: MainStore;
     portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
-    granularity?: TGranularity;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             portalNodeIdChanged: observable,
             setGranularity: action.bound,
+            updateProps: action.bound,
             updatePortalNode: action.bound,
-            granularity: observable,
         });
 
         this.mainStore = mainStore;
@@ -122,7 +121,7 @@ export default class TimeperiodStore {
                         const chartInterval =
                             getIntervalInSeconds({
                                 timeUnit: this.timeUnit,
-                                interval: this.granularity,
+                                interval: this.mainStore.chart.granularity,
                             }) * 1000;
                         const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
 
@@ -143,14 +142,18 @@ export default class TimeperiodStore {
     }
 
     setGranularity(granularity?: TGranularity) {
-        const { onGranularityChange } = this.mainStore.state;
-
         logEvent(LogCategories.ChartControl, LogActions.Interval, granularity?.toString());
 
-        if (onGranularityChange) {
-            onGranularityChange(granularity);
+        if (this.onGranularityChange) {
+            this.onGranularityChange(granularity);
         } else {
             this.mainStore.chart.changeSymbol(undefined, granularity);
+        }
+    }
+
+    updateProps(onChange: (granularity?: TGranularity) => void) {
+        if (this.mainStore.state.granularity !== undefined) {
+            this.onGranularityChange = onChange;
         }
     }
 

@@ -216,9 +216,11 @@ const App = () => {
     }, [notifier]);
     const renderControls = React.useCallback(() => <ChartSetting />, []);
     const renderToolbarWidget = React.useCallback(() => {
+        const changeGranularity = (timePeriod: TGranularity) => setGranularity(timePeriod);
+        const changeChartType = (_chartType?: string) => setChartType(_chartType);
         return (
             <ToolbarWidget>
-                <ChartMode />
+                <ChartMode onChartType={changeChartType} onGranularity={changeGranularity} />
                 <StudyLegend />
                 <Views />
                 <DrawTools />
@@ -237,8 +239,7 @@ const App = () => {
             });
         }
     };
-    const changeGranularity = (timePeriod: TGranularity) => setGranularity(timePeriod);
-    const changeChartType = (_chartType?: string) => setChartType(_chartType);
+
     return (
         <SmartChart
             id={chartId}
@@ -268,8 +269,6 @@ const App = () => {
             enabledChartFooter
             allTicks={allTicks}
             contractInfo={contractInfo}
-            onChartTypeChange={changeChartType}
-            onGranularityChange={changeGranularity}
             getIndicatorHeightRatio={(chart_height: number, indicator_count: number) => {
                 const isSmallScreen = chart_height < 780;
                 const denominator = indicator_count >= 5 ? indicator_count : indicator_count + 1;

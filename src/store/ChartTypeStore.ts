@@ -102,6 +102,7 @@ export default class ChartTypeStore {
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             type: observable,
+            updateProps: action.bound,
             setChartType: action.bound,
             setType: action.bound,
         });
@@ -118,6 +119,8 @@ export default class ChartTypeStore {
             onChanged: () => null,
         });
     }
+
+    onChartTypeChanged?: (chartType?: string) => void;
 
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -146,13 +149,7 @@ export default class ChartTypeStore {
     setChartType(type?: string) {
         if (!type) return;
 
-        const { onChartTypeChange } = this.mainStore.state;
-
-        if (onChartTypeChange) {
-            onChartTypeChange(type);
-        } else {
-            this.setType(type);
-        }
+        this.setType(type);
     }
 
     setType(type?: ChartType | string) {
@@ -174,8 +171,12 @@ export default class ChartTypeStore {
         this.type = chartType;
     }
 
+    updateProps(onChange: (chartType?: string) => void) {
+        this.onChartTypeChanged = onChange;
+    }
+
     get types() {
-        const isTickSelected = this.mainStore.timeperiod.granularity === 0;
+        const isTickSelected = this.mainStore.chart.granularity === 0;
         if (this.chartTypes === undefined || this.chartTypes.length === 0) {
             this.chartTypes = [...ChartTypes];
         }

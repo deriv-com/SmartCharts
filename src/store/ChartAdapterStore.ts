@@ -135,9 +135,7 @@ export default class ChartAdapterStore {
     }
 
     getGranularityInMs() {
-        let granularity: number =
-            this.mainStore.state.granularity || this.mainStore.chart.feed?.getQuotesInterval() || 1;
-
+        let granularity: number = this.mainStore.state.granularity || 1;
         return granularity * 1000;
     }
 

@@ -60,8 +60,6 @@ class ChartState {
     activeSymbols: string | null = null;
     chartControlsWidgets?: TChartControlsWidgets;
     enabledChartFooter?: boolean;
-    onGranularityChange?: (granularity: TGranularity) => void;
-    onChartTypeChange?: (chartType?: string) => void;
 
     get context() {
         return this.chartStore.context;
@@ -172,8 +170,6 @@ class ChartState {
         enableZoom = null,
         anchorChartToLeft = false,
         chartData,
-        onGranularityChange,
-        onChartTypeChange,
         isLive,
         startWithDataFitMode,
         leftMargin,
@@ -213,8 +209,6 @@ class ChartState {
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
-        this.onGranularityChange = onGranularityChange;
-        this.onChartTypeChange = onChartTypeChange;
 
         const feed = this.mainStore.chart.feed;
         if (shouldDrawTicksFromContractInfo && feed && contractInfo.tick_stream) {
@@ -406,12 +400,11 @@ class ChartState {
 
     setChartType(chartType: string | undefined) {
         this.chartType = chartType;
-        this.mainStore.chartType.setType(chartType);
         if (this.chartType) {
             this.mainStore.chartAdapter.updateChartStyle(this.chartType);
         }
-        if (this.chartTypeStore.setType) {
-            this.chartTypeStore.setType(chartType);
+        if (this.chartTypeStore.onChartTypeChanged) {
+            this.chartTypeStore.onChartTypeChanged(chartType);
         }
     }
 

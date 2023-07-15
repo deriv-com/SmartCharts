@@ -461,7 +461,6 @@ class ChartStore {
             this.mainStore.paginationLoader.updateOnPagination(false);
 
             this.mainStore.state.setChartIsReady(true);
-            this.mainStore.timeperiod.granularity = this.granularity;
 
             if (err) {
                 /* TODO, symbol not found error */
