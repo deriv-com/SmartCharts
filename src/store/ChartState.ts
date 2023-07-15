@@ -392,6 +392,8 @@ class ChartState {
             this.mainStore.chartType.isCandle ||
             (this.chartType && this.mainStore.chartType.isTypeCandle(this.chartType));
 
+        this.mainStore.chartAdapter.setMsPerPx(undefined);
+
         if (this.context && isTimeUnitSecond && isChartTypeCandle) {
             this.setChartType('line'); // if granularity is zero, set the chartType to 'line'
         }

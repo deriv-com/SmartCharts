@@ -180,7 +180,7 @@ export default class ViewStore {
             this.loader.show();
         }
 
-        this.mainStore.chartAdapter.setMsPerPx(layout.msPerPx);
+        this.mainStore.chartAdapter.msPerPx = layout.msPerPx;
 
         this.mainStore.state.setChartIsReady(false);
 

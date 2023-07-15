@@ -224,8 +224,11 @@ export default class ChartAdapterStore {
 
     scale(scale: number) {
         this.isDataFitModeEnabled = false;
-        this.msPerPx = this.flutterChart?.app.scale(scale);
-        this.mainStore.state.saveLayout();
+        const msPerPx = this.flutterChart?.app.scale(scale);
+
+        if (msPerPx != null) {
+            this.setMsPerPx(msPerPx);
+        }
     }
 
     toggleDataFitMode = () => {
@@ -312,6 +315,7 @@ export default class ChartAdapterStore {
 
     setMsPerPx(msPerPx?: number) {
         this.msPerPx = msPerPx;
+        this.mainStore.state.saveLayout();
     }
 
     getXFromEpoch(epoch: number) {
