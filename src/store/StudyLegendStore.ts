@@ -44,6 +44,7 @@ export default class StudyLegendStore {
             setFilterText: action.bound,
             onInfoItem: action.bound,
             updatePortalNode: action.bound,
+            restoreStudies: action.bound,
         });
 
         this.mainStore = mainStore;

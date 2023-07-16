@@ -3,7 +3,7 @@ import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import { TCustomEvent, TLayout } from '../types';
-import { createObjectFromLocalStorage } from '../utils';
+import { clone, createObjectFromLocalStorage } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
@@ -122,14 +122,14 @@ export default class ViewStore {
         } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
 
-            this.views.push({ name: this.templateName.trim(), layout: this.getLayout() });
+            this.views.push({ name: this.templateName.trim(), layout: clone(this.getLayout()) });
             this.updateLocalStorage();
             this.templateName = '';
         }
     }
 
     overwrite() {
-        const layout = this.getLayout();
+        const layout = clone(this.getLayout());
         const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         this.views[templateIndex].layout = layout;
         this.views[templateIndex].name = this.templateName.trim();
