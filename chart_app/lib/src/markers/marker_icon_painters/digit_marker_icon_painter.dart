@@ -18,8 +18,6 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    canvas.save();
-
     for (final WebMarker marker in markerGroup.markers) {
       final Offset center = Offset(
         epochToX(marker.epoch),
@@ -28,8 +26,6 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
 
       _drawMarker(canvas, size, theme, marker, center, markerGroup.style);
     }
-
-    canvas.restore();
   }
 
   void _drawMarker(Canvas canvas, Size size, ChartTheme theme, WebMarker marker,

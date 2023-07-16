@@ -19,8 +19,6 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     EpochToX epochToX,
     QuoteToY quoteToY,
   ) {
-    canvas.save();
-
     final Map<MarkerType, Offset> points = <MarkerType, Offset>{};
 
     for (final WebMarker marker in markerGroup.markers) {
@@ -37,8 +35,6 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     }
 
     _drawBarriers(canvas, points, markerGroup.style);
-
-    canvas.restore();
   }
 
   void _drawBarriers(

@@ -43,7 +43,6 @@ type TFastMarkerProps = {
 const FastMarker = (props: TFastMarkerProps) => {
     const { chart: chartStore, chartAdapter } = useStores();
     const { contextPromise } = chartStore;
-    const { epochBounds, quoteBounds } = chartAdapter;
     const price_ref = React.useRef<number | null>(null);
     const date_ref = React.useRef<Date | null>(null);
     const epoch_ref = React.useRef<number | null>(null);
@@ -51,6 +50,14 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     const props_ref = React.useRef(props);
     props_ref.current = props;
+
+    React.useEffect(() => {
+        chartAdapter.painter.registerCallback(updateCSS);
+
+        return () => {
+            chartAdapter.painter.unregisterCallback(updateCSS);
+        };
+    }, []);
 
     React.useEffect(() => {
         updateCSS();
@@ -86,42 +93,21 @@ const FastMarker = (props: TFastMarkerProps) => {
             show = true;
 
         if (epoch_ref.current) {
-            let tickIdx = chartStore.feed?.getQuoteIndexForEpoch(epoch_ref.current);
-
-            let x: number = chartAdapter.getXFromEpoch(epoch_ref.current);
-
-            if (typeof tickIdx === 'number' && tickIdx > -1) {
-                // To not place markers in the middle of ticks.
-                const bar = chartStore.feed?.quotes[tickIdx];
-                // Here we interpolate the pixel distance between two adjacent ticks.
-                if (bar && bar.DT! < date_ref.current) {
-                    const barNext = chartStore.feed?.quotes[tickIdx + 1];
-                    const barPrev = tickIdx > 0 ? chartStore.feed?.quotes[tickIdx - 1] : null;
-                    if (barNext && barNext.Close && barNext.DT! > date_ref.current) {
-                        const pixelToNextBar = chartAdapter.getXFromEpoch(barNext.DT!.getTime()) - x;
-                        x +=
-                            ((((date_ref.current as unknown) as number) - bar.DT!.getTime()) /
-                                (barNext.DT!.getTime() - bar.DT!.getTime())) *
-                            pixelToNextBar;
-                    } else if (barPrev && barPrev.Close) {
-                        const pixelFromPrevBar = x - chartAdapter.getXFromEpoch(barPrev.DT!.getTime());
-                        x +=
-                            ((((date_ref.current as unknown) as number) - bar.DT!.getTime()) /
-                                (bar.DT!.getTime() - barPrev.DT!.getTime())) *
-                            pixelFromPrevBar;
-                    }
-                }
-            }
-
+            const x: number = chartAdapter.getXFromEpoch(epoch_ref.current);
             const y: number = price_ref.current ? chartAdapter.getYFromQuote(price_ref.current) : 0;
+
+            const { epochBounds, quoteBounds } = chartAdapter;
+
+            // To offset verticalPaddingFraction
+            const topQuote = quoteBounds.topQuote * 1.1;
+            const bottomQuote = Math.max(quoteBounds.bottomQuote - quoteBounds.bottomQuote * 0.1, 0);
 
             if (
                 epochBounds.leftEpoch <= epoch_ref.current &&
-                (price_ref.current == null ||
-                    (quoteBounds.topQuote >= price_ref.current && quoteBounds.bottomQuote <= price_ref.current))
+                (price_ref.current == null || (topQuote >= price_ref.current && bottomQuote <= price_ref.current))
             ) {
                 top = +y;
-                left = Math.round(x);
+                left = +x;
             } else {
                 show = false;
             }

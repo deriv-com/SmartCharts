@@ -44,8 +44,6 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     super
         .paintMarkerGroup(canvas, size, theme, markerGroup, epochToX, quoteToY);
 
-    canvas.save();
-
     final Map<MarkerType, WebMarker> markers = <MarkerType, WebMarker>{};
 
     for (final WebMarker marker in markerGroup.markers) {
@@ -75,8 +73,6 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
         previousTickMarker: previousTickMarker,
       );
     }
-
-    canvas.restore();
   }
 
   void _drawShadedBarriers({

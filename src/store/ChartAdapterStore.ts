@@ -2,6 +2,7 @@ import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
+import Painter from 'src/flutter-chart/painter';
 import MainStore from './';
 
 export default class ChartAdapterStore {
@@ -19,6 +20,7 @@ export default class ChartAdapterStore {
     isFeedLoaded = false;
     msPerPx?: number;
     isDataFitModeEnabled = false;
+    painter = new Painter();
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -49,6 +51,7 @@ export default class ChartAdapterStore {
     initFlutterCharts() {
         window.jsInterop = {
             onChartLoad: this.onChartLoad,
+            onMainSeriesPaint: this.painter.onPaint,
             onVisibleAreaChanged: this.onVisibleAreaChanged,
             onQuoteAreaChanged: this.onQuoteAreaChanged,
             loadHistory: this.loadHistory,

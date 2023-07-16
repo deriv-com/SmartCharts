@@ -7,6 +7,9 @@ class JsInterop {
   /// Called when the chart has loaded
   external static void onChartLoad();
 
+  /// Called on each line series paint
+  external static void onMainSeriesPaint();
+
   /// Called when visible area is change
   external static void onVisibleAreaChanged(int leftEpoch, int rightEpoch);
 

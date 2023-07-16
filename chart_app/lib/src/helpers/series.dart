@@ -1,5 +1,6 @@
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
+import 'package:chart_app/src/series/custom_line_series.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +34,7 @@ DataSeries<Tick> getDataSeries(
         break;
     }
   }
-  return LineSeries(
+  return CustomLineSeries(
     ticks,
     style: LineStyle(
       color: Color.fromRGBO(133, 172, 176, opacity),
