@@ -61,7 +61,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   final IndicatorsModel indicatorsModel = IndicatorsModel();
 
   late final ChartApp app;
-  late int rightBoundEpoch;
+  int? rightBoundEpoch;
   bool isFollowMode = false;
 
   void onVisibilityChange(html.Event ev) {
@@ -73,8 +73,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       app.scrollToLastTick();
     }
 
-    if (html.document.visibilityState == 'hidden') {
-      isFollowMode = rightBoundEpoch > feedModel.ticks.last.epoch;
+    if (html.document.visibilityState == 'hidden' && rightBoundEpoch != null) {
+      isFollowMode = rightBoundEpoch! > feedModel.ticks.last.epoch;
     }
   }
 
