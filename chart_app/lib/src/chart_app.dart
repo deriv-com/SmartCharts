@@ -55,7 +55,7 @@ class ChartApp {
 
   /// Gets the chart visibility
   bool getChartVisibilitity() {
-    final bool showChart = feedModel.ticks.isNotEmpty && feedModel.isFeedLoaded;
+    final bool showChart = feedModel.isFeedLoaded;
 
     if (showChart != _prevShowChart) {
       _processChartVisibilityChange(showChart);

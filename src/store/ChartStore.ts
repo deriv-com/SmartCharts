@@ -19,7 +19,7 @@ import {
     TQuote,
     TRatio,
 } from '../types';
-import { cloneCategories, createObjectFromLocalStorage } from '../utils';
+import { cloneCategories } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import BarrierStore from './BarrierStore';
 import ChartState from './ChartState';
@@ -295,15 +295,22 @@ class ChartStore {
             this.loader.setState('trading-time');
             this.tradingTimes?.initialize().then(
                 action(() => {
+                    // In the odd event that chart is destroyed by the time
+                    // the request finishes, just calmly return...
+                    if (this.isDestroyed) {
+                        return;
+                    }
                     if (this.startWithDataFitMode) {
                         this.state?.clearLayout();
                     } else {
                         this.state?.restoreLayout();
                     }
-                    this.loadChartWithInitalData(symbol, initialData?.masterData);
+
+                    let _symbol = this.state?.symbol || symbol;
+
                     this.changeSymbol(
                         // default to first available symbol
-                        symbol || (this.activeSymbols && Object.keys(this.activeSymbols.symbolMap)[0]),
+                        _symbol || (this.activeSymbols && Object.keys(this.activeSymbols.symbolMap)[0]),
                         this.granularity
                     );
                     this.context = context;
@@ -484,27 +491,7 @@ class ChartStore {
             }
         );
     }
-    /**
-     * load the chart with given data
-     *
-     * by this methos, beside of waiting for Feed@fetchInitialData to provide first data
-     * the chart are initiled by give masterData. Chart need a symbol to be able to get
-     * loaded, so if the passed symbol didn't fill, it try to get the symbol from `layout-*`
-     * storage
-     *
-     * @param {string} symbol the symbol used to load the chart
-     * @param {array} masterData array of ticks regards of desire tick
-     */
-    loadChartWithInitalData(symbol: string | undefined, masterData: TQuote[] | undefined) {
-        if (!masterData) return;
-        const layoutData = createObjectFromLocalStorage(`layout-${this.chartId}`);
-        if (!layoutData || !layoutData.symbols.length) return;
-        const layout_symbol = layoutData.symbols[0].symbol;
-        if (!(symbol || layout_symbol)) {
-            console.error('symbol is not specificed, without it, chart is unable to be loaded!');
-            return;
-        }
-    }
+
     remainLabelY = (): number => {
         return 0;
     };

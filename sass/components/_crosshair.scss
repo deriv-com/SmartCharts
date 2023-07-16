@@ -27,8 +27,8 @@
 .cq-crosshair-tooltip {
     position: absolute;
     z-index: 30;
-    top: 0;
-    left: 0;
+    top: -50;
+    left: -50;
     pointer-events: none;
 
     .cq-crosshair-content {
@@ -105,14 +105,14 @@
 
 .cq-crosshair-x {
     /* Horizontal Crosshair line size */
-    top: 0px;
+    top: -50px;
     width: 1px;
     height: 100%;
 }
 
 .cq-crosshair-y {
     /* Vertical Crosshair line size */
-    left: 0px;
+    left: -50px;
     top: 0px;
     height: 1px;
     width: 98%;

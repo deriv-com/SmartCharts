@@ -76,9 +76,6 @@ class ChartState {
     get drawTools() {
         return this.mainStore.drawTools;
     }
-    get indicatorRatio() {
-        return this.mainStore.chart;
-    }
 
     get rootElement() {
         return this.chartStore.rootElement;

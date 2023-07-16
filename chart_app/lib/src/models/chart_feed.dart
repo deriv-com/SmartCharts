@@ -59,23 +59,21 @@ class ChartFeedModel extends ChangeNotifier {
   /// To update the tick history
   // ignore: avoid_positional_boolean_parameters
   void onTickHistory(List<JsQuote> quotes, bool append) {
-    if (quotes.isEmpty) {
-      return;
-    }
-
     List<Tick> newTicks = quotes
         .map((JsQuote item) =>
             item.Open != null ? _parseCandle(item) : _parseTick(item))
         .toList();
 
-    if (quotes.first.Open != null) {
+    if (quotes.isNotEmpty && quotes.first.Open != null) {
       newTicks = quotes.map((JsQuote item) => _parseCandle(item)).toList();
     } else {
       newTicks = quotes.map((JsQuote item) => _parseTick(item)).toList();
     }
 
     if (append) {
-      while (newTicks.isNotEmpty && newTicks.last.epoch >= ticks.first.epoch) {
+      while (newTicks.isNotEmpty &&
+          ticks.isNotEmpty &&
+          newTicks.last.epoch >= ticks.first.epoch) {
         newTicks.removeLast();
       }
 

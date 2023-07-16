@@ -79,9 +79,6 @@ export default class StudyLegendStore {
         return this.mainStore.chart.context;
     }
 
-    get indicatorRatio() {
-        return this.mainStore.chart;
-    }
     get items() {
         return [...getIndicatorsTree()].map(indicator => {
             // the only icon which is different on light/dark is trend
