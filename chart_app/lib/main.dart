@@ -108,6 +108,14 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     return configModel.isMobile ? currentTickOffset / 1.25 : currentTickOffset;
   }
 
+  double? _getMinIntervalWidth() {
+    if (configModel.startWithDataFitMode &&
+        configModel.style == ChartStyle.line) {
+      return 0.1;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<dynamic>>[
@@ -205,6 +213,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       msPerPx: configModel.startWithDataFitMode
                           ? null
                           : configModel.msPerPx,
+                      minIntervalWidth: _getMinIntervalWidth(),
                       bottomChartTitleMargin: configModel.leftMargin != null
                           ? EdgeInsets.only(left: configModel.leftMargin!)
                           : null,
