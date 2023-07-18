@@ -5,6 +5,7 @@ import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:chart_app/src/models/indicators.dart';
+import 'package:chart_app/src/series/current_tick_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -152,8 +153,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       annotations: feedModel.ticks.isNotEmpty
                           ? <Barrier>[
                               if (configModel.isLive)
-                                TickIndicator(
+                                CurrentTickIndicator(
                                   feedModel.ticks.last,
+                                  id: 'last_tick_indicator',
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
@@ -220,7 +222,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       verticalPaddingFraction:
                           _getVerticalPaddingFraction(constraints.maxHeight),
                       showDataFitButton: false,
-                      showLoadingAnimationForHistoricalData: true,
                     );
                   }),
                 ),
