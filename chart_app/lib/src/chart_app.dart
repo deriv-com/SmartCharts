@@ -118,6 +118,15 @@ class ChartApp {
     }
   }
 
+  /// Gets the quote interval as granularity to fix 2s ticks.
+  int? getQuotesInterval() {
+    if (feedModel.isFeedLoaded && feedModel.ticks.length > 1) {
+      final Tick previousTick = feedModel.ticks[feedModel.ticks.length - 2];
+      return feedModel.ticks.last.epoch - previousTick.epoch;
+    }
+    return configModel.granularity;
+  }
+
   /// Called to get epoch from x position
   int? getEpochFromX(double x) {
     if (isMounted) {

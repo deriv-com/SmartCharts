@@ -177,7 +177,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             ]
                           : null,
                       pipSize: configModel.pipSize,
-                      granularity: configModel.granularity ?? 1000,
+                      granularity: app.getQuotesInterval() ?? 1000,
                       controller: _controller,
                       theme: configModel.theme,
                       onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {
