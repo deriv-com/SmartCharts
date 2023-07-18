@@ -88,36 +88,6 @@ class ChartApp {
     );
   }
 
-  /// Scales the chart.
-  double? scale(double scale) {
-    if (isMounted) {
-      return controller.scale(scale);
-    }
-    return null;
-  }
-
-  /// Scroll chart visible area.
-  void scroll(double pxShift) {
-    if (isMounted) {
-      controller.scroll(pxShift);
-    }
-  }
-
-  /// Scroll chart visible area to the newest data.
-  void scrollToLastTick() {
-    if (isMounted) {
-      controller.scrollToLastTick();
-    }
-  }
-
-  /// Scroll chart visible area to the newest data.
-  // ignore: avoid_positional_boolean_parameters
-  void toggleDataFitMode(bool dataFitMode) {
-    if (isMounted) {
-      controller.toggleDataFitMode?.call(dataFitMode);
-    }
-  }
-
   /// Gets the quote interval as granularity to fix 2s ticks.
   int? getQuotesInterval() {
     if (feedModel.isFeedLoaded && feedModel.ticks.length > 1) {
@@ -130,35 +100,76 @@ class ChartApp {
     return configModel.granularity;
   }
 
+  /// Scales the chart.
+  double? scale(double scale) {
+    try {
+      return controller.scale(scale);
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  /// Scroll chart visible area.
+  void scroll(double pxShift) {
+    try {
+      controller.scroll(pxShift);
+    } on Exception catch (_) {
+      return;
+    }
+  }
+
+  /// Scroll chart visible area to the newest data.
+  void scrollToLastTick() {
+    try {
+      controller.scrollToLastTick();
+    } on Exception catch (_) {
+      return;
+    }
+  }
+
+  /// Scroll chart visible area to the newest data.
+  // ignore: avoid_positional_boolean_parameters
+  void toggleDataFitMode(bool dataFitMode) {
+    try {
+      controller.toggleDataFitMode?.call(dataFitMode);
+    } on Exception catch (_) {
+      return;
+    }
+  }
+
   /// Called to get epoch from x position
   int? getEpochFromX(double x) {
-    if (isMounted) {
+    try {
       return controller.getEpochFromX?.call(x);
+    } on Exception catch (_) {
+      return null;
     }
-    return null;
   }
 
   /// Called to get quote from y position
   double? getQuoteFromY(double y) {
-    if (isMounted) {
+    try {
       return controller.getQuoteFromY?.call(y);
+    } on Exception catch (_) {
+      return null;
     }
-    return null;
   }
 
   /// Called to get X position from epoch
   double? getXFromEpoch(int epoch) {
-    if (isMounted) {
+    try {
       return controller.getXFromEpoch?.call(epoch);
+    } on Exception catch (_) {
+      return null;
     }
-    return null;
   }
 
   /// Called to get Y position from quote
   double? getYFromQuote(double quote) {
-    if (isMounted) {
+    try {
       return controller.getYFromQuote?.call(quote);
+    } on Exception catch (_) {
+      return null;
     }
-    return null;
   }
 }
