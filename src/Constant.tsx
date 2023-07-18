@@ -420,9 +420,9 @@ const getFieldTypeOptions = () => ({
     low: t.translate('Low'),
     close: t.translate('Close'),
     'Hl/2': t.translate('Hl/2'),
-    'Hlc/3': t.translate('Hlc/3'),
-    'Hlcc/4': t.translate('Hlcc/4'),
-    'Ohlc/4': t.translate('Ohlc/4'),
+    'HlC/3': t.translate('Hlc/3'),
+    'HlCC/4': t.translate('Hlcc/4'),
+    'OHlC/4': t.translate('Ohlc/4'),
 });
 
 const getMovingAverageTypeOptions = () => ({

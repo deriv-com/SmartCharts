@@ -254,10 +254,10 @@ const fieldTypeShortCode = {
     high: 'H',
     close: 'C',
     low: 'L',
-    'Hl/2': 'hl/2',
-    'Hlc/3': 'hlc/3',
-    'Hlcc/4': 'hlcc/4',
-    'Ohlc/4': 'ohlc/4',
+    'Hl/2': 'Hl/2',
+    'HlC/3': 'Hlc/3',
+    'HlCC/4': 'Hlcc/4',
+    'OHlC/4': 'Ohlc/4',
 };
 
 export const prepareIndicatorName = (name: string, parameters: TSettingsParameter[] = []) => {
