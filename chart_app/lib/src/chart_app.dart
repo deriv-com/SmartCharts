@@ -122,7 +122,10 @@ class ChartApp {
   int? getQuotesInterval() {
     if (feedModel.isFeedLoaded && feedModel.ticks.length > 1) {
       final Tick previousTick = feedModel.ticks[feedModel.ticks.length - 2];
-      return feedModel.ticks.last.epoch - previousTick.epoch;
+      final Tick lastTick = feedModel.ticks.last;
+      if (previousTick.epoch != lastTick.epoch) {
+        return feedModel.ticks.last.epoch - previousTick.epoch;
+      }
     }
     return configModel.granularity;
   }
