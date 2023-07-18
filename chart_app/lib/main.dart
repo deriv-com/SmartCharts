@@ -142,8 +142,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       );
                     }
 
+                    final int granularity = app.getQuotesInterval() ?? 1000;
+
                     final DataSeries<Tick> mainSeries =
-                        getDataSeries(feedModel, configModel);
+                        getDataSeries(feedModel, configModel, granularity);
 
                     final Color latestTickColor = Color.fromRGBO(
                         255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
@@ -177,7 +179,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             ]
                           : null,
                       pipSize: configModel.pipSize,
-                      granularity: app.getQuotesInterval() ?? 1000,
+                      granularity: granularity,
                       controller: _controller,
                       theme: configModel.theme,
                       onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {

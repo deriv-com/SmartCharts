@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 
 /// Gets the data series
 DataSeries<Tick> getDataSeries(
-    ChartFeedModel feedModel, ChartConfigModel configModel) {
+    ChartFeedModel feedModel, ChartConfigModel configModel, int granularity) {
   final List<Tick> ticks = feedModel.ticks;
   final double opacity = configModel.isSymbolClosed ? 0.32 : 1;
 
-  if (ticks is List<Candle>) {
+  // Min granularity 1m
+  if (ticks is List<Candle> && granularity >= 60000) {
     final CandleStyle? style = configModel.theme is ChartDefaultLightTheme
         ? CandleStyle(
             positiveColor: Color.fromRGBO(76, 175, 79, opacity),

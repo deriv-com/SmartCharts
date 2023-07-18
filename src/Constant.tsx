@@ -786,7 +786,7 @@ const getMACDIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
 const getROCIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: clone(lineStyle),
-        pipSize: 2,
+        pipSize: 4,
         showLastIndicator: true,
     },
     parameters: [
