@@ -28,6 +28,6 @@ class MarkerGroup implements Comparable<MarkerGroup> {
     final int epoch = markers.isNotEmpty ? markers.first.epoch : 0;
     final int otherEpoch =
         other.markers.isNotEmpty ? other.markers.first.epoch : 0;
-    throw epoch.compareTo(otherEpoch);
+    return epoch.compareTo(otherEpoch);
   }
 }

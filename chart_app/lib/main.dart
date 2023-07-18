@@ -119,7 +119,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   @override
   Widget build(BuildContext _) => MultiProvider(
-        providers: <ChangeNotifierProvider<dynamic>>[
+        providers: <ChangeNotifierProvider<ChangeNotifier>>[
           ChangeNotifierProvider<ChartConfigModel>.value(value: configModel),
           ChangeNotifierProvider<ChartFeedModel>.value(value: feedModel)
         ],
