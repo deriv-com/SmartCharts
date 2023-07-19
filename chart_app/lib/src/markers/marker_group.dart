@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
@@ -8,6 +10,7 @@ class MarkerGroup implements Comparable<MarkerGroup> {
     this.markers, {
     required this.type,
     this.id,
+    this.props,
     this.style = const MarkerStyle(),
   });
 
@@ -22,6 +25,9 @@ class MarkerGroup implements Comparable<MarkerGroup> {
 
   /// Marker group type.
   final String type;
+
+  /// Extra props
+  final JsObject? props;
 
   @override
   int compareTo(covariant MarkerGroup other) {

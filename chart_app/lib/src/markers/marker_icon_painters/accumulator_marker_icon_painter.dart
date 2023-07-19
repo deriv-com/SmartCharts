@@ -1,3 +1,6 @@
+import 'dart:js';
+import 'dart:js_util';
+
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_icon_painters/tick_marker_icon_painter.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
@@ -10,11 +13,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   AccumulatorMarkerIconPainter({
     required this.yAxiswidth,
     this.isMobile = false,
-    this.hasPersistentBorders = false,
   });
-
-  /// Closed borders
-  bool hasPersistentBorders;
 
   /// Width of yAxis
   double yAxiswidth;
@@ -68,11 +67,22 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
         highMarker: highMarker,
         startLeft: lowOffset.dx,
         top: highOffset.dy,
-        style: markerGroup.style,
+        markerGroup: markerGroup,
         bottom: lowOffset.dy,
         previousTickMarker: previousTickMarker,
       );
     }
+  }
+
+  bool _hasPersistentBorders(JsObject? props) {
+    if (props == null) {
+      return false;
+    }
+
+    final bool? hasPersistentBorders =
+        getProperty(props, 'hasPersistentBorders');
+
+    return hasPersistentBorders ?? false;
   }
 
   void _drawShadedBarriers({
@@ -82,12 +92,16 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     required WebMarker highMarker,
     required double startLeft,
     required double top,
-    required MarkerStyle style,
+    required MarkerGroup markerGroup,
     required double bottom,
     WebMarker? previousTickMarker,
   }) {
     final double endLeft = size.width - yAxiswidth - 15;
     final double endTop = size.height;
+
+    final bool hasPersistentBorders = _hasPersistentBorders(markerGroup.props);
+
+    final MarkerStyle style = markerGroup.style;
 
     final bool isTopVisible =
         top < endTop && (top >= 0 || !hasPersistentBorders);

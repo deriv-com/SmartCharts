@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 import 'package:js/js.dart';
 
@@ -91,6 +93,9 @@ class JSMarkerGroupUpdate {
 
   /// Color of the markers
   external String? get color;
+
+  /// Extra props needed to customize contract painting
+  external JsObject? props;
 }
 
 @JS()

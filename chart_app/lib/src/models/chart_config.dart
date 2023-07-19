@@ -99,6 +99,7 @@ class ChartConfigModel extends ChangeNotifier {
           style: MarkerStyle(
             backgroundColor: _bgColor,
           ),
+          props: _markerGroup.props,
         ),
       );
     }

@@ -102,6 +102,9 @@ class ChartApp {
 
   /// Scales the chart.
   double? scale(double scale) {
+    if (!isMounted) {
+      return null;
+    }
     try {
       return controller.scale(scale);
     } on Exception catch (_) {
@@ -111,6 +114,9 @@ class ChartApp {
 
   /// Scroll chart visible area.
   void scroll(double pxShift) {
+    if (!isMounted) {
+      return;
+    }
     try {
       controller.scroll(pxShift);
     } on Exception catch (_) {
@@ -120,6 +126,9 @@ class ChartApp {
 
   /// Scroll chart visible area to the newest data.
   void scrollToLastTick() {
+    if (!isMounted) {
+      return;
+    }
     try {
       controller.scrollToLastTick();
     } on Exception catch (_) {
@@ -130,6 +139,9 @@ class ChartApp {
   /// Scroll chart visible area to the newest data.
   // ignore: avoid_positional_boolean_parameters
   void toggleDataFitMode(bool dataFitMode) {
+    if (!isMounted) {
+      return;
+    }
     try {
       controller.toggleDataFitMode?.call(dataFitMode);
     } on Exception catch (_) {
@@ -139,6 +151,9 @@ class ChartApp {
 
   /// Called to get epoch from x position
   int? getEpochFromX(double x) {
+    if (!isMounted) {
+      return null;
+    }
     try {
       return controller.getEpochFromX?.call(x);
     } on Exception catch (_) {
@@ -148,6 +163,9 @@ class ChartApp {
 
   /// Called to get quote from y position
   double? getQuoteFromY(double y) {
+    if (!isMounted) {
+      return null;
+    }
     try {
       return controller.getQuoteFromY?.call(y);
     } on Exception catch (_) {
@@ -157,6 +175,9 @@ class ChartApp {
 
   /// Called to get X position from epoch
   double? getXFromEpoch(int epoch) {
+    if (!isMounted) {
+      return null;
+    }
     try {
       return controller.getXFromEpoch?.call(epoch);
     } on Exception catch (_) {
@@ -166,6 +187,9 @@ class ChartApp {
 
   /// Called to get Y position from quote
   double? getYFromQuote(double quote) {
+    if (!isMounted) {
+      return null;
+    }
     try {
       return controller.getYFromQuote?.call(quote);
     } on Exception catch (_) {

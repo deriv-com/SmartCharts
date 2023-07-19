@@ -17,14 +17,7 @@ MarkerGroupIconPainter getMarkerGroupPainter(
         yAxiswidth: app.yAxisWidth,
         isMobile: app.configModel.isMobile,
       );
-
-    case 'AccumulatorContractInContractDetails':
-      return AccumulatorMarkerIconPainter(
-        yAxiswidth: app.yAxisWidth,
-        isMobile: app.configModel.isMobile,
-        hasPersistentBorders: true,
-      );
+    default:
+      return TickMarkerIconPainter();
   }
-
-  return TickMarkerIconPainter();
 }
