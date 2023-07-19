@@ -37,6 +37,7 @@ type TFastMarkerProps = {
     x?: number;
     xPositioner?: string;
     yPositioner?: string;
+    overlap_y_axis?: boolean;
     children?: React.ReactNode;
 };
 
@@ -146,9 +147,17 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     if (!chartAdapter.isChartLoaded) return null;
 
+    const { chartNode, yAxisWidth } = chartStore;
+
+    const { overlap_y_axis = true } = props;
+
+    const maxWidth = chartNode && !overlap_y_axis ? chartNode.offsetWidth - yAxisWidth - 10 : '100%';
+
     return (
-        <div className={className} ref={setRef} style={{ position: 'absolute' }}>
-            {children}
+        <div className='fast-marker' style={{ maxWidth: maxWidth }}>
+            <div className={className} ref={setRef} style={{ position: 'absolute' }}>
+                {children}
+            </div>
         </div>
     );
 };
