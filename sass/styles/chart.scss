@@ -1101,6 +1101,14 @@ $spot-color: #0298d3;
     }
 }
 
+// To hide google translate tooltips on drag
 #gtx-trans {
     display: none;
+}
+
+.fast-marker {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
 }
