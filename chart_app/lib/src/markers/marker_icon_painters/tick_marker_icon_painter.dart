@@ -1,6 +1,8 @@
+import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/markers/helpers/paint_functions/paint_vertical_line.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
+import 'package:chart_app/src/markers/painter_props.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -18,6 +20,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     MarkerGroup markerGroup,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    PainterProps painterProps,
   ) {
     final Map<MarkerType, Offset> points = <MarkerType, Offset>{};
 
@@ -30,16 +33,33 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
       if (marker.markerType != null) {
         points[marker.markerType!] = center;
       }
-
-      _drawMarker(canvas, size, theme, marker, center, markerGroup.style);
     }
 
-    _drawBarriers(canvas, points, markerGroup.style);
+    final Offset? startPoint = points[MarkerType.start];
+    final Offset? exitPoint = points[MarkerType.exit];
+    final Offset? endPoint = points[MarkerType.end];
+
+    double opacity = 1;
+
+    if (startPoint != null && (endPoint != null || exitPoint != null)) {
+      opacity =
+          calculateOpacity(startPoint.dx, (endPoint?.dx ?? exitPoint?.dx)!);
+    }
+
+    _drawBarriers(
+        canvas, size, points, markerGroup.style, opacity, painterProps);
+
+    for (final WebMarker marker in markerGroup.markers) {
+      final Offset center = points[marker.markerType!]!;
+      _drawMarker(canvas, size, theme, marker, center, markerGroup.style,
+          painterProps.zoom, opacity);
+    }
   }
 
-  void _drawBarriers(
-      Canvas canvas, Map<MarkerType, Offset> points, MarkerStyle style) {
-    final Paint paint = Paint()..color = style.backgroundColor;
+  void _drawBarriers(Canvas canvas, Size size, Map<MarkerType, Offset> points,
+      MarkerStyle style, double opacity, PainterProps painterProps) {
+    final Color color = style.backgroundColor.withOpacity(opacity);
+    final Paint paint = Paint()..color = color;
     final Offset? _entryOffset = points[MarkerType.entry];
     final Offset? _entryTickOffset = points[MarkerType.entryTick];
     final Offset? _startOffset = points[MarkerType.start];
@@ -47,13 +67,13 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     final Offset? _endOffset = points[MarkerType.end];
     final Offset? _exitOffset = points[MarkerType.exit];
 
-    if (_entryOffset != null) {
+    if (_entryOffset != null && _startOffset != null) {
       paintHorizontalDashedLine(
         canvas,
-        _startOffset!.dx,
+        _startOffset.dx,
         _entryOffset.dx,
         _startOffset.dy,
-        style.backgroundColor,
+        color,
         1,
         dashWidth: 1,
         dashSpace: 1,
@@ -61,7 +81,10 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     }
 
     if (_entryOffset != null && (_latestOffset != null || _endOffset != null)) {
-      canvas.drawLine(_entryOffset, _latestOffset ?? _endOffset!, paint);
+      final double dx = (_latestOffset?.dx ?? _endOffset?.dx)!;
+      final double dy = (_latestOffset?.dy ?? _endOffset?.dy)!;
+
+      canvas.drawLine(_entryOffset, Offset(dx, dy), paint);
     }
 
     if (_entryOffset != null && _entryTickOffset != null) {
@@ -69,7 +92,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
         canvas,
         _entryOffset,
         _entryTickOffset,
-        style,
+        color,
         1,
         dashWidth: 2,
         dashSpace: 2,
@@ -81,7 +104,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
         canvas,
         _exitOffset,
         _endOffset,
-        style,
+        color,
         1,
         dashWidth: 2,
         dashSpace: 2,
@@ -90,61 +113,93 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
   }
 
   void _drawMarker(Canvas canvas, Size size, ChartTheme theme, WebMarker marker,
-      Offset anchor, MarkerStyle style) {
-    final Paint paint = Paint()..color = style.backgroundColor;
+      Offset anchor, MarkerStyle style, double zoom, double opacity) {
+    final Color color = style.backgroundColor.withOpacity(opacity);
+
+    final Paint paint = Paint()..color = color;
+
     switch (marker.markerType) {
       case MarkerType.activeStart:
-        paintStartLine(canvas, size, marker, anchor, style);
+        paintStartLine(canvas, size, marker, anchor, style, zoom);
         break;
       case MarkerType.start:
-        _drawStartPoint(canvas, size, theme, marker, anchor, style);
+        _drawStartPoint(
+            canvas, size, theme, marker, anchor, style, zoom, opacity);
         break;
       case MarkerType.entry:
-        final Paint entryPaint = Paint()
-          ..color = style.backgroundColor
-          ..style = PaintingStyle.stroke;
-        canvas.drawCircle(
-          anchor,
-          2,
-          entryPaint,
-        );
+        _drawEntryPoint(canvas, theme, anchor, color, zoom, opacity);
         break;
       case MarkerType.end:
-        paintEndMarker(canvas, theme, anchor - const Offset(1, 20), style);
+        paintEndMarker(canvas, theme, anchor - Offset(1, 20 * zoom),
+            style.backgroundColor, zoom);
         break;
       case MarkerType.exit:
         canvas.drawCircle(
           anchor,
-          2,
+          1.5 * zoom,
           paint,
         );
         break;
       case MarkerType.tick:
-        _drawTickPoint(canvas, anchor, paint);
+        _drawTickPoint(canvas, anchor, paint, zoom);
         break;
       default:
         break;
     }
   }
 
-  void _drawTickPoint(Canvas canvas, Offset anchor, Paint paint) {
+  void _drawTickPoint(Canvas canvas, Offset anchor, Paint paint, double zoom) {
     canvas.drawCircle(
       anchor,
-      2,
+      1.5 * zoom,
       paint,
     );
   }
 
-  void _drawStartPoint(Canvas canvas, Size size, ChartTheme theme,
-      WebMarker marker, Offset anchor, MarkerStyle style) {
+  void _drawEntryPoint(Canvas canvas, ChartTheme theme, Offset anchor,
+      Color color, double zoom, double opacity) {
+    final Paint paint = Paint()
+      ..color = theme.base08Color.withOpacity(opacity)
+      ..style = PaintingStyle.fill;
+    final double radius = 1.5 * zoom;
+    canvas.drawCircle(
+      anchor,
+      radius,
+      paint,
+    );
+    final Paint strokePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke;
+    canvas.drawCircle(
+      anchor,
+      radius,
+      strokePaint,
+    );
+  }
+
+  void _drawStartPoint(
+    Canvas canvas,
+    Size size,
+    ChartTheme theme,
+    WebMarker marker,
+    Offset anchor,
+    MarkerStyle style,
+    double zoom,
+    double opacity,
+  ) {
     if (marker.quote != 0) {
-      paintStartMarker(canvas, anchor - const Offset(10, 20), style, 20);
+      paintStartMarker(
+        canvas,
+        anchor - Offset(20 * zoom / 2, 20 * zoom),
+        style.backgroundColor.withOpacity(opacity),
+        20 * zoom,
+      );
     }
 
     if (marker.text != null) {
       final TextStyle textStyle = TextStyle(
-        color: marker.color ?? style.backgroundColor,
-        fontSize: style.activeMarkerText.fontSize,
+        color: (marker.color ?? style.backgroundColor).withOpacity(opacity),
+        fontSize: style.activeMarkerText.fontSize! * zoom,
         fontWeight: FontWeight.bold,
         backgroundColor: theme.base08Color,
       );
@@ -152,7 +207,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
       final TextPainter textPainter = makeTextPainter(marker.text!, textStyle);
 
       final Offset iconShift =
-          Offset(textPainter.width / 2, 20 + textPainter.height);
+          Offset(textPainter.width / 2, 20 * zoom + textPainter.height);
 
       paintWithTextPainter(
         canvas,

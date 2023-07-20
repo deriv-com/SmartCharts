@@ -1,5 +1,6 @@
 import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
+import 'package:chart_app/src/misc/wrapped_controller.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
 import 'package:chart_app/src/models/indicators.dart';
@@ -13,7 +14,6 @@ class ChartApp {
     this.configModel,
     this.feedModel,
     this.indicatorsModel,
-    this.controller,
   );
 
   /// ChartConfigModel
@@ -25,8 +25,8 @@ class ChartApp {
   /// Indicators config
   IndicatorsModel indicatorsModel;
 
-  /// ChartController
-  ChartController controller;
+  /// WrappedController
+  WrappedController wrappedController = WrappedController();
 
   bool _prevShowChart = false;
 
@@ -74,10 +74,11 @@ class ChartApp {
   /// Gets the tooltip content for indicator series
   List<JsIndicatorTooltip?>? getTooltipContent(int epoch, int pipSize) {
     final List<Series> seriesList =
-        controller.getSeriesList?.call() ?? <Series>[];
+        wrappedController.chartController.getSeriesList?.call() ?? <Series>[];
     final List<IndicatorConfig> indicatorConfigsList =
-        controller.getConfigsList != null
-            ? controller.getConfigsList!.call() as List<IndicatorConfig>
+        wrappedController.chartController.getConfigsList != null
+            ? wrappedController.chartController.getConfigsList!.call()
+                as List<IndicatorConfig>
             : <IndicatorConfig>[];
 
     return indicatorsModel.getTooltipContent(
@@ -98,102 +99,5 @@ class ChartApp {
       }
     }
     return configModel.granularity;
-  }
-
-  /// Scales the chart.
-  double? scale(double scale) {
-    if (!isMounted) {
-      return null;
-    }
-    try {
-      return controller.scale(scale);
-    } on Exception catch (_) {
-      return null;
-    }
-  }
-
-  /// Scroll chart visible area.
-  void scroll(double pxShift) {
-    if (!isMounted) {
-      return;
-    }
-    try {
-      controller.scroll(pxShift);
-    } on Exception catch (_) {
-      return;
-    }
-  }
-
-  /// Scroll chart visible area to the newest data.
-  void scrollToLastTick() {
-    if (!isMounted) {
-      return;
-    }
-    try {
-      controller.scrollToLastTick();
-    } on Exception catch (_) {
-      return;
-    }
-  }
-
-  /// Scroll chart visible area to the newest data.
-  // ignore: avoid_positional_boolean_parameters
-  void toggleDataFitMode(bool dataFitMode) {
-    if (!isMounted) {
-      return;
-    }
-    try {
-      controller.toggleDataFitMode?.call(dataFitMode);
-    } on Exception catch (_) {
-      return;
-    }
-  }
-
-  /// Called to get epoch from x position
-  int? getEpochFromX(double x) {
-    if (!isMounted) {
-      return null;
-    }
-    try {
-      return controller.getEpochFromX?.call(x);
-    } on Exception catch (_) {
-      return null;
-    }
-  }
-
-  /// Called to get quote from y position
-  double? getQuoteFromY(double y) {
-    if (!isMounted) {
-      return null;
-    }
-    try {
-      return controller.getQuoteFromY?.call(y);
-    } on Exception catch (_) {
-      return null;
-    }
-  }
-
-  /// Called to get X position from epoch
-  double? getXFromEpoch(int epoch) {
-    if (!isMounted) {
-      return null;
-    }
-    try {
-      return controller.getXFromEpoch?.call(epoch);
-    } on Exception catch (_) {
-      return null;
-    }
-  }
-
-  /// Called to get Y position from quote
-  double? getYFromQuote(double quote) {
-    if (!isMounted) {
-      return null;
-    }
-    try {
-      return controller.getYFromQuote?.call(quote);
-    } on Exception catch (_) {
-      return null;
-    }
   }
 }

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 /// Paints expiry/end tick marker
 void paintEndMarker(
-    Canvas canvas, ChartTheme theme, Offset center, MarkerStyle style) {
+    Canvas canvas, ChartTheme theme, Offset center, Color color, double zoom) {
   canvas
     ..save()
     ..translate(
       center.dx,
       center.dy,
     )
-    ..scale(1);
+    ..scale(1 * zoom);
 
   final Paint paint = Paint()
     ..style = PaintingStyle.fill
@@ -87,7 +87,7 @@ void paintEndMarker(
 
   final Paint flagPaint = Paint()
     ..style = PaintingStyle.fill
-    ..color = style.backgroundColor.withOpacity(1);
+    ..color = color;
 
   canvas
     ..drawPath(path, paint)

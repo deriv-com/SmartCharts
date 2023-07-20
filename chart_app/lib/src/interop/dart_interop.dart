@@ -43,22 +43,26 @@ JsObject _exposeApp(ChartApp app) {
     allowInterop(app.getTooltipContent),
   );
 
-  setProperty(jsObject, 'getXFromEpoch', allowInterop(app.getXFromEpoch));
+  setProperty(jsObject, 'getXFromEpoch',
+      allowInterop(app.wrappedController.getXFromEpoch));
 
-  setProperty(jsObject, 'getYFromQuote', allowInterop(app.getYFromQuote));
+  setProperty(jsObject, 'getYFromQuote',
+      allowInterop(app.wrappedController.getYFromQuote));
 
-  setProperty(jsObject, 'getEpochFromX', allowInterop(app.getEpochFromX));
+  setProperty(jsObject, 'getEpochFromX',
+      allowInterop(app.wrappedController.getEpochFromX));
 
-  setProperty(jsObject, 'getQuoteFromY', allowInterop(app.getQuoteFromY));
+  setProperty(jsObject, 'getQuoteFromY',
+      allowInterop(app.wrappedController.getQuoteFromY));
 
-  setProperty(jsObject, 'scale', allowInterop(app.scale));
+  setProperty(jsObject, 'scale', allowInterop(app.wrappedController.scale));
 
-  setProperty(jsObject, 'scroll', allowInterop(app.scroll));
+  setProperty(jsObject, 'scroll', allowInterop(app.wrappedController.scroll));
 
   setProperty(
     jsObject,
     'toggleDataFitMode',
-    allowInterop(app.toggleDataFitMode),
+    allowInterop(app.wrappedController.toggleDataFitMode),
   );
 
   return jsObject;

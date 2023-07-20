@@ -1,5 +1,7 @@
+import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
+import 'package:chart_app/src/markers/painter_props.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -17,34 +19,59 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     MarkerGroup markerGroup,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    PainterProps painterProps,
   ) {
+    final Map<MarkerType, Offset> points = <MarkerType, Offset>{};
+
     for (final WebMarker marker in markerGroup.markers) {
       final Offset center = Offset(
         epochToX(marker.epoch),
         quoteToY(marker.quote),
       );
 
-      _drawMarker(canvas, size, theme, marker, center, markerGroup.style);
+      if (marker.markerType != null) {
+        points[marker.markerType!] = center;
+      }
+    }
+
+    final Offset? startPoint = points[MarkerType.start];
+    final Offset? exitPoint = points[MarkerType.exit];
+    final Offset? endPoint = points[MarkerType.end];
+
+    double opacity = 1;
+
+    if (startPoint != null && (endPoint != null || exitPoint != null)) {
+      opacity =
+          calculateOpacity(startPoint.dx, (endPoint?.dx ?? exitPoint?.dx)!);
+    }
+
+    for (final WebMarker marker in markerGroup.markers) {
+      final Offset center = points[marker.markerType!]!;
+      _drawMarker(canvas, size, theme, marker, center, markerGroup.style,
+          painterProps.zoom, opacity);
     }
   }
 
   void _drawMarker(Canvas canvas, Size size, ChartTheme theme, WebMarker marker,
-      Offset anchor, MarkerStyle style) {
+      Offset anchor, MarkerStyle style, double zoom, double opacity) {
     switch (marker.markerType) {
       case MarkerType.activeStart:
-        paintStartLine(canvas, size, marker, anchor, style);
+        paintStartLine(canvas, size, marker, anchor, style, zoom);
         break;
 
       case MarkerType.start:
-        _drawStartPoint(canvas, size, theme, marker, anchor, style);
+        _drawStartPoint(
+            canvas, size, theme, marker, anchor, style, zoom, opacity);
         break;
 
       case MarkerType.exit:
         final Paint paint = Paint()..color = style.backgroundColor;
-        paintEndMarker(canvas, theme, anchor - const Offset(1, 20), style);
 
-        const Color fontColor = Colors.white;
-        _drawTick(canvas, marker, anchor, style, paint, fontColor);
+        paintEndMarker(canvas, theme, anchor - Offset(1, 20 * zoom + 5),
+            style.backgroundColor, zoom);
+
+        final Color fontColor = theme.base08Color;
+        _drawTick(canvas, marker, anchor, style, paint, fontColor, zoom);
         break;
       case MarkerType.tick:
         final Paint paint = Paint()
@@ -53,7 +80,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
           ..strokeWidth = 1.5;
 
         final Color fontColor = style.backgroundColor;
-        _drawTick(canvas, marker, anchor, style, paint, fontColor);
+        _drawTick(canvas, marker, anchor, style, paint, fontColor, zoom);
         break;
       default:
         break;
@@ -61,16 +88,16 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
   }
 
   void _drawTick(Canvas canvas, Marker marker, Offset anchor, MarkerStyle style,
-      Paint paint, Color fontColor) {
+      Paint paint, Color fontColor, double zoom) {
     canvas
       ..drawCircle(
         anchor,
-        8,
+        8 * zoom,
         Paint()..color = Colors.white,
       )
       ..drawCircle(
         anchor,
-        8,
+        8 * zoom,
         paint,
       );
 
@@ -78,7 +105,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     final TextSpan span = TextSpan(
       text: lastChar,
       style: TextStyle(
-        fontSize: 12,
+        fontSize: 11 * zoom,
         color: fontColor,
         fontWeight: FontWeight.bold,
       ),
@@ -94,16 +121,28 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     );
   }
 
-  void _drawStartPoint(Canvas canvas, Size size, ChartTheme theme,
-      WebMarker marker, Offset anchor, MarkerStyle style) {
+  void _drawStartPoint(
+      Canvas canvas,
+      Size size,
+      ChartTheme theme,
+      WebMarker marker,
+      Offset anchor,
+      MarkerStyle style,
+      double zoom,
+      double opacity) {
     if (marker.quote != 0) {
-      paintStartMarker(canvas, anchor - const Offset(10, 20), style, 20);
+      paintStartMarker(
+        canvas,
+        anchor - Offset(20 * zoom / 2, 20 * zoom),
+        style.backgroundColor.withOpacity(opacity),
+        20 * zoom,
+      );
     }
 
     if (marker.text != null) {
       final TextStyle textStyle = TextStyle(
-        color: style.backgroundColor,
-        fontSize: style.activeMarkerText.fontSize,
+        color: style.backgroundColor.withOpacity(opacity),
+        fontSize: style.activeMarkerText.fontSize! * zoom,
         fontWeight: FontWeight.bold,
         backgroundColor: theme.base08Color,
       );
@@ -111,7 +150,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
       final TextPainter textPainter = makeTextPainter(marker.text!, textStyle);
 
       final Offset iconShift =
-          Offset(textPainter.width / 2, 20 + textPainter.height);
+          Offset(textPainter.width / 2, 20 * zoom + textPainter.height);
 
       paintWithTextPainter(
         canvas,

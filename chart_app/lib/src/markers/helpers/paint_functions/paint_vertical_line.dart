@@ -6,7 +6,7 @@ void paintVerticalLine(
   Canvas canvas,
   Offset point1,
   Offset point2,
-  MarkerStyle style,
+  Color color,
   double lineThickness, {
   double dashWidth = 3,
   double dashSpace = 3,
@@ -19,7 +19,7 @@ void paintVerticalLine(
     point1.dx,
     _topOffset.dy,
     _bottomOffset.dy,
-    style.backgroundColor,
+    color,
     lineThickness,
     dashWidth: 2,
     dashSpace: 2,

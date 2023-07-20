@@ -49,13 +49,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       configModel,
       feedModel,
       indicatorsModel,
-      _controller,
     );
     initDartInterop(app);
     JsInterop.onChartLoad();
   }
-
-  final ChartController _controller = ChartController();
 
   final ChartFeedModel feedModel = ChartFeedModel();
   final ChartConfigModel configModel = ChartConfigModel();
@@ -71,7 +68,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     }
 
     if (html.document.visibilityState == 'visible' && isFollowMode) {
-      app.scrollToLastTick();
+      app.wrappedController.chartController.scrollToLastTick();
     }
 
     if (html.document.visibilityState == 'hidden' && rightBoundEpoch != null) {
@@ -180,7 +177,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                           : null,
                       pipSize: configModel.pipSize,
                       granularity: granularity,
-                      controller: _controller,
+                      controller: app.wrappedController.chartController,
                       theme: configModel.theme,
                       onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {
                         if (!feedModel.waitingForHistory &&
@@ -198,9 +195,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       markerSeries: MarkerGroupSeries(
                         SplayTreeSet<Marker>(),
                         markerGroupList: configModel.markerGroupList,
-                        markerGroupIconPainter: getMarkerGroupPainter(
-                          app,
-                        ),
+                        markerGroupIconPainter: getMarkerGroupPainter(app),
+                        controller: app.wrappedController,
+                        yAxisWidth: app.yAxisWidth,
+                        isMobile: app.configModel.isMobile,
                       ),
                       drawingToolsRepo: indicatorsModel.drawingToolsRepo,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,

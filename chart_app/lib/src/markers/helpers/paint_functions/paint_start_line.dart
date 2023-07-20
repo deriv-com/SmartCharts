@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 /// Paints start time line
 void paintStartLine(Canvas canvas, Size size, WebMarker marker, Offset anchor,
-    MarkerStyle style) {
+    MarkerStyle style, double zoom) {
   paintVerticalDashedLine(
     canvas,
     anchor.dx,
@@ -18,7 +18,7 @@ void paintStartLine(Canvas canvas, Size size, WebMarker marker, Offset anchor,
   if (marker.text != null) {
     final TextStyle textStyle = TextStyle(
       color: style.backgroundColor,
-      fontSize: style.activeMarkerText.fontSize,
+      fontSize: style.activeMarkerText.fontSize! * zoom,
       fontWeight: FontWeight.normal,
     );
 

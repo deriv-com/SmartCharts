@@ -1,9 +1,8 @@
-import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 
 /// Paints start time marker
 void paintStartMarker(
-    Canvas canvas, Offset offset, MarkerStyle style, double iconSize) {
+    Canvas canvas, Offset offset, Color color, double iconSize) {
   const IconData icon = Icons.location_on;
 
   TextPainter(textDirection: TextDirection.ltr)
@@ -12,7 +11,7 @@ void paintStartMarker(
       style: TextStyle(
         fontSize: iconSize,
         fontFamily: icon.fontFamily,
-        color: style.backgroundColor,
+        color: color,
       ),
     )
     ..layout()

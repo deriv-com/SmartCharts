@@ -3,6 +3,7 @@ import 'dart:js_util';
 
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_icon_painters/tick_marker_icon_painter.dart';
+import 'package:chart_app/src/markers/painter_props.dart';
 import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +11,7 @@ import 'package:flutter/material.dart';
 /// Accumulator contract painter
 class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   /// Constructor
-  AccumulatorMarkerIconPainter({
-    required this.yAxiswidth,
-    this.isMobile = false,
-  });
-
-  /// Width of yAxis
-  double yAxiswidth;
-
-  /// Specifies mobile mode.
-  bool isMobile;
+  AccumulatorMarkerIconPainter();
 
   Offset _getOffset(
     WebMarker marker,
@@ -39,9 +31,17 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     MarkerGroup markerGroup,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    PainterProps painterProps,
   ) {
-    super
-        .paintMarkerGroup(canvas, size, theme, markerGroup, epochToX, quoteToY);
+    super.paintMarkerGroup(
+      canvas,
+      size,
+      theme,
+      markerGroup,
+      epochToX,
+      quoteToY,
+      painterProps,
+    );
 
     final Map<MarkerType, WebMarker> markers = <MarkerType, WebMarker>{};
 
@@ -63,6 +63,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
       _drawShadedBarriers(
         canvas: canvas,
         size: size,
+        painterProps: painterProps,
         lowMarker: lowMarker,
         highMarker: highMarker,
         startLeft: lowOffset.dx,
@@ -88,6 +89,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   void _drawShadedBarriers({
     required Canvas canvas,
     required Size size,
+    required PainterProps painterProps,
     required WebMarker lowMarker,
     required WebMarker highMarker,
     required double startLeft,
@@ -96,7 +98,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     required double bottom,
     WebMarker? previousTickMarker,
   }) {
-    final double endLeft = size.width - yAxiswidth - 15;
+    final double endLeft = size.width - painterProps.yAxisWidth - 15;
     final double endTop = size.height;
 
     final bool hasPersistentBorders = _hasPersistentBorders(markerGroup.props);
@@ -126,7 +128,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
     final TextStyle textStyle = TextStyle(
       color: barrierColor,
-      fontSize: isMobile ? 10 : 14,
+      fontSize: painterProps.isMobile ? 10 : 14,
     );
 
     if (previousTickMarker != null && previousTickMarker.color != null) {
