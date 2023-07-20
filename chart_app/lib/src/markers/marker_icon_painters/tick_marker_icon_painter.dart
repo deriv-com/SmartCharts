@@ -100,10 +100,13 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
         _drawStartPoint(canvas, size, theme, marker, anchor, style);
         break;
       case MarkerType.entry:
+        final Paint entryPaint = Paint()
+          ..color = style.backgroundColor
+          ..style = PaintingStyle.stroke;
         canvas.drawCircle(
           anchor,
           2,
-          paint,
+          entryPaint,
         );
         break;
       case MarkerType.end:
