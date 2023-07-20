@@ -105,7 +105,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     final TextSpan span = TextSpan(
       text: lastChar,
       style: TextStyle(
-        fontSize: 11 * zoom,
+        fontSize: 10 * zoom,
         color: fontColor,
         fontWeight: FontWeight.bold,
       ),
