@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
 import 'package:chart_app/src/markers/marker_group_painter.dart';
+import 'package:chart_app/src/misc/wrapped_controller.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// Marker Group series
@@ -11,6 +12,9 @@ class MarkerGroupSeries extends MarkerSeries {
   MarkerGroupSeries(
     SplayTreeSet<Marker> entries, {
     required this.markerGroupIconPainter,
+    required this.controller,
+    required this.yAxisWidth,
+    required this.isMobile,
     this.markerGroupList,
   }) : super(entries, markerIconPainter: markerGroupIconPainter);
 
@@ -20,6 +24,15 @@ class MarkerGroupSeries extends MarkerSeries {
   /// List of related grouped markers.
   final List<MarkerGroup>? markerGroupList;
 
+  /// WrappedController
+  final WrappedController controller;
+
+  /// The width of y-axis
+  final double yAxisWidth;
+
+  /// Whether it is in mobile mode or not.
+  final bool isMobile;
+
   /// Visible marker entries.
   List<MarkerGroup> visibleMarkerGroupList = <MarkerGroup>[];
 
@@ -27,6 +40,9 @@ class MarkerGroupSeries extends MarkerSeries {
   SeriesPainter<MarkerGroupSeries> createPainter() => MarkerGroupPainter(
         this,
         markerGroupIconPainter,
+        controller: controller,
+        yAxisWidth: yAxisWidth,
+        isMobile: isMobile,
       );
 
   @override

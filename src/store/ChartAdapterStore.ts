@@ -245,7 +245,7 @@ export default class ChartAdapterStore {
             .map(c => {
                 c.markers.forEach((m: any) => {
                     if (!m.quote) {
-                        const { price } = this.getInterpolatedPositionAndPrice(m.epoch) || {};
+                        const { price } = this.getInterpolatedPositionAndPrice(m.epoch * 1000) || {};
                         m.quote = price;
                     }
                 });
@@ -253,8 +253,6 @@ export default class ChartAdapterStore {
             });
 
         await when(() => this.isFeedLoaded);
-
-        //  console.log(transformedContractsMarker);
 
         this.flutterChart?.config.updateMarkers(transformedContractsMarker);
     }

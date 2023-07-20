@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:chart_app/src/markers/marker_group.dart';
+import 'package:chart_app/src/markers/painter_props.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// Foundation class for painting marker group on canvas
@@ -23,5 +24,6 @@ abstract class MarkerGroupIconPainter extends MarkerIconPainter {
     MarkerGroup markerGroup,
     EpochToX epochToX,
     QuoteToY quoteToY,
+    PainterProps painterProps,
   );
 }

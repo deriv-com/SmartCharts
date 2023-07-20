@@ -2,6 +2,7 @@ import 'dart:js';
 
 import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart';
+import 'package:flutter/material.dart';
 
 /// Chart open position marker.
 class MarkerGroup implements Comparable<MarkerGroup> {
@@ -11,7 +12,13 @@ class MarkerGroup implements Comparable<MarkerGroup> {
     required this.type,
     this.id,
     this.props,
-    this.style = const MarkerStyle(),
+    this.style = const MarkerStyle(
+      activeMarkerText: TextStyle(
+        color: Colors.black,
+        fontSize: 12,
+        height: 1.4,
+      ),
+    ),
   });
 
   /// Marker entries.
