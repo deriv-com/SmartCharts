@@ -379,7 +379,7 @@ export type JSInterop = {
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
     onCrosshairDisappeared: () => void;
-    onCrosshairHover: (dx: number, dy: number, epoch: number, quote: String) => void;
+    onCrosshairHover: (dx: number, dy: number, epoch: number, quote: string) => void;
     loadHistory: (request: TLoadHistoryParams) => void;
     indicators: {
         onRemove: (index: number) => void;

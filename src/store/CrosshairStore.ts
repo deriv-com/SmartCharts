@@ -94,7 +94,7 @@ class CrosshairStore {
         this.refs = undefined;
     };
 
-    onMouseMove = (dx: number, dy: number, epoch: number, quote: String) => {
+    onMouseMove = (dx: number, dy: number, epoch: number, quote: string) => {
         if (!this.isOverChartContainer) return;
 
         this.setPositions(dx, dy, epoch, quote);
@@ -121,7 +121,7 @@ class CrosshairStore {
         this.onCrosshairChanged = onChange || (() => null);
     }
 
-    setPositions = (offsetX: number, offsetY: number, epoch: number, quote: String) => {
+    setPositions = (offsetX: number, offsetY: number, epoch: number, quote: string) => {
         if (!this.refs) return;
         const { crossHairXRef, crossHairYRef, floatDateRef, floatPriceRef } = this.refs;
 

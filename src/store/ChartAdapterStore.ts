@@ -262,7 +262,7 @@ export default class ChartAdapterStore {
 
         const date = moment.utc(epoch).toDate();
 
-        let tickIdx = this.mainStore.chart.feed?.getClosestQuoteIndexForEpoch(epoch);
+        const tickIdx = this.mainStore.chart.feed?.getClosestQuoteIndexForEpoch(epoch);
 
         // To not place markers in the middle of ticks.
         let x: number = this.getXFromEpoch(epoch);
