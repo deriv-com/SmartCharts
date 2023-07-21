@@ -1,14 +1,18 @@
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// WrappedController
+/// To prevent controller exceptions
 class WrappedController {
   /// ChartController
-  final ChartController chartController = ChartController();
+  final ChartController _chartController = ChartController();
+
+  /// Gets chart controller
+  ChartController getChartController() => _chartController;
 
   /// Scales the chart.
   double? scale(double scale) {
     try {
-      return chartController.onScale?.call(scale);
+      return _chartController.onScale?.call(scale);
     } on Exception catch (_) {
       return null;
     }
@@ -17,7 +21,7 @@ class WrappedController {
   /// Scroll chart visible area.
   void scroll(double pxShift) {
     try {
-      chartController.onScroll?.call(pxShift);
+      _chartController.onScroll?.call(pxShift);
     } on Exception catch (_) {
       return;
     }
@@ -26,7 +30,7 @@ class WrappedController {
   /// Scroll chart visible area to the newest data.
   void scrollToLastTick() {
     try {
-      chartController.scrollToLastTick();
+      _chartController.scrollToLastTick();
     } on Exception catch (_) {
       return;
     }
@@ -36,7 +40,7 @@ class WrappedController {
   // ignore: avoid_positional_boolean_parameters
   void toggleDataFitMode(bool dataFitMode) {
     try {
-      chartController.toggleDataFitMode?.call(enableDataFit: dataFitMode);
+      _chartController.toggleDataFitMode?.call(enableDataFit: dataFitMode);
     } on Exception catch (_) {
       return;
     }
@@ -45,7 +49,7 @@ class WrappedController {
   /// Called to get epoch from x position
   int? getEpochFromX(double x) {
     try {
-      return chartController.getEpochFromX?.call(x);
+      return _chartController.getEpochFromX?.call(x);
     } on Exception catch (_) {
       return null;
     }
@@ -54,7 +58,7 @@ class WrappedController {
   /// Called to get quote from y position
   double? getQuoteFromY(double y) {
     try {
-      return chartController.getQuoteFromY?.call(y);
+      return _chartController.getQuoteFromY?.call(y);
     } on Exception catch (_) {
       return null;
     }
@@ -63,7 +67,7 @@ class WrappedController {
   /// Called to get X position from epoch
   double? getXFromEpoch(int epoch) {
     try {
-      return chartController.getXFromEpoch?.call(epoch);
+      return _chartController.getXFromEpoch?.call(epoch);
     } on Exception catch (_) {
       return null;
     }
@@ -72,7 +76,7 @@ class WrappedController {
   /// Called to get Y position from quote
   double? getYFromQuote(double quote) {
     try {
-      return chartController.getYFromQuote?.call(quote);
+      return _chartController.getYFromQuote?.call(quote);
     } on Exception catch (_) {
       return null;
     }
@@ -81,7 +85,25 @@ class WrappedController {
   /// Called to get msPerPx
   double? getMsPerPx() {
     try {
-      return chartController.getMsPerPx?.call();
+      return _chartController.getMsPerPx?.call();
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  /// Called to get List of Series
+  List<Series>? getSeriesList() {
+    try {
+      return _chartController.getSeriesList?.call();
+    } on Exception catch (_) {
+      return null;
+    }
+  }
+
+  /// Called to get List of Configs
+  List<AddOnConfig>? getConfigsList() {
+    try {
+      return _chartController.getConfigsList?.call();
     } on Exception catch (_) {
       return null;
     }

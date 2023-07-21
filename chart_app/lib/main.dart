@@ -68,7 +68,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     }
 
     if (html.document.visibilityState == 'visible' && isFollowMode) {
-      app.wrappedController.chartController.scrollToLastTick();
+      app.wrappedController.scrollToLastTick();
     }
 
     if (html.document.visibilityState == 'hidden' && rightBoundEpoch != null) {
@@ -177,7 +177,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                           : null,
                       pipSize: configModel.pipSize,
                       granularity: granularity,
-                      controller: app.wrappedController.chartController,
+                      controller: app.wrappedController.getChartController(),
                       theme: configModel.theme,
                       onVisibleAreaChanged: (int leftEpoch, int rightEpoch) {
                         if (!feedModel.waitingForHistory &&

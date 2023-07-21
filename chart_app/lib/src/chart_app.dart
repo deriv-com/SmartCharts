@@ -74,12 +74,10 @@ class ChartApp {
   /// Gets the tooltip content for indicator series
   List<JsIndicatorTooltip?>? getTooltipContent(int epoch, int pipSize) {
     final List<Series> seriesList =
-        wrappedController.chartController.getSeriesList?.call() ?? <Series>[];
+        wrappedController.getSeriesList() ?? <Series>[];
     final List<IndicatorConfig> indicatorConfigsList =
-        wrappedController.chartController.getConfigsList != null
-            ? wrappedController.chartController.getConfigsList!.call()
-                as List<IndicatorConfig>
-            : <IndicatorConfig>[];
+        wrappedController.getConfigsList() as List<IndicatorConfig>? ??
+            <IndicatorConfig>[];
 
     return indicatorsModel.getTooltipContent(
       seriesList,
