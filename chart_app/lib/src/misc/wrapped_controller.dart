@@ -1,5 +1,7 @@
 import 'package:deriv_chart/deriv_chart.dart';
 
+// ignore_for_file: avoid_catches_without_on_clauses
+
 /// WrappedController
 /// To prevent controller exceptions
 class WrappedController {
@@ -13,7 +15,7 @@ class WrappedController {
   double? scale(double scale) {
     try {
       return _chartController.onScale?.call(scale);
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -22,7 +24,7 @@ class WrappedController {
   void scroll(double pxShift) {
     try {
       _chartController.onScroll?.call(pxShift);
-    } on Exception catch (_) {
+    } catch (_) {
       return;
     }
   }
@@ -31,7 +33,7 @@ class WrappedController {
   void scrollToLastTick() {
     try {
       _chartController.scrollToLastTick();
-    } on Exception catch (_) {
+    } catch (_) {
       return;
     }
   }
@@ -41,7 +43,7 @@ class WrappedController {
   void toggleDataFitMode(bool dataFitMode) {
     try {
       _chartController.toggleDataFitMode?.call(enableDataFit: dataFitMode);
-    } on Exception catch (_) {
+    } catch (_) {
       return;
     }
   }
@@ -50,7 +52,7 @@ class WrappedController {
   int? getEpochFromX(double x) {
     try {
       return _chartController.getEpochFromX?.call(x);
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -59,7 +61,7 @@ class WrappedController {
   double? getQuoteFromY(double y) {
     try {
       return _chartController.getQuoteFromY?.call(y);
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -68,7 +70,7 @@ class WrappedController {
   double? getXFromEpoch(int epoch) {
     try {
       return _chartController.getXFromEpoch?.call(epoch);
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -77,7 +79,7 @@ class WrappedController {
   double? getYFromQuote(double quote) {
     try {
       return _chartController.getYFromQuote?.call(quote);
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -86,7 +88,7 @@ class WrappedController {
   double? getMsPerPx() {
     try {
       return _chartController.getMsPerPx?.call();
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -95,7 +97,7 @@ class WrappedController {
   List<Series>? getSeriesList() {
     try {
       return _chartController.getSeriesList?.call();
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
@@ -104,7 +106,7 @@ class WrappedController {
   List<AddOnConfig>? getConfigsList() {
     try {
       return _chartController.getConfigsList?.call();
-    } on Exception catch (_) {
+    } catch (_) {
       return null;
     }
   }
