@@ -3,7 +3,7 @@ import moment from 'moment';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
-import MainStore from './';
+import MainStore from '.';
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
@@ -106,7 +106,7 @@ export default class ChartAdapterStore {
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
 
-        if (e.deltaX == 0 && e.deltaZ == 0) {
+        if (e.deltaX === 0 && e.deltaZ === 0) {
             const value = (100 - e.deltaY) / 100;
             this.scale(value);
         } else {
@@ -121,7 +121,7 @@ export default class ChartAdapterStore {
     };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
-        if (this.epochBounds.leftEpoch != leftEpoch || this.epochBounds.rightEpoch != rightEpoch) {
+        if (this.epochBounds.leftEpoch !== leftEpoch || this.epochBounds.rightEpoch !== rightEpoch) {
             this.epochBounds = {
                 leftEpoch,
                 rightEpoch,
@@ -137,7 +137,7 @@ export default class ChartAdapterStore {
     }
 
     getGranularityInMs() {
-        let granularity: number = this.mainStore.state.granularity || 1;
+        const granularity: number = this.mainStore.state.granularity || 1;
         return granularity * 1000;
     }
 
