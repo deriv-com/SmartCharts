@@ -2,8 +2,8 @@ import { action, computed, observable, when, makeObservable } from 'mobx';
 import moment from 'moment';
 import Context from 'src/components/ui/Context';
 import { TQuote } from 'src/types';
-import MainStore from '.';
 import { getTooltipLabels } from 'src/Constant';
+import MainStore from '.';
 
 type TDupMap = {
     [key: string]: number;
@@ -54,7 +54,7 @@ class CrosshairStore {
         return this.activeSymbol?.decimal_places;
     }
     get showOhl(): boolean {
-        return this.mainStore.timeperiod.timeUnit != 'tick' && this.mainStore.chartType.isCandle;
+        return this.mainStore.timeperiod.timeUnit !== 'tick' && this.mainStore.chartType.isCandle;
     }
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -185,9 +185,8 @@ class CrosshairStore {
         const indicatorsRows = this.getIndicatorRows(quoteBar?.DT?.getTime() || closestEpoch || epoch);
         rows.push(...indicatorsRows);
 
-        if (rows.length == 0 || !this.isChartReady) {
+        if (rows.length === 0 || !this.isChartReady) {
             this.updateTooltipPosition({ left: -5000, top: 0, rows: null });
-            return;
         } else {
             this.updateTooltipPosition({
                 left: offsetX,
@@ -202,35 +201,34 @@ class CrosshairStore {
             member: string;
             display: string;
         }[] = [];
-        {
-            // Access main chart panel and yAxis in this scope:
+
+        // Access main chart panel and yAxis in this scope:
+        fields.push({
+            member: 'DT',
+            display: 'DT',
+        });
+        dupMap.DT = dupMap.Close = 1;
+        if (this.showChange) {
             fields.push({
-                member: 'DT',
-                display: 'DT',
+                member: 'Change',
+                display: 'Change',
             });
-            dupMap.DT = dupMap.Close = 1;
-            if (this.showChange) {
+        }
+        if (this.showOhl) {
+            for (const el of ['Open', 'Close', 'High', 'Low']) {
                 fields.push({
-                    member: 'Change',
-                    display: 'Change',
+                    member: el,
+                    display: el,
                 });
             }
-            if (this.showOhl) {
-                for (const el of ['Open', 'Close', 'High', 'Low']) {
-                    fields.push({
-                        member: el,
-                        display: el,
-                    });
-                }
-                dupMap.Open = dupMap.High = dupMap.Low = 1;
-            }
-            if (this.activeSymbol?.name) {
-                const display = this.activeSymbol?.name as string;
-                fields.push({
-                    member: 'Close',
-                    display,
-                });
-            }
+            dupMap.Open = dupMap.High = dupMap.Low = 1;
+        }
+        if (this.activeSymbol?.name) {
+            const display = this.activeSymbol?.name as string;
+            fields.push({
+                member: 'Close',
+                display,
+            });
         }
 
         const rows = [];
@@ -280,7 +278,7 @@ class CrosshairStore {
 
                     rows.push({
                         name: label,
-                        value: value,
+                        value,
                     });
                 });
             });
