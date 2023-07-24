@@ -551,17 +551,7 @@ class Feed {
         if (keys.length === 0) {
             return;
         }
-        const { granularity } = this._unpackKey(keys[0]);
-        const elapsedSeconds =
-            ((((new Date() as unknown) as number) - ((this._connectionClosedDate as unknown) as number)) / 1000) | 0;
-        const maxIdleSeconds = (granularity || 1) * 60;
-        if (elapsedSeconds >= maxIdleSeconds) {
-            this._mainStore.chart.refreshChart();
-        } else {
-            for (const key of keys) {
-                this._resumeStream(key);
-            }
-        }
+        this._mainStore.chart.refreshChart();
         this._connectionClosedDate = undefined;
     }
     _resumeStream(key: string) {
