@@ -114,6 +114,13 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     return null;
   }
 
+  double? _getMaxIntervalWidth() {
+    if (configModel.style == ChartStyle.candles) {
+      return 240;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -216,6 +223,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                           ? null
                           : configModel.msPerPx,
                       minIntervalWidth: _getMinIntervalWidth(),
+                      maxIntervalWidth: _getMaxIntervalWidth(),
                       bottomChartTitleMargin: configModel.leftMargin != null
                           ? EdgeInsets.only(left: configModel.leftMargin!)
                           : null,
