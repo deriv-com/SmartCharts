@@ -43,6 +43,12 @@ JsObject _exposeApp(ChartApp app) {
     allowInterop(app.getTooltipContent),
   );
 
+  setProperty(
+    jsObject,
+    'getIndicatorHoverIndex',
+    allowInterop(app.getIndicatorHoverIndex),
+  );
+
   setProperty(jsObject, 'getXFromEpoch',
       allowInterop(app.wrappedController.getXFromEpoch));
 

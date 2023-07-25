@@ -60,6 +60,9 @@ export default class ChartAdapterStore {
             },
             onCrosshairHover: (dx, dy, epoch, quote) => {
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+                const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
+                const granularity = this.mainStore.chartAdapter.getGranularityInMs();
+                this.flutterChart?.app.getIndicatorHoverIndex(dx, dy, getClosestEpoch, granularity);
             },
             indicators: {
                 onRemove: (index: number) => {

@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:js_util';
 import 'dart:math';
 
+import 'package:chart_app/src/misc/wrapped_controller.dart';
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:flutter/material.dart';
 
 /// State and methods of chart web adapter config.
 class IndicatorsModel {
@@ -352,5 +355,143 @@ class IndicatorsModel {
       }
     }
     return tooltipContent;
+  }
+
+  /// Gets indicator hover index
+  int? getIndicatorHoverIndex(
+    List<Series> seriesList,
+    List<IndicatorConfig> indicatorConfigsList,
+    WrappedController controller,
+    Function getClosestEpoch,
+    int granularity,
+    double x,
+    double y,
+  ) {
+    final List<Series> sortedSeriesList = <Series>[...seriesList];
+    indicatorConfigsList.forEachIndexed((int index, IndicatorConfig config) {
+      final int configIndex = indicatorsRepo.items.indexOf(config);
+      if (configIndex > -1) {
+        sortedSeriesList[configIndex] = seriesList[index];
+      }
+    });
+
+    final Offset target = Offset(x, y);
+
+    final int? epoch =
+        getClosestEpoch(controller.getEpochFromX(x), granularity);
+
+    for (final ChartData item in sortedSeriesList) {
+      if (item is BollingerBandSeries) {
+        final List<Tick> middleEntries = item.middleSeries.entries ?? <Tick>[];
+        final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
+        final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
+
+        // // get the tick and next tick from epoch
+
+        isPointOnIndicator(middleEntries, controller, target, epoch);
+        isPointOnIndicator(lowerEntries, controller, target, epoch);
+        isPointOnIndicator(upperEntries, controller, target, epoch);
+
+        // final int? indexForBinary =
+        //     binarySearch1(middleEntries, epoch!, 0, middleEntries.length - 1)
+      } else if (item is DonchianChannelsSeries) {
+        final List<Tick> middleChannelEntries =
+            item.middleChannelSeries.entries ?? <Tick>[];
+        final List<Tick> lowerChannelEntries =
+            item.lowerChannelSeries.entries ?? <Tick>[];
+        final List<Tick> upperChannelEntries =
+            item.upperChannelSeries.entries ?? <Tick>[];
+
+        isPointOnIndicator(middleChannelEntries, controller, target, epoch);
+        isPointOnIndicator(lowerChannelEntries, controller, target, epoch);
+        isPointOnIndicator(upperChannelEntries, controller, target, epoch);
+      } else if (item is MASeries) {
+        final List<Tick> maEntries = item.entries ?? <Tick>[];
+
+        isPointOnIndicator(maEntries, controller, target, epoch);
+      } else if (item is IchimokuCloudSeries) {
+        final List<Tick> ichimokuBaseEntries =
+            item.baseLineSeries.entries ?? <Tick>[];
+
+        final List<Tick> ichimoksuConversionEntries =
+            item.conversionLineSeries.entries ?? <Tick>[];
+
+        final List<Tick> ichimoksuSpanAEntries =
+            item.spanASeries.entries ?? <Tick>[];
+
+        final List<Tick> ichimoksuSpanBEntries =
+            item.spanBSeries.entries ?? <Tick>[];
+
+        final List<Tick> ichimoksuLaggingSpanEntries =
+            item.laggingSpanSeries.entries ?? <Tick>[];
+
+        isPointOnIndicator(ichimokuBaseEntries, controller, target, epoch);
+        isPointOnIndicator(
+            ichimoksuConversionEntries, controller, target, epoch);
+        isPointOnIndicator(ichimoksuSpanAEntries, controller, target, epoch);
+        isPointOnIndicator(ichimoksuSpanBEntries, controller, target, epoch);
+        isPointOnIndicator(
+            ichimoksuLaggingSpanEntries, controller, target, epoch);
+
+        //
+      } else if (item is MAEnvSeries) {
+        final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
+        final List<Tick> middleEntries = item.middleSeries.entries ?? <Tick>[];
+        final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
+
+        isPointOnIndicator(lowerEntries, controller, target, epoch);
+        isPointOnIndicator(middleEntries, controller, target, epoch);
+        isPointOnIndicator(upperEntries, controller, target, epoch);
+      } else if (item is ADXSeries) {
+        final List<Tick> adxEntries = item.adxSeries.entries ?? <Tick>[];
+        final List<Tick> positiveEntries =
+            item.positiveDISeries.entries ?? <Tick>[];
+        final List<Tick> negativeEntries =
+            item.negativeDISeries.entries ?? <Tick>[];
+
+        isPointOnIndicator(adxEntries, controller, target, epoch);
+        isPointOnIndicator(positiveEntries, controller, target, epoch);
+        isPointOnIndicator(negativeEntries, controller, target, epoch);
+      } else if (item is ZigZagSeries) {
+        final List<Tick> zigZagSeries = item.entries ?? <Tick>[];
+        isPointOnIndicator(zigZagSeries, controller, target, epoch);
+      } else if (item is FractalChaosBandSeries) {
+        final List<Tick> fcbHighEntries =
+            item.fcbHighSeries.entries ?? <Tick>[];
+        final List<Tick> fcbLowEntries = item.fcbLowSeries.entries ?? <Tick>[];
+
+        isPointOnIndicator(fcbHighEntries, controller, target, epoch);
+        isPointOnIndicator(fcbLowEntries, controller, target, epoch);
+      } else if (item is AlligatorSeries) {
+        final List<Tick> teethEntries = item.teethSeries!.entries ?? <Tick>[];
+
+        final List<Tick> jawEntries = item.jawSeries!.entries ?? <Tick>[];
+
+        final List<Tick> lipEntries = item.lipsSeries!.entries ?? <Tick>[];
+
+        isPointOnIndicator(teethEntries, controller, target, epoch);
+        isPointOnIndicator(jawEntries, controller, target, epoch);
+        isPointOnIndicator(lipEntries, controller, target, epoch);
+      }
+    }
+    return null;
+  }
+
+  ///
+  void isPointOnIndicator(List<Tick> entries, WrappedController controller,
+      Offset target, int? epoch) {
+    final int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
+    if (index != null) {
+      // get quote of the epoch
+      final String? qt = _getQuote(entries, epoch, 12);
+
+      if (qt != null) {
+        final double? targetQuote = controller.getQuoteFromY(target.dy);
+
+        if ((targetQuote! - double.parse(qt)).abs() < 0.5) {
+          print('quote from Target: ${controller.getQuoteFromY(target.dy)}');
+        }
+      }
+    }
   }
 }

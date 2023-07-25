@@ -343,6 +343,12 @@ export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
+        getIndicatorHoverIndex: (
+            x: number,
+            y: number,
+            getClosestEpoch: ((epoch: number, granularity: number) => number) | undefined,
+            granularity: number
+        ) => number;
         getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;
