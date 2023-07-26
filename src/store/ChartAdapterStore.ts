@@ -20,7 +20,9 @@ export default class ChartAdapterStore {
     isFeedLoaded = false;
     msPerPx?: number;
     isDataFitModeEnabled = false;
+    isScaling = false;
     painter = new Painter();
+    previousTouchSqRoot: number | undefined;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -41,6 +43,10 @@ export default class ChartAdapterStore {
             quoteBounds: observable.ref,
             msPerPx: observable,
             isFeedLoaded: observable,
+            isScaling: observable,
+            onTouchStart: observable,
+            onTouchMove: observable,
+            onTouchEnd: observable,
         });
 
         this.mainStore = mainStore;
@@ -84,18 +90,16 @@ export default class ChartAdapterStore {
         element.appendChild(window.flutterChartElement);
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
-
-        // To stop swiping for digit contracts
-        ['pointerdown', 'touchstart'].forEach(e => {
-            window.flutterChartElement?.addEventListener(e, this.onPointerDown);
-        });
+        window.flutterChartElement?.addEventListener('touchstart', this.onTouchStart, { capture: true });
+        window.flutterChartElement?.addEventListener('touchmove', this.onTouchMove, { capture: true });
+        window.flutterChartElement?.addEventListener('touchend', this.onTouchEnd, { capture: true });
     }
 
     onUnmount() {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
-        ['pointerdown', 'touchstart'].forEach(e => {
-            window.flutterChartElement?.removeEventListener(e, this.onPointerDown);
-        });
+        window.flutterChartElement?.removeEventListener('touchstart', this.onTouchStart, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchmove', this.onTouchMove, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchend', this.onTouchEnd, { capture: true });
     }
 
     onChartLoad() {
@@ -116,8 +120,37 @@ export default class ChartAdapterStore {
         return false;
     };
 
-    onPointerDown = (e: Event) => {
-        e.stopPropagation();
+    onTouchStart = (e: TouchEvent) => {
+        if (e.touches?.length === 2) {
+            e.stopPropagation();
+            this.isScaling = true;
+        }
+    };
+
+    onTouchMove = (e: TouchEvent) => {
+        if (this.isScaling && e.touches?.length >= 2) {
+            e.stopPropagation();
+
+            const touchSqRoot = Math.hypot(
+                e.touches[0].pageX - e.touches[1].pageX,
+                e.touches[0].pageY - e.touches[1].pageY
+            );
+
+            if (this.previousTouchSqRoot) {
+                const value = 1 + (touchSqRoot - this.previousTouchSqRoot) / 100;
+                this.scale(value);
+            }
+
+            this.previousTouchSqRoot = touchSqRoot;
+        }
+    };
+
+    onTouchEnd = (e: TouchEvent) => {
+        if (e.touches?.length >= 2) {
+            e.stopPropagation();
+        }
+        this.isScaling = false;
+        this.previousTouchSqRoot = undefined;
     };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
