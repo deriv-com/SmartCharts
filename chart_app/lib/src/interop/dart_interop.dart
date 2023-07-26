@@ -61,6 +61,14 @@ JsObject _exposeApp(ChartApp app) {
 
   setProperty(
     jsObject,
+    'scrollToLastTick',
+    allowInterop(
+      app.wrappedController.scrollToLastTick,
+    ),
+  );
+
+  setProperty(
+    jsObject,
     'toggleDataFitMode',
     allowInterop(app.wrappedController.toggleDataFitMode),
   );

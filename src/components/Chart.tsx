@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
+import { TChartProps } from 'src/types';
 import { usePrevious } from '../hooks';
 
-import { TChartProps } from 'src/types';
 /* css + scss */
 import '../../sass/main.scss';
 import { initGA, logPageView } from '../utils/ga';
@@ -23,6 +23,7 @@ import NavigationWidget from './NavigationWidget';
 import PaginationLoader from './PaginationLoader';
 import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
+import ScrollToRecent from './ScrollToRecent';
 
 const Chart = (props: TChartProps) => {
     const { chart, drawTools, studies, chartSetting, chartType, state, loader, chartAdapter } = useStores();
@@ -164,7 +165,7 @@ const Chart = (props: TChartProps) => {
                                         {t.translate('Chart data is not available for this symbol.')}
                                     </div>
                                 )}
-                                <div className='cq-inchart-subholder'></div>
+                                <div className='cq-inchart-subholder' />
                                 <BottomWidgetsContainer>
                                     <BottomWidget bottomWidgets={bottomWidgets} />
                                 </BottomWidgetsContainer>
@@ -172,6 +173,7 @@ const Chart = (props: TChartProps) => {
                             {chartControlsWidgets !== null && !enabledChartFooter && (
                                 <ChartControls widgets={chartControlsWidgets} />
                             )}
+                            <ScrollToRecent />
                             {enabledChartFooter && <ChartFooter />}
                             <Loader />
                         </div>

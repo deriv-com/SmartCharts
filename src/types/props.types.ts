@@ -351,6 +351,7 @@ export type TFlutterChart = {
         scale: (scale: number) => number;
         scroll: (pxShift: number) => void;
         toggleDataFitMode: (isDataFitEnabled: boolean) => void;
+        scrollToLastTick: () => void;
     };
     config: {
         updateTheme: (theme: string) => void;

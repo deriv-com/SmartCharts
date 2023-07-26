@@ -230,6 +230,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       verticalPaddingFraction:
                           _getVerticalPaddingFraction(constraints.maxHeight),
                       showDataFitButton: false,
+                      showScrollToLastTickButton: false,
                       loadingAnimationColor: Colors.transparent,
                     );
                   }),
