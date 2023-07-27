@@ -58,7 +58,8 @@ export default class ChartAdapterStore {
             onCrosshairDisappeared: () => {
                 this.mainStore.crosshair.updateVisibility(false);
             },
-            onCrosshairHover: (dx, dy, dxLocal, dyLocal) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            onCrosshairHover: (dx, dy, dxLocal, dyLocal, _indicatorIndex) => {
                 // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
                 const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
                 const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(

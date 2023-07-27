@@ -136,6 +136,13 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     final CrosshairController controller =
         app.wrappedController.getCrosshairController();
 
+    int? index;
+
+    if (config != null) {
+      index = indicatorsModel.indicatorsRepo.items
+          .indexOf(config as IndicatorConfig);
+    }
+
     // ignore: cascade_invocations
     controller
       ..getEpochFromX_ = epochFromX
@@ -148,6 +155,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       ev.position.dy,
       ev.localPosition.dx,
       ev.localPosition.dy,
+      index,
     );
   }
 

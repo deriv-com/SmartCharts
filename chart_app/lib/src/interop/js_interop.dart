@@ -25,8 +25,8 @@ class JsInterop {
   external static void onCrosshairDisappeared();
 
   /// Called when the crosshair is moved.
-  external static void onCrosshairHover(
-      double dx, double dy, double dxLocal, double dyLocal);
+  external static void onCrosshairHover(double dx, double dy, double dxLocal,
+      double dyLocal, int? indicatorIndex);
 
   /// Indicator options
   external static JsIndicators? indicators;
