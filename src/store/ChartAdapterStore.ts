@@ -58,7 +58,14 @@ export default class ChartAdapterStore {
             onCrosshairDisappeared: () => {
                 this.mainStore.crosshair.updateVisibility(false);
             },
-            onCrosshairHover: (dx, dy, epoch, quote) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            onCrosshairHover: (dx, dy, dxLocal, dyLocal, _indicatorIndex) => {
+                // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
+                const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
+                const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
+                    this.mainStore.crosshair.decimalPlaces
+                );
+
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
                 const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
                 const granularity = this.mainStore.chartAdapter.getGranularityInMs();
@@ -87,18 +94,10 @@ export default class ChartAdapterStore {
         element.appendChild(window.flutterChartElement);
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
-
-        // To stop swiping for digit contracts
-        ['pointerdown', 'touchstart'].forEach(e => {
-            window.flutterChartElement?.addEventListener(e, this.onPointerDown);
-        });
     }
 
     onUnmount() {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
-        ['pointerdown', 'touchstart'].forEach(e => {
-            window.flutterChartElement?.removeEventListener(e, this.onPointerDown);
-        });
     }
 
     onChartLoad() {
@@ -110,17 +109,13 @@ export default class ChartAdapterStore {
         e.preventDefault();
 
         if (e.deltaX === 0 && e.deltaZ === 0) {
-            const value = (100 - e.deltaY) / 100;
+            const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);
         } else {
             window.flutterChart?.app.scroll(e.deltaX);
         }
 
         return false;
-    };
-
-    onPointerDown = (e: Event) => {
-        e.stopPropagation();
     };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {

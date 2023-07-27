@@ -44,6 +44,8 @@ body {
     height: auto;
     width: 100%;
     z-index: 4;
+    touch-action: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
+
     @include themify($themes) {
         background: themed('ChartBg');
     }
@@ -190,19 +192,19 @@ body {
     z-index: 30;
 }
 
-.stx_jump_today:hover,
-.stx_jump_today:active {
+.scroll_to_recent:hover,
+.scroll_to_recent:active {
     /* Make buttons full opacity on hover or hit */
     opacity: 1;
 }
 
-.stx_jump_today {
+.scroll_to_recent {
     /* Button  jumping to today's data */
     color: #fff;
     overflow: hidden;
     position: absolute;
     bottom: 12px;
-    right: 10px;
+    right: 80px;
     line-height: 0px;
     height: 32px;
     width: 32px;
@@ -210,15 +212,17 @@ body {
     margin-bottom: 17px;
     border-radius: $border-radius;
     z-index: 12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+
     @include themify($themes) {
         background: themed('NavigationWidgetBg');
     }
 
     svg {
         position: relative;
-        left: 8px;
-        top: 8px;
         @include themify($themes) {
             fill: themed('NavigationWidgetColor');
         }
