@@ -26,7 +26,7 @@ class JsInterop {
 
   /// Called when the crosshair is moved.
   external static void onCrosshairHover(
-      double dx, double dy, int epoch, String quote);
+      double dx, double dy, double dxLocal, double dyLocal);
 
   /// Indicator options
   external static JsIndicators? indicators;

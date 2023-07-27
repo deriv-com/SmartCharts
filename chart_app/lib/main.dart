@@ -1,9 +1,11 @@
 import 'dart:collection';
+import 'dart:js';
 import 'dart:math';
 import 'dart:ui';
 import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
+import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -19,6 +21,8 @@ import 'src/models/chart_config.dart';
 import 'src/interop/dart_interop.dart';
 import 'src/interop/js_interop.dart';
 import 'src/markers/marker_group_series.dart';
+
+// ignore_for_file: avoid_catches_without_on_clauses
 
 void main() {
   runApp(const DerivChartApp());
@@ -121,6 +125,32 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     return null;
   }
 
+  void _onCrosshairHover(
+    PointerHoverEvent ev,
+    EpochToX epochToX,
+    QuoteToY quoteToY,
+    EpochFromX epochFromX,
+    QuoteFromY quoteFromY,
+    AddOnConfig? config,
+  ) {
+    final CrosshairController controller =
+        app.wrappedController.getCrosshairController();
+
+    // ignore: cascade_invocations
+    controller
+      ..getEpochFromX_ = epochFromX
+      ..getQuoteFromY_ = quoteFromY
+      ..getXFromEpoch_ = epochToX
+      ..getYFromQuote_ = quoteToY;
+
+    JsInterop.onCrosshairHover(
+      ev.position.dx,
+      ev.position.dy,
+      ev.localPosition.dx,
+      ev.localPosition.dy,
+    );
+  }
+
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -213,11 +243,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       showCrosshair: configModel.showCrosshair,
                       isLive: configModel.isLive,
                       onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,
-                      onCrosshairHover:
-                          (PointerHoverEvent ev, int epoch, String quote) {
-                        JsInterop.onCrosshairHover(
-                            ev.position.dx, ev.position.dy, epoch, quote);
-                      },
+                      onCrosshairHover: _onCrosshairHover,
                       maxCurrentTickOffset: _getMaxCurrentTickOffset(),
                       msPerPx: configModel.startWithDataFitMode
                           ? null

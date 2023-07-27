@@ -4,6 +4,7 @@ import 'dart:html' as html;
 import 'dart:js_util';
 
 import 'package:chart_app/src/chart_app.dart';
+import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
@@ -19,6 +20,7 @@ void initDartInterop(ChartApp app) {
       dartInterop, 'indicators', _exposeIndicatorsModel(app.indicatorsModel));
   setProperty(dartInterop, 'feed', _exposeDataModel(app.feedModel));
   setProperty(dartInterop, 'app', _exposeApp(app));
+  setProperty(dartInterop, 'crosshair', _exposeCrosshair(app));
   setProperty(html.window, 'flutterChart', dartInterop);
 }
 
@@ -74,6 +76,27 @@ JsObject _exposeApp(ChartApp app) {
   );
 
   return jsObject;
+}
+
+JsObject _exposeCrosshair(ChartApp app) {
+  final JsObject crosshair = JsObject(context['Object']);
+
+  final CrosshairController controller =
+      app.wrappedController.getCrosshairController();
+
+  setProperty(
+      crosshair, 'getXFromEpoch', allowInterop(controller.getXFromEpoch));
+
+  setProperty(
+      crosshair, 'getYFromQuote', allowInterop(controller.getYFromQuote));
+
+  setProperty(
+      crosshair, 'getEpochFromX', allowInterop(controller.getEpochFromX));
+
+  setProperty(
+      crosshair, 'getQuoteFromY', allowInterop(controller.getQuoteFromY));
+
+  return crosshair;
 }
 
 JsObject _exposeDataModel(ChartFeedModel model) {

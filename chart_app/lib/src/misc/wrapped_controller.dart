@@ -1,3 +1,4 @@
+import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 // ignore_for_file: avoid_catches_without_on_clauses
@@ -8,8 +9,13 @@ class WrappedController {
   /// ChartController
   final ChartController _chartController = ChartController();
 
+  final CrosshairController _crosshairController = CrosshairController();
+
   /// Gets chart controller
   ChartController getChartController() => _chartController;
+
+  /// Gets crosshair controller
+  CrosshairController getCrosshairController() => _crosshairController;
 
   /// Scales the chart.
   double? scale(double scale) {

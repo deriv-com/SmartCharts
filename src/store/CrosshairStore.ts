@@ -51,7 +51,7 @@ class CrosshairStore {
         return this.mainStore.chart.currentActiveSymbol;
     }
     get decimalPlaces() {
-        return this.activeSymbol?.decimal_places;
+        return this.activeSymbol?.decimal_places || 2;
     }
     get showOhl(): boolean {
         return this.mainStore.timeperiod.timeUnit !== 'tick' && this.mainStore.chartType.isCandle;

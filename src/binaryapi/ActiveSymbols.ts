@@ -7,7 +7,15 @@ import { cloneCategories, stableSort } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import { isDeepEqual } from '../utils/object';
 
-const DefaultSymbols = ['synthetic_index', 'basket_index', 'forex', 'indices', 'stocks', 'cryptocurrency', 'commodities'];
+const DefaultSymbols = [
+    'synthetic_index',
+    'basket_index',
+    'forex',
+    'indices',
+    'stocks',
+    'cryptocurrency',
+    'commodities',
+];
 
 export type TProcessedSymbolItem = {
     symbol: string;
@@ -81,8 +89,7 @@ export default class ActiveSymbols {
             retrieveActiveSymbols: action.bound,
             computeActiveSymbols: action.bound,
             activeSymbols: computed,
-
-        })
+        });
         this._api = api;
         this._tradingTimes = tradingTimes;
         this._params = params;
@@ -215,7 +222,10 @@ export default class ActiveSymbols {
         let subcategory = getSubcategory(first);
         let category = getCategory(first);
         for (const symbol of activeSymbols) {
-            if (category.categoryName !== symbol.market_display_name && category.categoryName !== symbol.subgroup_display_name) {
+            if (
+                category.categoryName !== symbol.market_display_name &&
+                category.categoryName !== symbol.subgroup_display_name
+            ) {
                 category.data.push(subcategory);
                 categorizedSymbols.push(category);
                 subcategory = getSubcategory(symbol);
@@ -223,7 +233,7 @@ export default class ActiveSymbols {
             }
 
             if (category.hasSubgroup) {
-                if(!category.subgroups?.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
+                if (!category.subgroups?.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
                     category.subgroups?.push({
                         data: [],
                         categoryName: symbol.subgroup_display_name,
@@ -234,17 +244,26 @@ export default class ActiveSymbols {
                     });
                 }
                 // should push a subcategory instead of symbol
-                if (!category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)) {
+                if (
+                    !category.subgroups
+                        ?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)
+                        ?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)
+                ) {
                     subcategory = getSubcategory(symbol);
-                    category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.push(subcategory);
+                    category.subgroups
+                        ?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)
+                        ?.data.push(subcategory);
                     subcategory = getSubcategory(symbol);
                 }
-                category.subgroups?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)?.data.push({
-                    enabled: true,
-                    itemId: symbol.symbol,
-                    display: symbol.name,
-                    dataObject: symbol,
-                });
+                category.subgroups
+                    ?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)
+                    ?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)
+                    ?.data.push({
+                        enabled: true,
+                        itemId: symbol.symbol,
+                        display: symbol.name,
+                        dataObject: symbol,
+                    });
             }
             if (subcategory.subcategoryName !== symbol.submarket_display_name) {
                 category.data.push(subcategory);

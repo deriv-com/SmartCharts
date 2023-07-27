@@ -372,6 +372,12 @@ export type TFlutterChart = {
         removeIndicator: (index: number) => void;
         clearIndicators: () => void;
     };
+    crosshair: {
+        getXFromEpoch: (epoch: number) => number;
+        getYFromQuote: (quote: number) => number;
+        getEpochFromX: (x: number) => number;
+        getQuoteFromY: (y: number) => number;
+    };
 };
 
 export type JSInterop = {
@@ -380,7 +386,7 @@ export type JSInterop = {
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
     onCrosshairDisappeared: () => void;
-    onCrosshairHover: (dx: number, dy: number, epoch: number, quote: string) => void;
+    onCrosshairHover: (dx: number, dy: number, dxLocal: number, dyLocal: number) => void;
     loadHistory: (request: TLoadHistoryParams) => void;
     indicators: {
         onRemove: (index: number) => void;
