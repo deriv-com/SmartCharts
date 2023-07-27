@@ -106,7 +106,7 @@ export default class ChartAdapterStore {
         e.preventDefault();
 
         if (e.deltaX === 0 && e.deltaZ === 0) {
-            const value = (100 - e.deltaY) / 100;
+            const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);
         } else {
             window.flutterChart?.app.scroll(e.deltaX);
