@@ -4,7 +4,7 @@
 
 var fs = require('fs');
 
-const languages = ['en','ar','fr','de','hu','it','ru','es','zh_cn','ja'];
+const languages = ['en', 'ar', 'fr', 'de', 'hu', 'it', 'ko', 'ru', 'es', 'zh_cn', 'ja'];
 const lang_map = {};
 let i = 0;
 for (const l of languages) {
@@ -51,7 +51,6 @@ for (const f of fs.readdirSync('./translation/')) {
         } else {
             notFound.push(f);
         }
-
     }
 }
 
@@ -63,5 +62,3 @@ console.log('\nNo translations are available for the following languages:');
 for (const f of notFound) {
     console.log(` - ${f}`);
 }
-
-
