@@ -108,6 +108,7 @@ import Thailand from '../../sass/icons/flags/thailand.svg';
 import Indonesia from '../../sass/icons/flags/indonesia.svg';
 import Vietnam from '../../sass/icons/flags/vietnam.svg';
 import Italy from '../../sass/icons/flags/italy.svg';
+import Korean from '../../sass/icons/flags/korean.svg';
 import Chinese from '../../sass/icons/flags/chinese.svg';
 import ChineseTraditional from '../../sass/icons/flags/chinese-traditional.svg';
 import German from '../../sass/icons/flags/german.svg';
@@ -499,6 +500,7 @@ export const FlagIcons = {
     Indonesia: Wrapper(Indonesia),
     Vietnam: Wrapper(Vietnam),
     Italy: Wrapper(Italy),
+    Korean: Wrapper(Korean),
     Chinese: Wrapper(Chinese),
     ChineseTraditional: Wrapper(ChineseTraditional),
     Poland: Wrapper(PLN),
@@ -570,18 +572,18 @@ export const ItemIconMap = {
     cryXRPUSD: Wrapper(XRPUSD),
     cryBTCUSD: Wrapper(BTCUSD),
     /* Stock Indices */
-    'OTC_AEX':Wrapper(DUT25),
-    'OTC_FTSE':Wrapper(UK100),
-    'OTC_SX5E':Wrapper(EUR50),
-    'OTC_FCHI':Wrapper(FR40),
-    'OTC_GDAXI':Wrapper(DE40),
-    'OTC_N225':Wrapper(JPY225),
-    'OTC_SPC':Wrapper(USD500),
-    'OTC_DJI':Wrapper(WST30),
-    'OTC_NDX':Wrapper(USTech100),
-    'OTC_SSMI':Wrapper(CHF20),
-    'OTC_HSI':Wrapper(HKG50),
-    'OTC_AS51':Wrapper(AUD200),
+    OTC_AEX: Wrapper(DUT25),
+    OTC_FTSE: Wrapper(UK100),
+    OTC_SX5E: Wrapper(EUR50),
+    OTC_FCHI: Wrapper(FR40),
+    OTC_GDAXI: Wrapper(DE40),
+    OTC_N225: Wrapper(JPY225),
+    OTC_SPC: Wrapper(USD500),
+    OTC_DJI: Wrapper(WST30),
+    OTC_NDX: Wrapper(USTech100),
+    OTC_SSMI: Wrapper(CHF20),
+    OTC_HSI: Wrapper(HKG50),
+    OTC_AS51: Wrapper(AUD200),
 };
 
 const createCompositeIcon = (A: TIcon, B: TIcon, icId: string) => {
@@ -606,7 +608,6 @@ function frx(flagA: keyof typeof FlagIconMap, flagB: keyof typeof FlagIconMap) {
 
 export const OTCBadgeIcon = Wrapper(OTCBadge);
 const BasketIndexIcon = Wrapper(BasketIndexPlaceholder);
-
 
 function wld(flag: keyof typeof FlagIconMap) {
     const FlagIcon = FlagIconMap[flag];
@@ -655,7 +656,6 @@ frx('USD', 'MXN');
 frx('USD', 'NOK');
 frx('USD', 'PLN');
 frx('USD', 'SEK');
-
 
 export const ActiveOptionsIconMap = {
     delete: DeleteIcon,
