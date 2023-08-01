@@ -111,7 +111,7 @@ class ChartApp {
                 as List<IndicatorConfig>
             : <IndicatorConfig>[];
 
-    return indicatorsModel.getIndicatorHoverIndex(
+    final int? value = indicatorsModel.getIndicatorHoverIndex(
       seriesList,
       indicatorConfigsList,
       wrappedController,
@@ -120,5 +120,7 @@ class ChartApp {
       x,
       y,
     );
+
+    return value;
   }
 }

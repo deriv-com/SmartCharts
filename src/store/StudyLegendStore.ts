@@ -112,9 +112,10 @@ export default class StudyLegendStore {
     }
 
     transform = (value: any) => {
-        if (typeof value == 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+        if (typeof value === 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
             return hexToInt(value);
-        } else if (isLiteralObject(value)) {
+        }
+        if (isLiteralObject(value)) {
             const map = value as Record<string, any>;
             Object.keys(value).forEach(key => {
                 map[key] = this.transform(map[key]);

@@ -21,7 +21,7 @@ export default class ChartAdapterStore {
     msPerPx?: number;
     isDataFitModeEnabled = false;
     painter = new Painter();
-
+    hoverIndex = '';
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
@@ -66,10 +66,45 @@ export default class ChartAdapterStore {
                     this.mainStore.crosshair.decimalPlaces
                 );
 
-                this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+                this.mainStore.crosshair.onMouseMove(dxLocal, dyLocal, epoch, quote);
                 const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
                 const granularity = this.mainStore.chartAdapter.getGranularityInMs();
-                this.flutterChart?.app.getIndicatorHoverIndex(dx, dy, getClosestEpoch, granularity);
+                // console.log('local', dyLocal);
+                // console.log('global', dy);
+
+                const configIndex = this.flutterChart?.app.getIndicatorHoverIndex(
+                    dxLocal,
+                    dyLocal,
+                    getClosestEpoch,
+                    granularity
+                );
+                // _indicatorIndex;
+
+                if (localStorage.getItem('chart-layout-trade')) {
+                    const indicatorConfig = JSON.parse(localStorage.getItem('chart-layout-trade')!);
+                    if (configIndex != null) {
+                        const item = indicatorConfig.studyItems[configIndex];
+                        console.log(item);
+                        if (item.config) {
+                            for (const key in item.config) {
+                                if (key.includes('Style')) {
+                                    item.config[key].thickness = 2;
+                                }
+                            }
+                            this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
+                        }
+                    } else if (indicatorConfig.studyItems.length > 0) {
+                        for (let index = 0; index < indicatorConfig.studyItems.length; index++) {
+                            const item = indicatorConfig.studyItems[index];
+                            for (const keys in item.config) {
+                                if (keys.includes('Style')) {
+                                    item.config[keys].thickness = 1;
+                                }
+                                this.mainStore.studies.addOrUpdateIndicator(item, index);
+                            }
+                        }
+                    }
+                }
             },
             indicators: {
                 onRemove: (index: number) => {
