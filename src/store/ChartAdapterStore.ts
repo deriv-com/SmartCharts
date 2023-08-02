@@ -19,9 +19,10 @@ export default class ChartAdapterStore {
     };
     isFeedLoaded = false;
     msPerPx?: number;
+    hoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
     painter = new Painter();
-    hoverIndex = '';
+    clickEventCount = 0;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
@@ -66,11 +67,26 @@ export default class ChartAdapterStore {
                     this.mainStore.crosshair.decimalPlaces
                 );
 
+                const handleClickEvent = (e: Event) => {
+                    e.preventDefault();
+                    if (this.hoverIndex != null) {
+                        this.mainStore.studies.editStudyByIndex(this.hoverIndex);
+                    }
+                };
+
+                function updateEventListener(condition: boolean) {
+                    if (condition) {
+                        document
+                            .getElementsByClassName('chartContainer')[0]
+                            .addEventListener('contextmenu', handleClickEvent);
+                    } else {
+                        document.removeEventListener('contextmenu', handleClickEvent);
+                    }
+                }
+
                 this.mainStore.crosshair.onMouseMove(dxLocal, dyLocal, epoch, quote);
                 const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
                 const granularity = this.mainStore.chartAdapter.getGranularityInMs();
-                // console.log('local', dyLocal);
-                // console.log('global', dy);
 
                 const configIndex = this.flutterChart?.app.getIndicatorHoverIndex(
                     dxLocal,
@@ -78,18 +94,21 @@ export default class ChartAdapterStore {
                     getClosestEpoch,
                     granularity
                 );
-                // _indicatorIndex;
+                this.hoverIndex = configIndex;
 
                 if (localStorage.getItem('chart-layout-trade')) {
                     const indicatorConfig = JSON.parse(localStorage.getItem('chart-layout-trade')!);
                     if (configIndex != null) {
                         const item = indicatorConfig.studyItems[configIndex];
-                        console.log(item);
                         if (item.config) {
                             for (const key in item.config) {
                                 if (key.includes('Style')) {
                                     item.config[key].thickness = 2;
                                 }
+                            }
+                            if (this.clickEventCount === 0) {
+                                this.clickEventCount++;
+                                updateEventListener(true);
                             }
                             this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
                         }
