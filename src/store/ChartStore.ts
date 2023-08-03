@@ -738,6 +738,7 @@ class ChartStore {
             initialData,
             chartData,
             feedCall,
+            whitespace,
         } = props;
         this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
@@ -775,7 +776,7 @@ class ChartStore {
             yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
-                whitespace: isMobile ? 50 : 150,
+                whitespace: whitespace || (isMobile ? 50 : 150),
             },
             chart: {
                 yAxis: {
