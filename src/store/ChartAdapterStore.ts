@@ -125,10 +125,6 @@ export default class ChartAdapterStore {
                             this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
                         }
                     } else if (indicatorConfig.studyItems.length > 0) {
-                        // if (this.hoverIndex != null) {
-                        //     const item = indicatorConfig.studyItems[this.hoverIndex ?? 0];
-                        //     this.mainStore.studies.addOrUpdateIndicator(item, this.hoverIndex ?? 0);
-                        // }
                         for (let index = 0; index < indicatorConfig.studyItems.length; index++) {
                             const item = indicatorConfig.studyItems[index];
                             for (const keys in item.config) {

@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:js_interop';
-import 'dart:js_util';
 import 'dart:math';
 import 'dart:ui';
 
@@ -9,7 +7,6 @@ import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:collection/collection.dart' show IterableExtension;
-import 'package:deriv_chart/src/deriv_chart/chart/data_visualization/chart_series/indicators_series/single_indicator_series.dart';
 import 'package:flutter/material.dart';
 
 /// State and methods of chart web adapter config.
@@ -878,13 +875,6 @@ class IndicatorsModel {
         return true;
       }
 
-      // if (qt != null) {
-      //   final double? targetQuote = controller.getQuoteFromY(target.dy);
-
-      //   if ((targetQuote! - double.parse(qt)).abs() < 50) {
-      //     return true;
-      //   }
-      // }
       return false;
     }
     return false;
@@ -926,15 +916,5 @@ class IndicatorsModel {
 
     // The point is on the line if the distance is close to 0
     return distance.abs() < 0.005;
-
-    // Path path = Path()
-    //   ..moveTo(controller.getXFromEpoch(startPoint!.epoch)! + 0.0,
-    //       controller.getYFromQuote(startPoint.quote)! + 0.0)
-    //   ..lineTo(controller.getXFromEpoch(endPoint!.epoch)! + 0.0,
-    //       controller.getYFromQuote(endPoint.quote)! + 0.0);
-
-    // if (path.contains(target)) {
-    //   return true;
-    // }
   }
 }
