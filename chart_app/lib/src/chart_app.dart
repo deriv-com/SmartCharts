@@ -100,8 +100,8 @@ class ChartApp {
   }
 
   /// Gets the hover index for indicator series
-  int? getIndicatorHoverIndex(
-      double x, double y, Function getClosestEpoch, int granularity) {
+  int? getIndicatorHoverIndex(double x, double y, Function getClosestEpoch,
+      int granularity, int bottomIndicatorIndex) {
     final List<Series> seriesList =
         wrappedController.getChartController().getSeriesList?.call() ??
             <Series>[];
@@ -119,6 +119,7 @@ class ChartApp {
       granularity,
       x,
       y,
+      bottomIndicatorIndex,
     );
 
     return value;

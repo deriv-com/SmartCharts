@@ -66,7 +66,6 @@ export default class ChartAdapterStore {
                 const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
                     this.mainStore.crosshair.decimalPlaces
                 );
-
                 const handleClickEvent = (e: Event) => {
                     e.preventDefault();
                     if (this.hoverIndex != null) {
@@ -80,7 +79,9 @@ export default class ChartAdapterStore {
                             .getElementsByClassName('chartContainer')[0]
                             .addEventListener('contextmenu', handleClickEvent);
                     } else {
-                        document.removeEventListener('contextmenu', handleClickEvent);
+                        document
+                            .getElementsByClassName('chartContainer')[0]
+                            .removeEventListener('contextmenu', handleClickEvent);
                     }
                 }
 
@@ -88,22 +89,33 @@ export default class ChartAdapterStore {
                 const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
                 const granularity = this.mainStore.chartAdapter.getGranularityInMs();
 
-                const configIndex = this.flutterChart?.app.getIndicatorHoverIndex(
+                const configIndex: null | number | undefined = this.flutterChart?.app.getIndicatorHoverIndex(
                     dxLocal,
                     dyLocal,
                     getClosestEpoch,
-                    granularity
+                    granularity,
+                    _indicatorIndex
                 );
+
+                // : number | null | undefined
+
                 this.hoverIndex = configIndex;
 
                 if (localStorage.getItem('chart-layout-trade')) {
                     const indicatorConfig = JSON.parse(localStorage.getItem('chart-layout-trade')!);
+
                     if (configIndex != null) {
                         const item = indicatorConfig.studyItems[configIndex];
+
                         if (item.config) {
                             for (const key in item.config) {
                                 if (key.includes('Style')) {
                                     item.config[key].thickness = 2;
+                                }
+                                if (key.includes('Styles')) {
+                                    item.config[key].forEach(element => {
+                                        element.thickness = 2;
+                                    });
                                 }
                             }
                             if (this.clickEventCount === 0) {
@@ -113,6 +125,10 @@ export default class ChartAdapterStore {
                             this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
                         }
                     } else if (indicatorConfig.studyItems.length > 0) {
+                        // if (this.hoverIndex != null) {
+                        //     const item = indicatorConfig.studyItems[this.hoverIndex ?? 0];
+                        //     this.mainStore.studies.addOrUpdateIndicator(item, this.hoverIndex ?? 0);
+                        // }
                         for (let index = 0; index < indicatorConfig.studyItems.length; index++) {
                             const item = indicatorConfig.studyItems[index];
                             for (const keys in item.config) {
