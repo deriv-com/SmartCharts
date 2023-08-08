@@ -67,8 +67,8 @@ export default class ChartAdapterStore {
                     this.mainStore.crosshair.decimalPlaces
                 );
                 const handleClickEvent = (e: Event) => {
-                    e.preventDefault();
                     if (this.hoverIndex != null) {
+                        e.preventDefault();
                         this.mainStore.studies.editStudyByIndex(this.hoverIndex);
                     }
                 };
@@ -97,21 +97,23 @@ export default class ChartAdapterStore {
                     _indicatorIndex
                 );
 
-                // : number | null | undefined
-
                 this.hoverIndex = configIndex;
+                const chartConfigList = localStorage.getItem('chart-layout-trade');
 
-                if (localStorage.getItem('chart-layout-trade')) {
-                    const indicatorConfig = JSON.parse(localStorage.getItem('chart-layout-trade')!);
+                if (chartConfigList) {
+                    const indicatorConfig = JSON.parse(chartConfigList!);
 
                     if (configIndex != null) {
                         const item = indicatorConfig.studyItems[configIndex];
-
                         if (item.config) {
                             for (const key in item.config) {
                                 if (key.includes('Style')) {
                                     item.config[key].thickness = 2;
+                                    if (key === 'scatterStyle') {
+                                        item.config[key].radius = 2.5;
+                                    }
                                 }
+
                                 if (key.includes('Styles')) {
                                     item.config[key].forEach(element => {
                                         element.thickness = 2;

@@ -370,7 +370,8 @@ class IndicatorsModel {
   ) {
     int configIndex = 0;
 
-    final List<Series> sortedSeriesList = <Series>[...seriesList];
+    List<Series> sortedSeriesList = <Series>[...seriesList];
+
     indicatorConfigsList.forEachIndexed((int index, IndicatorConfig config) {
       configIndex = indicatorsRepo.items.indexOf(config);
 
@@ -386,19 +387,7 @@ class IndicatorsModel {
     final int? epoch =
         getClosestEpoch(controller.getEpochFromX(x), granularity);
 
-    if (bottomItemIndicator is CCISeries) {
-      final List<Tick> cciEntries = bottomItemIndicator.entries ?? <Tick>[];
-      if (isPointOnIndicator(
-        cciEntries,
-        controller,
-        target,
-        epoch,
-        offset: bottomItemIndicator.offset,
-      )) {
-        return sortedSeriesList.indexWhere(
-            (Series element) => element.id == bottomItemIndicator.id);
-      }
-    } else if (bottomItemIndicator is AwesomeOscillatorSeries) {
+    if (bottomItemIndicator is AwesomeOscillatorSeries) {
       final List<Tick> aoEntries = bottomItemIndicator.entries ?? <Tick>[];
       if (isPointOnIndicator(
         aoEntries,
@@ -430,6 +419,18 @@ class IndicatorsModel {
             epoch,
             offset: bottomItemIndicator.gatorTopSeries.offset,
           )) {
+        return sortedSeriesList.indexWhere(
+            (Series element) => element.id == bottomItemIndicator.id);
+      }
+    } else if (bottomItemIndicator is CCISeries) {
+      final List<Tick> cciEntries = bottomItemIndicator.entries ?? <Tick>[];
+      if (isPointOnIndicator(
+        cciEntries,
+        controller,
+        target,
+        epoch,
+        offset: bottomItemIndicator.offset,
+      )) {
         return sortedSeriesList.indexWhere(
             (Series element) => element.id == bottomItemIndicator.id);
       }
@@ -616,229 +617,232 @@ class IndicatorsModel {
         return sortedSeriesList.indexWhere(
             (Series element) => element.id == bottomItemIndicator.id);
       }
-    }
+    } else {
+      for (final ChartData item in sortedSeriesList) {
+        if (item is BollingerBandSeries) {
+          final List<Tick> middleEntries =
+              item.middleSeries.entries ?? <Tick>[];
+          final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
+          final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
 
-    for (final ChartData item in sortedSeriesList) {
-      if (item is BollingerBandSeries) {
-        final List<Tick> middleEntries = item.middleSeries.entries ?? <Tick>[];
-        final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
-        final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
+          // // get the tick and next tick from epoch
+          if (isPointOnIndicator(middleEntries, controller, target, epoch) |
+              isPointOnIndicator(lowerEntries, controller, target, epoch) |
+              isPointOnIndicator(upperEntries, controller, target, epoch)) {
+            return seriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is DonchianChannelsSeries) {
+          final List<Tick> middleChannelEntries =
+              item.middleChannelSeries.entries ?? <Tick>[];
+          final List<Tick> lowerChannelEntries =
+              item.lowerChannelSeries.entries ?? <Tick>[];
+          final List<Tick> upperChannelEntries =
+              item.upperChannelSeries.entries ?? <Tick>[];
 
-        // // get the tick and next tick from epoch
-        if (isPointOnIndicator(middleEntries, controller, target, epoch) |
-            isPointOnIndicator(lowerEntries, controller, target, epoch) |
-            isPointOnIndicator(upperEntries, controller, target, epoch)) {
-          return seriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is DonchianChannelsSeries) {
-        final List<Tick> middleChannelEntries =
-            item.middleChannelSeries.entries ?? <Tick>[];
-        final List<Tick> lowerChannelEntries =
-            item.lowerChannelSeries.entries ?? <Tick>[];
-        final List<Tick> upperChannelEntries =
-            item.upperChannelSeries.entries ?? <Tick>[];
+          if (isPointOnIndicator(
+                middleChannelEntries,
+                controller,
+                target,
+                epoch,
+              ) |
+              isPointOnIndicator(
+                lowerChannelEntries,
+                controller,
+                target,
+                epoch,
+              ) |
+              isPointOnIndicator(
+                upperChannelEntries,
+                controller,
+                target,
+                epoch,
+              )) {
+            return seriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is MASeries) {
+          final List<Tick> maEntries = item.entries ?? <Tick>[];
 
-        if (isPointOnIndicator(
-              middleChannelEntries,
-              controller,
-              target,
-              epoch,
-            ) |
-            isPointOnIndicator(
-              lowerChannelEntries,
-              controller,
-              target,
-              epoch,
-            ) |
-            isPointOnIndicator(
-              upperChannelEntries,
-              controller,
-              target,
-              epoch,
-            )) {
-          return seriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is MASeries) {
-        final List<Tick> maEntries = item.entries ?? <Tick>[];
+          if (isPointOnIndicator(maEntries, controller, target, epoch)) {
+            return seriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is IchimokuCloudSeries) {
+          final List<Tick> ichimokuBaseEntries =
+              item.baseLineSeries.entries ?? <Tick>[];
 
-        if (isPointOnIndicator(maEntries, controller, target, epoch)) {
-          return seriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is IchimokuCloudSeries) {
-        final List<Tick> ichimokuBaseEntries =
-            item.baseLineSeries.entries ?? <Tick>[];
+          final List<Tick> ichimoksuConversionEntries =
+              item.conversionLineSeries.entries ?? <Tick>[];
 
-        final List<Tick> ichimoksuConversionEntries =
-            item.conversionLineSeries.entries ?? <Tick>[];
+          final List<Tick> ichimoksuSpanAEntries =
+              item.spanASeries.entries ?? <Tick>[];
 
-        final List<Tick> ichimoksuSpanAEntries =
-            item.spanASeries.entries ?? <Tick>[];
+          final List<Tick> ichimoksuSpanBEntries =
+              item.spanBSeries.entries ?? <Tick>[];
 
-        final List<Tick> ichimoksuSpanBEntries =
-            item.spanBSeries.entries ?? <Tick>[];
+          final List<Tick> ichimoksuLaggingSpanEntries =
+              item.laggingSpanSeries.entries ?? <Tick>[];
 
-        final List<Tick> ichimoksuLaggingSpanEntries =
-            item.laggingSpanSeries.entries ?? <Tick>[];
+          if (isPointOnIndicator(
+                ichimokuBaseEntries,
+                controller,
+                target,
+                epoch,
+              ) |
+              isPointOnIndicator(
+                ichimoksuConversionEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.conversionLineSeries.offset,
+              ) |
+              isPointOnIndicator(
+                ichimoksuSpanAEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.spanASeries.offset,
+              ) |
+              isPointOnIndicator(
+                ichimoksuSpanBEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.spanBSeries.offset,
+              ) |
+              isPointOnIndicator(
+                ichimoksuLaggingSpanEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.laggingSpanSeries.offset,
+              )) {
+            return seriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is MAEnvSeries) {
+          final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
+          final List<Tick> middleEntries =
+              item.middleSeries.entries ?? <Tick>[];
+          final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
 
-        if (isPointOnIndicator(
-              ichimokuBaseEntries,
-              controller,
-              target,
-              epoch,
-            ) |
-            isPointOnIndicator(
-              ichimoksuConversionEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.conversionLineSeries.offset,
-            ) |
-            isPointOnIndicator(
-              ichimoksuSpanAEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.spanASeries.offset,
-            ) |
-            isPointOnIndicator(
-              ichimoksuSpanBEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.spanBSeries.offset,
-            ) |
-            isPointOnIndicator(
-              ichimoksuLaggingSpanEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.laggingSpanSeries.offset,
-            )) {
-          return seriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is MAEnvSeries) {
-        final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
-        final List<Tick> middleEntries = item.middleSeries.entries ?? <Tick>[];
-        final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
-
-        if (isPointOnIndicator(
-              lowerEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.lowerSeries.offset,
-            ) |
-            isPointOnIndicator(
-              middleEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.middleSeries.offset,
-            ) |
-            isPointOnIndicator(
-              upperEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.upperSeries.offset,
-            )) {
-          return seriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is ParabolicSARSeries) {
-        final List<Tick> parabolicSeries = item.entries ?? <Tick>[];
-        if (isPointOnIndicator(
-          parabolicSeries,
-          controller,
-          target,
-          epoch,
-        )) {
-          return sortedSeriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is ZigZagSeries) {
-        final List<Tick> zigZagSeries = item.entries ?? <Tick>[];
-
-        if (isPointOnZigZagIndicator(
-          zigZagSeries,
-          controller,
-          target,
-          epoch,
-        )) {
-          return sortedSeriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is FractalChaosBandSeries) {
-        final List<Tick> fcbHighEntries =
-            item.fcbHighSeries.entries ?? <Tick>[];
-        final List<Tick> fcbLowEntries = item.fcbLowSeries.entries ?? <Tick>[];
-
-        if (isPointOnIndicator(
-              fcbHighEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.fcbHighSeries.offset,
-            ) |
-            isPointOnIndicator(
-              fcbLowEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.fcbLowSeries.offset,
-            )) {
-          return sortedSeriesList
-              .indexWhere((Series element) => element.id == item.id);
-        }
-      } else if (item is RainbowSeries) {
-        bool isClick = false;
-        for (int i = 0; i < item.rainbowSeries.length; i++) {
-          isClick = isPointOnIndicator(
-            item.rainbowSeries[i].entries ?? <Tick>[],
+          if (isPointOnIndicator(
+                lowerEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.lowerSeries.offset,
+              ) |
+              isPointOnIndicator(
+                middleEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.middleSeries.offset,
+              ) |
+              isPointOnIndicator(
+                upperEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.upperSeries.offset,
+              )) {
+            return seriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is ParabolicSARSeries) {
+          final List<Tick> parabolicSeries = item.entries ?? <Tick>[];
+          if (isPointOnIndicator(
+            parabolicSeries,
             controller,
             target,
             epoch,
-          );
-
-          if (isClick) {
+          )) {
             return sortedSeriesList
                 .indexWhere((Series element) => element.id == item.id);
           }
-        }
-      } else if (item is AlligatorSeries) {
-        final List<Tick> teethEntries = item.teethSeries!.entries ?? <Tick>[];
+        } else if (item is ZigZagSeries) {
+          final List<Tick> zigZagSeries = item.entries ?? <Tick>[];
 
-        final List<Tick> jawEntries = item.jawSeries!.entries ?? <Tick>[];
+          if (isPointOnZigZagIndicator(
+            zigZagSeries,
+            controller,
+            target,
+            epoch,
+          )) {
+            return sortedSeriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is FractalChaosBandSeries) {
+          final List<Tick> fcbHighEntries =
+              item.fcbHighSeries.entries ?? <Tick>[];
+          final List<Tick> fcbLowEntries =
+              item.fcbLowSeries.entries ?? <Tick>[];
 
-        final List<Tick> lipEntries = item.lipsSeries!.entries ?? <Tick>[];
-
-        if (isPointOnIndicator(
-              teethEntries,
+          if (isPointOnIndicator(
+                fcbHighEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.fcbHighSeries.offset,
+              ) |
+              isPointOnIndicator(
+                fcbLowEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.fcbLowSeries.offset,
+              )) {
+            return sortedSeriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
+        } else if (item is RainbowSeries) {
+          bool isClick = false;
+          for (int i = 0; i < item.rainbowSeries.length; i++) {
+            isClick = isPointOnIndicator(
+              item.rainbowSeries[i].entries ?? <Tick>[],
               controller,
               target,
               epoch,
-              offset: item.alligatorOptions.teethOffset,
-            ) |
-            isPointOnIndicator(
-              jawEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.alligatorOptions.jawOffset,
-            ) |
-            isPointOnIndicator(
-              lipEntries,
-              controller,
-              target,
-              epoch,
-              offset: item.alligatorOptions.lipsOffset,
-            )) {
-          return sortedSeriesList
-              .indexWhere((Series element) => element.id == item.id);
+            );
+
+            if (isClick) {
+              return sortedSeriesList
+                  .indexWhere((Series element) => element.id == item.id);
+            }
+          }
+        } else if (item is AlligatorSeries) {
+          final List<Tick> teethEntries = item.teethSeries!.entries ?? <Tick>[];
+
+          final List<Tick> jawEntries = item.jawSeries!.entries ?? <Tick>[];
+
+          final List<Tick> lipEntries = item.lipsSeries!.entries ?? <Tick>[];
+
+          if (isPointOnIndicator(
+                teethEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.alligatorOptions.teethOffset,
+              ) |
+              isPointOnIndicator(
+                jawEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.alligatorOptions.jawOffset,
+              ) |
+              isPointOnIndicator(
+                lipEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.alligatorOptions.lipsOffset,
+              )) {
+            return sortedSeriesList
+                .indexWhere((Series element) => element.id == item.id);
+          }
         }
       }
     }
@@ -887,10 +891,6 @@ class IndicatorsModel {
   bool isPointOnZigZagIndicator(List<Tick> entries,
       WrappedController controller, Offset target, int? epoch,
       {int offset = 0}) {
-    // final int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
-
-    // final List<Tick> endEntries =
-    //     entries.sublist(entries.length / 2.toInt() as int, entries.length - 1);
     final Tick? endPoint = entries[entries.length - 1];
 
     // endEntries.firstWhereOrNull((element) => !element.quote.isNaN);
