@@ -167,6 +167,10 @@
                     svg {
                         @include themify($themes) {
                             fill: themed('CatDisplayActiveFilterIcon');
+                        }
+                    }
+                    &:not(.ic-synthetic_index, .ic-cryptocurrency) svg {
+                        @include themify($themes) {
                             stroke: themed('CatDisplayActiveFilterIcon');
                         }
                     }

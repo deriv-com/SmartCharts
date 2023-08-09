@@ -741,6 +741,7 @@ class ChartStore {
         } = props;
         this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
+        this.currentLanguage = localStorage.getItem('current_chart_lang')?.toLowerCase();
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes =
             ChartStore.tradingTimes ||
@@ -760,8 +761,8 @@ class ChartStore {
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
+        localStorage.setItem('current_chart_lang', settings?.language || 'en');
         this.isMobile = isMobile;
-        this.currentLanguage = settings?.language;
         this.state = this.mainStore.state;
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;

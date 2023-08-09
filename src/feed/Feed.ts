@@ -1,9 +1,4 @@
-import {
-    AuditDetailsForExpiredContract,
-    TicksHistoryRequest,
-    TicksHistoryResponse,
-    ProposalOpenContract,
-} from '@deriv/api-types';
+import { TicksHistoryRequest, TicksHistoryResponse, ProposalOpenContract } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { reaction } from 'mobx';
 import { BinaryAPI, TradingTimes } from 'src/binaryapi';
@@ -34,6 +29,7 @@ class Feed {
     _mainStore: TMainStore;
     _serverTime: ServerTime;
     _stx: Context['stx'];
+    tickQueue: TQuote[] = [];
     _tradingTimes: TradingTimes;
     static get EVENT_MASTER_DATA_UPDATE() {
         return 'EVENT_MASTER_DATA_UPDATE';
@@ -76,6 +72,9 @@ class Feed {
     }
     get margin() {
         return this._mainStore.state.margin;
+    }
+    get hasAlternativeSource() {
+        return this._mainStore.state.shouldDrawTicksFromContractInfo;
     }
     get paginationLoader() {
         return this._mainStore.paginationLoader;
@@ -168,6 +167,7 @@ class Feed {
         params: TPaginationParams,
         callback: TPaginationCallback
     ) {
+        this.tickQueue = [];
         this.setHasReachedEndOfData(false);
         this.paginationLoader.updateOnPagination(true);
         const { period, interval, symbolObject } = params;
@@ -212,13 +212,14 @@ class Feed {
             start: this.endEpoch ? start : undefined,
             count: this.endEpoch ? undefined : this._mainStore.lastDigitStats.count,
         };
+        const validation_error = (this.contractInfo as ProposalOpenContract).validation_error_code;
         let getHistoryOnly = false;
         let quotes: TQuote[] | undefined;
         if (end) {
             // When there is end; no streaming required
             tickHistoryRequest.end = String(end);
             getHistoryOnly = true;
-        } else if (this._tradingTimes.isMarketOpened(symbol)) {
+        } else if (validation_error !== 'MarketIsClosed' && validation_error !== 'MarketIsClosedTryVolatility') {
             let subscription: DelayedSubscription | RealtimeSubscription;
             const delay = this._tradingTimes.getDelayedMinutes(symbol);
             if (delay > 0) {
@@ -290,9 +291,7 @@ class Feed {
             } else {
                 // Passed all_ticks from Deriv-app store modules.contract_replay.contract_store.contract_info.audit_details.all_ticks
                 const allTicksContract = await this.allTicks;
-                quotes = TickHistoryFormatter.formatAllTicks(
-                    allTicksContract as keyof AuditDetailsForExpiredContract | []
-                );
+                quotes = TickHistoryFormatter.formatAllTicks(allTicksContract);
             }
         }
         if (!quotes) {
@@ -440,13 +439,14 @@ class Feed {
         }
         return result;
     }
-    _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string) {
+    _appendChartData(quotes: TQuote[], key: string, comparisonChartSymbol?: string, fromAlternativeSource = false) {
         if (this._forgetIfEndEpoch(key) && !this._activeStreams[key]) {
             quotes = [];
             return;
         }
         if (
             this.endEpoch &&
+            this._stx.chart.dataSet &&
             this._stx.chart.dataSet.slice(-1)[0] &&
             CIQ.strToDateTime(getUTCDate(this.endEpoch)).valueOf() !== this._stx.chart.dataSet.slice(-1)[0].DT.valueOf()
         ) {
@@ -467,13 +467,33 @@ class Feed {
                 secondarySeries: comparisonChartSymbol,
                 noCreateDataSet: true,
             });
-        } else {
+        } else if (!this.hasAlternativeSource || fromAlternativeSource) {
+            if (fromAlternativeSource) {
+                if (!this.tickQueue.length) {
+                    this.tickQueue = [quotes[quotes.length - 1]];
+                    return;
+                }
+                if (this.tickQueue[0].tick?.epoch === quotes[quotes.length - 1].tick?.epoch) return;
+                this.tickQueue = [quotes[quotes.length - 1]];
+
+                this._stx.updateChartData(quotes.slice(0, -1), null, {
+                    noCreateDataSet: true,
+                    allowReplaceOHL: true,
+                });
+                quotes = [quotes[quotes.length - 1]];
+            }
             this._stx.updateChartData(quotes, null, {
                 allowReplaceOHL: true,
             });
             this._stx.createDataSet();
         }
         this._emitDataUpdate(quotes, comparisonChartSymbol);
+    }
+    appendChartDataFromPOCResponse(contract_info: ProposalOpenContract) {
+        const ticks = TickHistoryFormatter.formatPOCTick(contract_info);
+        if (ticks) {
+            this._appendChartData(ticks, ticks[0].tick.symbol, undefined, true);
+        }
     }
     _emitDataUpdate(quotes: TQuote[], comparisonChartSymbol?: string, isChartReinitialized = false) {
         const prev = quotes[quotes.length - 2];
@@ -604,7 +624,10 @@ class Feed {
                 tick => CIQ.strToDateTime(tick.Date) >= CIQ.strToDateTime(getUTCDate(this.endEpoch as number))
             );
             if (endTickIndex > -1) {
-                const addon = trimmedQuotes[endTickIndex].Date === getUTCDate(this.endEpoch) ? 2 : 1;
+                const addon =
+                    CIQ.strToDateTime(trimmedQuotes[endTickIndex].Date) === CIQ.strToDateTime(getUTCDate(this.endEpoch))
+                        ? 2
+                        : 1;
                 trimmedQuotes = trimmedQuotes.slice(0, endTickIndex + addon);
             }
         }
