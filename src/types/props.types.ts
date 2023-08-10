@@ -349,7 +349,7 @@ export type TFlutterChart = {
             getClosestEpoch: ((epoch: number, granularity: number) => number) | undefined,
             granularity: number,
             _indicatorIndex: number | undefined
-        ) => number;
+        ) => number | null;
         getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;
