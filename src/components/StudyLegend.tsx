@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { TIcon } from 'src/types';
+import { TActiveItem, TIcon } from 'src/types';
 import { useStores } from 'src/store';
 import StudyLegendStore from 'src/store/StudyLegendStore';
 import NotificationBadge from './NotificationBadge';
@@ -10,7 +10,7 @@ import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
-import { TActiveItem, TooltipsContent } from '../Constant';
+import { TooltipsContent } from '../Constant';
 import Menu from './Menu';
 import SearchInput from './SearchInput';
 
@@ -20,9 +20,9 @@ type TStudyIconProps = {
 
 type TIndicatorListProps = {
     items: TActiveItem[];
-    onSelectItem?: (id: string) => void;
-    onDeleteItem?: (study: TActiveItem['dataObject']['sd']) => void;
-    onEditItem?: (dataObject: TActiveItem['dataObject']) => void;
+    onSelectItem?: (name: string) => void;
+    onDeleteItem?: (id: string) => void;
+    onEditItem?: (activeItem: TActiveItem) => void;
     onInfoItem?: (item: TActiveItem) => void;
     disableAll?: boolean;
     isTick?: boolean;
@@ -30,7 +30,7 @@ type TIndicatorListProps = {
 
 type TTabularDisplaySearchPanelProps = {
     categories: StudyLegendStore['searchedItems'];
-    onSelectItem?: (id: string) => void;
+    onSelectItem?: (name: string) => void;
     onInfoItem: (item: TActiveItem) => void;
     isTick: boolean;
     disableAll: boolean;
@@ -39,8 +39,8 @@ type TTabularDisplaySearchPanelProps = {
 type TabularDisplayActivePanelProps = {
     items: TActiveItem[];
     isMobile?: boolean;
-    onDeleteItem?: (study: TActiveItem['dataObject']['sd']) => void;
-    onEditItem: (dataObject: TActiveItem['dataObject']) => void;
+    onDeleteItem?: (id: string) => void;
+    onEditItem: (activeItem: TActiveItem) => void;
     clearAll: () => void;
 };
 
@@ -49,10 +49,10 @@ type TTabularDisplayProps = {
     selectedTab: number;
     categories: StudyLegendStore['items'];
     searchedCategories: StudyLegendStore['searchedItems'];
-    onSelectItem?: (id: string) => void;
-    onDeleteItem?: (study: TActiveItem['dataObject']['sd']) => void;
-    onEditItem: (dataObject: TActiveItem['dataObject']) => void;
-    onInfoItem: (item: TActiveItem) => void;
+    onSelectItem?: (name: string) => void;
+    onDeleteItem?: (id: string) => void;
+    onEditItem: (activeItem: TActiveItem) => void;
+    onInfoItem: (activeItem: TActiveItem) => void;
     activeItems: StudyLegendStore['activeItems'];
     clearAll: () => void;
     searchQuery: string;
@@ -95,7 +95,7 @@ const IndicatorList = ({
     <div className='sc-studies__list'>
         {items.map(Item => (
             <div
-                key={`item--${Item.id}`}
+                key={`item--${Item.id || Item.flutter_chart_id}`}
                 className={classNames('sc-studies__list__item ', {
                     'sc-studies__list__item--disabled': disableAll,
                     'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
@@ -109,21 +109,23 @@ const IndicatorList = ({
                     }
                     content={
                         Item.isPrediction && isTick
-                            ? t.translate('This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.')
+                            ? t.translate(
+                                  'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
+                              )
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
-                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
+                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
-                            <span>{Item.name}</span>
+                            <span>{onDeleteItem ? Item.shortname : Item.name}</span>
                             {Item.bars && <small>({Item.bars})</small>}
                         </div>
                     </div>
                     <div className='detail'>
                         {onInfoItem && <InfoCircleIcon className='ic-info' onClick={() => onInfoItem(Item)} />}
-                        {onEditItem && <SettingIcon onClick={() => onEditItem(Item.dataObject)} />}
-                        {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />}
+                        {onEditItem && <SettingIcon onClick={() => onEditItem(Item)} />}
+                        {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.id)} />}
                     </div>
                 </Tooltip>
             </div>
@@ -140,7 +142,7 @@ const TabularDisplaySearchPanel = ({
 }: TTabularDisplaySearchPanelProps) => (
     <Scroll autoHide>
         {categories.map(Category => (
-            <div key={Category.id} className='sc-studies__category'>
+            <div key={Category.name} className='sc-studies__category'>
                 <div className='sc-studies__category__head'>{Category.name}</div>
                 <div className='sc-studies__category__body'>
                     <IndicatorList
@@ -205,7 +207,7 @@ const TabularDisplay = ({
                 <NotificationBadge notificationCount={activeItems.length} />
             </Tab>
             {categories.map(Category => (
-                <Tab key={`tab--${Category.id}`}>
+                <Tab key={`tab--${Category.name}`}>
                     <StudyIcon Icon={Category.icon} />
                     <span>{Category.name}</span>
                 </Tab>
@@ -242,7 +244,7 @@ const TabularDisplay = ({
             </div>
         </TabPanel>
         {categories.map(Category => (
-            <TabPanel key={`panel--${Category.id}`}>
+            <TabPanel key={`panel--${Category.name}`}>
                 <div className='sc-studies__panel'>
                     <h3>{Category.name}</h3>
                     <IndicatorList
@@ -271,7 +273,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
         onSelectTab,
         onSelectItem,
         activeItems,
-        deleteStudy,
+        deleteStudyById,
         editStudy,
         onInfoItem,
         infoItem,
@@ -299,7 +301,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                 infoItem ? (
                     <div className='sc-dialog__head--info'>
                         <BackIcon onClick={() => onInfoItem(null)} />
-                        {infoItem.name}
+                        {infoItem.flutter_chart_id}
                     </div>
                 ) : (
                     <div className='sc-dialog__head--search'>
@@ -321,41 +323,46 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                 </div>
             </Menu.Title>
             <Menu.Body>
-                {infoItem && (
-                    <div className='sc-studies__info'>
-                        <Scroll autoHide height='360px' className='sc-studies__info__content'>
-                            <p>{infoItem?.description}</p>
-                        </Scroll>
-                        <div className='sc-studies__info__footer'>
-                            <Tooltip enabled={infoItem?.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
-                                <button
-                                    type='button'
-                                    className='sc-btn sc-btn--primary sc-btn--w100'
-                                    onClick={() => onSelectItem(infoItem?.id)}
-                                    disabled={infoItem?.disabledAddBtn}
+                <React.Fragment>
+                    {infoItem && (
+                        <div className='sc-studies__info'>
+                            <Scroll autoHide height='360px' className='sc-studies__info__content'>
+                                <p>{infoItem?.description}</p>
+                            </Scroll>
+                            <div className='sc-studies__info__footer'>
+                                <Tooltip
+                                    enabled={infoItem?.disabledAddBtn}
+                                    content={TooltipsContent.predictionIndicator}
                                 >
-                                    {t.translate('Add')}
-                                </button>
-                            </Tooltip>
+                                    <button
+                                        type='button'
+                                        className='sc-btn sc-btn--primary sc-btn--w100'
+                                        onClick={() => onSelectItem(infoItem?.flutter_chart_id)}
+                                        disabled={infoItem?.disabledAddBtn}
+                                    >
+                                        {t.translate('Add')}
+                                    </button>
+                                </Tooltip>
+                            </div>
                         </div>
-                    </div>
-                )}
-                <TabularDisplay
-                    onSelectTab={onSelectTab}
-                    selectedTab={selectedTab}
-                    categories={items}
-                    searchedCategories={searchedItems}
-                    onSelectItem={onSelectItem}
-                    onDeleteItem={deleteStudy}
-                    onEditItem={editStudy}
-                    onInfoItem={onInfoItem}
-                    activeItems={activeItems}
-                    clearAll={deleteAll}
-                    searchQuery={searchQuery}
-                    isMobile={isMobile}
-                    maxAllowedItem={maxAllowedItem}
-                    isTick={isTick}
-                />
+                    )}
+                    <TabularDisplay
+                        onSelectTab={onSelectTab}
+                        selectedTab={selectedTab}
+                        categories={items}
+                        searchedCategories={searchedItems}
+                        onSelectItem={onSelectItem}
+                        onDeleteItem={deleteStudyById}
+                        onEditItem={editStudy}
+                        onInfoItem={onInfoItem}
+                        activeItems={activeItems}
+                        clearAll={deleteAll}
+                        searchQuery={searchQuery}
+                        isMobile={isMobile}
+                        maxAllowedItem={maxAllowedItem}
+                        isTick={isTick}
+                    />
+                </React.Fragment>
             </Menu.Body>
         </Menu>
     );

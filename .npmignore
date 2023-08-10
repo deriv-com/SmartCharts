@@ -3,7 +3,7 @@
 .eslintrc
 .tern-project
 .travis.yml
-chartiq/
+chart_app/
 crowdin.yml
 css/
 design-v1.js

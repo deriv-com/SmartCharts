@@ -13,10 +13,10 @@ import Share from './components/Share';
 import SmartChart from './components/SmartChart';
 import ChartTitle from './components/ChartTitle';
 import FastMarker from './components/FastMarker';
-import RawMarker from './components/RawMarker';
 import ToolbarWidget from './components/ToolbarWidget';
 import { createObjectFromLocalStorage } from './utils';
 import { logEvent, LogCategories, LogActions } from './utils/ga';
+import './overrides';
 
 function setSmartChartsPublicPath(path: string) {
     __webpack_public_path__ = path; // eslint-disable-line
@@ -61,7 +61,6 @@ export default {
     FastMarker,
     Marker: FastMarker,
     PendingPromise,
-    RawMarker,
     setSmartChartsPublicPath,
     Share,
     SmartChart,

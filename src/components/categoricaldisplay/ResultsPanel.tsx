@@ -147,7 +147,9 @@ const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) =>
     const DEFAULT_LANGUAGE = 'EN';
     const lang_from_url =
         new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
-    const link_mapper = should_show_eu_content ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    const link_mapper = should_show_eu_content
+        ? eu_subcategory_mapper[subCategoryId]
+        : row_subcategory_mapper[subCategoryId];
     let language = `${lang_from_url}/`;
     const modified_lang_code = lang_from_url.replace('_', '-');
     if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;

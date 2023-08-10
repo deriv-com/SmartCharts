@@ -1,5 +1,4 @@
-import { action, computed, observable, reaction, when, makeObservable } from 'mobx';
-import { TQuote } from 'src/types';
+import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import MainStore from '.';
 import ChartStore from './ChartStore';
 
@@ -15,37 +14,22 @@ export default class NavigationWidgetStore {
     get crosshairStore() {
         return this.mainStore.crosshair;
     }
-    get stxx(): ChartStore['stxx'] {
-        return this.chart.stxx;
-    }
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             mouse_in: observable,
             enableScale: computed,
-            onMouseWheel: action.bound,
             onMouseEnter: action.bound,
             onMouseLeave: action.bound,
-            onScale: action.bound,
-            onCrosshairChange: action.bound
+            onCrosshairChange: action.bound,
         });
 
         this.mainStore = mainStore;
-        when(() => !!this.mainStore.chart.context, this.onContextReady);
         reaction(() => this.crosshairStore.state, this.onCrosshairChange);
     }
 
-    onContextReady = () => {
-        this.stxx.prepend('mouseWheel', this.onMouseWheel);
-    };
-
     get enableScale() {
         return this.stateStore.startEpoch;
-    }
-
-    onMouseWheel() {
-        this.stxx.chart.lockScroll = false;
-        this.mainStore.chart.updateScaledOneOne(false);
     }
 
     onMouseEnter() {
@@ -56,17 +40,6 @@ export default class NavigationWidgetStore {
     onMouseLeave() {
         this.mouse_in = false;
         this.crosshairStore.updateVisibility(true);
-    }
-
-    onScale() {
-        let point: TQuote | null = null;
-        const { dataSet } = this.stxx.chart;
-        if (dataSet && dataSet.length) point = dataSet[0];
-
-        this.stxx.home();
-        setTimeout(() => {
-            this.stateStore.scrollChartToLeft(point, true);
-        }, 10);
     }
 
     onCrosshairChange() {

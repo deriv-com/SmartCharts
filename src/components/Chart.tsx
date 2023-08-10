@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
+import { TChartProps } from 'src/types';
 import { usePrevious } from '../hooks';
 
-import { TChartProps } from 'src/types';
 /* css + scss */
 import '../../sass/main.scss';
 import { initGA, logPageView } from '../utils/ga';
@@ -23,10 +23,10 @@ import NavigationWidget from './NavigationWidget';
 import PaginationLoader from './PaginationLoader';
 import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
+import ScrollToRecent from './ScrollToRecent';
 
 const Chart = (props: TChartProps) => {
-    const { chart, drawTools, studies, chartSetting, chartType, state, loader } = useStores();
-
+    const { chart, drawTools, studies, chartSetting, chartType, state, loader, chartAdapter } = useStores();
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
     const { settingsDialog: studiesSettingsDialog } = studies;
     const { settingsDialog: drawToolsSettingsDialog } = drawTools;
@@ -36,6 +36,7 @@ const Chart = (props: TChartProps) => {
     const { isActive: isLoading, show: showChart } = loader;
 
     const rootRef = React.useRef<HTMLDivElement>(null);
+    const chartContainerRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         initGA();
@@ -76,6 +77,7 @@ const Chart = (props: TChartProps) => {
         toolbarWidget = () => null,
         onCrosshairChange = () => null,
         historical,
+        markers_array = [],
     } = props;
 
     const hasPosition = chartControlsWidgets && position && !isMobile;
@@ -85,6 +87,17 @@ const Chart = (props: TChartProps) => {
     const ToolbarWidget = React.useCallback(toolbarWidget, [t.lang]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const memoizedOnCrosshairChange = React.useCallback(onCrosshairChange, [t.lang]);
+
+    React.useEffect(() => {
+        chartAdapter.onMount(chartContainerRef.current as HTMLDivElement);
+        return () => {
+            chartAdapter.onUnmount();
+        };
+    }, []);
+
+    React.useEffect(() => {
+        chartAdapter.updateMarkers(markers_array);
+    }, [markers_array]);
 
     return (
         <div
@@ -111,8 +124,8 @@ const Chart = (props: TChartProps) => {
                     >
                         <div className='ciq-chart-area'>
                             <div className={classNames('ciq-chart', { 'closed-chart': isChartClosed })}>
-                                <RenderInsideChart at='holder'>
-                                    {barriers.map((barr, idx) => (
+                                <RenderInsideChart at='subholder'>
+                                    {barriers.map(({ key, ...barr }, idx) => (
                                         <Barrier
                                             key={`barrier-${idx}`} // eslint-disable-line react/no-array-index-key
                                             {...barr}
@@ -122,9 +135,7 @@ const Chart = (props: TChartProps) => {
                                 <RenderInsideChart at='subholder'>
                                     {!isCandle && !isSpline && isHighestLowestMarkerEnabled && <HighestLowestMarker />}
                                 </RenderInsideChart>
-                                <RenderInsideChart at='subholder' hideInScrollToEpoch>
-                                    {children}
-                                </RenderInsideChart>
+                                <RenderInsideChart at='subholder'>{children}</RenderInsideChart>
                                 <RenderInsideChart at='subholder'>
                                     <PaginationLoader />
                                 </RenderInsideChart>
@@ -135,6 +146,7 @@ const Chart = (props: TChartProps) => {
                                 )}
                                 <div
                                     className='chartContainer'
+                                    ref={chartContainerRef}
                                     style={{
                                         height:
                                             historical && chartContainerHeight && isMobile
@@ -153,6 +165,7 @@ const Chart = (props: TChartProps) => {
                                         {t.translate('Chart data is not available for this symbol.')}
                                     </div>
                                 )}
+                                <div className='cq-inchart-subholder' />
                                 <BottomWidgetsContainer>
                                     <BottomWidget bottomWidgets={bottomWidgets} />
                                 </BottomWidgetsContainer>
@@ -160,6 +173,7 @@ const Chart = (props: TChartProps) => {
                             {chartControlsWidgets !== null && !enabledChartFooter && (
                                 <ChartControls widgets={chartControlsWidgets} />
                             )}
+                            <ScrollToRecent />
                             {enabledChartFooter && <ChartFooter />}
                             <Loader />
                         </div>

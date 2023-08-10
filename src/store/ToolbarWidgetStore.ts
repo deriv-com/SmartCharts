@@ -13,7 +13,7 @@ export default class ToolbarWidgetStore {
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMouseEnter: action.bound,
-            onMouseLeave: action.bound
+            onMouseLeave: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -43,12 +43,6 @@ export default class ToolbarWidgetStore {
 
     onMouseEnter() {
         this.crosshairStore.updateVisibility(false);
-
-        // Hide the indicator tooltip
-        const chartNode = this.chartStore.chartNode;
-        if (chartNode) {
-            (chartNode.querySelector('.stx_sticky') as HTMLElement).style.display = 'none';
-        }
     }
 
     onMouseLeave() {

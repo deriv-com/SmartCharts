@@ -14,14 +14,12 @@ type TPriceLineProps = {
     foregroundColor: string;
     color?: string;
     opacityOnOverlap: number;
-    width: number;
 };
 
 const PriceLine = ({
     lineStyle,
     color,
     foregroundColor,
-    width,
     hideOffscreenBarrier,
     opacityOnOverlap,
     hideOffscreenLine,
@@ -37,7 +35,7 @@ const PriceLine = ({
         isDragging,
         init,
         title,
-        yAxiswidth,
+        priceLineWidth,
         offScreen,
         offScreenDirection,
         isOverlapping,
@@ -55,6 +53,8 @@ const PriceLine = ({
     }, [init]);
 
     if (!showBarrier) return null;
+
+    const width = showBarrierDragLine ? priceLineWidth + 16 : priceLineWidth;
 
     return (
         <div className='barrier-area' style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
@@ -79,7 +79,7 @@ const PriceLine = ({
                         <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                     )}
                 </div>
-                {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
+                {title && <PriceLineTitle color={color} title={title} yAxiswidth={width} opacity={opacity} />}
             </div>
         </div>
     );

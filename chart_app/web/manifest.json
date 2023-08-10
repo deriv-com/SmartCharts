@@ -1,0 +1,12 @@
+{
+    "name": "chart_app",
+    "short_name": "chart_app",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#0175C2",
+    "theme_color": "#0175C2",
+    "description": "Chart app",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": []
+}

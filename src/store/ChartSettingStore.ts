@@ -17,7 +17,7 @@ export default class ChartSettingStore {
     historical = false;
     isAutoScale = true;
     isHighestLowestMarkerEnabled = true;
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             language: observable,
@@ -34,7 +34,7 @@ export default class ChartSettingStore {
             showCountdown: action.bound,
             setHistorical: action.bound,
             setAutoScale: action.bound,
-            toggleHighestLowestMarker: action.bound
+            toggleHighestLowestMarker: action.bound,
         });
 
         this.defaultLanguage = this.languages[0];
@@ -46,8 +46,6 @@ export default class ChartSettingStore {
             () => {
                 mainStore?.chart?.activeSymbols?.retrieveActiveSymbols?.(true).then(() => {
                     mainStore?.chart?.changeSymbol?.(mainStore.state.symbol, mainStore.state.granularity, true);
-                    mainStore?.chart?.addDeleteElement();
-                    mainStore?.chart?.addManageElement();
                 });
             }
         );
@@ -61,9 +59,7 @@ export default class ChartSettingStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
+
     languages: (TLanguage | string)[] = [];
     defaultLanguage = {} as TLanguage | string;
     onSettingsChange?: (newSettings: Omit<TSettings, 'activeLanguages'>) => void = undefined;
@@ -165,10 +161,11 @@ export default class ChartSettingStore {
             return;
         }
         this.theme = theme;
+        this.mainStore.chartAdapter.updateTheme(theme);
         if (this.context) {
             this.mainStore.state.setChartTheme(theme);
-            this.mainStore.crosshair.setFloatPriceLabelStyle(theme);
         }
+        this.mainStore.studies.updateTheme();
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();
     }
@@ -177,9 +174,6 @@ export default class ChartSettingStore {
             return;
         }
         this.position = value;
-        if (this.context) {
-            this.stx.clearStyles();
-        }
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, 'Change Position');
         this.saveSetting();
         /**

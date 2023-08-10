@@ -14,7 +14,7 @@ export default class MenuStore {
             setOpen: action.bound,
             onTitleClick: action.bound,
             handleDialogStatus: action.bound,
-            handleCloseDialog: action.bound
+            handleCloseDialog: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -46,20 +46,7 @@ export default class MenuStore {
         this.routingStore.updateRoute(this.route, val);
     }
     blurInput() {
-        const stx: Context['stx'] = this.context?.stx;
         setTimeout(this.handleDialogStatus, 300);
-        if (this.open === false) {
-            (document.activeElement as HTMLElement).blur();
-            stx.modalEnd();
-        } else {
-            stx.modalBegin();
-        }
-        stx.allowZoom = !this.open;
-        if (!this.open) {
-            this.mainStore.state.setEnableScroll();
-        } else {
-            this.mainStore.state.setDisableScroll();
-        }
     }
     onTitleClick(e: React.MouseEvent) {
         if (e) {

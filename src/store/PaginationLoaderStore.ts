@@ -1,5 +1,4 @@
 import { action, observable, when, makeObservable } from 'mobx';
-import React from 'react';
 import Context from 'src/components/ui/Context';
 import { TRefData } from 'src/types';
 import MainStore from '.';
@@ -22,15 +21,12 @@ class PaginationLoaderStore {
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): ChartStore['stxx'] {
-        return this.mainStore.chart.stxx;
-    }
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             isOnPagination: observable,
             updateOnPagination: action.bound,
-            setOnPagination: action.bound
+            setOnPagination: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -40,20 +36,6 @@ class PaginationLoaderStore {
     onContextReady = () => {
         this.feed?.onStartPagination(this.setOnPagination);
         this.feed?.onPagination(this.setOnPagination);
-
-        // this injection will slows down the swiping and mouse wheel operations
-        // by ignoring requests that are too close from one another or
-        // when isOnPagination is true
-        this.stx.prepend('mouseWheel', this.onMouseWheel);
-    };
-
-    onMouseWheel = (e: React.MouseEvent) => {
-        e.preventDefault();
-        let diff = null;
-        const timeLimit = 40;
-        if (this.stx.lastMouseWheelEvent) diff = Date.now() - this.stx.lastMouseWheelEvent;
-        if ((diff && diff < timeLimit) || this.isOnPagination) return true; // skip swiping
-        return false; // continue swiping
     };
 
     setRef = (ref: TRefData | null) => {

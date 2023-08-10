@@ -1,9 +1,8 @@
 import EventEmitter from 'event-emitter-es6';
-import { action, computed, observable, when, makeObservable } from 'mobx';
+import { action, computed, observable, when, makeObservable, reaction, IReactionDisposer } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TCIQAppend, TCustomEvent } from 'src/types';
 import MainStore from '.';
-import { ARROW_HEIGHT, DIRECTIONS } from '../utils';
+import { ARROW_HEIGHT, DIRECTIONS, makeElementDraggable } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
@@ -11,8 +10,6 @@ const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
 export default class PriceLineStore {
     __top = 0;
     _emitter: EventEmitter;
-    _initialPosition?: number;
-    _injectionId?: TCIQAppend<() => void>;
     _line?: HTMLElement;
     _priceConstrainer: number | ((val: number) => number) = 0;
     _startDragPrice = '0';
@@ -27,10 +24,12 @@ export default class PriceLineStore {
     isDragging = false;
     visible = true;
     _price = '0';
+    _dragPrice = '0';
     offScreen = false;
     title?: string;
     isOverlapping = false;
     offScreenDirection: keyof typeof DIRECTIONS | null = null;
+    disposeDrawReaction?: IReactionDisposer;
 
     set zIndex(value: string | number | null) {
         if (this._line && value) {
@@ -48,6 +47,7 @@ export default class PriceLineStore {
             isDragging: observable,
             visible: observable,
             _price: observable,
+            _dragPrice: observable,
             offScreen: observable,
             title: observable,
             isOverlapping: observable,
@@ -58,34 +58,45 @@ export default class PriceLineStore {
             _startDrag: action.bound,
             _dragLine: action.bound,
             _endDrag: action.bound,
-            _calculateTop: action.bound
+            _calculateTop: action.bound,
         });
 
         this.mainStore = mainStore;
         this._emitter = new EventEmitter({ emitDelay: 0 });
-        when(() => !!this.context, this.onContextReady);
+        when(() => this.mainStore.chartAdapter.isChartLoaded, this.onChartLoaded);
     }
 
-    destructor() {
-        this.stx.removeInjection(this._injectionId);
-    }
-
-    onContextReady = () => {
-        this._injectionId = this.stx.append('draw', this._draw);
+    onChartLoaded = () => {
+        this.disposeDrawReaction = reaction(
+            () => [this.mainStore.chartAdapter.epochBounds, this.mainStore.chartAdapter.quoteBounds],
+            () => {
+                if (!this.isDragging) {
+                    this._draw();
+                }
+            }
+        );
     };
 
+    destructor() {
+        this.disposeDrawReaction?.();
+    }
+
     init = () => {
-        const exitIfNotisDraggable = (e: TCustomEvent, callback: (event: TCustomEvent) => void) => {
+        const exitIfNotisDraggable = (e: MouseEvent, callback: (event: MouseEvent) => void) => {
             if (this.visible && this.draggable) {
                 callback.call(this, e);
             }
         };
-        CIQ.safeDrag(
-            this._line,
-            (e: TCustomEvent) => exitIfNotisDraggable(e, this._startDrag),
-            (e: TCustomEvent) => exitIfNotisDraggable(e, this._dragLine),
-            (e: TCustomEvent) => exitIfNotisDraggable(e, this._endDrag)
-        );
+
+        const subholder: HTMLElement | null = document.querySelector('.ciq-chart-area');
+
+        if (this._line && subholder) {
+            makeElementDraggable(this._line, subholder, {
+                onDragStart: (e: MouseEvent) => exitIfNotisDraggable(e, this._startDrag),
+                onDrag: (e: MouseEvent) => exitIfNotisDraggable(e, e => this._dragLine(e, subholder)),
+                onDragReleased: (e: MouseEvent) => exitIfNotisDraggable(e, this._endDrag),
+            });
+        }
     };
 
     static get EVENT_PRICE_CHANGED() {
@@ -96,7 +107,7 @@ export default class PriceLineStore {
     }
 
     get priceDisplay() {
-        let display = this.isDragging ? Number(this._price).toFixed(this.pip) : this._price;
+        let display = this.isDragging ? Number(this.dragPrice).toFixed(this.pip) : this._price;
         if (this.relative && +this._price > 0 && display[0] !== '+') {
             display = `+${display}`;
         }
@@ -108,10 +119,22 @@ export default class PriceLineStore {
     }
 
     set price(value) {
-        if (value !== this._price) {
+        if (value !== this._price && !this.isDragging) {
             this._price = value;
             this._draw();
             this._emitter.emit(PriceLineStore.EVENT_PRICE_CHANGED, this._price);
+        }
+    }
+
+    get dragPrice() {
+        return this._dragPrice;
+    }
+
+    set dragPrice(value) {
+        if (value != this._dragPrice) {
+            this._dragPrice = value;
+            this._draw();
+            this._emitter.emit(PriceLineStore.EVENT_PRICE_CHANGED, this._dragPrice);
         }
     }
 
@@ -138,25 +161,22 @@ export default class PriceLineStore {
         return this.mainStore.chart.context;
     }
 
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
-
-    get chart(): typeof CIQ.ChartEngine.Chart {
-        return this.stx.chart;
-    }
-
     set priceConstrainer(value: number | ((val: number) => number)) {
         this._priceConstrainer = value;
     }
 
     get realPrice(): string {
-        const real_price = this.relative ? (this.mainStore.chart.currentCloseQuote()?.Close as number) + Number(this._price) : Number(this._price);
+        const price = this.isDragging ? this.dragPrice : this.price;
+
+        const real_price = this.relative
+            ? (this.mainStore.chart.currentCloseQuote()?.Close as number) + Number(price)
+            : Number(price);
         return real_price.toString();
     }
 
-    get yAxiswidth() {
-        return this.mainStore.chart.yAxiswidth;
+    get priceLineWidth() {
+        // TODO: measure the price label width
+        return Math.max(this.priceDisplay.length * 8, 60);
     }
 
     setDragLine(el: HTMLDivElement) {
@@ -166,32 +186,20 @@ export default class PriceLineStore {
         }
     }
 
-    _modalBegin() {
-        if (this.stx.grabbingScreen) {
-            return;
-        }
-        this.stx.editingAnnotation = true;
-        this.stx.modalBegin();
-    }
-
-    _modalEnd() {
-        this.stx.modalEnd();
-        this.stx.editingAnnotation = false;
-    }
-
-    _startDrag() {
-        this._modalBegin();
+    _startDrag = () => {
         this.isDragging = true;
-        this.mainStore.chart.isBarrierDragging = true;
-        this._initialPosition = this.top;
-        this._startDragPrice = this._price;
-    }
 
-    _dragLine(e: TCustomEvent) {
+        this.mainStore.chart.isBarrierDragging = true;
+        this.dragPrice = this.price;
+        this._startDragPrice = this._price;
+    };
+
+    _dragLine = (e: MouseEvent, zone: HTMLElement) => {
         if (!this._line) {
             return;
         }
-        const newTop = this._initialPosition && this._initialPosition + e.displacementY;
+        const { top } = zone.getBoundingClientRect();
+        const newTop = e.pageY - top;
         const newCenter = newTop && newTop + LINE_OFFSET_HEIGHT_HALF;
         let newPrice = newCenter && this._priceFromLocation(newCenter);
 
@@ -199,38 +207,39 @@ export default class PriceLineStore {
             newPrice = this._priceConstrainer(newPrice);
         }
         if (this.relative) {
-            newPrice -= this.mainStore.chart.currentCloseQuote()?.Close as number;
+            newPrice -= this.mainStore.chart.currentClose as number;
         }
 
-        this.price = newPrice;
-    }
+        this.dragPrice = `${newPrice}`;
+    };
 
-    _endDrag() {
-        this._modalEnd();
+    _endDrag = () => {
         this.isDragging = false;
         this.mainStore.chart.isBarrierDragging = false;
 
-        if (Number(this._startDragPrice).toFixed(this.pip) !== Number(this._price).toFixed(this.pip)) {
+        if (Number(this._startDragPrice).toFixed(this.pip) !== Number(this.dragPrice).toFixed(this.pip)) {
+            this.price = this.dragPrice;
             this._emitter.emit(PriceLineStore.EVENT_DRAG_RELEASED, this._price);
         }
-    }
+    };
 
     _locationFromPrice(p: number) {
-        return this.stx.pixelFromPrice(p, this.chart.panel) - this.chart.panel.top;
+        return this.mainStore.chartAdapter.getYFromQuote(p);
     }
 
     _priceFromLocation(y: number) {
-        const price = this.stx.valueFromPixel(y + this.chart.panel.top, this.chart.panel);
-
-        return price;
+        return this.mainStore.chartAdapter.getQuoteFromY(y);
     }
 
     _calculateTop = () => {
-        if (this.stx.currentQuote() === null) {
+        if (this.mainStore.chart.currentCloseQuote() === null || !this.mainStore.chartAdapter.isChartLoaded) {
             return;
         }
 
         let top = this._locationFromPrice(+this.realPrice);
+
+        // @ts-ignore
+        const height = window.flutterChartElement?.clientHeight || 0;
 
         // keep line on chart even if price is off viewable area:
         if (top < 0) {
@@ -239,20 +248,20 @@ export default class PriceLineStore {
                 this.offScreenDirection = DIRECTIONS.UP as 'UP';
             }
             top = 0;
-        } else if (top + LINE_OFFSET_HEIGHT > this.chart.panel.height) {
+        } else if (top + LINE_OFFSET_HEIGHT > height) {
             // this.uncentered = true;
-            if (top + LINE_OFFSET_HEIGHT - this.chart.panel.height > LINE_OFFSET_HEIGHT_HALF) {
+            if (top + LINE_OFFSET_HEIGHT - height > LINE_OFFSET_HEIGHT_HALF) {
                 this.offScreenDirection = DIRECTIONS.DOWN as 'DOWN';
             }
-            top = this.chart.panel.height - LINE_OFFSET_HEIGHT;
+            top = height - LINE_OFFSET_HEIGHT;
         } else {
             // this.uncentered = false;
             this.offScreenDirection = null;
         }
         this.offScreen = !!this.offScreenDirection;
 
-        if (top + 30 > this.chart.panel.height) {
-            top = this.chart.panel.height - 30;
+        if (top + 30 > height) {
+            top = height - 30;
         } else if (top < 10) {
             top = 10;
         }

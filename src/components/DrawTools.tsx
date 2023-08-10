@@ -46,7 +46,7 @@ type TActiveDrawToolsListItemProps = {
 };
 
 type TDrawToolsListProps = {
-    items: DrawToolsStore['drawToolsItems'];
+    items: ReturnType<DrawToolsStore['getDrawToolsItems']>;
     onClick: DrawToolsStore['selectTool'];
 };
 
@@ -89,7 +89,7 @@ const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: TActiveDrawTools
         <Info Icon={item.icon} text={item.text} bars={item.bars} num={item.num} />
         <div className='actions'>
             <SettingIcon onClick={() => onSetting(item.index)} />
-            <DeleteIcon onClick={() => onDelete(item.index)} />
+            <DeleteIcon onClick={() => onDelete(item.name)} />
         </div>
     </div>
 );
@@ -135,7 +135,7 @@ const DrawTools = ({ portalNodeId }: DrawToolsProps) => {
     const {
         clearAll,
         selectTool,
-        drawToolsItems,
+        getDrawToolsItems,
         activeToolsNo: activeDrawToolsItemsNo,
         activeToolsGroup: activeDrawToolsGroup,
         onDeleted: onDelete,
@@ -143,6 +143,8 @@ const DrawTools = ({ portalNodeId }: DrawToolsProps) => {
         updatePortalNode,
         menuStore,
     } = drawTools;
+
+    const drawToolsItems = getDrawToolsItems();
 
     const menuOpen = menuStore.open;
 
