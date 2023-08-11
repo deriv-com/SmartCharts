@@ -309,7 +309,7 @@ export type TIndicatorItem = {
     isPrediction?: boolean;
     flutter_chart_id: string;
     name: string;
-    shortname: string;
+    short_name: string;
 };
 
 export type TActiveItem = TIndicatorItem & {
@@ -317,6 +317,8 @@ export type TActiveItem = TIndicatorItem & {
     config?: Record<string, any>;
     parameters: TSettingsParameter[];
     bars?: string;
+    short_name_and_index: string;
+    group_length: number;
 };
 
 export type TNewChartPayload = {
