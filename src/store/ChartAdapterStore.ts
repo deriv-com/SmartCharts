@@ -102,9 +102,9 @@ export default class ChartAdapterStore {
 
                 if (chartConfigList) {
                     const indicatorConfig = JSON.parse(chartConfigList!);
-
                     if (configIndex != null) {
                         const item = indicatorConfig.studyItems[configIndex];
+
                         if (item.config) {
                             for (const key in item.config) {
                                 if (key.includes('Style')) {
@@ -113,6 +113,7 @@ export default class ChartAdapterStore {
                                         item.config[key].radius = 2.5;
                                     }
                                 }
+                                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
 
                                 if (key.includes('Styles')) {
                                     item.config[key].forEach(element => {
@@ -124,9 +125,12 @@ export default class ChartAdapterStore {
                                 this.clickEventCount++;
                                 updateEventListener(true);
                             }
+
                             this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
                         }
                     } else if (indicatorConfig.studyItems.length > 0) {
+                        this.mainStore.crosshair.removeIndicatorToolTip();
+
                         for (let index = 0; index < indicatorConfig.studyItems.length; index++) {
                             const item = indicatorConfig.studyItems[index];
                             for (const keys in item.config) {

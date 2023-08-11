@@ -195,6 +195,34 @@ class CrosshairStore {
             });
         }
     };
+
+    renderIndicatorToolTip = (name: string, dx: number, dy: number) => {
+        if (document.getElementsByClassName('indicator-tooltip').length === 0) {
+            const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
+                '.chartContainer'
+            );
+
+            const parentDiv = document.createElement('div');
+            parentDiv.classList.add('indicator-tooltip', 'mSticky');
+            parentDiv.style.display = 'inline-block';
+            parentDiv.style.position = 'absolute';
+            parentDiv.style.top = `${dy - 100}px`;
+            parentDiv.style.left = `${dx - 150}px`;
+
+            parentDiv.innerHTML = `
+                    <span class='mStickyInterior' style='display:inline-block'>${name}</span>
+                    <span class='mouseDeleteInstructions'>Right click to manage</span>
+        `;
+
+            chartContainer?.appendChild(parentDiv);
+        }
+    };
+
+    removeIndicatorToolTip = () => {
+        if (document.getElementsByClassName('indicator-tooltip').length > 0) {
+            document.getElementsByClassName('indicator-tooltip')[0].remove();
+        }
+    };
     calculateRows(data: TQuote) {
         const dupMap = {} as TDupMap;
         const fields: {
