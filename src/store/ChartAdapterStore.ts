@@ -62,8 +62,7 @@ export default class ChartAdapterStore {
             onCrosshairDisappeared: () => {
                 this.mainStore.crosshair.updateVisibility(false);
             },
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onCrosshairHover: (_dx, _dy, dxLocal, dyLocal, _indicatorIndex) => {
+            onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
                 // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
                 const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
                 const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
@@ -92,15 +91,15 @@ export default class ChartAdapterStore {
                 const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
                 const granularity = this.mainStore.chartAdapter.getGranularityInMs();
 
-                const configIndex = this.flutterChart?.app.getIndicatorHoverIndex(
+                const indicatorHoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
                     dxLocal,
                     dyLocal,
                     getClosestEpoch,
                     granularity,
-                    _indicatorIndex
+                    bottomIndicatorIndex
                 );
 
-                this.hoverIndex = configIndex;
+                this.hoverIndex = indicatorHoverIndex;
 
                 if (this.previousHoverIndex === this.hoverIndex) {
                     return;
@@ -108,8 +107,8 @@ export default class ChartAdapterStore {
 
                 const activeItems = this.mainStore.studies.activeItems;
 
-                if (configIndex != null) {
-                    const item = clone(activeItems[configIndex]);
+                if (indicatorHoverIndex != null) {
+                    const item = clone(activeItems[indicatorHoverIndex]);
                     if (item && item.config) {
                         for (const key in item.config) {
                             if (key.includes('Style')) {
@@ -118,6 +117,7 @@ export default class ChartAdapterStore {
                                     item.config[key].radius = 2.5;
                                 }
                             }
+                            this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
 
                             if (key.includes('Styles')) {
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -131,7 +131,7 @@ export default class ChartAdapterStore {
                             updateEventListener(true);
                         }
                     }
-                    this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
+                    this.mainStore.studies.addOrUpdateIndicator(item, indicatorHoverIndex);
                 }
 
                 if (
@@ -141,9 +141,10 @@ export default class ChartAdapterStore {
                 ) {
                     const item = activeItems[this.previousHoverIndex];
                     this.mainStore.studies.addOrUpdateIndicator(item, this.previousHoverIndex);
+                    this.mainStore.crosshair.removeIndicatorToolTip();
                 }
 
-                this.previousHoverIndex = configIndex;
+                this.previousHoverIndex = indicatorHoverIndex;
             },
             indicators: {
                 onRemove: (index: number) => {
