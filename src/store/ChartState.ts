@@ -31,6 +31,8 @@ type TScrollListenerParamsData = {
     y: number;
 };
 
+type TYAxisMargin = { top: number; bottom?: number; heightFactor?: number; whitespace?: number };
+
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
@@ -46,7 +48,7 @@ class ChartState {
     isConnectionOpened? = false;
     isChartReady = false;
     chartStatusListener?: (isChartReady: boolean) => boolean;
-    stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
+    stateChangeListener?: (state: string, option?: TStateChangeOption & { chart_yaxis_height?: number }) => void;
     settings?: TSettings;
     showLastDigitStats = false;
     scrollToEpoch?: number | null;
@@ -70,7 +72,7 @@ class ChartState {
     maxTick?: number;
     enableScroll: boolean | null = true;
     enableZoom: boolean | null = true;
-    yAxisMargin = { top: 106, bottom: 64 };
+    yAxisMargin: TYAxisMargin = { top: 106, bottom: 64 };
     tradingTimes: string | null = null;
     activeSymbols: string | null = null;
     chartControlsWidgets?: TChartControlsWidgets;
@@ -443,7 +445,10 @@ class ChartState {
 
     stateChange(tag: string, option?: TStateChangeOption) {
         if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
-            this.stateChangeListener(tag, option);
+            this.stateChangeListener(tag, {
+                ...(option as TStateChangeOption),
+                chart_yaxis_height: this.stxx.chart.panel.yAxis.height,
+            });
         }
     }
 
