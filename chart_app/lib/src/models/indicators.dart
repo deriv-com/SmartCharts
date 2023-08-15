@@ -400,8 +400,7 @@ class IndicatorsModel {
           target,
           epoch,
         )) {
-          return sortedSeriesList.indexWhere(
-              (Series element) => element.id == bottomItemIndicator!.id);
+          return bottomIndicatorIndex;
         }
       } else if (bottomItemIndicator is GatorSeries) {
         final List<Tick> gatorBottomEntries =
@@ -615,7 +614,8 @@ class IndicatorsModel {
         }
       }
     } else {
-      for (final ChartData item in sortedSeriesList) {
+      for (int index = sortedSeriesList.length - 1; index >= 0; index--) {
+        final ChartData item = sortedSeriesList[index];
         if (item is BollingerBandSeries) {
           final List<Tick> middleEntries =
               item.middleSeries.entries ?? <Tick>[];
@@ -626,8 +626,7 @@ class IndicatorsModel {
           if (isPointOnIndicator(middleEntries, controller, target, epoch) |
               isPointOnIndicator(lowerEntries, controller, target, epoch) |
               isPointOnIndicator(upperEntries, controller, target, epoch)) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is DonchianChannelsSeries) {
           final List<Tick> middleChannelEntries =
@@ -655,15 +654,13 @@ class IndicatorsModel {
                 target,
                 epoch,
               )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is MASeries) {
           final List<Tick> maEntries = item.entries ?? <Tick>[];
 
           if (isPointOnIndicator(maEntries, controller, target, epoch)) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is IchimokuCloudSeries) {
           final List<Tick> ichimokuBaseEntries =
@@ -715,8 +712,7 @@ class IndicatorsModel {
                 epoch,
                 offset: item.laggingSpanSeries.offset,
               )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is MAEnvSeries) {
           final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
@@ -745,8 +741,7 @@ class IndicatorsModel {
                 epoch,
                 offset: item.upperSeries.offset,
               )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is ParabolicSARSeries) {
           final List<Tick> parabolicSeries = item.entries ?? <Tick>[];
@@ -756,8 +751,7 @@ class IndicatorsModel {
             target,
             epoch,
           )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is ZigZagSeries) {
           final List<Tick> zigZagSeries = item.entries ?? <Tick>[];
@@ -768,8 +762,7 @@ class IndicatorsModel {
             target,
             epoch,
           )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is FractalChaosBandSeries) {
           final List<Tick> fcbHighEntries =
@@ -791,8 +784,7 @@ class IndicatorsModel {
                 epoch,
                 offset: item.fcbLowSeries.offset,
               )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         } else if (item is RainbowSeries) {
           bool isClick = false;
@@ -805,8 +797,7 @@ class IndicatorsModel {
             );
 
             if (isClick) {
-              return sortedSeriesList
-                  .indexWhere((Series element) => element.id == item.id);
+              return index;
             }
           }
         } else if (item is AlligatorSeries) {
@@ -837,8 +828,7 @@ class IndicatorsModel {
                 epoch,
                 offset: item.alligatorOptions.lipsOffset,
               )) {
-            return sortedSeriesList
-                .indexWhere((Series element) => element.id == item.id);
+            return index;
           }
         }
       }

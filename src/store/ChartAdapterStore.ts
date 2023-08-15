@@ -3,6 +3,7 @@ import moment from 'moment';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
+import { clone } from 'src/utils';
 import MainStore from '.';
 
 export default class ChartAdapterStore {
@@ -23,6 +24,8 @@ export default class ChartAdapterStore {
     isDataFitModeEnabled = false;
     painter = new Painter();
     clickEventCount = 0;
+    previousHoverIndex: number | undefined | null = null;
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
@@ -59,8 +62,7 @@ export default class ChartAdapterStore {
             onCrosshairDisappeared: () => {
                 this.mainStore.crosshair.updateVisibility(false);
             },
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onCrosshairHover: (dx, dy, dxLocal, dyLocal, _indicatorIndex) => {
+            onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
                 // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
                 const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
                 const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
@@ -89,59 +91,60 @@ export default class ChartAdapterStore {
                 const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
                 const granularity = this.mainStore.chartAdapter.getGranularityInMs();
 
-                const configIndex: null | number | undefined = this.flutterChart?.app.getIndicatorHoverIndex(
+                const indicatorHoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
                     dxLocal,
                     dyLocal,
                     getClosestEpoch,
                     granularity,
-                    _indicatorIndex
+                    bottomIndicatorIndex
                 );
 
-                this.hoverIndex = configIndex;
-                const chartConfigList = localStorage.getItem('chart-layout-trade');
+                this.hoverIndex = indicatorHoverIndex;
 
-                if (chartConfigList) {
-                    const indicatorConfig = JSON.parse(chartConfigList!);
-                    if (configIndex != null) {
-                        const item = indicatorConfig.studyItems[configIndex];
+                if (this.previousHoverIndex === this.hoverIndex) {
+                    return;
+                }
 
-                        if (item.config) {
-                            for (const key in item.config) {
-                                if (key.includes('Style')) {
-                                    item.config[key].thickness = 2;
-                                    if (key === 'scatterStyle') {
-                                        item.config[key].radius = 2.5;
-                                    }
-                                }
-                                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
+                const activeItems = this.mainStore.studies.activeItems;
 
-                                if (key.includes('Styles')) {
-                                    item.config[key].forEach(element => {
-                                        element.thickness = 2;
-                                    });
+                if (indicatorHoverIndex != null) {
+                    const item = clone(activeItems[indicatorHoverIndex]);
+                    if (item && item.config) {
+                        for (const key in item.config) {
+                            if (key.includes('Style')) {
+                                item.config[key].thickness = 2;
+                                if (key === 'scatterStyle') {
+                                    item.config[key].radius = 2.5;
                                 }
                             }
-                            if (this.clickEventCount === 0) {
-                                this.clickEventCount++;
-                                updateEventListener(true);
-                            }
+                            this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
 
-                            this.mainStore.studies.addOrUpdateIndicator(item, configIndex);
+                            if (key.includes('Styles')) {
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                item.config[key].forEach((element: any) => {
+                                    element.thickness = 2;
+                                });
+                            }
                         }
-                    } else if (indicatorConfig.studyItems.length > 0) {
-                        this.mainStore.crosshair.removeIndicatorToolTip();
-
-                        for (let index = 0; index < indicatorConfig.studyItems.length; index++) {
-                            const item = indicatorConfig.studyItems[index];
-                            for (const keys in item.config) {
-                                if (keys.includes('Style')) {
-                                    item.config[keys].thickness = 1;
-                                }
-                                this.mainStore.studies.addOrUpdateIndicator(item, index);
-                            }
+                        if (this.clickEventCount === 0) {
+                            this.clickEventCount++;
+                            updateEventListener(true);
                         }
                     }
+                    this.mainStore.studies.addOrUpdateIndicator(item, indicatorHoverIndex);
                 }
+
+                if (
+                    this.previousHoverIndex != null &&
+                    this.previousHoverIndex >= 0 &&
+                    this.previousHoverIndex < activeItems.length
+                ) {
+                    const item = activeItems[this.previousHoverIndex];
+                    this.mainStore.studies.addOrUpdateIndicator(item, this.previousHoverIndex);
+                    this.mainStore.crosshair.removeIndicatorToolTip();
+                }
+
+                this.previousHoverIndex = indicatorHoverIndex;
             },
             indicators: {
                 onRemove: (index: number) => {
