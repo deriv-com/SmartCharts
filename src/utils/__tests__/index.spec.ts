@@ -1,13 +1,13 @@
 import { expect } from 'chai';
-import { getCustomChartScaleParams } from '..';
+import { getCustomScalingParams } from '..';
 
-describe('getCustomChartScaleParams', () => {
+describe('getCustomScalingParams', () => {
     const mocked_height_desktop = 700;
     const mocked_height_mobile = 400;
-    const { height_factor } = getCustomChartScaleParams({ yaxis_height: mocked_height_desktop });
+    const { height_factor } = getCustomScalingParams({ yaxis_height: mocked_height_desktop });
 
     it('should return an object with correct scale params for desktop', () => {
-        expect(getCustomChartScaleParams({ yaxis_height: mocked_height_desktop })).to.deep.equal({
+        expect(getCustomScalingParams({ yaxis_height: mocked_height_desktop })).to.deep.equal({
             height_factor,
             yaxis_margin: {
                 top: 189,
@@ -17,7 +17,7 @@ describe('getCustomChartScaleParams', () => {
     });
     it('should return an object with correct scale params for mobile', () => {
         expect(
-            getCustomChartScaleParams({
+            getCustomScalingParams({
                 is_mobile: true,
                 yaxis_height: mocked_height_mobile,
             })
@@ -31,7 +31,7 @@ describe('getCustomChartScaleParams', () => {
     });
     it('should return an object with correct scale params for desktop contract chart when tick_passed < or > 5', () => {
         expect(
-            getCustomChartScaleParams({
+            getCustomScalingParams({
                 yaxis_height: mocked_height_desktop,
                 is_contract_chart: true,
                 ticks_length: 2,
@@ -44,7 +44,7 @@ describe('getCustomChartScaleParams', () => {
             },
         });
         expect(
-            getCustomChartScaleParams({
+            getCustomScalingParams({
                 yaxis_height: mocked_height_desktop,
                 is_contract_chart: true,
                 ticks_length: 10,
@@ -59,7 +59,7 @@ describe('getCustomChartScaleParams', () => {
     });
     it('should return an object with correct scale params for mobile contract chart when tick_passed < or > 5', () => {
         expect(
-            getCustomChartScaleParams({
+            getCustomScalingParams({
                 is_mobile: true,
                 yaxis_height: mocked_height_mobile,
                 is_contract_chart: true,
@@ -73,7 +73,7 @@ describe('getCustomChartScaleParams', () => {
             },
         });
         expect(
-            getCustomChartScaleParams({
+            getCustomScalingParams({
                 is_mobile: true,
                 yaxis_height: mocked_height_mobile,
                 is_contract_chart: true,

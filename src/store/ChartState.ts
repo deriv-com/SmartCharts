@@ -16,7 +16,7 @@ import {
     calculateGranularity,
     calculateTimeUnitInterval,
     createObjectFromLocalStorage,
-    getCustomChartScaleParams,
+    getCustomScalingParams,
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
@@ -368,7 +368,7 @@ class ChartState {
         }
 
         if (should_zoom_out_on_yaxis && this.stxx) {
-            const { height_factor, yaxis_margin } = getCustomChartScaleParams({
+            const { height_factor, yaxis_margin } = getCustomScalingParams({
                 is_contract_chart: shouldDrawTicksFromContractInfo,
                 is_mobile: this.mainStore.chart.isMobile,
                 ticks_length: this.stxx.chart.dataSet?.length,

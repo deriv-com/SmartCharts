@@ -3,7 +3,7 @@ import Context from 'src/components/ui/Context';
 import MarkerStore from 'src/store/MarkerStore';
 import { TGranularity, TQuote } from 'src/types';
 
-type TGetCustomChartScaleParams = (options: {
+type TGetCustomScalingParams = (options: {
     is_contract_chart?: boolean;
     is_mobile?: boolean;
     ticks_length?: number;
@@ -151,7 +151,7 @@ export function stxtap(el: HTMLElement, func: EventListenerOrEventListenerObject
     }
 }
 
-export const getCustomChartScaleParams: TGetCustomChartScaleParams = ({
+export const getCustomScalingParams: TGetCustomScalingParams = ({
     is_contract_chart,
     is_mobile,
     ticks_length,
