@@ -7,7 +7,6 @@ import {
     TGranularity,
     TQuote,
     TSettings,
-    TStateChangeListener,
 } from 'src/types';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
@@ -17,12 +16,13 @@ import {
     calculateGranularity,
     calculateTimeUnitInterval,
     createObjectFromLocalStorage,
+    getCustomChartScaleParams,
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
 import ChartStore from './ChartStore';
 
-type TStateChangeOption = { symbol: string | undefined; isClosed: boolean; chart_yaxis_height?: number };
+type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
 
 type TScrollListenerParamsData = {
     grab: boolean;
@@ -31,8 +31,6 @@ type TScrollListenerParamsData = {
     x: number;
     y: number;
 };
-
-type TYAxisMargin = { top: number; bottom?: number };
 
 class ChartState {
     chartStore: ChartStore;
@@ -46,10 +44,11 @@ class ChartState {
     startEpoch?: number;
     endEpoch?: number;
     symbol?: string;
+    heightFactor?: number;
     isConnectionOpened? = false;
     isChartReady = false;
     chartStatusListener?: (isChartReady: boolean) => boolean;
-    stateChangeListener?: TStateChangeListener;
+    stateChangeListener?: (state: string, option?: TStateChangeOption) => void;
     settings?: TSettings;
     showLastDigitStats = false;
     scrollToEpoch?: number | null;
@@ -73,7 +72,7 @@ class ChartState {
     maxTick?: number;
     enableScroll: boolean | null = true;
     enableZoom: boolean | null = true;
-    yAxisMargin: TYAxisMargin = { top: 106, bottom: 64 };
+    yAxisMargin = { top: 106, bottom: 64 };
     tradingTimes: string | null = null;
     activeSymbols: string | null = null;
     chartControlsWidgets?: TChartControlsWidgets;
@@ -112,6 +111,7 @@ class ChartState {
             startEpoch: observable,
             endEpoch: observable,
             symbol: observable,
+            heightFactor: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
@@ -183,6 +183,7 @@ class ChartState {
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
         should_show_eu_content,
+        should_zoom_out_on_yaxis,
         allTicks = [],
         contractInfo = {},
         showLastDigitStats = false,
@@ -364,6 +365,19 @@ class ChartState {
                 ...this.yAxisMargin,
                 ...yAxisMargin,
             };
+            if (should_zoom_out_on_yaxis && this.stxx) {
+                const { height_factor, yaxis_margin } = getCustomChartScaleParams({
+                    is_contract_chart: shouldDrawTicksFromContractInfo,
+                    is_mobile: this.mainStore.chart.isMobile,
+                    ticks_length: this.stxx.chart.dataSet?.length,
+                    yaxis_height: this.stxx.chart.panel.yAxis.height,
+                });
+                this.yAxisMargin = {
+                    ...this.yAxisMargin,
+                    ...yaxis_margin,
+                };
+                this.heightFactor = height_factor;
+            }
         }
 
         if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
@@ -446,10 +460,7 @@ class ChartState {
 
     stateChange(tag: string, option?: TStateChangeOption) {
         if (this.stateChangeListener && typeof this.stateChangeListener === 'function') {
-            this.stateChangeListener(tag, {
-                ...(option as TStateChangeOption),
-                chart_yaxis_height: this.stxx.chart.panel.yAxis.height,
-            });
+            this.stateChangeListener(tag, option);
         }
     }
 

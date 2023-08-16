@@ -10,7 +10,6 @@ export default class ChartSettingStore {
     mainStore: MainStore;
     menuStore: MenuStore;
 
-    heightFactor?: number;
     language: TLanguage | string = '';
     position = 'bottom';
     theme = 'light';
@@ -26,7 +25,6 @@ export default class ChartSettingStore {
             position: observable,
             theme: observable,
             countdown: observable,
-            heightFactor: observable,
             historical: observable,
             isAutoScale: observable,
             isHighestLowestMarkerEnabled: observable,
@@ -37,7 +35,6 @@ export default class ChartSettingStore {
             showCountdown: action.bound,
             setHistorical: action.bound,
             setAutoScale: action.bound,
-            setHeightFactor: action.bound,
             setWhiteSpace: action.bound,
             toggleHighestLowestMarker: action.bound,
             whitespace: observable,
@@ -80,7 +77,6 @@ export default class ChartSettingStore {
         }
         const {
             countdown,
-            heightFactor,
             historical,
             language,
             position,
@@ -111,9 +107,6 @@ export default class ChartSettingStore {
         }
         if (language !== undefined) {
             this.setLanguage(language);
-        }
-        if (heightFactor !== undefined) {
-            this.setHeightFactor(heightFactor);
         }
         if (historical !== undefined) {
             this.setHistorical(historical);
@@ -238,19 +231,10 @@ export default class ChartSettingStore {
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
         this.saveSetting();
     }
-    setHeightFactor(value: number) {
-        if (this.heightFactor === value) {
-            return;
-        }
-        this.heightFactor = value;
-        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change HeightFactor to ${value}`);
-        this.saveSetting();
-    }
     setWhiteSpace(value: number) {
         if (this.whitespace === value) {
             return;
         }
-        console.log('setWhiteSpace', value);
         this.whitespace = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change Whitespace to ${value}`);
         this.saveSetting();

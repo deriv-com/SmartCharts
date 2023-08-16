@@ -783,7 +783,7 @@ class ChartStore {
                     initialMarginBottom: this.stateStore.yAxisMargin.bottom,
                     // position: 'left',
                     displayBorder: true,
-                    heightFactor: settings?.heightFactor,
+                    heightFactor: this.stateStore.heightFactor,
                     justifyRight: false,
                 },
                 xAxis: {
