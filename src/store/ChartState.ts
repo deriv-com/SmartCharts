@@ -7,6 +7,7 @@ import {
     TGranularity,
     TQuote,
     TSettings,
+    TStateChangeListener,
 } from 'src/types';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
@@ -21,7 +22,7 @@ import {
 } from '../utils';
 import ChartStore from './ChartStore';
 
-type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
+type TStateChangeOption = { symbol: string | undefined; isClosed: boolean; chart_yaxis_height?: number };
 
 type TScrollListenerParamsData = {
     grab: boolean;
@@ -31,7 +32,7 @@ type TScrollListenerParamsData = {
     y: number;
 };
 
-type TYAxisMargin = { top: number; bottom?: number; heightFactor?: number; whitespace?: number };
+type TYAxisMargin = { top: number; bottom?: number };
 
 class ChartState {
     chartStore: ChartStore;
@@ -48,7 +49,7 @@ class ChartState {
     isConnectionOpened? = false;
     isChartReady = false;
     chartStatusListener?: (isChartReady: boolean) => boolean;
-    stateChangeListener?: (state: string, option?: TStateChangeOption & { chart_yaxis_height?: number }) => void;
+    stateChangeListener?: TStateChangeListener;
     settings?: TSettings;
     showLastDigitStats = false;
     scrollToEpoch?: number | null;

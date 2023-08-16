@@ -10,6 +10,7 @@ export default class ChartSettingStore {
     mainStore: MainStore;
     menuStore: MenuStore;
 
+    heightFactor?: number;
     language: TLanguage | string = '';
     position = 'bottom';
     theme = 'light';
@@ -17,13 +18,15 @@ export default class ChartSettingStore {
     historical = false;
     isAutoScale = true;
     isHighestLowestMarkerEnabled = true;
-    
+    whitespace?: number;
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             language: observable,
             position: observable,
             theme: observable,
             countdown: observable,
+            heightFactor: observable,
             historical: observable,
             isAutoScale: observable,
             isHighestLowestMarkerEnabled: observable,
@@ -34,7 +37,10 @@ export default class ChartSettingStore {
             showCountdown: action.bound,
             setHistorical: action.bound,
             setAutoScale: action.bound,
-            toggleHighestLowestMarker: action.bound
+            setHeightFactor: action.bound,
+            setWhiteSpace: action.bound,
+            toggleHighestLowestMarker: action.bound,
+            whitespace: observable,
         });
 
         this.defaultLanguage = this.languages[0];
@@ -74,6 +80,7 @@ export default class ChartSettingStore {
         }
         const {
             countdown,
+            heightFactor,
             historical,
             language,
             position,
@@ -81,6 +88,7 @@ export default class ChartSettingStore {
             isHighestLowestMarkerEnabled,
             theme,
             activeLanguages,
+            whitespace,
         } = settings;
         if (
             !(
@@ -104,6 +112,9 @@ export default class ChartSettingStore {
         if (language !== undefined) {
             this.setLanguage(language);
         }
+        if (heightFactor !== undefined) {
+            this.setHeightFactor(heightFactor);
+        }
         if (historical !== undefined) {
             this.setHistorical(historical);
         }
@@ -112,6 +123,9 @@ export default class ChartSettingStore {
         }
         if (isHighestLowestMarkerEnabled !== undefined) {
             this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled);
+        }
+        if (whitespace !== undefined) {
+            this.setWhiteSpace(whitespace);
         }
     }
     saveSetting() {
@@ -222,6 +236,23 @@ export default class ChartSettingStore {
         }
         this.isAutoScale = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
+        this.saveSetting();
+    }
+    setHeightFactor(value: number) {
+        if (this.heightFactor === value) {
+            return;
+        }
+        this.heightFactor = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change HeightFactor to ${value}`);
+        this.saveSetting();
+    }
+    setWhiteSpace(value: number) {
+        if (this.whitespace === value) {
+            return;
+        }
+        console.log('setWhiteSpace', value);
+        this.whitespace = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change Whitespace to ${value}`);
         this.saveSetting();
     }
     toggleHighestLowestMarker(value: boolean) {

@@ -774,16 +774,16 @@ class ChartStore {
             yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
-                whitespace: this.stateStore.yAxisMargin.whitespace || (isMobile ? 50 : 150),
+                whitespace: settings?.whitespace || (isMobile ? 50 : 150),
             },
             chart: {
                 yAxis: {
                     // Put some top margin so chart doesn't get blocked by chart title
                     initialMarginTop: this.stateStore.yAxisMargin.top,
                     initialMarginBottom: this.stateStore.yAxisMargin.bottom,
-                    heightFactor: this.stateStore.yAxisMargin.heightFactor,
                     // position: 'left',
                     displayBorder: true,
+                    heightFactor: settings?.heightFactor,
                     justifyRight: false,
                 },
                 xAxis: {
