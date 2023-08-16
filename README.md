@@ -196,7 +196,9 @@ Props marked with `*` are **mandatory**:
 | lang                         | Sets the language. Defaults to `en`.                                                                                                  |
 | position                     | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`. |
 | enabledNavigationWidget      | Show or hide navigation widget. Defaults to `false`                                                                                   |
+| heightFactor                         | This factor is used to scale the y-axis. The y-axis zoom value will be internally adjusted based on the value of this property as follows: zoom = (1-heightFactor) * height + initial y-axis margin settings. For example, the scale of the y-axis can be reduced by 20% by setting heightFactor to 0.8. Please refer to CIQ.ChartEngine.YAxis.prototype.heightFactor.                                                                                                  |
 | isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.                                                           |
+| whitespace                         | The initial amount of whitespace to display between the right edge of the chart and the y-axis. Please refer to stxx.preferences.whitespace in CIQ documentation.                                                                                                  |
 
 #### InitialData
 
