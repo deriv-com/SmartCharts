@@ -365,19 +365,20 @@ class ChartState {
                 ...this.yAxisMargin,
                 ...yAxisMargin,
             };
-            if (should_zoom_out_on_yaxis && this.stxx) {
-                const { height_factor, yaxis_margin } = getCustomChartScaleParams({
-                    is_contract_chart: shouldDrawTicksFromContractInfo,
-                    is_mobile: this.mainStore.chart.isMobile,
-                    ticks_length: this.stxx.chart.dataSet?.length,
-                    yaxis_height: this.stxx.chart.panel.yAxis.height,
-                });
-                this.yAxisMargin = {
-                    ...this.yAxisMargin,
-                    ...yaxis_margin,
-                };
-                this.heightFactor = height_factor;
-            }
+        }
+
+        if (should_zoom_out_on_yaxis && this.stxx) {
+            const { height_factor, yaxis_margin } = getCustomChartScaleParams({
+                is_contract_chart: shouldDrawTicksFromContractInfo,
+                is_mobile: this.mainStore.chart.isMobile,
+                ticks_length: this.stxx.chart.dataSet?.length,
+                yaxis_height: this.stxx.chart.panel.yAxis.height,
+            });
+            this.yAxisMargin = {
+                ...this.yAxisMargin,
+                ...yaxis_margin,
+            };
+            this.heightFactor = height_factor;
         }
 
         if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
