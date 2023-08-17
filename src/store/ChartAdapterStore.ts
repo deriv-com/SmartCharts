@@ -52,6 +52,108 @@ export default class ChartAdapterStore {
         this.initFlutterCharts();
     }
 
+    debounce(
+        func: (a: number, b: number, c: number, d: number, e: number | undefined) => void,
+        delay: number
+    ): (a: number, b: number, c: number, d: number, e: number | undefined) => void {
+        let inDebounce: ReturnType<typeof setTimeout>;
+
+        return function (this: any, a: number, b: number, c: number, d: number, e: number | undefined): void {
+            clearTimeout(inDebounce);
+            inDebounce = setTimeout(() => func.call(this, a, b, c, d, e), delay);
+        };
+    }
+
+    crossHover = (
+        dx: number,
+        dy: number,
+        dxLocal: number,
+        dyLocal: number,
+        bottomIndicatorIndex: number | undefined
+    ) => {
+        // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
+        const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
+        const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
+            this.mainStore.crosshair.decimalPlaces
+        );
+        const handleClickEvent = (e: Event) => {
+            if (this.hoverIndex != null) {
+                e.preventDefault();
+                this.mainStore.studies.editStudyByIndex(this.hoverIndex);
+            }
+        };
+
+        function updateEventListener(condition: boolean) {
+            if (condition) {
+                document.getElementsByClassName('chartContainer')[0].addEventListener('contextmenu', handleClickEvent);
+            } else {
+                document
+                    .getElementsByClassName('chartContainer')[0]
+                    .removeEventListener('contextmenu', handleClickEvent);
+            }
+        }
+
+        this.mainStore.crosshair.onMouseMove(dxLocal, dyLocal, epoch, quote);
+        const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
+        const granularity = this.mainStore.chartAdapter.getGranularityInMs();
+
+        const indicatorHoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
+            dxLocal,
+            dyLocal,
+            getClosestEpoch,
+            granularity,
+            bottomIndicatorIndex
+        );
+
+        this.hoverIndex = indicatorHoverIndex;
+
+        if (this.previousHoverIndex === this.hoverIndex) {
+            return;
+        }
+
+        const activeItems = this.mainStore.studies.activeItems;
+
+        if (indicatorHoverIndex != null) {
+            const item = clone(activeItems[indicatorHoverIndex]);
+            console.log(item);
+            if (item && item.config) {
+                for (const key in item.config) {
+                    if (key.includes('Style')) {
+                        item.config[key].thickness = 2;
+                        if (key === 'scatterStyle') {
+                            item.config[key].radius = 2.5;
+                        }
+                    }
+                    this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
+
+                    if (key.includes('Styles')) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        item.config[key].forEach((element: any) => {
+                            element.thickness = 2;
+                        });
+                    }
+                }
+                if (this.clickEventCount === 0) {
+                    this.clickEventCount++;
+                    updateEventListener(true);
+                }
+            }
+            this.mainStore.studies.addOrUpdateIndicator(item, indicatorHoverIndex);
+        }
+
+        if (
+            this.previousHoverIndex != null &&
+            this.previousHoverIndex >= 0 &&
+            this.previousHoverIndex < activeItems.length
+        ) {
+            const item = activeItems[this.previousHoverIndex];
+            this.mainStore.studies.addOrUpdateIndicator(item, this.previousHoverIndex);
+            this.mainStore.crosshair.removeIndicatorToolTip();
+        }
+
+        this.previousHoverIndex = indicatorHoverIndex;
+    };
+
     initFlutterCharts() {
         window.jsInterop = {
             onChartLoad: this.onChartLoad,
@@ -63,88 +165,9 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
-                // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
-                const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
-                const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
-                    this.mainStore.crosshair.decimalPlaces
-                );
-                const handleClickEvent = (e: Event) => {
-                    if (this.hoverIndex != null) {
-                        e.preventDefault();
-                        this.mainStore.studies.editStudyByIndex(this.hoverIndex);
-                    }
-                };
-
-                function updateEventListener(condition: boolean) {
-                    if (condition) {
-                        document
-                            .getElementsByClassName('chartContainer')[0]
-                            .addEventListener('contextmenu', handleClickEvent);
-                    } else {
-                        document
-                            .getElementsByClassName('chartContainer')[0]
-                            .removeEventListener('contextmenu', handleClickEvent);
-                    }
-                }
-
-                this.mainStore.crosshair.onMouseMove(dxLocal, dyLocal, epoch, quote);
-                const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
-                const granularity = this.mainStore.chartAdapter.getGranularityInMs();
-
-                const indicatorHoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
-                    dxLocal,
-                    dyLocal,
-                    getClosestEpoch,
-                    granularity,
-                    bottomIndicatorIndex
-                );
-
-                this.hoverIndex = indicatorHoverIndex;
-
-                if (this.previousHoverIndex === this.hoverIndex) {
-                    return;
-                }
-
-                const activeItems = this.mainStore.studies.activeItems;
-
-                if (indicatorHoverIndex != null) {
-                    const item = clone(activeItems[indicatorHoverIndex]);
-                    if (item && item.config) {
-                        for (const key in item.config) {
-                            if (key.includes('Style')) {
-                                item.config[key].thickness = 2;
-                                if (key === 'scatterStyle') {
-                                    item.config[key].radius = 2.5;
-                                }
-                            }
-                            this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
-
-                            if (key.includes('Styles')) {
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                item.config[key].forEach((element: any) => {
-                                    element.thickness = 2;
-                                });
-                            }
-                        }
-                        if (this.clickEventCount === 0) {
-                            this.clickEventCount++;
-                            updateEventListener(true);
-                        }
-                    }
-                    this.mainStore.studies.addOrUpdateIndicator(item, indicatorHoverIndex);
-                }
-
-                if (
-                    this.previousHoverIndex != null &&
-                    this.previousHoverIndex >= 0 &&
-                    this.previousHoverIndex < activeItems.length
-                ) {
-                    const item = activeItems[this.previousHoverIndex];
-                    this.mainStore.studies.addOrUpdateIndicator(item, this.previousHoverIndex);
-                    this.mainStore.crosshair.removeIndicatorToolTip();
-                }
-
-                this.previousHoverIndex = indicatorHoverIndex;
+                const debouncedLog = this.debounce(this.crossHover, 100);
+                debouncedLog(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
+                // this.crossHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
                 onRemove: (index: number) => {

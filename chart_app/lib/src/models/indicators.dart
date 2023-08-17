@@ -679,31 +679,16 @@ class IndicatorsModel {
               item.laggingSpanSeries.entries ?? <Tick>[];
 
           if (isPointOnIndicator(
-                ichimokuBaseEntries,
-                controller,
-                target,
-                epoch,
-              ) |
-              isPointOnIndicator(
                 ichimoksuConversionEntries,
                 controller,
                 target,
                 epoch,
-                offset: item.conversionLineSeries.offset,
               ) |
               isPointOnIndicator(
-                ichimoksuSpanAEntries,
+                ichimokuBaseEntries,
                 controller,
                 target,
                 epoch,
-                offset: item.spanASeries.offset,
-              ) |
-              isPointOnIndicator(
-                ichimoksuSpanBEntries,
-                controller,
-                target,
-                epoch,
-                offset: item.spanBSeries.offset,
               ) |
               isPointOnIndicator(
                 ichimoksuLaggingSpanEntries,
@@ -711,6 +696,22 @@ class IndicatorsModel {
                 target,
                 epoch,
                 offset: item.laggingSpanSeries.offset,
+              ) |
+              isPointOnIndicator(
+                ichimoksuSpanBEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.spanBSeries.offset,
+                greaterThenSeries: true,
+              ) |
+              isPointOnIndicator(
+                ichimoksuSpanAEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.spanASeries.offset,
+                greaterThenSeries: true,
               )) {
             return index;
           }
@@ -839,38 +840,43 @@ class IndicatorsModel {
   ///
   bool isPointOnIndicator(List<Tick> entries, WrappedController controller,
       Offset target, int? epoch,
-      {int offset = 0}) {
-    final int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
+      {int offset = 0, bool greaterThenSeries = false}) {
+    int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
+    if (greaterThenSeries) {
+      index = binarySearch(
+          entries, entries[index! + offset].epoch, 0, entries.length - 1);
+    }
+
     if (index != null) {
-      final double prevQuote = controller
-          .getCrosshairController()
-          .getYFromQuote(entries[index - offset - 1].quote)!;
+      int quoteIndex;
+      quoteIndex = index - offset;
 
-      final double currentQuote = controller
-          .getCrosshairController()
-          .getYFromQuote(entries[index].quote)!;
+      if (quoteIndex <= entries.length - 1) {
+        final Tick prevIndex = entries[quoteIndex - 1];
+        final Tick currIndex = entries[quoteIndex];
 
-      // if ((target.dx - controller.getXFromEpoch(entries[index].epoch)!).abs() <
-      //         10 &&
-      //     (target.dy - currentQuote).abs() < 10) {
-      //   return true;
-      // }
+        final double prevQuote =
+            controller.getCrosshairController().getYFromQuote(prevIndex.quote)!;
 
-      final Rect rect = Rect.fromPoints(
-        Offset(
-          controller.getXFromEpoch(entries[index - 1].epoch)!,
-          prevQuote,
-        ),
-        Offset(
-          controller.getXFromEpoch(entries[index].epoch)!,
-          currentQuote,
-        ),
-      );
+        final double currentQuote =
+            controller.getCrosshairController().getYFromQuote(currIndex.quote)!;
 
-      if (rect.inflate(7).contains(target)) {
-        return true;
+        final Rect rect = Rect.fromPoints(
+          Offset(
+            controller.getXFromEpoch(entries[index - 1].epoch)!,
+            prevQuote,
+          ),
+          Offset(
+            controller.getXFromEpoch(entries[index].epoch)!,
+            currentQuote,
+          ),
+        );
+
+        if (rect.inflate(7).contains(target)) {
+          return true;
+        }
+        return false;
       }
-
       return false;
     }
     return false;
