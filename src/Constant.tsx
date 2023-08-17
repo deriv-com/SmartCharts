@@ -491,7 +491,7 @@ export const Languages = [
     },
     {
         key: 'de',
-        name: 'German',
+        name: 'Deutsch',
         icon: <FlagIcons.German />,
     },
     {
