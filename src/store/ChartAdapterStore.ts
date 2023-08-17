@@ -58,7 +58,7 @@ export default class ChartAdapterStore {
     ): (a: number, b: number, c: number, d: number, e: number | undefined) => void {
         let inDebounce: ReturnType<typeof setTimeout>;
 
-        return function (this: any, a: number, b: number, c: number, d: number, e: number | undefined): void {
+        return function (this: unknown, a: number, b: number, c: number, d: number, e: number | undefined): void {
             clearTimeout(inDebounce);
             inDebounce = setTimeout(() => func.call(this, a, b, c, d, e), delay);
         };
