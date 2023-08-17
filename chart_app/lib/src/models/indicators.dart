@@ -691,27 +691,17 @@ class IndicatorsModel {
                 epoch,
               ) |
               isPointOnIndicator(
-                ichimoksuLaggingSpanEntries,
-                controller,
-                target,
-                epoch,
-                offset: item.laggingSpanSeries.offset,
-              ) |
+                  ichimoksuLaggingSpanEntries, controller, target, epoch,
+                  offset: item.config.laggingSpanOffset) |
               isPointOnIndicator(
-                ichimoksuSpanBEntries,
-                controller,
-                target,
-                epoch,
-                offset: item.spanBSeries.offset,
-                greaterThenSeries: true,
-              ) |
+                  ichimoksuSpanBEntries, controller, target, epoch,
+                  offset: item.config.baseLinePeriod) |
               isPointOnIndicator(
                 ichimoksuSpanAEntries,
                 controller,
                 target,
                 epoch,
-                offset: item.spanASeries.offset,
-                greaterThenSeries: true,
+                offset: item.config.baseLinePeriod,
               )) {
             return index;
           }
@@ -837,15 +827,15 @@ class IndicatorsModel {
     return null;
   }
 
-  ///
-  bool isPointOnIndicator(List<Tick> entries, WrappedController controller,
-      Offset target, int? epoch,
-      {int offset = 0, bool greaterThenSeries = false}) {
-    int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
-    if (greaterThenSeries) {
-      index = binarySearch(
-          entries, entries[index! + offset].epoch, 0, entries.length - 1);
-    }
+  /// Function to check if the hover is on indicator
+  bool isPointOnIndicator(
+    List<Tick> entries,
+    WrappedController controller,
+    Offset target,
+    int? epoch, {
+    int offset = 0,
+  }) {
+    final int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
 
     if (index != null) {
       int quoteIndex;
@@ -885,7 +875,7 @@ class IndicatorsModel {
   /// IF NUMBER IS ODD
   bool isOdd(int number) => number % 2 != 0;
 
-  ///
+  /// Function to check if the hover is on zigzag indicator
   bool isPointOnZigZagIndicator(List<Tick> entries,
       WrappedController controller, Offset target, int? epoch,
       {int offset = 0}) {

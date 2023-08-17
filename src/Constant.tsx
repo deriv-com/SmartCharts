@@ -1174,6 +1174,7 @@ const getIchimokuIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         conversionLineStyle: clone(lineStyle),
         baseLineStyle: clone(lineStyle),
         spanALineStyle: clone(lineStyle),
+        laggingLineStyle: clone(lineStyle),
         spanBLineStyle: clone(lineStyle),
         conversionLinePeriod: clone(lineStyle),
         showLastIndicator: true,
@@ -1208,7 +1209,7 @@ const getIchimokuIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             type: 'colorpicker',
         },
         {
-            path: 'laggingSpanStyle.color',
+            path: 'laggingLineStyle.color',
             title: t.translate('Lagging Span'),
             defaultValue: '#808000',
             category: 'inputs',

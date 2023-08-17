@@ -115,7 +115,6 @@ export default class ChartAdapterStore {
 
         if (indicatorHoverIndex != null) {
             const item = clone(activeItems[indicatorHoverIndex]);
-            console.log(item);
             if (item && item.config) {
                 for (const key in item.config) {
                     if (key.includes('Style')) {
@@ -124,7 +123,7 @@ export default class ChartAdapterStore {
                             item.config[key].radius = 2.5;
                         }
                     }
-                    this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars}`, dx, dy);
+                    this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
 
                     if (key.includes('Styles')) {
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -165,9 +164,8 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
-                const debouncedLog = this.debounce(this.crossHover, 100);
-                debouncedLog(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
-                // this.crossHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
+                const debounced = this.debounce(this.crossHover, 100);
+                debounced(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
                 onRemove: (index: number) => {
