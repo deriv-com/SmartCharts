@@ -30,7 +30,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
         quoteToY(marker.quote),
       );
 
-      if (marker.markerType != null) {
+      if (marker.markerType != null && marker.markerType != MarkerType.tick) {
         points[marker.markerType!] = center;
       }
     }
@@ -50,7 +50,17 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
         canvas, size, points, markerGroup.style, opacity, painterProps);
 
     for (final WebMarker marker in markerGroup.markers) {
-      final Offset center = points[marker.markerType!]!;
+      final Offset center = points[marker.markerType!] ??
+          Offset(
+            epochToX(marker.epoch),
+            quoteToY(marker.quote),
+          );
+
+      if (marker.markerType == MarkerType.entry &&
+          points[MarkerType.entryTick] != null) {
+        continue;
+      }
+
       _drawMarker(canvas, size, theme, marker, center, markerGroup.style,
           painterProps.zoom, opacity);
     }
@@ -63,7 +73,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     final Offset? _entryOffset = points[MarkerType.entry];
     final Offset? _entryTickOffset = points[MarkerType.entryTick];
     final Offset? _startOffset = points[MarkerType.start];
-    final Offset? _latestOffset = points[MarkerType.latestTick];
+    final Offset? _latestOffset = points[MarkerType.latestTickBarrier];
     final Offset? _endOffset = points[MarkerType.end];
     final Offset? _exitOffset = points[MarkerType.exit];
 
@@ -127,6 +137,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
             canvas, size, theme, marker, anchor, style, zoom, opacity);
         break;
       case MarkerType.entry:
+      case MarkerType.entryTick:
         _drawEntryPoint(canvas, theme, anchor, color, zoom, opacity);
         break;
       case MarkerType.end:
@@ -136,11 +147,15 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
       case MarkerType.exit:
         canvas.drawCircle(
           anchor,
-          1.5 * zoom,
+          3 * zoom,
           paint,
         );
         break;
       case MarkerType.tick:
+        final Paint paint = Paint()..color = theme.base01Color;
+        _drawTickPoint(canvas, anchor, paint, zoom);
+        break;
+      case MarkerType.latestTick:
         _drawTickPoint(canvas, anchor, paint, zoom);
         break;
       default:
@@ -161,7 +176,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     final Paint paint = Paint()
       ..color = theme.base08Color.withOpacity(opacity)
       ..style = PaintingStyle.fill;
-    final double radius = 1.5 * zoom;
+    final double radius = 3 * zoom;
     canvas.drawCircle(
       anchor,
       radius,

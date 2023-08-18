@@ -35,7 +35,7 @@ class DerivChartApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        theme: ThemeData.light(),
+        theme: ThemeData(fontFamily: 'IBMPlexSans'),
         home: const _DerivChartWebAdapter(),
       );
 }

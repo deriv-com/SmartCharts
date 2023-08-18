@@ -30,6 +30,9 @@ enum MarkerType {
   /// Exit marker.
   exit,
 
+  /// Latest tick point on the barrier.
+  latestTickBarrier,
+
   /// High Barrier.
   highBarrier,
 
