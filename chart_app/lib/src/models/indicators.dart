@@ -838,8 +838,7 @@ class IndicatorsModel {
     final int? index = binarySearch(entries, epoch!, 0, entries.length - 1);
 
     if (index != null) {
-      int quoteIndex;
-      quoteIndex = index - offset;
+      final int quoteIndex = index - offset;
 
       if (quoteIndex <= entries.length - 1) {
         final Tick prevIndex = entries[quoteIndex - 1];
