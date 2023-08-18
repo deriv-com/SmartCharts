@@ -5,6 +5,7 @@ import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
 import { clone } from 'src/utils';
 import MainStore from '.';
+import debounce from 'lodash.debounce';
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
@@ -52,18 +53,6 @@ export default class ChartAdapterStore {
         this.initFlutterCharts();
     }
 
-    debounce(
-        func: (a: number, b: number, c: number, d: number, e: number | undefined) => void,
-        delay: number
-    ): (a: number, b: number, c: number, d: number, e: number | undefined) => void {
-        let inDebounce: ReturnType<typeof setTimeout>;
-
-        return function (this: unknown, a: number, b: number, c: number, d: number, e: number | undefined): void {
-            clearTimeout(inDebounce);
-            inDebounce = setTimeout(() => func.call(this, a, b, c, d, e), delay);
-        };
-    }
-
     crossHover = (
         dx: number,
         dy: number,
@@ -71,6 +60,12 @@ export default class ChartAdapterStore {
         dyLocal: number,
         bottomIndicatorIndex: number | undefined
     ) => {
+        const debouncedAddOrUpdateIndicator = (item: any, index: number) => {
+            // 0ms so that it also allows to not run the function second time until first is completed.
+            const debounced = debounce(this.mainStore.studies.addOrUpdateIndicator, 0);
+            debounced(item, index);
+        };
+
         // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
         const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
         const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
@@ -116,6 +111,8 @@ export default class ChartAdapterStore {
         if (indicatorHoverIndex != null) {
             const item = clone(activeItems[indicatorHoverIndex]);
             if (item && item.config) {
+                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+
                 for (const key in item.config) {
                     if (key.includes('Style')) {
                         item.config[key].thickness = 2;
@@ -123,7 +120,6 @@ export default class ChartAdapterStore {
                             item.config[key].radius = 2.5;
                         }
                     }
-                    this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
 
                     if (key.includes('Styles')) {
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -137,7 +133,7 @@ export default class ChartAdapterStore {
                     updateEventListener(true);
                 }
             }
-            this.mainStore.studies.addOrUpdateIndicator(item, indicatorHoverIndex);
+            debouncedAddOrUpdateIndicator(item, indicatorHoverIndex);
         }
 
         if (
@@ -146,8 +142,8 @@ export default class ChartAdapterStore {
             this.previousHoverIndex < activeItems.length
         ) {
             const item = activeItems[this.previousHoverIndex];
-            this.mainStore.studies.addOrUpdateIndicator(item, this.previousHoverIndex);
             this.mainStore.crosshair.removeIndicatorToolTip();
+            debouncedAddOrUpdateIndicator(item, this.previousHoverIndex);
         }
 
         this.previousHoverIndex = indicatorHoverIndex;
@@ -164,8 +160,7 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
-                const debounced = this.debounce(this.crossHover, 100);
-                debounced(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
+                this.crossHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
                 onRemove: (index: number) => {

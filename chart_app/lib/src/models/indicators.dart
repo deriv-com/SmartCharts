@@ -862,7 +862,7 @@ class IndicatorsModel {
           ),
         );
 
-        if (rect.inflate(7).contains(target)) {
+        if (rect.inflate(10).contains(target)) {
           return true;
         }
         return false;
