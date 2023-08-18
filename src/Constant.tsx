@@ -1926,6 +1926,11 @@ export const Languages = [
         icon: <FlagIcons.Italy />,
     },
     {
+        key: 'ko',
+        name: '한국어',
+        icon: <FlagIcons.Korean />,
+    },
+    {
         key: 'zh_cn',
         name: '简体中文',
         icon: <FlagIcons.Chinese />,

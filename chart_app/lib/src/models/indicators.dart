@@ -4,6 +4,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:chart_app/src/misc/wrapped_controller.dart';
+
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
