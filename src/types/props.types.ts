@@ -79,6 +79,7 @@ export type TSettings = {
     isHighestLowestMarkerEnabled?: boolean;
     theme?: string;
     activeLanguages?: Array<string | TLanguage> | null;
+    whitespace?: number;
 };
 
 export type TStateChangeListener = (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
@@ -129,6 +130,7 @@ export type TChartProps = {
     feedCall?: { activeSymbols?: boolean; tradingTimes?: boolean };
     granularity?: TGranularity;
     chartType?: string;
+    should_zoom_out_on_yaxis?: boolean;
     startEpoch?: number;
     endEpoch?: number;
     chartControlsWidgets?: TChartControlsWidgets;

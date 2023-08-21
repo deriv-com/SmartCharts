@@ -173,7 +173,6 @@ class ChartStore {
     defaultMinimumBars = 5;
     _barriers: BarrierStore[] = [];
 
-
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
     get loader() {
@@ -775,7 +774,7 @@ class ChartStore {
             yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
-                whitespace: isMobile ? 50 : 150,
+                whitespace: settings?.whitespace || (isMobile ? 50 : 150),
             },
             chart: {
                 yAxis: {
@@ -784,6 +783,7 @@ class ChartStore {
                     initialMarginBottom: this.stateStore.yAxisMargin.bottom,
                     // position: 'left',
                     displayBorder: true,
+                    heightFactor: this.stateStore.heightFactor,
                     justifyRight: false,
                 },
                 xAxis: {
@@ -1060,7 +1060,7 @@ class ChartStore {
 
         const { context } = this.context?.stx.chart;
         // barrier price can be wider than current tick price for 1 decimal digit
-        const priceWidth = context.measureText(price.toFixed(this.pip as number + 1)).width + 20;
+        const priceWidth = context.measureText(price.toFixed((this.pip as number) + 1)).width + 20;
         if (priceWidth > this.yAxiswidth) {
             this.yAxiswidth = priceWidth;
 
