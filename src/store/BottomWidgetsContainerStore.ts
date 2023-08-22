@@ -27,7 +27,7 @@ export default class BottomWidgetsContainerStore {
             mainChartHeight: observable,
             top: observable,
             totalHeight: observable,
-            updateChartHeight: action.bound
+            updateChartHeight: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -70,6 +70,7 @@ export default class BottomWidgetsContainerStore {
             ) {
                 this.stx.chart.yAxis.initialMarginTop = marginTop;
                 this.stx.chart.yAxis.initialMarginBottom = marginBottom;
+                this.stx.chart.yAxis.heightFactor = this.state.heightFactor;
                 this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
                 this.stx.draw();
             }

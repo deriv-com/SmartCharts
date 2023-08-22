@@ -16,6 +16,7 @@ import {
     calculateGranularity,
     calculateTimeUnitInterval,
     createObjectFromLocalStorage,
+    getYAxisScalingParams,
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
@@ -43,6 +44,7 @@ class ChartState {
     startEpoch?: number;
     endEpoch?: number;
     symbol?: string;
+    heightFactor?: number;
     isConnectionOpened? = false;
     isChartReady = false;
     chartStatusListener?: (isChartReady: boolean) => boolean;
@@ -109,6 +111,7 @@ class ChartState {
             startEpoch: observable,
             endEpoch: observable,
             symbol: observable,
+            heightFactor: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
@@ -180,6 +183,7 @@ class ChartState {
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
         should_show_eu_content,
+        should_zoom_out_on_yaxis,
         allTicks = [],
         contractInfo = {},
         showLastDigitStats = false,
@@ -361,6 +365,20 @@ class ChartState {
                 ...this.yAxisMargin,
                 ...yAxisMargin,
             };
+        }
+
+        if (should_zoom_out_on_yaxis && this.stxx) {
+            const { height_factor, yaxis_margin } = getYAxisScalingParams({
+                is_contract_chart: shouldDrawTicksFromContractInfo,
+                is_mobile: this.mainStore.chart.isMobile,
+                ticks_length: this.stxx.chart.dataSet?.length,
+                yaxis_height: this.stxx.chart.panel.yAxis.height,
+            });
+            this.yAxisMargin = {
+                ...this.yAxisMargin,
+                ...yaxis_margin,
+            };
+            this.heightFactor = height_factor;
         }
 
         if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
