@@ -80,6 +80,18 @@ export default class ChartAdapterStore {
                     [activeItems[index1], activeItems[index2]] = [activeItems[index2], activeItems[index1]];
                 },
             },
+            drawingTool: {
+                onRemove: (index: number) => {
+                    this.mainStore.studies.deleteStudy(index);
+                },
+                onEdit: (index: number) => {
+                    this.mainStore.studies.editStudyByIndex(index);
+                },
+                onSwap: (index1: number, index2: number) => {
+                    const { activeItems } = this.mainStore.studies;
+                    [activeItems[index1], activeItems[index2]] = [activeItems[index2], activeItems[index1]];
+                },
+            },
         };
 
         createChartElement({

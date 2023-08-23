@@ -6,6 +6,7 @@ import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:chart_app/src/misc/crosshair_controller.dart';
+import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -53,6 +54,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       configModel,
       feedModel,
       indicatorsModel,
+      drawingToolModel,
     );
     initDartInterop(app);
     JsInterop.onChartLoad();
@@ -61,6 +63,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   final ChartFeedModel feedModel = ChartFeedModel();
   final ChartConfigModel configModel = ChartConfigModel();
   final IndicatorsModel indicatorsModel = IndicatorsModel();
+  final DrawingToolModel drawingToolModel = DrawingToolModel();
 
   late final ChartApp app;
   int? rightBoundEpoch;
@@ -245,7 +248,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         yAxisWidth: app.yAxisWidth,
                         isMobile: app.configModel.isMobile,
                       ),
-                      drawingToolsRepo: indicatorsModel.drawingToolsRepo,
+                      drawingToolsRepo: drawingToolModel.drawingToolsRepo,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,
                       dataFitEnabled: configModel.startWithDataFitMode,
                       showCrosshair: configModel.showCrosshair,

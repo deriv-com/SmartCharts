@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
+import 'package:chart_app/src/interop/js_interop.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 /// State and methods of chart web adapter config.
 class DrawingToolModel {
@@ -11,7 +12,11 @@ class DrawingToolModel {
 
   /// Drawing tools repo
   final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
-      AddOnsRepository<DrawingToolConfig>();
+      AddOnsRepository<DrawingToolConfig>(
+    onEditCallback: (int i) => JsInterop.drawingTool?.onEdit?.call(i),
+    onRemoveCallback: (int i) => JsInterop.drawingTool?.onRemove?.call(i),
+    onSwapCallback: (int x, int y) => JsInterop.drawingTool?.onSwap?.call(x, y),
+  );
 
   /// To add or update a drawing
   void addDrawing(String dataString, int? index) {

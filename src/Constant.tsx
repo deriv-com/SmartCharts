@@ -414,6 +414,11 @@ const lineStyle = {
     hasArea: false,
 };
 
+export const getDrawingToolConfig = {
+    lineStyle: clone(lineStyle),
+    pattern: 'solid',
+};
+
 const getFieldTypeOptions = () => ({
     open: t.translate('Open'),
     high: t.translate('High'),

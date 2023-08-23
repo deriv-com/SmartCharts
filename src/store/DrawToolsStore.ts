@@ -2,7 +2,7 @@ import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TIcon, TSettingsParameter } from 'src/types';
 import MainStore from '.';
-import { getDrawTools } from '../Constant';
+import { getDrawTools, getDrawingToolConfig } from '../Constant';
 import { formatCamelCase } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -25,6 +25,7 @@ type TRepositioner = {
     tick: number;
     value: number;
 };
+
 type TDrawingObject = {
     abort: () => void;
     adjust: () => void;
@@ -155,8 +156,7 @@ export default class DrawToolsStore {
     }
     showDrawToolDialog(drawing: TDrawingObject) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
-        // @ts-ignore
-        const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
+        // const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
         let title = formatCamelCase(drawing.name);
 
         this.settingsDialog.items = [];
@@ -166,6 +166,7 @@ export default class DrawToolsStore {
                 num: drawingItem.num || ' ',
             })}`;
         }
+        console.log(drawing);
         this.activeDrawing = drawing;
         this.activeDrawing.highlighted = false;
         this.settingsDialog.title = title;
@@ -198,14 +199,24 @@ export default class DrawToolsStore {
     clearAll() {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
     }
+
     selectTool(id: string) {
         this.isContinuous = false;
+        this.menuStore.setOpen(false);
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
         if (id === 'continuous') {
             this.isContinuous = true;
         }
-        this.menuStore.setOpen(false);
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.addDrawing(
+            JSON.stringify({ ...getDrawingToolConfig, ...{ name: `dt_${id}`, key: id } }),
+            0
+        );
+
+        this.activeToolsGroup.push({ name: `dt_${id}`, key: id, items: [] });
+        this.mainStore.state.saveLayout();
+        console.log(this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0));
     }
+
     onChanged(items: TSettingsParameter[]) {
         // TODO: implement the drawing settings change
         for (const item of items) {

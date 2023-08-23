@@ -30,6 +30,9 @@ class JsInterop {
 
   /// Indicator options
   external static JsIndicators? indicators;
+
+  /// Drawingtool options
+  external static JsDrawings? drawingTool;
 }
 
 @JS()
@@ -145,6 +148,21 @@ class JsQuote {
 
 /// Indicator props
 class JsIndicators {
+  /// Called when an indicator is to be removed
+  external OnEditCallback? onRemove;
+
+  /// Called when an indicator is to be edited
+  external OnEditCallback? onEdit;
+
+  /// Callback to swap two elements of a list.
+  external OnSwapCallback? onSwap;
+}
+
+@JS()
+@anonymous
+
+/// Drawings
+class JsDrawings {
   /// Called when an indicator is to be removed
   external OnEditCallback? onRemove;
 
