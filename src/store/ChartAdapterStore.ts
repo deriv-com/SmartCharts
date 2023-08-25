@@ -173,7 +173,7 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
-                const throttledUpdate = throttle(this.crossHover, 5);
+                const throttledUpdate = throttle(this.crossHover, 10);
 
                 throttledUpdate(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
