@@ -11,7 +11,7 @@ import {
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
-import { STATE } from '../Constant';
+import { ANALYTICS_ACTIONS, STATE } from '../Constant';
 import {
     calculateGranularity,
     calculateTimeUnitInterval,
@@ -22,7 +22,7 @@ import {
 } from '../utils';
 import ChartStore from './ChartStore';
 
-type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
+type TStateChangeOption = { symbol?: string; isClosed?: boolean; chartType?: string };
 
 type TScrollListenerParamsData = {
     grab: boolean;
@@ -493,6 +493,7 @@ class ChartState {
     }
 
     setChartType(chartType: string | undefined) {
+        this.mainStore.state.stateChange(ANALYTICS_ACTIONS.CHOOSE_CHART_TYPE, { chartType });
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);

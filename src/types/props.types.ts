@@ -82,7 +82,10 @@ export type TSettings = {
     whitespace?: number;
 };
 
-export type TStateChangeListener = (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
+export type TStateChangeListener = (
+    state: string,
+    option?: { symbol?: string; isClosed?: boolean; chartType?: string }
+) => void;
 
 export type TRatio = {
     height: number;

@@ -551,6 +551,10 @@ export const Languages = [
     },
 ];
 
+export const ANALYTICS_ACTIONS = {
+    CHOOSE_CHART_TYPE: 'choose_chart_type',
+};
+
 export const STATE = {
     INITIAL: 'INITIAL',
     READY: 'READY',
