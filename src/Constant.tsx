@@ -551,11 +551,9 @@ export const Languages = [
     },
 ];
 
-export const ANALYTICS_ACTIONS = {
-    CHOOSE_CHART_TYPE: 'choose_chart_type',
-};
-
 export const STATE = {
+    CHART_TYPE_CHANGE: 'CHART_TYPE_CHANGE',
+    CHART_INTERVAL_CHANGE: 'CHART_INTERVAL_CHANGE',
     INITIAL: 'INITIAL',
     READY: 'READY',
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',

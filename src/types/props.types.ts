@@ -84,7 +84,7 @@ export type TSettings = {
 
 export type TStateChangeListener = (
     state: string,
-    option?: { symbol?: string; isClosed?: boolean; chartType?: string }
+    option?: { symbol?: string; isClosed?: boolean; chart_type_name?: string; time_interval_name?: string }
 ) => void;
 
 export type TRatio = {
