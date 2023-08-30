@@ -70,7 +70,9 @@ export default class BottomWidgetsContainerStore {
             ) {
                 this.stx.chart.yAxis.initialMarginTop = marginTop;
                 this.stx.chart.yAxis.initialMarginBottom = marginBottom;
-                this.stx.chart.yAxis.heightFactor = this.state.heightFactor;
+                if (this.state.heightFactor) {
+                    this.stx.chart.yAxis.heightFactor = this.state.heightFactor;
+                }
                 this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
                 this.stx.draw();
             }
