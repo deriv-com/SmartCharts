@@ -73,6 +73,7 @@ export type TSettings = {
     historical?: boolean;
     lang?: string;
     language?: string;
+    minimumLeftBars?: number;
     position?: string;
     enabledNavigationWidget?: boolean;
     isAutoScale?: boolean;

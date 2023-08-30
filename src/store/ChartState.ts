@@ -9,6 +9,7 @@ import {
     TSettings,
 } from 'src/types';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
+import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -36,6 +37,7 @@ class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
     shouldDrawTicksFromContractInfo? = false;
+    has_updated_settings = false;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -111,6 +113,7 @@ class ChartState {
             startEpoch: observable,
             endEpoch: observable,
             symbol: observable,
+            has_updated_settings: observable,
             heightFactor: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
@@ -226,6 +229,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
         this.margin = margin;
+        this.has_updated_settings = !isDeepEqual(this.settings?.whitespace, settings?.whitespace);
         this.settings = settings;
         this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
@@ -395,7 +399,10 @@ class ChartState {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
+            this.stxx.preferences.whitespace = this.settings?.whitespace || this.chartStore.whitespace;
+            this.stxx.minimumLeftBars = this.settings?.minimumLeftBars || this.chartStore.defaultMinimumBars;
             this.stxx.draw();
+            if (this.has_updated_settings) this.stxx.home();
         }
     }
 
