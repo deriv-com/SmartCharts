@@ -317,6 +317,7 @@ export type TActiveItem = TIndicatorItem & {
     config?: Record<string, any>;
     parameters: TSettingsParameter[];
     bars?: string;
+    key?: string;
 };
 
 export type TNewChartPayload = {
@@ -373,9 +374,11 @@ export type TFlutterChart = {
         clearIndicators: () => void;
     };
     drawingTool: {
-        addDrawing: (config: string, index?: number) => void;
+        addOrUpdateDrawing: (config: string, index?: number) => void;
         removeDrawingTool: (index: number) => void;
         clearDrawingTool: () => void;
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        getDrawingTool: () => {};
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;

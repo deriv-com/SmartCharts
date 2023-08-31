@@ -209,8 +209,8 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
 
   setProperty(
     chartConfig,
-    'addDrawing',
-    allowInterop(model.addDrawing),
+    'addOrUpdateDrawing',
+    allowInterop(model.addOrUpdateDrawing),
   );
 
   setProperty(
@@ -223,6 +223,12 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
     chartConfig,
     'clearDrawingTool',
     allowInterop(model.clearDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'getDrawingTool',
+    allowInterop(model.getDrawingTool),
   );
 
   return chartConfig;

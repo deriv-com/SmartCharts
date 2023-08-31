@@ -114,17 +114,25 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: TActiveDrawToo
 
 const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }: TActiveDrawToolsListProps) => (
     <Scroll autoHide height={320}>
-        {activeDrawToolsGroup.map(group =>
-            group.items && group.items.length === 1 ? (
+        {activeDrawToolsGroup.map(
+            group => (
                 <ActiveDrawToolsListItem
-                    key={group.key}
-                    item={group.items[0]}
+                    // key={group.key}
+                    item={group}
                     onSetting={onSetting}
                     onDelete={onDelete}
                 />
-            ) : (
-                <ActiveDrawToolsListGroup key={group.key} group={group} onSetting={onSetting} onDelete={onDelete} />
             )
+            // group.items && group.items.length === 1 ? (
+            //     <ActiveDrawToolsListItem
+            //         key={group.key}
+            //         item={group.items[0]}
+            //         onSetting={onSetting}
+            //         onDelete={onDelete}
+            //     />
+            // ) : (
+            //     <ActiveDrawToolsListGroup key={group.key} group={group} onSetting={onSetting} onDelete={onDelete} />
+            // )
         )}
     </Scroll>
 );

@@ -114,7 +114,7 @@ const SettingsPanelGroup = ({
             return (
                 <Pattern
                     pattern={item.value as string}
-                    lineWidth={lineWidth}
+                    lineWidth={'1'}
                     subtitle={item.title}
                     onChange={v => {
                         onItemChange(item, v);
