@@ -1,9 +1,9 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TGranularity } from 'src/types';
-import { Intervals, STATE } from 'src/Constant';
+import { ChartTypes, STATE } from 'src/Constant';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
+import { displayMilliseconds, getIntervalInSeconds, getTimeIntervalName, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
@@ -193,12 +193,13 @@ export default class TimeperiodStore {
     }
 
     changeGranularity(interval: TGranularity) {
-        const interval_category = Intervals.find(i => i.items.some(item => item.interval === interval));
-        const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
-        const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
-        if (interval_num && interval_label) {
+        if (interval) {
+            const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.state.chartType)?.text ?? '';
+            const time_interval_name = getTimeIntervalName(interval);
             this.mainStore.state.stateChange(STATE.CHART_INTERVAL_CHANGE, {
-                time_interval_name: `${interval_num} ${interval_label}`,
+                time_interval_name,
+                chart_type_name:
+                    this.mainStore.state.chartType === 'colored_bar' ? chart_type_name : chart_type_name.toLowerCase(),
             });
         }
         if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {

@@ -11,7 +11,7 @@ import {
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
-import { ChartTypes, STATE } from '../Constant';
+import { STATE } from '../Constant';
 import {
     calculateGranularity,
     calculateTimeUnitInterval,
@@ -25,6 +25,7 @@ import ChartStore from './ChartStore';
 type TStateChangeOption = {
     symbol?: string;
     isClosed?: boolean;
+    is_open?: boolean;
     chart_type_name?: string;
     time_interval_name?: string;
 };
@@ -498,10 +499,6 @@ class ChartState {
     }
 
     setChartType(chartType: string | undefined) {
-        if (chartType) {
-            const chart_type_name = ChartTypes.find(type => type.id === chartType)?.text?.toLowerCase();
-            this.mainStore.state.stateChange(STATE.CHART_TYPE_CHANGE, { chart_type_name });
-        }
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);

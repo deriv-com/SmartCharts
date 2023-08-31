@@ -1,3 +1,4 @@
+import { Intervals } from 'src/Constant';
 import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
 import Context from 'src/components/ui/Context';
 import MarkerStore from 'src/store/MarkerStore';
@@ -349,6 +350,13 @@ export const DIRECTIONS = Object.freeze({
 export const formatCamelCase = (s: string) => {
     const capitalized = s.charAt(0).toUpperCase() + s.slice(1);
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
+};
+
+export const getTimeIntervalName = (interval: TGranularity) => {
+    const interval_category = Intervals.find(i => i.items.some(item => item.interval === interval));
+    const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
+    const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
+    return interval_label ? `${interval_num} ${interval_label}` : '';
 };
 
 export const prepareIndicatorName = (name: string) => {
