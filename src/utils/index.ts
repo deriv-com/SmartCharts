@@ -170,7 +170,7 @@ export const getYAxisScalingParams: TGetYAxisScalingParams = ({
     }
     return {
         ...params,
-        ...(yaxis_height ? { yaxis_margin: { top, bottom } } : {}),
+        ...(top && bottom ? { yaxis_margin: { top, bottom } } : {}),
     };
 };
 
