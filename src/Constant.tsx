@@ -43,7 +43,7 @@ import {
     TypeHollowIcon,
     TypeOhlcIcon,
 } from './components/Icons';
-import { TIcon } from './types';
+import { TGranularity, TIcon } from './types';
 
 type TDrawTools = {
     [key: string]: {
@@ -333,6 +333,13 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
     },
 ];
 
+export const getTimeIntervalName = (interval: TGranularity) => {
+    const interval_category = Intervals.find(i => i.items.some(item => item.interval === interval));
+    const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
+    const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
+    return interval_label ? `${interval_num} ${interval_label}` : '';
+};
+
 export const ExcludedStudies = {
     Beta: true,
     // volume is not supported in chart
@@ -556,6 +563,7 @@ export const STATE = {
     CHART_MODE_TOGGLE: 'CHART_MODE_TOGGLE',
     CHART_TYPE_CHANGE: 'CHART_TYPE_CHANGE',
     INITIAL: 'INITIAL',
+    MARKETS_LIST_TOGGLE: 'MARKETS_LIST_TOGGLE',
     READY: 'READY',
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
     MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',

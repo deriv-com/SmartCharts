@@ -1,9 +1,9 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TGranularity } from 'src/types';
-import { ChartTypes, STATE } from 'src/Constant';
+import { ChartTypes, getTimeIntervalName, STATE } from 'src/Constant';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeIntervalName, getTimeUnit } from '../utils';
+import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
