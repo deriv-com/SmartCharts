@@ -18,7 +18,7 @@ SmartCharts is both the name of the app ([charts.binary.com](https://charts.bina
 
 ## Pre-installation
 
-Before running or contribute to this project, you need to have the setup of the following packages in your environment:
+Before running or contributing to this project, you need to have the setup of the following packages in your environment:
 
 -   node
 -   npm
