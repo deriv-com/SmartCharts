@@ -44,6 +44,7 @@ import {
     TypeOhlcIcon,
 } from './components/Icons';
 import { TGranularity, TIcon } from './types';
+import { TProcessedSymbolItem } from './binaryapi/ActiveSymbols';
 
 type TDrawTools = {
     [key: string]: {
@@ -340,6 +341,16 @@ export const getTimeIntervalName = (interval: TGranularity) => {
     return interval_label ? `${interval_num} ${interval_label}` : '';
 };
 
+export const getSymbolMarketAndSubgroup = (symbol_object: TProcessedSymbolItem, favorites: string[]) => {
+    const { market_display_name, subgroup } = symbol_object || {};
+    if (favorites.includes(symbol_object.symbol)) return 'favorites';
+    if (!market_display_name) return '';
+    if (subgroup && subgroup !== 'none') {
+        return `${market_display_name.toLowerCase()} ${subgroup}`;
+    }
+    return market_display_name.toLowerCase();
+};
+
 export const ExcludedStudies = {
     Beta: true,
     // volume is not supported in chart
@@ -564,9 +575,10 @@ export const STATE = {
     CHART_TYPE_CHANGE: 'CHART_TYPE_CHANGE',
     INITIAL: 'INITIAL',
     MARKETS_LIST_TOGGLE: 'MARKETS_LIST_TOGGLE',
+    MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
     READY: 'READY',
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
-    MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
+    SYMBOL_CHANGE: 'SYMBOL_CHANGE',
 };
 
 export const TooltipsContent = {

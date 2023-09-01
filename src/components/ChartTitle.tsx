@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import { useStores } from 'src/store';
 import { TOpenMarket } from 'src/types';
+import { STATE, getSymbolMarketAndSubgroup } from 'src/Constant';
 import '../../sass/components/_chart-title.scss';
 import { CategoricalDisplay } from './categoricaldisplay';
 import Menu from './Menu';
@@ -21,9 +22,8 @@ export type TChartTitleProps = {
 };
 
 const ChartTitle = (props: TChartTitleProps) => {
-    const { chartTitle, chart, chartSetting } = useStores();
+    const { chartTitle, chart, chartSetting, favorites, state } = useStores();
     const { isMobile } = chart;
-
     const { theme } = chartSetting;
     const {
         menuStore,
@@ -36,7 +36,7 @@ const ChartTitle = (props: TChartTitleProps) => {
     } = chartTitle;
     const onChange = props.onChange || setSymbol;
     const setMenuOpen = menuStore.setOpen;
-
+    const favorite_symbols = Object.keys(favorites.favoritesMap[categoricalDisplay.favoritesId]);
     const { containerId, enabled, portalNodeId, searchInputClassName, open, open_market, isNestedList } = props;
 
     React.useEffect(() => {
@@ -70,6 +70,10 @@ const ChartTitle = (props: TChartTitleProps) => {
                     searchInputClassName={searchInputClassName}
                     onSelectItem={(x: TProcessedSymbolItem) => {
                         if (x.symbol !== currentSymbol.symbol) {
+                            state.stateChange(STATE.SYMBOL_CHANGE, {
+                                tab_market_name: getSymbolMarketAndSubgroup(x, favorite_symbols),
+                                market_type_name: x.name,
+                            });
                             onChange(x.symbol);
                         }
                         setMenuOpen(false);
