@@ -87,7 +87,7 @@ describe('getYAxisScalingParams', () => {
             },
         });
     });
-    it('should return an object with heightfactor only when yaxis_height is undefined', () => {
+    it('should return an object with height_factor only when yaxis_height is undefined', () => {
         expect(
             getYAxisScalingParams({
                 is_mobile: true,
