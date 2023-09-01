@@ -195,10 +195,11 @@ Props marked with `*` are **mandatory**:
 | countdown                    | Show Countdown. Defaults to `false`.                                                                                                  |
 | theme                        | Sets the chart theme. themes are (`dark\|light`), and default is `light`.                                                             |
 | lang                         | Sets the language. Defaults to `en`.                                                                                                  |
+| minimumLeftBars              | The default number of bars to display on the chart. It's used in combination with `whitespace` setting in order to adjust white space width. Please refer to `whitespace` below for more details. Defaults to `undefined`.                                                                                                  |
 | position                     | Sets the position of the chart controls. Choose between `left` and `bottom`. In mobile this is always `bottom`. Defaults to `bottom`. |
 | enabledNavigationWidget      | Show or hide navigation widget. Defaults to `false`                                                                                   |
 | isHighestLowestMarkerEnabled | Show or hide the highest and lowest tick on the chart. Defaults to `false`.                                                           |
-| whitespace                    | The initial amount of whitespace to display between the right edge of the chart and the y-axis. White space width also depends on `maxTick` prop value. Please refer to stxx.preferences.whitespace in CIQ documentation for more details. Defaults to `undefined`.                                                                                                  |
+| whitespace                    | The default width of whitespace between the right edge of the chart and the y-axis. It should be used in combination with `minimumLeftBars` setting value. For more details, please refer to stxx.preferences.whitespace in CIQ documentation. Defaults to `undefined`.                                                                                                  |
 
 #### InitialData
 
