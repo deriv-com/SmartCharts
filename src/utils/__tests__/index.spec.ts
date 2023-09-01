@@ -87,4 +87,14 @@ describe('getYAxisScalingParams', () => {
             },
         });
     });
+    it('should return an object with height_factor only when yaxis_height is undefined', () => {
+        expect(
+            getYAxisScalingParams({
+                is_mobile: true,
+                yaxis_height: undefined,
+                is_contract_chart: true,
+                ticks_length: 2,
+            })
+        ).to.deep.equal({ height_factor });
+    });
 });
