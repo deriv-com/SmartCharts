@@ -88,9 +88,11 @@ export type TStateChangeListener = (
     option?: {
         symbol?: string;
         isClosed?: boolean;
+        is_favorite?: boolean;
         is_open?: boolean;
         chart_type_name?: string;
         market_type_name?: string;
+        markets_category_name?: string;
         tab_market_name?: string;
         time_interval_name?: string;
     }

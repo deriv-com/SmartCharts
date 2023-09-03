@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { STATE } from 'src/Constant';
 import { useStores } from 'src/store';
 import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
 import { stringToSlug } from '../../utils';
@@ -147,7 +148,9 @@ const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) =>
     const DEFAULT_LANGUAGE = 'EN';
     const lang_from_url =
         new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
-    const link_mapper = should_show_eu_content ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    const link_mapper = should_show_eu_content
+        ? eu_subcategory_mapper[subCategoryId]
+        : row_subcategory_mapper[subCategoryId];
     let language = `${lang_from_url}/`;
     const modified_lang_code = lang_from_url.replace('_', '-');
     if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
@@ -156,13 +159,18 @@ const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) =>
     return link;
 };
 
-const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
+const RedirectIcon = ({ subcategory }: { subcategory: TSubCategory }) => {
     const { state } = useStores();
     const { should_show_eu_content } = state;
+    const { subcategoryId, subcategoryName } = subcategory;
     const derivComLink = redirectLink(subcategoryId, !!should_show_eu_content);
 
+    const handleInfoClick = () => {
+        state.stateChange(STATE.MARKET_INFO_REDIRECT, { markets_category_name: subcategoryName });
+    };
+
     return (
-        <a href={derivComLink} target='_blank' rel='noreferrer'>
+        <a href={derivComLink} target='_blank' rel='noreferrer' onClick={handleInfoClick}>
             <InfoCircleIcon />
         </a>
     );
@@ -212,7 +220,7 @@ const Category = ({
                       >
                           <div className='subcategory'>
                               {t.translate(subcategory.subcategoryName)}
-                              <RedirectIcon subcategoryId={subcategory.subcategoryId} />
+                              <RedirectIcon subcategory={subcategory} />
                           </div>
                           {subcategory.data.map(item => (
                               <ItemType
