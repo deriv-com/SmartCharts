@@ -1,6 +1,5 @@
 import { action, computed, observable, reaction, makeObservable, toJS } from 'mobx';
 import React from 'react';
-import debounce from 'lodash.debounce';
 import { STATE } from 'src/Constant';
 import MainStore from '.';
 import {
@@ -338,20 +337,14 @@ export default class CategoricalDisplayStore {
         this.categoryElements[id] = element;
     }
 
-    sendSearchStateUpdate = debounce((filterText: string) => {
-        this.mainStore.state.stateChange(STATE.MARKET_SEARCH, {
-            search_string: filterText,
-        });
-    }, 500);
-
     setFilterText(filterText: string): void {
         this.filterText = filterText;
         this.isUserScrolling = false;
         this.updateScrollSpy();
-        this.sendSearchStateUpdate(filterText);
         if (filterText === '') {
             setTimeout(() => this.scrollToActiveSymbol(), 1);
         }
+        this.mainStore.state.debouncedStateChange(STATE.MARKET_SEARCH, { search_string: filterText });
     }
 
     handleFilterClick(categoryId: string): void {

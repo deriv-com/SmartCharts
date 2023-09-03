@@ -82,6 +82,10 @@ export default class MenuStore {
                 is_open: this.open,
                 market_type_name: this.mainStore.chart.currentActiveSymbol?.name,
             });
+        } else if (this.route === 'indicators') {
+            this.mainStore.state.stateChange(STATE.INDICATORS_MODAL_TOGGLE, {
+                is_open: this.open,
+            });
         }
         this.dialogStatus = this.open;
     }

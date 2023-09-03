@@ -8,6 +8,7 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
+import debounce from 'lodash.debounce';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
@@ -129,6 +130,7 @@ class ChartState {
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
+            debouncedStateChange: action.bound,
             stateChangeListener: observable,
             should_show_eu_content: observable,
             settings: observable,
@@ -750,6 +752,10 @@ class ChartState {
             this.stxx.chart.lockScroll = false;
         }
     }
+
+    debouncedStateChange = debounce((state: string, option: TStateChangeOption) => {
+        this.stateChange(state, option);
+    }, 500);
 }
 
 export default ChartState;
