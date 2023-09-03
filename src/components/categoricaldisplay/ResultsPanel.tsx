@@ -165,12 +165,12 @@ const RedirectIcon = ({ subcategory }: { subcategory: TSubCategory }) => {
     const { subcategoryId, subcategoryName } = subcategory;
     const derivComLink = redirectLink(subcategoryId, !!should_show_eu_content);
 
-    const handleInfoClick = () => {
+    const onInfoClick = () => {
         state.stateChange(STATE.MARKET_INFO_REDIRECT, { markets_category_name: subcategoryName });
     };
 
     return (
-        <a href={derivComLink} target='_blank' rel='noreferrer' onClick={handleInfoClick}>
+        <a href={derivComLink} target='_blank' rel='noreferrer' onClick={onInfoClick}>
             <InfoCircleIcon />
         </a>
     );

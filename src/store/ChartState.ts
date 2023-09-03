@@ -24,13 +24,14 @@ import {
 import ChartStore from './ChartStore';
 
 type TStateChangeOption = {
-    symbol?: string;
     isClosed?: boolean;
     is_favorite?: boolean;
     is_open?: boolean;
     chart_type_name?: string;
     market_type_name?: string;
     markets_category_name?: string;
+    search_string?: string;
+    symbol?: string;
     tab_market_name?: string;
     time_interval_name?: string;
 };
