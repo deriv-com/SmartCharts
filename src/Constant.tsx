@@ -417,6 +417,42 @@ const lineStyle = {
 export const getDrawingToolConfig = {
     lineStyle: clone(lineStyle),
     pattern: 'solid',
+    isOverlay: true,
+};
+
+const getVerticalDrawingConfig: TDefaultIndicatorConfigFn = () => ({
+    config: {
+        lineStyle: clone(lineStyle),
+        pattern: 'solid',
+        color: '#000000',
+        isOverlay: true,
+    },
+    parameters: [
+        {
+            path: 'lineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'pattern',
+            title: t.translate('Pattern'),
+            type: 'pattern',
+            lineWidth: '1',
+            category: 'inputs',
+            defaultValue: 'solid',
+            value: 'solid',
+        },
+    ],
+});
+
+export const defaultdrawToolsConfigs = {
+    // Keys are mapped to the flutter indicators name. Don't change it.
+    vertical: getVerticalDrawingConfig,
+    line: getVerticalDrawingConfig,
+    ray: getVerticalDrawingConfig,
+    trend: getVerticalDrawingConfig,
 };
 
 const getFieldTypeOptions = () => ({

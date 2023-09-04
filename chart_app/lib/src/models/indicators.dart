@@ -19,10 +19,6 @@ class IndicatorsModel {
     onSwapCallback: (int x, int y) => JsInterop.indicators?.onSwap?.call(x, y),
   );
 
-  /// Drawing tools repo
-  final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
-      AddOnsRepository<DrawingToolConfig>();
-
   /// To add or update an indicator
   void addOrUpdateIndicator(String dataString, int? index) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
@@ -307,6 +303,7 @@ class IndicatorsModel {
           values: values,
         ));
       } else if (item is AlligatorSeries) {
+        //TODO : enable offset after fixing in the flutter charts
         tooltipContent.add(JsIndicatorTooltip(
             name: AlligatorIndicatorConfig.name,
             values: <String?>[
@@ -315,21 +312,21 @@ class IndicatorsModel {
                   item.jawSeries!.entries,
                   epoch,
                   pipSize,
-                  offset: item.alligatorOptions.jawOffset,
+                  // offset: item.alligatorOptions.jawOffset,
                 ),
               if (item.teethSeries != null)
                 _getQuote(
                   item.teethSeries!.entries,
                   epoch,
                   pipSize,
-                  offset: item.alligatorOptions.teethOffset,
+                  // offset: item.alligatorOptions.teethOffset,
                 ),
               if (item.lipsSeries != null)
                 _getQuote(
                   item.lipsSeries!.entries,
                   epoch,
                   pipSize,
-                  offset: item.alligatorOptions.lipsOffset,
+                  // offset: item.alligatorOptions.lipsOffset,
                 )
             ]));
       } else if (item is FractalChaosBandSeries) {
