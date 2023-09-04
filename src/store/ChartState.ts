@@ -440,27 +440,11 @@ class ChartState {
     }
 
     saveDrawings() {
-        if (!this.chartStore.chartId) return;
-        const layoutData: TLayout = this.mainStore.view.getLayout();
-        const id = this.mainStore.chart.chartId;
-
-        saveToLocalStorage(`chart-layout-${id}`, {
-            drawTools: layoutData.drawTools,
-            crosshair: layoutData.crosshair,
-            msPerPx: layoutData.msPerPx,
-        });
         // TODO: implement save drawings
     }
 
     restoreDrawings() {
-        const id = this.mainStore.chart.chartId;
-        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
-
-        if (!layout) return false;
-
-        this.mainStore.view.restoreLayout(layout);
-
-        return true;
+        // TODO: implement restore drawings
     }
 
     cleanChart() {

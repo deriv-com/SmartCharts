@@ -111,7 +111,6 @@ export default class ViewStore {
             granularity: this.mainStore.state.granularity,
             timeUnit: this.mainStore.state.timeperiodStore.timeUnit,
             studyItems: this.mainStore.studies.activeItems,
-            drawTools: this.mainStore.drawTools.activeToolsGroup,
             crosshair: this.mainStore.crosshair.state,
             msPerPx: this.mainStore.chartAdapter.msPerPx,
         };

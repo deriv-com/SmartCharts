@@ -249,7 +249,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         isMobile: app.configModel.isMobile,
                       ),
                       drawingToolsRepo: drawingToolModel.drawingToolsRepo,
-                      drawingTools: drawingToolModel.drawingTools,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,
                       dataFitEnabled: configModel.startWithDataFitMode,
                       showCrosshair: configModel.showCrosshair,
