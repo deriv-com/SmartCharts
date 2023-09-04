@@ -221,8 +221,26 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
 
   setProperty(
     chartConfig,
+    'getTypeOfSelectedDrawingTool',
+    allowInterop(model.getTypeOfSelectedDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'getDrawingHover',
+    allowInterop(model.getDrawingHover),
+  );
+
+  setProperty(
+    chartConfig,
     'clearDrawingTool',
     allowInterop(model.clearDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'getDrawingTools',
+    allowInterop(model.getDrawingTools),
   );
 
   setProperty(

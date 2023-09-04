@@ -20,6 +20,11 @@ type TUpdateTooltipPositionParams = {
     rows: TRow[] | null;
 };
 
+type TDrawingToolFlutterRepo = {
+    isDrawingMoved: boolean | null;
+    selectedDrawingTool: null;
+    shouldStopDrawing: boolean | null;
+};
 type TCrosshairRefs = {
     crosshairRef: React.RefObject<HTMLDivElement>;
     crossHairXRef: React.RefObject<HTMLDivElement>;
@@ -29,6 +34,14 @@ type TCrosshairRefs = {
 };
 
 const MAX_TOOLTIP_WIDTH = 315;
+const initialDrawingClick = {
+    vertical: { count: 0 },
+    ray: { count: 0 },
+    trend: { count: 0 },
+    line: { count: 0 },
+    continuous: { count: 0 },
+};
+
 class CrosshairStore {
     mainStore: MainStore;
     prev_arrow?: string;
@@ -68,7 +81,9 @@ class CrosshairStore {
     showChange = false;
     showSeries = false;
     showStudies = false;
-
+    isDrawingRegistered = false;
+    drawingCounter = initialDrawingClick;
+    selectedDrawing = '';
     refs?: TCrosshairRefs;
 
     isOverChartContainer = false;
@@ -195,6 +210,120 @@ class CrosshairStore {
             });
         }
     };
+
+    setDrawingCount = (selectedDrawingName: string, isContinuous?: boolean) => {
+        // Loop over all keys in drawingCounter and reset them to zero,
+        // except for the selectedDrawingName
+        for (const key in this.drawingCounter) {
+            if (key !== selectedDrawingName) {
+                this.drawingCounter[key].count = 0;
+            }
+        }
+        const selectDrawing = this.drawingCounter[selectedDrawingName];
+        // Increment the count of the selected drawing type, up to a maximum of 2
+        if (selectDrawing.count < 2 || isContinuous) {
+            selectDrawing.count++;
+        }
+    };
+
+    handleDrawing = (selectedDrawingName: string) => {
+        switch (selectedDrawingName) {
+            case 'vertical':
+                this.setDrawingCount(selectedDrawingName);
+                this.mainStore.drawTools.onCreation('vertical');
+                this.onDeletedDrawing();
+                break;
+            case 'line':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count === 2) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    this.onDeletedDrawing();
+                }
+                break;
+            case 'ray':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count === 2) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    this.onDeletedDrawing();
+                }
+                break;
+            case 'trend':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count === 2) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    this.onDeletedDrawing();
+                }
+                break;
+            case 'continuous':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count > 1) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                }
+                break;
+            default:
+                console.warn(`Unsupported drawing name: ${selectedDrawingName}`);
+        }
+    };
+
+    onDeletedDrawing = () => {
+        this.drawingCounter = JSON.parse(JSON.stringify({ ...initialDrawingClick }));
+    };
+
+    selectedDrawingHoverClick = async () => {
+        await when(() => this.mainStore.chartAdapter.isChartLoaded);
+
+        const contentWindow = document.querySelector('.chartContainer');
+        if (!contentWindow || this.isDrawingRegistered) return;
+
+        this.isDrawingRegistered = true;
+
+        contentWindow.addEventListener('mousedown', () => {
+            const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+
+            if (!drawTools || drawTools.selectedDrawingTool === null) return;
+
+            if (drawTools.drawingToolsRepo._addOns.length === 0) {
+                this.onDeletedDrawing();
+            }
+
+            const selectedDrawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
+                drawTools.selectedDrawingTool
+            );
+
+            if (selectedDrawingName) {
+                this.handleDrawing(selectedDrawingName);
+            }
+        });
+    };
+
+    renderDrawingToolToolTip = (name: string, dx: number, dy: number) => {
+        if (document.getElementsByClassName('draw-tool-tooltip').length === 0) {
+            const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
+                '.chartContainer'
+            );
+
+            const parentDiv = document.createElement('div');
+            parentDiv.classList.add('draw-tool-tooltip', 'mSticky');
+            parentDiv.style.display = 'inline-block';
+            parentDiv.style.position = 'absolute';
+            parentDiv.style.top = `${dy - 100}px`;
+            parentDiv.style.left = `${dx - 150}px`;
+
+            parentDiv.innerHTML = `
+                    <span class='mStickyInterior' style='display:inline-block'>${name}</span>
+                    <span class='mouseDeleteInstructions'>Right click to manage</span>
+        `;
+
+            chartContainer?.appendChild(parentDiv);
+        }
+    };
+
+    removeDrawingToolToolTip = () => {
+        if (document.getElementsByClassName('draw-tool-tooltip').length > 0) {
+            document.getElementsByClassName('draw-tool-tooltip')[0].remove();
+        }
+    };
+
     calculateRows(data: TQuote) {
         const dupMap = {} as TDupMap;
         const fields: {
@@ -285,6 +414,7 @@ class CrosshairStore {
 
         return rows;
     };
+
     updateVisibility = (visible: boolean) => {
         const crosshair = this.refs?.crosshairRef.current;
         if (crosshair) {
@@ -292,6 +422,7 @@ class CrosshairStore {
             else crosshair.classList.remove('active');
         }
     };
+
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
     updateTooltipPosition({ top, left, rows }: TUpdateTooltipPositionParams) {

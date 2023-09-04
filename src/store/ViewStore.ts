@@ -112,6 +112,7 @@ export default class ViewStore {
             timeUnit: this.mainStore.state.timeperiodStore.timeUnit,
             studyItems: this.mainStore.studies.activeItems,
             crosshair: this.mainStore.crosshair.state,
+            drawTools: this.mainStore.drawTools.activeToolsGroup,
             msPerPx: this.mainStore.chartAdapter.msPerPx,
         };
     }

@@ -5,6 +5,8 @@ import {
     AuditDetailsForExpiredContract,
     ProposalOpenContract,
 } from '@deriv/api-types';
+
+import { TActiveDrawingToolItem } from 'src/store/DrawToolsStore';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
@@ -379,6 +381,7 @@ export type TFlutterChart = {
         clearDrawingTool: () => void;
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
+        getDrawingHover: (dx: number, dy: number, epoch: number, quote: string) => number;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;
@@ -431,6 +434,7 @@ export type TLayout = {
     granularity?: TGranularity;
     studyItems?: TActiveItem[];
     crosshair?: number;
+    drawTools?: TActiveDrawingToolItem[];
     msPerPx?: number;
 };
 
