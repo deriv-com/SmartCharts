@@ -63,3 +63,10 @@ export function hexToInt(color: string) {
     const colorCode = color.replace('#', '0xff');
     return parseInt(colorCode, 16);
 }
+
+export function capitalize(str: string) {
+    if (!str || typeof str !== 'string') {
+        return '';
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}

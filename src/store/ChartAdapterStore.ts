@@ -19,9 +19,10 @@ export default class ChartAdapterStore {
     };
     isFeedLoaded = false;
     msPerPx?: number;
+    hoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
     painter = new Painter();
-
+    clickEventCount = 0;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
@@ -67,6 +68,41 @@ export default class ChartAdapterStore {
                 );
 
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+                this.mainStore.crosshair.selectedDrawingHoverClick();
+                const index = this.mainStore.drawTools.onDrawingHover(dx, dy, epoch, quote);
+                const drawingRepo = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+                const handleClickEvent = (e: Event) => {
+                    if (this.hoverIndex != null) {
+                        e.preventDefault();
+                        this.mainStore.drawTools.onSetting(this.hoverIndex);
+                    }
+                };
+
+                function updateEventListener(condition: boolean) {
+                    if (condition) {
+                        document
+                            .getElementsByClassName('chartContainer')[0]
+                            .addEventListener('contextmenu', handleClickEvent);
+                    }
+                }
+
+                if (index != null) {
+                    this.hoverIndex = index;
+                    let item = drawingRepo.drawingToolsRepo._addOns[index];
+                    item.lineStyle.thickness = 3;
+                    this.mainStore.crosshair.renderDrawingToolToolTip('Vertical', dx, dy);
+                    if (this.clickEventCount === 0) {
+                        this.clickEventCount++;
+                        updateEventListener(true);
+                    }
+                    // this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(item, index);
+                } else if (this.hoverIndex !== null) {
+                    this.hoverIndex = null;
+                    drawingRepo.drawingToolsRepo._addOns.forEach(item => {
+                        item.lineStyle.thickness = 1;
+                        this.mainStore.crosshair.removeDrawingToolToolTip();
+                    });
+                }
             },
             indicators: {
                 onRemove: (index: number) => {

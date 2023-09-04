@@ -31,6 +31,7 @@ export default class SettingsDialogStore {
     freezeScroll = false;
     id = '';
     flutter_chart_id = '';
+    drawing_tool_id = '';
     constructor({ mainStore, onChanged, onDeleted }: TSettingsDialogStoreProps) {
         makeObservable(this, {
             items: observable,

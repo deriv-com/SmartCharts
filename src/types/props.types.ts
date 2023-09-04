@@ -12,6 +12,7 @@ import ChartState from 'src/store/ChartState';
 import { TNotification } from 'src/store/Notifier';
 import { TGranularity } from '.';
 import { OHLCStreamResponse } from './api.types';
+import { TActiveDrawingToolItem } from 'src/store/DrawToolsStore';
 
 declare global {
     interface Window {
@@ -317,6 +318,7 @@ export type TActiveItem = TIndicatorItem & {
     config?: Record<string, any>;
     parameters: TSettingsParameter[];
     bars?: string;
+    key?: string;
 };
 
 export type TNewChartPayload = {
@@ -373,9 +375,16 @@ export type TFlutterChart = {
         clearIndicators: () => void;
     };
     drawingTool: {
-        addDrawing: (config: string, index?: number) => void;
+        addOrUpdateDrawing: (config: string, index?: number) => void;
         removeDrawingTool: (index: number) => void;
         clearDrawingTool: () => void;
+
+        getTypeOfSelectedDrawingTool: (config: {}) => string;
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        getDrawingTool: () => {};
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        getDrawingTools: () => {};
+        getDrawingHover: (dx: number, dy: number, epoch: number, quote: string) => number;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;
@@ -427,6 +436,7 @@ export type TLayout = {
     timeUnit?: string | number;
     granularity?: TGranularity;
     studyItems?: TActiveItem[];
+    drawTools?: TActiveDrawingToolItem[];
     crosshair?: number;
     msPerPx?: number;
 };

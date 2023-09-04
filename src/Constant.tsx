@@ -63,11 +63,12 @@ type TDrawTools = {
 
 export const getDrawTools: () => TDrawTools = () => ({
     channel: { id: 'channel', text: t.translate('Channel [num]'), icon: DrawToolsChannelIcon },
-    segment: { id: 'continuous', text: t.translate('Continuous [num]'), icon: DrawToolsContinuousIcon },
+    continuous: { id: 'continuous', text: t.translate('Continuous [num]'), icon: DrawToolsContinuousIcon },
     fibfan: { id: 'fibfan', text: t.translate('Fib Fan [num]'), icon: DrawToolsFibonaccifanIcon },
     horizontal: { id: 'horizontal', text: t.translate('Horizontal [num]'), icon: DrawToolsHorizontalIcon },
     line: { id: 'line', text: t.translate('Line [num]'), icon: DrawToolsLineIcon },
     ray: { id: 'ray', text: t.translate('Ray [num]'), icon: DrawToolsRayIcon },
+    // continuous: { id: 'continuous', text: t.translate('Continuous [num]'), icon: DrawToolsRayIcon },
     rectangle: { id: 'rectangle', text: t.translate('Rectangle [num]'), icon: DrawToolsRectangleIcon },
     tirone: { id: 'tirone', text: t.translate('Trend [num]'), icon: DrawToolsTrendIcon },
     vertical: { id: 'vertical', text: t.translate('Vertical [num]'), icon: DrawToolsVerticalIcon },
@@ -417,6 +418,43 @@ const lineStyle = {
 export const getDrawingToolConfig = {
     lineStyle: clone(lineStyle),
     pattern: 'solid',
+    isOverlay: true,
+};
+
+const getVerticalDrawingConfig: TDefaultIndicatorConfigFn = () => ({
+    config: {
+        lineStyle: clone(lineStyle),
+        pattern: 'solid',
+        color: '#000000',
+        isOverlay: true,
+    },
+    parameters: [
+        {
+            path: 'lineStyle.color',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'pattern',
+            title: t.translate('Pattern'),
+            type: 'pattern',
+            lineWidth: '1',
+            category: 'inputs',
+            defaultValue: 'solid',
+            value: 'solid',
+        },
+    ],
+});
+
+export const defaultdrawToolsConfigs = {
+    // Keys are mapped to the flutter indicators name. Don't change it.
+    vertical: getVerticalDrawingConfig,
+    line: getVerticalDrawingConfig,
+    ray: getVerticalDrawingConfig,
+    trend: getVerticalDrawingConfig,
+    continuous: getVerticalDrawingConfig,
 };
 
 const getFieldTypeOptions = () => ({
