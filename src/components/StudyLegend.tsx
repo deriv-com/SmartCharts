@@ -109,7 +109,9 @@ const IndicatorList = ({
                     }
                     content={
                         Item.isPrediction && isTick
-                            ? t.translate('This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.')
+                            ? t.translate(
+                                  'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
+                              )
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
@@ -331,7 +333,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                                 <button
                                     type='button'
                                     className='sc-btn sc-btn--primary sc-btn--w100'
-                                    onClick={() => onSelectItem(infoItem?.id)}
+                                    onClick={() => onSelectItem(infoItem?.id, true)}
                                     disabled={infoItem?.disabledAddBtn}
                                 >
                                     {t.translate('Add')}

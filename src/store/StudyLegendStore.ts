@@ -196,7 +196,7 @@ export default class StudyLegendStore {
             });
         }
     }
-    onSelectItem(item: string) {
+    onSelectItem(item: string, is_info_open = false) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
         if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
@@ -209,6 +209,15 @@ export default class StudyLegendStore {
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
             this.mainStore.chart.setYaxisWidth();
         }
+        const indicators_category_name = this.items.find(i => i.items.some(el => el.id === item))?.name;
+        const indicator_type_name = this.items
+            .find(i => i.name === indicators_category_name)
+            ?.items.find(el => el.id === item)?.name;
+        this.mainStore.state.stateChange(STATE.INDICATOR_ADDED, {
+            indicator_type_name,
+            indicators_category_name,
+            is_info_open,
+        });
     }
     updateIndicatorHeight() {
         const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;

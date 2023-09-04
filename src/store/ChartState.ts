@@ -25,8 +25,11 @@ import {
 import ChartStore from './ChartStore';
 
 type TStateChangeOption = {
+    indicator_type_name?: string;
+    indicators_category_name?: string;
     isClosed?: boolean;
     is_favorite?: boolean;
+    is_info_open?: boolean;
     is_open?: boolean;
     chart_type_name?: string;
     market_type_name?: string;
