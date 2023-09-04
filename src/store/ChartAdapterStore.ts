@@ -40,6 +40,7 @@ export default class ChartAdapterStore {
     isDataFitModeEnabled = false;
     painter = new Painter();
     clickEventCount = 0;
+    isScaled = false;
     previousHoverIndex: number | undefined | null = null;
 
     constructor(mainStore: MainStore) {
@@ -103,7 +104,7 @@ export default class ChartAdapterStore {
             }
         }
 
-        this.mainStore.crosshair.onMouseMove(dxLocal, dyLocal, epoch, quote);
+        this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
         const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
         const granularity = this.mainStore.chartAdapter.getGranularityInMs();
 
@@ -114,8 +115,11 @@ export default class ChartAdapterStore {
             granularity,
             bottomIndicatorIndex
         );
-
-        this.hoverIndex = indicatorHoverIndex;
+        if (this.isScaled) {
+            this.isScaled = false;
+        } else {
+            this.hoverIndex = indicatorHoverIndex;
+        }
 
         if (this.previousHoverIndex === this.hoverIndex) {
             return;
@@ -148,7 +152,6 @@ export default class ChartAdapterStore {
             }
             setIndicator(item, indicatorHoverIndex);
         }
-
         if (
             this.previousHoverIndex != null &&
             this.previousHoverIndex >= 0 &&
@@ -330,6 +333,10 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
+        if (this.hoverIndex !== null) {
+            this.isScaled = true;
+        }
+
         this.isDataFitModeEnabled = false;
         const msPerPx = this.flutterChart?.app.scale(scale);
 
