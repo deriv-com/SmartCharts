@@ -196,7 +196,7 @@ export default class StudyLegendStore {
             });
         }
     }
-    onSelectItem(item: string, is_info_open = false) {
+    onSelectItem(item: string) {
         this.onInfoItem(null);
         const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
         if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
@@ -209,15 +209,6 @@ export default class StudyLegendStore {
             logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
             this.mainStore.chart.setYaxisWidth();
         }
-        const indicators_category_name = this.items.find(i => i.items.some(el => el.id === item))?.name;
-        const indicator_type_name = this.items
-            .find(i => i.name === indicators_category_name)
-            ?.items.find(el => el.id === item)?.name;
-        this.mainStore.state.stateChange(STATE.INDICATOR_ADDED, {
-            indicator_type_name,
-            indicators_category_name,
-            is_info_open,
-        });
     }
     updateIndicatorHeight() {
         const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
@@ -309,11 +300,6 @@ export default class StudyLegendStore {
         this.settingsDialog.description = '';
         this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.setOpen(true);
-        const indicator_type_name = study.sd.study.name;
-        this.mainStore.state.stateChange(STATE.INDICATOR_SETTINGS_OPEN, {
-            indicator_type_name,
-            indicators_category_name: this.items.find(i => i.items.some(el => el.name === indicator_type_name))?.name,
-        });
     }
     deleteStudy(study: TActiveItem['dataObject']['sd']) {
         logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
@@ -543,13 +529,6 @@ export default class StudyLegendStore {
                   disabledAddBtn: study.isPrediction && this.mainStore.timeperiod.isTick,
               }
             : study;
-        if (study) {
-            this.mainStore.state.stateChange(STATE.INDICATOR_INFO_TOGGLE, {
-                is_info_open: true,
-                indicator_type_name: study.name,
-                indicators_category_name: this.items.find(i => i.items.some(el => el.name === study.name))?.name,
-            });
-        }
     }
     updatePortalNode(portalNodeId?: string) {
         this.portalNodeIdChanged = portalNodeId;
