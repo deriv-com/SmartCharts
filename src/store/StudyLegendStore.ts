@@ -326,13 +326,6 @@ export default class StudyLegendStore {
             }, 0);
             setTimeout(this.updateIndicatorHeight, 20);
         }
-        const indicator_type_name = study.study.name;
-        const indicators_category_name = this.items.find(i => i.items.some(el => el.name === indicator_type_name))
-            ?.name;
-        this.mainStore.state.stateChange(STATE.INDICATOR_DELETED, {
-            indicator_type_name,
-            indicators_category_name,
-        });
     }
     updateStudy(study: typeof CIQ.Studies.StudyDescriptor, items: TSettingsItem[]) {
         const updates: Record<string, Record<string, string>> = {};

@@ -288,6 +288,9 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
     const activeStudiesNo = activeItems.length;
 
     updatePortalNode(portalNodeId);
+
+    const getCategoryName = (name: string) => items.find(i => i.items.some(el => el.name === name))?.name ?? '';
+
     return (
         <Menu
             store={menuStore}
@@ -303,12 +306,9 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                         <BackIcon
                             onClick={() => {
                                 onInfoItem(null);
-                                const indicators_category_name = items.find(i =>
-                                    i.items.some(el => el.name === infoItem.name)
-                                )?.name;
                                 state.stateChange(STATE.INDICATOR_INFO_TOGGLE, {
                                     indicator_type_name: infoItem.name,
-                                    indicators_category_name,
+                                    indicators_category_name: getCategoryName(infoItem.name),
                                 });
                             }}
                         />
@@ -359,7 +359,13 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                     categories={items}
                     searchedCategories={searchedItems}
                     onSelectItem={onSelectItem}
-                    onDeleteItem={deleteStudy}
+                    onDeleteItem={(item: TActiveItem['dataObject']['sd']) => {
+                        deleteStudy(item);
+                        state.stateChange(STATE.INDICATOR_DELETED, {
+                            indicator_type_name: item.study.name,
+                            indicators_category_name: getCategoryName(item.study.name),
+                        });
+                    }}
                     onEditItem={editStudy}
                     onInfoItem={onInfoItem}
                     activeItems={activeItems}
