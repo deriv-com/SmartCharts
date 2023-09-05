@@ -3,8 +3,9 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import { ChartType, TIcon } from 'src/types';
+import { getTimeIntervalName } from 'src/utils';
 import { TListItem } from 'src/store/ListStore';
-import { getTimeIntervalName, STATE } from 'src/Constant';
+import { Intervals, STATE } from 'src/Constant';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
 import List from './List';
@@ -39,7 +40,7 @@ const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesPro
             if (chart_type.id) {
                 state.stateChange(STATE.CHART_TYPE_CHANGE, {
                     chart_type_name: chart_type.id === 'colored_bar' ? chart_type.text : chart_type.text.toLowerCase(),
-                    time_interval_name: getTimeIntervalName(state.granularity),
+                    time_interval_name: getTimeIntervalName(state.granularity, Intervals),
                 });
             }
             onChange(chart_type.id);

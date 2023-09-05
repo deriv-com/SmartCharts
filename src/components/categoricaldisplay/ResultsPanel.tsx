@@ -1,9 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
-import { STATE, getSymbolMarketCategory } from 'src/Constant';
+import { STATE } from 'src/Constant';
 import { useStores } from 'src/store';
 import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
-import { stringToSlug } from '../../utils';
+import { getSymbolMarketCategory, stringToSlug } from '../../utils';
 import {
     TCategorizedSymbolItem,
     TCategorizedSymbols,

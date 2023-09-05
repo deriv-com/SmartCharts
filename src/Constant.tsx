@@ -43,8 +43,7 @@ import {
     TypeHollowIcon,
     TypeOhlcIcon,
 } from './components/Icons';
-import { TGranularity, TIcon } from './types';
-import { TProcessedSymbolItem } from './binaryapi/ActiveSymbols';
+import { TIcon } from './types';
 
 type TDrawTools = {
     [key: string]: {
@@ -333,24 +332,6 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
         ],
     },
 ];
-
-export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem) => {
-    const { market_display_name, submarket_display_name, subgroup } = symbol_object || {};
-    if (!market_display_name) return '';
-    const market = market_display_name.replace(' ', '_');
-    const submarket = submarket_display_name.replace(' ', '_');
-    if (subgroup && subgroup !== 'none') {
-        return `${market}-${subgroup}-${submarket}`.toLowerCase();
-    }
-    return `${market}-${submarket}`.toLowerCase();
-};
-
-export const getTimeIntervalName = (interval: TGranularity) => {
-    const interval_category = Intervals.find(i => i.items.some(item => item.interval === interval));
-    const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
-    const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
-    return interval_label ? `${interval_num} ${interval_label}` : '';
-};
 
 export const ExcludedStudies = {
     Beta: true,

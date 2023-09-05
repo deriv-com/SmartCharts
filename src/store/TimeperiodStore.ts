@@ -1,9 +1,9 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TGranularity } from 'src/types';
-import { ChartTypes, getTimeIntervalName, STATE } from 'src/Constant';
+import { ChartTypes, Intervals, STATE } from 'src/Constant';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
+import { displayMilliseconds, getIntervalInSeconds, getTimeIntervalName, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
@@ -195,7 +195,7 @@ export default class TimeperiodStore {
     changeGranularity(interval: TGranularity) {
         if (interval) {
             const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.state.chartType)?.text ?? '';
-            const time_interval_name = getTimeIntervalName(interval);
+            const time_interval_name = getTimeIntervalName(interval, Intervals);
             this.mainStore.state.stateChange(STATE.CHART_INTERVAL_CHANGE, {
                 time_interval_name,
                 chart_type_name:

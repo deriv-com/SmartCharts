@@ -1,5 +1,6 @@
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { ChartTypes, getTimeIntervalName, STATE } from 'src/Constant';
+import { ChartTypes, Intervals, STATE } from 'src/Constant';
+import { getTimeIntervalName } from 'src/utils';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import DialogStore from './DialogStore';
@@ -75,7 +76,7 @@ export default class MenuStore {
                 is_open: this.open,
                 chart_type_name:
                     this.mainStore.state.chartType === 'colored_bar' ? chart_type_name : chart_type_name.toLowerCase(),
-                time_interval_name: getTimeIntervalName(this.mainStore.state.granularity),
+                time_interval_name: getTimeIntervalName(this.mainStore.state.granularity, Intervals),
             });
         } else if (this.route === 'chart-title') {
             this.mainStore.state.stateChange(STATE.MARKETS_LIST_TOGGLE, {
