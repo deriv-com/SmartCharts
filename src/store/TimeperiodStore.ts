@@ -195,9 +195,8 @@ export default class TimeperiodStore {
     changeGranularity(interval: TGranularity) {
         if (interval) {
             const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.state.chartType)?.text ?? '';
-            const time_interval_name = getTimeIntervalName(interval, Intervals);
             this.mainStore.state.stateChange(STATE.CHART_INTERVAL_CHANGE, {
-                time_interval_name,
+                time_interval_name: getTimeIntervalName(interval, Intervals),
                 chart_type_name:
                     this.mainStore.state.chartType === 'colored_bar' ? chart_type_name : chart_type_name.toLowerCase(),
             });

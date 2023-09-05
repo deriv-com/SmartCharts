@@ -242,9 +242,9 @@ const Category = ({
                 : !category.hasSubgroup &&
                   category.data.length > 0 && (
                       <div className='sc-mcd__category__content'>
-                          {(category.data as TSubCategoryData).map((item, idx) => (
+                          {(category.data as TSubCategoryData).map(item => (
                               <ItemType
-                                  key={`${item.display}-${idx}`} // eslint-disable-line react/no-array-index-key
+                                  key={item.itemId}
                                   item={item}
                                   onSelectItem={handleSelectItem}
                                   disableAll={disableAll}
