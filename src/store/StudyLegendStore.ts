@@ -553,7 +553,8 @@ export default class StudyLegendStore {
             const indicator_type_name = study.name;
             const indicators_category_name = this.items.find(i => i.items.some(el => el.name === indicator_type_name))
                 ?.name;
-            this.mainStore.state.stateChange(STATE.INDICATOR_INFO_OPEN, {
+            this.mainStore.state.stateChange(STATE.INDICATOR_INFO_TOGGLE, {
+                is_info_open: true,
                 indicator_type_name,
                 indicators_category_name,
             });

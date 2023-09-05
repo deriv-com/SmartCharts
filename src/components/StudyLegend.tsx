@@ -306,7 +306,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                                 const indicators_category_name = items.find(i =>
                                     i.items.some(el => el.name === infoItem.name)
                                 )?.name;
-                                state.stateChange(STATE.INDICATOR_INFO_CLOSED, {
+                                state.stateChange(STATE.INDICATOR_INFO_TOGGLE, {
                                     indicator_type_name: infoItem.name,
                                     indicators_category_name,
                                 });
