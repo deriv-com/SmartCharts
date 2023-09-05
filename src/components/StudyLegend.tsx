@@ -10,7 +10,7 @@ import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
-import { TActiveItem, TooltipsContent } from '../Constant';
+import { STATE, TActiveItem, TooltipsContent } from '../Constant';
 import Menu from './Menu';
 import SearchInput from './SearchInput';
 
@@ -261,7 +261,7 @@ const TabularDisplay = ({
 );
 
 const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
-    const { studies, chart, timeperiod } = useStores();
+    const { studies, chart, state, timeperiod } = useStores();
 
     const {
         menuStore,
@@ -300,7 +300,18 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
             customHead={
                 infoItem ? (
                     <div className='sc-dialog__head--info'>
-                        <BackIcon onClick={() => onInfoItem(null)} />
+                        <BackIcon
+                            onClick={() => {
+                                onInfoItem(null);
+                                const indicators_category_name = items.find(i =>
+                                    i.items.some(el => el.name === infoItem.name)
+                                )?.name;
+                                state.stateChange(STATE.INDICATOR_INFO_CLOSED, {
+                                    indicator_type_name: infoItem.name,
+                                    indicators_category_name,
+                                });
+                            }}
+                        />
                         {infoItem.name}
                     </div>
                 ) : (
