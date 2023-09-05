@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { STATE } from 'src/Constant';
+import { STATE, getSymbolMarketCategory } from 'src/Constant';
 import { useStores } from 'src/store';
 import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
 import { stringToSlug } from '../../utils';
@@ -16,7 +16,7 @@ import { TNormalItemProps } from './Item';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
-    onSelectItem?: (item: TProcessedSymbolItem) => void;
+    onSelectItem?: (item: TProcessedSymbolItem, category_id: string) => void;
     ItemType: (props: TNormalItemProps) => React.ReactElement | null;
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
@@ -162,11 +162,12 @@ const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) =>
 const RedirectIcon = ({ subcategory }: { subcategory: TSubCategory }) => {
     const { state } = useStores();
     const { should_show_eu_content } = state;
-    const { subcategoryId, subcategoryName } = subcategory;
-    const derivComLink = redirectLink(subcategoryId, !!should_show_eu_content);
+    const derivComLink = redirectLink(subcategory.subcategoryId, !!should_show_eu_content);
 
     const onInfoClick = () => {
-        state.stateChange(STATE.MARKET_INFO_REDIRECT, { markets_category_name: subcategoryName });
+        state.stateChange(STATE.MARKET_INFO_REDIRECT, {
+            tab_market_name: getSymbolMarketCategory(subcategory.data[0].dataObject),
+        });
     };
 
     return (
@@ -188,68 +189,74 @@ const Category = ({
     handleTitleClick,
     hasSubgroup,
     favoritesId,
-}: TCategoryProps) => (
-    <div
-        className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
-            'sc-mcd__category--has-subtitle': category.categorySubtitle,
-            'sc-mcd__category--active': category.active,
-        })}
-        ref={el => setCategoryElement(el, category.categoryId)}
-    >
-        {(isNestedList || !category.hasSubcategory) && (
-            <CategoryTitle
-                category={category}
-                activeHeadKey={activeHeadKey}
-                isNestedList={!!isNestedList}
-                handleTitleClick={handleTitleClick}
-                hasSubgroup={hasSubgroup}
-            />
-        )}
-        {!category.hasSubgroup && category.hasSubcategory
-            ? (category.data as TSubCategory[])
-                  .filter(subcategory => getItemCount(subcategory) > 0)
-                  .map(subcategory => (
-                      <div
-                          className={classNames(
-                              'sc-mcd__category__content',
-                              `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
-                              'sc-mcd__category--has-subgroup',
-                              'sc-mcd__category__content--has-subcategory'
-                          )}
-                          key={subcategory.subcategoryName}
-                      >
-                          <div className='subcategory'>
-                              {t.translate(subcategory.subcategoryName)}
-                              <RedirectIcon subcategory={subcategory} />
+}: TCategoryProps) => {
+    const handleSelectItem = (symbol_object: TProcessedSymbolItem) => {
+        onSelectItem?.(symbol_object, category.categoryId);
+    };
+
+    return (
+        <div
+            className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
+                'sc-mcd__category--has-subtitle': category.categorySubtitle,
+                'sc-mcd__category--active': category.active,
+            })}
+            ref={el => setCategoryElement(el, category.categoryId)}
+        >
+            {(isNestedList || !category.hasSubcategory) && (
+                <CategoryTitle
+                    category={category}
+                    activeHeadKey={activeHeadKey}
+                    isNestedList={!!isNestedList}
+                    handleTitleClick={handleTitleClick}
+                    hasSubgroup={hasSubgroup}
+                />
+            )}
+            {!category.hasSubgroup && category.hasSubcategory
+                ? (category.data as TSubCategory[])
+                      .filter(subcategory => getItemCount(subcategory) > 0)
+                      .map(subcategory => (
+                          <div
+                              className={classNames(
+                                  'sc-mcd__category__content',
+                                  `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
+                                  'sc-mcd__category--has-subgroup',
+                                  'sc-mcd__category__content--has-subcategory'
+                              )}
+                              key={subcategory.subcategoryName}
+                          >
+                              <div className='subcategory'>
+                                  {t.translate(subcategory.subcategoryName)}
+                                  <RedirectIcon subcategory={subcategory} />
+                              </div>
+                              {subcategory.data.map(item => (
+                                  <ItemType
+                                      key={item.display}
+                                      item={item}
+                                      onSelectItem={handleSelectItem}
+                                      disableAll={disableAll}
+                                      favoritesId={favoritesId}
+                                  />
+                              ))}
                           </div>
-                          {subcategory.data.map(item => (
+                      ))
+                : !category.hasSubgroup &&
+                  category.data.length > 0 && (
+                      <div className='sc-mcd__category__content'>
+                          {(category.data as TSubCategoryData).map((item, idx) => (
                               <ItemType
-                                  key={item.display}
+                                  key={`${item.display}-${idx}`} // eslint-disable-line react/no-array-index-key
                                   item={item}
-                                  onSelectItem={onSelectItem}
+                                  onSelectItem={handleSelectItem}
                                   disableAll={disableAll}
                                   favoritesId={favoritesId}
                               />
                           ))}
                       </div>
-                  ))
-            : !category.hasSubgroup &&
-              category.data.length > 0 && (
-                  <div className='sc-mcd__category__content'>
-                      {(category.data as TSubCategoryData).map((item, idx) => (
-                          <ItemType
-                              key={`${item.display}-${idx}`} // eslint-disable-line react/no-array-index-key
-                              item={item}
-                              onSelectItem={onSelectItem}
-                              disableAll={disableAll}
-                              favoritesId={favoritesId}
-                          />
-                      ))}
-                  </div>
-              )}
-        {categoryItemCount === 0 && category.emptyDescription && <EmptyCategory category={category} />}
-    </div>
-);
+                  )}
+            {categoryItemCount === 0 && category.emptyDescription && <EmptyCategory category={category} />}
+        </div>
+    );
+};
 
 const ResultsPanel = ({
     filteredItems,

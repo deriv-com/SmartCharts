@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import { useStores } from 'src/store';
 import { TOpenMarket } from 'src/types';
-import { STATE, getSymbolMarketAndSubgroup } from 'src/Constant';
+import { STATE, getSymbolMarketCategory } from 'src/Constant';
 import '../../sass/components/_chart-title.scss';
 import { CategoricalDisplay } from './categoricaldisplay';
 import Menu from './Menu';
@@ -22,7 +22,7 @@ export type TChartTitleProps = {
 };
 
 const ChartTitle = (props: TChartTitleProps) => {
-    const { chartTitle, chart, chartSetting, favorites, state } = useStores();
+    const { chartTitle, chart, chartSetting, state } = useStores();
     const { isMobile } = chart;
     const { theme } = chartSetting;
     const {
@@ -36,7 +36,6 @@ const ChartTitle = (props: TChartTitleProps) => {
     } = chartTitle;
     const onChange = props.onChange || setSymbol;
     const setMenuOpen = menuStore.setOpen;
-    const favorite_symbols = Object.keys(favorites.favoritesMap[categoricalDisplay.favoritesId]);
     const { containerId, enabled, portalNodeId, searchInputClassName, open, open_market, isNestedList } = props;
 
     React.useEffect(() => {
@@ -68,13 +67,13 @@ const ChartTitle = (props: TChartTitleProps) => {
                     store={categoricalDisplay}
                     isNestedList={isNestedList}
                     searchInputClassName={searchInputClassName}
-                    onSelectItem={(x: TProcessedSymbolItem) => {
-                        if (x.symbol !== currentSymbol.symbol) {
+                    onSelectItem={(symbol_object: TProcessedSymbolItem, category_id: string) => {
+                        if (symbol_object.symbol !== currentSymbol.symbol) {
                             state.stateChange(STATE.SYMBOL_CHANGE, {
-                                tab_market_name: getSymbolMarketAndSubgroup(x, favorite_symbols),
-                                market_type_name: x.name,
+                                tab_market_name: getSymbolMarketCategory(symbol_object, category_id),
+                                market_type_name: symbol_object.name,
                             });
-                            onChange(x.symbol);
+                            onChange(symbol_object.symbol);
                         }
                         setMenuOpen(false);
                     }}

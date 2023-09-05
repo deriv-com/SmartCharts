@@ -341,14 +341,16 @@ export const getTimeIntervalName = (interval: TGranularity) => {
     return interval_label ? `${interval_num} ${interval_label}` : '';
 };
 
-export const getSymbolMarketAndSubgroup = (symbol_object: TProcessedSymbolItem, favorites: string[]) => {
-    const { market_display_name, subgroup } = symbol_object || {};
-    if (favorites.includes(symbol_object.symbol)) return 'favorites';
+export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem, category_id?: string) => {
+    const { market_display_name, submarket_display_name, subgroup } = symbol_object || {};
+    if (category_id === 'favorite') return 'favorites';
     if (!market_display_name) return '';
+    const market = market_display_name.replace(' ', '_');
+    const submarket = submarket_display_name.replace(' ', '_');
     if (subgroup && subgroup !== 'none') {
-        return `${market_display_name.toLowerCase()} ${subgroup}`;
+        return `${market}-${subgroup}-${submarket}`.toLowerCase();
     }
-    return market_display_name.toLowerCase();
+    return `${market}-${submarket}`.toLowerCase();
 };
 
 export const ExcludedStudies = {
