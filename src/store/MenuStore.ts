@@ -71,11 +71,13 @@ export default class MenuStore {
     }
     handleDialogStatus() {
         if (this.route === 'chart-mode') {
-            const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.state.chartType)?.text ?? '';
+            const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.chartType.type.id)?.text ?? '';
             this.mainStore.state.stateChange(STATE.CHART_MODE_TOGGLE, {
                 is_open: this.open,
                 chart_type_name:
-                    this.mainStore.state.chartType === 'colored_bar' ? chart_type_name : chart_type_name.toLowerCase(),
+                    this.mainStore.chartType.type.id === 'colored_bar'
+                        ? chart_type_name
+                        : chart_type_name.toLowerCase(),
                 time_interval_name: getTimeIntervalName(this.mainStore.state.granularity, Intervals),
             });
         } else if (this.route === 'chart-title') {
