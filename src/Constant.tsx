@@ -334,16 +334,8 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
     },
 ];
 
-export const getTimeIntervalName = (interval: TGranularity) => {
-    const interval_category = Intervals.find(i => i.items.some(item => item.interval === interval));
-    const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
-    const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
-    return interval_label ? `${interval_num} ${interval_label}` : '';
-};
-
-export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem, category_id?: string) => {
+export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem) => {
     const { market_display_name, submarket_display_name, subgroup } = symbol_object || {};
-    if (category_id === 'favorite') return 'favorites';
     if (!market_display_name) return '';
     const market = market_display_name.replace(' ', '_');
     const submarket = submarket_display_name.replace(' ', '_');
@@ -351,6 +343,13 @@ export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem, cat
         return `${market}-${subgroup}-${submarket}`.toLowerCase();
     }
     return `${market}-${submarket}`.toLowerCase();
+};
+
+export const getTimeIntervalName = (interval: TGranularity) => {
+    const interval_category = Intervals.find(i => i.items.some(item => item.interval === interval));
+    const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
+    const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
+    return interval_label ? `${interval_num} ${interval_label}` : '';
 };
 
 export const ExcludedStudies = {
@@ -587,7 +586,7 @@ export const STATE = {
     READY: 'READY',
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
     SYMBOL_CHANGE: 'SYMBOL_CHANGE',
-};
+} as const;
 
 export const TooltipsContent = {
     predictionIndicator: t.translate(

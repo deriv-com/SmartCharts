@@ -70,7 +70,8 @@ const ChartTitle = (props: TChartTitleProps) => {
                     onSelectItem={(symbol_object: TProcessedSymbolItem, category_id: string) => {
                         if (symbol_object.symbol !== currentSymbol.symbol) {
                             state.stateChange(STATE.SYMBOL_CHANGE, {
-                                tab_market_name: getSymbolMarketCategory(symbol_object, category_id),
+                                tab_market_name:
+                                    category_id === 'favorite' ? 'favorites' : getSymbolMarketCategory(symbol_object),
                                 market_type_name: symbol_object.name,
                             });
                             onChange(symbol_object.symbol);
