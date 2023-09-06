@@ -292,6 +292,14 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
     const getIndicatorCategoryName = (id: string) =>
         items.find(i => i.items.some(el => el.id === id))?.id.replace('-', ' ') ?? '';
 
+    const handleStateChange = (id: string, type: string, payload?: { is_info_open: boolean }) => {
+        state.stateChange(type, {
+            indicator_type_name: id,
+            indicators_category_name: getIndicatorCategoryName(id),
+            ...(payload ?? {}),
+        });
+    };
+
     return (
         <Menu
             store={menuStore}
@@ -307,10 +315,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                         <BackIcon
                             onClick={() => {
                                 onInfoItem(null);
-                                state.stateChange(STATE.INDICATOR_INFO_TOGGLE, {
-                                    indicator_type_name: infoItem.id,
-                                    indicators_category_name: getIndicatorCategoryName(infoItem.id),
-                                });
+                                handleStateChange(infoItem.id, STATE.INDICATOR_INFO_TOGGLE);
                             }}
                         />
                         {infoItem.name}
@@ -347,11 +352,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                                     className='sc-btn sc-btn--primary sc-btn--w100'
                                     onClick={() => {
                                         onSelectItem(infoItem?.id);
-                                        state.stateChange(STATE.INDICATOR_ADDED, {
-                                            indicator_type_name: infoItem?.id,
-                                            indicators_category_name: getIndicatorCategoryName(infoItem?.id),
-                                            is_info_open: true,
-                                        });
+                                        handleStateChange(infoItem?.id, STATE.INDICATOR_ADDED, { is_info_open: true });
                                     }}
                                     disabled={infoItem?.disabledAddBtn}
                                 >
@@ -368,32 +369,19 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                     searchedCategories={searchedItems}
                     onSelectItem={(id: string) => {
                         onSelectItem(id);
-                        state.stateChange(STATE.INDICATOR_ADDED, {
-                            indicator_type_name: id,
-                            indicators_category_name: getIndicatorCategoryName(id),
-                        });
+                        handleStateChange(id, STATE.INDICATOR_ADDED);
                     }}
                     onDeleteItem={(item: TActiveItem['dataObject']['sd']) => {
                         deleteStudy(item);
-                        state.stateChange(STATE.INDICATOR_DELETED, {
-                            indicator_type_name: item.type,
-                            indicators_category_name: getIndicatorCategoryName(item.type),
-                        });
+                        handleStateChange(item.type, STATE.INDICATOR_DELETED);
                     }}
                     onEditItem={(study: TActiveItem['dataObject']) => {
                         editStudy(study);
-                        state.stateChange(STATE.INDICATOR_SETTINGS_OPEN, {
-                            indicator_type_name: study.sd.type,
-                            indicators_category_name: getIndicatorCategoryName(study.sd.type),
-                        });
+                        handleStateChange(study.sd.type, STATE.INDICATOR_SETTINGS_OPEN);
                     }}
                     onInfoItem={(item: TActiveItem) => {
                         onInfoItem(item);
-                        state.stateChange(STATE.INDICATOR_INFO_TOGGLE, {
-                            is_info_open: true,
-                            indicator_type_name: item.id,
-                            indicators_category_name: getIndicatorCategoryName(item.id),
-                        });
+                        handleStateChange(item.id, STATE.INDICATOR_INFO_TOGGLE, { is_info_open: true });
                     }}
                     activeItems={activeItems}
                     clearAll={deleteAll}
