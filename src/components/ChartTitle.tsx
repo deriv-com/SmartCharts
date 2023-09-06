@@ -72,9 +72,9 @@ const ChartTitle = (props: TChartTitleProps) => {
                         if (symbol_object.symbol !== currentSymbol.symbol) {
                             onChange(symbol_object.symbol);
                             state.stateChange(STATE.SYMBOL_CHANGE, {
-                                tab_market_name:
+                                symbol: symbol_object.symbol,
+                                symbol_category:
                                     category_id === 'favorite' ? 'favorites' : getSymbolMarketCategory(symbol_object),
-                                market_type_name: symbol_object.symbol,
                             });
                         }
                         setMenuOpen(false);

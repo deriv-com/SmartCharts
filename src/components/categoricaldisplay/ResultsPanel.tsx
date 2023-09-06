@@ -166,7 +166,7 @@ const RedirectIcon = ({ subcategory }: { subcategory: TSubCategory }) => {
 
     const onInfoClick = () => {
         state.stateChange(STATE.MARKET_INFO_REDIRECT, {
-            tab_market_name: getSymbolMarketCategory(subcategory.data[0].dataObject),
+            symbol_category: getSymbolMarketCategory(subcategory.data[0].dataObject),
         });
     };
 

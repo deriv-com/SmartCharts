@@ -24,7 +24,7 @@ const Favorite = ({ category, id }: TFavoriteProps) => {
             store.toggleFavorite(category, id);
             state.stateChange(STATE.FAVORITE_MARKETS_TOGGLE, {
                 is_favorite: store.isFavorite(category, id),
-                market_type_name: chart.activeSymbols?.symbolMap[id]?.symbol,
+                symbol: chart.activeSymbols?.symbolMap[id]?.symbol,
             });
         },
         [chart, state, store, category, id]

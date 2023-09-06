@@ -39,6 +39,13 @@ export function getStringValue(p: number | string, pipSize: number) {
     return typeof p === 'string' ? p : p.toFixed(pipSize);
 }
 
+/**
+ *
+ * @param {TProcessedSymbolItem} symbol_object
+ * @returns {string} concatenation of market name, market subgroup name (if has a subgroup) & submarket name.
+ * E.g.: 'derived-baskets-forex_basket', where 'Derived' is a market, 'Baskets' is a market subgroup,
+ * and 'Forex basket' is a submarket.
+ */
 export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem) => {
     const { market_display_name, submarket_display_name, subgroup } = symbol_object || {};
     if (!market_display_name) return '';

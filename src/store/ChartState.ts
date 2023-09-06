@@ -32,10 +32,9 @@ type TStateChangeOption = {
     is_info_open?: boolean;
     is_open?: boolean;
     chart_type_name?: string;
-    market_type_name?: string;
     search_string?: string;
     symbol?: string;
-    tab_market_name?: string;
+    symbol_category?: string;
     time_interval_name?: string;
 };
 
