@@ -17,7 +17,9 @@ export default class ChartSettingStore {
     historical = false;
     isAutoScale = true;
     isHighestLowestMarkerEnabled = true;
-    
+    minimumLeftBars?: number;
+    whitespace?: number;
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             language: observable,
@@ -27,6 +29,7 @@ export default class ChartSettingStore {
             historical: observable,
             isAutoScale: observable,
             isHighestLowestMarkerEnabled: observable,
+            minimumLeftBars: observable,
             updateActiveLanguage: action.bound,
             setLanguage: action.bound,
             setTheme: action.bound,
@@ -34,7 +37,9 @@ export default class ChartSettingStore {
             showCountdown: action.bound,
             setHistorical: action.bound,
             setAutoScale: action.bound,
-            toggleHighestLowestMarker: action.bound
+            setWhiteSpace: action.bound,
+            toggleHighestLowestMarker: action.bound,
+            whitespace: observable,
         });
 
         this.defaultLanguage = this.languages[0];
@@ -76,11 +81,13 @@ export default class ChartSettingStore {
             countdown,
             historical,
             language,
+            minimumLeftBars,
             position,
             isAutoScale,
             isHighestLowestMarkerEnabled,
             theme,
             activeLanguages,
+            whitespace,
         } = settings;
         if (
             !(
@@ -104,6 +111,7 @@ export default class ChartSettingStore {
         if (language !== undefined) {
             this.setLanguage(language);
         }
+        this.setMinimumLeftBars(minimumLeftBars);
         if (historical !== undefined) {
             this.setHistorical(historical);
         }
@@ -113,6 +121,7 @@ export default class ChartSettingStore {
         if (isHighestLowestMarkerEnabled !== undefined) {
             this.toggleHighestLowestMarker(isHighestLowestMarkerEnabled);
         }
+        this.setWhiteSpace(whitespace);
     }
     saveSetting() {
         if (this.onSettingsChange && this.language) {
@@ -123,7 +132,9 @@ export default class ChartSettingStore {
                 position: this.position,
                 isAutoScale: this.isAutoScale,
                 isHighestLowestMarkerEnabled: this.isHighestLowestMarkerEnabled,
+                minimumLeftBars: this.minimumLeftBars,
                 theme: this.theme,
+                whitespace: this.whitespace,
             });
         }
     }
@@ -222,6 +233,22 @@ export default class ChartSettingStore {
         }
         this.isAutoScale = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change AutoScale to ${value}`);
+        this.saveSetting();
+    }
+    setMinimumLeftBars(value?: number) {
+        if (this.minimumLeftBars === value) {
+            return;
+        }
+        this.minimumLeftBars = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change MinimumLeftBars to ${value}`);
+        this.saveSetting();
+    }
+    setWhiteSpace(value?: number) {
+        if (this.whitespace === value) {
+            return;
+        }
+        this.whitespace = value;
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, ` Change Whitespace to ${value}`);
         this.saveSetting();
     }
     toggleHighestLowestMarker(value: boolean) {

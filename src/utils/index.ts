@@ -3,6 +3,18 @@ import Context from 'src/components/ui/Context';
 import MarkerStore from 'src/store/MarkerStore';
 import { TGranularity, TQuote } from 'src/types';
 
+type TGetYAxisScalingParams = (options: {
+    is_contract_chart?: boolean;
+    is_mobile?: boolean;
+    ticks_length?: number;
+    yaxis_height?: number;
+}) => {
+    yaxis_margin?: {
+        top?: number;
+        bottom?: number;
+    };
+    height_factor: number;
+};
 type TTransferItem = (item: TSubCategoryDataItem | TSubCategory) => TSubCategoryDataItem | TSubCategory;
 
 export function createObjectFromLocalStorage(key: string) {
@@ -18,7 +30,7 @@ export function createObjectFromLocalStorage(key: string) {
 }
 
 export function getStringValue(p: number | string, pipSize: number) {
-    return (typeof p === 'string') ? p : p.toFixed(pipSize);
+    return typeof p === 'string' ? p : p.toFixed(pipSize);
 }
 
 export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
@@ -138,6 +150,29 @@ export function stxtap(el: HTMLElement, func: EventListenerOrEventListenerObject
         el.addEventListener('stxtap', func);
     }
 }
+
+export const getYAxisScalingParams: TGetYAxisScalingParams = ({
+    is_contract_chart,
+    is_mobile,
+    ticks_length,
+    yaxis_height,
+}) => {
+    let top, bottom;
+    const params = { height_factor: 0.8 };
+    if (!yaxis_height) return params;
+    if (!is_contract_chart) {
+        top = bottom = is_mobile ? yaxis_height * 0.33 : yaxis_height * 0.27;
+    } else if (ticks_length) {
+        const coefficient = ticks_length < 5 ? 0.3 : 0.25;
+        const yaxis_margin_mobile = yaxis_height * coefficient;
+        const yaxis_margin_desktop = yaxis_height * 0.27;
+        top = bottom = is_mobile ? yaxis_margin_mobile : yaxis_margin_desktop;
+    }
+    return {
+        ...params,
+        ...(top && bottom ? { yaxis_margin: { top, bottom } } : {}),
+    };
+};
 
 export function getUTCEpoch(date: Date) {
     return (date.getTime() / 1000 - date.getTimezoneOffset() * 60) | 0;
