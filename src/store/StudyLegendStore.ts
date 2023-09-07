@@ -500,7 +500,7 @@ export default class StudyLegendStore {
             });
             setTimeout(this.updateIndicatorHeight, 20);
         }
-        this.mainStore.state.stateChange(STATE.INDICATORS_CLEAR_ALL, {});
+        this.mainStore.state.stateChange(STATE.INDICATORS_CLEAR_ALL);
     }
     clearStudies() {
         if (this.context) {
