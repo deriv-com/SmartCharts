@@ -1,9 +1,9 @@
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { TSettingsParameter, TSettingsItemGroup, TObject } from 'src/types';
+import { clone } from 'src/utils';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
-import { clone } from 'src/utils';
 
 type TSettingsDialogStoreProps = {
     mainStore: MainStore;
@@ -116,6 +116,7 @@ export default class SettingsDialogStore {
         this.menuStore.setOpen(false);
         if (this.onDeleted) this.onDeleted(this.id);
     }
+
     onItemChange(item: TSettingsParameter, newValue: string | number | boolean | TObject) {
         if (item && item.value !== newValue) {
             item.value = newValue as string | number | boolean;

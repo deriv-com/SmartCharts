@@ -482,7 +482,7 @@ const getTrendlDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     ],
 });
 
-export const defaultdrawToolsConfigs = {
+export const defaultdrawToolsConfigs: TDefaultIndicatorConfigMap = {
     // Keys are mapped to the flutter indicators name. Don't change it.
     vertical: getVerticalDrawingConfig,
     line: getVerticalDrawingConfig,

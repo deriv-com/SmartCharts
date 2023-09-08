@@ -419,6 +419,7 @@ class ChartState {
         saveToLocalStorage(`chart-layout-${id}`, {
             studyItems: layoutData.studyItems,
             crosshair: layoutData.crosshair,
+            // drawTools: layoutData.drawTools,
             msPerPx: layoutData.msPerPx,
         });
     }
@@ -426,7 +427,7 @@ class ChartState {
     // returns false if restoring layout fails
     restoreLayout() {
         const id = this.mainStore.chart.chartId;
-        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
+        const layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
 
         if (!layout) return false;
 
@@ -445,8 +446,9 @@ class ChartState {
         const id = this.mainStore.chart.chartId;
 
         saveToLocalStorage(`chart-layout-${id}`, {
-            drawTools: layoutData.drawTools,
+            // drawTools: layoutData.drawTools,
             crosshair: layoutData.crosshair,
+            studyItems: layoutData.studyItems,
             msPerPx: layoutData.msPerPx,
         });
         // TODO: implement save drawings
@@ -454,11 +456,11 @@ class ChartState {
 
     restoreDrawings() {
         const id = this.mainStore.chart.chartId;
-        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
+        // let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
 
-        if (!layout) return false;
+        // if (!layout) return false;
 
-        this.mainStore.view.restoreLayout(layout);
+        // this.mainStore.view.restoreLayout(layout);
 
         return true;
     }

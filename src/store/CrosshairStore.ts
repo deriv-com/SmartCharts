@@ -228,15 +228,19 @@ class CrosshairStore {
 
     handleDrawing = (selectedDrawingName: string) => {
         switch (selectedDrawingName) {
-            case 'vertical':
+            case 'vertical': {
                 this.setDrawingCount(selectedDrawingName);
                 this.mainStore.drawTools.onCreation('vertical');
+
                 this.onDeletedDrawing();
                 break;
+            }
             case 'line':
                 this.setDrawingCount(selectedDrawingName);
                 if (this.drawingCounter[selectedDrawingName].count === 2) {
                     this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    // const contentWindow = document.querySelector('.chartContainer') as HTMLElement;
+                    // contentWindow.style.pointerEvents = 'none';
                     this.onDeletedDrawing();
                 }
                 break;
@@ -272,20 +276,25 @@ class CrosshairStore {
     selectedDrawingHoverClick = async () => {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
 
-        const contentWindow = document.querySelector('.chartContainer');
+        const contentWindow = document.querySelector('.chartContainer') as HTMLElement;
+
         if (!contentWindow || this.isDrawingRegistered) return;
 
         this.isDrawingRegistered = true;
 
-        contentWindow.addEventListener('mousedown', () => {
-            const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+        contentWindow.addEventListener('mousedown', e => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (contentWindow) {
+                // contentWindow.style.pointerEvents = 'none';
+            }
 
+            const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
             if (!drawTools || drawTools.selectedDrawingTool === null) return;
 
             if (drawTools.drawingToolsRepo._addOns.length === 0) {
                 this.onDeletedDrawing();
             }
-
             const selectedDrawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
                 drawTools.selectedDrawingTool
             );

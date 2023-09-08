@@ -23,6 +23,7 @@ export default class ChartAdapterStore {
     isDataFitModeEnabled = false;
     painter = new Painter();
     clickEventCount = 0;
+    drawingColor = 0;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
@@ -68,13 +69,18 @@ export default class ChartAdapterStore {
                 );
 
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
-
-                const index = this.mainStore.drawTools.onDrawingHover(dx, dy, epoch, quote);
+                this.mainStore.crosshair.selectedDrawingHoverClick();
+                const quoteToY = this.flutterChart?.crosshair.getYFromQuote;
+                const epochToX = this.flutterChart?.crosshair.getXFromEpoch;
+                // const quoteToY = this.flutterChart?.crosshair.getYFromQuote;
+                // console.log(this.msPerPx);
+                const index = this.mainStore.drawTools.onDrawingHover(dx, dy, epoch, quote, quoteToY, epochToX);
                 const drawingRepo = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
                 const handleClickEvent = (e: Event) => {
                     if (this.hoverIndex != null) {
                         e.preventDefault();
-                        this.mainStore.drawTools.onSetting(this.hoverIndex);
+                        e.stopPropagation();
+                        this.mainStore.drawTools.onRightClickSetting(this.hoverIndex);
                     }
                 };
 
@@ -89,23 +95,29 @@ export default class ChartAdapterStore {
                 if (index != null) {
                     this.hoverIndex = index;
                     const item = drawingRepo.drawingToolsRepo._addOns[index];
-                    item.lineStyle.thickness = 3;
+                    item.lineStyle.thickness = 4;
+                    this.drawingColor = item.lineStyle.color.value;
                     item.lineStyle.color.value = 4293532972;
-                    this.mainStore.crosshair.renderDrawingToolToolTip('Vertical', dx, dy);
+                    this.mainStore.crosshair.renderDrawingToolToolTip(
+                        this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(item) || '',
+                        dx,
+                        dy
+                    );
                     if (this.clickEventCount === 0) {
                         this.clickEventCount++;
                         updateEventListener(true);
                     }
-                    // this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(item, index);
+                    this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, index);
                 } else if (this.hoverIndex !== null) {
                     this.hoverIndex = null;
-                    drawingRepo.drawingToolsRepo._addOns.forEach(item => {
-                        item.lineStyle.thickness = 1;
-                        item.lineStyle.color.value = 4278190080;
-
-                        console.log(item);
-                        this.mainStore.crosshair.removeDrawingToolToolTip();
-                    });
+                    drawingRepo.drawingToolsRepo._addOns.forEach(
+                        (item: { lineStyle: { thickness: number; color: { value: number } } }, idx: number) => {
+                            item.lineStyle.thickness = 1;
+                            item.lineStyle.color.value = this.drawingColor;
+                            this.mainStore.crosshair.removeDrawingToolToolTip();
+                            this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, idx);
+                        }
+                    );
                 }
             },
             indicators: {
@@ -122,14 +134,14 @@ export default class ChartAdapterStore {
             },
             drawingTool: {
                 onRemove: (index: number) => {
-                    this.mainStore.studies.deleteStudy(index);
+                    // this.mainStore.drawTools.deleteGroupTool(index);
                 },
                 onEdit: (index: number) => {
-                    this.mainStore.studies.editStudyByIndex(index);
+                    // console.log('From the On Edit', index);
+                    // this.mainStore.studies.editStudyByIndex(index);
                 },
                 onSwap: (index1: number, index2: number) => {
-                    const { activeItems } = this.mainStore.studies;
-                    [activeItems[index1], activeItems[index2]] = [activeItems[index2], activeItems[index1]];
+                    // console.log('swapped');
                 },
             },
         };
@@ -156,7 +168,6 @@ export default class ChartAdapterStore {
 
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
-
         if (e.deltaX === 0 && e.deltaZ === 0) {
             const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);

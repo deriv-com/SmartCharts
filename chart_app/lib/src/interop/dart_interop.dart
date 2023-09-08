@@ -233,8 +233,20 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
 
   setProperty(
     chartConfig,
+    'editDrawing',
+    allowInterop(model.editDrawing),
+  );
+
+  setProperty(
+    chartConfig,
     'clearDrawingTool',
     allowInterop(model.clearDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'clearDrawingToolSelect',
+    allowInterop(model.clearDrawingToolSelect),
   );
 
   setProperty(

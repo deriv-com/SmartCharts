@@ -381,7 +381,17 @@ export type TFlutterChart = {
         clearDrawingTool: () => void;
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
-        getDrawingHover: (dx: number, dy: number, epoch: number, quote: string) => number;
+        getDrawingTools: () => { drawingToolsRepo: {} };
+        getTypeOfSelectedDrawingTool: (config: string) => string;
+        clearDrawingToolSelect: () => void;
+        getDrawingHover: (
+            dx: number,
+            dy: number,
+            epoch: number,
+            quote: string,
+            quoteToY: (qt: number) => number,
+            epochToX: (epch: number) => number
+        ) => number;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;

@@ -172,7 +172,7 @@ export default class ViewStore {
             }
             this.mainStore.state.setChartIsReady(true);
 
-            if (layout.granularity != undefined) {
+            if (layout.granularity !== undefined) {
                 this.mainStore.timeperiod.setGranularity(layout.granularity);
             }
         };
@@ -185,7 +185,7 @@ export default class ViewStore {
 
         this.mainStore.state.setChartIsReady(false);
 
-        if (layout.chartType != undefined) {
+        if (layout.chartType !== undefined) {
             this.mainStore.chartType.setChartType(layout.chartType);
         }
         this.menuStore.setOpen(false);
@@ -193,6 +193,8 @@ export default class ViewStore {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
 
         this.mainStore.studies.restoreStudies(layout.studyItems || []);
+
+        this.mainStore.drawTools.restoreDrawings(layout.drawTools || []);
 
         if (typeof layout.crosshair === 'number') {
             this.mainStore.crosshair.setCrosshairState(layout.crosshair);

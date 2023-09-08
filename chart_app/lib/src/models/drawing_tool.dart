@@ -68,11 +68,33 @@ class DrawingToolModel {
       return 'ray';
     } else if (config is ContinuousDrawingToolConfig) {
       return 'continuous';
-    } else if (config is TrendDrawingToolConfig) {
-      return 'trend';
+      // } else if (config is TrendDrawingToolConfig) {
+      //   return 'trend';
+      // }
     } else {
       return 'nil';
     }
+  }
+
+  /// To add a drawing
+  // void addDrawing(String dataString, int? index) {
+  void editDrawing(DrawingToolConfig drawingToolConfig, int? index) {
+    if (index != null) {
+      final DrawingToolConfig config = drawingToolConfig.copyWith(
+          configId:
+              drawingTools.drawingToolsRepo!.items[index].toJson()['configId'],
+          edgePoints: drawingTools.drawingToolsRepo!.items[index]
+              .toJson()['edgePoints'],
+          drawingData: drawingTools.drawingToolsRepo!.items[index]
+              .toJson()['drawingData']);
+
+      drawingTools.drawingToolsRepo!.updateAt(index, config);
+    }
+  }
+
+  ///
+  void clearDrawingToolSelect() {
+    drawingTools.clearDrawingToolSelection();
   }
 
   /// To clear all drawing tool
@@ -82,9 +104,11 @@ class DrawingToolModel {
   }
 
   ///
-  int? getDrawingHover(int dx, int dy, int epoch, String quote) {
+  int? getDrawingHover(int dx, int dy, int epoch, String quote,
+      double Function(double) quoteToY, int Function(double) epochToX) {
     for (int i = 0; i < drawingToolsRepo.items.length; i++) {
       final DrawingToolConfig config = drawingTools.drawingToolsRepo!.items[i];
+
       if (config is VerticalDrawingToolConfig) {
         if ((epoch - config.edgePoints[0].epoch).abs() < 5000) {
           return i;
@@ -112,18 +136,33 @@ class DrawingToolModel {
           return i;
         }
       } else if (config is ContinuousDrawingToolConfig &&
-          config.edgePoints.length > 1) {}
+          config.edgePoints.length > 1) {
+        final Iterable<ContinuousDrawingToolConfig> continuousList =
+            drawingTools.drawingToolsRepo!.items
+                .whereType<ContinuousDrawingToolConfig>();
+        final Path path = Path();
+
+        // ignore: cascade_invocations
+        path.moveTo(continuousList.first.edgePoints[0].epoch as double,
+            continuousList.first.edgePoints[0].quote);
+
+        for (final ContinuousDrawingToolConfig point in continuousList) {
+          path
+            ..lineTo(
+                point.edgePoints[0].epoch as double, point.edgePoints[0].quote)
+            ..lineTo(
+                point.edgePoints[1].epoch as double, point.edgePoints[1].quote);
+        }
+        path.close();
+        if (path.contains(Offset(epoch as double, double.parse(quote)))) {
+          return i;
+        }
+      }
     }
 
     return null;
   }
 }
-
-/// if hover is on line of drawing; Vertical
-// bool isHoverOnLine(Offset linePosition, Offset hoverPosition,
-//     {double tolerance = 4000}) {
-//   return (hoverPosition.dx - linePosition.dx).abs() < tolerance;
-// }
 
 /// Line Drawing
 bool isHoverOnInfiniteLine(
