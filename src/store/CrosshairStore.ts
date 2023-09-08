@@ -380,7 +380,8 @@ class CrosshairStore {
                         if (stx.chart.xAxis.noDraw) {
                             continue;
                         } else {
-                            fieldValue = floatDate.innerHTML;
+                            const formattedTime = floatDate.innerHTML.replace(/(\d{2})\/(\d{2})/, '$2/$1,');
+                            fieldValue = formattedTime;
                         }
                     } else {
                         fieldValue = CIQ.yyyymmdd(dsField);
