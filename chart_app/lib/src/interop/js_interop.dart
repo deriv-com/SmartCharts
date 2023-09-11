@@ -50,7 +50,7 @@ class JsLoadHistoryReq {
   external int end;
 }
 
-@JS()
+@JS() 
 @anonymous
 
 /// Payload for new chart init

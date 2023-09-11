@@ -34,7 +34,13 @@ type TCrosshairRefs = {
 };
 
 const MAX_TOOLTIP_WIDTH = 315;
-const initialDrawingClick = {
+
+interface DrawingCounter {
+    [key: string]: { count: number };
+}
+
+
+const initialDrawingClick:DrawingCounter = {
     vertical: { count: 0 },
     ray: { count: 0 },
     trend: { count: 0 },
@@ -313,6 +319,30 @@ class CrosshairStore {
 
             const parentDiv = document.createElement('div');
             parentDiv.classList.add('draw-tool-tooltip', 'mSticky');
+            parentDiv.classList.add('indicator-tooltip', 'mSticky');
+            parentDiv.style.display = 'inline-block';
+            parentDiv.style.position = 'absolute';
+            parentDiv.style.top = `${dy - 100}px`;
+            parentDiv.style.left = `${dx - 150}px`;
+
+            parentDiv.innerHTML = `
+                    <span class='mStickyInterior' style='display:inline-block'>${name}</span>
+                    <span class='mouseDeleteInstructions'>Right click to manage</span>
+        `;
+
+            chartContainer?.appendChild(parentDiv);
+        }}
+
+
+    renderIndicatorToolTip = (name: string, dx: number, dy: number) => {
+        if (document.getElementsByClassName('indicator-tooltip').length === 0) {
+            const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
+                '.chartContainer'
+            );
+
+            const parentDiv = document.createElement('div');
+            parentDiv.classList.add('draw-tool-tooltip', 'mSticky');
+            parentDiv.classList.add('indicator-tooltip', 'mSticky');
             parentDiv.style.display = 'inline-block';
             parentDiv.style.position = 'absolute';
             parentDiv.style.top = `${dy - 100}px`;
@@ -326,13 +356,18 @@ class CrosshairStore {
             chartContainer?.appendChild(parentDiv);
         }
     };
-
+    
     removeDrawingToolToolTip = () => {
         if (document.getElementsByClassName('draw-tool-tooltip').length > 0) {
             document.getElementsByClassName('draw-tool-tooltip')[0].remove();
         }
     };
 
+    removeIndicatorToolTip = () => {
+        if (document.getElementsByClassName('indicator-tooltip').length > 0) {
+            document.getElementsByClassName('indicator-tooltip')[0].remove();
+        }
+    };
     calculateRows(data: TQuote) {
         const dupMap = {} as TDupMap;
         const fields: {

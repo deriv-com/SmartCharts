@@ -9,10 +9,16 @@ import {
     TSettings,
 } from 'src/types';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
+import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
-import { calculateTimeUnitInterval, createObjectFromLocalStorage, saveToLocalStorage } from '../utils';
+import {
+    calculateTimeUnitInterval,
+    createObjectFromLocalStorage,
+    saveToLocalStorage,
+    getYAxisScalingParams,
+} from '../utils';
 import ChartStore from './ChartStore';
 
 type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
@@ -21,6 +27,7 @@ class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
     shouldDrawTicksFromContractInfo? = false;
+    has_updated_settings = false;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -29,6 +36,7 @@ class ChartState {
     startEpoch?: number;
     endEpoch?: number;
     symbol?: string;
+    heightFactor?: number;
     isConnectionOpened? = false;
     isChartReady = false;
     chartStatusListener?: (isChartReady: boolean) => boolean;
@@ -88,6 +96,8 @@ class ChartState {
             startEpoch: observable,
             endEpoch: observable,
             symbol: observable,
+            has_updated_settings: observable,
+            heightFactor: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
@@ -152,6 +162,7 @@ class ChartState {
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
         should_show_eu_content,
+        should_zoom_out_on_yaxis,
         allTicks = [],
         contractInfo = {},
         showLastDigitStats = false,
@@ -197,6 +208,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
         this.margin = margin;
+        this.has_updated_settings = !isDeepEqual(this.settings?.whitespace, settings?.whitespace);
         this.settings = settings;
         this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
@@ -317,6 +329,20 @@ class ChartState {
                 ...this.yAxisMargin,
                 ...yAxisMargin,
             };
+        }
+
+        if (should_zoom_out_on_yaxis) {
+            const { height_factor, yaxis_margin } = getYAxisScalingParams({
+                is_contract_chart: shouldDrawTicksFromContractInfo,
+                is_mobile: this.mainStore.chart.isMobile,
+                ticks_length: this.mainStore.chart.feed?.quotes.length,
+                yaxis_height: this.mainStore.chart.chartContainerHeight,
+            });
+            this.yAxisMargin = {
+                ...this.yAxisMargin,
+                ...yaxis_margin,
+            };
+            this.heightFactor = height_factor;
         }
 
         if (enableScroll !== null && this.enableScroll !== enableScroll) {

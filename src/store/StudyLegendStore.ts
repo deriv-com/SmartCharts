@@ -112,9 +112,10 @@ export default class StudyLegendStore {
     }
 
     transform = (value: any) => {
-        if (typeof value == 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+        if (typeof value === 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
             return hexToInt(value);
-        } else if (isLiteralObject(value)) {
+        }
+        if (isLiteralObject(value)) {
             const map = value as Record<string, any>;
             Object.keys(value).forEach(key => {
                 map[key] = this.transform(map[key]);
@@ -148,7 +149,7 @@ export default class StudyLegendStore {
         const config: TIndicatorConfig = {
             id: activeItem.id,
             name: activeItem.flutter_chart_id,
-            title: (activeItem.shortname + (activeItem.bars ? ` (${activeItem.bars})` : '')).toUpperCase(),
+            title: (activeItem.short_name_and_index + (activeItem.bars ? ` (${activeItem.bars})` : '')).toUpperCase(),
             ...this.transform(params),
         };
 
@@ -170,8 +171,13 @@ export default class StudyLegendStore {
             parameters.map(p => (p.value = clone(p.defaultValue)));
             const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
 
+            const lastGroupItem = this.findLastActiveItem(props.flutter_chart_id);
+            const group_length = lastGroupItem ? lastGroupItem.group_length + 1 : 0;
+
             const item: TActiveItem = {
                 ...props,
+                group_length,
+                short_name_and_index: props.short_name + (group_length ? ` ${group_length}` : ''),
                 id: getUniqueId(),
                 config,
                 parameters,
@@ -263,16 +269,20 @@ export default class StudyLegendStore {
 
         if (props && parameters) {
             const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
+            const index = this.activeItems.findIndex(item => item.id === this.settingsDialog.id);
+            const currentActiveItem = this.activeItems[index];
 
             const item: TActiveItem = {
                 ...props,
+                short_name_and_index:
+                    props.short_name + (currentActiveItem.group_length ? ` ${currentActiveItem.group_length}` : ''),
+                group_length: currentActiveItem.group_length,
                 id: this.settingsDialog.id,
                 bars: nameObj.bars,
                 parameters,
                 config,
             };
 
-            const index = this.activeItems.findIndex(item => item.id === this.settingsDialog.id);
             this.activeItems[index] = item;
 
             this.addOrUpdateIndicator(item, index);
@@ -334,5 +344,13 @@ export default class StudyLegendStore {
     }
     updatePortalNode(portalNodeId?: string) {
         this.portalNodeIdChanged = portalNodeId;
+    }
+
+    findLastActiveItem(flutter_chart_id: string) {
+        for (let i = this.activeItems.length - 1; i >= 0; i--) {
+            if (this.activeItems[i].flutter_chart_id === flutter_chart_id) {
+                return this.activeItems[i];
+            }
+        }
     }
 }

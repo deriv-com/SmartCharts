@@ -37,7 +37,7 @@ class DrawingToolModel {
   /// To add a drawing
   // void addDrawing(String dataString, int? index) {
   void addOrUpdateDrawing(String dataString, int? index) {
-    final Map<String, dynamic> config = json.decode(dataString)..remove('id');
+    final Map<String, dynamic> config = json.decode(dataString);
 
     DrawingToolConfig? drawingToolConfig = DrawingToolConfig.fromJson(config);
 
@@ -46,7 +46,7 @@ class DrawingToolModel {
           configId: drawingToolsRepo.items[index].toJson()['configId'],
           edgePoints: drawingToolsRepo.items[index].toJson()['edgePoints'],
           drawingData: drawingToolsRepo.items[index].toJson()['drawingData']);
-
+          
       drawingTools.drawingToolsRepo!.updateAt(index, drawingToolConfig);
     } else {
       drawingTools.onDrawingToolSelection(drawingToolConfig);
@@ -68,9 +68,8 @@ class DrawingToolModel {
       return 'ray';
     } else if (config is ContinuousDrawingToolConfig) {
       return 'continuous';
-      // } else if (config is TrendDrawingToolConfig) {
-      //   return 'trend';
-      // }
+    } else if (config is TrendDrawingToolConfig) {
+      return 'trend';
     } else {
       return 'nil';
     }

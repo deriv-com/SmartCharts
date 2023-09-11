@@ -4,7 +4,7 @@ import { TIcon, TSettingsParameter } from 'src/types';
 import set from 'lodash.set';
 import { capitalize, hexToInt } from 'src/components/ui/utils';
 import MainStore from '.';
-import { defaultdrawToolsConfigs, getDrawTools } from '../Constant';
+import { defaultdrawToolsConfigs, getDefaultDrawingConfig, getDrawTools } from '../Constant';
 import { clone, formatCamelCase, isLiteralObject } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -35,6 +35,11 @@ type TDrawObject = {
     };
     id: string;
     name: string;
+};
+
+type TDrawConfig = {
+    lineStyle: { color: { value: number } };
+    fillStyle?: { color: { value: number } };
 };
 
 type TDrawingObject = {
@@ -210,7 +215,7 @@ export default class DrawToolsStore {
             let title = formatCamelCase(drawing.name || '');
 
             const parameters = defaultdrawToolsConfigs[drawing.id]().parameters;
-            parameters.map((p: { value: string; defaultValue: string }) => (p.value = clone(p.defaultValue)));
+            parameters.map(p => (p.value = clone(p.defaultValue)));
 
             title = `${drawing.title} ${drawing.num || ''}`;
 
@@ -298,12 +303,14 @@ export default class DrawToolsStore {
 
     // The common function (now only responsible for creating finalItem)
     processDrawTool(id: string) {
-        const props = getDrawTools()[id];
-        const { parameters, config } = defaultdrawToolsConfigs[id]();
+        const drawToolsConfig = getDrawTools();
+        const props = drawToolsConfig[id];
+
+        const { parameters, config } = getDefaultDrawingConfig(id);
         let finalItem = null;
 
         if (props && parameters) {
-            parameters.map((p: { value: any; defaultValue: any }) => (p.value = clone(p.defaultValue)));
+            parameters.map(p => (p.value = clone(p.defaultValue)));
 
             const item = {
                 config,
@@ -312,7 +319,7 @@ export default class DrawToolsStore {
                 ...props,
             };
 
-            const params = item.parameters.reduce((acc: any, it: { path: any; paths: any; value: any }) => {
+            const params = item.parameters.reduce((acc, it) => {
                 const { path, paths, value } = it;
 
                 if (isLiteralObject(value) && paths) {
@@ -382,17 +389,30 @@ export default class DrawToolsStore {
             }, itemm.config || {});
 
             const tools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-            const selectedConfig = tools.drawingToolsRepo._addOns[this.settingsDialog.id];
-            const transformedParams = this.transform(params);
-            selectedConfig.lineStyle.color.value = transformedParams.lineStyle.color;
-            this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(selectedConfig, this.settingsDialog.id);
+            if (tools) {
+                const selectedConfig: TDrawConfig = tools.drawingToolsRepo._addOns[parseInt(this.settingsDialog.id)];
 
-            ///
-            const activeToolsGroup = [...this.activeToolsGroup];
-            const selectedGroup = activeToolsGroup.find(item => item.id === this.settingsDialog.drawing_tool_id);
-            const selectedItem = selectedGroup?.items.find(group => group.index === parseInt(this.settingsDialog.id));
-            if (selectedItem && selectedItem.parameters) {
-                selectedItem.parameters = parameters;
+                const transformedParams = this.transform(params);
+
+                selectedConfig.lineStyle.color.value = transformedParams.lineStyle.color;
+                if (selectedConfig.fillStyle) {
+                    selectedConfig.fillStyle.color.value = transformedParams.fillStyle.color;
+                }
+
+                this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
+                    { ...selectedConfig, ...transformedParams },
+                    parseInt(this.settingsDialog.id)
+                );
+
+                ///
+                const activeToolsGroup = [...this.activeToolsGroup];
+                const selectedGroup = activeToolsGroup.find(item => item.id === this.settingsDialog.drawing_tool_id);
+                const selectedItem = selectedGroup?.items.find(
+                    group => group.index === parseInt(this.settingsDialog.id)
+                );
+                if (selectedItem && selectedItem.parameters) {
+                    selectedItem.parameters = parameters;
+                }
             }
         }
     }

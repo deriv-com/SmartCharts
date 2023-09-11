@@ -109,12 +109,14 @@ export type TSettings = {
     historical?: boolean;
     lang?: string;
     language?: string;
+    minimumLeftBars?: number;
     position?: string;
     enabledNavigationWidget?: boolean;
     isAutoScale?: boolean;
     isHighestLowestMarkerEnabled?: boolean;
     theme?: string;
     activeLanguages?: Array<string | TLanguage> | null;
+    whitespace?: number;
 };
 
 export type TStateChangeListener = (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
@@ -166,6 +168,7 @@ export type TChartProps = {
     feedCall?: { activeSymbols?: boolean; tradingTimes?: boolean };
     granularity?: TGranularity;
     chartType?: string;
+    should_zoom_out_on_yaxis?: boolean;
     startEpoch?: number;
     endEpoch?: number;
     chartControlsWidgets?: TChartControlsWidgets;
@@ -311,7 +314,7 @@ export type TIndicatorItem = {
     isPrediction?: boolean;
     flutter_chart_id: string;
     name: string;
-    shortname: string;
+    short_name: string;
 };
 
 export type TActiveItem = TIndicatorItem & {
@@ -319,7 +322,8 @@ export type TActiveItem = TIndicatorItem & {
     config?: Record<string, any>;
     parameters: TSettingsParameter[];
     bars?: string;
-    key?: string;
+    short_name_and_index: string;
+    group_length: number;
 };
 
 export type TNewChartPayload = {
@@ -346,6 +350,13 @@ export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
+        getIndicatorHoverIndex: (
+            x: number,
+            y: number,
+            getClosestEpoch: ((epoch: number, granularity: number) => number) | undefined,
+            granularity: number,
+            _indicatorIndex: number | undefined
+        ) => number | null;
         getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;
@@ -381,9 +392,10 @@ export type TFlutterChart = {
         clearDrawingTool: () => void;
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
-        getDrawingTools: () => { drawingToolsRepo: {} };
+        getDrawingTools: () => { drawingToolsRepo: { _addOns: [] }; selectedDrawingTool: any };
         getTypeOfSelectedDrawingTool: (config: string) => string;
         clearDrawingToolSelect: () => void;
+        editDrawing: (config: {}, index: number) => void;
         getDrawingHover: (
             dx: number,
             dy: number,
