@@ -309,7 +309,7 @@ export type TIndicatorItem = {
     isPrediction?: boolean;
     flutter_chart_id: string;
     name: string;
-    shortname: string;
+    short_name: string;
 };
 
 export type TActiveItem = TIndicatorItem & {
@@ -317,6 +317,8 @@ export type TActiveItem = TIndicatorItem & {
     config?: Record<string, any>;
     parameters: TSettingsParameter[];
     bars?: string;
+    short_name_and_index: string;
+    group_length: number;
 };
 
 export type TNewChartPayload = {
@@ -343,6 +345,13 @@ export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
+        getIndicatorHoverIndex: (
+            x: number,
+            y: number,
+            getClosestEpoch: ((epoch: number, granularity: number) => number) | undefined,
+            granularity: number,
+            _indicatorIndex: number | undefined
+        ) => number | null;
         getTooltipContent: (epoch: number, pipSize: number) => TIndicatorTooltipContent[];
         getXFromEpoch: (epoch: number) => number;
         getYFromQuote: (quote: number) => number;

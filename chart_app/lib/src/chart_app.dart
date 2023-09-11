@@ -98,4 +98,30 @@ class ChartApp {
     }
     return configModel.granularity;
   }
+
+  /// Gets the hover index for indicator series
+  int? getIndicatorHoverIndex(double x, double y, Function getClosestEpoch,
+      int granularity, int bottomIndicatorIndex) {
+    final List<Series> seriesList =
+        wrappedController.getChartController().getSeriesList?.call() ??
+            <Series>[];
+    final List<IndicatorConfig> indicatorConfigsList =
+        wrappedController.getChartController().getConfigsList != null
+            ? wrappedController.getChartController().getConfigsList!.call()
+                as List<IndicatorConfig>
+            : <IndicatorConfig>[];
+
+    final int? value = indicatorsModel.getIndicatorHoverIndex(
+      seriesList,
+      indicatorConfigsList,
+      wrappedController,
+      getClosestEpoch,
+      granularity,
+      x,
+      y,
+      bottomIndicatorIndex,
+    );
+
+    return value;
+  }
 }

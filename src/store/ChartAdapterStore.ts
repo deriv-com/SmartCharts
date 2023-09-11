@@ -3,7 +3,24 @@ import moment from 'moment';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
+import { clone } from 'src/utils';
 import MainStore from '.';
+
+// Define the throttle function
+function throttle<T extends (...args: any[]) => any>(func: T, delay: number): T {
+    let lastCall = 0;
+
+    return ((...args: any[]) => {
+        const now = new Date().getTime();
+
+        if (now - lastCall < delay) {
+            return;
+        }
+
+        lastCall = now;
+        return func(...args);
+    }) as T;
+}
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
@@ -19,8 +36,12 @@ export default class ChartAdapterStore {
     };
     isFeedLoaded = false;
     msPerPx?: number;
+    hoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
     painter = new Painter();
+    clickEventCount = 0;
+    isScaled = false;
+    previousHoverIndex: number | undefined | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -48,6 +69,102 @@ export default class ChartAdapterStore {
         this.initFlutterCharts();
     }
 
+    crossHover = (
+        dx: number,
+        dy: number,
+        dxLocal: number,
+        dyLocal: number,
+        bottomIndicatorIndex: number | undefined
+    ) => {
+        const setIndicator = (item: any, index: number) => {
+            this.mainStore.studies.addOrUpdateIndicator(item, index);
+        };
+
+        const activeItems = this.mainStore.studies.activeItems;
+
+        // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
+        const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
+        const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
+            this.mainStore.crosshair.decimalPlaces
+        );
+        const handleClickEvent = (e: Event) => {
+            if (this.hoverIndex != null) {
+                e.preventDefault();
+                this.mainStore.studies.editStudyByIndex(this.hoverIndex);
+            }
+        };
+
+        function updateEventListener(condition: boolean) {
+            if (condition) {
+                document.getElementsByClassName('chartContainer')[0].addEventListener('contextmenu', handleClickEvent);
+            } else {
+                document
+                    .getElementsByClassName('chartContainer')[0]
+                    .removeEventListener('contextmenu', handleClickEvent);
+            }
+        }
+
+        this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+        const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
+        const granularity = this.mainStore.chartAdapter.getGranularityInMs();
+
+        const indicatorHoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
+            dxLocal,
+            dyLocal,
+            getClosestEpoch,
+            granularity,
+            bottomIndicatorIndex
+        );
+        if (this.isScaled) {
+            this.isScaled = false;
+        } else {
+            this.hoverIndex = indicatorHoverIndex;
+        }
+
+        if (this.previousHoverIndex === this.hoverIndex) {
+            return;
+        }
+
+        if (indicatorHoverIndex != null) {
+            const item = clone(activeItems[indicatorHoverIndex]);
+
+            if (item && item.config) {
+                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+                for (const key in item.config) {
+                    if (key.includes('Style')) {
+                        item.config[key].thickness = 2;
+                        if (key === 'scatterStyle') {
+                            item.config[key].radius = 2.5;
+                        }
+                    }
+
+                    if (key.includes('Styles')) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        item.config[key].forEach((element: any) => {
+                            element.thickness = 2;
+                        });
+                    }
+                }
+                if (this.clickEventCount === 0) {
+                    this.clickEventCount++;
+                    updateEventListener(true);
+                }
+            }
+            setIndicator(item, indicatorHoverIndex);
+        }
+        if (
+            this.previousHoverIndex != null &&
+            this.previousHoverIndex >= 0 &&
+            this.previousHoverIndex < activeItems.length
+        ) {
+            const item = activeItems[this.previousHoverIndex];
+            this.mainStore.crosshair.removeIndicatorToolTip();
+            setIndicator(item, this.previousHoverIndex);
+        }
+
+        this.previousHoverIndex = indicatorHoverIndex;
+    };
+
     initFlutterCharts() {
         window.jsInterop = {
             onChartLoad: this.onChartLoad,
@@ -58,15 +175,10 @@ export default class ChartAdapterStore {
             onCrosshairDisappeared: () => {
                 this.mainStore.crosshair.updateVisibility(false);
             },
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            onCrosshairHover: (dx, dy, dxLocal, dyLocal, _indicatorIndex) => {
-                // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
-                const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
-                const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
-                    this.mainStore.crosshair.decimalPlaces
-                );
+            onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
+                const throttledUpdate = throttle(this.crossHover, 10);
 
-                this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+                throttledUpdate(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
                 onRemove: (index: number) => {
@@ -221,6 +333,10 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
+        if (this.hoverIndex !== null) {
+            this.isScaled = true;
+        }
+
         this.isDataFitModeEnabled = false;
         const msPerPx = this.flutterChart?.app.scale(scale);
 
