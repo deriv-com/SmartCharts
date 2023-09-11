@@ -159,6 +159,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     );
   }
 
+  DrawingTools drawingTool = DrawingTools();
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -246,6 +247,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         isMobile: app.configModel.isMobile,
                       ),
                       drawingToolsRepo: indicatorsModel.drawingToolsRepo,
+                      drawingTools: drawingTool,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,
                       dataFitEnabled: configModel.startWithDataFitMode,
                       showCrosshair: configModel.showCrosshair,

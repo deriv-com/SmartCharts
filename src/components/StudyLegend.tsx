@@ -118,7 +118,7 @@ const IndicatorList = ({
                     <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
-                            <span>{onDeleteItem ? Item.shortname : Item.name}</span>
+                            <span>{onDeleteItem ? Item.short_name_and_index : Item.name}</span>
                             {Item.bars && <small>({Item.bars})</small>}
                         </div>
                     </div>

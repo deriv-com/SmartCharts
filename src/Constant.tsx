@@ -168,7 +168,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'AwesomeOscillator',
                 name: t.translate('Awesome Oscillator'),
-                shortname: t.translate('Awesome'),
+                short_name: t.translate('Awesome'),
                 description: t.translate(
                     "The Awesome Oscillator is an indicator used to measure market momentum. AO calculates the difference of a 34 Period and 5 Period Simple Moving Averages. The Simple Moving Averages that are used are not calculated using closing price but rather each bar's midpoints. AO is generally used to affirm trends or to anticipate possible reversals."
                 ),
@@ -178,7 +178,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'dpo',
                 name: t.translate('Detrended Price Oscillator'),
-                shortname: t.translate('Detrended'),
+                short_name: t.translate('Detrended'),
                 description: t.translate(
                     'The Detrended Price Oscillator (DPO) helps to identify price cycles without the influence of short- and long-term trends. The DPO compares a simple moving average to a historical pricenear the middle of a specified period. It also shows the peaks and drops over that particular period, making it easier to predict buy points.'
                 ),
@@ -187,7 +187,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'gator',
                 name: t.translate('Gator Oscillator'),
-                shortname: t.translate('Gator'),
+                short_name: t.translate('Gator'),
                 description: t.translate(
                     'The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligator indicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase (absence of a trend) is when the bars on both sides are red. The awakening phase (formation of a trend) is when there are red and green bars on both sides. When there are green bars on both sides, it indicates the eating phase (trend strengthening). A solitary red bar appearing after the eating phase indicates the beginning of the sated phase (trend approaching its end).'
                 ),
@@ -197,7 +197,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'macd',
                 name: t.translate('MACD'),
-                shortname: t.translate('MACD'),
+                short_name: t.translate('MACD'),
                 description: t.translate(
                     "MACD is a trading indicator used in technical analysis of stock prices. It is supposed to reveal changes in the strength, direction, momentum, and duration of a trend in a stock's price."
                 ),
@@ -206,7 +206,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'ROC',
                 name: t.translate('Price Rate of Change'),
-                shortname: t.translate('Price ROC'),
+                short_name: t.translate('Price ROC'),
                 description: t.translate(
                     'The Price Rate-of-Change (ROC) indicator displays the difference between the current price and the price x-time periods ago. The difference can be displayed in either points or as a percentage.'
                 ),
@@ -215,7 +215,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'RSI',
                 name: t.translate('Relative Strength Index (RSI)'),
-                shortname: t.translate('RSI'),
+                short_name: t.translate('RSI'),
                 description: t.translate(
                     'The Relative Strength Index (RSI) was published by J. Welles Wilder. The current price is normalized as a percentage between 0 and 100. The flutter_chart_id of this oscillator is misleading because it does not compare the instrument relative to another instrument or set of instruments, but rather represents the current price relative to other recent pieces within the selected lookback window length.'
                 ),
@@ -224,7 +224,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'StochasticOscillator',
                 name: t.translate('Stochastic Oscillator'),
-                shortname: t.translate('Stochastic'),
+                short_name: t.translate('Stochastic'),
                 description: t.translate(
                     "A technical momentum indicator that compares a security's closing price to its price range over a given time period. The oscillator's sensitivity to market movements can be reduced by adjusting the time period or by taking a moving average of the result."
                 ),
@@ -234,7 +234,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'SMI',
                 name: t.translate('Stochastic Momentum Index'),
-                shortname: t.translate('Stch Mtm'),
+                short_name: t.translate('Stch Mtm'),
                 description: t.translate(
                     'The Stochastic Momentum Index (SMI) helps to identify overbought or oversold conditions in the market and to predict bearish or bullish trends. It calculates the distance between the current closing price and the median of the high/low range, and displays 2 lines on the chart: the first (known as %K) represents the price movement while the second (known as %D) is a moving average of the first line. If the closing price is higher than the median of the high/low range, the SMI returns a positive value. If the closing price is lower than the average price, a negative value is returned. Values above 40 indicate a bullish trend while values below -40 indicate a bearish trend.'
                 ),
@@ -243,7 +243,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'WilliamsR',
                 name: t.translate("William's Percent Range"),
-                shortname: t.translate("William's %R"),
+                short_name: t.translate("William's %R"),
                 description: t.translate(
                     'Developed by Larry Williams, Williams %R is a momentum indicator that is the inverse of the Fast Stochastic Oscillator. Also referred to as %R, Williams %R reflects the level of the close relative to the highest high for the look-back period.'
                 ),
@@ -260,7 +260,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'Aroon',
                 name: t.translate('Aroon'),
-                shortname: t.translate('Aroon'),
+                short_name: t.translate('Aroon'),
                 description: t.translate(
                     'Developed by Tushar Chande in 1995, Aroon is an indicator system that determines whether a stock is trending or not and how strong the trend is. There are two separate indicators: Aroon-Up and Aroon-Down. A 25-day Aroon-Up measures the number of days since a 25-day high. A 25-day Aroon-Down measures the number of days since a 25-day low.'
                 ),
@@ -269,7 +269,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'adx',
                 name: t.translate('ADX/DMS'),
-                shortname: t.translate('ADX'),
+                short_name: t.translate('ADX'),
                 description: t.translate(
                     'The Average Directional Movement Index index (ADX) was developed in 1978 by J. Welles Wilder as an indicator of trend strength in a series of prices of a financial instrument ADX will range between 0 and 100. Generally, ADX readings below 20 indicate trend weakness, and readings above 40 indicate trend strength.'
                 ),
@@ -279,7 +279,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'commodity_channel_index',
                 name: t.translate('Commodity Channel Index'),
-                shortname: t.translate('CCI'),
+                short_name: t.translate('CCI'),
                 description: t.translate(
                     'The Commodity Channel Index (CCI) is a versatile indicator that can be used to identify a new trend or warn of extreme conditions.'
                 ),
@@ -289,7 +289,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'ichimoku',
                 name: t.translate('Ichimoku Clouds'),
-                shortname: t.translate('Ichimoku Clouds'),
+                short_name: t.translate('Ichimoku Clouds'),
                 description: t.translate(
                     'The Ichimoku Cloud, also known as Ichimoku Kinko Hyo, is a versatile indicator that defines support and resistance, identifies trend direction, gauges momentum and provides trading signals. Ichimoku Kinko Hyo translates into “one look equilibrium chart”.'
                 ),
@@ -299,7 +299,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'ParabolicSAR',
                 name: t.translate('Parabolic SAR'),
-                shortname: t.translate('PSAR'),
+                short_name: t.translate('PSAR'),
                 description: t.translate(
                     'The parabolic SAR is calculated almost independently for each trend in the price. When the price is in an uptrend, the SAR emerges below the price and converges upwards towards it. Similarly, on a downtrend, the SAR emerges above the price and converges downwards. At each step within a trend, the SAR is calculated one period in advance.'
                 ),
@@ -309,7 +309,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'zigzag',
                 name: t.translate('Zig Zag'),
-                shortname: t.translate('Zig Zag'),
+                short_name: t.translate('Zig Zag'),
                 description: t.translate(
                     'Zig Zag helps to identify trend reversals and filters out relatively small price movements by determining the support and resistance levels of the market. It accepts a percentage of deviation as the input and displays a line if the price change is larger than the percentage of deviation. Zig Zag ignores any sideways movement and is useful to filter out “market noise”.'
                 ),
@@ -326,7 +326,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'bollinger_bands',
                 name: t.translate('Bollinger Bands'),
-                shortname: t.translate('Bollinger Bands'),
+                short_name: t.translate('Bollinger Bands'),
                 description: t.translate(
                     'Bollinger Bands can be used to measure the highness or lowness of the price relative to previous trades.'
                 ),
@@ -335,7 +335,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'donchian_channel',
                 name: t.translate('Donchian Channel'),
-                shortname: t.translate('Donchian Channel'),
+                short_name: t.translate('Donchian Channel'),
                 description: t.translate(
                     'The Donchian Channel is an indicator used in market trading developed by Richard Donchian. It is formed by taking the highest high and the lowest low of the last n periods. The area between the high and the low is the channel for the period chosen.'
                 ),
@@ -352,7 +352,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'moving_average',
                 name: t.translate('Moving Average (MA)'),
-                shortname: t.translate('MA'),
+                short_name: t.translate('MA'),
                 description: t.translate(
                     'The Moving Average (MA) helps to identify the overall market trend by filtering out short-term price fluctuations. Using historical data, it calculates the average price over a specific period and plots a line on the chart. If the MA line moves upwards, it’s an indicator of an uptrend, a downtrend if it moves downwards. A buy signal occurs when the price moves above the MA line.'
                 ),
@@ -361,7 +361,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'moving_envelope_average',
                 name: t.translate('Moving Average Envelope'),
-                shortname: t.translate('MA Env'),
+                short_name: t.translate('MA Env'),
                 description: t.translate(
                     'The Moving Average Envelope (MAE) helps to identify strong price movement that indicates the start of a trend. The MAE creates a moving average line as well as 2 bands around it. In theory, when the market price touches the upper or lower bands, a trend reversal will occur, indicating a buy signal.'
                 ),
@@ -371,7 +371,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'rainbow',
                 name: t.translate('Rainbow Moving Average'),
-                shortname: t.translate('Rainbow MA'),
+                short_name: t.translate('Rainbow MA'),
                 description: t.translate(
                     'The Rainbow Moving Average (RMA) displays several moving average lines simultaneously. When the lines intersect, it’s an indicator of price reversal and the angle of the lines are helpful to predict the trend strength. The steeper the curve, the stronger the trend. When the price crosses the moving average lines from below, it signals an upward trend. When the price crosses the moving average lines from above, it signals a downward trend. The RMA is easier to use compared to using several different moving average indicators at once.'
                 ),
@@ -388,7 +388,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'alligator',
                 name: t.translate('Alligator'),
-                shortname: t.translate('Alligator'),
+                short_name: t.translate('Alligator'),
                 description: t.translate(
                     'Bill Williams introduced the Alligator indicator in 1995. The Alligator is as much a metaphor as it is an indicator. It consists of three lines, overlaid on a pricing chart, that represent the jaw, the teeth and the lips of the beast, and was created to help the trader confirm the presence of a trend and its direction. The Alligator indicator can also help traders designate impulse and corrective wave formations, but the tool works best when combined with a momentum indicator.'
                 ),
@@ -398,7 +398,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
             {
                 flutter_chart_id: 'fcb',
                 name: t.translate('Fractal Chaos Band'),
-                shortname: t.translate('Fractal Chaos Band'),
+                short_name: t.translate('Fractal Chaos Band'),
                 description: t.translate(
                     'Fractals are indicators on candlestick charts that identify reversal points in the market. Traders often use fractals to get an idea about the direction in which the price will develop. A fractal will form when a particular price pattern happens on a chart.'
                 ),
@@ -1174,6 +1174,7 @@ const getIchimokuIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         conversionLineStyle: clone(lineStyle),
         baseLineStyle: clone(lineStyle),
         spanALineStyle: clone(lineStyle),
+        laggingLineStyle: clone(lineStyle),
         spanBLineStyle: clone(lineStyle),
         conversionLinePeriod: clone(lineStyle),
         showLastIndicator: true,
@@ -1208,7 +1209,7 @@ const getIchimokuIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             type: 'colorpicker',
         },
         {
-            path: 'laggingSpanStyle.color',
+            path: 'laggingLineStyle.color',
             title: t.translate('Lagging Span'),
             defaultValue: '#808000',
             category: 'inputs',
