@@ -236,7 +236,7 @@ class CrosshairStore {
                 dupMap.Open = dupMap.High = dupMap.Low = 1;
             }
         }
-        if (this.showSeries) {
+        if (this.showSeries && this.mainStore.timeperiod.timeUnit === 'tick') {
             const renderers = stx.chart.seriesRenderers;
             for (const renderer in renderers) {
                 const rendererToDisplay = renderers[renderer];
