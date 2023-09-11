@@ -1,5 +1,6 @@
 import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
+import moment from 'moment';
 import { TQuote } from 'src/types';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
@@ -236,7 +237,7 @@ class CrosshairStore {
                 dupMap.Open = dupMap.High = dupMap.Low = 1;
             }
         }
-        if (this.showSeries && this.mainStore.timeperiod.timeUnit === 'tick') {
+        if (this.showSeries && !this.showOhl) {
             const renderers = stx.chart.seriesRenderers;
             for (const renderer in renderers) {
                 const rendererToDisplay = renderers[renderer];
@@ -380,8 +381,8 @@ class CrosshairStore {
                         if (stx.chart.xAxis.noDraw) {
                             continue;
                         } else {
-                            const formattedTime = floatDate.innerHTML.replace(/(\d{2})\/(\d{2})/, '$2/$1');
-                            fieldValue = formattedTime;
+                            const formattedTime = floatDate.innerHTML.split(' ');
+                            fieldValue = `${moment(formattedTime[0], 'MM/DD').format('DD/MM')} ${formattedTime[1]}`;
                         }
                     } else {
                         fieldValue = CIQ.yyyymmdd(dsField);
