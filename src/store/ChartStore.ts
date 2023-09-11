@@ -105,12 +105,10 @@ class ChartStore {
     state?: ChartState;
     onMessage = null;
     _barriers: BarrierStore[] = [];
-
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
-
+    whitespace?: number;
     isDestroyed = false;
-
     get loader() {
         return this.mainStore.loader;
     }
@@ -273,6 +271,7 @@ class ChartStore {
         chartSetting.onSettingsChange = onSettingsChange;
         localStorage.setItem('current_chart_lang', settings?.language || 'en');
         this.isMobile = isMobile;
+        this.whitespace = isMobile ? 50 : 150;
         this.state = this.mainStore.state;
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;

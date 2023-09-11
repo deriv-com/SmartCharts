@@ -1895,6 +1895,11 @@ export const Languages = [
         icon: <FlagIcons.GBP />,
     },
     {
+        key: 'de',
+        name: 'Deutsch',
+        icon: <FlagIcons.German />,
+    },
+    {
         key: 'fr',
         name: 'French',
         icon: <FlagIcons.French />,
