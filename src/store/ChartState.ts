@@ -685,8 +685,10 @@ class ChartState {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
-                this.stxx.setMaxTicks(Math.floor((scrollToTarget * 3) / 2) || 2);
-                this.stxx.chart.scroll = Math.floor((scrollToTarget * 5) / 4) || 1;
+                const scrollValue = Math.floor((scrollToTarget * 5) / 4) || 1;
+                const scroll = scrollValue > 3 ? scrollValue : 4; // should be at least 4, otherwise it won't scroll properly
+                this.stxx.setMaxTicks(scroll + 1);
+                this.stxx.chart.scroll = scroll;
                 this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
