@@ -223,7 +223,7 @@ export default class ChartAdapterStore {
                         this.clickEventCount++;
                         updateEventListener(true);
                     }
-                    this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, index);
+                    // this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, index);
                 } else if (this.drawingHoverIndex !== null) {
                     this.drawingHoverIndex = null;
                     if (drawingRepo) {
@@ -232,7 +232,7 @@ export default class ChartAdapterStore {
                                 item.lineStyle.thickness = 1;
                                 // item.lineStyle.color.value = this.drawingColor;
                                 this.mainStore.crosshair.removeDrawingToolToolTip();
-                                this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, idx);
+                                // this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, idx);
                             }
                         );
                     }

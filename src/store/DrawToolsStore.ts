@@ -398,9 +398,11 @@ export default class DrawToolsStore {
                 if (selectedConfig.fillStyle) {
                     selectedConfig.fillStyle.color.value = transformedParams.fillStyle.color;
                 }
+                console.log(this.settingsDialog.id,  { ...selectedConfig, ...transformedParams });
 
-                this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
-                    { ...selectedConfig, ...transformedParams },
+
+                this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(
+                    JSON.stringify({ ...selectedConfig, ...transformedParams }),
                     parseInt(this.settingsDialog.id)
                 );
 

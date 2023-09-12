@@ -37,7 +37,7 @@ class DrawingToolModel {
   /// To add a drawing
   // void addDrawing(String dataString, int? index) {
   void addOrUpdateDrawing(String dataString, int? index) {
-    final Map<String, dynamic> config = json.decode(dataString);
+    final Map<String, dynamic> config = json.decode(dataString)..remove('id');
 
     DrawingToolConfig? drawingToolConfig = DrawingToolConfig.fromJson(config);
 
@@ -46,7 +46,7 @@ class DrawingToolModel {
           configId: drawingToolsRepo.items[index].toJson()['configId'],
           edgePoints: drawingToolsRepo.items[index].toJson()['edgePoints'],
           drawingData: drawingToolsRepo.items[index].toJson()['drawingData']);
-          
+
       drawingTools.drawingToolsRepo!.updateAt(index, drawingToolConfig);
     } else {
       drawingTools.onDrawingToolSelection(drawingToolConfig);
@@ -79,14 +79,8 @@ class DrawingToolModel {
   // void addDrawing(String dataString, int? index) {
   void editDrawing(DrawingToolConfig drawingToolConfig, int? index) {
     if (index != null) {
-      final DrawingToolConfig config = drawingToolConfig.copyWith(
-          configId:
-              drawingTools.drawingToolsRepo!.items[index].toJson()['configId'],
-          edgePoints: drawingTools.drawingToolsRepo!.items[index]
-              .toJson()['edgePoints'],
-          drawingData: drawingTools.drawingToolsRepo!.items[index]
-              .toJson()['drawingData']);
-
+      final DrawingToolConfig config = drawingToolConfig;
+      drawingToolsRepo.updateAt(index, config);
       drawingTools.drawingToolsRepo!.updateAt(index, config);
     }
   }
@@ -158,7 +152,6 @@ class DrawingToolModel {
         }
       }
     }
-
     return null;
   }
 }
