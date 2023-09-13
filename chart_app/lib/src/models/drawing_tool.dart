@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:chart_app/src/add_ons/add_ons_repository.dart';
-import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
+// import 'package:chart_app/src/add_ons/add_ons_repository.dart';
+import 'package:deriv_chart/deriv_chart.dart';
+// hide AddOnsRepository;
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -15,9 +16,10 @@ class DrawingToolModel {
   /// Drawing tools repo
   final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
       AddOnsRepository<DrawingToolConfig>(
-    onEditCallback: (int i) => JsInterop.drawingTool?.onEdit?.call(i),
-    onRemoveCallback: (int i) => JsInterop.drawingTool?.onRemove?.call(i),
-    onSwapCallback: (int x, int y) => JsInterop.drawingTool?.onSwap?.call(x, y),
+    createAddOn: (Map<String, dynamic> map) => DrawingToolConfig.fromJson(map),
+    onEditCallback: () {},
+    // onRemoveCallback: (int i) => JsInterop.drawingTool?.onRemove?.call(i),
+    // onSwapCallback: (int x, int y) => JsInterop.drawingTool?.onSwap?.call(x, y),
   );
 
   ///
@@ -45,7 +47,8 @@ class DrawingToolModel {
       drawingToolConfig = drawingToolConfig.copyWith(
           configId: drawingToolsRepo.items[index].toJson()['configId'],
           edgePoints: drawingToolsRepo.items[index].toJson()['edgePoints'],
-          drawingData: drawingToolsRepo.items[index].toJson()['drawingData']);
+        drawingData: drawingToolsRepo.items[index].toJson()['drawingData'],
+      );
 
       drawingTools.drawingToolsRepo!.updateAt(index, drawingToolConfig);
     } else {
@@ -55,7 +58,7 @@ class DrawingToolModel {
 
   /// To remove an existing drawing tool
   void removeDrawingTool(int index) {
-    drawingToolsRepo.remove(index);
+    drawingToolsRepo.removeAt(index);
   }
 
   /// To get the tool name from config
@@ -70,6 +73,14 @@ class DrawingToolModel {
       return 'continuous';
     } else if (config is TrendDrawingToolConfig) {
       return 'trend';
+    } else if (config is HorizontalDrawingToolConfig) {
+      return 'horizontal';
+    } else if (config is ChannelDrawingToolConfig) {
+      return 'channel';
+    } else if (config is FibfanDrawingToolConfig) {
+      return 'fibfan';
+    } else if (config is RectangleDrawingToolConfig) {
+      return 'rectangle';
     } else {
       return 'nil';
     }
@@ -104,6 +115,11 @@ class DrawingToolModel {
 
       if (config is VerticalDrawingToolConfig) {
         if ((epoch - config.edgePoints[0].epoch).abs() < 5000) {
+          return i;
+        }
+      } else if (config is HorizontalDrawingToolConfig) {
+        if ((double.parse(quote) - config.edgePoints[0].quote).abs() < 0.12 &&
+            (double.parse(quote) - config.edgePoints[0].quote).abs() > -0.12) {
           return i;
         }
       } else if (config is LineDrawingToolConfig &&

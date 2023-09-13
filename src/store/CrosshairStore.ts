@@ -20,11 +20,6 @@ type TUpdateTooltipPositionParams = {
     rows: TRow[] | null;
 };
 
-type TDrawingToolFlutterRepo = {
-    isDrawingMoved: boolean | null;
-    selectedDrawingTool: null;
-    shouldStopDrawing: boolean | null;
-};
 type TCrosshairRefs = {
     crosshairRef: React.RefObject<HTMLDivElement>;
     crossHairXRef: React.RefObject<HTMLDivElement>;
@@ -39,13 +34,16 @@ interface DrawingCounter {
     [key: string]: { count: number };
 }
 
-
-const initialDrawingClick:DrawingCounter = {
+const initialDrawingClick: DrawingCounter = {
     vertical: { count: 0 },
     ray: { count: 0 },
     trend: { count: 0 },
+    horizontal: { count: 0 },
     line: { count: 0 },
     continuous: { count: 0 },
+    channel: { count: 0 },
+    rectangle: { count: 0 },
+    fibfan: { count: 0 },
 };
 
 class CrosshairStore {
@@ -241,6 +239,12 @@ class CrosshairStore {
                 this.onDeletedDrawing();
                 break;
             }
+            case 'horizontal': {
+                this.setDrawingCount(selectedDrawingName);
+                this.mainStore.drawTools.onCreation('horizontal');
+                this.onDeletedDrawing();
+                break;
+            }
             case 'line':
                 this.setDrawingCount(selectedDrawingName);
                 if (this.drawingCounter[selectedDrawingName].count === 2) {
@@ -260,6 +264,27 @@ class CrosshairStore {
             case 'trend':
                 this.setDrawingCount(selectedDrawingName);
                 if (this.drawingCounter[selectedDrawingName].count === 2) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    this.onDeletedDrawing();
+                }
+                break;
+            case 'rectangle':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count === 2) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    this.onDeletedDrawing();
+                }
+                break;
+            case 'fibfan':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count === 2) {
+                    this.mainStore.drawTools.onCreation(selectedDrawingName);
+                    this.onDeletedDrawing();
+                }
+                break;
+            case 'channel':
+                this.setDrawingCount(selectedDrawingName);
+                if (this.drawingCounter[selectedDrawingName].count === 3) {
                     this.mainStore.drawTools.onCreation(selectedDrawingName);
                     this.onDeletedDrawing();
                 }
@@ -331,8 +356,8 @@ class CrosshairStore {
         `;
 
             chartContainer?.appendChild(parentDiv);
-        }}
-
+        }
+    };
 
     renderIndicatorToolTip = (name: string, dx: number, dy: number) => {
         if (document.getElementsByClassName('indicator-tooltip').length === 0) {
@@ -356,7 +381,7 @@ class CrosshairStore {
             chartContainer?.appendChild(parentDiv);
         }
     };
-    
+
     removeDrawingToolToolTip = () => {
         if (document.getElementsByClassName('draw-tool-tooltip').length > 0) {
             document.getElementsByClassName('draw-tool-tooltip')[0].remove();
