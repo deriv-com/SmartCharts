@@ -124,6 +124,7 @@ export default class DrawToolsStore {
     settingsDialog: SettingsDialogStore;
     activeToolsGroup: TActiveDrawingToolItem[] = [];
     portalNodeIdChanged?: string;
+    seletedDrawToolConfig: TActiveDrawingItem | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -273,6 +274,7 @@ export default class DrawToolsStore {
         // If found, remove the item with the given index
 
         const finalItem = this.processDrawTool(id);
+        this.seletedDrawToolConfig = clone(finalItem);
         delete finalItem.parameters;
         // console.log('Final Item', finalItem);
         if (finalItem) {
@@ -355,9 +357,12 @@ export default class DrawToolsStore {
         return finalItem;
     }
 
-    onCreation(id: string) {
-        const processedData = this.processDrawTool(id);
-        this.updateActiveToolsGroup(processedData);
+    onCreation() {
+        if (this.seletedDrawToolConfig) {
+            console.log('creation');
+            this.updateActiveToolsGroup(this.seletedDrawToolConfig);
+            this.seletedDrawToolConfig = null;
+        }
     }
 
     onChanged(parameters: TSettingsParameter[]) {

@@ -30,22 +30,6 @@ type TCrosshairRefs = {
 
 const MAX_TOOLTIP_WIDTH = 315;
 
-interface DrawingCounter {
-    [key: string]: { count: number };
-}
-
-const initialDrawingClick: DrawingCounter = {
-    vertical: { count: 0 },
-    ray: { count: 0 },
-    trend: { count: 0 },
-    horizontal: { count: 0 },
-    line: { count: 0 },
-    continuous: { count: 0 },
-    channel: { count: 0 },
-    rectangle: { count: 0 },
-    fibfan: { count: 0 },
-};
-
 class CrosshairStore {
     mainStore: MainStore;
     prev_arrow?: string;
@@ -86,7 +70,6 @@ class CrosshairStore {
     showSeries = false;
     showStudies = false;
     isDrawingRegistered = false;
-    drawingCounter = initialDrawingClick;
     selectedDrawing = '';
     refs?: TCrosshairRefs;
 
@@ -215,95 +198,6 @@ class CrosshairStore {
         }
     };
 
-    setDrawingCount = (selectedDrawingName: string, isContinuous?: boolean) => {
-        // Loop over all keys in drawingCounter and reset them to zero,
-        // except for the selectedDrawingName
-        for (const key in this.drawingCounter) {
-            if (key !== selectedDrawingName) {
-                this.drawingCounter[key].count = 0;
-            }
-        }
-        const selectDrawing = this.drawingCounter[selectedDrawingName];
-        // Increment the count of the selected drawing type, up to a maximum of 2
-        if (selectDrawing.count < 2 || isContinuous) {
-            selectDrawing.count++;
-        }
-    };
-
-    handleDrawing = (selectedDrawingName: string) => {
-        switch (selectedDrawingName) {
-            case 'vertical': {
-                this.setDrawingCount(selectedDrawingName);
-                this.mainStore.drawTools.onCreation('vertical');
-
-                this.onDeletedDrawing();
-                break;
-            }
-            case 'horizontal': {
-                this.setDrawingCount(selectedDrawingName);
-                this.mainStore.drawTools.onCreation('horizontal');
-                this.onDeletedDrawing();
-                break;
-            }
-            case 'line':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count === 2) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                    // const contentWindow = document.querySelector('.chartContainer') as HTMLElement;
-                    // contentWindow.style.pointerEvents = 'none';
-                    this.onDeletedDrawing();
-                }
-                break;
-            case 'ray':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count === 2) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                    this.onDeletedDrawing();
-                }
-                break;
-            case 'trend':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count === 2) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                    this.onDeletedDrawing();
-                }
-                break;
-            case 'rectangle':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count === 2) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                    this.onDeletedDrawing();
-                }
-                break;
-            case 'fibfan':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count === 2) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                    this.onDeletedDrawing();
-                }
-                break;
-            case 'channel':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count === 3) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                    this.onDeletedDrawing();
-                }
-                break;
-            case 'continuous':
-                this.setDrawingCount(selectedDrawingName);
-                if (this.drawingCounter[selectedDrawingName].count > 1) {
-                    this.mainStore.drawTools.onCreation(selectedDrawingName);
-                }
-                break;
-            default:
-                console.warn(`Unsupported drawing name: ${selectedDrawingName}`);
-        }
-    };
-
-    onDeletedDrawing = () => {
-        this.drawingCounter = JSON.parse(JSON.stringify({ ...initialDrawingClick }));
-    };
-
     selectedDrawingHoverClick = async () => {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
 
@@ -312,28 +206,6 @@ class CrosshairStore {
         if (!contentWindow || this.isDrawingRegistered) return;
 
         this.isDrawingRegistered = true;
-
-        contentWindow.addEventListener('mousedown', e => {
-            e.stopPropagation();
-            e.preventDefault();
-            if (contentWindow) {
-                // contentWindow.style.pointerEvents = 'none';
-            }
-
-            const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-            if (!drawTools || drawTools.selectedDrawingTool === null) return;
-
-            if (drawTools.drawingToolsRepo._addOns.length === 0) {
-                this.onDeletedDrawing();
-            }
-            const selectedDrawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
-                drawTools.selectedDrawingTool
-            );
-
-            if (selectedDrawingName) {
-                this.handleDrawing(selectedDrawingName);
-            }
-        });
     };
 
     renderDrawingToolToolTip = (name: string, dx: number, dy: number) => {

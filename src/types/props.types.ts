@@ -433,6 +433,7 @@ export type JSInterop = {
         onSwap: (index1: number, index2: number) => void;
     };
     drawingTool: {
+        onAdd: () => void;
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
         onSwap: (index1: number, index2: number) => void;

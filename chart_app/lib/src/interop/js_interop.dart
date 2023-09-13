@@ -50,7 +50,7 @@ class JsLoadHistoryReq {
   external int end;
 }
 
-@JS() 
+@JS()
 @anonymous
 
 /// Payload for new chart init
@@ -148,25 +148,31 @@ class JsQuote {
 
 /// Indicator props
 class JsIndicators {
-  /// Called when an indicator is to be removed
+  /// Called when an indicator is removed
   external OnEditCallback? onRemove;
 
-  /// Called when an indicator is to be edited
+  /// Called when an indicator is edited
   external OnEditCallback? onEdit;
 
   /// Callback to swap two elements of a list.
   external OnSwapCallback? onSwap;
 }
 
+/// Called when an addOn is created
+typedef OnAddDrawingCallback = void Function();
+
 @JS()
 @anonymous
 
 /// Drawings
 class JsDrawings {
-  /// Called when an indicator is to be removed
+  /// Called when an drawing is added
+  external OnAddDrawingCallback? onAdd;
+
+  /// Called when an drawing is removed
   external OnEditCallback? onRemove;
 
-  /// Called when an indicator is to be edited
+  /// Called when an drawing is edited
   external OnEditCallback? onEdit;
 
   /// Callback to swap two elements of a list.

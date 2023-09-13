@@ -5,6 +5,9 @@ import 'package:deriv_chart/deriv_chart.dart';
 /// Storage key of saved indicators.
 const String addOnsKey = 'addOns';
 
+/// Called when an addOn is created
+typedef OnAddCallback = void Function(AddOnConfig config);
+
 /// Called when an addOn is to be edited
 ///
 /// [id] is the id of the addOn to be edited
@@ -18,6 +21,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     implements Repository<T> {
   /// Initializes
   AddOnsRepository({
+    this.onAddCallback,
     this.onEditCallback,
     this.onRemoveCallback,
     this.onSwapCallback,
@@ -29,10 +33,13 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   @override
   List<T> get items => _addOns;
 
+  /// Callback to add an addon.
+  OnAddCallback? onAddCallback;
+
   /// Callback to open edit dialog.
   OnEditCallback? onEditCallback;
 
-  /// Callback to remove an indicator.
+  /// Callback to remove an addon.
   OnEditCallback? onRemoveCallback;
 
   /// Callback to swap two elements of a list.
@@ -42,6 +49,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   @override
   void add(T addOnConfig) {
     _addOns.add(addOnConfig);
+    onAddCallback?.call(addOnConfig);
     notifyListeners();
   }
 

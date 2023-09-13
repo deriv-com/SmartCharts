@@ -252,6 +252,9 @@ export default class ChartAdapterStore {
                 },
             },
             drawingTool: {
+                onAdd: () => {
+                    this.mainStore.drawTools.onCreation();
+                },
                 onRemove: (index: number) => {
                     // this.mainStore.drawTools.deleteGroupTool(index);
                 },

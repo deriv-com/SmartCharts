@@ -487,18 +487,16 @@ export const defaultdrawToolsConfigs: TDefaultIndicatorConfigMap = {
     line: getVerticalDrawingConfig,
     ray: getVerticalDrawingConfig,
     trend: getTrendlDrawingConfig,
-    channel:getTrendlDrawingConfig,
-    fibfan:getTrendlDrawingConfig,
-    rectangle:getTrendlDrawingConfig,
-    horizontal:getVerticalDrawingConfig,
+    channel: getTrendlDrawingConfig,
+    fibfan: getTrendlDrawingConfig,
+    rectangle: getTrendlDrawingConfig,
+    horizontal: getVerticalDrawingConfig,
     continuous: getVerticalDrawingConfig,
 };
-
 
 export const getDefaultDrawingConfig = (drawTool: keyof typeof defaultIndicatorConfigs) => {
     return defaultdrawToolsConfigs[drawTool]();
 };
-
 
 const getFieldTypeOptions = () => ({
     open: t.translate('Open'),

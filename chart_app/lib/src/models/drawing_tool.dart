@@ -1,29 +1,31 @@
 import 'dart:convert';
-
-// import 'package:chart_app/src/add_ons/add_ons_repository.dart';
-import 'package:deriv_chart/deriv_chart.dart';
-// hide AddOnsRepository;
+import 'dart:math';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
+import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 
 /// State and methods of chart web adapter config.
 class DrawingToolModel {
-  // drawingTools.drawingToolsRepo=drawingToolsRepo;
   /// Initialize
   DrawingToolModel();
 
   /// Drawing tools repo
   final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
       AddOnsRepository<DrawingToolConfig>(
-    createAddOn: (Map<String, dynamic> map) => DrawingToolConfig.fromJson(map),
-    onEditCallback: () {},
-    // onRemoveCallback: (int i) => JsInterop.drawingTool?.onRemove?.call(i),
-    // onSwapCallback: (int x, int y) => JsInterop.drawingTool?.onSwap?.call(x, y),
+    onAddCallback: (AddOnConfig config) {
+      final DrawingToolConfig drawingToolConfig = config as DrawingToolConfig;
+      if (drawingToolConfig.drawingData != null &&
+          drawingToolConfig.drawingData!.isDrawingFinished) {
+        JsInterop.drawingTool?.onAdd?.call();
+      }
+    },
+    // onEditCallback: () {},
   );
 
-  ///
-  final DrawingTools drawingTools = DrawingTools();
+  /// DrawingTools
+  late DrawingTools drawingTools = DrawingTools()
+    ..drawingToolsRepo = drawingToolsRepo;
 
   ///
   void selectDrawing(DrawingToolConfig config) {
@@ -45,8 +47,8 @@ class DrawingToolModel {
 
     if (index != null && index > -1) {
       drawingToolConfig = drawingToolConfig.copyWith(
-          configId: drawingToolsRepo.items[index].toJson()['configId'],
-          edgePoints: drawingToolsRepo.items[index].toJson()['edgePoints'],
+        configId: drawingToolsRepo.items[index].toJson()['configId'],
+        edgePoints: drawingToolsRepo.items[index].toJson()['edgePoints'],
         drawingData: drawingToolsRepo.items[index].toJson()['drawingData'],
       );
 
