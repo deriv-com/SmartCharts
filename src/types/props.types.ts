@@ -396,6 +396,7 @@ export type TFlutterChart = {
         getTypeOfSelectedDrawingTool: (config: string) => string;
         clearDrawingToolSelect: () => void;
         editDrawing: (config: {}, index: number) => void;
+        addDrawing: (config:string) => void;
         getDrawingHover: (
             dx: number,
             dy: number,
@@ -434,6 +435,7 @@ export type JSInterop = {
     };
     drawingTool: {
         onAdd: () => void;
+        onUpdate:(index:number,config:{})=>void;
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
         onSwap: (index1: number, index2: number) => void;

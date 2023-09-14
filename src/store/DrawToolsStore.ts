@@ -106,6 +106,8 @@ export type TActiveDrawingItem = {
     key?: string;
     icon?: TIcon | undefined;
     name: string;
+    lineStyle?: {};
+    fillStyle?: {};
     num: number;
     index: number;
 };
@@ -203,10 +205,58 @@ export default class DrawToolsStore {
         return true;
     }
 
+      
     async restoreDrawings(activeItems: TActiveDrawingToolItem[]) {
+        const drawingPartMap = {
+            Ray: 'RayLine',
+            Continuous: 'ContinuousLine',
+        };
+
+        const activeDrawingItems = [...activeItems];
+        let drawingList: any = [];
+
+        const drawingPart = ['marker', 'line', 'rectangle'];
+        activeDrawingItems.forEach(drawing => {
+            drawing.items.forEach(data => {
+                const drawingParts: any[] = [];
+                data.config.drawingData.drawingParts.forEach(item => {
+                    drawingParts.push({
+                        ...item,
+                        ...{
+                            class_name_key: `${drawingPartMap[data.title] || data.title}Drawing`,
+                            drawingPart:
+                                typeof item.drawingPart === 'string'
+                                    ? item.drawingPart
+                                    : drawingPart[item.drawingPart.index],
+                        },
+                    });
+                });
+
+                data.config.drawingData.drawingParts = drawingParts;
+
+                const finalItem = {
+                    ...data.config,
+                    ...{ name: data.name, title: data.title, pattern: 'solid', lineStyle: data.lineStyle },
+                };
+                if (data.fillStyle) {
+                    finalItem['fillStyle'] = data.fillStyle;
+                }
+
+                // this.mainStore.chartAdapter.flutterChart?.drawingTool.addDrawing(JSON.stringify(finalItem));
+                drawingList.push({ index: data.index, data: finalItem });
+            });
+        });
+
+        drawingList = drawingList.sort((x, y) => x.index - y.index);
+
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingTool();
+
+        drawingList.forEach(item => {
+            this.mainStore.chartAdapter.flutterChart?.drawingTool.addDrawing(JSON.stringify(item.data));
+        });
+
         this.activeToolsGroup = activeItems;
-        // console.log(activeItems);
-        this.mainStore.bottomWidgetsContainer.updateChartHeight();
+
     }
 
     showDrawToolDialog(drawing: TActiveDrawingItem) {
@@ -278,7 +328,7 @@ export default class DrawToolsStore {
         delete finalItem.parameters;
         // console.log('Final Item', finalItem);
         if (finalItem) {
-            this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
+            // this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
             this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(JSON.stringify(finalItem), -1);
             this.mainStore.state.saveDrawings();
             // this.mainStore.crosshair.selectedDrawingHoverClick();
@@ -357,11 +407,47 @@ export default class DrawToolsStore {
         return finalItem;
     }
 
+    // onUpdate(index,config){
+    //    const drawingName= this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(config);
+    //    const groupItem=this.activeToolsGroup.find(item=>item.id==drawingName);
+    //     const groupIndex=groupItem?.items.find(it=>it.index==index);
+    //     groupIndex.config=config;
+    //     this.mainStore.state.saveDrawings();
+    // }
+
+    onUpdate(index, config) {
+        const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(config);
+
+        // Find the group item containing the drawing tool
+        const groupItem = this.activeToolsGroup.find(item => item.id === drawingName);
+
+        if (groupItem) {
+            // Find the item in the group by index
+            const itemToUpdate = groupItem.items.find(item => item.index === index);
+
+            if (itemToUpdate) {
+                // Update the config of the found item
+                itemToUpdate.config = config;
+                this.mainStore.state.saveDrawings();
+            }
+        }
+    }
+
     onCreation() {
         if (this.seletedDrawToolConfig) {
-            console.log('creation');
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
+            const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+            this.activeToolsGroup.map(item => {
+                item.items.map(data => {
+                    if (this.seletedDrawToolConfig.id === 'channel') {
+                        data.config = drawingTools?.drawingToolsRepo?._addOns[data.index + 1];
+                    } else {
+                        data.config = drawingTools.drawingToolsRepo?._addOns[data.index];
+                    }
+                });
+            });
             this.seletedDrawToolConfig = null;
+            this.mainStore.state.saveDrawings();
         }
     }
 
@@ -403,23 +489,28 @@ export default class DrawToolsStore {
                 if (selectedConfig.fillStyle) {
                     selectedConfig.fillStyle.color.value = transformedParams.fillStyle.color;
                 }
-                console.log(this.settingsDialog.id,  { ...selectedConfig, ...transformedParams });
 
-
-                this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(
-                    JSON.stringify({ ...selectedConfig, ...transformedParams }),
-                    parseInt(this.settingsDialog.id)
+                const selectedGroup = this.activeToolsGroup.find(
+                    item => item.id === this.settingsDialog.drawing_tool_id
                 );
-
-                ///
-                const activeToolsGroup = [...this.activeToolsGroup];
-                const selectedGroup = activeToolsGroup.find(item => item.id === this.settingsDialog.drawing_tool_id);
                 const selectedItem = selectedGroup?.items.find(
                     group => group.index === parseInt(this.settingsDialog.id)
                 );
                 if (selectedItem && selectedItem.parameters) {
                     selectedItem.parameters = parameters;
+                    selectedItem.lineStyle.color = selectedConfig.lineStyle.color.value;
+                    if (selectedConfig.fillStyle) {
+                        selectedItem.fillStyle.color = transformedParams.fillStyle.color;
+                    }
                 }
+
+                this.mainStore.state.saveDrawings();
+
+                console.log(selectedConfig);
+                this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
+                    selectedConfig,
+                    parseInt(this.settingsDialog.id)
+                );
             }
         }
     }

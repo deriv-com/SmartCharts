@@ -154,12 +154,16 @@ class JsIndicators {
   /// Called when an indicator is edited
   external OnEditCallback? onEdit;
 
+  external OnUpdateCallback? onUpdate;
+
   /// Callback to swap two elements of a list.
   external OnSwapCallback? onSwap;
 }
 
 /// Called when an addOn is created
 typedef OnAddDrawingCallback = void Function();
+
+
 
 @JS()
 @anonymous
@@ -168,6 +172,9 @@ typedef OnAddDrawingCallback = void Function();
 class JsDrawings {
   /// Called when an drawing is added
   external OnAddDrawingCallback? onAdd;
+
+  /// Called when an drawing is edited
+  external OnUpdateCallback? onUpdate;
 
   /// Called when an drawing is removed
   external OnEditCallback? onRemove;

@@ -16,6 +16,10 @@ typedef OnEditCallback = void Function(int index);
 /// Swaps two elements of a list.
 typedef OnSwapCallback = void Function(int index1, int index2);
 
+
+typedef OnUpdateCallback = void Function(int index1, AddOnConfig config);
+
+
 /// Holds indicators/drawing tools that were added to the Chart during runtime.
 class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     implements Repository<T> {
@@ -25,6 +29,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     this.onEditCallback,
     this.onRemoveCallback,
     this.onSwapCallback,
+    this.onUpdateCallback,
   }) : _addOns = <T>[];
 
   final List<T> _addOns;
@@ -42,6 +47,10 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   /// Callback to remove an addon.
   OnEditCallback? onRemoveCallback;
 
+  ///
+  OnUpdateCallback? onUpdateCallback;
+
+  
   /// Callback to swap two elements of a list.
   OnSwapCallback? onSwapCallback;
 
@@ -66,10 +75,11 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
       return;
     }
     _addOns[index] = addOnConfig;
+    onUpdateCallback?.call(index, addOnConfig);
 
     notifyListeners();
   }
-
+  
   /// Removes indicator/drawing tool at [index] from repository and calls `onRemoveCallback`
   @override
   void removeAt(int index) {
@@ -96,6 +106,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   }
 
   /// To clear all indicators
+  @override
   void clear() {
     _addOns.clear();
     notifyListeners();
