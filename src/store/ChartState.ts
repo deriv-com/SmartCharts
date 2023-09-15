@@ -8,6 +8,8 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
+import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
+import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -15,6 +17,7 @@ import {
     calculateGranularity,
     calculateTimeUnitInterval,
     createObjectFromLocalStorage,
+    getYAxisScalingParams,
     getUTCDate,
     getUTCEpoch,
 } from '../utils';
@@ -33,6 +36,8 @@ type TScrollListenerParamsData = {
 class ChartState {
     chartStore: ChartStore;
     getIndicatorHeightRatio?: TGetIndicatorHeightRatio;
+    shouldDrawTicksFromContractInfo? = false;
+    has_updated_settings = false;
     isAnimationEnabled?: boolean;
     mainStore: MainStore;
     margin?: number;
@@ -41,6 +46,7 @@ class ChartState {
     startEpoch?: number;
     endEpoch?: number;
     symbol?: string;
+    heightFactor?: number;
     isConnectionOpened? = false;
     isChartReady = false;
     chartStatusListener?: (isChartReady: boolean) => boolean;
@@ -57,8 +63,8 @@ class ChartState {
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
     shouldFetchTickHistory = true;
-    allTicks = [];
-    contractInfo = {};
+    allTicks: NonNullable<AuditDetailsForExpiredContract>['all_ticks'] = [];
+    contractInfo: ProposalOpenContract = {};
     refreshActiveSymbols?: boolean;
     hasReachedEndOfData = false;
     prevChartType?: string;
@@ -107,6 +113,8 @@ class ChartState {
             startEpoch: observable,
             endEpoch: observable,
             symbol: observable,
+            has_updated_settings: observable,
+            heightFactor: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
@@ -126,6 +134,7 @@ class ChartState {
             allTicks: observable,
             contractInfo: observable,
             refreshActiveSymbols: observable,
+            shouldDrawTicksFromContractInfo: observable,
             hasReachedEndOfData: observable,
             prevChartType: observable,
             isChartScrollingToEpoch: observable,
@@ -159,6 +168,7 @@ class ChartState {
         chartControlsWidgets,
         enabledChartFooter,
         chartStatusListener,
+        shouldDrawTicksFromContractInfo,
         stateChangeListener,
         getIndicatorHeightRatio,
         chartType,
@@ -176,6 +186,7 @@ class ChartState {
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
         should_show_eu_content,
+        should_zoom_out_on_yaxis,
         allTicks = [],
         contractInfo = {},
         showLastDigitStats = false,
@@ -218,6 +229,7 @@ class ChartState {
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
         this.margin = margin;
+        this.has_updated_settings = !isDeepEqual(this.settings?.whitespace, settings?.whitespace);
         this.settings = settings;
         this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
@@ -227,6 +239,12 @@ class ChartState {
         this.contractInfo = contractInfo;
         this.showLastDigitStats = showLastDigitStats;
         this.getIndicatorHeightRatio = getIndicatorHeightRatio;
+
+        const feed = this.mainStore.chart.feed;
+        if (shouldDrawTicksFromContractInfo && feed && contractInfo.tick_stream) {
+            this.shouldDrawTicksFromContractInfo = shouldDrawTicksFromContractInfo;
+            feed.appendChartDataFromPOCResponse.call(feed, contractInfo);
+        }
 
         if (
             networkStatus &&
@@ -353,6 +371,20 @@ class ChartState {
             };
         }
 
+        if (should_zoom_out_on_yaxis && this.stxx) {
+            const { height_factor, yaxis_margin } = getYAxisScalingParams({
+                is_contract_chart: shouldDrawTicksFromContractInfo,
+                is_mobile: this.mainStore.chart.isMobile,
+                ticks_length: this.stxx.chart.dataSet?.length,
+                yaxis_height: this.stxx.chart.panel.yAxis.height,
+            });
+            this.yAxisMargin = {
+                ...this.yAxisMargin,
+                ...yaxis_margin,
+            };
+            this.heightFactor = height_factor;
+        }
+
         if (this.stxx && enableScroll !== null && this.enableScroll !== enableScroll) {
             this.enableScroll = enableScroll;
             this.stxx.allowScroll = enableScroll;
@@ -367,7 +399,10 @@ class ChartState {
             this.stxx.chart.panel.yAxis.drawCurrentPriceLabel = !this.endEpoch;
             this.stxx.preferences.currentPriceLine = !this.endEpoch;
             this.stxx.isAutoScale = this.settings && this.settings.isAutoScale !== false;
+            this.stxx.preferences.whitespace = this.settings?.whitespace || this.chartStore.whitespace;
+            this.stxx.minimumLeftBars = this.settings?.minimumLeftBars || this.chartStore.defaultMinimumBars;
             this.stxx.draw();
+            if (this.has_updated_settings) this.stxx.home();
         }
     }
 

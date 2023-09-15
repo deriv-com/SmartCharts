@@ -1,4 +1,10 @@
-import { ActiveSymbols, TicksStreamResponse, TradingTimesResponse, AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
+import {
+    ActiveSymbols,
+    TicksStreamResponse,
+    TradingTimesResponse,
+    AuditDetailsForExpiredContract,
+    ProposalOpenContract,
+} from '@deriv/api-types';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
@@ -67,12 +73,14 @@ export type TSettings = {
     historical?: boolean;
     lang?: string;
     language?: string;
+    minimumLeftBars?: number;
     position?: string;
     enabledNavigationWidget?: boolean;
     isAutoScale?: boolean;
     isHighestLowestMarkerEnabled?: boolean;
     theme?: string;
     activeLanguages?: Array<string | TLanguage> | null;
+    whitespace?: number;
 };
 
 export type TStateChangeListener = (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
@@ -123,6 +131,7 @@ export type TChartProps = {
     feedCall?: { activeSymbols?: boolean; tradingTimes?: boolean };
     granularity?: TGranularity;
     chartType?: string;
+    should_zoom_out_on_yaxis?: boolean;
     startEpoch?: number;
     endEpoch?: number;
     chartControlsWidgets?: TChartControlsWidgets;
@@ -136,6 +145,7 @@ export type TChartProps = {
     barriers?: TBarrierUpdateProps[];
     enableRouting?: boolean;
     enable?: boolean;
+    shouldDrawTicksFromContractInfo?: boolean;
     isConnectionOpened?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
@@ -149,7 +159,7 @@ export type TChartProps = {
     shouldFetchTickHistory?: boolean;
     allowTickChartTypeOnly?: boolean;
     allTicks?: keyof AuditDetailsForExpiredContract | [];
-    contractInfo?: keyof ProposalOpenContract | {};
+    contractInfo?: ProposalOpenContract;
     maxTick?: number | null;
     crosshairTooltipLeftAllow?: number | null;
     zoom?: number;

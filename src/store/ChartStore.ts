@@ -172,10 +172,9 @@ class ChartStore {
     onMessage = null;
     defaultMinimumBars = 5;
     _barriers: BarrierStore[] = [];
-
-
     tradingTimes?: TradingTimes;
     activeSymbols?: ActiveSymbols;
+    whitespace?: number;
     get loader() {
         return this.mainStore.loader;
     }
@@ -741,6 +740,7 @@ class ChartStore {
         } = props;
         this.feedCall = feedCall || {};
         this.api = new BinaryAPI(requestAPI, requestSubscribe, requestForget, requestForgetStream);
+        this.currentLanguage = localStorage.getItem('current_chart_lang')?.toLowerCase();
         // trading times and active symbols can be reused across multiple charts
         this.tradingTimes =
             ChartStore.tradingTimes ||
@@ -760,8 +760,9 @@ class ChartStore {
         const { chartSetting } = this.mainStore;
         chartSetting.setSettings(settings);
         chartSetting.onSettingsChange = onSettingsChange;
+        localStorage.setItem('current_chart_lang', settings?.language || 'en');
         this.isMobile = isMobile;
-        this.currentLanguage = settings?.language;
+        this.whitespace = isMobile ? 50 : 150;
         this.state = this.mainStore.state;
         this.mainStore.notifier.onMessage = onMessage;
         this.granularity = granularity !== undefined ? granularity : this.defaults.granularity;
@@ -774,7 +775,7 @@ class ChartStore {
             yaxisLabelStyle: 'roundRect',
             preferences: {
                 currentPriceLine: true,
-                whitespace: isMobile ? 50 : 150,
+                whitespace: settings?.whitespace || this.whitespace,
             },
             chart: {
                 yAxis: {
@@ -783,6 +784,7 @@ class ChartStore {
                     initialMarginBottom: this.stateStore.yAxisMargin.bottom,
                     // position: 'left',
                     displayBorder: true,
+                    heightFactor: this.stateStore.heightFactor,
                     justifyRight: false,
                 },
                 xAxis: {
@@ -791,7 +793,7 @@ class ChartStore {
                 gaplines: true,
                 dynamicYAxis: true,
             },
-            minimumLeftBars: this.defaultMinimumBars,
+            minimumLeftBars: settings?.minimumLeftBars || this.defaultMinimumBars,
             yTolerance: 999999,
         };
         let chartLayout = {
@@ -1059,7 +1061,7 @@ class ChartStore {
 
         const { context } = this.context?.stx.chart;
         // barrier price can be wider than current tick price for 1 decimal digit
-        const priceWidth = context.measureText(price.toFixed(this.pip as number + 1)).width + 20;
+        const priceWidth = context.measureText(price.toFixed((this.pip as number) + 1)).width + 20;
         if (priceWidth > this.yAxiswidth) {
             this.yAxiswidth = priceWidth;
 

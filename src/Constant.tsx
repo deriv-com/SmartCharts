@@ -490,9 +490,9 @@ export const Languages = [
         icon: <FlagIcons.GBP />,
     },
     {
-        key: 'pt',
-        name: 'Português',
-        icon: <FlagIcons.Portugal />,
+        key: 'de',
+        name: 'Deutsch',
+        icon: <FlagIcons.German />,
     },
     {
         key: 'fr',
@@ -523,6 +523,11 @@ export const Languages = [
         key: 'it',
         name: 'Italiano',
         icon: <FlagIcons.Italy />,
+    },
+    {
+        key: 'ko',
+        name: '한국어',
+        icon: <FlagIcons.Korean />,
     },
     {
         key: 'zh_cn',
