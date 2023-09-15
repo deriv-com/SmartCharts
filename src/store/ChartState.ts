@@ -685,10 +685,10 @@ class ChartState {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
-                const maxTicks = Math.floor((scrollToTarget * 3) / 2) || 2;
-                const scrollValue = Math.floor((scrollToTarget * 5) / 4) || 1;
-                this.stxx.setMaxTicks(maxTicks - scrollValue === 1 ? 8 : maxTicks); // must be 8 to center ticks if dataset length < 7
-                this.stxx.chart.scroll = scrollValue;
+                this.stxx.setMaxTicks(
+                    this.stxx.chart.dataSet?.length < 7 ? 8 : Math.floor((scrollToTarget * 3) / 2) || 2
+                ); // must be 8 to center ticks if dataset length < 7
+                this.stxx.chart.scroll = Math.floor((scrollToTarget * 5) / 4) || 1;
                 this.setDisableScroll();
             }
             this.mainStore.chart.updateScaledOneOne(true);
