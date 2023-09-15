@@ -12,7 +12,7 @@ import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api
 import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
-import { STATE } from '../Constant';
+import { SMALL_DATASET_MAX_TICKS, STATE } from '../Constant';
 import {
     calculateGranularity,
     calculateTimeUnitInterval,
@@ -686,8 +686,10 @@ class ChartState {
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
                 this.stxx.setMaxTicks(
-                    this.stxx.chart.dataSet?.length < 7 ? 8 : Math.floor((scrollToTarget * 3) / 2) || 2
-                ); // must be 8 to center ticks if dataset length < 7
+                    this.stxx.chart.dataSet?.length < 7
+                        ? SMALL_DATASET_MAX_TICKS
+                        : Math.floor((scrollToTarget * 3) / 2) || 2
+                );
                 this.stxx.chart.scroll = Math.floor((scrollToTarget * 5) / 4) || 1;
                 this.setDisableScroll();
             }

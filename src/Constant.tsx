@@ -551,6 +551,11 @@ export const Languages = [
     },
 ];
 
+/**
+ * maxTicks value used to center ticks on the chart when dataset length < 7
+ */
+export const SMALL_DATASET_MAX_TICKS = 8;
+
 export const STATE = {
     INITIAL: 'INITIAL',
     READY: 'READY',
