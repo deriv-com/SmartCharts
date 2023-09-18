@@ -177,6 +177,12 @@ class JsDrawings {
 
   /// Callback to swap two elements of a list.
   external OnSwapCallback? onSwap;
+
+  /// Callback to notify mouse enter over the addon.
+  external OnMouseEnterCallback? onMouseEnter;
+
+  /// Callback to notify mouse exit over the addon.
+  external OnMouseExitCallback? onMouseExit;
 }
 
 @JS()

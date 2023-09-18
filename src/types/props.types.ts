@@ -396,14 +396,6 @@ export type TFlutterChart = {
         getTypeOfSelectedDrawingTool: (config: string) => string;
         clearDrawingToolSelect: () => void;
         editDrawing: (config: {}, index: number) => void;
-        getDrawingHover: (
-            dx: number,
-            dy: number,
-            epoch: number,
-            quote: string,
-            quoteToY: (qt: number) => number,
-            epochToX: (epch: number) => number
-        ) => number;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;
@@ -437,6 +429,8 @@ export type JSInterop = {
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
         onSwap: (index1: number, index2: number) => void;
+        onMouseEnter: (index: number) => void;
+        onMouseExit: (index: number) => void;
     };
 };
 

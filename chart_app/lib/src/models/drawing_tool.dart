@@ -20,6 +20,10 @@ class DrawingToolModel {
         JsInterop.drawingTool?.onAdd?.call();
       }
     },
+    onMouseEnterCallback: (int index) =>
+        JsInterop.drawingTool?.onMouseEnter?.call(index),
+    onMouseExitCallback: (int index) =>
+        JsInterop.drawingTool?.onMouseExit?.call(index),
     // onEditCallback: () {},
   );
 
@@ -108,105 +112,4 @@ class DrawingToolModel {
     drawingTools.clearDrawingToolSelection();
     drawingToolsRepo.clear();
   }
-
-  ///
-  int? getDrawingHover(int dx, int dy, int epoch, String quote,
-      double Function(double) quoteToY, int Function(double) epochToX) {
-    for (int i = 0; i < drawingToolsRepo.items.length; i++) {
-      final DrawingToolConfig config = drawingTools.drawingToolsRepo!.items[i];
-
-      if (config is VerticalDrawingToolConfig) {
-        if ((epoch - config.edgePoints[0].epoch).abs() < 5000) {
-          return i;
-        }
-      } else if (config is HorizontalDrawingToolConfig) {
-        if ((double.parse(quote) - config.edgePoints[0].quote).abs() < 0.12 &&
-            (double.parse(quote) - config.edgePoints[0].quote).abs() > -0.12) {
-          return i;
-        }
-      } else if (config is LineDrawingToolConfig &&
-          config.edgePoints.length > 1) {
-        if (isHoverOnInfiniteLine(
-            Offset(config.edgePoints[0].epoch as double,
-                config.edgePoints[0].quote),
-            Offset(config.edgePoints[1].epoch as double,
-                config.edgePoints[1].quote),
-            Offset(epoch as double, double.parse(quote)),
-            0.1)) {
-          return i;
-        }
-      } else if (config is RayDrawingToolConfig &&
-          config.edgePoints.length > 1) {
-        if (isHoverOnConstrainedLine(
-            Offset(config.edgePoints[0].epoch as double,
-                config.edgePoints[0].quote),
-            Offset(config.edgePoints[1].epoch as double,
-                config.edgePoints[1].quote),
-            Offset(epoch as double, double.parse(quote)),
-            0.1)) {
-          return i;
-        }
-      } else if (config is ContinuousDrawingToolConfig &&
-          config.edgePoints.length > 1) {
-        final Iterable<ContinuousDrawingToolConfig> continuousList =
-            drawingTools.drawingToolsRepo!.items
-                .whereType<ContinuousDrawingToolConfig>();
-        final Path path = Path();
-
-        // ignore: cascade_invocations
-        path.moveTo(continuousList.first.edgePoints[0].epoch as double,
-            continuousList.first.edgePoints[0].quote);
-
-        for (final ContinuousDrawingToolConfig point in continuousList) {
-          path
-            ..lineTo(
-                point.edgePoints[0].epoch as double, point.edgePoints[0].quote)
-            ..lineTo(
-                point.edgePoints[1].epoch as double, point.edgePoints[1].quote);
-        }
-        path.close();
-        if (path.contains(Offset(epoch as double, double.parse(quote)))) {
-          return i;
-        }
-      }
-    }
-    return null;
-  }
-}
-
-/// Line Drawing
-bool isHoverOnInfiniteLine(
-    Offset p1, Offset p2, Offset hover, double tolerance) {
-  double distance = (p2.dy - p1.dy) * hover.dx -
-      (p2.dx - p1.dx) * hover.dy +
-      p2.dx * p1.dy -
-      p2.dy * p1.dx;
-
-  distance =
-      distance.abs() / sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
-
-  return distance < tolerance;
-}
-
-/// Ray Drawing
-bool isHoverOnConstrainedLine(
-    Offset p1, Offset p2, Offset hover, double tolerance) {
-  // Check distance to line
-  double distance = (p2.dy - p1.dy) * hover.dx -
-      (p2.dx - p1.dx) * hover.dy +
-      p2.dx * p1.dy -
-      p2.dy * p1.dx;
-
-  distance =
-      distance.abs() / sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
-
-  if (distance >= tolerance) {
-    return false;
-  }
-
-  // Check directionality
-  final double dotProduct = (hover.dx - p1.dx) * (p2.dx - p1.dx) +
-      (hover.dy - p1.dy) * (p2.dy - p1.dy);
-
-  return dotProduct >= 0;
 }

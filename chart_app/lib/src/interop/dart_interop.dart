@@ -233,12 +233,6 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
 
   setProperty(
     chartConfig,
-    'getDrawingHover',
-    allowInterop(model.getDrawingHover),
-  );
-
-  setProperty(
-    chartConfig,
     'editDrawing',
     allowInterop(model.editDrawing),
   );

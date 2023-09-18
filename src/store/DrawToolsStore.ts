@@ -513,22 +513,4 @@ export default class DrawToolsStore {
     updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }
-
-    onDrawingHover(
-        _dx: number,
-        _dy: number,
-        _epoch: number,
-        _quote: string,
-        quoteToY: (quote: number) => number,
-        epochToX: (epoch: number) => number
-    ) {
-        return this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingHover(
-            _dx,
-            _dy,
-            _epoch,
-            _quote,
-            quoteToY,
-            epochToX
-        );
-    }
 }
