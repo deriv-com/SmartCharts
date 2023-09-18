@@ -16,9 +16,8 @@ typedef OnEditCallback = void Function(int index);
 /// Swaps two elements of a list.
 typedef OnSwapCallback = void Function(int index1, int index2);
 
-
+/// Allow Updation when dragged (drawing tool)
 typedef OnUpdateCallback = void Function(int index1, AddOnConfig config);
-
 
 /// Holds indicators/drawing tools that were added to the Chart during runtime.
 class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
@@ -50,7 +49,6 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   ///
   OnUpdateCallback? onUpdateCallback;
 
-  
   /// Callback to swap two elements of a list.
   OnSwapCallback? onSwapCallback;
 
@@ -79,7 +77,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
     notifyListeners();
   }
-  
+
   /// Removes indicator/drawing tool at [index] from repository and calls `onRemoveCallback`
   @override
   void removeAt(int index) {

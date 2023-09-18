@@ -10,24 +10,6 @@ import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
-type TDrawingParameters = {
-    extendLeft: boolean;
-    fibs: { level: number; color: string; parameters: unknown; display?: boolean }[];
-    printLevels: boolean;
-    printValues: boolean;
-    timezone: { color: string; parameters: { pattern: string; opacity: number; lineWidth: number } };
-    trend: { color: string; parameters: unknown };
-    pattern: string;
-    penDown: boolean;
-};
-type TRepositioner = {
-    action: string;
-    p0: number[];
-    p1: number[];
-    tick: number;
-    value: number;
-};
-
 type TDrawObject = {
     config: {
         pattern: string;
@@ -42,74 +24,54 @@ type TDrawConfig = {
     fillStyle?: { color: { value: number } };
 };
 
-type TDrawingObject = {
-    abort?: () => void;
-    adjust?: () => void;
-    axisLabel: boolean;
-    bars?: number | null;
-    color: string;
-    d0?: string;
-    d0B?: string;
-    d1?: string;
-    d1B?: string;
-    d2?: string;
-    dragToDraw?: boolean;
-    field?: string | null;
-    fillColor?: string;
-    highlighted: boolean;
-    icon?: TIcon;
-    id?: string;
-    index: number;
-    lineWidth: number;
-    name: string;
-    num?: string | number;
-    p0: number[];
-    p1: number[];
-    p2?: number[];
-    panelName: string;
-    parameters?: TDrawingParameters;
-    pattern: string;
-    penDown?: boolean;
-    pixelX?: number[];
-    pixelY?: number[];
-    prefix?: string;
-    rays?: number[][][];
-    repositioner: TRepositioner | null;
-    text?: string;
-    tzo0?: number;
-    tzo1?: number;
-    tzo2?: number;
-    v0?: number;
-    v0B?: number;
-    v1?: number;
-    v1B?: number;
-    v2?: number;
+export type TEdgePoints = {
+    epoch: number;
+    quote: number;
 };
 
-type TDrawToolsGroup = {
-    key: string;
-    text: string;
-    name: string;
-    bar: number;
-    // index: number;
-    id: string;
-    items: TDrawingObject[];
+type TDrawingPart = {
+    chartConfig?: { pipsize: number; granularity: number };
+    class_name_key: string;
+    drawingPart: string | { index: number };
+    edgePoint?: TEdgePoints;
+    startPoint?: { x: number; y: number };
+    isDrawingFinished?: boolean;
+    startEdgePoint?: TEdgePoints;
+    middleEdgePoint?: TEdgePoints;
+    endEdgePoint?: TEdgePoints;
+    [key: string]: any; /// Allows any other string key with values of any type
 };
 
 export type TActiveDrawingItem = {
     title: string;
     text: string;
     id: string;
-    config?: Record<string, any>;
+    config: Record<string, any>;
     parameters: TSettingsParameter[];
     bars?: number;
     key?: string;
     icon?: TIcon | undefined;
     name: string;
-    lineStyle?: {};
-    fillStyle?: {};
+    lineStyle?: {
+        color: number;
+    };
+    fillStyle?: {
+        color: number;
+    };
     num: number;
     index: number;
+};
+export type TRestoreFinalItem = {
+    name: string;
+    title: string;
+    pattern: string;
+    lineStyle?: { color: number };
+    fillStyle?: { color: number };
+    [key: string]: any;
+};
+export type TRestoreDrawingList = {
+    index: number;
+    data: TRestoreFinalItem;
 };
 
 export type TActiveDrawingToolItem = {
@@ -117,7 +79,15 @@ export type TActiveDrawingToolItem = {
     items: TActiveDrawingItem[];
 };
 
-// TODO: Integrate draw tools with flutter charts
+export type TDrawingCreatedConfig = {
+    configId: string;
+    edgePoints: TEdgePoints[];
+    isOverlay: boolean;
+    pattern: { index: number };
+    [key: string]: any;
+};
+
+/// TODO: Integrate draw tools with flutter charts
 
 export default class DrawToolsStore {
     _pervDrawingObjectCount = 0;
@@ -197,29 +167,36 @@ export default class DrawToolsStore {
     destructor() {
         document.removeEventListener('keydown', this.closeOnEscape);
         document.removeEventListener('dblclick', this.doubleClick);
-        // if (!this.context) return;
+        /// if (!this.context) return;
     }
 
     onRightClickDrawing() {
-        // this.showDrawToolDialog(drawing);
+        /// this.showDrawToolDialog(drawing);
         return true;
     }
 
-      
     async restoreDrawings(activeItems: TActiveDrawingToolItem[]) {
-        const drawingPartMap = {
-            Ray: 'RayLine',
-            Continuous: 'ContinuousLine',
+        const drawingPart = ['marker', 'line', 'rectangle'];
+        const drawingPartMap: {
+            Ray: string;
+            Continuous: string;
+            [key: string]: any;
+        } = {
+            Ray: 'rayValue',
+            Continuous: 'continuousValue',
         };
 
         const activeDrawingItems = [...activeItems];
         let drawingList: any = [];
 
-        const drawingPart = ['marker', 'line', 'rectangle'];
-        activeDrawingItems.forEach(drawing => {
-            drawing.items.forEach(data => {
+        activeDrawingItems.forEach((drawing, index) => {
+            drawing.items.forEach((data, itemIndex) => {
                 const drawingParts: any[] = [];
-                data.config.drawingData.drawingParts.forEach(item => {
+                const drawingToolLabel = this.getDrawingToolProps(data.id);
+
+                activeItems[index].items[itemIndex] = { ...activeItems[index].items[itemIndex], ...drawingToolLabel };
+
+                data.config.drawingData.drawingParts.forEach((item: TDrawingPart) => {
                     drawingParts.push({
                         ...item,
                         ...{
@@ -234,34 +211,33 @@ export default class DrawToolsStore {
 
                 data.config.drawingData.drawingParts = drawingParts;
 
-                const finalItem = {
+                const finalItem: TRestoreFinalItem = {
                     ...data.config,
                     ...{ name: data.name, title: data.title, pattern: 'solid', lineStyle: data.lineStyle },
                 };
+
                 if (data.fillStyle) {
-                    finalItem['fillStyle'] = data.fillStyle;
+                    finalItem.fillStyle = data.fillStyle;
                 }
 
-                // this.mainStore.chartAdapter.flutterChart?.drawingTool.addDrawing(JSON.stringify(finalItem));
                 drawingList.push({ index: data.index, data: finalItem });
             });
         });
 
-        drawingList = drawingList.sort((x, y) => x.index - y.index);
+        drawingList = drawingList.sort((x: TRestoreFinalItem, y: TRestoreFinalItem) => x.index - y.index);
 
         this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingTool();
 
-        drawingList.forEach(item => {
+        drawingList.forEach((item: TRestoreDrawingList) => {
             this.mainStore.chartAdapter.flutterChart?.drawingTool.addDrawing(JSON.stringify(item.data));
         });
-
         this.activeToolsGroup = activeItems;
-
     }
 
+    // Function that show the setting dialog for drawing tool
     showDrawToolDialog(drawing: TActiveDrawingItem) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
-        // const dontDeleteMe = drawing.abort(); // eslint-disable-line no-unused-vars
+        /// const dontDeleteMe = drawing.abort(); /// eslint-disable-line no-unused-vars
         if (drawing) {
             let title = formatCamelCase(drawing.name || '');
 
@@ -269,10 +245,6 @@ export default class DrawToolsStore {
             parameters.map(p => (p.value = clone(p.defaultValue)));
 
             title = `${drawing.title} ${drawing.num || ''}`;
-
-            // console.log('checking drawing', drawing);
-            // this.activeDrawing.highlighted = false;
-            // this.activeDrawing = drawing;
             this.settingsDialog.title = title;
             this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
             this.settingsDialog.items = drawing.parameters;
@@ -289,6 +261,8 @@ export default class DrawToolsStore {
             this.crosshairStore.setCrosshairState(this.stateStore.crosshairState);
         }
     }
+
+    // Callback to remove all drawings
     clearAll() {
         this.activeToolsGroup = [];
         window.flutterChart?.drawingTool.clearDrawingTool();
@@ -296,6 +270,7 @@ export default class DrawToolsStore {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, 'Clear All');
     }
 
+    // Getting Props for drawing tool
     getDrawingToolProps = (drawTool: string) => {
         return getDrawTools()[drawTool];
     };
@@ -318,23 +293,20 @@ export default class DrawToolsStore {
         return value;
     };
 
+    // Callback that runs when a drawing tool is selected
     selectTool(id: string) {
         this.menuStore.setOpen(false);
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Add ${id}`);
-        // If found, remove the item with the given index
-
+        /// If found, remove the item with the given index
         const finalItem = this.processDrawTool(id);
         this.seletedDrawToolConfig = clone(finalItem);
         delete finalItem.parameters;
-        // console.log('Final Item', finalItem);
         if (finalItem) {
-            // this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
             this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(JSON.stringify(finalItem), -1);
-            this.mainStore.state.saveDrawings();
-            // this.mainStore.crosshair.selectedDrawingHoverClick();
         }
     }
 
+    /// Used to add item in activeToolsGroup
     updateActiveToolsGroup(finalItem: TActiveDrawingItem) {
         const activeTools = [...this.activeToolsGroup];
         const groupIndex = activeTools.findIndex(item => item.id === finalItem.id);
@@ -353,7 +325,7 @@ export default class DrawToolsStore {
         this.mainStore.state.saveDrawings();
     }
 
-    // The common function (now only responsible for creating finalItem)
+    /// The common function (now only responsible for creating finalItem)
     processDrawTool(id: string) {
         const drawToolsConfig = getDrawTools();
         const props = drawToolsConfig[id];
@@ -407,15 +379,8 @@ export default class DrawToolsStore {
         return finalItem;
     }
 
-    // onUpdate(index,config){
-    //    const drawingName= this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(config);
-    //    const groupItem=this.activeToolsGroup.find(item=>item.id==drawingName);
-    //     const groupIndex=groupItem?.items.find(it=>it.index==index);
-    //     groupIndex.config=config;
-    //     this.mainStore.state.saveDrawings();
-    // }
-
-    onUpdate(index, config) {
+    /// This callback run when any of the drawing is dragged, used to save updated drawing config
+    onUpdate(index: number, config: TDrawingCreatedConfig) {
         const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(config);
 
         // Find the group item containing the drawing tool
@@ -426,31 +391,59 @@ export default class DrawToolsStore {
             const itemToUpdate = groupItem.items.find(item => item.index === index);
 
             if (itemToUpdate) {
-                // Update the config of the found item
-                itemToUpdate.config = config;
+                if (drawingName == 'trend') {
+                    /// TODO
+                    /// const filteredConfig = { ...config };
+                } else {
+                    itemToUpdate.config = config;
+                }
                 this.mainStore.state.saveDrawings();
             }
         }
     }
 
+    /// Callback that runs on the creation of the drawing tool
     onCreation() {
-        if (this.seletedDrawToolConfig) {
+        if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
             const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
             this.activeToolsGroup.map(item => {
                 item.items.map(data => {
-                    if (this.seletedDrawToolConfig.id === 'channel') {
-                        data.config = drawingTools?.drawingToolsRepo?._addOns[data.index + 1];
-                    } else {
-                        data.config = drawingTools.drawingToolsRepo?._addOns[data.index];
+                    const config: TDrawingCreatedConfig | undefined =
+                        drawingTools?.drawingToolsRepo?._addOns[data.index];
+
+                    if (config) {
+                        if (this.seletedDrawToolConfig?.id && this.seletedDrawToolConfig.id === 'channel') {
+                            const edgePoints = config?.edgePoints;
+
+                            if (edgePoints && edgePoints.length == 2) {
+                                const incrementedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index + 1];
+                                if (incrementedConfig) {
+                                    data.config = incrementedConfig;
+                                }
+                            } else {
+                                data.config = config;
+                            }
+                        } else {
+                            data.config = config;
+                        }
                     }
                 });
             });
-            this.seletedDrawToolConfig = null;
+
+            /// for continuous, re-initializing it with updated index
+            if (this.seletedDrawToolConfig.id == 'continuous') {
+                const finalItem = this.processDrawTool(this.seletedDrawToolConfig.id);
+                this.seletedDrawToolConfig = clone(finalItem);
+            } else {
+                /// for other tools, making config to null
+                this.seletedDrawToolConfig = null;
+            }
             this.mainStore.state.saveDrawings();
         }
     }
 
+    /// When any of the property of a drawing tool is changed (lineStyle,fillStyle)
     onChanged(parameters: TSettingsParameter[]) {
         const props = getDrawTools()[this.settingsDialog.drawing_tool_id];
         const { config } = defaultdrawToolsConfigs[this.settingsDialog.drawing_tool_id]();
@@ -496,17 +489,16 @@ export default class DrawToolsStore {
                 const selectedItem = selectedGroup?.items.find(
                     group => group.index === parseInt(this.settingsDialog.id)
                 );
-                if (selectedItem && selectedItem.parameters) {
+                if (selectedItem && selectedItem.lineStyle && selectedItem.parameters) {
                     selectedItem.parameters = parameters;
                     selectedItem.lineStyle.color = selectedConfig.lineStyle.color.value;
-                    if (selectedConfig.fillStyle) {
+                    if (selectedConfig.fillStyle && selectedItem.fillStyle) {
                         selectedItem.fillStyle.color = transformedParams.fillStyle.color;
                     }
                 }
 
                 this.mainStore.state.saveDrawings();
 
-                console.log(selectedConfig);
                 this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
                     selectedConfig,
                     parseInt(this.settingsDialog.id)
@@ -515,11 +507,12 @@ export default class DrawToolsStore {
         }
     }
 
+    /// Deleting the item from the activeToolsGroup
     deleteItemWithIndex(groups: TActiveDrawingToolItem[], searchIndex: number, searchId: string) {
-        // Find the group with the given id
+        /// Find the group with the given id
         const group = groups.find(g => g.id === searchId);
 
-        // If found, remove the item with the given index
+        /// If found, remove the item with the given index
         if (group) {
             group.items = group.items.filter(item => item.index !== searchIndex);
         }
@@ -527,6 +520,7 @@ export default class DrawToolsStore {
         return groups;
     }
 
+    /// Finding item from the activeToolsGroup by its property {index:number}
     findItem(activeTools: TActiveDrawingToolItem[], indx: number) {
         let targetItem = null;
         const targetGroup = activeTools.find(group => group.items.some(item => item.index === indx));
@@ -536,6 +530,7 @@ export default class DrawToolsStore {
         return targetItem;
     }
 
+    /// Callback that runs when drawingTool is Deleted
     onDeleted(indx?: number | string) {
         let activeTools = this.activeToolsGroup;
 
@@ -564,13 +559,14 @@ export default class DrawToolsStore {
             }
             this.activeToolsGroup = activeTools;
             this.mainStore.state.saveDrawings();
-            // Log the event
+            /// Log the event
             if (this.activeDrawing) {
                 logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);
             }
         }
     }
 
+    /// When the settings are opened for a drawing tools
     onSetting(indx?: number) {
         if (indx !== undefined) {
             let targetItem;
@@ -586,6 +582,7 @@ export default class DrawToolsStore {
         }
     }
 
+    /// Clone to OnSetting for testing
     onRightClickSetting(indx?: number) {
         if (indx !== undefined) {
             let targetItem;
@@ -601,10 +598,12 @@ export default class DrawToolsStore {
         }
     }
 
+    /// Will be deleted
     updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }
 
+    /// Callback to check if the drawing is hovered
     onDrawingHover(
         _dx: number,
         _dy: number,

@@ -34,14 +34,13 @@ class DrawingToolModel {
     drawingTools.onDrawingToolSelection(config);
   }
 
-  ///
+  /// Getting the repo
   AddOnsRepository<DrawingToolConfig> getDrawingTool() => drawingToolsRepo;
 
-  ///
+  /// function to get drawtools
   DrawingTools getDrawingTools() => drawingTools;
 
   /// To add a drawing
-  // void addDrawing(String dataString, int? index) {
   void addOrUpdateDrawing(String dataString, int? index) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
 
@@ -60,7 +59,8 @@ class DrawingToolModel {
     }
   }
 
-  /// Adding Drawing
+
+  /// Adding Drawing used when restoring drawing from the localStorage
   void addDrawing(String dataString) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
 
@@ -72,8 +72,7 @@ class DrawingToolModel {
       drawingData: DrawingData(
         id: drawingToolConfig.configId!,
         drawingParts: drawingToolConfig.drawingData!.drawingParts,
-        isDrawingFinished:
-            drawingToolConfig is ContinuousDrawingToolConfig ? false : true,
+        isDrawingFinished: true,
       ),
     );
 
@@ -111,8 +110,7 @@ class DrawingToolModel {
   }
 
 
-  /// To add a drawing
-  // void addDrawing(String dataString, int? index) {
+  /// To edit a drawing
   void editDrawing(DrawingToolConfig drawingToolConfig, int? index) {
     if (index != null) {
       final DrawingToolConfig config = drawingToolConfig;

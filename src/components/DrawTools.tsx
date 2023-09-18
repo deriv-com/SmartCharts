@@ -85,7 +85,7 @@ const DrawToolsList = ({ items, onClick }: TDrawToolsListProps) => (
     </div>
 );
 
-const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: TActiveDrawToolsListItemProps) => {
+const ActiveDrawToolsListItem = ({ item, onSetting, onDelete }: TActiveDrawToolsListItemProps) => {    
     return (
         <div className='sc-dtools__list__item'>
             <Info Icon={item.icon} text={item.text} bars={item.bars} num={item.num} />
@@ -102,8 +102,8 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: TActiveDrawToo
         <div className='sc-dtools__category__head'>{t.translate(capitalize(group.id))}</div>
         <div className='sc-dtools__category__body'>
             <div className='sc-dtools__list'>
-                {group.items.map((item, idx) => (
-                    <ActiveDrawToolsListItem key={idx} item={{ ...item }} onSetting={onSetting} onDelete={onDelete} />
+                {group.items.map((item) => (
+                    <ActiveDrawToolsListItem key={item.index} item={{ ...item }} onSetting={onSetting} onDelete={onDelete} />
                 ))}
             </div>
         </div>
@@ -111,6 +111,8 @@ const ActiveDrawToolsListGroup = ({ group, onSetting, onDelete }: TActiveDrawToo
 );
 
 const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }: TActiveDrawToolsListProps) => {
+
+    
     const sortedActiveDrawToolsGroup = activeDrawToolsGroup.sort((a, b) => {
         if (a.items.length <= 1 && b.items.length <= 1) return 0;
         if (a.items.length <= 1) return -1;
@@ -120,18 +122,17 @@ const ActiveDrawToolsList = ({ activeDrawToolsGroup, onSetting, onDelete }: TAct
 
     return (
         <Scroll autoHide height={320}>
-            {sortedActiveDrawToolsGroup.map((group, idx) =>
+            {sortedActiveDrawToolsGroup.map((group) =>
                 group.items.length > 1 ? (
                     <ActiveDrawToolsListGroup
                         group={group}
-                        key={idx + 1}
-                        // item={group.items}
+                        key={group.id}
                         onSetting={onSetting}
                         onDelete={onDelete}
                     />
                 ) : (
-                    group.items.map((item, inddx) => (
-                        <ActiveDrawToolsListItem key={inddx} item={item} onSetting={onSetting} onDelete={onDelete} />
+                    group.items.map((item) => (
+                        <ActiveDrawToolsListItem key={item.index} item={item} onSetting={onSetting} onDelete={onDelete} />
                     ))
                 )
             )}
