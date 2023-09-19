@@ -472,7 +472,7 @@ class ChartStore {
                 /* TODO, symbol not found error */
                 return;
             }
-            this.state?.restoreDrawings();
+            // this.state?.restoreDrawings();
         };
 
         this.mainStore.chartAdapter.newChart();

@@ -240,6 +240,9 @@ export default class ChartAdapterStore {
                 onAdd: () => {
                     this.mainStore.drawTools.onCreation();
                 },
+                onUpdate: (index: number, config: {}) => {
+                    this.mainStore.drawTools.onUpdate(index, config);
+                },
                 onRemove: (index: number) => {
                     // this.mainStore.drawTools.deleteGroupTool(index);
                 },

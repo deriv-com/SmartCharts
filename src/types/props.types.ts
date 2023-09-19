@@ -6,7 +6,7 @@ import {
     ProposalOpenContract,
 } from '@deriv/api-types';
 
-import { TActiveDrawingToolItem } from 'src/store/DrawToolsStore';
+import { TActiveDrawingToolItem, TDrawingCreatedConfig } from 'src/store/DrawToolsStore';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
@@ -393,9 +393,10 @@ export type TFlutterChart = {
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
         getDrawingTools: () => { drawingToolsRepo: { _addOns: [] }; selectedDrawingTool: any };
-        getTypeOfSelectedDrawingTool: (config: string) => string;
+        getTypeOfSelectedDrawingTool: (config: TDrawingCreatedConfig) => string;
         clearDrawingToolSelect: () => void;
         editDrawing: (config: {}, index: number) => void;
+        addDrawing: (config: string) => void;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;
@@ -426,6 +427,7 @@ export type JSInterop = {
     };
     drawingTool: {
         onAdd: () => void;
+        onUpdate: (index: number, config: {}) => void;
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
         onSwap: (index1: number, index2: number) => void;

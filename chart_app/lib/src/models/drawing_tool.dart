@@ -18,8 +18,9 @@ class DrawingToolModel {
         JsInterop.drawingTool?.onAdd?.call();
       }
     },
-
-    // onEditCallback: () {},
+    onUpdateCallback: (int index, AddOnConfig config) {
+      JsInterop.drawingTool?.onUpdate?.call(index, config);
+    },
   );
 
   /// DrawingTools
@@ -35,14 +36,13 @@ class DrawingToolModel {
     drawingTools.onDrawingToolSelection(config);
   }
 
-  ///
+  /// Getting the repo
   AddOnsRepository<DrawingToolConfig> getDrawingTool() => drawingToolsRepo;
 
-  ///
+  /// function to get drawtools
   DrawingTools getDrawingTools() => drawingTools;
 
   /// To add a drawing
-  // void addDrawing(String dataString, int? index) {
   void addOrUpdateDrawing(String dataString, int? index) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
 
@@ -59,6 +59,25 @@ class DrawingToolModel {
     } else {
       drawingTools.onDrawingToolSelection(drawingToolConfig);
     }
+  }
+
+  /// Adding Drawing used when restoring drawing from the localStorage
+  void addDrawing(String dataString) {
+    final Map<String, dynamic> config = json.decode(dataString)..remove('id');
+
+    DrawingToolConfig? drawingToolConfig = DrawingToolConfig.fromJson(config);
+
+    drawingToolConfig = drawingToolConfig.copyWith(
+      configId: drawingToolConfig.configId,
+      edgePoints: drawingToolConfig.edgePoints,
+      drawingData: DrawingData(
+        id: drawingToolConfig.configId!,
+        drawingParts: drawingToolConfig.drawingData!.drawingParts,
+        isDrawingFinished: true,
+      ),
+    );
+
+    drawingTools.drawingToolsRepo!.add(drawingToolConfig);
   }
 
   /// To remove an existing drawing tool
@@ -91,13 +110,12 @@ class DrawingToolModel {
     }
   }
 
-  /// To add a drawing
-  // void addDrawing(String dataString, int? index) {
+  /// To edit a drawing
   void editDrawing(DrawingToolConfig drawingToolConfig, int? index) {
     if (index != null) {
       final DrawingToolConfig config = drawingToolConfig;
       drawingToolsRepo.updateAt(index, config);
-      drawingTools.drawingToolsRepo!.updateAt(index, config);
+      // drawingTools.drawingToolsRepo!.updateAt(index, config);
     }
   }
 
