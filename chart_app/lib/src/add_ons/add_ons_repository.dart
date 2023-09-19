@@ -16,12 +16,6 @@ typedef OnEditCallback = void Function(int index);
 /// Swaps two elements of a list.
 typedef OnSwapCallback = void Function(int index1, int index2);
 
-/// Callback to notify mouse enter over the addon.
-typedef OnMouseEnterCallback = void Function(int index);
-
-/// Callback to notify mouse exit over the addon.
-typedef OnMouseExitCallback = void Function(int index);
-
 /// Holds indicators/drawing tools that were added to the Chart during runtime.
 class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     implements Repository<T> {
@@ -31,8 +25,6 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     this.onEditCallback,
     this.onRemoveCallback,
     this.onSwapCallback,
-    this.onMouseEnterCallback,
-    this.onMouseExitCallback,
   }) : _addOns = <T>[];
 
   final List<T> _addOns;
@@ -52,12 +44,6 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
   /// Callback to swap two elements of a list.
   OnSwapCallback? onSwapCallback;
-
-  /// Callback to notify mouse enter over the addon.
-  OnMouseEnterCallback? onMouseEnterCallback;
-
-  /// Callback to notify mouse exit over the addon.
-  OnMouseExitCallback? onMouseExitCallback;
 
   /// Adds a new indicator or drawing tool.
   @override
@@ -113,15 +99,5 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   void clear() {
     _addOns.clear();
     notifyListeners();
-  }
-
-  @override
-  void onMouseEnter(int index) {
-    onMouseEnterCallback?.call(index);
-  }
-
-  @override
-  void onMouseExit(int index) {
-    onMouseExitCallback?.call(index);
   }
 }

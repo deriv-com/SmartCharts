@@ -162,7 +162,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     );
   }
 
-  DrawingTools drawingTool = DrawingTools();
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[

@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:js/js.dart';
 
 /// JS Interop

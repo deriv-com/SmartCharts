@@ -185,13 +185,7 @@ export default class ChartAdapterStore {
                     this.mainStore.crosshair.decimalPlaces
                 );
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
-                this.mainStore.crosshair.selectedDrawingHoverClick();
-                const quoteToY = this.flutterChart?.crosshair.getYFromQuote;
-                const epochToX = this.flutterChart?.crosshair.getXFromEpoch;
-                // const quoteToY = this.flutterChart?.crosshair.getYFromQuote;
-                // console.log(this.msPerPx);
-                const index = this.mainStore.drawTools.onDrawingHover(dx, dy, epoch, quote, quoteToY, epochToX);
-                const drawingRepo = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+
                 const handleDrawingRightClick = (e: Event) => {
                     if (this.drawingHoverIndex != null) {
                         e.preventDefault();
@@ -208,35 +202,26 @@ export default class ChartAdapterStore {
                     }
                 }
 
-                if (index != null) {
-                    this.drawingHoverIndex = index;
-                    const item = drawingRepo.drawingToolsRepo._addOns[index];
-                    item.lineStyle.thickness = 3;
-                    // this.drawingColor = item.lineStyle.color.value;
-                    // item.lineStyle.color.value = 4293532972;
-                    this.mainStore.crosshair.renderDrawingToolToolTip(
-                        this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(item) || '',
-                        dx,
-                        dy
-                    );
-                    if (this.clickEventCount === 0) {
-                        this.clickEventCount++;
-                        updateEventListener(true);
-                    }
-                    // this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, index);
-                } else if (this.drawingHoverIndex !== null) {
-                    this.drawingHoverIndex = null;
-                    if (drawingRepo) {
-                        drawingRepo.drawingToolsRepo._addOns.forEach(
-                            (item: { lineStyle: { thickness: number; color: { value: number } } }, idx: number) => {
-                                item.lineStyle.thickness = 1;
-                                // item.lineStyle.color.value = this.drawingColor;
-                                this.mainStore.crosshair.removeDrawingToolToolTip();
-                                // this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(item, idx);
-                            }
+                if (this.drawingHoverIndex != null) {
+                    const drawingRepo = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+                    const item = drawingRepo?.drawingToolsRepo._addOns[this.drawingHoverIndex];
+
+                    if (item) {
+                        this.mainStore.crosshair.renderDrawingToolToolTip(
+                            this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(item) ||
+                                '',
+                            dx,
+                            dy
                         );
+                        if (this.clickEventCount === 0) {
+                            this.clickEventCount++;
+                            updateEventListener(true);
+                        }
                     }
+                } else {
+                    this.mainStore.crosshair.removeDrawingToolToolTip();
                 }
+
                 throttledUpdate(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
@@ -264,6 +249,12 @@ export default class ChartAdapterStore {
                 },
                 onSwap: (index1: number, index2: number) => {
                     // console.log('swapped');
+                },
+                onMouseEnter: (index: number) => {
+                    this.drawingHoverIndex = index;
+                },
+                onMouseExit: (index: number) => {
+                    this.drawingHoverIndex = null;
                 },
             },
         };

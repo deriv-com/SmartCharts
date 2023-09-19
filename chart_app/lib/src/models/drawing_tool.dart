@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:chart_app/src/interop/js_interop.dart';
-import 'package:flutter/material.dart';
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 
@@ -20,16 +18,17 @@ class DrawingToolModel {
         JsInterop.drawingTool?.onAdd?.call();
       }
     },
-    onMouseEnterCallback: (int index) =>
-        JsInterop.drawingTool?.onMouseEnter?.call(index),
-    onMouseExitCallback: (int index) =>
-        JsInterop.drawingTool?.onMouseExit?.call(index),
+
     // onEditCallback: () {},
   );
 
   /// DrawingTools
-  late DrawingTools drawingTools = DrawingTools()
-    ..drawingToolsRepo = drawingToolsRepo;
+  late DrawingTools drawingTools = DrawingTools(
+    onMouseEnterCallback: (int index) =>
+        JsInterop.drawingTool?.onMouseEnter?.call(index),
+    onMouseExitCallback: (int index) =>
+        JsInterop.drawingTool?.onMouseExit?.call(index),
+  )..drawingToolsRepo = drawingToolsRepo;
 
   ///
   void selectDrawing(DrawingToolConfig config) {
