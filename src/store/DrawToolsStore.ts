@@ -182,10 +182,11 @@ export default class DrawToolsStore {
             Continuous: string;
             [key: string]: any;
         } = {
-            Ray: 'rayValue',
-            Continuous: 'continuousValue',
+            Ray: 'RayLine',
+            Continuous: 'ContinuousLine',
         };
 
+        // ContinuousLineDrawing
         const activeDrawingItems = [...activeItems];
         let drawingList: any = [];
 
@@ -195,6 +196,7 @@ export default class DrawToolsStore {
                 const drawingToolLabel = this.getDrawingToolProps(data.id);
 
                 activeItems[index].items[itemIndex] = { ...activeItems[index].items[itemIndex], ...drawingToolLabel };
+                console.log(data);
 
                 data.config.drawingData.drawingParts.forEach((item: TDrawingPart) => {
                     drawingParts.push({
@@ -322,7 +324,7 @@ export default class DrawToolsStore {
             activeTools[groupIndex] = item;
         }
         this.activeToolsGroup = activeTools;
-        this.mainStore.state.saveDrawings();
+        // this.mainStore.state.saveDrawings();
     }
 
     /// The common function (now only responsible for creating finalItem)
@@ -359,7 +361,7 @@ export default class DrawToolsStore {
                 return acc;
             }, item.config || {});
 
-            const configg = {
+            const drawingData = {
                 id: item.id,
                 name: `dt_${id}`,
                 title: capitalize(item.id),
@@ -369,7 +371,7 @@ export default class DrawToolsStore {
             const drawToolConfig = getDrawTools();
 
             finalItem = {
-                ...configg,
+                ...drawingData,
                 ...drawToolConfig[id],
                 parameters,
                 ...{ index: this.activeToolsNo },
@@ -382,18 +384,15 @@ export default class DrawToolsStore {
     /// This callback run when any of the drawing is dragged, used to save updated drawing config
     onUpdate(index: number, config: TDrawingCreatedConfig) {
         const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(config);
-
         // Find the group item containing the drawing tool
         const groupItem = this.activeToolsGroup.find(item => item.id === drawingName);
 
         if (groupItem) {
             // Find the item in the group by index
             const itemToUpdate = groupItem.items.find(item => item.index === index);
-
             if (itemToUpdate) {
                 if (drawingName == 'trend') {
-                    /// TODO
-                    /// const filteredConfig = { ...config };
+                    itemToUpdate.config = this.transformConfig(config);
                 } else {
                     itemToUpdate.config = config;
                 }
@@ -402,20 +401,46 @@ export default class DrawToolsStore {
         }
     }
 
+    // For converting circular structure to JSON
+    replacerFunc = () => {
+        const visited = new WeakSet();
+        return (_key: any, value: object | null) => {
+            if (typeof value === 'object' && value !== null) {
+                if (visited.has(value)) {
+                    return;
+                }
+                visited.add(value);
+            }
+            return value;
+        };
+    };
+
+    transformConfig = (config: TDrawingCreatedConfig) => {
+        return JSON.parse(JSON.stringify(config, this.replacerFunc()));
+    };
+
     /// Callback that runs on the creation of the drawing tool
     onCreation() {
         if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
             const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+
             this.activeToolsGroup.map(item => {
                 item.items.map(data => {
-                    const config: TDrawingCreatedConfig | undefined =
-                        drawingTools?.drawingToolsRepo?._addOns[data.index];
+                    const config: TDrawingCreatedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index] || {
+                        configId: '',
+                        edgePoints: [],
+                        isOverlay: false,
+                        pattern: { index: 0 },
+                    };
 
                     if (config) {
-                        if (this.seletedDrawToolConfig?.id && this.seletedDrawToolConfig.id === 'channel') {
-                            const edgePoints = config?.edgePoints;
-
+                        if (
+                            this.seletedDrawToolConfig?.id &&
+                            this.seletedDrawToolConfig.id === 'channel' &&
+                            this.seletedDrawToolConfig.index === data.index
+                        ) {
+                            const edgePoints = config.edgePoints;
                             if (edgePoints && edgePoints.length == 2) {
                                 const incrementedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index + 1];
                                 if (incrementedConfig) {
@@ -424,8 +449,18 @@ export default class DrawToolsStore {
                             } else {
                                 data.config = config;
                             }
-                        } else {
+                        } else if (
+                            this.seletedDrawToolConfig?.id &&
+                            this.seletedDrawToolConfig.id === 'trend' &&
+                            this.seletedDrawToolConfig.index === data.index
+                        ) {
                             data.config = config;
+                        } else {
+                            if (config.configId.includes('Trend')) {
+                                data.config = this.transformConfig(config);
+                            } else {
+                                data.config = config;
+                            }
                         }
                     }
                 });
