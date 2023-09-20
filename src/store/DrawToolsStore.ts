@@ -61,6 +61,8 @@ export type TActiveDrawingItem = {
     num: number;
     index: number;
 };
+
+
 export type TRestoreFinalItem = {
     name: string;
     title: string;
@@ -69,6 +71,7 @@ export type TRestoreFinalItem = {
     fillStyle?: { color: number };
     [key: string]: any;
 };
+
 export type TRestoreDrawingList = {
     index: number;
     data: TRestoreFinalItem;
@@ -176,7 +179,7 @@ export default class DrawToolsStore {
     }
 
     async restoreDrawings(activeItems: TActiveDrawingToolItem[]) {
-        const drawingPart = ['marker', 'line', 'rectangle'];
+        const drawingPartType = ['marker', 'line', 'rectangle'];
         const drawingPartMap: {
             Ray: string;
             Continuous: string;
@@ -186,7 +189,6 @@ export default class DrawToolsStore {
             Continuous: 'ContinuousLine',
         };
 
-        // ContinuousLineDrawing
         const activeDrawingItems = [...activeItems];
         let drawingList: any = [];
 
@@ -196,7 +198,6 @@ export default class DrawToolsStore {
                 const drawingToolLabel = this.getDrawingToolProps(data.id);
 
                 activeItems[index].items[itemIndex] = { ...activeItems[index].items[itemIndex], ...drawingToolLabel };
-                console.log(data);
 
                 data.config.drawingData.drawingParts.forEach((item: TDrawingPart) => {
                     drawingParts.push({
@@ -206,7 +207,7 @@ export default class DrawToolsStore {
                             drawingPart:
                                 typeof item.drawingPart === 'string'
                                     ? item.drawingPart
-                                    : drawingPart[item.drawingPart.index],
+                                    : drawingPartType[item.drawingPart.index],
                         },
                     });
                 });
@@ -456,6 +457,7 @@ export default class DrawToolsStore {
                         ) {
                             data.config = config;
                         } else {
+                            // if the trend is already created then for assigning config again use transformConfig
                             if (config.configId.includes('Trend')) {
                                 data.config = this.transformConfig(config);
                             } else {
