@@ -5,7 +5,7 @@ import set from 'lodash.set';
 import { capitalize, hexToInt } from 'src/components/ui/utils';
 import MainStore from '.';
 import { defaultdrawToolsConfigs, getDefaultDrawingConfig, getDrawTools } from '../Constant';
-import { clone, formatCamelCase, isLiteralObject } from '../utils';
+import { clone, formatCamelCase, isLiteralObject, transformStudiesforTheme } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
@@ -61,7 +61,6 @@ export type TActiveDrawingItem = {
     num: number;
     index: number;
 };
-
 
 export type TRestoreFinalItem = {
     name: string;
@@ -176,6 +175,18 @@ export default class DrawToolsStore {
     onRightClickDrawing() {
         /// this.showDrawToolDialog(drawing);
         return true;
+    }
+
+    updateTheme() {
+        this.activeToolsGroup.forEach(item =>
+            item.items.forEach(data => {
+                this.settingsDialog.id = JSON.stringify(data.index);
+                this.settingsDialog.drawing_tool_id = data.id;
+                this.onChanged(data.parameters);
+            })
+        );
+
+        this.mainStore.state.saveLayout();
     }
 
     async restoreDrawings(activeItems: TActiveDrawingToolItem[]) {
@@ -334,6 +345,10 @@ export default class DrawToolsStore {
         const props = drawToolsConfig[id];
 
         const { parameters, config } = getDefaultDrawingConfig(id);
+
+        transformStudiesforTheme(parameters, this.mainStore.chartSetting.theme);
+        transformStudiesforTheme(config, this.mainStore.chartSetting.theme);
+
         let finalItem = null;
 
         if (props && parameters) {
@@ -426,8 +441,8 @@ export default class DrawToolsStore {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
             const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
 
-            this.activeToolsGroup.map(item => {
-                item.items.map(data => {
+            this.activeToolsGroup.forEach(item => {
+                item.items.forEach(data => {
                     const config: TDrawingCreatedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index] || {
                         configId: '',
                         edgePoints: [],
@@ -484,6 +499,8 @@ export default class DrawToolsStore {
     onChanged(parameters: TSettingsParameter[]) {
         const props = getDrawTools()[this.settingsDialog.drawing_tool_id];
         const { config } = defaultdrawToolsConfigs[this.settingsDialog.drawing_tool_id]();
+
+        transformStudiesforTheme(parameters, this.mainStore.chartSetting.theme);
 
         if (props && parameters) {
             const itemm = {

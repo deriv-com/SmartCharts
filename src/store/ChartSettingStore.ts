@@ -177,6 +177,7 @@ export default class ChartSettingStore {
             this.mainStore.state.setChartTheme(theme);
         }
         this.mainStore.studies.updateTheme();
+        this.mainStore.drawTools.updateTheme();
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change theme to ${theme}`);
         this.saveSetting();
     }
