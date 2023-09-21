@@ -19,28 +19,24 @@ type TDrawObject = {
     name: string;
 };
 
-type TDrawConfig = {
-    lineStyle: { color: { value: number } };
-    fillStyle?: { color: { value: number } };
-};
 
 export type TEdgePoints = {
     epoch: number;
     quote: number;
 };
 
-type TDrawingPart = {
-    chartConfig?: { pipsize: number; granularity: number };
-    class_name_key: string;
-    drawingPart: string | { index: number };
-    edgePoint?: TEdgePoints;
-    startPoint?: { x: number; y: number };
-    isDrawingFinished?: boolean;
-    startEdgePoint?: TEdgePoints;
-    middleEdgePoint?: TEdgePoints;
-    endEdgePoint?: TEdgePoints;
-    [key: string]: any; /// Allows any other string key with values of any type
-};
+// type TDrawingPart = {
+//     chartConfig?: { pipsize: number; granularity: number };
+//     class_name_key: string;
+//     drawingPart: string | { index: number };
+//     edgePoint?: TEdgePoints;
+//     startPoint?: { x: number; y: number };
+//     isDrawingFinished?: boolean;
+//     startEdgePoint?: TEdgePoints;
+//     middleEdgePoint?: TEdgePoints;
+//     endEdgePoint?: TEdgePoints;
+//     [key: string]: any; /// Allows any other string key with values of any type
+// };
 
 export type TActiveDrawingItem = {
     title: string;
@@ -191,6 +187,7 @@ export default class DrawToolsStore {
     // callback that runs when the chart is loaded
     onLoad(drawings: TDrawingCreatedConfig[]) {
         // console.log(drawings);
+        // console.log(this.s)
         this.activeToolsGroup = [];
         drawings.forEach((item: TDrawingCreatedConfig) => {
             const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
@@ -366,10 +363,6 @@ export default class DrawToolsStore {
 
     /// Callback that runs on the creation of the drawing tool
     onCreation() {
-        // const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-        // if (drawTools?.drawingToolsRepo._addOns) {
-        //     this.onLoad(drawTools?.drawingToolsRepo._addOns);
-        // }
         if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
             const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
@@ -450,7 +443,8 @@ export default class DrawToolsStore {
 
             const tools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
             if (tools) {
-                const selectedConfig: TDrawConfig = tools.drawingToolsRepo._addOns[parseInt(this.settingsDialog.id)];
+                const selectedConfig: TDrawingCreatedConfig =
+                    tools.drawingToolsRepo._addOns[parseInt(this.settingsDialog.id)];
 
                 const transformedParams = this.transform(params);
 

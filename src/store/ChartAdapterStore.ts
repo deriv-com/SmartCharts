@@ -202,13 +202,13 @@ export default class ChartAdapterStore {
                 onAdd: () => {
                     this.mainStore.drawTools.onCreation();
                 },
-                onUpdate: (index: number, config: {}) => {
-                    this.mainStore.drawTools.onUpdate(index, config);
+                onUpdate: () => {
+                    this.mainStore.drawTools.onUpdate();
                 },
-                onRemove: (index: number) => {
+                onRemove: () => {
                     // this.mainStore.drawTools.deleteGroupTool(index);
                 },
-                onEdit: (index: number) => {
+                onEdit: () => {
                     // console.log('From the On Edit', index);
                     // this.mainStore.studies.editStudyByIndex(index);
                 },
