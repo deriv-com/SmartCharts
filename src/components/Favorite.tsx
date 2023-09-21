@@ -1,5 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
+import { useStores } from 'src/store';
+import { STATE } from 'src/Constant';
 import { FavoriteIcon } from './Icons';
 import FavoriteStore from '../store/FavoriteStore';
 import { logEvent, LogCategories, LogActions } from '../utils/ga';
@@ -11,6 +13,7 @@ type TFavoriteProps = {
 };
 
 const Favorite = ({ category, id }: TFavoriteProps) => {
+    const { chart, state } = useStores();
     const [store] = React.useState(FavoriteStore.getInstance());
     const [is_favorite, setFavorite] = React.useState(false);
 
@@ -19,8 +22,12 @@ const Favorite = ({ category, id }: TFavoriteProps) => {
             e.stopPropagation();
             (e as TCustomEvent).nativeEvent.isHandledByDialog = true; // prevent close dialog
             store.toggleFavorite(category, id);
+            state.stateChange(STATE.FAVORITE_MARKETS_TOGGLE, {
+                is_favorite: store.isFavorite(category, id),
+                symbol: chart.activeSymbols?.symbolMap[id]?.symbol,
+            });
         },
-        [store, category, id]
+        [chart, state, store, category, id]
     );
     const onFavoriteUpdate = React.useCallback(() => {
         const isFavorite = store.isFavorite(category, id);

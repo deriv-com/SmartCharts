@@ -8,11 +8,12 @@ import {
     TQuote,
     TSettings,
 } from 'src/types';
+import debounce from 'lodash.debounce';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
-import { STATE } from '../Constant';
+import { SMALL_DATASET_MAX_TICKS, STATE } from '../Constant';
 import {
     calculateGranularity,
     calculateTimeUnitInterval,
@@ -23,7 +24,19 @@ import {
 } from '../utils';
 import ChartStore from './ChartStore';
 
-type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
+type TStateChangeOption = {
+    indicator_type_name?: string;
+    indicators_category_name?: string;
+    isClosed?: boolean;
+    is_favorite?: boolean;
+    is_info_open?: boolean;
+    is_open?: boolean;
+    chart_type_name?: string;
+    search_string?: string;
+    symbol?: string;
+    symbol_category?: string;
+    time_interval_name?: string;
+};
 
 type TScrollListenerParamsData = {
     grab: boolean;
@@ -118,6 +131,7 @@ class ChartState {
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
+            debouncedStateChange: action.bound,
             stateChangeListener: observable,
             should_show_eu_content: observable,
             settings: observable,
@@ -685,7 +699,11 @@ class ChartState {
                 this.stxx.setMaxTicks(scrollToTarget + 3);
                 this.stxx.chart.scroll = scrollToTarget + 1;
             } else {
-                this.stxx.setMaxTicks(Math.floor((scrollToTarget * 3) / 2) || 2);
+                this.stxx.setMaxTicks(
+                    this.stxx.chart.dataSet?.length < 7
+                        ? SMALL_DATASET_MAX_TICKS
+                        : Math.floor((scrollToTarget * 3) / 2) || 2
+                );
                 this.stxx.chart.scroll = Math.floor((scrollToTarget * 5) / 4) || 1;
                 this.setDisableScroll();
             }
@@ -739,6 +757,10 @@ class ChartState {
             this.stxx.chart.lockScroll = false;
         }
     }
+
+    debouncedStateChange = debounce((state: string, option: TStateChangeOption) => {
+        this.stateChange(state, option);
+    }, 500);
 }
 
 export default ChartState;

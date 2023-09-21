@@ -236,7 +236,7 @@ class CrosshairStore {
                 dupMap.Open = dupMap.High = dupMap.Low = 1;
             }
         }
-        if (this.showSeries) {
+        if (this.showSeries && !this.showOhl) {
             const renderers = stx.chart.seriesRenderers;
             for (const renderer in renderers) {
                 const rendererToDisplay = renderers[renderer];
@@ -380,7 +380,8 @@ class CrosshairStore {
                         if (stx.chart.xAxis.noDraw) {
                             continue;
                         } else {
-                            fieldValue = floatDate.innerHTML;
+                            const formattedTime = floatDate.innerHTML.replace(/(\d{2})\/(\d{2})/, '$2/$1');
+                            fieldValue = formattedTime;
                         }
                     } else {
                         fieldValue = CIQ.yyyymmdd(dsField);

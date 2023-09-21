@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import { TProcessedSymbolItem } from 'src/binaryapi/ActiveSymbols';
 import { useStores } from 'src/store';
 import { TOpenMarket } from 'src/types';
+import { getSymbolMarketCategory } from 'src/utils';
+import { STATE } from 'src/Constant';
 import '../../sass/components/_chart-title.scss';
 import { CategoricalDisplay } from './categoricaldisplay';
 import Menu from './Menu';
@@ -21,9 +23,8 @@ export type TChartTitleProps = {
 };
 
 const ChartTitle = (props: TChartTitleProps) => {
-    const { chartTitle, chart, chartSetting } = useStores();
+    const { chartTitle, chart, chartSetting, state } = useStores();
     const { isMobile } = chart;
-
     const { theme } = chartSetting;
     const {
         menuStore,
@@ -36,7 +37,6 @@ const ChartTitle = (props: TChartTitleProps) => {
     } = chartTitle;
     const onChange = props.onChange || setSymbol;
     const setMenuOpen = menuStore.setOpen;
-
     const { containerId, enabled, portalNodeId, searchInputClassName, open, open_market, isNestedList } = props;
 
     React.useEffect(() => {
@@ -68,9 +68,14 @@ const ChartTitle = (props: TChartTitleProps) => {
                     store={categoricalDisplay}
                     isNestedList={isNestedList}
                     searchInputClassName={searchInputClassName}
-                    onSelectItem={(x: TProcessedSymbolItem) => {
-                        if (x.symbol !== currentSymbol.symbol) {
-                            onChange(x.symbol);
+                    onSelectItem={(symbol_object: TProcessedSymbolItem, category_id: string) => {
+                        if (symbol_object.symbol !== currentSymbol.symbol) {
+                            onChange(symbol_object.symbol);
+                            state.stateChange(STATE.SYMBOL_CHANGE, {
+                                symbol: symbol_object.symbol,
+                                symbol_category:
+                                    category_id === 'favorite' ? 'favorites' : getSymbolMarketCategory(symbol_object),
+                            });
                         }
                         setMenuOpen(false);
                     }}
