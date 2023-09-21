@@ -88,25 +88,25 @@ class DrawingToolModel {
   /// To get the tool name from config
   String getTypeOfSelectedDrawingTool(DrawingToolConfig config) {
     if (config is VerticalDrawingToolConfig) {
-      return 'vertical';
+      return 'Vertical';
     } else if (config is LineDrawingToolConfig) {
-      return 'line';
+      return 'Line';
     } else if (config is RayDrawingToolConfig) {
-      return 'ray';
+      return 'Ray';
     } else if (config is ContinuousDrawingToolConfig) {
-      return 'continuous';
+      return 'Continuous';
     } else if (config is TrendDrawingToolConfig) {
-      return 'trend';
+      return 'Trend';
     } else if (config is HorizontalDrawingToolConfig) {
-      return 'horizontal';
+      return 'Horizontal';
     } else if (config is ChannelDrawingToolConfig) {
-      return 'channel';
+      return 'Channel';
     } else if (config is FibfanDrawingToolConfig) {
-      return 'fibfan';
+      return 'Fibfan';
     } else if (config is RectangleDrawingToolConfig) {
-      return 'rectangle';
+      return 'Rectangle';
     } else {
-      return 'nil';
+      return '';
     }
   }
 
