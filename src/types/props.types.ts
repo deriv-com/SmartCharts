@@ -430,6 +430,7 @@ export type JSInterop = {
         onUpdate: (index: number, config: {}) => void;
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
+        onLoad: (drawings: []) => void;
         onMouseEnter: (index: number) => void;
         onMouseExit: (index: number) => void;
     };

@@ -11,12 +11,16 @@ class DrawingToolModel {
   /// Drawing tools repo
   final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
       AddOnsRepository<DrawingToolConfig>(
+    createAddOn: (Map<String, dynamic> map) => DrawingToolConfig.fromJson(map),
     onAddCallback: (AddOnConfig config) {
       final DrawingToolConfig drawingToolConfig = config as DrawingToolConfig;
       if (drawingToolConfig.drawingData != null &&
           drawingToolConfig.drawingData!.isDrawingFinished) {
         JsInterop.drawingTool?.onAdd?.call();
       }
+    },
+    onLoadCallback: (List items) {
+      JsInterop.drawingTool?.onLoad?.call(items);
     },
     onUpdateCallback: (int index, AddOnConfig config) {
       JsInterop.drawingTool?.onUpdate?.call(index, config);
@@ -88,23 +92,23 @@ class DrawingToolModel {
   /// To get the tool name from config
   String getTypeOfSelectedDrawingTool(DrawingToolConfig config) {
     if (config is VerticalDrawingToolConfig) {
-      return 'Vertical';
+      return 'vertical';
     } else if (config is LineDrawingToolConfig) {
-      return 'Line';
+      return 'line';
     } else if (config is RayDrawingToolConfig) {
-      return 'Ray';
+      return 'ray';
     } else if (config is ContinuousDrawingToolConfig) {
-      return 'Continuous';
+      return 'continuous';
     } else if (config is TrendDrawingToolConfig) {
-      return 'Trend';
+      return 'trend';
     } else if (config is HorizontalDrawingToolConfig) {
       return 'Horizontal';
     } else if (config is ChannelDrawingToolConfig) {
-      return 'Channel';
+      return 'channel';
     } else if (config is FibfanDrawingToolConfig) {
-      return 'Fibfan';
+      return 'fibfan';
     } else if (config is RectangleDrawingToolConfig) {
-      return 'Rectangle';
+      return 'rectangle';
     } else {
       return '';
     }

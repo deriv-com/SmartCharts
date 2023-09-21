@@ -5,6 +5,7 @@ import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
 import { clone } from 'src/utils';
 import MainStore from '.';
+import { capitalize } from 'src/components/ui/utils';
 
 // Define the throttle function
 function throttle<T extends (...args: any[]) => any>(func: T, delay: number): T {
@@ -170,8 +171,11 @@ export default class ChartAdapterStore {
 
                     if (item) {
                         this.mainStore.crosshair.renderDrawingToolToolTip(
-                            this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(item) ||
-                                '',
+                            capitalize(
+                                this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
+                                    item
+                                ) || ''
+                            ) || '',
                             dx,
                             dy
                         );
@@ -207,6 +211,9 @@ export default class ChartAdapterStore {
                 onEdit: (index: number) => {
                     // console.log('From the On Edit', index);
                     // this.mainStore.studies.editStudyByIndex(index);
+                },
+                onLoad: (item: []) => {
+                    this.mainStore.drawTools.onLoad(item);
                 },
                 onMouseEnter: (index: number) => {
                     this.drawingHoverIndex = index;

@@ -19,6 +19,7 @@ class IndicatorsModel {
   /// Indicators repo
   final AddOnsRepository<IndicatorConfig> indicatorsRepo =
       AddOnsRepository<IndicatorConfig>(
+    createAddOn: (Map<String, dynamic> map) => IndicatorConfig.fromJson(map),
     onEditCallback: (int i) => JsInterop.indicators?.onEdit?.call(i),
     onRemoveCallback: (int i) => JsInterop.indicators?.onRemove?.call(i),
     onSwapCallback: (int x, int y) => JsInterop.indicators?.onSwap?.call(x, y),

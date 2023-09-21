@@ -194,8 +194,6 @@ export default class ViewStore {
 
         this.mainStore.studies.restoreStudies(layout.studyItems || []);
 
-        this.mainStore.drawTools.restoreDrawings(layout.drawTools || []);
-
         if (typeof layout.crosshair === 'number') {
             this.mainStore.crosshair.setCrosshairState(layout.crosshair);
         }
