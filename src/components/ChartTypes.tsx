@@ -3,7 +3,9 @@ import React from 'react';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
 import { ChartType, TIcon } from 'src/types';
+import { getTimeIntervalName } from 'src/utils';
 import { TListItem } from 'src/store/ListStore';
+import { Intervals, STATE } from 'src/Constant';
 import Tooltip from './Tooltip';
 import '../../sass/components/_chart-types.scss';
 import List from './List';
@@ -23,7 +25,7 @@ type TChartTypesProps = {
 };
 
 const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
-    const { chartType, chart } = useStores();
+    const { chartType, chart, state } = useStores();
 
     const { listStore, setTypeFromUI, updateProps, types, type, menuStore } = chartType;
     const { open: menuOpen, setOpen } = chartType.menuStore;
@@ -35,6 +37,12 @@ const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesPro
 
     const onItemClick = (chart_type: ChartType) => {
         if (type.id !== chart_type.id) {
+            if (chart_type.id) {
+                state.stateChange(STATE.CHART_TYPE_CHANGE, {
+                    chart_type_name: chart_type.id === 'colored_bar' ? chart_type.text : chart_type.text.toLowerCase(),
+                    time_interval_name: getTimeIntervalName(state.granularity, Intervals),
+                });
+            }
             onChange(chart_type.id);
         }
         setOpen(false);

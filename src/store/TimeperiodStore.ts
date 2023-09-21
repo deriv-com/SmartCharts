@@ -1,8 +1,9 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
 import { TCIQAppend, TGranularity } from 'src/types';
+import { ChartTypes, Intervals, STATE } from 'src/Constant';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
+import { displayMilliseconds, getIntervalInSeconds, getTimeIntervalName, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
@@ -40,7 +41,7 @@ export default class TimeperiodStore {
             updateProps: action.bound,
             changeGranularity: action.bound,
             updateDisplay: action.bound,
-            updatePortalNode: action.bound
+            updatePortalNode: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -69,7 +70,6 @@ export default class TimeperiodStore {
             this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
         } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
-
 
     onGranularityChange: (granularity?: TGranularity) => void | null = () => null;
 
@@ -193,6 +193,16 @@ export default class TimeperiodStore {
     }
 
     changeGranularity(interval: TGranularity) {
+        if (interval) {
+            const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.chartType.type.id)?.text ?? '';
+            this.mainStore.state.stateChange(STATE.CHART_INTERVAL_CHANGE, {
+                time_interval_name: getTimeIntervalName(interval, Intervals),
+                chart_type_name:
+                    this.mainStore.chartType.type.id === 'colored_bar'
+                        ? chart_type_name
+                        : chart_type_name.toLowerCase(),
+            });
+        }
         if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
             this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
