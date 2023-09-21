@@ -160,6 +160,7 @@ export default class DrawToolsStore {
             this.drawingFinished();
         }
     };
+
     doubleClick = () => this.drawingFinished();
     get activeToolsNo() {
         return this.activeToolsGroup.reduce((a, b) => a + b.items.length, 0);
@@ -190,6 +191,7 @@ export default class DrawToolsStore {
     // callback that runs when the chart is loaded
     onLoad(drawings: TDrawingCreatedConfig[]) {
         // console.log(drawings);
+        this.activeToolsGroup = [];
         drawings.forEach((item: TDrawingCreatedConfig) => {
             const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
                 item
@@ -336,17 +338,10 @@ export default class DrawToolsStore {
     }
 
     /// This callback run when any of the drawing is dragged, used to save updated drawing config
-    onUpdate(index: number, config: TDrawingCreatedConfig) {
-        const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(config);
-        // Find the group item containing the drawing tool
-        const groupItem = this.activeToolsGroup.find(item => item.id === drawingName);
-
-        if (groupItem) {
-            // Find the item in the group by index
-            const itemToUpdate = groupItem.items.find(item => item.index === index);
-            if (itemToUpdate) {
-                itemToUpdate.config = config;
-            }
+    onUpdate() {
+        const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+        if (drawTools?.drawingToolsRepo._addOns) {
+            this.onLoad(drawTools?.drawingToolsRepo._addOns);
         }
     }
 
@@ -371,6 +366,10 @@ export default class DrawToolsStore {
 
     /// Callback that runs on the creation of the drawing tool
     onCreation() {
+        // const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+        // if (drawTools?.drawingToolsRepo._addOns) {
+        //     this.onLoad(drawTools?.drawingToolsRepo._addOns);
+        // }
         if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
             const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
@@ -483,58 +482,18 @@ export default class DrawToolsStore {
         }
     }
 
-    /// Deleting the item from the activeToolsGroup
-    deleteItemWithIndex(groups: TActiveDrawingToolItem[], searchIndex: number, searchId: string) {
-        /// Find the group with the given id
-        const group = groups.find(g => g.id === searchId);
-
-        /// If found, remove the item with the given index
-        if (group) {
-            group.items = group.items.filter(item => item.index !== searchIndex);
-        }
-        //this.mainStore.state.saveDrawings();
-        return groups;
-    }
-
-    /// Finding item from the activeToolsGroup by its property {index:number}
-    findItem(activeTools: TActiveDrawingToolItem[], indx: number) {
-        let targetItem = null;
-        const targetGroup = activeTools.find(group => group.items.some(item => item.index === indx));
-        if (targetGroup) {
-            targetItem = targetGroup;
-        }
-        return targetItem;
-    }
-
     /// Callback that runs when drawingTool is Deleted
     onDeleted(indx?: number | string) {
-        let activeTools = this.activeToolsGroup;
-
         if (indx !== undefined) {
             if (typeof indx === 'string') {
                 indx = parseInt(indx);
             }
 
             this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(indx);
-
-            const targetItem = this.findItem(activeTools, indx);
-
-            if (targetItem) {
-                activeTools = this.deleteItemWithIndex(activeTools, indx, targetItem.id);
-
-                activeTools.forEach(group => {
-                    group.items.forEach(item => {
-                        if (item.index > (indx as number)) {
-                            item.index--;
-                            if (targetItem?.id === group.id) {
-                                item.num--;
-                            }
-                        }
-                    });
-                });
+            const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+            if (drawTools?.drawingToolsRepo._addOns) {
+                this.onLoad(drawTools?.drawingToolsRepo._addOns);
             }
-            this.activeToolsGroup = activeTools;
-            //this.mainStore.state.saveDrawings();
             /// Log the event
             if (this.activeDrawing) {
                 logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);

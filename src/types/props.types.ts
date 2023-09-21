@@ -392,7 +392,7 @@ export type TFlutterChart = {
         clearDrawingTool: () => void;
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
-        getDrawingTools: () => { drawingToolsRepo: { _addOns: [] }; selectedDrawingTool: any };
+        getDrawingTools: () => { drawingToolsRepo: { _addOns: TDrawingCreatedConfig[] }; selectedDrawingTool: any };
         getTypeOfSelectedDrawingTool: (config: TDrawingCreatedConfig) => string;
         clearDrawingToolSelect: () => void;
         editDrawing: (config: {}, index: number) => void;
