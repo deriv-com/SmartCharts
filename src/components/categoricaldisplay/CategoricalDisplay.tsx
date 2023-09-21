@@ -14,7 +14,7 @@ type TCategoricalDisplayProps = {
     searchInputClassName?: string;
     isNestedList?: boolean;
     id?: string;
-    onSelectItem?: (item: TProcessedSymbolItem) => void;
+    onSelectItem?: (item: TProcessedSymbolItem, category_id: string) => void;
     disableAll?: boolean;
 };
 
@@ -50,8 +50,8 @@ const CategoricalDisplay = ({
 
     const innerPanel = (
         <ResultsPanel
-            onSelectItem={(item: TProcessedSymbolItem) => {
-                onSelectItem?.(item);
+            onSelectItem={(item: TProcessedSymbolItem, category_id: string) => {
+                onSelectItem?.(item, category_id);
                 setFilterText('');
             }}
             disableAll={disableAll}

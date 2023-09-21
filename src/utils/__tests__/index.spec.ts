@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { getYAxisScalingParams } from '..';
+import { Intervals } from 'src/Constant';
+import { getSymbolMarketCategory, getTimeIntervalName, getYAxisScalingParams } from '..';
 
 describe('getYAxisScalingParams', () => {
     const mocked_height_desktop = 700;
@@ -96,5 +97,55 @@ describe('getYAxisScalingParams', () => {
                 ticks_length: 2,
             })
         ).to.deep.equal({ height_factor });
+    });
+});
+
+describe('getSymbolMarketCategory', () => {
+    const symbol_object_with_subgroup = {
+        decimal_places: 3,
+        exchange_is_open: true,
+        market: 'synthetic_index',
+        market_display_name: 'Derived',
+        name: 'Volatility 10 Index',
+        submarket: 'random_index',
+        submarket_display_name: 'Continuous Indices',
+        subgroup: 'synthetics',
+        subgroup_display_name: 'Synthetics',
+        symbol: 'R_10',
+    };
+    const symbol_object_without_subgroup = {
+        decimal_places: 5,
+        exchange_is_open: true,
+        market: 'forex',
+        market_display_name: 'Forex',
+        name: 'GBP/AUD',
+        submarket: 'major_pairs',
+        submarket_display_name: 'Major Pairs',
+        subgroup: 'none',
+        subgroup_display_name: 'None',
+        symbol: 'frxGBPAUD',
+    };
+    it('should return concatenated market + subgroup + submarket name when has a subgroup', () => {
+        expect(getSymbolMarketCategory(symbol_object_with_subgroup)).to.equal('derived-synthetics-continuous_indices');
+    });
+    it('should return concatenated market + submarket name when has no subgroup', () => {
+        expect(getSymbolMarketCategory(symbol_object_without_subgroup)).to.equal('forex-major_pairs');
+    });
+});
+
+describe('getTimeIntervalName', () => {
+    const intervals = [
+        {
+            single: 'minute',
+            plural: 'minutes',
+            items: [
+                { interval: 60, num: 1 },
+                { interval: 300, num: 5 },
+            ],
+        },
+    ] as typeof Intervals;
+    it('should return correct time interval name', () => {
+        expect(getTimeIntervalName(60, intervals)).to.equal('1 minute');
+        expect(getTimeIntervalName(300, intervals)).to.equal('5 minutes');
     });
 });

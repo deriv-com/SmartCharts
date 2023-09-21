@@ -6,7 +6,7 @@ import MainStore from '.';
 import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
 import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
-import { ExcludedStudies, getIndicatorsTree, TActiveItem, TIndicatorsTree } from '../Constant';
+import { ExcludedStudies, getIndicatorsTree, STATE, TActiveItem, TIndicatorsTree } from '../Constant';
 import { prepareIndicatorName, renderSVGString } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -500,6 +500,7 @@ export default class StudyLegendStore {
             });
             setTimeout(this.updateIndicatorHeight, 20);
         }
+        this.mainStore.state.stateChange(STATE.INDICATORS_CLEAR_ALL);
     }
     clearStudies() {
         if (this.context) {
@@ -518,6 +519,7 @@ export default class StudyLegendStore {
     setFilterText(filterText: string) {
         this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
+        this.mainStore.state.debouncedStateChange(STATE.INDICATOR_SEARCH, { search_string: filterText });
     }
 
     onInfoItem(study: TActiveItem | null) {
