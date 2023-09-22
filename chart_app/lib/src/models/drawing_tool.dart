@@ -70,44 +70,32 @@ class DrawingToolModel {
   void addOrUpdateDrawing(String dataString, int? index) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
 
-    DrawingToolConfig? drawingToolConfig = DrawingToolConfig.fromJson(config);
+    DrawingToolConfig drawingToolConfig = DrawingToolConfig.fromJson(config);
 
     if (index != null && index > -1) {
       drawingToolConfig = drawingToolConfig.copyWith(
-        configId: drawingToolsRepo.items[index].toJson()['configId'],
-        edgePoints: drawingToolsRepo.items[index].toJson()['edgePoints'],
-        drawingData: drawingToolsRepo.items[index].toJson()['drawingData'],
+        configId: drawingToolConfig.configId,
+        edgePoints: drawingToolConfig.edgePoints,
+        drawingData: DrawingData(
+          id: drawingToolConfig.configId!,
+          drawingParts: drawingToolConfig.drawingData!.drawingParts,
+          isDrawingFinished: true,
+        ),
       );
-
       drawingTools.drawingToolsRepo!.updateAt(index, drawingToolConfig);
     } else {
       drawingTools.onDrawingToolSelection(drawingToolConfig);
     }
   }
 
-  /// Adding Drawing used when restoring drawing from the localStorage
-  void addDrawing(String dataString) {
-    final Map<String, dynamic> config = json.decode(dataString)..remove('id');
-
-    DrawingToolConfig? drawingToolConfig = DrawingToolConfig.fromJson(config);
-
-    drawingToolConfig = drawingToolConfig.copyWith(
-      configId: drawingToolConfig.configId,
-      edgePoints: drawingToolConfig.edgePoints,
-      drawingData: DrawingData(
-        id: drawingToolConfig.configId!,
-        drawingParts: drawingToolConfig.drawingData!.drawingParts,
-        isDrawingFinished: true,
-      ),
-    );
-
-    drawingTools.drawingToolsRepo!.add(drawingToolConfig);
-  }
 
   /// To remove an existing drawing tool
   void removeDrawingTool(int index) {
     drawingToolsRepo.removeAt(index);
   }
+
+  /// To get Item byits index;
+  DrawingToolConfig getItemByIndex(int index) => drawingToolsRepo.items[index];
 
   /// To get the tool name from config
   String getTypeOfSelectedDrawingTool(DrawingToolConfig config) {
@@ -139,11 +127,11 @@ class DrawingToolModel {
     if (index != null) {
       final DrawingToolConfig config = drawingToolConfig;
       drawingToolsRepo.updateAt(index, config);
-      // drawingTools.drawingToolsRepo!.updateAt(index, config);
     }
   }
 
-  ///
+
+  /// To clear the selection of drawing tool
   void clearDrawingToolSelect() {
     drawingTools.clearDrawingToolSelection();
   }

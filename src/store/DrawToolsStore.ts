@@ -25,19 +25,6 @@ export type TEdgePoints = {
     quote: number;
 };
 
-// type TDrawingPart = {
-//     chartConfig?: { pipsize: number; granularity: number };
-//     class_name_key: string;
-//     drawingPart: string | { index: number };
-//     edgePoint?: TEdgePoints;
-//     startPoint?: { x: number; y: number };
-//     isDrawingFinished?: boolean;
-//     startEdgePoint?: TEdgePoints;
-//     middleEdgePoint?: TEdgePoints;
-//     endEdgePoint?: TEdgePoints;
-//     [key: string]: any; /// Allows any other string key with values of any type
-// };
-
 export type TActiveDrawingItem = {
     title: string;
     text: string;
@@ -82,8 +69,21 @@ export type TDrawingCreatedConfig = {
     edgePoints: TEdgePoints[];
     isOverlay: boolean;
     pattern: { index: number };
+    lineStyle?: { color: { value: number }; thickness: number };
+    fillStyle?: { color: { value: number }; thickness: number };
     [key: string]: any;
 };
+
+export type TDrawingEditParameter =
+    | {
+          category: string;
+          defaultValue: string;
+          path: string;
+          title: string;
+          type: string;
+          value: string;
+      }
+    | TSettingsParameter;
 
 /// TODO: Integrate draw tools with flutter charts
 
@@ -121,7 +121,7 @@ export default class DrawToolsStore {
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: this.onDeleted,
-            onChanged: (items: TSettingsParameter[]) => this.onChanged(items),
+            onChanged: (items: TDrawingEditParameter[]) => this.onChanged(items),
         });
         when(() => !!this.context, this.onContextReady);
     }
@@ -150,9 +150,13 @@ export default class DrawToolsStore {
         document.addEventListener('keydown', this.closeOnEscape, false);
         document.addEventListener('dblclick', this.doubleClick);
     };
+
     closeOnEscape = (e: KeyboardEvent) => {
         const ESCAPE = 27;
         if (e.keyCode === ESCAPE) {
+            this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
+            // drawingTools.selectedDrawingTool = null;
+            this.seletedDrawToolConfig = null;
             this.drawingFinished();
         }
     };
@@ -186,8 +190,6 @@ export default class DrawToolsStore {
 
     // callback that runs when the chart is loaded
     onLoad(drawings: TDrawingCreatedConfig[]) {
-        // console.log(drawings);
-        // console.log(this.s)
         this.activeToolsGroup = [];
         drawings.forEach((item: TDrawingCreatedConfig) => {
             const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
@@ -198,8 +200,10 @@ export default class DrawToolsStore {
 
                 finalItem.config = item;
 
-                // console.log(item.lineStyle.color.value, finalItem.parameters[0]);
-                finalItem.parameters[0].value = intToHexColor(item.lineStyle.color.value);
+                if (item.lineStyle) {
+                    finalItem.parameters[0].value = intToHexColor(item.lineStyle.color.value);
+                }
+
                 if (item.fillStyle) {
                     finalItem.parameters[1].value = intToHexColor(item.fillStyle.color.value);
                 }
@@ -336,6 +340,7 @@ export default class DrawToolsStore {
 
     /// This callback run when any of the drawing is dragged, used to save updated drawing config
     onUpdate() {
+        // console.log('onupdate');
         const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
         if (drawTools?.drawingToolsRepo._addOns) {
             this.onLoad(drawTools?.drawingToolsRepo._addOns);
@@ -411,68 +416,26 @@ export default class DrawToolsStore {
     }
 
     /// When any of the property of a drawing tool is changed (lineStyle,fillStyle)
-    onChanged(parameters: TSettingsParameter[]) {
-        const props = getDrawTools()[this.settingsDialog.drawing_tool_id];
-        const { config } = defaultdrawToolsConfigs[this.settingsDialog.drawing_tool_id]();
+    /// OnUpdate runs after this function as well
+    onChanged(parameters: TDrawingEditParameter[]) {
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
 
-        transformStudiesforTheme(parameters, this.mainStore.chartSetting.theme);
+        const selectedConfig = this.mainStore.chartAdapter.flutterChart?.drawingTool.getItemByIndex(
+            parseInt(this.settingsDialog.id)
+        );
 
-        if (props && parameters) {
-            const itemm = {
-                ...props,
-                config,
-                parameters,
-                bars: '0',
-            };
-
-            const params = parameters.reduce((acc, item) => {
-                const { path, paths, value } = item;
-
-                if (isLiteralObject(value) && paths) {
-                    const map = value as Record<string, any>;
-                    const keys = Object.keys(map);
-                    keys.forEach(key => {
-                        set(acc, paths[key], map[key]);
-                    });
-                } else if (path) {
-                    set(acc, path, value);
-                }
-
-                return acc;
-            }, itemm.config || {});
-
-            const tools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-            if (tools) {
-                const selectedConfig: TDrawingCreatedConfig =
-                    tools.drawingToolsRepo._addOns[parseInt(this.settingsDialog.id)];
-
-                const transformedParams = this.transform(params);
-
-                selectedConfig.lineStyle.color.value = transformedParams.lineStyle.color;
-                if (selectedConfig.fillStyle) {
-                    selectedConfig.fillStyle.color.value = transformedParams.fillStyle.color;
-                }
-
-                const selectedGroup = this.activeToolsGroup.find(
-                    item => item.id === this.settingsDialog.drawing_tool_id
-                );
-                const selectedItem = selectedGroup?.items.find(
-                    group => group.index === parseInt(this.settingsDialog.id)
-                );
-
-                if (selectedItem && selectedItem.lineStyle && selectedItem.parameters) {
-                    selectedItem.parameters = parameters;
-                    selectedItem.lineStyle.color = selectedConfig.lineStyle.color.value;
-                    if (selectedConfig.fillStyle && selectedItem.fillStyle) {
-                        selectedItem.fillStyle.color = transformedParams.fillStyle.color;
-                    }
-                }
-
-                this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
-                    selectedConfig,
-                    parseInt(this.settingsDialog.id)
-                );
+        if (selectedConfig) {
+            if (selectedConfig.lineStyle?.color.value) {
+                selectedConfig.lineStyle.color.value = hexToInt(parameters[0].value as string);
             }
+            if (selectedConfig.fillStyle?.color.value) {
+                selectedConfig.fillStyle.color.value = hexToInt(parameters[1].value as string);
+            }
+
+            this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
+                selectedConfig,
+                parseInt(this.settingsDialog.id)
+            );
         }
     }
 
@@ -484,10 +447,7 @@ export default class DrawToolsStore {
             }
 
             this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(indx);
-            const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-            if (drawTools?.drawingToolsRepo._addOns) {
-                this.onLoad(drawTools?.drawingToolsRepo._addOns);
-            }
+            this.onUpdate();
             /// Log the event
             if (this.activeDrawing) {
                 logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);
