@@ -19,7 +19,6 @@ type TDrawObject = {
     name: string;
 };
 
-
 export type TEdgePoints = {
     epoch: number;
     quote: number;
@@ -113,6 +112,7 @@ export default class DrawToolsStore {
             onSetting: action.bound,
             updatePortalNode: action.bound,
             onCreation: action.bound,
+            onLoad: action.bound,
         });
 
         this.mainStore = mainStore;
