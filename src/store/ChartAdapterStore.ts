@@ -212,8 +212,8 @@ export default class ChartAdapterStore {
                     // console.log('From the On Edit', index);
                     // this.mainStore.studies.editStudyByIndex(index);
                 },
-                onLoad: (item: []) => {
-                    this.mainStore.drawTools.onLoad(item);
+                onLoad: (items: []) => {
+                    this.mainStore.drawTools.onLoad(items);
                 },
                 onMouseEnter: (index: number) => {
                     this.drawingHoverIndex = index;
@@ -296,6 +296,7 @@ export default class ChartAdapterStore {
         await when(() => this.isChartLoaded);
 
         this.flutterChart?.app.newChart({
+            symbol: this.mainStore.chart.currentActiveSymbol?.symbol,
             granularity: this.getGranularityInMs(),
             chartType: this.mainStore.state.chartType,
             isLive: this.mainStore.chart.isLive || false,

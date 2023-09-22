@@ -247,7 +247,7 @@ class CrosshairStore {
 
             parentDiv.innerHTML = `
                     <span class='mStickyInterior' style='display:inline-block'>${name}</span>
-                    <span class='mouseDeleteInstructions'>Right click to manage</span>
+                    <span class='mouseDeleteInstructions'>Double click to manage</span>
         `;
 
             chartContainer?.appendChild(parentDiv);

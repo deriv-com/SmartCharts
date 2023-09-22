@@ -12,7 +12,6 @@ import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
@@ -87,18 +86,12 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   void initState() {
     super.initState();
     html.document.addEventListener('visibilitychange', onVisibilityChange);
-    loadSavedDrawingTools();
   }
 
   @override
   void dispose() {
     super.dispose();
     html.document.removeEventListener('visibilitychange', onVisibilityChange);
-  }
-
-  Future<void> loadSavedDrawingTools() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    drawingToolModel.drawingToolsRepo.loadFromPrefs(prefs);
   }
 
   double? _getVerticalPaddingFraction(double height) {
@@ -202,6 +195,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
 
                     return DerivChart(
+                      activeSymbol: configModel.symbol,
                       mainSeries: mainSeries,
                       annotations: feedModel.ticks.isNotEmpty
                           ? <Barrier>[

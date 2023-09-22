@@ -69,6 +69,7 @@ class ChartApp {
   /// Initialize new chart
   void newChart(JSNewChart payload) {
     configModel.newChart(payload);
+    drawingToolModel.newChart(payload);
     feedModel.newChart();
   }
 

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:deriv_chart/deriv_chart.dart' hide AddOnsRepository;
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
@@ -6,36 +7,55 @@ import 'package:chart_app/src/add_ons/add_ons_repository.dart';
 /// State and methods of chart web adapter config.
 class DrawingToolModel {
   /// Initialize
-  DrawingToolModel();
+  DrawingToolModel() {
+    drawingToolsRepo = AddOnsRepository<DrawingToolConfig>(
+      createAddOn: (Map<String, dynamic> map) =>
+          DrawingToolConfig.fromJson(map),
+      onAddCallback: (AddOnConfig config) {
+        final DrawingToolConfig drawingToolConfig = config as DrawingToolConfig;
+        if (drawingToolConfig.drawingData != null &&
+            drawingToolConfig.drawingData!.isDrawingFinished) {
+          JsInterop.drawingTool?.onAdd?.call();
+        }
+      },
+      onLoadCallback: (List<dynamic> items) {
+        JsInterop.drawingTool?.onLoad?.call(items);
+      },
+      onUpdateCallback: (int index, AddOnConfig config) {
+        JsInterop.drawingTool?.onUpdate?.call(index, config);
+      },
+      getKey: () => 'drawings_$symbol',
+    );
+
+    drawingTools = DrawingTools(
+      onMouseEnterCallback: (int index) =>
+          JsInterop.drawingTool?.onMouseEnter?.call(index),
+      onMouseExitCallback: (int index) =>
+          JsInterop.drawingTool?.onMouseExit?.call(index),
+    )..drawingToolsRepo = drawingToolsRepo;
+  }
+
+  /// Symbol of the chart
+  String symbol = '';
 
   /// Drawing tools repo
-  final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
-      AddOnsRepository<DrawingToolConfig>(
-    createAddOn: (Map<String, dynamic> map) => DrawingToolConfig.fromJson(map),
-    onAddCallback: (AddOnConfig config) {
-      final DrawingToolConfig drawingToolConfig = config as DrawingToolConfig;
-      if (drawingToolConfig.drawingData != null &&
-          drawingToolConfig.drawingData!.isDrawingFinished) {
-        JsInterop.drawingTool?.onAdd?.call();
-      }
-    },
-    onLoadCallback: (List items) {
-      JsInterop.drawingTool?.onLoad?.call(items);
-    },
-    onUpdateCallback: (int index, AddOnConfig config) {
-      JsInterop.drawingTool?.onUpdate?.call(index, config);
-    },
-  );
+  late AddOnsRepository<DrawingToolConfig> drawingToolsRepo;
 
   /// DrawingTools
-  late DrawingTools drawingTools = DrawingTools(
-    onMouseEnterCallback: (int index) =>
-        JsInterop.drawingTool?.onMouseEnter?.call(index),
-    onMouseExitCallback: (int index) =>
-        JsInterop.drawingTool?.onMouseExit?.call(index),
-  )..drawingToolsRepo = drawingToolsRepo;
+  late DrawingTools drawingTools;
 
-  ///
+  /// Initialize new chart
+  void newChart(JSNewChart payload) {
+    symbol = payload.symbol ?? '';
+    _loadSavedDrawingTools();
+  }
+
+  Future<void> _loadSavedDrawingTools() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    drawingToolsRepo.loadFromPrefs(prefs);
+  }
+
+  /// To select a drawing
   void selectDrawing(DrawingToolConfig config) {
     drawingTools.onDrawingToolSelection(config);
   }

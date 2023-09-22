@@ -330,6 +330,7 @@ export type TNewChartPayload = {
     granularity: number;
     isLive: boolean;
     startWithDataFitMode: boolean;
+    symbol?: string;
     chartType?: string;
     theme: string;
     msPerPx?: number;

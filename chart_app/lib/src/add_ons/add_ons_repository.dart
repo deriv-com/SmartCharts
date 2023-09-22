@@ -5,9 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Storage key of saved indicators.
-const String addOnsKey = 'addOns';
-
 /// Called to create an AddOnConfig object from a map.
 typedef CreateAddOn<T extends AddOnConfig> = T Function(
     Map<String, dynamic> map);
@@ -26,22 +23,23 @@ typedef OnSwapCallback = void Function(int index1, int index2);
 /// Allow Updation when dragged (drawing tool)
 typedef OnUpdateCallback = void Function(int index1, AddOnConfig config);
 
-///
-typedef OnLoadCallback = void Function(List config);
+/// OnLoadCallback
+typedef OnLoadCallback = void Function(List<dynamic> config);
 
 /// Holds indicators/drawing tools that were added to the Chart during runtime.
 class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     implements Repository<T> {
   /// Initializes
-  AddOnsRepository(
-      {required this.createAddOn,
-      this.onAddCallback,
-      this.onEditCallback,
-      this.onRemoveCallback,
-      this.onSwapCallback,
-      this.onUpdateCallback,
-      this.onLoadCallback})
-      : _addOns = <T>[];
+  AddOnsRepository({
+    required this.createAddOn,
+    this.onAddCallback,
+    this.onEditCallback,
+    this.onRemoveCallback,
+    this.onSwapCallback,
+    this.onUpdateCallback,
+    this.onLoadCallback,
+    this.getKey,
+  }) : _addOns = <T>[];
 
   final List<T> _addOns;
 
@@ -72,17 +70,24 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   /// Callback when prefs are loaded
   OnLoadCallback? onLoadCallback;
 
+  /// To get the key of the addOns
+  String Function()? getKey;
+
+  String get _addOnsKey => getKey?.call() ?? 'addOns_${T.toString()}';
+
   /// Loads user selected indicators or drawing tools from shared preferences.
   void loadFromPrefs(SharedPreferences prefs) {
     _prefs = prefs;
 
-    if (!prefs.containsKey(addOnsKey)) {
+    items.clear();
+
+    if (!prefs.containsKey(_addOnsKey)) {
+      onLoadCallback?.call(<T>[]);
       // No saved indicators or drawing tools.
       return;
     }
 
-    final List<String> encodedAddOns = prefs.getStringList(addOnsKey)!;
-    items.clear();
+    final List<String> encodedAddOns = prefs.getStringList(_addOnsKey)!;
 
     for (final String encodedAddOn in encodedAddOns) {
       final T addOnConfig = createAddOn.call(jsonDecode(encodedAddOn));
@@ -159,7 +164,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
   Future<void> _writeToPrefs() async {
     if (_prefs != null) {
       await _prefs!.setStringList(
-        addOnsKey,
+        _addOnsKey,
         items.map((T config) => jsonEncode(config.toJson())).toList(),
       );
     }

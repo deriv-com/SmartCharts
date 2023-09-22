@@ -65,6 +65,9 @@ class JSNewChart {
   /// Granularity of the chart data
   external int get granularity;
 
+  /// Market symbol
+  external String? get symbol;
+
   /// Style of the chart
   external String? get chartType;
 
@@ -157,7 +160,6 @@ class JsIndicators {
 
   ///
   external OnUpdateCallback? onUpdate;
-
 
   /// Callback to swap two elements of a list.
   external OnSwapCallback? onSwap;

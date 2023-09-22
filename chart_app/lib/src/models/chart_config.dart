@@ -40,6 +40,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Type of the contract
   String? contractType;
 
+  /// Market symbol
+  String symbol = '';
+
   /// Pip size of the chart
   int pipSize = 4;
 
@@ -142,6 +145,7 @@ class ChartConfigModel extends ChangeNotifier {
     pipSize = payload.pipSize ?? 4;
     isMobile = payload.isMobile;
     yAxisMargin = payload.yAxisMargin;
+    symbol = payload.symbol ?? '';
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);
