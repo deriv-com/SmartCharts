@@ -221,8 +221,8 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
 
   setProperty(
     chartConfig,
-    'addDrawing',
-    allowInterop(model.addDrawing),
+    'getItemByIndex',
+    allowInterop(model.getItemByIndex),
   );
 
   setProperty(

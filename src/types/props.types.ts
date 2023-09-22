@@ -391,13 +391,13 @@ export type TFlutterChart = {
         addOrUpdateDrawing: (config: string, index?: number) => void;
         removeDrawingTool: (index: number) => void;
         clearDrawingTool: () => void;
+        getItemByIndex: (index: number) => TDrawingCreatedConfig;
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
         getDrawingTools: () => { drawingToolsRepo: { _addOns: TDrawingCreatedConfig[] }; selectedDrawingTool: any };
         getTypeOfSelectedDrawingTool: (config: TDrawingCreatedConfig) => string;
         clearDrawingToolSelect: () => void;
         editDrawing: (config: {}, index: number) => void;
-        addDrawing: (config: string) => void;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;

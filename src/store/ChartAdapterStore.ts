@@ -41,6 +41,7 @@ export default class ChartAdapterStore {
     drawingHoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
     painter = new Painter();
+    isHoverOnIndicator = false;
     drawingColor = 0;
     isScaled = false;
     previousHoverIndex: number | undefined | null = null;
@@ -107,15 +108,22 @@ export default class ChartAdapterStore {
             this.indicatorHoverIndex = hoverIndex;
         }
 
-        if (this.previousHoverIndex === this.indicatorHoverIndex) {
-            return;
-        }
-
         if (hoverIndex != null) {
             const item = clone(activeItems[hoverIndex]);
 
+            if (this.isHoverOnIndicator) {
+                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+            } else {
+                this.mainStore.crosshair.removeIndicatorToolTip();
+            }
+
+            if (this.previousHoverIndex === this.indicatorHoverIndex) {
+                return;
+            }
+
             if (item && item.config) {
                 this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+                this.isHoverOnIndicator = true;
                 for (const key in item.config) {
                     if (key.includes('Style')) {
                         item.config[key].thickness = 2;
@@ -139,6 +147,7 @@ export default class ChartAdapterStore {
             this.previousHoverIndex >= 0 &&
             this.previousHoverIndex < activeItems.length
         ) {
+            this.isHoverOnIndicator = false;
             const item = activeItems[this.previousHoverIndex];
             this.mainStore.crosshair.removeIndicatorToolTip();
             setIndicator(item, this.previousHoverIndex);
