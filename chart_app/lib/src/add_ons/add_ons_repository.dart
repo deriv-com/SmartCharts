@@ -29,28 +29,25 @@ typedef OnUpdateCallback = void Function(int index1, AddOnConfig config);
 ///
 typedef OnLoadCallback = void Function(List config);
 
-
 /// Holds indicators/drawing tools that were added to the Chart during runtime.
 class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     implements Repository<T> {
   /// Initializes
-  AddOnsRepository({
-    required this.createAddOn,
-    this.onAddCallback,
-    this.onEditCallback,
-    this.onRemoveCallback,
-    this.onSwapCallback,
-    this.onUpdateCallback,
-      this.onLoadCallback
-  }) : _addOns = <T>[];
+  AddOnsRepository(
+      {required this.createAddOn,
+      this.onAddCallback,
+      this.onEditCallback,
+      this.onRemoveCallback,
+      this.onSwapCallback,
+      this.onUpdateCallback,
+      this.onLoadCallback})
+      : _addOns = <T>[];
 
   final List<T> _addOns;
 
   /// List of indicators or drawing tools.
   @override
   List<T> get items => _addOns;
-
-
 
   SharedPreferences? _prefs;
 
