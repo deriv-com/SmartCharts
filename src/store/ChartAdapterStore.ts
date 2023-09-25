@@ -4,24 +4,8 @@ import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
 import { clone } from 'src/utils';
-import MainStore from '.';
 import { capitalize } from 'src/components/ui/utils';
-
-// Define the throttle function
-function throttle<T extends (...args: any[]) => any>(func: T, delay: number): T {
-    let lastCall = 0;
-
-    return ((...args: any[]) => {
-        const now = new Date().getTime();
-
-        if (now - lastCall < delay) {
-            return;
-        }
-
-        lastCall = now;
-        return func(...args);
-    }) as T;
-}
+import MainStore from '.';
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
