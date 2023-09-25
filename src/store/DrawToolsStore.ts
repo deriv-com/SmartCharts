@@ -181,7 +181,7 @@ export default class DrawToolsStore {
         this.activeToolsGroup.forEach(item =>
             item.items.forEach(data => {
                 transformStudiesforTheme(data.parameters, this.mainStore.chartSetting.theme);
-                this.onChanged(data.parameters);
+                this.onChanged(data.parameters, data.index);
             })
         );
     }
@@ -198,13 +198,15 @@ export default class DrawToolsStore {
 
                 finalItem.config = item;
 
-                if (item.lineStyle) {
-                    finalItem.parameters[0].value = intToHexColor(item.lineStyle.color.value);
-                }
-
-                if (item.fillStyle) {
-                    finalItem.parameters[1].value = intToHexColor(item.fillStyle.color.value);
-                }
+                finalItem.parameters.forEach((params: TDrawingEditParameter) => {
+                    if (params.path) {
+                        if (['lineStyle', 'fillStyle'].includes(params.path)) {
+                            params.value = intToHexColor(item[params.path].color.value);
+                        } else if (params.path == 'enableLabel') {
+                            params.value = item[params.path];
+                        }
+                    }
+                });
 
                 this.updateActiveToolsGroup(finalItem);
             }
@@ -214,7 +216,6 @@ export default class DrawToolsStore {
     // Function that show the setting dialog for drawing tool
     showDrawToolDialog(drawing: TActiveDrawingItem) {
         logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Edit ${drawing.name}`);
-        /// const dontDeleteMe = drawing.abort(); /// eslint-disable-line no-unused-vars
         if (drawing) {
             let title = formatCamelCase(drawing.name || '');
 
@@ -271,7 +272,17 @@ export default class DrawToolsStore {
         /// If found, remove the item with the given index
         const finalItem = this.processDrawTool(id);
         this.seletedDrawToolConfig = clone(finalItem);
+        finalItem.lineStyle = {
+            color: finalItem.lineStyle,
+        };
+        if (finalItem.fillStyle) {
+            finalItem.fillStyle = {
+                color: finalItem.fillStyle,
+            };
+        }
+
         delete finalItem.parameters;
+
         if (finalItem) {
             this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(JSON.stringify(finalItem), -1);
         }
@@ -412,39 +423,49 @@ export default class DrawToolsStore {
 
     /// When any of the property of a drawing tool is changed (lineStyle,fillStyle)
     /// OnUpdate runs after this function as well
-    onChanged(parameters: TDrawingEditParameter[]) {
+    onChanged(parameters: TDrawingEditParameter[], drawingIndex?: number) {
+        let index;
         this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
 
         const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
         const addOns = drawTools?.drawingToolsRepo._addOns;
+
         if (!addOns) {
             return;
         }
-        const index = addOns.findIndex(item => item.configId === this.settingsDialog.id);
+
+        if (!drawingIndex && drawingIndex !== 0) {
+            index = addOns.findIndex(item => item.configId === this.settingsDialog.id);
+        } else {
+            index = drawingIndex;
+        }
 
         if (index === -1) return;
 
         const selectedConfig = addOns[index];
 
-        if (selectedConfig) {
-            if (selectedConfig.lineStyle?.color.value) {
-                selectedConfig.lineStyle.color.value = hexToInt(parameters[0].value as string);
+        parameters.forEach(item => {
+            if (!item.path) {
+                return;
             }
-            if (selectedConfig.fillStyle?.color.value) {
-                selectedConfig.fillStyle.color.value = hexToInt(parameters[1].value as string);
+            if (item.type == 'colorpicker') {
+                selectedConfig[item.path].color.value = hexToInt(item.value as string);
+            } else if (item.type == 'switch') {
+                selectedConfig[item.path] = item.value;
             }
-            this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(selectedConfig, index);
-        }
+        });
+
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(selectedConfig, index);
     }
 
     /// Callback that runs when drawingTool is Deleted
-    onDeleted(indx?: number | string) {
-        if (indx !== undefined) {
-            if (typeof indx === 'string') {
-                indx = parseInt(indx);
+    onDeleted(index?: number | string) {
+        if (index !== undefined) {
+            if (typeof index === 'string') {
+                index = parseInt(index);
             }
 
-            this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(indx);
+            this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(index);
             this.onUpdate();
             /// Log the event
             if (this.activeDrawing) {
@@ -454,11 +475,11 @@ export default class DrawToolsStore {
     }
 
     /// When the settings are opened for a drawing tools
-    onSetting(indx?: number) {
-        if (indx !== undefined) {
+    onSetting(index?: number) {
+        if (index !== undefined) {
             let targetItem;
             for (const group of this.activeToolsGroup) {
-                const foundItem = group.items.find(item => item.index === indx);
+                const foundItem = group.items.find(item => item.index === index);
                 if (foundItem) {
                     targetItem = foundItem;
                 }
@@ -468,6 +489,7 @@ export default class DrawToolsStore {
             }
         }
     }
+
     /// Update portal node
     updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;

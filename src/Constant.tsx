@@ -430,7 +430,42 @@ const getVerticalDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     },
     parameters: [
         {
-            path: 'lineStyle.color',
+            path: 'lineStyle',
+            title: t.translate('Color'),
+            defaultValue: '#000000',
+            category: 'inputs',
+            type: 'colorpicker',
+        },
+        {
+            path: 'pattern',
+            title: t.translate('Pattern'),
+            type: 'pattern',
+            lineWidth: '1',
+            category: 'inputs',
+            defaultValue: 'solid',
+            value: 'solid',
+        },
+        {
+            path: 'enableLabel',
+            title: t.translate('Axis Label'),
+            type: 'switch',
+            category: 'parameters',
+            defaultValue: true,
+        },
+    ],
+});
+
+
+const getLineDrawingConfig: TDefaultIndicatorConfigFn = () => ({
+    config: {
+        lineStyle: clone(lineStyle),
+        pattern: 'solid',
+        color: '#000000',
+        isOverlay: true,
+    },
+    parameters: [
+        {
+            path: 'lineStyle',
             title: t.translate('Color'),
             defaultValue: '#000000',
             category: 'inputs',
@@ -448,6 +483,7 @@ const getVerticalDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     ],
 });
 
+
 const getTrendlDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: clone(lineStyle),
@@ -457,14 +493,14 @@ const getTrendlDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     },
     parameters: [
         {
-            path: 'lineStyle.color',
+            path: 'lineStyle',
             title: t.translate('Color'),
             defaultValue: '#000000',
             category: 'inputs',
             type: 'colorpicker',
         },
         {
-            path: 'fillStyle.color',
+            path: 'fillStyle',
             title: t.translate('Fill Color'),
             defaultValue: '#000000',
             category: 'inputs',
@@ -484,14 +520,14 @@ const getTrendlDrawingConfig: TDefaultIndicatorConfigFn = () => ({
 
 export const defaultdrawToolsConfigs: TDefaultIndicatorConfigMap = {
     vertical: getVerticalDrawingConfig,
-    line: getVerticalDrawingConfig,
-    ray: getVerticalDrawingConfig,
+    line: getLineDrawingConfig,
+    ray: getLineDrawingConfig,
     trend: getTrendlDrawingConfig,
     channel: getTrendlDrawingConfig,
     fibfan: getTrendlDrawingConfig,
     rectangle: getTrendlDrawingConfig,
     horizontal: getVerticalDrawingConfig,
-    continuous: getVerticalDrawingConfig,
+    continuous: getLineDrawingConfig,
 };
 
 export const getDefaultDrawingConfig = (drawTool: keyof typeof defaultIndicatorConfigs) => {
