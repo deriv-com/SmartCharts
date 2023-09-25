@@ -186,7 +186,7 @@ export default class DrawToolsStore {
         );
     }
 
-    // callback that runs when the chart is loaded
+    // Callback that runs when the chart is loaded
     onLoad(drawings: TDrawingCreatedConfig[]) {
         this.activeToolsGroup = [];
         drawings.forEach((item: TDrawingCreatedConfig) => {
@@ -469,24 +469,7 @@ export default class DrawToolsStore {
             }
         }
     }
-
-    /// Clone to OnSetting for testing
-    onRightClickSetting(indx?: number) {
-        if (indx !== undefined) {
-            let targetItem;
-            for (const group of this.activeToolsGroup) {
-                const foundItem = group.items.find(item => item.index === indx);
-                if (foundItem) {
-                    targetItem = foundItem;
-                }
-            }
-            if (targetItem) {
-                this.showDrawToolDialog(targetItem);
-            }
-        }
-    }
-
-    /// Will be deleted
+    /// Update portal node
     updatePortalNode(portalNodeId: string | undefined) {
         this.portalNodeIdChanged = portalNodeId;
     }

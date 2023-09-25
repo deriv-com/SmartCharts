@@ -253,7 +253,7 @@ export default class ChartAdapterStore {
 
     onDoubleClick = () => {
         if (this.drawingHoverIndex != null) {
-            this.mainStore.drawTools.onRightClickSetting(this.drawingHoverIndex);
+            this.mainStore.drawTools.onSetting(this.drawingHoverIndex);
             this.mainStore.crosshair.removeDrawingToolToolTip();
         } else if (this.indicatorHoverIndex != null) {
             this.mainStore.studies.editStudyByIndex(this.indicatorHoverIndex);
