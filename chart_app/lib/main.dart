@@ -128,7 +128,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   }
 
   void _onCrosshairHover(
-    PointerHoverEvent ev,
+    Offset localPosition,
+    Offset globalPosition,
     EpochToX epochToX,
     QuoteToY quoteToY,
     EpochFromX epochFromX,
@@ -153,10 +154,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       ..getYFromQuote_ = quoteToY;
 
     JsInterop.onCrosshairHover(
-      ev.position.dx,
-      ev.position.dy,
-      ev.localPosition.dx,
-      ev.localPosition.dy,
+      globalPosition.dx,
+      globalPosition.dy,
+      localPosition.dx,
+      localPosition.dy,
       index,
     );
   }
