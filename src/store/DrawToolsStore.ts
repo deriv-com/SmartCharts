@@ -1,6 +1,6 @@
 import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TIcon, TSettingsParameter } from 'src/types';
+import { TDrawingToolConfig, TIcon, TSettingsParameter } from 'src/types';
 import set from 'lodash.set';
 import { capitalize, hexToInt, intToHexColor } from 'src/components/ui/utils';
 import MainStore from '.';
@@ -28,7 +28,7 @@ export type TActiveDrawingItem = {
     title: string;
     text: string;
     id: string;
-    config: Record<string, any>;
+    config: TDrawingToolConfig;
     parameters: TSettingsParameter[];
     bars?: number;
     key?: string;
@@ -181,8 +181,6 @@ export default class DrawToolsStore {
         this.activeToolsGroup.forEach(item =>
             item.items.forEach(data => {
                 transformStudiesforTheme(data.parameters, this.mainStore.chartSetting.theme);
-                this.settingsDialog.id = JSON.stringify(data.index);
-                this.settingsDialog.drawing_tool_id = data.id;
                 this.onChanged(data.parameters);
             })
         );
@@ -228,8 +226,7 @@ export default class DrawToolsStore {
             this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
             this.settingsDialog.items = drawing.parameters;
             this.settingsDialog.formTitle = t.translate('Result');
-            this.settingsDialog.id = JSON.stringify(drawing.index);
-            this.settingsDialog.drawing_tool_id = drawing.id;
+            this.settingsDialog.id = drawing.config.configId;
             this.settingsDialog.formClassname = 'form--drawing-tool';
             this.settingsDialog.setOpen(true);
         }
@@ -340,7 +337,6 @@ export default class DrawToolsStore {
 
     /// This callback run when any of the drawing is dragged, used to save updated drawing config
     onUpdate() {
-        // console.log('onupdate');
         const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
         if (drawTools?.drawingToolsRepo._addOns) {
             this.onLoad(drawTools?.drawingToolsRepo._addOns);
@@ -363,7 +359,6 @@ export default class DrawToolsStore {
             activeTools[groupIndex] = item;
         }
         this.activeToolsGroup = activeTools;
-        // //this.mainStore.state.saveDrawings();
     }
 
     /// Callback that runs on the creation of the drawing tool
@@ -388,7 +383,7 @@ export default class DrawToolsStore {
                             this.seletedDrawToolConfig.index === data.index
                         ) {
                             const edgePoints = config.edgePoints;
-                            if (edgePoints && edgePoints.length == 2) {
+                            if (edgePoints && edgePoints.length === 2) {
                                 const incrementedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index + 1];
                                 if (incrementedConfig) {
                                     data.config = incrementedConfig;
@@ -404,14 +399,14 @@ export default class DrawToolsStore {
             });
 
             /// for continuous, re-initializing it with updated index
-            if (this.seletedDrawToolConfig.id == 'continuous') {
+            if (this.seletedDrawToolConfig.id === 'continuous') {
                 const finalItem = this.processDrawTool(this.seletedDrawToolConfig.id);
                 this.seletedDrawToolConfig = clone(finalItem);
+                this.selectTool(this.seletedDrawToolConfig!.id);
             } else {
                 /// for other tools, making config to null
                 this.seletedDrawToolConfig = null;
             }
-            //this.mainStore.state.saveDrawings();
         }
     }
 
@@ -420,9 +415,16 @@ export default class DrawToolsStore {
     onChanged(parameters: TDrawingEditParameter[]) {
         this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
 
-        const selectedConfig = this.mainStore.chartAdapter.flutterChart?.drawingTool.getItemByIndex(
-            parseInt(this.settingsDialog.id)
-        );
+        const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+        const addOns = drawTools?.drawingToolsRepo._addOns;
+        if (!addOns) {
+            return;
+        }
+        const index = addOns.findIndex(item => item.configId === this.settingsDialog.id);
+
+        if (index === -1) return;
+
+        const selectedConfig = addOns[index];
 
         if (selectedConfig) {
             if (selectedConfig.lineStyle?.color.value) {
@@ -431,11 +433,7 @@ export default class DrawToolsStore {
             if (selectedConfig.fillStyle?.color.value) {
                 selectedConfig.fillStyle.color.value = hexToInt(parameters[1].value as string);
             }
-
-            this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(
-                selectedConfig,
-                parseInt(this.settingsDialog.id)
-            );
+            this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(selectedConfig, index);
         }
     }
 

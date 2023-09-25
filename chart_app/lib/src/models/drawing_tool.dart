@@ -88,14 +88,10 @@ class DrawingToolModel {
     }
   }
 
-
   /// To remove an existing drawing tool
   void removeDrawingTool(int index) {
     drawingToolsRepo.removeAt(index);
   }
-
-  /// To get Item byits index;
-  DrawingToolConfig getItemByIndex(int index) => drawingToolsRepo.items[index];
 
   /// To get the tool name from config
   String getTypeOfSelectedDrawingTool(DrawingToolConfig config) {
@@ -129,7 +125,6 @@ class DrawingToolModel {
       drawingToolsRepo.updateAt(index, config);
     }
   }
-
 
   /// To clear the selection of drawing tool
   void clearDrawingToolSelect() {

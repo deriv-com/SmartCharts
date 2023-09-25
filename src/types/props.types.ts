@@ -347,6 +347,10 @@ export type TIndicatorTooltipContent = {
     values: string[];
 };
 
+export type TDrawingToolConfig = {
+    configId: string;
+};
+
 export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
@@ -391,13 +395,12 @@ export type TFlutterChart = {
         addOrUpdateDrawing: (config: string, index?: number) => void;
         removeDrawingTool: (index: number) => void;
         clearDrawingTool: () => void;
-        getItemByIndex: (index: number) => TDrawingCreatedConfig;
         // eslint-disable-next-line @typescript-eslint/ban-types
         getDrawingTool: () => {};
         getDrawingTools: () => { drawingToolsRepo: { _addOns: TDrawingCreatedConfig[] }; selectedDrawingTool: any };
         getTypeOfSelectedDrawingTool: (config: TDrawingCreatedConfig) => string;
         clearDrawingToolSelect: () => void;
-        editDrawing: (config: {}, index: number) => void;
+        editDrawing: (config: TDrawingToolConfig, index: number) => void;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;
@@ -428,7 +431,7 @@ export type JSInterop = {
     };
     drawingTool: {
         onAdd: () => void;
-        onUpdate: (index: number, config: {}) => void;
+        onUpdate: (index: number, config: TDrawingToolConfig) => void;
         onRemove: (index: number) => void;
         onEdit: (index: number) => void;
         onLoad: (drawings: []) => void;
