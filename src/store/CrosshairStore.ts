@@ -35,6 +35,8 @@ class CrosshairStore {
     prev_arrow?: string;
 
     state?: number = 2;
+    drawingTooltip: HTMLElement | null = null;
+    indicatorTooltip: HTMLElement | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -209,36 +211,45 @@ class CrosshairStore {
     };
 
     renderDrawingToolToolTip = (name: string, dx: number, dy: number) => {
-        if (document.getElementsByClassName('draw-tool-tooltip').length === 0) {
+        if (this.drawingTooltip !== null) {
+            this.drawingTooltip.style.top = `${dy - 100}px`;
+            this.drawingTooltip.style.left = `${dx - 150}px`;
+        } else {
+            if (document.querySelector('.draw-tool-tooltip') != null) return;
+
             const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
                 '.chartContainer'
             );
 
             const parentDiv = document.createElement('div');
             parentDiv.classList.add('draw-tool-tooltip', 'mSticky');
-            parentDiv.classList.add('indicator-tooltip', 'mSticky');
             parentDiv.style.display = 'inline-block';
             parentDiv.style.position = 'absolute';
             parentDiv.style.top = `${dy - 100}px`;
             parentDiv.style.left = `${dx - 150}px`;
 
             parentDiv.innerHTML = `
-                    <span class='mStickyInterior' style='display:inline-block'>${name}</span>
-                    <span class='mouseDeleteInstructions'>Double click to manage</span>
-        `;
+                        <span class='mStickyInterior' style='display:inline-block'>${name}</span>
+                        <span class='mouseDeleteInstructions'>Double click to manage</span>
+            `;
 
+            this.drawingTooltip = parentDiv;
             chartContainer?.appendChild(parentDiv);
         }
     };
 
     renderIndicatorToolTip = (name: string, dx: number, dy: number) => {
-        if (document.getElementsByClassName('indicator-tooltip').length === 0) {
+        if (this.indicatorTooltip !== null) {
+            this.indicatorTooltip.style.top = `${dy - 100}px`;
+            this.indicatorTooltip.style.left = `${dx - 150}px`;
+        } else {
+            if (document.querySelector('.indicator-tooltip') != null) return;
+
             const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
                 '.chartContainer'
             );
 
             const parentDiv = document.createElement('div');
-            parentDiv.classList.add('draw-tool-tooltip', 'mSticky');
             parentDiv.classList.add('indicator-tooltip', 'mSticky');
             parentDiv.style.display = 'inline-block';
             parentDiv.style.position = 'absolute';
@@ -249,20 +260,25 @@ class CrosshairStore {
                     <span class='mStickyInterior' style='display:inline-block'>${name}</span>
                     <span class='mouseDeleteInstructions'>Double click to manage</span>
         `;
+            this.indicatorTooltip = parentDiv;
 
             chartContainer?.appendChild(parentDiv);
         }
     };
 
     removeDrawingToolToolTip = () => {
+        // TODO: cleanup
         if (document.getElementsByClassName('draw-tool-tooltip').length > 0) {
             document.getElementsByClassName('draw-tool-tooltip')[0].remove();
+            this.drawingTooltip = null;
         }
     };
 
     removeIndicatorToolTip = () => {
+        // TODO: cleanup
         if (document.getElementsByClassName('indicator-tooltip').length > 0) {
             document.getElementsByClassName('indicator-tooltip')[0].remove();
+            this.indicatorTooltip = null;
         }
     };
     calculateRows(data: TQuote) {

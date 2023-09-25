@@ -128,8 +128,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   }
 
   void _onCrosshairHover(
-    Offset localPosition,
     Offset globalPosition,
+    Offset localPosition,
     EpochToX epochToX,
     QuoteToY quoteToY,
     EpochFromX epochFromX,
