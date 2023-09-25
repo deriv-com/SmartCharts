@@ -402,6 +402,7 @@ export default class DrawToolsStore {
             if (this.seletedDrawToolConfig.id === 'continuous') {
                 const finalItem = this.processDrawTool(this.seletedDrawToolConfig.id);
                 this.seletedDrawToolConfig = clone(finalItem);
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 this.selectTool(this.seletedDrawToolConfig!.id);
             } else {
                 /// for other tools, making config to null
