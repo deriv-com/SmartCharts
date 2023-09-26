@@ -251,15 +251,10 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
 
   setProperty(
     chartConfig,
-    'getDrawingTools',
-    allowInterop(model.getDrawingTools),
+    'getDrawingToolsRepoItems',
+    allowInterop(model.getDrawingToolsRepoItems),
   );
-
-  setProperty(
-    chartConfig,
-    'getDrawingTool',
-    allowInterop(model.getDrawingTool),
-  );
+  
 
   return chartConfig;
 }

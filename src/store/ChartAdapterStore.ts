@@ -159,8 +159,12 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
 
                 if (this.drawingHoverIndex != null) {
-                    const drawingRepo = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-                    const item = drawingRepo?.drawingToolsRepo._addOns[this.drawingHoverIndex];
+                    const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+                    if (!drawingRepoItems) {
+                        return;
+                    }
+
+                    const item = drawingRepoItems[this.drawingHoverIndex];
 
                     if (item) {
                         this.mainStore.crosshair.renderDrawingToolToolTip(

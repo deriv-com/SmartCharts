@@ -348,9 +348,9 @@ export default class DrawToolsStore {
 
     /// This callback run when any of the drawing is dragged, used to save updated drawing config
     onUpdate() {
-        const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-        if (drawTools?.drawingToolsRepo._addOns) {
-            this.onLoad(drawTools?.drawingToolsRepo._addOns);
+        const drawToolsItem = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+        if (drawToolsItem) {
+            this.onLoad(drawToolsItem);
         }
     }
 
@@ -376,34 +376,33 @@ export default class DrawToolsStore {
     onCreation() {
         if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
-            const drawingTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
+            const drawingToolsItem = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+            if (!drawingToolsItem) {
+                return;
+            }
 
             this.activeToolsGroup.forEach(item => {
                 item.items.forEach(data => {
-                    const config: TDrawingCreatedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index] || {
-                        configId: '',
-                        edgePoints: [],
-                        isOverlay: false,
-                        pattern: { index: 0 },
-                    };
-
-                    if (config) {
-                        if (
-                            this.seletedDrawToolConfig?.id &&
-                            this.seletedDrawToolConfig.id === 'channel' &&
-                            this.seletedDrawToolConfig.index === data.index
-                        ) {
-                            const edgePoints = config.edgePoints;
-                            if (edgePoints && edgePoints.length === 2) {
-                                const incrementedConfig = drawingTools?.drawingToolsRepo?._addOns[data.index + 1];
-                                if (incrementedConfig) {
-                                    data.config = incrementedConfig;
+                    if (drawingToolsItem[data.index]) {
+                        const config: TDrawingCreatedConfig = drawingToolsItem[data.index];
+                        if (config) {
+                            if (
+                                this.seletedDrawToolConfig?.id &&
+                                this.seletedDrawToolConfig.id === 'channel' &&
+                                this.seletedDrawToolConfig.index === data.index
+                            ) {
+                                const edgePoints = config.edgePoints;
+                                if (edgePoints && edgePoints.length === 2) {
+                                    const incrementedConfig = drawingToolsItem[data.index + 1];
+                                    if (incrementedConfig) {
+                                        data.config = incrementedConfig;
+                                    }
+                                } else {
+                                    data.config = config;
                                 }
                             } else {
                                 data.config = config;
                             }
-                        } else {
-                            data.config = config;
                         }
                     }
                 });
@@ -428,22 +427,21 @@ export default class DrawToolsStore {
         let index;
         this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
 
-        const drawTools = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingTools();
-        const addOns = drawTools?.drawingToolsRepo._addOns;
+        const drawToolsItem = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
 
-        if (!addOns) {
+        if (!drawToolsItem) {
             return;
         }
 
         if (!drawingIndex && drawingIndex !== 0) {
-            index = addOns.findIndex(item => item.configId === this.settingsDialog.id);
+            index = drawToolsItem.findIndex(item => item.configId === this.settingsDialog.id);
         } else {
             index = drawingIndex;
         }
 
         if (index === -1) return;
 
-        const selectedConfig = addOns[index];
+        const selectedConfig = drawToolsItem[index];
 
         parameters.forEach(item => {
             if (!item.path) {

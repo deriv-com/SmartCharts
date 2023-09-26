@@ -60,11 +60,14 @@ class DrawingToolModel {
     drawingTools.onDrawingToolSelection(config);
   }
 
-  /// Getting the repo
-  AddOnsRepository<DrawingToolConfig> getDrawingTool() => drawingToolsRepo;
-
   /// function to get drawtools
-  DrawingTools getDrawingTools() => drawingTools;
+  // DrawingTools getDrawingTools() => drawingTools;
+
+  /// function to get drawtool items
+  List<DrawingToolConfig>? getDrawingToolsRepoItems() => drawingToolsRepo.items;
+  
+
+
 
   /// To add a drawing
   void addOrUpdateDrawing(String dataString, int? index) {
