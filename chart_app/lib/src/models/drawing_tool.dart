@@ -60,35 +60,17 @@ class DrawingToolModel {
     drawingTools.onDrawingToolSelection(config);
   }
 
-  /// function to get drawtools
-  // DrawingTools getDrawingTools() => drawingTools;
-
   /// function to get drawtool items
   List<DrawingToolConfig>? getDrawingToolsRepoItems() => drawingToolsRepo.items;
   
 
 
-
   /// To add a drawing
-  void addOrUpdateDrawing(String dataString, int? index) {
+  void addOrUpdateDrawing(String dataString) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
-
-    DrawingToolConfig drawingToolConfig = DrawingToolConfig.fromJson(config);
-
-    if (index != null && index > -1) {
-      drawingToolConfig = drawingToolConfig.copyWith(
-        configId: drawingToolConfig.configId,
-        edgePoints: drawingToolConfig.edgePoints,
-        drawingData: DrawingData(
-          id: drawingToolConfig.configId!,
-          drawingParts: drawingToolConfig.drawingData!.drawingParts,
-          isDrawingFinished: true,
-        ),
-      );
-      drawingTools.drawingToolsRepo!.updateAt(index, drawingToolConfig);
-    } else {
-      drawingTools.onDrawingToolSelection(drawingToolConfig);
-    }
+    final DrawingToolConfig drawingToolConfig =
+        DrawingToolConfig.fromJson(config);
+    drawingTools.onDrawingToolSelection(drawingToolConfig);
   }
 
   /// To remove an existing drawing tool

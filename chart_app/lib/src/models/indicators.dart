@@ -318,21 +318,21 @@ class IndicatorsModel {
                   item.jawSeries!.entries,
                   epoch,
                   pipSize,
-                  // offset: item.alligatorOptions.jawOffset,
+                  offset: item.alligatorOptions.jawOffset,
                 ),
               if (item.teethSeries != null)
                 _getQuote(
                   item.teethSeries!.entries,
                   epoch,
                   pipSize,
-                  // offset: item.alligatorOptions.teethOffset,
+                  offset: item.alligatorOptions.teethOffset,
                 ),
               if (item.lipsSeries != null)
                 _getQuote(
                   item.lipsSeries!.entries,
                   epoch,
                   pipSize,
-                  // offset: item.alligatorOptions.lipsOffset,
+                  offset: item.alligatorOptions.lipsOffset,
                 )
             ]));
       } else if (item is FractalChaosBandSeries) {

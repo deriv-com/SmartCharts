@@ -202,13 +202,6 @@ export default class ChartAdapterStore {
                 onUpdate: () => {
                     this.mainStore.drawTools.onUpdate();
                 },
-                onRemove: () => {
-                    // this.mainStore.drawTools.deleteGroupTool(index);
-                },
-                onEdit: () => {
-                    // console.log('From the On Edit', index);
-                    // this.mainStore.studies.editStudyByIndex(index);
-                },
                 onLoad: (items: []) => {
                     this.mainStore.drawTools.onLoad(items);
                 },
@@ -317,9 +310,6 @@ export default class ChartAdapterStore {
 
     async onTick(quote: TQuote) {
         await when(() => this.isChartLoaded);
-        if (this.mainStore.chartSetting.countdown) {
-            console.log(quote.Close);
-        }
 
         const lastQuote = this.mainStore.chart.feed?.quotes[this.mainStore.chart.feed?.quotes.length - 1];
         if (lastQuote && new Date(lastQuote.Date) > new Date(quote.Date)) return;

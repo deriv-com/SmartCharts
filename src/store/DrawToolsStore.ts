@@ -10,14 +10,6 @@ import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
-type TDrawObject = {
-    config: {
-        pattern: string;
-        lineStyle: { thickness: number; hasArea: boolean };
-    };
-    id: string;
-    name: string;
-};
 
 export type TEdgePoints = {
     epoch: number;
@@ -84,8 +76,6 @@ export type TDrawingEditParameter =
       }
     | TSettingsParameter;
 
-/// TODO: Integrate draw tools with flutter charts
-
 export default class DrawToolsStore {
     _pervDrawingObjectCount = 0;
     mainStore: MainStore;
@@ -101,7 +91,6 @@ export default class DrawToolsStore {
             portalNodeIdChanged: observable,
             activeToolsNo: computed,
             destructor: action.bound,
-            onRightClickDrawing: action.bound,
             drawingFinished: action.bound,
             clearAll: action.bound,
             updateActiveToolsGroup: action.bound,
@@ -143,8 +132,6 @@ export default class DrawToolsStore {
         return this.mainStore.crosshair;
     }
 
-    activeDrawing: TDrawObject | null = null;
-
     isContinuous = false;
 
     getDrawToolsItems = () => {
@@ -176,11 +163,6 @@ export default class DrawToolsStore {
         document.removeEventListener('keydown', this.closeOnEscape);
         document.removeEventListener('dblclick', this.doubleClick);
         /// if (!this.context) return;
-    }
-
-    onRightClickDrawing() {
-        /// this.showDrawToolDialog(drawing);
-        return true;
     }
 
     updateTheme() {
@@ -290,7 +272,7 @@ export default class DrawToolsStore {
         delete finalItem.parameters;
 
         if (finalItem) {
-            this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(JSON.stringify(finalItem), -1);
+            this.mainStore.chartAdapter.flutterChart?.drawingTool.addOrUpdateDrawing(JSON.stringify(finalItem));
         }
     }
 
@@ -469,8 +451,8 @@ export default class DrawToolsStore {
             this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(index);
             this.onUpdate();
             /// Log the event
-            if (this.activeDrawing) {
-                logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${this.activeDrawing.name}`);
+            if (index) {
+                logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${index}`);
             }
         }
     }
