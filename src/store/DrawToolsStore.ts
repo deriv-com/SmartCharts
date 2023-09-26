@@ -120,7 +120,13 @@ export default class DrawToolsStore {
 
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            onDeleted: this.onDeleted,
+            onDeleted: (id: string) => {
+                const drawToolsItems = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+                const index = drawToolsItems?.findIndex(item => item.configId === id);
+                if (index !== undefined && index > -1) {
+                    this.onDeleted(index);
+                }
+            },
             onChanged: (items: TDrawingEditParameter[]) => this.onChanged(items),
         });
         when(() => !!this.context, this.onContextReady);
@@ -458,12 +464,8 @@ export default class DrawToolsStore {
     }
 
     /// Callback that runs when drawingTool is Deleted
-    onDeleted(index?: number | string) {
+    onDeleted(index?: number) {
         if (index !== undefined) {
-            if (typeof index === 'string') {
-                index = parseInt(index);
-            }
-
             this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(index);
             this.onUpdate();
             /// Log the event
