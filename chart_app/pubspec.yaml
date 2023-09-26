@@ -23,4 +23,10 @@ dev_dependencies:
         sdk: flutter
 
 flutter:
+    fonts:
+        - family: IBMPlexSans
+          fonts:
+              - asset: fonts/IBMPlexSans-Regular.woff2
+              - asset: fonts/IBMPlexSans-Bold.woff2
+                weight: 700
     uses-material-design: true
