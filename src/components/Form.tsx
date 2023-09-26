@@ -459,7 +459,7 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: TNum
 
     const handleUpdateValue = (e: ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        setInnerValue(e.target.value);
+        setInnerValue(e.target.valueAsNumber || '');
     };
 
     const handleFireOnEnter: React.KeyboardEventHandler = e => {
