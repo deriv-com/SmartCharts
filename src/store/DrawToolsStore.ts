@@ -132,8 +132,6 @@ export default class DrawToolsStore {
         return this.mainStore.crosshair;
     }
 
-    isContinuous = false;
-
     getDrawToolsItems = () => {
         const drawTools = getDrawTools();
         return Object.keys(drawTools).map(key => drawTools[key]);
@@ -360,7 +358,7 @@ export default class DrawToolsStore {
         this.activeToolsGroup = activeTools;
     }
 
-    /// Callback that runs on the creation of the drawing tool
+    /// Callback that runs after the creation of the drawing tool in flutter charts
     onCreation() {
         if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
@@ -450,6 +448,7 @@ export default class DrawToolsStore {
         if (index !== undefined) {
             this.mainStore.chartAdapter.flutterChart?.drawingTool.removeDrawingTool(index);
             this.onUpdate();
+            this.mainStore.crosshair.removeDrawingToolToolTip();
             /// Log the event
             if (index) {
                 logEvent(LogCategories.ChartControl, LogActions.DrawTools, `Remove ${index}`);
