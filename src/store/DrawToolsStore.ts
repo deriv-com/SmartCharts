@@ -160,9 +160,9 @@ export default class DrawToolsStore {
     destructor() {
         document.removeEventListener('keydown', this.closeOnEscape);
         document.removeEventListener('dblclick', this.doubleClick);
-        /// if (!this.context) return;
     }
 
+    // Callback that gets called when theme is changed
     updateTheme() {
         this.activeToolsGroup.forEach(item =>
             item.items.forEach(data => {

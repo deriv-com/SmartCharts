@@ -81,10 +81,6 @@ class ChartState {
     get loader() {
         return this.mainStore.loader;
     }
-    // get drawTools() {
-    //     return this.mainStore.drawTools;
-    // }
-
     get rootElement() {
         return this.chartStore.rootElement;
     }
@@ -445,7 +441,6 @@ class ChartState {
         saveToLocalStorage(`chart-layout-${id}`, {
             studyItems: layoutData.studyItems,
             crosshair: layoutData.crosshair,
-            // drawTools: layoutData.drawTools,
             msPerPx: layoutData.msPerPx,
         });
     }
@@ -472,12 +467,10 @@ class ChartState {
         const id = this.mainStore.chart.chartId;
 
         saveToLocalStorage(`chart-layout-${id}`, {
-            // drawTools: layoutData.drawTools,
             crosshair: layoutData.crosshair,
             studyItems: layoutData.studyItems,
             msPerPx: layoutData.msPerPx,
         });
-        // TODO: implement save drawings
     }
 
     cleanChart() {
