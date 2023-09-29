@@ -74,7 +74,7 @@ class CrosshairStore {
     isDrawingRegistered = false;
     selectedDrawing = '';
     refs?: TCrosshairRefs;
-
+    hoverOnScreen = false;
     isOverChartContainer = false;
 
     onCrosshairChanged: (state?: number) => void = () => null;
@@ -83,7 +83,6 @@ class CrosshairStore {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.addEventListener('mouseover', this.onMouseOver);
             contentWindow.addEventListener('mouseout', this.onMouseOut);
         }
         this.refs = refs;
@@ -92,29 +91,29 @@ class CrosshairStore {
     onUnmount = () => {
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.removeEventListener('mouseover', this.onMouseOver);
             contentWindow.removeEventListener('mouseout', this.onMouseOut);
         }
         this.refs = undefined;
     };
 
     onMouseMove = (dx: number, dy: number, epoch: number, quote: string) => {
+        if (this.hoverOnScreen == false) {
+            this.isOverChartContainer = true;
+            this.updateVisibility(true);
+            this.hoverOnScreen = true;
+        }
+
         if (!this.isOverChartContainer) return;
 
         this.setPositions(dx, dy, epoch, quote);
         this.renderCrosshairTooltip(dx, dy);
-
         this.mainStore.crosshair.updateVisibility(true);
-    };
-
-    onMouseOver = () => {
-        this.isOverChartContainer = true;
-        this.updateVisibility(true);
     };
 
     onMouseOut = () => {
         this.isOverChartContainer = false;
         this.updateVisibility(false);
+        this.hoverOnScreen = false;
     };
 
     toggleState() {
@@ -161,8 +160,10 @@ class CrosshairStore {
         const isCrosshairVisible = state !== 0;
         this.mainStore.chartAdapter.flutterChart?.config.updateCrosshairVisibility(isCrosshairVisible);
     }
+
     renderCrosshairTooltip = (offsetX: number, offsetY: number) => {
         // if no tooltip exists, then skip
+
         if (this.state !== 2) return;
 
         if (!this.mainStore.chartAdapter.isChartLoaded) return;
