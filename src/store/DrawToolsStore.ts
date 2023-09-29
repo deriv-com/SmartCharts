@@ -110,7 +110,7 @@ export default class DrawToolsStore {
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
             onDeleted: (id: string) => {
-                const drawToolsItems = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+                const drawToolsItems = this.drawingToolsRepoArray();
                 const index = drawToolsItems?.findIndex(item => item.configId === id);
                 if (index !== undefined && index > -1) {
                     this.onDeleted(index);
@@ -135,6 +135,15 @@ export default class DrawToolsStore {
     getDrawToolsItems = () => {
         const drawTools = getDrawTools();
         return Object.keys(drawTools).map(key => drawTools[key]);
+    };
+
+    drawingToolsRepoArray = () => {
+        return this.mainStore.chartAdapter.flutterChart?.drawingTool
+            .getDrawingToolsRepoItems()
+            .map(item => JSON.parse(item))
+            .filter(item => {
+                return !(item.drawingData.isDrawingFinished == false);
+            });
     };
 
     onContextReady = () => {
@@ -175,25 +184,27 @@ export default class DrawToolsStore {
     // Callback that runs when the chart is loaded
     onLoad(drawings: TDrawingCreatedConfig[]) {
         this.activeToolsGroup = [];
+
         drawings.forEach((item: TDrawingCreatedConfig) => {
-            const drawingName = this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
-                item
-            );
+            if (typeof item == 'string') {
+                item = JSON.parse(item);
+            }
+
+            const drawingName = item.name.replace('dt_', '');
             if (drawingName) {
-                const finalItem = this.processDrawTool(drawingName.toLowerCase());
+                const finalItem = this.processDrawTool(drawingName);
 
                 finalItem.config = item;
 
                 finalItem.parameters.forEach((params: TDrawingEditParameter) => {
                     if (params.path) {
                         if (['lineStyle', 'fillStyle'].includes(params.path)) {
-                            params.value = intToHexColor(item[params.path].color.value);
+                            params.value = intToHexColor(item[params.path]?.color?.value ?? item[params.path]?.color);
                         } else if (params.path == 'enableLabel') {
                             params.value = item[params.path];
                         }
                     }
                 });
-
                 this.updateActiveToolsGroup(finalItem);
             }
         });
@@ -334,7 +345,7 @@ export default class DrawToolsStore {
 
     /// This callback run when any of the drawing is dragged, used to save updated drawing config
     onUpdate() {
-        const drawToolsItem = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+        const drawToolsItem = this.drawingToolsRepoArray();
         if (drawToolsItem) {
             this.onLoad(drawToolsItem);
         }
@@ -362,7 +373,7 @@ export default class DrawToolsStore {
     onCreation() {
         if (this.seletedDrawToolConfig !== null) {
             this.updateActiveToolsGroup(this.seletedDrawToolConfig);
-            const drawingToolsItem = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+            const drawingToolsItem = this.drawingToolsRepoArray();
             if (!drawingToolsItem) {
                 return;
             }
@@ -413,8 +424,7 @@ export default class DrawToolsStore {
         let index;
         this.mainStore.chartAdapter.flutterChart?.drawingTool.clearDrawingToolSelect();
 
-        const drawToolsItem = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
-
+        const drawToolsItem = this.drawingToolsRepoArray();
         if (!drawToolsItem) {
             return;
         }
@@ -434,13 +444,12 @@ export default class DrawToolsStore {
                 return;
             }
             if (item.type == 'colorpicker') {
-                selectedConfig[item.path].color.value = hexToInt(item.value as string);
+                selectedConfig[item.path].color = hexToInt(item.value as string);
             } else if (item.type == 'switch') {
                 selectedConfig[item.path] = item.value;
             }
         });
-
-        this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(selectedConfig, index);
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.editDrawing(JSON.stringify(selectedConfig), index);
     }
 
     /// Callback that runs when drawingTool is Deleted

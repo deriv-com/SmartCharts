@@ -93,23 +93,24 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
       final T addOnConfig = createAddOn.call(jsonDecode(encodedAddOn));
       items.add(addOnConfig);
     }
-    onLoadCallback?.call(items);
+    // ignore: always_specify_types
+    onLoadCallback?.call(items.map((e) => jsonEncode(e)).toList());
   }
 
   /// Adds a new indicator or drawing tool.
   @override
   void add(T addOnConfig) {
     _addOns.add(addOnConfig);
-    onAddCallback?.call(addOnConfig);
     _writeToPrefs();
     notifyListeners();
+    onAddCallback?.call(addOnConfig);
   }
 
   /// Updates indicator or drawing tool at [index].
   @override
   void editAt(int index) {
-    onEditCallback?.call(index);
     _writeToPrefs();
+    onEditCallback?.call(index);
   }
 
   /// Updates indicator or drawing tool at [index].
@@ -121,9 +122,8 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
 
     _addOns[index] = addOnConfig;
     _writeToPrefs();
-    onUpdateCallback?.call(index, addOnConfig);
-
     notifyListeners();
+    onUpdateCallback?.call(index, addOnConfig);
   }
 
   /// Removes indicator/drawing tool at [index] from repository and calls `onRemoveCallback`

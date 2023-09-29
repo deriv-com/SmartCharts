@@ -396,10 +396,10 @@ export type TFlutterChart = {
         removeDrawingTool: (index: number) => void;
         clearDrawingTool: () => void;
         // eslint-disable-next-line @typescript-eslint/ban-types
-        getDrawingToolsRepoItems: () => TDrawingCreatedConfig[];
+        getDrawingToolsRepoItems: () => string[];
         getTypeOfSelectedDrawingTool: (config: TDrawingCreatedConfig) => string;
         clearDrawingToolSelect: () => void;
-        editDrawing: (config: TDrawingToolConfig, index: number) => void;
+        editDrawing: (config: string, index: number) => void;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;

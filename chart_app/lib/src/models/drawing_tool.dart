@@ -61,8 +61,12 @@ class DrawingToolModel {
   }
 
   /// function to get drawtool items
-  List<DrawingToolConfig>? getDrawingToolsRepoItems() => drawingToolsRepo.items;
-  
+  // List<DrawingToolConfig>? getDrawingToolsRepoItems() => drawingToolsRepo.items;
+
+  ///
+  List<String> getDrawingToolsRepoItems() =>
+      drawingToolsRepo.items.map((e) => jsonEncode(e)).toList();
+
 
 
   /// To add a drawing
@@ -104,12 +108,25 @@ class DrawingToolModel {
   }
 
   /// To edit a drawing
-  void editDrawing(DrawingToolConfig drawingToolConfig, int? index) {
-    if (index != null) {
-      final DrawingToolConfig config = drawingToolConfig;
-      drawingToolsRepo.updateAt(index, config);
-    }
+  void editDrawing(String dataString, int index) {
+    final Map<String, dynamic> config = json.decode(dataString)..remove('id');
+
+    DrawingToolConfig? drawingToolConfig = DrawingToolConfig.fromJson(config);
+
+    drawingToolConfig = drawingToolConfig.copyWith(
+      configId: drawingToolConfig.configId,
+      edgePoints: drawingToolConfig.edgePoints,
+      drawingData: DrawingData(
+        id: drawingToolConfig.configId!,
+        drawingParts: drawingToolConfig.drawingData!.drawingParts,
+        isDrawingFinished: true,
+      ),
+    );
+
+    drawingToolsRepo.updateAt(index, drawingToolConfig);
   }
+
+
 
   /// To clear the selection of drawing tool
   void clearDrawingToolSelect() {

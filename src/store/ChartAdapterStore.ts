@@ -159,7 +159,10 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
 
                 if (this.drawingHoverIndex != null) {
-                    const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool.getDrawingToolsRepoItems();
+                    const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool
+                        .getDrawingToolsRepoItems()
+                        .map(item => JSON.parse(item));
+
                     if (!drawingRepoItems) {
                         return;
                     }
@@ -168,11 +171,7 @@ export default class ChartAdapterStore {
 
                     if (item) {
                         this.mainStore.crosshair.renderDrawingToolToolTip(
-                            capitalize(
-                                this.mainStore.chartAdapter.flutterChart?.drawingTool.getTypeOfSelectedDrawingTool(
-                                    item
-                                ) || ''
-                            ) || '',
+                            capitalize(item.name.replace('dt_', '')) || '',
                             dx,
                             dy
                         );
