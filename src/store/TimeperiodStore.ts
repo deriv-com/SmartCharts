@@ -27,6 +27,7 @@ export default class TimeperiodStore {
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            changeGranularity: action.bound,
             portalNodeIdChanged: observable,
             setGranularity: action.bound,
             updateProps: action.bound,
@@ -154,6 +155,15 @@ export default class TimeperiodStore {
     updateProps(onChange: (granularity?: TGranularity) => void) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
+        }
+    }
+
+    changeGranularity(interval: TGranularity) {
+        if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
+            this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
+            this.predictionIndicator.setOpen(true);
+        } else {
+            this.onGranularityChange(interval);
         }
     }
 
