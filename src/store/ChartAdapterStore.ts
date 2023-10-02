@@ -363,6 +363,11 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.setSymbolClosed(isClosed);
     }
 
+    async setShowInterval(showInterval: boolean) {
+        await when(() => this.isChartLoaded);
+        this.flutterChart?.config.setTimeInterval(showInterval);
+    }
+
     scale(scale: number) {
         if (this.indicatorHoverIndex !== null) {
             this.isScaled = true;

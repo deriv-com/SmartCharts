@@ -55,6 +55,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Specifies the margin of yAxis.
   JSYAxisMargin? yAxisMargin;
 
+  /// Show the time interval
+  bool showTimeInterval = false;
+
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
   void updateLiveStatus(bool _isLive) {
@@ -133,6 +136,13 @@ class ChartConfigModel extends ChangeNotifier {
   // ignore: avoid_positional_boolean_parameters
   void setSymbolClosed(bool _isSymbolClosed) {
     isSymbolClosed = _isSymbolClosed;
+    notifyListeners();
+  }
+
+  /// To set the time interval
+  // ignore: avoid_positional_boolean_parameters
+  void setTimeInterval(bool showInterval) {
+    showTimeInterval = showInterval;
     notifyListeners();
   }
 

@@ -380,6 +380,7 @@ export type TFlutterChart = {
         updateCrosshairVisibility: (visibility: boolean) => void;
         updateLeftMargin: (leftMargin?: number) => void;
         setSymbolClosed: (isClosed: boolean) => void;
+        setTimeInterval: (showInterval: boolean) => void;
     };
     feed: {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;

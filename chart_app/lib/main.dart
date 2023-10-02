@@ -8,6 +8,7 @@ import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
+import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -221,6 +222,24 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                       )),
                                   visibility: HorizontalBarrierVisibility
                                       .keepBarrierLabelVisible,
+                                ),
+                              if (app.configModel.showTimeInterval)
+                                TimeIntervalIndicator(
+                                  feedModel.ticks.last.close,
+                                  longLine: false,
+                                  style: const HorizontalBarrierStyle(
+                                    color: Colors.black,
+                                    hasArrow: false,
+                                    textStyle: TextStyle(
+                                      fontSize: 12,
+                                      height: 1.3,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontFeatures: <FontFeature>[
+                                        FontFeature.tabularFigures()
+                                      ],
+                                    ),
+                                  ),
                                 ),
                             ]
                           : null,

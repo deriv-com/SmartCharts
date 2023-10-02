@@ -176,6 +176,14 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     'updateLeftMargin',
     allowInterop(model.updateLeftMargin),
   );
+  
+  
+  setProperty(
+    chartConfig,
+    'setTimeInterval',
+    allowInterop(model.setTimeInterval),
+  );
+
 
   setProperty(
     chartConfig,
