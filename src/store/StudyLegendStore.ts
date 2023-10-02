@@ -96,7 +96,7 @@ export default class StudyLegendStore {
         return [...getIndicatorsTree()]
             .map(category => {
                 category.foundItems = (category.items.filter(
-                    item => item.flutter_chart_id.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
+                    item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
                 ) as unknown) as TActiveItem[];
                 return category;
             })
