@@ -4,10 +4,6 @@
     padding: 13px 0;
     position: absolute;
     width: 100%;
-
-    &--zero {
-        width: calc(100% - 70px);
-    }
 }
 /* Drag Lines and Prices */
 .chart-line {
@@ -38,6 +34,10 @@
             margin-left: -10px;
             position: relative;
             border-top-width: 0;
+
+            &--zero {
+                width: calc(100% - 63px);
+            }
         }
         .title-wrapper {
             $title-height: 24px;
@@ -85,6 +85,17 @@
     right: -1px;
     border: 1px solid inherit;
 
+    &-frame {
+        display: block;
+        height: 24px;
+        top: -11px;
+        position: absolute;
+        right: 0;
+        border: 1px solid gray;
+    }
+    &--zero {
+        top: -35px;
+    }
     .arrow-icon {
         height: 41px;
         padding: 4px 0px;

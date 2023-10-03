@@ -73,22 +73,21 @@ const PriceLine = ({
                 })}
                 style={{
                     color: foregroundColor,
-                    backgroundImage:
-                        lineStyle && lineStyle !== 'solid' ? '' : `linear-gradient(to left, ${color} 90%, ${color}00`,
                 }}
             >
                 {showBarrierDragLine && (
-                    <div className='drag-line' style={{ borderTop: `${lineStyle} ${color} 1px` }} />
+                    <div className={classNames('drag-line', { 'drag-line--zero': isBarrierZero })} style={{ borderTop: `${lineStyle} ${color} 1px` }} />
                 )}
                 <div className='draggable-area' />
-                {!isBarrierZero && (
-                    <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
+                <div>
+                    <div className={classNames('drag-price', { 'drag-price--zero': isBarrierZero })} style={{ backgroundColor: color, width, opacity }}>
                         <div className='price'>{priceDisplay}</div>
                         {offScreen && offScreenDirection && (
                             <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                         )}
                     </div>
-                )}
+                    <div className='drag-price-frame' style={{ width: width - 1 }}></div>
+                </div>
                 {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
             </div>
         </div>
