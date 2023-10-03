@@ -24,10 +24,7 @@ class TimeIntervalPainter<T extends TimeIntervalIndicator>
     required QuoteToY quoteToY,
     required AnimationInfo animationInfo,
   }) {
-    if (!series.isOnRange) {
-      return;
-    }
-
+      
     final HorizontalBarrierStyle style =
         series.style as HorizontalBarrierStyle? ?? theme.horizontalBarrierStyle;
 
@@ -47,7 +44,7 @@ class TimeIntervalPainter<T extends TimeIntervalIndicator>
     }
 
     final TextPainter valuePainter = makeTextPainter(
-      'Testing',
+      series.timePeriod,
       style.textStyle,
     );
 

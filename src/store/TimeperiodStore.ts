@@ -117,16 +117,17 @@ export default class TimeperiodStore {
                 if (dataSegmentClose && dataSegmentClose.length) {
                     const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
                     if (currentQuote.DT) {
-                        const now = this._serverTime.getUTCDate();
+                        const now = this._serverTime.getLocalDate().getTime();
                         const diff = now - currentQuote.DT.getTime();
-                        const chartInterval =
-                            getIntervalInSeconds({
-                                timeUnit: this.timeUnit,
-                                interval: this.mainStore.chart.granularity,
-                            }) * 1000;
+
+                        const granularity = this.mainStore.chart.granularity;
+
+                        const chartInterval = (granularity ? granularity : 1) * 1000;
                         const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
 
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
+
+                        this.mainStore.chartAdapter.flutterChart?.config.setRemainingTime(this.remain || '');
                     }
                 }
             }

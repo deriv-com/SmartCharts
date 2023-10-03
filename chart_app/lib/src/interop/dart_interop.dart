@@ -153,6 +153,15 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     allowInterop(model.updateChartStyle),
   );
 
+
+  setProperty(
+    chartConfig,
+    'setRemainingTime',
+    allowInterop(model.setRemainingTime),
+  );
+
+
+
   setProperty(
     chartConfig,
     'updateMarkers',

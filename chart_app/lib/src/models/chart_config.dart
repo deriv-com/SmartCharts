@@ -58,6 +58,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Show the time interval
   bool showTimeInterval = false;
 
+  /// Remaining time when the timeInterval is shown
+  String remainingTime = '--:--';
+
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
   void updateLiveStatus(bool _isLive) {
@@ -68,6 +71,13 @@ class ChartConfigModel extends ChangeNotifier {
   /// To update style of the chart
   void updateChartStyle(String chartStyle) {
     style = ChartStyle.values.byName(chartStyle);
+    notifyListeners();
+  }
+
+
+  /// Get remaining time of the chart
+  void setRemainingTime(String time) {
+    remainingTime = time;
     notifyListeners();
   }
 

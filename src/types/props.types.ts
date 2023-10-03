@@ -381,6 +381,7 @@ export type TFlutterChart = {
         updateLeftMargin: (leftMargin?: number) => void;
         setSymbolClosed: (isClosed: boolean) => void;
         setTimeInterval: (showInterval: boolean) => void;
+        setRemainingTime: (time: string) => void;
     };
     feed: {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;

@@ -5,6 +5,7 @@ import 'package:deriv_chart/deriv_chart.dart';
 class TimeIntervalIndicator extends Barrier {
   /// Initializes a TimeIntervalIndicator.
   TimeIntervalIndicator(
+    this.timePeriod,
     double value, {
     int? epoch,
     String? id,
@@ -20,9 +21,14 @@ class TimeIntervalIndicator extends Barrier {
           longLine: longLine,
         );
 
+  /// Time String
+  String timePeriod = '--:--';
+
+
+  
   @override
   bool shouldRepaint(ChartData? previous) => true;
-
+  
   @override
   SeriesPainter<Series> createPainter() =>
       TimeIntervalPainter<TimeIntervalIndicator>(this);

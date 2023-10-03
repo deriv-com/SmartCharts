@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:ui';
@@ -11,7 +12,6 @@ import 'package:chart_app/src/series/current_tick_indicator.dart';
 import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 // ignore: avoid_web_libraries_in_flutter
@@ -163,6 +163,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     );
   }
 
+
+
+
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -178,7 +181,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       (BuildContext context, ChartConfigModel configModel,
                           ChartFeedModel feedModel, Widget? child) {
                     final bool showChart = app.getChartVisibilitity();
-
                     if (showChart == false) {
                       return Container(
                         color: configModel.theme is ChartDefaultLightTheme
@@ -187,6 +189,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         constraints: const BoxConstraints.expand(),
                       );
                     }
+
 
                     final int granularity = app.getQuotesInterval() ?? 1000;
 
@@ -225,6 +228,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 ),
                               if (app.configModel.showTimeInterval)
                                 TimeIntervalIndicator(
+                                  app.configModel.remainingTime,
                                   feedModel.ticks.last.close,
                                   longLine: false,
                                   style: const HorizontalBarrierStyle(
