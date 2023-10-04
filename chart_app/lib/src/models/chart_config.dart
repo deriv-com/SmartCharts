@@ -151,7 +151,7 @@ class ChartConfigModel extends ChangeNotifier {
 
   /// To set the time interval
   // ignore: avoid_positional_boolean_parameters
-  void setTimeInterval(bool showInterval) {
+  void toggleTimeIntervalVisibility(bool showInterval) {
     showTimeInterval = showInterval;
     notifyListeners();
   }

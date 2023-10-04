@@ -185,8 +185,8 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
   
   setProperty(
     chartConfig,
-    'setTimeInterval',
-    allowInterop(model.setTimeInterval),
+    'toggleTimeIntervalVisibility',
+    allowInterop(model.toggleTimeIntervalVisibility),
   );
 
   setProperty(

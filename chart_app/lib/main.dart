@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:ui';
@@ -232,15 +231,21 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                   app.configModel.remainingTime,
                                   feedModel.ticks.last.close,
                                   longLine: false,
-                                  style: const HorizontalBarrierStyle(
-                                    color: Colors.black,
+                                  style: HorizontalBarrierStyle(
+                                    color: configModel.theme
+                                            is ChartDefaultLightTheme
+                                        ? Colors.black
+                                        : Colors.white,
                                     hasArrow: false,
                                     textStyle: TextStyle(
                                       fontSize: 12,
                                       height: 1.3,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                      fontFeatures: <FontFeature>[
+                                      color: configModel.theme
+                                              is ChartDefaultLightTheme
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontFeatures: const <FontFeature>[
                                         FontFeature.tabularFigures()
                                       ],
                                     ),

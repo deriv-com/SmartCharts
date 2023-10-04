@@ -365,7 +365,7 @@ export default class ChartAdapterStore {
 
     async setShowInterval(showInterval: boolean) {
         await when(() => this.isChartLoaded);
-        this.flutterChart?.config.setTimeInterval(showInterval);
+        this.flutterChart?.config.toggleTimeIntervalVisibility(showInterval);
     }
 
     scale(scale: number) {
