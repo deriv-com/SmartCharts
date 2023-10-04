@@ -1,7 +1,7 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import { TGranularity } from 'src/types';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
+import { displayMilliseconds, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';

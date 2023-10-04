@@ -226,7 +226,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                   visibility: HorizontalBarrierVisibility
                                       .keepBarrierLabelVisible,
                                 ),
-                              if (app.configModel.showTimeInterval)
+                              if (app.configModel.showTimeInterval &&
+                                  granularity > 1000)
                                 TimeIntervalIndicator(
                                   app.configModel.remainingTime,
                                   feedModel.ticks.last.close,
