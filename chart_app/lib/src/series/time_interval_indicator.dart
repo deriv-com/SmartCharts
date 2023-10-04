@@ -2,7 +2,7 @@ import 'package:chart_app/src/series/time_interval_painter.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
 /// CurrentTickIndicator
-class TimeIntervalIndicator extends Barrier {
+class TimeIntervalIndicator extends HorizontalBarrier {
   /// Initializes a TimeIntervalIndicator.
   TimeIntervalIndicator(
     this.timePeriod,
@@ -13,10 +13,10 @@ class TimeIntervalIndicator extends Barrier {
     bool longLine = true,
     HorizontalBarrierStyle? style,
   }) : super(
+          value,
           id: id,
           title: title,
           epoch: epoch,
-          value: value,
           style: style,
           longLine: longLine,
         );
@@ -24,8 +24,7 @@ class TimeIntervalIndicator extends Barrier {
   /// Time String
   String timePeriod = '--:--';
 
-
-  
+  // TODO: optimizing the shouldRepaint
   @override
   bool shouldRepaint(ChartData? previous) => true;
   
@@ -33,6 +32,4 @@ class TimeIntervalIndicator extends Barrier {
   SeriesPainter<Series> createPainter() =>
       TimeIntervalPainter<TimeIntervalIndicator>(this);
 
-  @override
-  BarrierObject createObject() => BarrierObject(leftEpoch: epoch, value: value);
 }

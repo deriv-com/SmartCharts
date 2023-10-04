@@ -24,7 +24,6 @@ class TimeIntervalPainter<T extends TimeIntervalIndicator>
     required QuoteToY quoteToY,
     required AnimationInfo animationInfo,
   }) {
-      
     final HorizontalBarrierStyle style =
         series.style as HorizontalBarrierStyle? ?? theme.horizontalBarrierStyle;
 
@@ -48,8 +47,11 @@ class TimeIntervalPainter<T extends TimeIntervalIndicator>
       style.textStyle,
     );
 
+    //set Y axis below the marker
     y = y + style.labelHeight;
 
+
+    // creating labelArea rectangle
     final Rect labelArea = Rect.fromCenter(
       center: Offset(
           size.width - rightMargin - padding - valuePainter.width / 2, y),
