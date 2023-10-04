@@ -201,6 +201,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 CurrentTickIndicator(
                                   feedModel.ticks.last,
                                   id: 'last_tick_indicator',
+                                  dataFitEnabled:
+                                      configModel.startWithDataFitMode,
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,

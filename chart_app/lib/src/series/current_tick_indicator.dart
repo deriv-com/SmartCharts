@@ -6,6 +6,7 @@ class CurrentTickIndicator extends TickIndicator {
   CurrentTickIndicator(
     Tick tick, {
     String? id,
+    this.dataFitEnabled = false,
     HorizontalBarrierStyle? style,
     HorizontalBarrierVisibility visibility = HorizontalBarrierVisibility.normal,
   }) : super(
@@ -15,7 +16,15 @@ class CurrentTickIndicator extends TickIndicator {
           visibility: visibility,
         );
 
-  // To fix the animation issue when the chart is in data fit mode.
+  /// Whether the dataFit is enabled or not
+  bool dataFitEnabled;
+
   @override
-  bool shouldRepaint(ChartData? previous) => true;
+  bool shouldRepaint(ChartData? previous) {
+    /// To fix the animation issue when the chart is in data fit mode.
+    if (dataFitEnabled) {
+      return true;
+    }
+    return super.shouldRepaint(previous);
+  }
 }
