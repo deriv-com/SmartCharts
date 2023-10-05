@@ -364,7 +364,7 @@ class IndicatorsModel {
     List<Series> seriesList,
     List<IndicatorConfig> indicatorConfigsList,
     WrappedController controller,
-    Function getClosestEpoch,
+    Function? getClosestEpoch,
     int granularity,
     double x,
     double y,
@@ -390,7 +390,7 @@ class IndicatorsModel {
 
     final Offset target = Offset(x, y);
     final int? epoch =
-        getClosestEpoch(controller.getEpochFromX(x), granularity);
+        getClosestEpoch?.call(controller.getEpochFromX(x), granularity);
 
     if (bottomItemIndicator != null && !bottomIndicatorIndex.isNull) {
       if (bottomItemIndicator is AwesomeOscillatorSeries) {
