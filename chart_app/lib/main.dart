@@ -63,7 +63,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   final IndicatorsModel indicatorsModel = IndicatorsModel();
 
   late final ChartApp app;
-  int? rightBoundEpoch;
+  int? leftBoundEpoch, rightBoundEpoch;
   bool isFollowMode = false;
 
   void onVisibilityChange(html.Event ev) {
@@ -125,6 +125,35 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     return null;
   }
 
+  Duration getAnimationDuration() {
+    if (configModel.style == ChartStyle.line &&
+        indicatorsModel.indicatorsRepo.items.length <= 3) {
+      return const Duration(milliseconds: 300);
+    } else {
+      return const Duration(milliseconds: 30);
+    }
+  }
+
+  /// Specifies the time to draw the next frame to update the right epoch.
+  /// Returning 50 will draw 20 frames/second to update the right epoch.
+  /// Returning 1000 will draw 1 frame/second to update the right epoch
+  int _getMinElapsedTimeToFollow() {
+    if (configModel.style != ChartStyle.line) {
+      return 1000;
+    }
+
+    final int visibleEpoch = (rightBoundEpoch ?? 0) - (leftBoundEpoch ?? 0);
+    // 15 mins
+    const int maxEpochToScrollSmooth = 15 * 60 * 1000;
+
+    if (visibleEpoch > maxEpochToScrollSmooth &&
+        indicatorsModel.indicatorsRepo.items.length >= 3) {
+      return 1000;
+    }
+
+    return 50;
+  }
+
   void _onCrosshairHover(
     PointerHoverEvent ev,
     EpochToX epochToX,
@@ -159,7 +188,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     );
   }
 
-  DrawingTools drawingTool = DrawingTools();
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -192,6 +220,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
                     final Color latestTickColor = Color.fromRGBO(
                         255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
+
+                    final Duration animationDuration = getAnimationDuration();
 
                     return DerivChart(
                       mainSeries: mainSeries,
@@ -233,6 +263,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             leftEpoch < feedModel.ticks.first.epoch) {
                           feedModel.loadHistory(2500);
                         }
+                        leftBoundEpoch = leftEpoch;
                         rightBoundEpoch = rightEpoch;
                         JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
                       },
@@ -249,7 +280,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         isMobile: app.configModel.isMobile,
                       ),
                       drawingToolsRepo: indicatorsModel.drawingToolsRepo,
-                      drawingTools: drawingTool,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,
                       dataFitEnabled: configModel.startWithDataFitMode,
                       showCrosshair: configModel.showCrosshair,
@@ -270,6 +300,11 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       showDataFitButton: false,
                       showScrollToLastTickButton: false,
                       loadingAnimationColor: Colors.transparent,
+                      minElapsedTimeToFollow: _getMinElapsedTimeToFollow(),
+                      showCurrentTickBlinkAnimation:
+                          configModel.style == ChartStyle.line,
+                      currentTickAnimationDuration: animationDuration,
+                      quoteBoundsAnimationDuration: animationDuration,
                     );
                   }),
                 ),
