@@ -75,15 +75,20 @@ class ChartConfigModel extends ChangeNotifier {
       contractType = _markerGroup.type;
 
       for (final JsMarker _marker in _markerGroup.markers) {
-        markers.add(WebMarker(
-          quote: _marker.quote,
-          epoch: _marker.epoch * 1000,
-          text: _marker.text,
-          markerType: MarkerType.values.byName(_marker.type),
-          direction: MarkerDirection.up,
-          color:
-              _marker.color != null ? getColorFromString(_marker.color!) : null,
-        ));
+        if (_marker.quote != null &&
+            _marker.epoch != null &&
+            _marker.type != null) {
+          markers.add(WebMarker(
+            quote: _marker.quote!,
+            epoch: _marker.epoch! * 1000,
+            text: _marker.text,
+            markerType: MarkerType.values.byName(_marker.type!),
+            direction: MarkerDirection.up,
+            color: _marker.color != null
+                ? getColorFromString(_marker.color!)
+                : null,
+          ));
+        }
       }
 
       Color _bgColor = Colors.white;
