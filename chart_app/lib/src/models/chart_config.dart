@@ -40,6 +40,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Type of the contract
   String? contractType;
 
+  /// Market symbol
+  String symbol = '';
+
   /// Pip size of the chart
   int pipSize = 4;
 
@@ -52,6 +55,12 @@ class ChartConfigModel extends ChangeNotifier {
   /// Specifies the margin of yAxis.
   JSYAxisMargin? yAxisMargin;
 
+  /// Show the time interval
+  bool showTimeInterval = false;
+
+  /// Remaining time when the timeInterval is shown
+  String remainingTime = '--:--';
+
   /// To update style of the chart
   // ignore: avoid_positional_boolean_parameters
   void updateLiveStatus(bool _isLive) {
@@ -62,6 +71,13 @@ class ChartConfigModel extends ChangeNotifier {
   /// To update style of the chart
   void updateChartStyle(String chartStyle) {
     style = ChartStyle.values.byName(chartStyle);
+    notifyListeners();
+  }
+
+
+  /// Get remaining time of the chart
+  void setRemainingTime(String time) {
+    remainingTime = time;
     notifyListeners();
   }
 
@@ -133,6 +149,13 @@ class ChartConfigModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// To set the time interval
+  // ignore: avoid_positional_boolean_parameters
+  void toggleTimeIntervalVisibility(bool showInterval) {
+    showTimeInterval = showInterval;
+    notifyListeners();
+  }
+
   /// Initialize new chart
   void newChart(JSNewChart payload) {
     granularity = payload.granularity;
@@ -142,6 +165,7 @@ class ChartConfigModel extends ChangeNotifier {
     pipSize = payload.pipSize ?? 4;
     isMobile = payload.isMobile;
     yAxisMargin = payload.yAxisMargin;
+    symbol = payload.symbol ?? '';
 
     if (payload.chartType != null && payload.chartType!.isNotEmpty) {
       style = ChartStyle.values.byName(payload.chartType!);

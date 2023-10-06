@@ -172,6 +172,9 @@ export default class ChartSettingStore {
             return;
         }
         this.theme = theme;
+
+        this.mainStore.drawTools.updateTheme();
+
         this.mainStore.chartAdapter.updateTheme(theme);
         if (this.context) {
             this.mainStore.state.setChartTheme(theme);
@@ -201,10 +204,12 @@ export default class ChartSettingStore {
         if (this.countdown === value) {
             return;
         }
+        this.mainStore.chartAdapter.setShowInterval(value);
         this.countdown = value;
         logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `${value ? 'Show' : 'Hide'} Countdown`);
         this.saveSetting();
     }
+
     setHistorical(value: boolean) {
         if (this.historical === value) {
             return;

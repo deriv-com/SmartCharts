@@ -81,10 +81,6 @@ class ChartState {
     get loader() {
         return this.mainStore.loader;
     }
-    get drawTools() {
-        return this.mainStore.drawTools;
-    }
-
     get rootElement() {
         return this.chartStore.rootElement;
     }
@@ -452,7 +448,7 @@ class ChartState {
     // returns false if restoring layout fails
     restoreLayout() {
         const id = this.mainStore.chart.chartId;
-        let layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
+        const layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
 
         if (!layout) return false;
 
@@ -466,11 +462,15 @@ class ChartState {
     }
 
     saveDrawings() {
-        // TODO: implement save drawings
-    }
+        if (!this.chartStore.chartId) return;
+        const layoutData: TLayout = this.mainStore.view.getLayout();
+        const id = this.mainStore.chart.chartId;
 
-    restoreDrawings() {
-        // TODO: implement restore drawings
+        saveToLocalStorage(`chart-layout-${id}`, {
+            crosshair: layoutData.crosshair,
+            studyItems: layoutData.studyItems,
+            msPerPx: layoutData.msPerPx,
+        });
     }
 
     cleanChart() {

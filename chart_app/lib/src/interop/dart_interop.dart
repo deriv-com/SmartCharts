@@ -6,6 +6,7 @@ import 'dart:js_util';
 import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:chart_app/src/models/indicators.dart';
+import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
 
@@ -16,6 +17,8 @@ import 'package:chart_app/src/models/chart_feed.dart';
 void initDartInterop(ChartApp app) {
   final JsObject dartInterop = JsObject(context['Object']);
   setProperty(dartInterop, 'config', _exposeConfigModel(app.configModel));
+  setProperty(dartInterop, 'drawingTool',
+      _exposeDrawingToolModel(app.drawingToolModel));
   setProperty(
       dartInterop, 'indicators', _exposeIndicatorsModel(app.indicatorsModel));
   setProperty(dartInterop, 'feed', _exposeDataModel(app.feedModel));
@@ -152,6 +155,12 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
 
   setProperty(
     chartConfig,
+    'setRemainingTime',
+    allowInterop(model.setRemainingTime),
+  );
+
+  setProperty(
+    chartConfig,
     'updateMarkers',
     allowInterop(model.updateMarkers),
   );
@@ -172,6 +181,12 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     chartConfig,
     'updateLeftMargin',
     allowInterop(model.updateLeftMargin),
+  );
+  
+  setProperty(
+    chartConfig,
+    'toggleTimeIntervalVisibility',
+    allowInterop(model.toggleTimeIntervalVisibility),
   );
 
   setProperty(
@@ -203,6 +218,55 @@ JsObject _exposeIndicatorsModel(IndicatorsModel model) {
     'clearIndicators',
     allowInterop(model.clearIndicators),
   );
+
+  return chartConfig;
+}
+
+JsObject _exposeDrawingToolModel(DrawingToolModel model) {
+  final JsObject chartConfig = JsObject(context['Object']);
+
+  setProperty(
+    chartConfig,
+    'addOrUpdateDrawing',
+    allowInterop(model.addOrUpdateDrawing),
+  );
+
+  setProperty(
+    chartConfig,
+    'removeDrawingTool',
+    allowInterop(model.removeDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'getTypeOfSelectedDrawingTool',
+    allowInterop(model.getTypeOfSelectedDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'editDrawing',
+    allowInterop(model.editDrawing),
+  );
+
+  setProperty(
+    chartConfig,
+    'clearDrawingTool',
+    allowInterop(model.clearDrawingTool),
+  );
+
+  setProperty(
+    chartConfig,
+    'clearDrawingToolSelect',
+    allowInterop(model.clearDrawingToolSelect),
+  );
+
+  setProperty(
+    chartConfig,
+    'getDrawingToolsRepoItems',
+    allowInterop(model.getDrawingToolsRepoItems),
+  );
+  
 
   return chartConfig;
 }

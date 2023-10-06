@@ -63,3 +63,20 @@ export function hexToInt(color: string) {
     const colorCode = color.replace('#', '0xff');
     return parseInt(colorCode, 16);
 }
+export function capitalize(str: string) {
+    if (!str || typeof str !== 'string') {
+        return '';
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function intToHexColor(intColor: number): string {
+    // Convert the integer color to a hexadecimal string without the "0x" prefix.
+    const hexString = (intColor & 0xffffff).toString(16).toUpperCase();
+
+    // Pad the hexadecimal string with zeros to ensure it has 6 digits.
+    const paddedHexString = ('000000' + hexString).slice(-6);
+
+    // Add the "#" prefix to the padded hexadecimal string.
+    return `#${paddedHexString}`;
+}

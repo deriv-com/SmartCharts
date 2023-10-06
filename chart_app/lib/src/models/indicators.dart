@@ -19,14 +19,11 @@ class IndicatorsModel {
   /// Indicators repo
   final AddOnsRepository<IndicatorConfig> indicatorsRepo =
       AddOnsRepository<IndicatorConfig>(
+    createAddOn: (Map<String, dynamic> map) => IndicatorConfig.fromJson(map),
     onEditCallback: (int i) => JsInterop.indicators?.onEdit?.call(i),
     onRemoveCallback: (int i) => JsInterop.indicators?.onRemove?.call(i),
     onSwapCallback: (int x, int y) => JsInterop.indicators?.onSwap?.call(x, y),
   );
-
-  /// Drawing tools repo
-  final AddOnsRepository<DrawingToolConfig> drawingToolsRepo =
-      AddOnsRepository<DrawingToolConfig>();
 
   /// To add or update an indicator
   void addOrUpdateIndicator(String dataString, int? index) {
@@ -312,6 +309,7 @@ class IndicatorsModel {
           values: values,
         ));
       } else if (item is AlligatorSeries) {
+        //TODO : enable offset after fixing in the flutter charts
         tooltipContent.add(JsIndicatorTooltip(
             name: AlligatorIndicatorConfig.name,
             values: <String?>[
@@ -392,7 +390,7 @@ class IndicatorsModel {
     final int? epoch =
         getClosestEpoch(controller.getEpochFromX(x), granularity);
 
-    if (bottomItemIndicator != null && !bottomIndicatorIndex.isNull) {
+    if (bottomItemIndicator != null && bottomIndicatorIndex != null) {
       if (bottomItemIndicator is AwesomeOscillatorSeries) {
         final List<Tick> aoEntries = bottomItemIndicator.entries ?? <Tick>[];
         if (isPointOnIndicator(

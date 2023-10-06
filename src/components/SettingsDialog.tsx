@@ -110,11 +110,10 @@ const SettingsPanelGroup = ({
             />
         ),
         pattern: (item: TSettingsParameter) => {
-            const lineWidth = '';
             return (
                 <Pattern
                     pattern={item.value as string}
-                    lineWidth={lineWidth}
+                    lineWidth='1'
                     subtitle={item.title}
                     onChange={v => {
                         onItemChange(item, v);
@@ -182,10 +181,10 @@ const SettingsPanelGroup = ({
         <div className={`form__input-group ${input_group_name}`}>
             {title === 'Show Zones' ? '' : <h4>{title}</h4>}
             {items.map(
-                (item, index) =>
+                item =>
                     renderMap[item.type as keyof typeof renderMap] && (
                         <SettingsPanelItem
-                            key={index}
+                            key={item.title}
                             type={item.type}
                             title={title === 'Show Zones' ? item.title : item.title.replace(title, '')}
                             Field={renderMap[item.type](item)}

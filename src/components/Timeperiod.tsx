@@ -85,7 +85,7 @@ type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGran
 const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
     const { timeperiod } = useStores();
 
-    const { setGranularity, updateProps, updatePortalNode } = timeperiod;
+    const { changeGranularity, setGranularity, updateProps, updatePortalNode } = timeperiod;
 
     const onChangeGranularity = onChange || setGranularity;
 
@@ -93,7 +93,7 @@ const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
         if (key === 'tick' && chart_type_id !== 'line') {
             return;
         }
-        onChangeGranularity(interval);
+        changeGranularity(interval);
     };
 
     React.useEffect(() => updateProps(onChangeGranularity));

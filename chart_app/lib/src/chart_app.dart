@@ -3,6 +3,7 @@ import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:chart_app/src/misc/wrapped_controller.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
+import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,11 +11,8 @@ import 'package:flutter/material.dart';
 /// ChartApp
 class ChartApp {
   /// Constructor
-  ChartApp(
-    this.configModel,
-    this.feedModel,
-    this.indicatorsModel,
-  );
+  ChartApp(this.configModel, this.feedModel, this.indicatorsModel,
+      this.drawingToolModel);
 
   /// ChartConfigModel
   ChartConfigModel configModel;
@@ -24,6 +22,9 @@ class ChartApp {
 
   /// Indicators config
   IndicatorsModel indicatorsModel;
+
+  /// drawingtool config
+  DrawingToolModel drawingToolModel;
 
   /// WrappedController
   WrappedController wrappedController = WrappedController();
@@ -68,6 +69,7 @@ class ChartApp {
   /// Initialize new chart
   void newChart(JSNewChart payload) {
     configModel.newChart(payload);
+    drawingToolModel.newChart(payload);
     feedModel.newChart();
   }
 

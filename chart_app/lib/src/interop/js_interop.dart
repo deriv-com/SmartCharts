@@ -1,6 +1,7 @@
 import 'dart:js';
 
 import 'package:chart_app/src/add_ons/add_ons_repository.dart';
+import 'package:deriv_chart/deriv_chart.dart';
 import 'package:js/js.dart';
 
 /// JS Interop
@@ -30,6 +31,9 @@ class JsInterop {
 
   /// Indicator options
   external static JsIndicators? indicators;
+
+  /// Drawingtool options
+  external static JsDrawings? drawingTool;
 }
 
 @JS()
@@ -60,6 +64,9 @@ class JSNewChart {
 
   /// Granularity of the chart data
   external int get granularity;
+
+  /// Market symbol
+  external String? get symbol;
 
   /// Style of the chart
   external String? get chartType;
@@ -145,14 +152,50 @@ class JsQuote {
 
 /// Indicator props
 class JsIndicators {
-  /// Called when an indicator is to be removed
+  /// Called when an indicator is removed
   external OnEditCallback? onRemove;
 
-  /// Called when an indicator is to be edited
+  /// Called when an indicator is edited
+  external OnEditCallback? onEdit;
+
+  ///
+  external OnUpdateCallback? onUpdate;
+
+  /// Callback to swap two elements of a list.
+  external OnSwapCallback? onSwap;
+}
+
+/// Called when an addOn is created
+typedef OnAddDrawingCallback = void Function();
+
+@JS()
+@anonymous
+
+/// Drawings
+class JsDrawings {
+  /// Called when an drawing is added
+  external OnAddDrawingCallback? onAdd;
+
+  /// Called when an drawing is edited/dragged
+  external OnUpdateCallback? onUpdate;
+
+  /// Called when the data is loaded from prefs
+  external OnLoadCallback? onLoad;
+
+  /// Called when an drawing is removed
+  external OnEditCallback? onRemove;
+
+  /// Called when an drawing is edited
   external OnEditCallback? onEdit;
 
   /// Callback to swap two elements of a list.
   external OnSwapCallback? onSwap;
+
+  /// Callback to notify mouse enter over the addon.
+  external OnMouseEnterCallback? onMouseEnter;
+
+  /// Callback to notify mouse exit over the addon.
+  external OnMouseExitCallback? onMouseExit;
 }
 
 @JS()
