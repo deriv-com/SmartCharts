@@ -4,23 +4,8 @@ import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
 import { clone } from 'src/utils';
+import { capitalize } from 'src/components/ui/utils';
 import MainStore from '.';
-
-// Define the throttle function
-function throttle<T extends (...args: any[]) => any>(func: T, delay: number): T {
-    let lastCall = 0;
-
-    return ((...args: any[]) => {
-        const now = new Date().getTime();
-
-        if (now - lastCall < delay) {
-            return;
-        }
-
-        lastCall = now;
-        return func(...args);
-    }) as T;
-}
 
 export default class ChartAdapterStore {
     private mainStore: MainStore;
@@ -36,10 +21,12 @@ export default class ChartAdapterStore {
     };
     isFeedLoaded = false;
     msPerPx?: number;
-    hoverIndex: number | undefined | null = null;
+    indicatorHoverIndex: number | undefined | null = null;
+    drawingHoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
     painter = new Painter();
-    clickEventCount = 0;
+    isHoverOnIndicator = false;
+    drawingColor = 0;
     isScaled = false;
     previousHoverIndex: number | undefined | null = null;
 
@@ -87,28 +74,12 @@ export default class ChartAdapterStore {
         const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
             this.mainStore.crosshair.decimalPlaces
         );
-        const handleClickEvent = (e: Event) => {
-            if (this.hoverIndex != null) {
-                e.preventDefault();
-                this.mainStore.studies.editStudyByIndex(this.hoverIndex);
-            }
-        };
-
-        function updateEventListener(condition: boolean) {
-            if (condition) {
-                document.getElementsByClassName('chartContainer')[0].addEventListener('contextmenu', handleClickEvent);
-            } else {
-                document
-                    .getElementsByClassName('chartContainer')[0]
-                    .removeEventListener('contextmenu', handleClickEvent);
-            }
-        }
 
         this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
         const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
         const granularity = this.mainStore.chartAdapter.getGranularityInMs();
 
-        const indicatorHoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
+        const hoverIndex = this.flutterChart?.app.getIndicatorHoverIndex(
             dxLocal,
             dyLocal,
             getClosestEpoch,
@@ -118,18 +89,25 @@ export default class ChartAdapterStore {
         if (this.isScaled) {
             this.isScaled = false;
         } else {
-            this.hoverIndex = indicatorHoverIndex;
+            this.indicatorHoverIndex = hoverIndex;
         }
 
-        if (this.previousHoverIndex === this.hoverIndex) {
-            return;
-        }
+        if (hoverIndex != null) {
+            const item = clone(activeItems[hoverIndex]);
 
-        if (indicatorHoverIndex != null) {
-            const item = clone(activeItems[indicatorHoverIndex]);
+            if (this.isHoverOnIndicator) {
+                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+            } else {
+                this.mainStore.crosshair.removeIndicatorToolTip();
+            }
+
+            if (this.previousHoverIndex === this.indicatorHoverIndex) {
+                return;
+            }
 
             if (item && item.config) {
                 this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+                this.isHoverOnIndicator = true;
                 for (const key in item.config) {
                     if (key.includes('Style')) {
                         item.config[key].thickness = 2;
@@ -145,24 +123,21 @@ export default class ChartAdapterStore {
                         });
                     }
                 }
-                if (this.clickEventCount === 0) {
-                    this.clickEventCount++;
-                    updateEventListener(true);
-                }
             }
-            setIndicator(item, indicatorHoverIndex);
+            setIndicator(item, hoverIndex);
         }
         if (
             this.previousHoverIndex != null &&
             this.previousHoverIndex >= 0 &&
             this.previousHoverIndex < activeItems.length
         ) {
+            this.isHoverOnIndicator = false;
             const item = activeItems[this.previousHoverIndex];
             this.mainStore.crosshair.removeIndicatorToolTip();
             setIndicator(item, this.previousHoverIndex);
         }
 
-        this.previousHoverIndex = indicatorHoverIndex;
+        this.previousHoverIndex = hoverIndex;
     };
 
     initFlutterCharts() {
@@ -176,9 +151,36 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
-                const throttledUpdate = throttle(this.crossHover, 10);
+                // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
+                const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
+                const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
+                    this.mainStore.crosshair.decimalPlaces
+                );
+                this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
 
-                throttledUpdate(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
+                if (this.drawingHoverIndex != null) {
+                    const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool
+                        .getDrawingToolsRepoItems()
+                        .map(item => JSON.parse(item));
+
+                    if (!drawingRepoItems) {
+                        return;
+                    }
+
+                    const item = drawingRepoItems[this.drawingHoverIndex];
+
+                    if (item) {
+                        this.mainStore.crosshair.renderDrawingToolToolTip(
+                            capitalize(item.name.replace('dt_', '')) || '',
+                            dx,
+                            dy
+                        );
+                    }
+                } else {
+                    this.mainStore.crosshair.removeDrawingToolToolTip();
+                }
+
+                this.crossHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
                 onRemove: (index: number) => {
@@ -192,6 +194,23 @@ export default class ChartAdapterStore {
                     [activeItems[index1], activeItems[index2]] = [activeItems[index2], activeItems[index1]];
                 },
             },
+            drawingTool: {
+                onAdd: () => {
+                    this.mainStore.drawTools.onCreation();
+                },
+                onUpdate: () => {
+                    this.mainStore.drawTools.onUpdate();
+                },
+                onLoad: (items: []) => {
+                    this.mainStore.drawTools.onLoad(items);
+                },
+                onMouseEnter: (index: number) => {
+                    this.drawingHoverIndex = index;
+                },
+                onMouseExit: () => {
+                    this.drawingHoverIndex = null;
+                },
+            },
         };
 
         createChartElement({
@@ -203,10 +222,12 @@ export default class ChartAdapterStore {
         element.appendChild(window.flutterChartElement);
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
     }
 
     onUnmount() {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
     }
 
     onChartLoad() {
@@ -216,7 +237,6 @@ export default class ChartAdapterStore {
 
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
-
         if (e.deltaX === 0 && e.deltaZ === 0) {
             const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);
@@ -225,6 +245,16 @@ export default class ChartAdapterStore {
         }
 
         return false;
+    };
+
+    onDoubleClick = () => {
+        if (this.drawingHoverIndex != null) {
+            this.mainStore.drawTools.onSetting(this.drawingHoverIndex);
+            this.mainStore.crosshair.removeDrawingToolToolTip();
+        } else if (this.indicatorHoverIndex != null) {
+            this.mainStore.studies.editStudyByIndex(this.indicatorHoverIndex);
+            this.mainStore.crosshair.removeIndicatorToolTip();
+        }
     };
 
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
@@ -255,6 +285,7 @@ export default class ChartAdapterStore {
         await when(() => this.isChartLoaded);
 
         this.flutterChart?.app.newChart({
+            symbol: this.mainStore.chart.currentActiveSymbol?.symbol,
             granularity: this.getGranularityInMs(),
             chartType: this.mainStore.state.chartType,
             isLive: this.mainStore.chart.isLive || false,
@@ -332,8 +363,13 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.setSymbolClosed(isClosed);
     }
 
+    async setShowInterval(showInterval: boolean) {
+        await when(() => this.isChartLoaded);
+        this.flutterChart?.config.toggleTimeIntervalVisibility(showInterval);
+    }
+
     scale(scale: number) {
-        if (this.hoverIndex !== null) {
+        if (this.indicatorHoverIndex !== null) {
             this.isScaled = true;
         }
 

@@ -1,16 +1,16 @@
 import 'dart:collection';
-import 'dart:js';
 import 'dart:math';
 import 'dart:ui';
 import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:chart_app/src/misc/crosshair_controller.dart';
+import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
+import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 // ignore: avoid_web_libraries_in_flutter
@@ -53,6 +53,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       configModel,
       feedModel,
       indicatorsModel,
+      drawingToolModel,
     );
     initDartInterop(app);
     JsInterop.onChartLoad();
@@ -61,6 +62,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   final ChartFeedModel feedModel = ChartFeedModel();
   final ChartConfigModel configModel = ChartConfigModel();
   final IndicatorsModel indicatorsModel = IndicatorsModel();
+  final DrawingToolModel drawingToolModel = DrawingToolModel();
 
   late final ChartApp app;
   int? leftBoundEpoch, rightBoundEpoch;
@@ -155,7 +157,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   }
 
   void _onCrosshairHover(
-    PointerHoverEvent ev,
+    Offset globalPosition,
+    Offset localPosition,
     EpochToX epochToX,
     QuoteToY quoteToY,
     EpochFromX epochFromX,
@@ -180,10 +183,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       ..getYFromQuote_ = quoteToY;
 
     JsInterop.onCrosshairHover(
-      ev.position.dx,
-      ev.position.dy,
-      ev.localPosition.dx,
-      ev.localPosition.dy,
+      globalPosition.dx,
+      globalPosition.dy,
+      localPosition.dx,
+      localPosition.dy,
       index,
     );
   }
@@ -203,7 +206,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       (BuildContext context, ChartConfigModel configModel,
                           ChartFeedModel feedModel, Widget? child) {
                     final bool showChart = app.getChartVisibilitity();
-
                     if (showChart == false) {
                       return Container(
                         color: configModel.theme is ChartDefaultLightTheme
@@ -224,6 +226,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                     final Duration animationDuration = getAnimationDuration();
 
                     return DerivChart(
+                      activeSymbol: configModel.symbol,
                       mainSeries: mainSeries,
                       annotations: feedModel.ticks.isNotEmpty
                           ? <Barrier>[
@@ -250,6 +253,32 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                       )),
                                   visibility: HorizontalBarrierVisibility
                                       .keepBarrierLabelVisible,
+                                ),
+                              if (app.configModel.showTimeInterval &&
+                                  granularity > 1000)
+                                TimeIntervalIndicator(
+                                  app.configModel.remainingTime,
+                                  feedModel.ticks.last.close,
+                                  longLine: false,
+                                  style: HorizontalBarrierStyle(
+                                    color: configModel.theme
+                                            is ChartDefaultLightTheme
+                                        ? Colors.black
+                                        : Colors.white,
+                                    hasArrow: false,
+                                    textStyle: TextStyle(
+                                      fontSize: 12,
+                                      height: 1.3,
+                                      fontWeight: FontWeight.w600,
+                                      color: configModel.theme
+                                              is ChartDefaultLightTheme
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontFeatures: const <FontFeature>[
+                                        FontFeature.tabularFigures()
+                                      ],
+                                    ),
+                                  ),
                                 ),
                             ]
                           : null,
@@ -279,7 +308,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         yAxisWidth: app.yAxisWidth,
                         isMobile: app.configModel.isMobile,
                       ),
-                      drawingToolsRepo: indicatorsModel.drawingToolsRepo,
+                      drawingToolsRepo: drawingToolModel.drawingToolsRepo,
+                      drawingTools: drawingToolModel.drawingTools,
                       indicatorsRepo: indicatorsModel.indicatorsRepo,
                       dataFitEnabled: configModel.startWithDataFitMode,
                       showCrosshair: configModel.showCrosshair,

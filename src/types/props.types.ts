@@ -5,6 +5,8 @@ import {
     AuditDetailsForExpiredContract,
     ProposalOpenContract,
 } from '@deriv/api-types';
+
+import { TActiveDrawingToolItem, TDrawingCreatedConfig } from 'src/store/DrawToolsStore';
 import { HtmlHTMLAttributes } from 'react';
 import { BinaryAPI } from 'src/binaryapi';
 import { ChartTypes } from 'src/Constant';
@@ -328,6 +330,7 @@ export type TNewChartPayload = {
     granularity: number;
     isLive: boolean;
     startWithDataFitMode: boolean;
+    symbol?: string;
     chartType?: string;
     theme: string;
     msPerPx?: number;
@@ -342,6 +345,10 @@ export type TNewChartPayload = {
 export type TIndicatorTooltipContent = {
     name: string;
     values: string[];
+};
+
+export type TDrawingToolConfig = {
+    configId: string;
 };
 
 export type TFlutterChart = {
@@ -373,6 +380,8 @@ export type TFlutterChart = {
         updateCrosshairVisibility: (visibility: boolean) => void;
         updateLeftMargin: (leftMargin?: number) => void;
         setSymbolClosed: (isClosed: boolean) => void;
+        toggleTimeIntervalVisibility: (showInterval: boolean) => void;
+        setRemainingTime: (time: string) => void;
     };
     feed: {
         onTickHistory: (quotes: TQuote[], append: boolean) => void;
@@ -383,6 +392,16 @@ export type TFlutterChart = {
         addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
         clearIndicators: () => void;
+    };
+    drawingTool: {
+        addOrUpdateDrawing: (config: string, index?: number) => void;
+        removeDrawingTool: (index: number) => void;
+        clearDrawingTool: () => void;
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        getDrawingToolsRepoItems: () => string[];
+        getTypeOfSelectedDrawingTool: (config: TDrawingCreatedConfig) => string;
+        clearDrawingToolSelect: () => void;
+        editDrawing: (config: string, index: number) => void;
     };
     crosshair: {
         getXFromEpoch: (epoch: number) => number;
@@ -411,6 +430,13 @@ export type JSInterop = {
         onEdit: (index: number) => void;
         onSwap: (index1: number, index2: number) => void;
     };
+    drawingTool: {
+        onAdd: () => void;
+        onUpdate: (index: number, config: TDrawingToolConfig) => void;
+        onLoad: (drawings: []) => void;
+        onMouseEnter: (index: number) => void;
+        onMouseExit: (index: number) => void;
+    };
 };
 
 export type TLoadHistoryParams = {
@@ -430,6 +456,7 @@ export type TLayout = {
     granularity?: TGranularity;
     studyItems?: TActiveItem[];
     crosshair?: number;
+    drawTools?: TActiveDrawingToolItem[];
     msPerPx?: number;
 };
 

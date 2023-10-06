@@ -63,6 +63,9 @@ export const getIntervalInSeconds = ({
     if (interv === 'day') {
         unit = 86400;
         interv = 1;
+    }
+    if (interv === 'hour') {
+        unit = 3600;
     } else if (timeUnit === 'minute') {
         unit = 60;
     } else if (timeUnit === 'second') {

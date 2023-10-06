@@ -29,11 +29,14 @@ type TCrosshairRefs = {
 };
 
 const MAX_TOOLTIP_WIDTH = 315;
+
 class CrosshairStore {
     mainStore: MainStore;
     prev_arrow?: string;
 
     state?: number = 2;
+    drawingTooltip: HTMLElement | null = null;
+    indicatorTooltip: HTMLElement | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -68,9 +71,10 @@ class CrosshairStore {
     showChange = false;
     showSeries = false;
     showStudies = false;
-
+    isDrawingRegistered = false;
+    selectedDrawing = '';
     refs?: TCrosshairRefs;
-
+    hoverOnScreen = false;
     isOverChartContainer = false;
 
     onCrosshairChanged: (state?: number) => void = () => null;
@@ -79,7 +83,6 @@ class CrosshairStore {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.addEventListener('mouseover', this.onMouseOver);
             contentWindow.addEventListener('mouseout', this.onMouseOut);
         }
         this.refs = refs;
@@ -88,29 +91,29 @@ class CrosshairStore {
     onUnmount = () => {
         const contentWindow = document.querySelector('.chartContainer');
         if (contentWindow) {
-            contentWindow.removeEventListener('mouseover', this.onMouseOver);
             contentWindow.removeEventListener('mouseout', this.onMouseOut);
         }
         this.refs = undefined;
     };
 
     onMouseMove = (dx: number, dy: number, epoch: number, quote: string) => {
+        if (this.hoverOnScreen == false) {
+            this.isOverChartContainer = true;
+            this.updateVisibility(true);
+            this.hoverOnScreen = true;
+        }
+
         if (!this.isOverChartContainer) return;
 
         this.setPositions(dx, dy, epoch, quote);
         this.renderCrosshairTooltip(dx, dy);
-
         this.mainStore.crosshair.updateVisibility(true);
-    };
-
-    onMouseOver = () => {
-        this.isOverChartContainer = true;
-        this.updateVisibility(true);
     };
 
     onMouseOut = () => {
         this.isOverChartContainer = false;
         this.updateVisibility(false);
+        this.hoverOnScreen = false;
     };
 
     toggleState() {
@@ -157,8 +160,10 @@ class CrosshairStore {
         const isCrosshairVisible = state !== 0;
         this.mainStore.chartAdapter.flutterChart?.config.updateCrosshairVisibility(isCrosshairVisible);
     }
+
     renderCrosshairTooltip = (offsetX: number, offsetY: number) => {
         // if no tooltip exists, then skip
+
         if (this.state !== 2) return;
 
         if (!this.mainStore.chartAdapter.isChartLoaded) return;
@@ -196,8 +201,51 @@ class CrosshairStore {
         }
     };
 
+    selectedDrawingHoverClick = async () => {
+        await when(() => this.mainStore.chartAdapter.isChartLoaded);
+
+        const contentWindow = document.querySelector('.chartContainer') as HTMLElement;
+
+        if (!contentWindow || this.isDrawingRegistered) return;
+
+        this.isDrawingRegistered = true;
+    };
+
+    renderDrawingToolToolTip = (name: string, dx: number, dy: number) => {
+        if (this.drawingTooltip !== null) {
+            this.drawingTooltip.style.top = `${dy - 100}px`;
+            this.drawingTooltip.style.left = `${dx - 150}px`;
+        } else {
+            if (document.querySelector('.draw-tool-tooltip') != null) return;
+
+            const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
+                '.chartContainer'
+            );
+
+            const parentDiv = document.createElement('div');
+            parentDiv.classList.add('draw-tool-tooltip', 'mSticky');
+            parentDiv.style.display = 'inline-block';
+            parentDiv.style.position = 'absolute';
+            parentDiv.style.top = `${dy - 100}px`;
+            parentDiv.style.left = `${dx - 150}px`;
+
+            parentDiv.innerHTML = `
+                        <span class='mStickyInterior' style='display:inline-block'>${name}</span>
+                        <span class='mouseDeleteInstructions'>Double click to manage</span>
+            `;
+
+            this.drawingTooltip = parentDiv;
+            chartContainer?.appendChild(parentDiv);
+        }
+    };
+
     renderIndicatorToolTip = (name: string, dx: number, dy: number) => {
-        if (document.getElementsByClassName('indicator-tooltip').length === 0) {
+        if (this.indicatorTooltip !== null) {
+            this.indicatorTooltip.style.top = `${dy - 100}px`;
+            this.indicatorTooltip.style.left = `${dx - 150}px`;
+        } else {
+            if (document.querySelector('.indicator-tooltip') != null) return;
+
             const chartContainer: HTMLElement | null | undefined = this.context?.topNode?.querySelector(
                 '.chartContainer'
             );
@@ -211,16 +259,27 @@ class CrosshairStore {
 
             parentDiv.innerHTML = `
                     <span class='mStickyInterior' style='display:inline-block'>${name}</span>
-                    <span class='mouseDeleteInstructions'>Right click to manage</span>
+                    <span class='mouseDeleteInstructions'>Double click to manage</span>
         `;
+            this.indicatorTooltip = parentDiv;
 
             chartContainer?.appendChild(parentDiv);
         }
     };
 
+    removeDrawingToolToolTip = () => {
+        // TODO: cleanup
+        if (document.getElementsByClassName('draw-tool-tooltip').length > 0) {
+            document.getElementsByClassName('draw-tool-tooltip')[0].remove();
+            this.drawingTooltip = null;
+        }
+    };
+
     removeIndicatorToolTip = () => {
+        // TODO: cleanup
         if (document.getElementsByClassName('indicator-tooltip').length > 0) {
             document.getElementsByClassName('indicator-tooltip')[0].remove();
+            this.indicatorTooltip = null;
         }
     };
     calculateRows(data: TQuote) {
@@ -313,6 +372,7 @@ class CrosshairStore {
 
         return rows;
     };
+
     updateVisibility = (visible: boolean) => {
         const crosshair = this.refs?.crosshairRef.current;
         if (crosshair) {
@@ -320,6 +380,7 @@ class CrosshairStore {
             else crosshair.classList.remove('active');
         }
     };
+
     // YES! we are manually patching DOM, Because we don't want to pay
     // for react reconciler & mox tracking observables.
     updateTooltipPosition({ top, left, rows }: TUpdateTooltipPositionParams) {

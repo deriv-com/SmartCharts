@@ -1,7 +1,7 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import { TGranularity } from 'src/types';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeUnit } from '../utils';
+import { displayMilliseconds, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
@@ -27,6 +27,7 @@ export default class TimeperiodStore {
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            changeGranularity: action.bound,
             portalNodeIdChanged: observable,
             setGranularity: action.bound,
             updateProps: action.bound,
@@ -116,16 +117,17 @@ export default class TimeperiodStore {
                 if (dataSegmentClose && dataSegmentClose.length) {
                     const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
                     if (currentQuote.DT) {
-                        const now = this._serverTime.getUTCDate();
+                        const now = this._serverTime.getLocalDate().getTime();
                         const diff = now - currentQuote.DT.getTime();
-                        const chartInterval =
-                            getIntervalInSeconds({
-                                timeUnit: this.timeUnit,
-                                interval: this.mainStore.chart.granularity,
-                            }) * 1000;
+
+                        const granularity = this.mainStore.chart.granularity;
+
+                        const chartInterval = (granularity ? granularity : 1) * 1000;
                         const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
 
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
+
+                        this.mainStore.chartAdapter.flutterChart?.config.setRemainingTime(this.remain || '');
                     }
                 }
             }
@@ -154,6 +156,15 @@ export default class TimeperiodStore {
     updateProps(onChange: (granularity?: TGranularity) => void) {
         if (this.mainStore.state.granularity !== undefined) {
             this.onGranularityChange = onChange;
+        }
+    }
+
+    changeGranularity(interval: TGranularity) {
+        if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
+            this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
+            this.predictionIndicator.setOpen(true);
+        } else {
+            this.onGranularityChange(interval);
         }
     }
 
