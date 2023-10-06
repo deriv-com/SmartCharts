@@ -1,7 +1,8 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import { TGranularity } from 'src/types';
+import { ChartTypes, Intervals, STATE } from 'src/Constant';
 import MainStore from '.';
-import { displayMilliseconds, getTimeUnit } from '../utils';
+import { displayMilliseconds, getTimeIntervalName, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
@@ -122,7 +123,7 @@ export default class TimeperiodStore {
 
                         const granularity = this.mainStore.chart.granularity;
 
-                        const chartInterval = (granularity ? granularity : 1) * 1000;
+                        const chartInterval = (granularity || 1) * 1000;
                         const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
 
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
@@ -160,6 +161,16 @@ export default class TimeperiodStore {
     }
 
     changeGranularity(interval: TGranularity) {
+        if (interval) {
+            const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.chartType.type.id)?.text ?? '';
+            this.mainStore.state.stateChange(STATE.CHART_INTERVAL_CHANGE, {
+                time_interval_name: getTimeIntervalName(interval, Intervals),
+                chart_type_name:
+                    this.mainStore.chartType.type.id === 'colored_bar'
+                        ? chart_type_name
+                        : chart_type_name.toLowerCase(),
+            });
+        }
         if (interval === 0 && this.mainStore.studies.hasPredictionIndicator) {
             this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
@@ -173,7 +184,7 @@ export default class TimeperiodStore {
 
         if (!currentClose) return;
 
-        let y = this.mainStore.chartAdapter.getYFromQuote(currentClose);
+        const y = this.mainStore.chartAdapter.getYFromQuote(currentClose);
         return y;
     };
 

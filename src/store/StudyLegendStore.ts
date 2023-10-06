@@ -6,7 +6,7 @@ import { getUniqueId, hexToInt } from 'src/components/ui/utils';
 import { TActiveItem, TIndicatorConfig, TSettingsParameter } from 'src/types';
 import MainStore from '.';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
-import { getIndicatorsTree, getDefaultIndicatorConfig } from '../Constant';
+import { getIndicatorsTree, getDefaultIndicatorConfig, STATE } from '../Constant';
 import { clone, flatMap, isLiteralObject, prepareIndicatorName, transformStudiesforTheme } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -45,6 +45,7 @@ export default class StudyLegendStore {
             onInfoItem: action.bound,
             updatePortalNode: action.bound,
             restoreStudies: action.bound,
+            getItemById: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -322,6 +323,7 @@ export default class StudyLegendStore {
         this.activeItems = [];
         window.flutterChart?.indicators.clearIndicators();
         this.mainStore.state.saveLayout();
+        this.mainStore.state.stateChange(STATE.INDICATORS_CLEAR_ALL);
     }
 
     onSelectTab(tabIndex: number) {
@@ -332,6 +334,7 @@ export default class StudyLegendStore {
     setFilterText(filterText: string) {
         this.selectedTab = filterText !== '' ? 0 : 1;
         this.filterText = filterText;
+        this.mainStore.state.debouncedStateChange(STATE.INDICATOR_SEARCH, { search_string: filterText });
     }
 
     onInfoItem(study: TActiveItem | null) {
@@ -352,5 +355,9 @@ export default class StudyLegendStore {
                 return this.activeItems[i];
             }
         }
+    }
+
+    getItemById(id: string) {
+        return this.activeItems.find(item => item.id === id);
     }
 }
