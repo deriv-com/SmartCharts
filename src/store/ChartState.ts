@@ -8,6 +8,7 @@ import {
     TLayout,
     TSettings,
 } from 'src/types';
+import debounce from 'lodash.debounce';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import { isDeepEqual } from 'src/utils/object';
 import MainStore from '.';
@@ -21,7 +22,19 @@ import {
 } from '../utils';
 import ChartStore from './ChartStore';
 
-type TStateChangeOption = { symbol: string | undefined; isClosed: boolean };
+type TStateChangeOption = {
+    indicator_type_name?: string;
+    indicators_category_name?: string;
+    isClosed?: boolean;
+    is_favorite?: boolean;
+    is_info_open?: boolean;
+    is_open?: boolean;
+    chart_type_name?: string;
+    search_string?: string;
+    symbol?: string;
+    symbol_category?: string;
+    time_interval_name?: string;
+};
 
 class ChartState {
     chartStore: ChartStore;
@@ -97,6 +110,7 @@ class ChartState {
             isConnectionOpened: observable,
             isChartReady: observable,
             chartStatusListener: observable,
+            debouncedStateChange: action.bound,
             stateChangeListener: observable,
             should_show_eu_content: observable,
             settings: observable,
@@ -481,6 +495,10 @@ class ChartState {
         // TODO: use constant
         this.mainStore.crosshair.onCrosshairChanged(2);
     }
+
+    debouncedStateChange = debounce((state: string, option: TStateChangeOption) => {
+        this.stateChange(state, option);
+    }, 500);
 }
 
 export default ChartState;

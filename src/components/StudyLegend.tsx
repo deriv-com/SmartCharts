@@ -10,7 +10,7 @@ import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
-import { TooltipsContent } from '../Constant';
+import { STATE, TooltipsContent, getIndicatorsTree } from '../Constant';
 import Menu from './Menu';
 import SearchInput from './SearchInput';
 
@@ -261,7 +261,7 @@ const TabularDisplay = ({
 );
 
 const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
-    const { studies, chart, timeperiod } = useStores();
+    const { studies, chart, state, timeperiod } = useStores();
 
     const {
         menuStore,
@@ -273,6 +273,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
         onSelectTab,
         onSelectItem,
         activeItems,
+        getItemById,
         deleteStudyById,
         editStudy,
         onInfoItem,
@@ -288,6 +289,20 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
     const activeStudiesNo = activeItems.length;
 
     updatePortalNode(portalNodeId);
+
+    const getIndicatorCategoryName = (id: string) =>
+        getIndicatorsTree()
+            .find(categories => categories.items.some(item => item.flutter_chart_id === id))
+            ?.category.replace('-', ' ') ?? '';
+
+    const handleStateChange = (id: string, type: string, payload?: { is_info_open: boolean }) => {
+        state.stateChange(type, {
+            indicator_type_name: id,
+            indicators_category_name: getIndicatorCategoryName(id),
+            ...(payload ?? {}),
+        });
+    };
+
     return (
         <Menu
             store={menuStore}
@@ -300,7 +315,12 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
             customHead={
                 infoItem ? (
                     <div className='sc-dialog__head--info'>
-                        <BackIcon onClick={() => onInfoItem(null)} />
+                        <BackIcon
+                            onClick={() => {
+                                onInfoItem(null);
+                                handleStateChange(infoItem.flutter_chart_id, STATE.INDICATOR_INFO_TOGGLE);
+                            }}
+                        />
                         {infoItem.flutter_chart_id}
                     </div>
                 ) : (
@@ -323,46 +343,62 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                 </div>
             </Menu.Title>
             <Menu.Body>
-                <React.Fragment>
-                    {infoItem && (
-                        <div className='sc-studies__info'>
-                            <Scroll autoHide height='360px' className='sc-studies__info__content'>
-                                <p>{infoItem?.description}</p>
-                            </Scroll>
-                            <div className='sc-studies__info__footer'>
-                                <Tooltip
-                                    enabled={infoItem?.disabledAddBtn}
-                                    content={TooltipsContent.predictionIndicator}
+                {infoItem && (
+                    <div className='sc-studies__info'>
+                        <Scroll autoHide height='360px' className='sc-studies__info__content'>
+                            <p>{infoItem?.description}</p>
+                        </Scroll>
+                        <div className='sc-studies__info__footer'>
+                            <Tooltip enabled={infoItem?.disabledAddBtn} content={TooltipsContent.predictionIndicator}>
+                                <button
+                                    type='button'
+                                    className='sc-btn sc-btn--primary sc-btn--w100'
+                                    onClick={() => {
+                                        onSelectItem(infoItem?.flutter_chart_id);
+                                        handleStateChange(infoItem?.flutter_chart_id, STATE.INDICATOR_ADDED, {
+                                            is_info_open: true,
+                                        });
+                                    }}
+                                    disabled={infoItem?.disabledAddBtn}
                                 >
-                                    <button
-                                        type='button'
-                                        className='sc-btn sc-btn--primary sc-btn--w100'
-                                        onClick={() => onSelectItem(infoItem?.flutter_chart_id)}
-                                        disabled={infoItem?.disabledAddBtn}
-                                    >
-                                        {t.translate('Add')}
-                                    </button>
-                                </Tooltip>
-                            </div>
+                                    {t.translate('Add')}
+                                </button>
+                            </Tooltip>
                         </div>
-                    )}
-                    <TabularDisplay
-                        onSelectTab={onSelectTab}
-                        selectedTab={selectedTab}
-                        categories={items}
-                        searchedCategories={searchedItems}
-                        onSelectItem={onSelectItem}
-                        onDeleteItem={deleteStudyById}
-                        onEditItem={editStudy}
-                        onInfoItem={onInfoItem}
-                        activeItems={activeItems}
-                        clearAll={deleteAll}
-                        searchQuery={searchQuery}
-                        isMobile={isMobile}
-                        maxAllowedItem={maxAllowedItem}
-                        isTick={isTick}
-                    />
-                </React.Fragment>
+                    </div>
+                )}
+                <TabularDisplay
+                    onSelectTab={onSelectTab}
+                    selectedTab={selectedTab}
+                    categories={items}
+                    searchedCategories={searchedItems}
+                    onSelectItem={(flutter_chart_id: string) => {
+                        onSelectItem(flutter_chart_id);
+                        handleStateChange(flutter_chart_id, STATE.INDICATOR_ADDED);
+                    }}
+                    onDeleteItem={(id: string) => {
+                        const item = getItemById(id);
+                        if (item) {
+                            handleStateChange(item.flutter_chart_id, STATE.INDICATOR_DELETED);
+                        }
+
+                        deleteStudyById(id);
+                    }}
+                    onEditItem={(study: TActiveItem) => {
+                        editStudy(study);
+                        handleStateChange(study.flutter_chart_id, STATE.INDICATOR_SETTINGS_OPEN);
+                    }}
+                    onInfoItem={(item: TActiveItem) => {
+                        onInfoItem(item);
+                        handleStateChange(item.flutter_chart_id, STATE.INDICATOR_INFO_TOGGLE, { is_info_open: true });
+                    }}
+                    activeItems={activeItems}
+                    clearAll={deleteAll}
+                    searchQuery={searchQuery}
+                    isMobile={isMobile}
+                    maxAllowedItem={maxAllowedItem}
+                    isTick={isTick}
+                />
             </Menu.Body>
         </Menu>
     );

@@ -1,4 +1,10 @@
-import { TCategorizedSymbolItem, TSubCategory, TSubCategoryDataItem } from 'src/binaryapi/ActiveSymbols';
+import { Intervals } from 'src/Constant';
+import {
+    TCategorizedSymbolItem,
+    TProcessedSymbolItem,
+    TSubCategory,
+    TSubCategoryDataItem,
+} from 'src/binaryapi/ActiveSymbols';
 import { TDragEvents, TGranularity, TSettingsParameter, TQuote } from 'src/types';
 
 type TGetYAxisScalingParams = (options: {
@@ -49,6 +55,30 @@ export const getTimeUnit = (granularity: TGranularity) => {
         }
         return 'hour';
     }
+};
+/**
+ *
+ * @param {TProcessedSymbolItem} symbol_object
+ * @returns {string} concatenation of market name, market subgroup name (if has a subgroup) & submarket name.
+ * E.g.: 'derived-baskets-forex_basket', where 'Derived' is a market, 'Baskets' is a market subgroup,
+ * and 'Forex basket' is a submarket.
+ */
+export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem) => {
+    const { market_display_name, submarket_display_name, subgroup } = symbol_object || {};
+    if (!market_display_name) return '';
+    const market = market_display_name.replace(' ', '_');
+    const submarket = submarket_display_name.replace(' ', '_');
+    if (subgroup && subgroup !== 'none') {
+        return `${market}-${subgroup}-${submarket}`.toLowerCase();
+    }
+    return `${market}-${submarket}`.toLowerCase();
+};
+
+export const getTimeIntervalName = (interval: TGranularity, intervals: typeof Intervals) => {
+    const interval_category = intervals.find(i => i.items.some(item => item.interval === interval));
+    const interval_num = interval_category?.items?.find(item => item.interval === interval)?.num;
+    const interval_label = interval_num === 1 ? interval_category?.single : interval_category?.plural;
+    return interval_label ? `${interval_num} ${interval_label}` : '';
 };
 
 export const getIntervalInSeconds = ({

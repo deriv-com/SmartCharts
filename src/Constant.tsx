@@ -455,7 +455,6 @@ const getVerticalDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     ],
 });
 
-
 const getLineDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
         lineStyle: clone(lineStyle),
@@ -482,7 +481,6 @@ const getLineDrawingConfig: TDefaultIndicatorConfigFn = () => ({
         },
     ],
 });
-
 
 const getTrendlDrawingConfig: TDefaultIndicatorConfigFn = () => ({
     config: {
@@ -2056,6 +2054,11 @@ export const Languages = [
         icon: <FlagIcons.Korean />,
     },
     {
+        key: 'tr',
+        name: 'Türkçe',
+        icon: <FlagIcons.Turkey />,
+    },
+    {
         key: 'zh_cn',
         name: '简体中文',
         icon: <FlagIcons.Chinese />,
@@ -2078,11 +2081,26 @@ export const Languages = [
 ];
 
 export const STATE = {
+    CHART_INTERVAL_CHANGE: 'CHART_INTERVAL_CHANGE',
+    CHART_MODE_TOGGLE: 'CHART_MODE_TOGGLE',
+    CHART_TYPE_CHANGE: 'CHART_TYPE_CHANGE',
+    FAVORITE_MARKETS_TOGGLE: 'FAVORITE_MARKETS_TOGGLE',
+    INDICATOR_ADDED: 'INDICATOR_ADDED',
+    INDICATOR_DELETED: 'INDICATOR_DELETED',
+    INDICATOR_INFO_TOGGLE: 'INDICATOR_INFO_TOGGLE',
+    INDICATOR_SEARCH: 'INDICATOR_SEARCH',
+    INDICATOR_SETTINGS_OPEN: 'INDICATOR_SETTINGS_OPEN',
+    INDICATORS_CLEAR_ALL: 'INDICATORS_CLEAR_ALL',
+    INDICATORS_MODAL_TOGGLE: 'INDICATORS_MODAL_TOGGLE',
     INITIAL: 'INITIAL',
+    MARKET_INFO_REDIRECT: 'MARKET_INFO_REDIRECT',
+    MARKET_SEARCH: 'MARKET_SEARCH',
+    MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
+    MARKETS_LIST_TOGGLE: 'MARKETS_LIST_TOGGLE',
     READY: 'READY',
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
-    MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
-};
+    SYMBOL_CHANGE: 'SYMBOL_CHANGE',
+} as const;
 
 export const TooltipsContent = {
     predictionIndicator: t.translate(

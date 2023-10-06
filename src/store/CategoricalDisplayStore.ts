@@ -1,5 +1,6 @@
 import { action, computed, observable, reaction, makeObservable, toJS } from 'mobx';
 import React from 'react';
+import { STATE } from 'src/Constant';
 import MainStore from '.';
 import {
     TCategorizedSymbolItem,
@@ -343,6 +344,7 @@ export default class CategoricalDisplayStore {
         if (filterText === '') {
             setTimeout(() => this.scrollToActiveSymbol(), 1);
         }
+        this.mainStore.state.debouncedStateChange(STATE.MARKET_SEARCH, { search_string: filterText });
     }
 
     handleFilterClick(categoryId: string): void {
