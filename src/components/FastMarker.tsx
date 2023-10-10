@@ -43,7 +43,6 @@ type TFastMarkerProps = {
 
 const FastMarker = (props: TFastMarkerProps) => {
     const { chart: chartStore, chartAdapter } = useStores();
-    const { contextPromise } = chartStore;
     const price_ref = React.useRef<number | null>(null);
     const date_ref = React.useRef<Date | null>(null);
     const epoch_ref = React.useRef<number | null>(null);
@@ -62,7 +61,7 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     React.useEffect(() => {
         updateCSS();
-    }, [chartAdapter.epochBounds, chartAdapter.quoteBounds, chartAdapter.isFeedLoaded]);
+    }, [chartAdapter.epochBounds, chartAdapter.quoteBounds, chartAdapter.isFeedLoaded, chartAdapter.isChartLoaded]);
 
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;
@@ -97,16 +96,7 @@ const FastMarker = (props: TFastMarkerProps) => {
             const x: number = chartAdapter.getXFromEpoch(epoch_ref.current);
             const y: number = price_ref.current ? chartAdapter.getYFromQuote(price_ref.current) : 0;
 
-            const { epochBounds, quoteBounds } = chartAdapter;
-
-            // To offset verticalPaddingFraction
-            const topQuote = quoteBounds.topQuote * 1.1;
-            const bottomQuote = Math.max(quoteBounds.bottomQuote - quoteBounds.bottomQuote * 0.1, 0);
-
-            if (
-                epochBounds.leftEpoch <= epoch_ref.current &&
-                (price_ref.current == null || (topQuote >= price_ref.current && bottomQuote <= price_ref.current))
-            ) {
+            if (x > 0 && (price_ref.current == null || y > 0)) {
                 top = +y;
                 left = +x;
             } else {
@@ -135,11 +125,7 @@ const FastMarker = (props: TFastMarkerProps) => {
         }
 
         if (ref !== null) {
-            if (contextPromise) {
-                contextPromise.then(() => {
-                    updateCSS();
-                });
-            }
+            updateCSS();
         }
     };
 
