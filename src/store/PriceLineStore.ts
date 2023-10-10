@@ -30,6 +30,7 @@ export default class PriceLineStore {
     offScreen = false;
     title?: string;
     isOverlapping = false;
+    isOverlappingWithPriceLine = false;
     offScreenDirection: keyof typeof DIRECTIONS | null = null;
 
     set zIndex(value: string | number | null) {
@@ -51,6 +52,7 @@ export default class PriceLineStore {
             offScreen: observable,
             title: observable,
             isOverlapping: observable,
+            isOverlappingWithPriceLine: observable,
             offScreenDirection: observable,
             pip: computed,
             priceDisplay: computed,
@@ -225,6 +227,10 @@ export default class PriceLineStore {
         return price;
     }
 
+    _distanceFromCurrentPrice() {
+        return Math.abs(this._locationFromPrice(+this.realPrice) - this._locationFromPrice(+this.realPrice - +this._price));
+    }
+
     _calculateTop = () => {
         if (this.stx.currentQuote() === null) {
             return;
@@ -263,6 +269,12 @@ export default class PriceLineStore {
 
         if (this.opacityOnOverlap) {
             this.isOverlapping = this.overlapCheck(top);
+        }
+
+        this.isOverlappingWithPriceLine = this._distanceFromCurrentPrice() < 25;
+
+        if (this.isOverlappingWithPriceLine) {
+            top = this._locationFromPrice(+this.realPrice - +this._price);
         }
 
         return Math.round(top) | 0;
@@ -304,7 +316,6 @@ export default class PriceLineStore {
             if (i === current_barrier_idx) {
                 continue;
             }
-
             const barrier = filtered_barriers[i];
             const diffTop = barrier._high_barrier.top && Math.abs(barrier._high_barrier.top - top);
 

@@ -34,9 +34,9 @@ const PriceLine = ({
         init,
         isDragging,
         isOverlapping,
+        isOverlappingWithPriceLine,
         offScreen,
         offScreenDirection,
-        price,
         priceDisplay,
         setDragLine,
         title,
@@ -51,7 +51,7 @@ const PriceLine = ({
     );
     const opacity = React.useMemo(() => (isOverlapping ? opacityOnOverlap : ''), [isOverlapping, opacityOnOverlap]);
 
-    const isBarrierZero = parseFloat(price) === 0.00;
+    const isBarrierZero = isOverlappingWithPriceLine;
 
     React.useEffect(() => {
         init();
