@@ -2,8 +2,9 @@ import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TCustomEvent, TGranularity } from '../types';
-import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
+import { TCustomEvent } from '../types';
+import { calculateGranularity, createObjectFromLocalStorage } from '../utils';
+import PendingPromise from '../utils/PendingPromise';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
@@ -14,6 +15,7 @@ export type TViews = {
         tension: number;
         timeUnit?: string | number;
         interval?: string | number;
+        periodicity?: number;
     };
 }[];
 export default class ViewStore {
@@ -47,7 +49,7 @@ export default class ViewStore {
             onToggleNew: action.bound,
             inputRef: action.bound,
             onFocus: action.bound,
-            onBlur: action.bound
+            onBlur: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -70,7 +72,6 @@ export default class ViewStore {
 
     mainStore: MainStore;
     menuStore: MenuStore;
-
 
     get context(): Context | null {
         return this.mainStore.chart.context;
@@ -159,10 +160,12 @@ export default class ViewStore {
         this.mainStore.state.setChartIsReady(false);
         const sortedItems = this.sortedItems[idx].layout;
         const stx = this.stx;
-        const granularity = getIntervalInSeconds(sortedItems) as TGranularity;
+        const { interval, periodicity, timeUnit } = sortedItems;
+        const period = timeUnit ? interval : periodicity;
+        const granularity = calculateGranularity(Number(period), (timeUnit as string) || (interval as string));
 
-        this.mainStore.timeperiod.onGranularityChange(granularity);
-        const importLayout = () => {
+        const importLayout = async () => {
+            const importFinishedPromise = PendingPromise<void, void>();
             const finishImportLayout = () => {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
@@ -172,12 +175,14 @@ export default class ViewStore {
                 }
                 this.mainStore.state.setChartIsReady(true);
                 this.mainStore.state.setChartGranularity(granularity);
+                importFinishedPromise.resolve();
             };
             stx.importLayout(sortedItems, {
                 managePeriodicity: true,
                 preserveTicksAndCandleWidth: true,
                 cb: finishImportLayout,
             });
+            await importFinishedPromise;
             // This condition is to make spline chart appear as spline chart
             // Both line chart and spline chart are of type mountain but with different tensions
             let chartType = sortedItems.chartType;
