@@ -298,7 +298,7 @@ export default class DrawToolsStore {
             item = drawTools[item.name] ? { ...item, ...drawTools[item.name] } : item;
             item.index = indx;
             item.bars =
-                ignoreBarType.indexOf(item.name) === -1 ? Math.abs(Math.floor(item.p1[0] - item.p0[0])) + 1 : null;
+                ignoreBarType.indexOf(item.name) === -1 && item.p1 && item.p0 ? Math.abs(Math.floor(item.p1[0] - item.p0[0])) + 1 : null;
             if (items[item.name]) {
                 items[item.name]++;
                 item.num = items[item.name];
