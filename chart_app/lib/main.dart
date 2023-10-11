@@ -99,9 +99,14 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   double? _getVerticalPaddingFraction(double height) {
     if (configModel.yAxisMargin != null && height != 0) {
-      final double verticalPaddingFraction = max(
-              configModel.yAxisMargin!.top ?? 0,
-              configModel.yAxisMargin!.bottom ?? 0) /
+      // We are converting yAxisMargin to verticalPaddingFraction to make it
+      // compatible with ChartIQ.
+      // TODO: Do a proper fix once ChartIQ is removed
+      final double multiplier = configModel.startWithDataFitMode ? 1.5 : 1.25;
+      final double verticalPaddingFraction = (max(
+                  configModel.yAxisMargin!.top ?? 0,
+                  configModel.yAxisMargin!.bottom ?? 0) *
+              multiplier) /
           height;
 
       return max(verticalPaddingFraction, 0.1);
