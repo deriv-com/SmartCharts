@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Intervals } from 'src/Constant';
-import { getSymbolMarketCategory, getTimeIntervalName, getYAxisScalingParams } from '..';
+import { calculateGranularity, getSymbolMarketCategory, getTimeIntervalName, getYAxisScalingParams } from '..';
 
 describe('getYAxisScalingParams', () => {
     const mocked_height_desktop = 700;
@@ -147,5 +147,16 @@ describe('getTimeIntervalName', () => {
     it('should return correct time interval name', () => {
         expect(getTimeIntervalName(60, intervals)).to.equal('1 minute');
         expect(getTimeIntervalName(300, intervals)).to.equal('5 minutes');
+    });
+});
+
+describe('calculateGranularity', () => {
+    it('should return correct granularity', () => {
+        expect(calculateGranularity(1, 'second')).to.equal(0);
+        expect(calculateGranularity(2, 'minute')).to.equal(120);
+        expect(calculateGranularity(5, 'minute')).to.equal(300);
+        expect(calculateGranularity(60, 'minute')).to.equal(3600);
+        expect(calculateGranularity(1, 'day')).to.equal(86400);
+        (expect(calculateGranularity(1, 'tick')).to.be.NaN as unknown) as () => void;
     });
 });
