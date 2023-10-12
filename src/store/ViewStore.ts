@@ -2,8 +2,8 @@ import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TCustomEvent } from '../types';
-import { calculateGranularity, createObjectFromLocalStorage } from '../utils';
+import { TCustomEvent, TGranularity } from '../types';
+import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -160,9 +160,7 @@ export default class ViewStore {
         this.mainStore.state.setChartIsReady(false);
         const sortedItems = this.sortedItems[idx].layout;
         const stx = this.stx;
-        const { interval, periodicity, timeUnit } = sortedItems;
-        const period = timeUnit ? interval : periodicity;
-        const granularity = calculateGranularity(Number(period), (timeUnit as string) || (interval as string));
+        const granularity = getIntervalInSeconds(sortedItems) as TGranularity;
 
         const importLayout = async () => {
             const importFinishedPromise = PendingPromise<void, void>();
@@ -173,7 +171,22 @@ export default class ViewStore {
                     this.loader.hide();
                     this.mainStore.paginationLoader.updateOnPagination(false);
                 }
+                // This condition is to make spline chart appear as spline chart
+                // Both line chart and spline chart are of type mountain but with different tensions
+                let chartType = sortedItems.chartType;
+                if (chartType === 'mountain') {
+                    const tension = sortedItems.tension;
+                    if (tension === 0.5) {
+                        chartType = 'spline';
+                    }
+                }
+                this.mainStore.chartType.setType(chartType as string);
+                this.mainStore.state.setChartType(chartType);
+                stx.setChartType(chartType);
+
                 this.mainStore.state.setChartIsReady(true);
+
+                this.mainStore.timeperiod.onGranularityChange(granularity);
                 this.mainStore.state.setChartGranularity(granularity);
                 importFinishedPromise.resolve();
             };
@@ -183,17 +196,6 @@ export default class ViewStore {
                 cb: finishImportLayout,
             });
             await importFinishedPromise;
-            // This condition is to make spline chart appear as spline chart
-            // Both line chart and spline chart are of type mountain but with different tensions
-            let chartType = sortedItems.chartType;
-            if (chartType === 'mountain') {
-                const tension = sortedItems.tension;
-                if (tension === 0.5) {
-                    chartType = 'spline';
-                }
-            }
-            this.mainStore.chartType.setType(chartType as string);
-            this.mainStore.state.setChartType(chartType);
             this.menuStore.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
