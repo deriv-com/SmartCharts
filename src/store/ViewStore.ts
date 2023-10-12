@@ -4,7 +4,6 @@ import MainStore from '.';
 import Context from '../components/ui/Context';
 import { TCustomEvent, TGranularity } from '../types';
 import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
-import PendingPromise from '../utils/PendingPromise';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
@@ -162,8 +161,7 @@ export default class ViewStore {
         const stx = this.stx;
         const granularity = getIntervalInSeconds(sortedItems) as TGranularity;
 
-        const importLayout = async () => {
-            const importFinishedPromise = PendingPromise<void, void>();
+        const importLayout = () => {
             const finishImportLayout = () => {
                 stx.changeOccurred('layout');
                 this.mainStore.studies.updateActiveStudies();
@@ -188,14 +186,12 @@ export default class ViewStore {
 
                 this.mainStore.timeperiod.onGranularityChange(granularity);
                 this.mainStore.state.setChartGranularity(granularity);
-                importFinishedPromise.resolve();
             };
             stx.importLayout(sortedItems, {
                 managePeriodicity: true,
                 preserveTicksAndCandleWidth: true,
                 cb: finishImportLayout,
             });
-            await importFinishedPromise;
             this.menuStore.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
