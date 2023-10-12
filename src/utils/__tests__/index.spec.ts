@@ -1,6 +1,12 @@
 import { expect } from 'chai';
 import { Intervals } from 'src/Constant';
-import { calculateGranularity, getSymbolMarketCategory, getTimeIntervalName, getYAxisScalingParams } from '..';
+import {
+    calculateGranularity,
+    getIntervalInSeconds,
+    getSymbolMarketCategory,
+    getTimeIntervalName,
+    getYAxisScalingParams,
+} from '..';
 
 describe('getYAxisScalingParams', () => {
     const mocked_height_desktop = 700;
@@ -151,12 +157,161 @@ describe('getTimeIntervalName', () => {
 });
 
 describe('calculateGranularity', () => {
-    it('should return correct granularity', () => {
+    it('should return correct granularity for 1 tick', () => {
         expect(calculateGranularity(1, 'second')).to.equal(0);
+    });
+    it('should return correct granularity for 1 minute', () => {
+        expect(calculateGranularity(1, 'minute')).to.equal(60);
+    });
+    it('should return correct granularity for 2 minutes', () => {
         expect(calculateGranularity(2, 'minute')).to.equal(120);
+    });
+    it('should return correct granularity for 3 minutes', () => {
+        expect(calculateGranularity(3, 'minute')).to.equal(180);
+    });
+    it('should return correct granularity for 5 minutes', () => {
         expect(calculateGranularity(5, 'minute')).to.equal(300);
+    });
+    it('should return correct granularity for 10 minutes', () => {
+        expect(calculateGranularity(10, 'minute')).to.equal(600);
+    });
+    it('should return correct granularity for 15 minutes', () => {
+        expect(calculateGranularity(15, 'minute')).to.equal(900);
+    });
+    it('should return correct granularity for 30 minutes', () => {
+        expect(calculateGranularity(30, 'minute')).to.equal(1800);
+    });
+    it('should return correct granularity for 1 hour', () => {
         expect(calculateGranularity(60, 'minute')).to.equal(3600);
+    });
+    it('should return correct granularity for 2 hours', () => {
+        expect(calculateGranularity(120, 'minute')).to.equal(7200);
+    });
+    it('should return correct granularity for 4 hours', () => {
+        expect(calculateGranularity(240, 'minute')).to.equal(14400);
+    });
+    it('should return correct granularity for 8 hours', () => {
+        expect(calculateGranularity(480, 'minute')).to.equal(28800);
+    });
+    it('should return correct granularity for 1 day', () => {
         expect(calculateGranularity(1, 'day')).to.equal(86400);
+    });
+    it('should return NaN if interval is incorrect', () => {
         (expect(calculateGranularity(1, 'tick')).to.be.NaN as unknown) as () => void;
+    });
+});
+
+describe('getIntervalInSeconds', () => {
+    it('should return correct number of seconds for 1-tick interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 1,
+                timeUnit: 'second',
+            })
+        ).to.equal(1);
+    });
+    it('should return correct number of seconds for 1-minute interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 1,
+                timeUnit: 'minute',
+            })
+        ).to.equal(60);
+    });
+    it('should return correct number of seconds for 2-minute interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 2,
+                timeUnit: 'minute',
+            })
+        ).to.equal(120);
+    });
+    it('should return correct number of seconds for 3-minute interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 3,
+                timeUnit: 'minute',
+            })
+        ).to.equal(180);
+    });
+    it('should return correct number of seconds for 5 minutes interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 5,
+                timeUnit: 'minute',
+            })
+        ).to.equal(300);
+    });
+    it('should return correct number of seconds for 10 minutes interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 10,
+                timeUnit: 'minute',
+            })
+        ).to.equal(600);
+    });
+    it('should return correct number of seconds for 15 minutes interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 15,
+                timeUnit: 'minute',
+            })
+        ).to.equal(900);
+    });
+    it('should return correct number of seconds for 30 minutes interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 30,
+                timeUnit: 'minute',
+            })
+        ).to.equal(1800);
+    });
+    it('should return correct number of seconds for 1-hour interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 60,
+                timeUnit: 'minute',
+            })
+        ).to.equal(3600);
+    });
+    it('should return correct number of seconds for 2-hour interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 120,
+                timeUnit: 'minute',
+            })
+        ).to.equal(7200);
+    });
+    it('should return correct number of seconds for 4-hour interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 240,
+                timeUnit: 'minute',
+            })
+        ).to.equal(14400);
+    });
+    it('should return correct number of seconds for 8-hour interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 480,
+                timeUnit: 'minute',
+            })
+        ).to.equal(28800);
+    });
+    it('should return correct number of seconds for 1-day interval', () => {
+        expect(
+            getIntervalInSeconds({
+                interval: 'day',
+                timeUnit: null,
+            })
+        ).to.equal(86400);
+    });
+    it('should return NaN if interval is incorrect', () => {
+        (expect(
+            getIntervalInSeconds({
+                interval: 1,
+                timeUnit: 'day',
+            })
+        ).to.be.NaN as unknown) as () => void;
     });
 });

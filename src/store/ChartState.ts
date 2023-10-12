@@ -157,6 +157,8 @@ class ChartState {
             maxTick: observable,
             enableScroll: observable,
             enableZoom: observable,
+            setChartType: action.bound,
+            setChartIsReady: action.bound,
             yAxisMargin: observable,
             updateProps: action.bound,
         });
