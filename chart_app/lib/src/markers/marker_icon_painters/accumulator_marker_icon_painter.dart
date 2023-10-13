@@ -53,6 +53,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
     final WebMarker? lowMarker = markers[MarkerType.lowBarrier];
     final WebMarker? highMarker = markers[MarkerType.highBarrier];
+    final WebMarker? endMarker = markers[MarkerType.end];
 
     final WebMarker? previousTickMarker = markers[MarkerType.previousTick];
 
@@ -60,12 +61,17 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
       final Offset lowOffset = _getOffset(lowMarker, epochToX, quoteToY);
       final Offset highOffset = _getOffset(highMarker, epochToX, quoteToY);
 
+      final double endLeft = endMarker != null
+          ? _getOffset(endMarker, epochToX, quoteToY).dx
+          : size.width - painterProps.yAxisWidth - 15;
+
       _drawShadedBarriers(
         canvas: canvas,
         size: size,
         painterProps: painterProps,
         lowMarker: lowMarker,
         highMarker: highMarker,
+        endLeft: endLeft,
         startLeft: lowOffset.dx,
         top: highOffset.dy,
         markerGroup: markerGroup,
@@ -92,18 +98,16 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     required PainterProps painterProps,
     required WebMarker lowMarker,
     required WebMarker highMarker,
+    required double endLeft,
     required double startLeft,
     required double top,
     required MarkerGroup markerGroup,
     required double bottom,
     WebMarker? previousTickMarker,
   }) {
-    final double endLeft = size.width - painterProps.yAxisWidth - 15;
     final double endTop = size.height;
 
     final bool hasPersistentBorders = _hasPersistentBorders(markerGroup.props);
-
-    final MarkerStyle style = markerGroup.style;
 
     final bool isTopVisible =
         top < endTop && (top >= 0 || !hasPersistentBorders);
@@ -121,6 +125,8 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     final Paint paint = Paint()
       ..color = barrierColor
       ..style = PaintingStyle.fill;
+
+    final Color shadeColor = barrierColor.withOpacity(0.08);
 
     if (!isStartLeftVisible) {
       return;
@@ -209,7 +215,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
       }
     }
 
-    final Paint rectPaint = Paint()..color = style.backgroundColor;
+    final Paint rectPaint = Paint()..color = shadeColor;
 
     canvas.drawRect(
       Rect.fromLTRB(startLeft, displayedTop, endLeft, displayedBottom),

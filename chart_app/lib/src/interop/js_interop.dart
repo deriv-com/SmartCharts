@@ -90,8 +90,8 @@ class JSNewChart {
 @JS()
 @anonymous
 
-/// Marker group props
-class JSMarkerGroupUpdate {
+/// Contract props
+class JSContractsUpdate {
   /// List of markers belongs to a contract
   external List<JsMarker> markers;
 

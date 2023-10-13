@@ -135,9 +135,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     return null;
   }
 
-  Duration getAnimationDuration() {
-    if (configModel.style == ChartStyle.line &&
-        indicatorsModel.indicatorsRepo.items.length <= 3) {
+  Duration getAnimationDuration({required bool isTickGranularity}) {
+    if (isTickGranularity && indicatorsModel.indicatorsRepo.items.length <= 3) {
       return const Duration(milliseconds: 300);
     } else {
       return const Duration(milliseconds: 30);
@@ -147,8 +146,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   /// Specifies the time to draw the next frame to update the right epoch.
   /// Returning 50 will draw 20 frames/second to update the right epoch.
   /// Returning 1000 will draw 1 frame/second to update the right epoch
-  int _getMinElapsedTimeToFollow() {
-    if (configModel.style != ChartStyle.line) {
+  int _getMinElapsedTimeToFollow({required bool isTickGranularity}) {
+    if (!isTickGranularity) {
       return 1000;
     }
 
@@ -223,7 +222,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       );
                     }
 
-                    final int granularity = app.getQuotesInterval() ?? 1000;
+                    final int granularity = app.getQuotesInterval();
+
+                    final bool isTickGranularity = granularity < 60000;
 
                     final DataSeries<Tick> mainSeries =
                         getDataSeries(feedModel, configModel, granularity);
@@ -231,7 +232,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                     final Color latestTickColor = Color.fromRGBO(
                         255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
 
-                    final Duration animationDuration = getAnimationDuration();
+                    final Duration animationDuration = getAnimationDuration(
+                        isTickGranularity: isTickGranularity);
 
                     return DerivChart(
                       activeSymbol: configModel.symbol,
@@ -263,7 +265,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                       .keepBarrierLabelVisible,
                                 ),
                               if (app.configModel.showTimeInterval &&
-                                  granularity > 1000)
+                                  !isTickGranularity)
                                 TimeIntervalIndicator(
                                   app.configModel.remainingTime,
                                   feedModel.ticks.last.close,
@@ -338,7 +340,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       showDataFitButton: false,
                       showScrollToLastTickButton: false,
                       loadingAnimationColor: Colors.transparent,
-                      minElapsedTimeToFollow: _getMinElapsedTimeToFollow(),
+                      minElapsedTimeToFollow: _getMinElapsedTimeToFollow(
+                          isTickGranularity: isTickGranularity),
                       showCurrentTickBlinkAnimation:
                           configModel.style == ChartStyle.line,
                       currentTickAnimationDuration: animationDuration,

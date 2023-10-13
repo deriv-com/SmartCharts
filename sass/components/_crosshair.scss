@@ -18,9 +18,14 @@
 .cq-crosshair {
     display: none;
     pointer-events: none;
+}
 
-    &.active {
-        display: block;
+.chartContainer {
+    &:hover,
+    &:active {
+        .cq-crosshair.active {
+            display: block;
+        }
     }
 }
 

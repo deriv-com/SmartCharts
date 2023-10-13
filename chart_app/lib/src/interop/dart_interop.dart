@@ -161,8 +161,8 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
 
   setProperty(
     chartConfig,
-    'updateMarkers',
-    allowInterop(model.updateMarkers),
+    'updateContracts',
+    allowInterop(model.updateContracts),
   );
 
   setProperty(

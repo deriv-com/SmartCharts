@@ -74,7 +74,6 @@ class ChartConfigModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   /// Get remaining time of the chart
   void setRemainingTime(String time) {
     remainingTime = time;
@@ -82,10 +81,10 @@ class ChartConfigModel extends ChangeNotifier {
   }
 
   /// Update markers
-  void updateMarkers(List<JSMarkerGroupUpdate> _markerGroupList) {
+  void updateContracts(List<JSContractsUpdate> _markerGroupList) {
     markerGroupList = <MarkerGroup>[];
 
-    for (final JSMarkerGroupUpdate _markerGroup in _markerGroupList) {
+    for (final JSContractsUpdate _markerGroup in _markerGroupList) {
       final List<WebMarker> markers = <WebMarker>[];
 
       contractType = _markerGroup.type;

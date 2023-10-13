@@ -90,7 +90,7 @@ class ChartApp {
   }
 
   /// Gets the quote interval as granularity to fix 2s ticks.
-  int? getQuotesInterval() {
+  int getQuotesInterval() {
     if (feedModel.isFeedLoaded && feedModel.ticks.length > 1) {
       final Tick previousTick = feedModel.ticks[feedModel.ticks.length - 2];
       final Tick lastTick = feedModel.ticks.last;
@@ -98,7 +98,7 @@ class ChartApp {
         return feedModel.ticks.last.epoch - previousTick.epoch;
       }
     }
-    return configModel.granularity;
+    return configModel.granularity ?? 1000;
   }
 
   /// Gets the hover index for indicator series
