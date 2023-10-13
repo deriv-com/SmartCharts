@@ -2,8 +2,8 @@ import { action, computed, observable, reaction, makeObservable } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TCustomEvent, TGranularity } from '../types';
-import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
+import { TCustomEvent } from '../types';
+import { calculateGranularity, createObjectFromLocalStorage } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
@@ -159,7 +159,9 @@ export default class ViewStore {
         this.mainStore.state.setChartIsReady(false);
         const sortedItems = this.sortedItems[idx].layout;
         const stx = this.stx;
-        const granularity = getIntervalInSeconds(sortedItems) as TGranularity;
+        const { interval, periodicity, timeUnit } = sortedItems;
+        const period = timeUnit ? interval : periodicity;
+        const granularity = calculateGranularity(Number(period), (timeUnit as string) || (interval as string));
 
         const importLayout = () => {
             const finishImportLayout = () => {
@@ -169,6 +171,9 @@ export default class ViewStore {
                     this.loader.hide();
                     this.mainStore.paginationLoader.updateOnPagination(false);
                 }
+                this.mainStore.state.setChartIsReady(true);
+                this.mainStore.timeperiod.onGranularityChange(granularity);
+                this.mainStore.state.setChartGranularity(granularity);
                 // This condition is to make spline chart appear as spline chart
                 // Both line chart and spline chart are of type mountain but with different tensions
                 let chartType = sortedItems.chartType;
@@ -178,21 +183,16 @@ export default class ViewStore {
                         chartType = 'spline';
                     }
                 }
-                this.mainStore.chartType.setType(chartType as string);
                 this.mainStore.state.setChartType(chartType);
+                this.mainStore.chartType.setType(chartType as string);
                 stx.setChartType(chartType);
-
-                this.mainStore.state.setChartIsReady(true);
-
-                this.mainStore.timeperiod.onGranularityChange(granularity);
-                this.mainStore.state.setChartGranularity(granularity);
+                this.menuStore.setOpen(false);
             };
             stx.importLayout(sortedItems, {
                 managePeriodicity: true,
                 preserveTicksAndCandleWidth: true,
                 cb: finishImportLayout,
             });
-            this.menuStore.setOpen(false);
             logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
         };
         setTimeout(importLayout, 100);

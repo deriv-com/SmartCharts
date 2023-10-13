@@ -32,6 +32,7 @@ type TStateChangeOption = {
     is_info_open?: boolean;
     is_open?: boolean;
     chart_type_name?: string;
+    granularity?: TGranularity;
     search_string?: string;
     symbol?: string;
     symbol_category?: string;
@@ -157,6 +158,7 @@ class ChartState {
             maxTick: observable,
             enableScroll: observable,
             enableZoom: observable,
+            setChartGranularity: action.bound,
             setChartType: action.bound,
             setChartIsReady: action.bound,
             yAxisMargin: observable,
@@ -504,6 +506,7 @@ class ChartState {
     }
 
     setChartGranularity(granularity: TGranularity) {
+        this.stateChange('SET_GRANULARITY', { granularity });
         const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
         const isChartTypeCandle =
             this.mainStore.chartType.isCandle ||
@@ -516,6 +519,7 @@ class ChartState {
     }
 
     setChartType(chartType: string | undefined) {
+        this.stateChange('SET_CHART_TYPE', { chart_type_name: chartType });
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);

@@ -93,6 +93,7 @@ export type TStateChangeListener = (
         is_info_open?: boolean;
         is_open?: boolean;
         chart_type_name?: string;
+        granularity?: TGranularity;
         search_string?: string;
         symbol?: string;
         symbol_category?: string;
