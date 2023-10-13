@@ -186,6 +186,7 @@ export default class ViewStore {
                 this.mainStore.state.setChartType(chartType);
                 this.mainStore.chartType.setType(chartType as string);
                 stx.setChartType(chartType);
+                this.mainStore.state.stateChange('SET_CHART_MODE', { chart_type_name: chartType, granularity });
                 this.menuStore.setOpen(false);
             };
             stx.importLayout(sortedItems, {

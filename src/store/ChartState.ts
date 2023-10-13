@@ -506,7 +506,6 @@ class ChartState {
     }
 
     setChartGranularity(granularity: TGranularity) {
-        this.stateChange('SET_GRANULARITY', { granularity });
         const isTimeUnitSecond = calculateTimeUnitInterval(granularity).timeUnit === 'second';
         const isChartTypeCandle =
             this.mainStore.chartType.isCandle ||
@@ -515,11 +514,13 @@ class ChartState {
         if (this.context && isTimeUnitSecond && isChartTypeCandle) {
             this.setChartType('mountain'); // if granularity is zero, set the chartType to 'mountain'
         }
+        if (granularity === 0 && this.mainStore.studies.hasPredictionIndicator) {
+            this.mainStore.studies.deletePredictionStudies();
+        }
         this.granularity = granularity === null ? undefined : granularity;
     }
 
     setChartType(chartType: string | undefined) {
-        this.stateChange('SET_CHART_TYPE', { chart_type_name: chartType });
         this.chartType = chartType;
         if (this.chartTypeStore.onChartTypeChanged) {
             this.chartTypeStore.onChartTypeChanged(chartType);
