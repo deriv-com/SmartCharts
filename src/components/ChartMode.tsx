@@ -15,6 +15,7 @@ import {
 } from './Icons';
 import Menu from './Menu';
 import Timeperiod from './Timeperiod';
+import InfoFootNote from './InfoFootNote';
 
 type TChartModeProps = {
     portalNodeId?: string;
@@ -66,13 +67,10 @@ const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps
                     </div>
                 </div>
                 {allowTickChartTypeOnly && (
-                    <div
-                        className={classNames('sc-chart-mode__section__text', {
-                            'sc-chart-mode__section__text--mobile': isMobile,
-                        })}
-                    >
-                        {t.translate('Only selected charts and time intervals are available for this trade type.')}
-                    </div>
+                    <InfoFootNote
+                        isMobile={isMobile}
+                        text={t.translate('Only selected charts and time intervals are available for this trade type.')}
+                    />
                 )}
             </Menu.Body>
         </Menu>

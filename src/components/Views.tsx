@@ -10,8 +10,10 @@ import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
 import Menu from './Menu';
+import InfoFootNote from './InfoFootNote';
 
 type TViewItemProps = {
+    disabled?: boolean;
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
     view: ArrayElement<TViews>;
     remove: (event: React.MouseEvent<HTMLElement>) => void;
@@ -28,23 +30,28 @@ type TOverwriteViewProps = {
 };
 
 type TActiveListViewProps = {
+    allowTickChartTypeOnly: TMainStore['state']['allowTickChartTypeOnly'];
     removeAll: TMainStore['view']['removeAll'];
     views: TMainStore['view']['sortedItems'];
     applyLayout: TMainStore['view']['applyLayout'];
     remove: TMainStore['view']['remove'];
 };
 
-const ViewItem = ({ view, remove, onClick }: TViewItemProps) => (
+const ViewItem = ({ disabled, view, remove, onClick }: TViewItemProps) => (
     <Tooltip
         className='sc-views__views__list__item'
-        onClick={onClick}
+        onClick={disabled ? undefined : onClick}
         enabled={view.name.length > 27}
         content={wrapText(view.name, 26)}
     >
-        <div className='text'>{view.name}</div>
+        <div className={classNames('text', { 'text--disabled': disabled })}>{view.name}</div>
         <DeleteIcon onClick={remove} />
     </Tooltip>
 );
+
+ViewItem.defaultProps = {
+    disabled: false,
+};
 
 const EmptyView = ({ onClick }: { onClick: (event: React.MouseEvent<HTMLElement>) => void }) => (
     <div className='sc-views--empty'>
@@ -78,7 +85,7 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }: TOverwriteViewPr
     </div>
 );
 
-const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListViewProps) => {
+const ActiveListView = ({ allowTickChartTypeOnly, views, removeAll, applyLayout, remove }: TActiveListViewProps) => {
     if (!views.length) return null;
 
     return (
@@ -91,14 +98,20 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListVi
             </div>
             <div className='sc-views__views__content'>
                 <div className='sc-views__views__list'>
-                    {views.map((view, i) => (
-                        <ViewItem
-                            view={view}
-                            key={view.name}
-                            onClick={e => applyLayout(i, e as TCustomEvent)}
-                            remove={e => remove(i, e as TCustomEvent)}
-                        />
-                    ))}
+                    {views.map((view, i) => {
+                        const { chartType, periodicity, timeUnit } = view.layout ?? {};
+                        const oneTickChartTemplate =
+                            chartType === 'mountain' && periodicity === 1 && timeUnit === 'second';
+                        return (
+                            <ViewItem
+                                disabled={allowTickChartTypeOnly && !oneTickChartTemplate}
+                                view={view}
+                                key={view.name}
+                                onClick={e => applyLayout(i, e as TCustomEvent)}
+                                remove={e => remove(i, e as TCustomEvent)}
+                            />
+                        );
+                    })}
                 </div>
             </div>
         </div>
@@ -106,8 +119,8 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListVi
 };
 
 const Views = ({ portalNodeId }: TViewsProps) => {
-    const { view } = useStores();
-
+    const { chart, state, view } = useStores();
+    const { allowTickChartTypeOnly } = state;
     const {
         sortedItems: views,
         routes: { main, overwrite },
@@ -126,7 +139,7 @@ const Views = ({ portalNodeId }: TViewsProps) => {
         onBlur,
         menuStore,
     } = view;
-
+    const { isMobile } = chart;
     const menuOpen = menuStore.dialogStore.open;
 
     const isActive = isInputActive || templateName !== '';
@@ -198,6 +211,7 @@ const Views = ({ portalNodeId }: TViewsProps) => {
                                     </div>
                                 </div>
                                 <ActiveListView
+                                    allowTickChartTypeOnly={allowTickChartTypeOnly}
                                     views={views}
                                     removeAll={removeAll}
                                     applyLayout={applyLayout}
@@ -207,6 +221,14 @@ const Views = ({ portalNodeId }: TViewsProps) => {
                         </React.Fragment>
                     )}
                 </div>
+                {allowTickChartTypeOnly && (
+                    <InfoFootNote
+                        isMobile={isMobile}
+                        text={t.translate(
+                            'You can apply templates saved for chart types and time intervals that are available only.'
+                        )}
+                    />
+                )}
             </Menu.Body>
         </Menu>
     );
