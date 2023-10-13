@@ -1,15 +1,15 @@
 import classNames from 'classnames';
 import React from 'react';
 
-type InfoFootNoteProps = {
+type InfoFootnoteProps = {
     className?: string;
     isMobile?: boolean;
     text: string;
 };
 
-const InfoFootNote = ({ className, isMobile, text }: InfoFootNoteProps) => (
+const InfoFootnote = ({ className, isMobile, text }: InfoFootnoteProps) => (
     <div
-        className={classNames('info-foot-note', className, {
+        className={classNames('info-footnote', className, {
             [`${className}--mobile`]: isMobile,
         })}
     >
@@ -17,9 +17,9 @@ const InfoFootNote = ({ className, isMobile, text }: InfoFootNoteProps) => (
     </div>
 );
 
-InfoFootNote.defaultProps = {
+InfoFootnote.defaultProps = {
     className: '',
     isMobile: false,
 };
 
-export default React.memo(InfoFootNote);
+export default React.memo(InfoFootnote);

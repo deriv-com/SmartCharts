@@ -132,7 +132,7 @@
             }
         }
     }
-    .info-foot-note {
+    .info-footnote {
         @include themify($themes) {
             color: themed('ChartModeText') !important;
         }

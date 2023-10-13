@@ -10,7 +10,7 @@ import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
 import Menu from './Menu';
-import InfoFootNote from './InfoFootNote';
+import InfoFootnote from './InfoFootnote';
 
 type TViewItemProps = {
     disabled?: boolean;
@@ -163,7 +163,7 @@ const Views = ({ portalNodeId }: TViewsProps) => {
                     {currentRoute === 'new' ? (
                         <EmptyView onClick={onToggleNew} />
                     ) : (
-                        <React.Fragment>
+                        <>
                             {currentRoute !== 'overwrite' ? (
                                 ''
                             ) : (
@@ -218,11 +218,11 @@ const Views = ({ portalNodeId }: TViewsProps) => {
                                     remove={remove}
                                 />
                             </Scroll>
-                        </React.Fragment>
+                        </>
                     )}
                 </div>
                 {allowTickChartTypeOnly && (
-                    <InfoFootNote
+                    <InfoFootnote
                         isMobile={isMobile}
                         text={t.translate(
                             'You can apply templates saved for chart types and time intervals that are available only.'
@@ -232,6 +232,10 @@ const Views = ({ portalNodeId }: TViewsProps) => {
             </Menu.Body>
         </Menu>
     );
+};
+
+Views.defaultProps = {
+    portalNodeId: '',
 };
 
 export default observer(Views);
