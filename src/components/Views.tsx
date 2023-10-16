@@ -224,9 +224,7 @@ const Views = ({ portalNodeId }: TViewsProps) => {
                 {allowTickChartTypeOnly && (
                     <InfoFootnote
                         isMobile={isMobile}
-                        text={t.translate(
-                            'You can apply templates saved for chart types and time intervals that are available only.'
-                        )}
+                        text={t.translate('Some of your templates may not work with this trade type.')}
                     />
                 )}
             </Menu.Body>

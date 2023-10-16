@@ -172,8 +172,6 @@ export default class ViewStore {
                     this.mainStore.paginationLoader.updateOnPagination(false);
                 }
                 this.mainStore.state.setChartIsReady(true);
-                this.mainStore.timeperiod.onGranularityChange(granularity);
-                this.mainStore.state.setChartGranularity(granularity);
                 // This condition is to make spline chart appear as spline chart
                 // Both line chart and spline chart are of type mountain but with different tensions
                 let chartType = sortedItems.chartType;
@@ -183,10 +181,11 @@ export default class ViewStore {
                         chartType = 'spline';
                     }
                 }
+                this.mainStore.state.stateChange('SET_CHART_MODE', { chart_type_name: chartType, granularity });
+                this.mainStore.timeperiod.onGranularityChange(granularity);
+                this.mainStore.state.setChartGranularity(granularity);
                 this.mainStore.state.setChartType(chartType);
                 this.mainStore.chartType.setType(chartType as string);
-                stx.setChartType(chartType);
-                this.mainStore.state.stateChange('SET_CHART_MODE', { chart_type_name: chartType, granularity });
                 this.menuStore.setOpen(false);
             };
             stx.importLayout(sortedItems, {
