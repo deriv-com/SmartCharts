@@ -393,7 +393,7 @@ class IndicatorsModel {
     if (bottomItemIndicator != null && bottomIndicatorIndex != null) {
       if (bottomItemIndicator is AwesomeOscillatorSeries) {
         final List<Tick> aoEntries = bottomItemIndicator.entries ?? <Tick>[];
-       
+
         if (isPointOnIndicator(
           aoEntries,
           controller,
@@ -484,8 +484,8 @@ class IndicatorsModel {
               controller,
               target,
               epoch,
-                offset: bottomItemIndicator
-                    .fastPercentStochasticIndicatorSeries.offset
+              offset: bottomItemIndicator
+                  .fastPercentStochasticIndicatorSeries.offset,
             ) |
             isPointOnIndicator(
               slowEntries,
@@ -630,7 +630,7 @@ class IndicatorsModel {
               item.middleSeries.entries ?? <Tick>[];
           final List<Tick> upperEntries = item.upperSeries.entries ?? <Tick>[];
           final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
-             
+
           // // get the tick and next tick from epoch
           if (isPointOnIndicator(middleEntries, controller, target, epoch,
                   offset: item.middleSeries.offset) |
@@ -695,21 +695,27 @@ class IndicatorsModel {
                 controller,
                 target,
                 epoch,
-                  offset: item.conversionLineSeries.offset
+                offset: item.conversionLineSeries.offset,
               ) |
               isPointOnIndicator(
                 ichimokuBaseEntries,
                 controller,
                 target,
                 epoch,
-                  offset: item.baseLineSeries.offset
+                offset: item.baseLineSeries.offset,
               ) |
               isPointOnIndicator(
-                  ichimoksuLaggingSpanEntries, controller, target, epoch,
+                ichimoksuLaggingSpanEntries,
+                controller,
+                target,
+                epoch,
                 offset: item.config.laggingSpanOffset,
               ) |
               isPointOnIndicator(
-                  ichimoksuSpanBEntries, controller, target, epoch,
+                ichimoksuSpanBEntries,
+                controller,
+                target,
+                epoch,
                 offset: item.config.baseLinePeriod,
               ) |
               isPointOnIndicator(
@@ -757,13 +763,13 @@ class IndicatorsModel {
             controller,
             target,
             epoch,
-              offset: item.offset
+            offset: item.offset,
           )) {
             return index;
           }
         } else if (item is ZigZagSeries) {
           final List<Tick> zigZagSeries = item.entries ?? <Tick>[];
-          
+
           if (isPointOnZigZagIndicator(
             zigZagSeries,
             controller,
@@ -802,7 +808,7 @@ class IndicatorsModel {
               controller,
               target,
               epoch,
-                offset: item.rainbowSeries[i].offset
+              offset: item.rainbowSeries[i].offset,
             );
 
             if (isClick) {
