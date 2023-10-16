@@ -386,6 +386,7 @@ export type TFlutterChart = {
         scroll: (pxShift: number) => void;
         toggleDataFitMode: (isDataFitEnabled: boolean) => void;
         scrollToLastTick: () => void;
+        addOrUpdateIndicator: (config: string, index?: number) => void;
     };
     config: {
         updateTheme: (theme: string) => void;
@@ -404,7 +405,6 @@ export type TFlutterChart = {
         onNewCandle: (quote: TQuote) => void;
     };
     indicators: {
-        addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
         clearIndicators: () => void;
     };

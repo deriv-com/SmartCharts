@@ -126,4 +126,13 @@ class ChartApp {
 
     return value;
   }
+
+  /// To add or update an indicator
+  void addOrUpdateIndicator(String dataString, int? index) {
+    indicatorsModel.addOrUpdateIndicator(dataString, index);
+    // A hack to fix the indicator style not being
+    // updated when the chart is not moved.
+    // TO DO: Add a proper fix
+    wrappedController.scroll(1);
+  }
 }

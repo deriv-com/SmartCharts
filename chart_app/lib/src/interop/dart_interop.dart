@@ -84,6 +84,12 @@ JsObject _exposeApp(ChartApp app) {
     allowInterop(app.wrappedController.toggleDataFitMode),
   );
 
+  setProperty(
+    jsObject,
+    'addOrUpdateIndicator',
+    allowInterop(app.addOrUpdateIndicator),
+  );
+
   return jsObject;
 }
 
@@ -182,7 +188,7 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
     'updateLeftMargin',
     allowInterop(model.updateLeftMargin),
   );
-  
+
   setProperty(
     chartConfig,
     'toggleTimeIntervalVisibility',
@@ -200,12 +206,6 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
 
 JsObject _exposeIndicatorsModel(IndicatorsModel model) {
   final JsObject chartConfig = JsObject(context['Object']);
-
-  setProperty(
-    chartConfig,
-    'addOrUpdateIndicator',
-    allowInterop(model.addOrUpdateIndicator),
-  );
 
   setProperty(
     chartConfig,
@@ -266,7 +266,6 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
     'getDrawingToolsRepoItems',
     allowInterop(model.getDrawingToolsRepoItems),
   );
-  
 
   return chartConfig;
 }
