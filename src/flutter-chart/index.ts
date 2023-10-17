@@ -28,7 +28,7 @@ export const createChartElement = ({ onChartLoad }: TProps) => {
     };
 
     // @ts-ignore
-    import(/* webpackChunkName: "flutter-chart-adapter" */ 'chart/main.dart.js');
+    import(/* webpackChunkName: "flutter-chart-adapter", webpackPreload: true */ 'chart/main.dart.js');
 
     return flutterChartElement;
 };

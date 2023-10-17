@@ -232,7 +232,7 @@ export type TChartProps = {
     crosshairState?: number | null;
     children?: React.ReactNode;
     historical?: boolean;
-    markers_array?: any[];
+    contracts_array?: any[];
     isLive?: boolean;
     startWithDataFitMode?: boolean;
     leftMargin?: number;
@@ -386,12 +386,13 @@ export type TFlutterChart = {
         scroll: (pxShift: number) => void;
         toggleDataFitMode: (isDataFitEnabled: boolean) => void;
         scrollToLastTick: () => void;
+        addOrUpdateIndicator: (config: string, index?: number) => void;
     };
     config: {
         updateTheme: (theme: string) => void;
         updateChartStyle: (chartStyle: string) => void;
         updateLiveStatus: (isLive: boolean) => void;
-        updateMarkers: (markers: any[]) => void;
+        updateContracts: (markers: any[]) => void;
         updateCrosshairVisibility: (visibility: boolean) => void;
         updateLeftMargin: (leftMargin?: number) => void;
         setSymbolClosed: (isClosed: boolean) => void;
@@ -404,7 +405,6 @@ export type TFlutterChart = {
         onNewCandle: (quote: TQuote) => void;
     };
     indicators: {
-        addOrUpdateIndicator: (config: string, index?: number) => void;
         removeIndicator: (index: number) => void;
         clearIndicators: () => void;
     };

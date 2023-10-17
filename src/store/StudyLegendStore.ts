@@ -154,7 +154,7 @@ export default class StudyLegendStore {
             ...this.transform(params),
         };
 
-        this.mainStore.chartAdapter.flutterChart?.indicators.addOrUpdateIndicator(JSON.stringify(config), index);
+        this.mainStore.chartAdapter.flutterChart?.app.addOrUpdateIndicator(JSON.stringify(config), index);
     };
 
     onSelectItem(indicatorName: string) {

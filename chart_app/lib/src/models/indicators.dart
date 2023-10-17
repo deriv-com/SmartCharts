@@ -362,7 +362,7 @@ class IndicatorsModel {
     List<Series> seriesList,
     List<IndicatorConfig> indicatorConfigsList,
     WrappedController controller,
-    Function getClosestEpoch,
+    Function? getClosestEpoch,
     int granularity,
     double x,
     double y,
@@ -388,16 +388,18 @@ class IndicatorsModel {
 
     final Offset target = Offset(x, y);
     final int? epoch =
-        getClosestEpoch(controller.getEpochFromX(x), granularity);
+        getClosestEpoch?.call(controller.getEpochFromX(x), granularity);
 
     if (bottomItemIndicator != null && bottomIndicatorIndex != null) {
       if (bottomItemIndicator is AwesomeOscillatorSeries) {
         final List<Tick> aoEntries = bottomItemIndicator.entries ?? <Tick>[];
+
         if (isPointOnIndicator(
           aoEntries,
           controller,
           target,
           epoch,
+          offset: bottomItemIndicator.offset,
         )) {
           return bottomIndicatorIndex;
         }
@@ -482,12 +484,15 @@ class IndicatorsModel {
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator
+                  .fastPercentStochasticIndicatorSeries.offset,
             ) |
             isPointOnIndicator(
               slowEntries,
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator.slowStochasticIndicatorSeries.offset,
             )) {
           return bottomIndicatorIndex;
         }
@@ -575,18 +580,21 @@ class IndicatorsModel {
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator.positiveDISeries.offset,
             ) |
             isPointOnIndicator(
               negativeDISeries,
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator.negativeDISeries.offset,
             ) |
             isPointOnIndicator(
               adxSeries,
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator.adxSeries.offset,
             )) {
           return bottomIndicatorIndex;
         }
@@ -602,12 +610,14 @@ class IndicatorsModel {
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator.aroonUpSeries.offset,
             ) |
             isPointOnIndicator(
               aroonDownEntries,
               controller,
               target,
               epoch,
+              offset: bottomItemIndicator.aroonDownSeries.offset,
             )) {
           return bottomIndicatorIndex;
         }
@@ -622,9 +632,12 @@ class IndicatorsModel {
           final List<Tick> lowerEntries = item.lowerSeries.entries ?? <Tick>[];
 
           // // get the tick and next tick from epoch
-          if (isPointOnIndicator(middleEntries, controller, target, epoch) |
-              isPointOnIndicator(lowerEntries, controller, target, epoch) |
-              isPointOnIndicator(upperEntries, controller, target, epoch)) {
+          if (isPointOnIndicator(middleEntries, controller, target, epoch,
+                  offset: item.middleSeries.offset) |
+              isPointOnIndicator(lowerEntries, controller, target, epoch,
+                  offset: item.lowerSeries.offset) |
+              isPointOnIndicator(upperEntries, controller, target, epoch,
+                  offset: item.upperSeries.offset)) {
             return index;
           }
         } else if (item is DonchianChannelsSeries) {
@@ -634,7 +647,6 @@ class IndicatorsModel {
               item.lowerChannelSeries.entries ?? <Tick>[];
           final List<Tick> upperChannelEntries =
               item.upperChannelSeries.entries ?? <Tick>[];
-
           if (isPointOnIndicator(
                 middleChannelEntries,
                 controller,
@@ -658,7 +670,8 @@ class IndicatorsModel {
         } else if (item is MASeries) {
           final List<Tick> maEntries = item.entries ?? <Tick>[];
 
-          if (isPointOnIndicator(maEntries, controller, target, epoch)) {
+          if (isPointOnIndicator(maEntries, controller, target, epoch,
+              offset: item.offset)) {
             return index;
           }
         } else if (item is IchimokuCloudSeries) {
@@ -682,19 +695,29 @@ class IndicatorsModel {
                 controller,
                 target,
                 epoch,
+                offset: item.conversionLineSeries.offset,
               ) |
               isPointOnIndicator(
                 ichimokuBaseEntries,
                 controller,
                 target,
                 epoch,
+                offset: item.baseLineSeries.offset,
               ) |
               isPointOnIndicator(
-                  ichimoksuLaggingSpanEntries, controller, target, epoch,
-                  offset: item.config.laggingSpanOffset) |
+                ichimoksuLaggingSpanEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.config.laggingSpanOffset,
+              ) |
               isPointOnIndicator(
-                  ichimoksuSpanBEntries, controller, target, epoch,
-                  offset: item.config.baseLinePeriod) |
+                ichimoksuSpanBEntries,
+                controller,
+                target,
+                epoch,
+                offset: item.config.baseLinePeriod,
+              ) |
               isPointOnIndicator(
                 ichimoksuSpanAEntries,
                 controller,
@@ -740,6 +763,7 @@ class IndicatorsModel {
             controller,
             target,
             epoch,
+            offset: item.offset,
           )) {
             return index;
           }
@@ -784,6 +808,7 @@ class IndicatorsModel {
               controller,
               target,
               epoch,
+              offset: item.rainbowSeries[i].offset,
             );
 
             if (isClick) {

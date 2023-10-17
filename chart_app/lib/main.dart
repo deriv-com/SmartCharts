@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:math';
 import 'dart:ui';
@@ -65,7 +66,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   final DrawingToolModel drawingToolModel = DrawingToolModel();
 
   late final ChartApp app;
-  int? rightBoundEpoch;
+  int? leftBoundEpoch, rightBoundEpoch;
   bool isFollowMode = false;
 
   void onVisibilityChange(html.Event ev) {
@@ -74,7 +75,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     }
 
     if (html.document.visibilityState == 'visible' && isFollowMode) {
-      app.wrappedController.scrollToLastTick();
+      Timer(const Duration(milliseconds: 100), () {
+        app.wrappedController.scrollToLastTick();
+      });
     }
 
     if (html.document.visibilityState == 'hidden' && rightBoundEpoch != null) {
@@ -96,9 +99,14 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
   double? _getVerticalPaddingFraction(double height) {
     if (configModel.yAxisMargin != null && height != 0) {
-      final double verticalPaddingFraction = max(
-              configModel.yAxisMargin!.top ?? 0,
-              configModel.yAxisMargin!.bottom ?? 0) /
+      // We are converting yAxisMargin to verticalPaddingFraction to make it
+      // compatible with ChartIQ.
+      // TODO: Do a proper fix once ChartIQ is removed
+      final double multiplier = configModel.startWithDataFitMode ? 1.5 : 1.25;
+      final double verticalPaddingFraction = (max(
+                  configModel.yAxisMargin!.top ?? 0,
+                  configModel.yAxisMargin!.bottom ?? 0) *
+              multiplier) /
           height;
 
       return max(verticalPaddingFraction, 0.1);
@@ -125,6 +133,40 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       return 240;
     }
     return null;
+  }
+
+  Duration getAnimationDuration({required bool isTickGranularity}) {
+    if (isTickGranularity && indicatorsModel.indicatorsRepo.items.length <= 3) {
+      return const Duration(milliseconds: 300);
+    } else {
+      return const Duration(milliseconds: 30);
+    }
+  }
+
+  /// Specifies the time to draw the next frame to update the right epoch.
+  /// Returning 50 will draw 20 frames/second to update the right epoch.
+  /// Returning 1000 will draw 1 frame/second to update the right epoch
+  int _getMinElapsedTimeToFollow({required bool isTickGranularity}) {
+    if (!isTickGranularity) {
+      return 1000;
+    }
+
+    final int visibleEpoch = (rightBoundEpoch ?? 0) - (leftBoundEpoch ?? 0);
+    // 15 mins
+    const int maxEpochToScrollSmooth = 15 * 60 * 1000;
+
+    if (visibleEpoch > maxEpochToScrollSmooth &&
+        indicatorsModel.indicatorsRepo.items.length >= 3) {
+      return 1000;
+    }
+
+    final double? msPerPx = app.wrappedController.getMsPerPx();
+
+    if (msPerPx != null && msPerPx <= 50) {
+      return 25;
+    }
+
+    return 50;
   }
 
   void _onCrosshairHover(
@@ -162,9 +204,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     );
   }
 
-
-
-
   @override
   Widget build(BuildContext _) => MultiProvider(
         providers: <ChangeNotifierProvider<ChangeNotifier>>[
@@ -189,14 +228,18 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       );
                     }
 
+                    final int granularity = app.getQuotesInterval();
 
-                    final int granularity = app.getQuotesInterval() ?? 1000;
+                    final bool isTickGranularity = granularity < 60000;
 
                     final DataSeries<Tick> mainSeries =
                         getDataSeries(feedModel, configModel, granularity);
 
                     final Color latestTickColor = Color.fromRGBO(
                         255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
+
+                    final Duration animationDuration = getAnimationDuration(
+                        isTickGranularity: isTickGranularity);
 
                     return DerivChart(
                       activeSymbol: configModel.symbol,
@@ -207,6 +250,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                 CurrentTickIndicator(
                                   feedModel.ticks.last,
                                   id: 'last_tick_indicator',
+                                  dataFitEnabled:
+                                      configModel.startWithDataFitMode,
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
@@ -226,7 +271,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                       .keepBarrierLabelVisible,
                                 ),
                               if (app.configModel.showTimeInterval &&
-                                  granularity > 1000)
+                                  !isTickGranularity)
                                 TimeIntervalIndicator(
                                   app.configModel.remainingTime,
                                   feedModel.ticks.last.close,
@@ -263,6 +308,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                             leftEpoch < feedModel.ticks.first.epoch) {
                           feedModel.loadHistory(2500);
                         }
+                        leftBoundEpoch = leftEpoch;
                         rightBoundEpoch = rightEpoch;
                         JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
                       },
@@ -300,6 +346,12 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       showDataFitButton: false,
                       showScrollToLastTickButton: false,
                       loadingAnimationColor: Colors.transparent,
+                      minElapsedTimeToFollow: _getMinElapsedTimeToFollow(
+                          isTickGranularity: isTickGranularity),
+                      showCurrentTickBlinkAnimation:
+                          configModel.style == ChartStyle.line,
+                      currentTickAnimationDuration: animationDuration,
+                      quoteBoundsAnimationDuration: animationDuration,
                     );
                   }),
                 ),

@@ -24,6 +24,7 @@ export default class ChartTypeStore {
             updateProps: action.bound,
             setChartType: action.bound,
             setType: action.bound,
+            isTypeCandle: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -108,7 +109,7 @@ export default class ChartTypeStore {
 
     isTypeCandle(type: ChartType | string) {
         if (typeof type === 'string') {
-            type = this.types.find(t => t.id === type) as ChartType;
+            type = (this.types.find(t => t.id === type) as ChartType) || this.types[0];
         }
         return notCandles.indexOf(type.id) === -1;
     }

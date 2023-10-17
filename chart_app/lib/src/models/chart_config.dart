@@ -74,7 +74,6 @@ class ChartConfigModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   /// Get remaining time of the chart
   void setRemainingTime(String time) {
     remainingTime = time;
@@ -82,24 +81,29 @@ class ChartConfigModel extends ChangeNotifier {
   }
 
   /// Update markers
-  void updateMarkers(List<JSMarkerGroupUpdate> _markerGroupList) {
+  void updateContracts(List<JSContractsUpdate> _markerGroupList) {
     markerGroupList = <MarkerGroup>[];
 
-    for (final JSMarkerGroupUpdate _markerGroup in _markerGroupList) {
+    for (final JSContractsUpdate _markerGroup in _markerGroupList) {
       final List<WebMarker> markers = <WebMarker>[];
 
       contractType = _markerGroup.type;
 
       for (final JsMarker _marker in _markerGroup.markers) {
-        markers.add(WebMarker(
-          quote: _marker.quote,
-          epoch: _marker.epoch * 1000,
-          text: _marker.text,
-          markerType: MarkerType.values.byName(_marker.type),
-          direction: MarkerDirection.up,
-          color:
-              _marker.color != null ? getColorFromString(_marker.color!) : null,
-        ));
+        if (_marker.quote != null &&
+            _marker.epoch != null &&
+            _marker.type != null) {
+          markers.add(WebMarker(
+            quote: _marker.quote!,
+            epoch: _marker.epoch! * 1000,
+            text: _marker.text,
+            markerType: MarkerType.values.byName(_marker.type!),
+            direction: MarkerDirection.up,
+            color: _marker.color != null
+                ? getColorFromString(_marker.color!)
+                : null,
+          ));
+        }
       }
 
       Color _bgColor = Colors.white;

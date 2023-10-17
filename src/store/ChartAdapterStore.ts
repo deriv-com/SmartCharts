@@ -386,7 +386,7 @@ export default class ChartAdapterStore {
         window.flutterChart?.app.toggleDataFitMode(this.isDataFitModeEnabled);
     };
 
-    async updateMarkers(contractsMarker: any[]) {
+    async updateContracts(contractsMarker: any[]) {
         const transformedContractsMarker = contractsMarker
             .filter(c => c.markers?.length > 0)
             .map(c => {
@@ -401,7 +401,7 @@ export default class ChartAdapterStore {
 
         await when(() => this.isFeedLoaded);
 
-        this.flutterChart?.config.updateMarkers(transformedContractsMarker);
+        this.flutterChart?.config.updateContracts(transformedContractsMarker);
     }
 
     getInterpolatedPositionAndPrice = (epoch: number) => {

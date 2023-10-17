@@ -90,8 +90,8 @@ class JSNewChart {
 @JS()
 @anonymous
 
-/// Marker group props
-class JSMarkerGroupUpdate {
+/// Contract props
+class JSContractsUpdate {
   /// List of markers belongs to a contract
   external List<JsMarker> markers;
 
@@ -111,16 +111,16 @@ class JSMarkerGroupUpdate {
 /// Marker props
 class JsMarker {
   /// Quote
-  external double get quote;
+  external double? get quote;
 
   /// Epoch
-  external int get epoch;
+  external int? get epoch;
 
   /// Marker text
-  external String get text;
+  external String? get text;
 
   /// Marker type
-  external String get type;
+  external String? get type;
 
   /// Marker color
   external String? get color;

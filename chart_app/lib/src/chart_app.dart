@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:chart_app/src/misc/wrapped_controller.dart';
@@ -90,7 +92,7 @@ class ChartApp {
   }
 
   /// Gets the quote interval as granularity to fix 2s ticks.
-  int? getQuotesInterval() {
+  int getQuotesInterval() {
     if (feedModel.isFeedLoaded && feedModel.ticks.length > 1) {
       final Tick previousTick = feedModel.ticks[feedModel.ticks.length - 2];
       final Tick lastTick = feedModel.ticks.last;
@@ -98,7 +100,7 @@ class ChartApp {
         return feedModel.ticks.last.epoch - previousTick.epoch;
       }
     }
-    return configModel.granularity;
+    return configModel.granularity ?? 1000;
   }
 
   /// Gets the hover index for indicator series
@@ -125,5 +127,17 @@ class ChartApp {
     );
 
     return value;
+  }
+
+  /// To add or update an indicator
+  void addOrUpdateIndicator(String dataString, int? index) {
+    indicatorsModel.addOrUpdateIndicator(dataString, index);
+
+    // A hack to fix the indicator style not being
+    // updated when the chart is not moved.
+    // TO DO: Add a proper fix
+    final Random random = Random();
+    final int randomNumber = random.nextInt(100);
+    wrappedController.scroll(randomNumber >= 50 ? 0.2 : -0.2);
   }
 }
