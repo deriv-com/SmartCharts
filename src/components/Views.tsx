@@ -87,6 +87,16 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }: TOverwriteViewPr
 
 const ActiveListView = ({ allowTickChartTypeOnly, views, removeAll, applyLayout, remove }: TActiveListViewProps) => {
     if (!views.length) return null;
+    const isDisabled = (layout: TMainStore['view']['sortedItems'][number]['layout']) => {
+        const { chartType, periodicity, timeUnit } = layout ?? {};
+        const oneTickChartTemplate = chartType === 'mountain' && periodicity === 1 && timeUnit === 'second';
+        return allowTickChartTypeOnly && !oneTickChartTemplate;
+    };
+    const sorted_views = [...views].sort((a, b) => {
+        if (!isDisabled(a.layout) && isDisabled(b.layout)) return -1; // enabled first
+        if (isDisabled(a.layout) && !isDisabled(b.layout)) return 1;
+        return 0;
+    });
 
     return (
         <div className='sc-views__views'>
@@ -98,20 +108,15 @@ const ActiveListView = ({ allowTickChartTypeOnly, views, removeAll, applyLayout,
             </div>
             <div className='sc-views__views__content'>
                 <div className='sc-views__views__list'>
-                    {views.map((view, i) => {
-                        const { chartType, periodicity, timeUnit } = view.layout ?? {};
-                        const oneTickChartTemplate =
-                            chartType === 'mountain' && periodicity === 1 && timeUnit === 'second';
-                        return (
-                            <ViewItem
-                                disabled={allowTickChartTypeOnly && !oneTickChartTemplate}
-                                view={view}
-                                key={view.name}
-                                onClick={e => applyLayout(i, e as TCustomEvent)}
-                                remove={e => remove(i, e as TCustomEvent)}
-                            />
-                        );
-                    })}
+                    {sorted_views.map((view, i) => (
+                        <ViewItem
+                            disabled={isDisabled(view.layout)}
+                            view={view}
+                            key={`${view.name}-${i.toString()}`}
+                            onClick={e => applyLayout(i, e as TCustomEvent)}
+                            remove={e => remove(i, e as TCustomEvent)}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
