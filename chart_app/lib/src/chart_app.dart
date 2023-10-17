@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
 import 'package:chart_app/src/misc/wrapped_controller.dart';
@@ -130,9 +132,12 @@ class ChartApp {
   /// To add or update an indicator
   void addOrUpdateIndicator(String dataString, int? index) {
     indicatorsModel.addOrUpdateIndicator(dataString, index);
+
     // A hack to fix the indicator style not being
     // updated when the chart is not moved.
     // TO DO: Add a proper fix
-    wrappedController.scroll(1);
+    final Random random = Random();
+    final int randomNumber = random.nextInt(100);
+    wrappedController.scroll(randomNumber >= 50 ? 0.2 : -0.2);
   }
 }
