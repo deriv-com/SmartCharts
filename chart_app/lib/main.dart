@@ -160,6 +160,12 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
       return 1000;
     }
 
+    final double? msPerPx = app.wrappedController.getMsPerPx();
+
+    if (msPerPx != null && msPerPx <= 50) {
+      return 25;
+    }
+
     return 50;
   }
 
