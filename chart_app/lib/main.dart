@@ -350,8 +350,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       loadingAnimationColor: Colors.transparent,
                       minElapsedTimeToFollow: _getMinElapsedTimeToFollow(
                           isTickGranularity: isTickGranularity),
-                      showCurrentTickBlinkAnimation:
-                          configModel.style == ChartStyle.line,
+                      showCurrentTickBlinkAnimation: isTickGranularity,
                       currentTickAnimationDuration: animationDuration,
                       quoteBoundsAnimationDuration: animationDuration,
                     );

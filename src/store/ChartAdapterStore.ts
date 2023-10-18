@@ -1,5 +1,6 @@
 import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
+import debounce from 'lodash.debounce';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
@@ -56,7 +57,7 @@ export default class ChartAdapterStore {
         this.initFlutterCharts();
     }
 
-    crossHover = (
+    checkIndicatorHover = (
         dx: number,
         dy: number,
         dxLocal: number,
@@ -140,6 +141,8 @@ export default class ChartAdapterStore {
         this.previousHoverIndex = hoverIndex;
     };
 
+    debouncedIndicatorHover = debounce(this.checkIndicatorHover, 5);
+
     initFlutterCharts() {
         window.jsInterop = {
             onChartLoad: this.onChartLoad,
@@ -180,7 +183,7 @@ export default class ChartAdapterStore {
                     this.mainStore.crosshair.removeDrawingToolToolTip();
                 }
 
-                this.crossHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
+                this.debouncedIndicatorHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
             },
             indicators: {
                 onRemove: (index: number) => {
