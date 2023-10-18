@@ -37,6 +37,7 @@ export default class IndicatorPredictionDialogStore {
     }
 
     handleContinue() {
+        this.mainStore.timeperiod.setGranularity(0);
         this.mainStore.studies.deletePredictionStudies();
         setTimeout(() => {
             this.handleCancel();
