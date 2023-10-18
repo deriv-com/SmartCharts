@@ -316,7 +316,12 @@ export default class StudyLegendStore {
     };
 
     deletePredictionStudies() {
-        this.deleteAllStudies();
+        let filteredItem = this.activeItems.filter(item => item.isPrediction == true);
+        filteredItem.forEach(item => {
+            this.mainStore.state.stateChange(STATE.INDICATOR_DELETED);
+            this.deleteStudyById(item.id);
+        });
+        this.mainStore.state.saveLayout();
     }
 
     deleteAllStudies() {
