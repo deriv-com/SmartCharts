@@ -6,6 +6,7 @@ import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:chart_app/src/misc/crosshair_controller.dart';
+import 'package:chart_app/src/misc/no_navigation_strategy.dart';
 import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
@@ -13,7 +14,7 @@ import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
@@ -26,6 +27,7 @@ import 'src/markers/marker_group_series.dart';
 // ignore_for_file: avoid_catches_without_on_clauses
 
 void main() {
+  setUrlStrategy(NoNavigationStrategy());
   runApp(const DerivChartApp());
 }
 
@@ -101,7 +103,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     if (configModel.yAxisMargin != null && height != 0) {
       // We are converting yAxisMargin to verticalPaddingFraction to make it
       // compatible with ChartIQ.
-      // TODO: Do a proper fix once ChartIQ is removed
+      // TO DO: Do a proper fix once ChartIQ is removed
       final double multiplier = configModel.startWithDataFitMode ? 1.5 : 1.25;
       final double verticalPaddingFraction = (max(
                   configModel.yAxisMargin!.top ?? 0,

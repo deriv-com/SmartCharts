@@ -357,17 +357,19 @@ class CrosshairStore {
         tooltipContent
             .filter(c => c)
             .forEach((item, index) => {
-                const labels = getTooltipLabels(item.name, activeItems[index])?.labels || [];
+                if (index < activeItems.length) {
+                    const labels = getTooltipLabels(item.name, activeItems[index])?.labels || [];
 
-                labels.forEach((label, i) => {
-                    const value = item.values[i];
-                    if (!value) return;
+                    labels.forEach((label, i) => {
+                        const value = item.values[i];
+                        if (!value) return;
 
-                    rows.push({
-                        name: label,
-                        value,
+                        rows.push({
+                            name: label,
+                            value,
+                        });
                     });
-                });
+                }
             });
 
         return rows;
