@@ -30,6 +30,7 @@ export default class ChartAdapterStore {
     drawingColor = 0;
     isScaled = false;
     previousHoverIndex: number | undefined | null = null;
+    isOverFlutterCharts = false;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -154,6 +155,7 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
+                if (!this.isOverFlutterCharts) return;
                 // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
                 const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
                 const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
@@ -226,11 +228,13 @@ export default class ChartAdapterStore {
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
+        window.addEventListener('mousemove', this.onMouseMove, { capture: true });
     }
 
     onUnmount() {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
+        window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
     }
 
     onChartLoad() {
@@ -248,6 +252,10 @@ export default class ChartAdapterStore {
         }
 
         return false;
+    };
+
+    onMouseMove = (e: MouseEvent) => {
+        this.isOverFlutterCharts = (e.target as HTMLElement)?.tagName?.toLowerCase() === 'flt-glass-pane';
     };
 
     onDoubleClick = () => {
