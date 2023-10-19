@@ -29,6 +29,24 @@ export default class ChartAdapterStore {
     isHoverOnIndicator = false;
     drawingColor = 0;
     isScaled = false;
+    crossHairValue: {
+        x: number;
+        y: number;
+        xLocal: number;
+        yLocal: number;
+        epoch: number;
+        quote: string;
+        bottomIndex: number | undefined;
+    } = {
+        x: 0,
+        y: 0,
+        xLocal: 0,
+        yLocal: 0,
+        epoch: 0,
+        quote: '',
+        bottomIndex: 0,
+    };
+
     previousHoverIndex: number | undefined | null = null;
     isOverFlutterCharts = false;
 
@@ -77,6 +95,15 @@ export default class ChartAdapterStore {
             this.mainStore.crosshair.decimalPlaces
         );
 
+        this.crossHairValue = {
+            x: dx,
+            y: dy,
+            epoch,
+            quote,
+            xLocal: dxLocal,
+            yLocal: dyLocal,
+            bottomIndex: bottomIndicatorIndex,
+        };
         this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
         const getClosestEpoch = this.mainStore.chart.feed?.getClosestValidEpoch;
         const granularity = this.mainStore.chartAdapter.getGranularityInMs();
@@ -161,7 +188,17 @@ export default class ChartAdapterStore {
                 const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
                     this.mainStore.crosshair.decimalPlaces
                 );
+
                 this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+                this.crossHairValue = {
+                    x: dx,
+                    y: dy,
+                    epoch,
+                    quote,
+                    xLocal: dxLocal,
+                    yLocal: dyLocal,
+                    bottomIndex: bottomIndicatorIndex,
+                };
 
                 if (this.drawingHoverIndex != null) {
                     const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool
@@ -274,6 +311,10 @@ export default class ChartAdapterStore {
                 leftEpoch,
                 rightEpoch,
             };
+        }
+        const { x, y, yLocal, xLocal, bottomIndex } = this.crossHairValue;
+        if (x !== 0 && y !== 0) {
+            window.jsInterop.onCrosshairHover(x, y, xLocal, yLocal, bottomIndex);
         }
     }
 

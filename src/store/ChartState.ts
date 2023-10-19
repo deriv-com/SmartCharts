@@ -457,6 +457,9 @@ class ChartState {
             crosshair: layoutData.crosshair,
             msPerPx: layoutData.msPerPx,
         });
+        if (localStorage.getItem('chart-views')) {
+            this.mainStore.view.views = JSON.parse(localStorage.getItem('chart-views') || '');
+        }
     }
 
     // returns false if restoring layout fails
