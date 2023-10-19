@@ -34,16 +34,12 @@ export default class ChartAdapterStore {
         y: number;
         xLocal: number;
         yLocal: number;
-        epoch: number;
-        quote: string;
         bottomIndex: number | undefined;
     } = {
         x: 0,
         y: 0,
         xLocal: 0,
         yLocal: 0,
-        epoch: 0,
-        quote: '',
         bottomIndex: 0,
     };
 
@@ -63,6 +59,7 @@ export default class ChartAdapterStore {
             newChart: action.bound,
             scale: action.bound,
             toggleDataFitMode: action.bound,
+            onCrosshairMove: action.bound,
             isDataFitModeEnabled: observable,
             isChartLoaded: observable,
             epochBounds: observable.ref,
@@ -174,22 +171,8 @@ export default class ChartAdapterStore {
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
                 if (!this.isOverFlutterCharts) return;
-                // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
-                const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
-                const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
-                    this.mainStore.crosshair.decimalPlaces
-                );
 
-                this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
-                this.crossHairValue = {
-                    x: dx,
-                    y: dy,
-                    epoch,
-                    quote,
-                    xLocal: dxLocal,
-                    yLocal: dyLocal,
-                    bottomIndex: bottomIndicatorIndex,
-                };
+                this.onCrosshairMove(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
 
                 if (this.drawingHoverIndex != null) {
                     const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool
@@ -296,6 +279,23 @@ export default class ChartAdapterStore {
         }
     };
 
+    onCrosshairMove(dx: number, dy: number, dxLocal: number, dyLocal: number, bottomIndicatorIndex?: number) {
+        // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
+        const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
+        const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
+            this.mainStore.crosshair.decimalPlaces
+        );
+
+        this.mainStore.crosshair.onMouseMove(dx, dy, epoch, quote);
+        this.crossHairValue = {
+            x: dx,
+            y: dy,
+            xLocal: dxLocal,
+            yLocal: dyLocal,
+            bottomIndex: bottomIndicatorIndex,
+        };
+    }
+
     onVisibleAreaChanged(leftEpoch: number, rightEpoch: number) {
         if (this.epochBounds.leftEpoch !== leftEpoch || this.epochBounds.rightEpoch !== rightEpoch) {
             this.epochBounds = {
@@ -307,7 +307,7 @@ export default class ChartAdapterStore {
         if (this.crossHairValue) {
             const { x, y, yLocal, xLocal, bottomIndex } = this.crossHairValue;
             if (x !== 0 && y !== 0) {
-                window.jsInterop.onCrosshairHover(x, y, xLocal, yLocal, bottomIndex);
+                this.onCrosshairMove(x, y, xLocal, yLocal, bottomIndex);
             }
         }
     }

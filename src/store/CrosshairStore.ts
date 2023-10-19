@@ -97,7 +97,7 @@ class CrosshairStore {
     };
 
     onMouseMove = (dx: number, dy: number, epoch: number, quote: string) => {
-        if (this.hoverOnScreen == false) {
+        if (this.hoverOnScreen === false) {
             this.isOverChartContainer = true;
             this.updateVisibility(true);
             this.hoverOnScreen = true;
