@@ -1,10 +1,10 @@
 import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
-import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
+import { TActiveItem, TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
-import { clone } from 'src/utils';
+import { clone, safeParse } from 'src/utils';
 import { capitalize } from 'src/components/ui/utils';
 import MainStore from '.';
 
@@ -80,7 +80,7 @@ export default class ChartAdapterStore {
         dyLocal: number,
         bottomIndicatorIndex: number | undefined
     ) => {
-        const setIndicator = (item: any, index: number) => {
+        const setIndicator = (item: TActiveItem, index: number) => {
             this.mainStore.studies.addOrUpdateIndicator(item, index);
         };
 
@@ -140,8 +140,8 @@ export default class ChartAdapterStore {
                         });
                     }
                 }
+                setIndicator(item, hoverIndex);
             }
-            setIndicator(item, hoverIndex);
         }
         if (
             this.previousHoverIndex != null &&
@@ -151,7 +151,10 @@ export default class ChartAdapterStore {
             this.isHoverOnIndicator = false;
             const item = activeItems[this.previousHoverIndex];
             this.mainStore.crosshair.removeIndicatorToolTip();
-            setIndicator(item, this.previousHoverIndex);
+
+            if (item) {
+                setIndicator(item, this.previousHoverIndex);
+            }
         }
 
         this.previousHoverIndex = hoverIndex;
@@ -177,7 +180,8 @@ export default class ChartAdapterStore {
                 if (this.drawingHoverIndex != null) {
                     const drawingRepoItems = this.mainStore.chartAdapter.flutterChart?.drawingTool
                         .getDrawingToolsRepoItems()
-                        .map(item => JSON.parse(item));
+                        .map(item => safeParse(item))
+                        .filter(item => item);
 
                     if (!drawingRepoItems) {
                         return;

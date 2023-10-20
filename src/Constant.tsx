@@ -185,16 +185,16 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
                 ),
                 icon: IndicatorDTrendedIcon,
             },
-            {
-                flutter_chart_id: 'gator',
-                name: t.translate('Gator Oscillator'),
-                short_name: t.translate('Gator'),
-                description: t.translate(
-                    'The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligator indicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase (absence of a trend) is when the bars on both sides are red. The awakening phase (formation of a trend) is when there are red and green bars on both sides. When there are green bars on both sides, it indicates the eating phase (trend strengthening). A solitary red bar appearing after the eating phase indicates the beginning of the sated phase (trend approaching its end).'
-                ),
-                icon: IndicatorGatorIcon,
-                isPrediction: true,
-            },
+            // {
+            //     flutter_chart_id: 'gator',
+            //     name: t.translate('Gator Oscillator'),
+            //     short_name: t.translate('Gator'),
+            //     description: t.translate(
+            //         'The Gator Oscillator helps to detect trend changes in the market price. Based on the Alligator indicator, the Gator plots 2 histograms on either side of the zero line. The sleeping phase (absence of a trend) is when the bars on both sides are red. The awakening phase (formation of a trend) is when there are red and green bars on both sides. When there are green bars on both sides, it indicates the eating phase (trend strengthening). A solitary red bar appearing after the eating phase indicates the beginning of the sated phase (trend approaching its end).'
+            //     ),
+            //     icon: IndicatorGatorIcon,
+            //     isPrediction: true,
+            // },
             {
                 flutter_chart_id: 'macd',
                 name: t.translate('MACD'),

@@ -5,11 +5,10 @@ import set from 'lodash.set';
 import { capitalize, hexToInt, intToHexColor } from 'src/components/ui/utils';
 import MainStore from '.';
 import { defaultdrawToolsConfigs, getDefaultDrawingConfig, getDrawTools } from '../Constant';
-import { clone, formatCamelCase, isLiteralObject, transformStudiesforTheme } from '../utils';
+import { clone, formatCamelCase, isLiteralObject, safeParse, transformStudiesforTheme } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
-
 
 export type TEdgePoints = {
     epoch: number;
@@ -140,7 +139,8 @@ export default class DrawToolsStore {
     drawingToolsRepoArray = () => {
         return this.mainStore.chartAdapter.flutterChart?.drawingTool
             .getDrawingToolsRepoItems()
-            .map(item => JSON.parse(item))
+            .map(item => safeParse(item))
+            .filter(item => item)
             .filter(item => {
                 return !(item.drawingData.isDrawingFinished == false);
             });
@@ -186,8 +186,12 @@ export default class DrawToolsStore {
         this.activeToolsGroup = [];
 
         drawings.forEach((item: TDrawingCreatedConfig) => {
-            if (typeof item == 'string') {
-                item = JSON.parse(item);
+            if (typeof item === 'string') {
+                item = safeParse(item);
+            }
+
+            if (!item) {
+                return;
             }
 
             const drawingName = item.name.replace('dt_', '');

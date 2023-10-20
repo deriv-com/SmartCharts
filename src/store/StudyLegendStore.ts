@@ -198,11 +198,15 @@ export default class StudyLegendStore {
     async restoreStudies(activeItems: TActiveItem[]) {
         this.deleteAllStudies();
 
-        activeItems.forEach(activeItem => {
-            this.addOrUpdateIndicator(activeItem);
-
+        activeItems.forEach((activeItem, index) => {
             const props = this.getIndicatorProps(activeItem.flutter_chart_id);
-            Object.assign(activeItem, props || {});
+
+            if (props) {
+                this.addOrUpdateIndicator(activeItem);
+                Object.assign(activeItem, props);
+            } else {
+                activeItems.splice(index, 1);
+            }
         });
 
         this.activeItems = activeItems;

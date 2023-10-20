@@ -90,8 +90,12 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     final List<String> encodedAddOns = prefs.getStringList(_addOnsKey)!;
 
     for (final String encodedAddOn in encodedAddOns) {
-      final T addOnConfig = createAddOn.call(jsonDecode(encodedAddOn));
-      items.add(addOnConfig);
+      try {
+        final T addOnConfig = createAddOn.call(jsonDecode(encodedAddOn));
+        items.add(addOnConfig);
+      } on Exception catch (e) {
+        continue;
+      }
     }
     // ignore: always_specify_types
     onLoadCallback?.call(items.map((e) => jsonEncode(e)).toList());
