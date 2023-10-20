@@ -464,7 +464,10 @@ class ChartState {
         const id = this.mainStore.chart.chartId;
         const layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
 
-        if (!layout) return false;
+        if (!layout) {
+            this.clearLayout();
+            return false;
+        }
 
         this.mainStore.view.restoreLayout(layout);
 
@@ -473,6 +476,7 @@ class ChartState {
 
     clearLayout() {
         window.flutterChart?.indicators.clearIndicators();
+        window.flutterChart?.drawingTool.clearDrawingTool();
     }
 
     saveDrawings() {
