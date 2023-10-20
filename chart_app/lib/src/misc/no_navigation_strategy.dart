@@ -4,7 +4,10 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
 /// To skip navigations in flutter
 /// NoNavigationStrategy
-class NoNavigationStrategy extends HashUrlStrategy {
+class NoNavigationStrategy extends UrlStrategy {
+  final BrowserPlatformLocation _platformLocation =
+      const BrowserPlatformLocation();
+
   @override
   ui.VoidCallback addPopStateListener(EventListener fn) => () {};
 
@@ -22,4 +25,13 @@ class NoNavigationStrategy extends HashUrlStrategy {
     });
     return completer.future;
   }
+
+  @override
+  String getPath() => '';
+
+  @override
+  Object? getState() => _platformLocation.state;
+
+  @override
+  String prepareExternalUrl(String internalUrl) => '';
 }
