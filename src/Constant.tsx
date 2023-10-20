@@ -26,7 +26,7 @@ import {
     IndicatorDTrendedIcon,
     IndicatorEnvelopeIcon,
     IndicatorFractalChaosIcon,
-    IndicatorGatorIcon,
+    // IndicatorGatorIcon,
     IndicatorIchimokuIcon,
     IndicatorMacdIcon,
     IndicatorParabolicIcon,
