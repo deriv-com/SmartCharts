@@ -11,6 +11,12 @@ import 'package:chart_app/src/markers/helpers/paint_functions/paint_start_line.d
 
 /// Digits contract painter
 class DigitMarkerIconPainter extends MarkerGroupIconPainter {
+  /// Initialize
+  DigitMarkerIconPainter({this.pipSize = 4});
+
+  /// PipSize
+  int pipSize;
+
   @override
   void paintMarkerGroup(
     Canvas canvas,
@@ -101,7 +107,8 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
         paint,
       );
 
-    final String lastChar = marker.quote.toString().characters.last;
+    final String lastChar =
+        marker.quote.toStringAsFixed(pipSize).characters.last;
     final TextSpan span = TextSpan(
       text: lastChar,
       style: TextStyle(

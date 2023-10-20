@@ -8,7 +8,7 @@ import 'package:chart_app/src/markers/marker_icon_painters/tick_marker_icon_pain
 MarkerGroupIconPainter getMarkerGroupPainter(ChartApp app) {
   switch (app.configModel.contractType) {
     case 'DigitContract':
-      return DigitMarkerIconPainter();
+      return DigitMarkerIconPainter(pipSize: app.configModel.pipSize);
 
     case 'AccumulatorContract':
       return AccumulatorMarkerIconPainter();
