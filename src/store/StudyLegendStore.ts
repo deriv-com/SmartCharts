@@ -22,6 +22,8 @@ export default class StudyLegendStore {
     activeItems: TActiveItem[] = [];
     infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
     portalNodeIdChanged? = '';
+    currentHoverIndex: number | undefined | null = null;
+    previousHoverIndex: number | undefined | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -46,6 +48,9 @@ export default class StudyLegendStore {
             updatePortalNode: action.bound,
             restoreStudies: action.bound,
             getItemById: action.bound,
+            setIndicator: action.bound,
+            highlightIndicator: action.bound,
+            clearHoverItem: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -263,6 +268,7 @@ export default class StudyLegendStore {
 
         this.activeItems.splice(index, 1);
         this.mainStore.bottomWidgetsContainer.updateChartHeight();
+        this.mainStore.crosshair.removeIndicatorToolTip();
         this.renderLegend();
         this.mainStore.state.saveLayout();
     }
@@ -354,6 +360,57 @@ export default class StudyLegendStore {
               }
             : study;
     }
+
+    setIndicator(item: TActiveItem, index: number) {
+        this.addOrUpdateIndicator(item, index);
+    }
+
+    highlightIndicator(hoverIndex: number | undefined | null, dx: number, dy: number) {
+        this.currentHoverIndex = hoverIndex;
+
+        if (this.previousHoverIndex === this.currentHoverIndex) {
+            return;
+        }
+
+        if (typeof this.previousHoverIndex === 'number') {
+            this.clearHoverItem(this.previousHoverIndex);
+        }
+
+        if (hoverIndex != null) {
+            const item = clone(this.activeItems[hoverIndex]);
+
+            if (item && item.config) {
+                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+                for (const key in item.config) {
+                    if (key.includes('Style')) {
+                        item.config[key].thickness = 2;
+                        if (key === 'scatterStyle') {
+                            item.config[key].radius = 2.5;
+                        }
+                    }
+
+                    if (key.includes('Styles')) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        item.config[key].forEach((element: any) => {
+                            element.thickness = 2;
+                        });
+                    }
+                }
+                this.setIndicator(item, hoverIndex);
+            }
+        }
+
+        this.previousHoverIndex = hoverIndex;
+    }
+
+    clearHoverItem(index: number) {
+        const item = this.activeItems[index];
+        this.mainStore.crosshair.removeIndicatorToolTip();
+        if (item) {
+            this.setIndicator(item, index);
+        }
+    }
+
     updatePortalNode(portalNodeId?: string) {
         this.portalNodeIdChanged = portalNodeId;
     }

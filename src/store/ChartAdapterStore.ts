@@ -1,10 +1,10 @@
 import { action, makeObservable, observable, when } from 'mobx';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
-import { TActiveItem, TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
+import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
 import { createChartElement } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
-import { clone, safeParse } from 'src/utils';
+import { safeParse } from 'src/utils';
 import { capitalize } from 'src/components/ui/utils';
 import MainStore from '.';
 
@@ -22,11 +22,9 @@ export default class ChartAdapterStore {
     };
     isFeedLoaded = false;
     msPerPx?: number;
-    indicatorHoverIndex: number | undefined | null = null;
     drawingHoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
     painter = new Painter();
-    isHoverOnIndicator = false;
     drawingColor = 0;
     isScaled = false;
     crossHairValue?: {
@@ -43,7 +41,6 @@ export default class ChartAdapterStore {
         bottomIndex: 0,
     };
 
-    previousHoverIndex: number | undefined | null = null;
     isOverFlutterCharts = false;
 
     constructor(mainStore: MainStore) {
@@ -80,12 +77,6 @@ export default class ChartAdapterStore {
         dyLocal: number,
         bottomIndicatorIndex: number | undefined
     ) => {
-        const setIndicator = (item: TActiveItem, index: number) => {
-            this.mainStore.studies.addOrUpdateIndicator(item, index);
-        };
-
-        const activeItems = this.mainStore.studies.activeItems;
-
         // dxLocal and dyLocal are the local position value correponding to the bottom indicator/main chart
         const epoch = this.flutterChart?.crosshair.getEpochFromX(dxLocal) || 0;
         const quote = (this.flutterChart?.crosshair.getQuoteFromY(dyLocal) || 0).toFixed(
@@ -105,59 +96,10 @@ export default class ChartAdapterStore {
         );
         if (this.isScaled) {
             this.isScaled = false;
-        } else {
-            this.indicatorHoverIndex = hoverIndex;
+            return;
         }
 
-        if (hoverIndex != null) {
-            const item = clone(activeItems[hoverIndex]);
-
-            if (this.isHoverOnIndicator) {
-                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
-            } else {
-                this.mainStore.crosshair.removeIndicatorToolTip();
-            }
-
-            if (this.previousHoverIndex === this.indicatorHoverIndex) {
-                return;
-            }
-
-            if (item && item.config) {
-                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
-                this.isHoverOnIndicator = true;
-                for (const key in item.config) {
-                    if (key.includes('Style')) {
-                        item.config[key].thickness = 2;
-                        if (key === 'scatterStyle') {
-                            item.config[key].radius = 2.5;
-                        }
-                    }
-
-                    if (key.includes('Styles')) {
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        item.config[key].forEach((element: any) => {
-                            element.thickness = 2;
-                        });
-                    }
-                }
-                setIndicator(item, hoverIndex);
-            }
-        }
-        if (
-            this.previousHoverIndex != null &&
-            this.previousHoverIndex >= 0 &&
-            this.previousHoverIndex < activeItems.length
-        ) {
-            this.isHoverOnIndicator = false;
-            const item = activeItems[this.previousHoverIndex];
-            this.mainStore.crosshair.removeIndicatorToolTip();
-
-            if (item) {
-                setIndicator(item, this.previousHoverIndex);
-            }
-        }
-
-        this.previousHoverIndex = hoverIndex;
+        this.mainStore.studies.highlightIndicator(hoverIndex, dx, dy);
     };
 
     debouncedIndicatorHover = debounce(this.checkIndicatorHover, 5);
@@ -196,8 +138,6 @@ export default class ChartAdapterStore {
                             dy
                         );
                     }
-                } else {
-                    this.mainStore.crosshair.removeDrawingToolToolTip();
                 }
 
                 this.debouncedIndicatorHover(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
@@ -229,6 +169,7 @@ export default class ChartAdapterStore {
                 },
                 onMouseExit: () => {
                     this.drawingHoverIndex = null;
+                    this.mainStore.crosshair.removeDrawingToolToolTip();
                 },
             },
         };
@@ -277,9 +218,9 @@ export default class ChartAdapterStore {
         if (this.drawingHoverIndex != null) {
             this.mainStore.drawTools.onSetting(this.drawingHoverIndex);
             this.mainStore.crosshair.removeDrawingToolToolTip();
-        } else if (this.indicatorHoverIndex != null) {
-            this.mainStore.studies.editStudyByIndex(this.indicatorHoverIndex);
-            this.mainStore.crosshair.removeIndicatorToolTip();
+        } else if (this.mainStore.studies.currentHoverIndex != null) {
+            this.mainStore.studies.editStudyByIndex(this.mainStore.studies.currentHoverIndex);
+            this.mainStore.studies.clearHoverItem(this.mainStore.studies.currentHoverIndex);
         }
     };
 
@@ -419,7 +360,7 @@ export default class ChartAdapterStore {
     }
 
     scale(scale: number) {
-        if (this.indicatorHoverIndex !== null) {
+        if (this.mainStore.studies.currentHoverIndex !== null) {
             this.isScaled = true;
         }
 
