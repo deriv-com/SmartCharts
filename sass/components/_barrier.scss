@@ -26,6 +26,9 @@
             top: -8px;
             position: absolute;
             width: 100%;
+            &-wrapper {
+                display: flex;
+            }
         }
         .drag-line {
             height: 1px;
@@ -33,7 +36,8 @@
             width: 100%;
             margin-left: -10px;
             position: relative;
-            border-top-width: 0;
+            border-top-width: 1px;
+            border-top-color: $color-blue;
 
             &--zero {
                 width: calc(100% - 63px);
@@ -78,12 +82,14 @@
 }
 
 .drag-price {
-    display: block;
+    display: flex;
     height: 24px;
-    top: -11px;
+    top: -12px;
     position: absolute;
     right: -1px;
     border: 1px solid inherit;
+    background-color: $color-blue;
+    justify-content: space-between;
 
     &-frame {
         display: block;
@@ -91,10 +97,6 @@
         top: -11px;
         position: absolute;
         right: 0;
-        border: 1px solid gray;
-    }
-    &--zero {
-        top: -35px;
     }
     .arrow-icon {
         height: 41px;
@@ -143,21 +145,47 @@
     display: block;
     padding: 3px 1px;
     line-height: 18px;
-    overflow: hidden;
     text-align: center;
+    position: relative;
+    right: 45px;
+    overflow: unset;
+    width: max-content;
+
+    &--zero {
+        color: $color-blue;
+        @include themify($themes) {
+            background-color: themed('DefaultBg');
+        }
+    }
+
+    &-overlay {
+        position: relative;
+        top: -12px;
+        right: -10px;
+        background-color: $color-blue;
+        opacity: 0.3;
+        height: 24px;
+    }
 }
 
-.draggable .price {
-    padding-left: 16px;
+.draggable {
+    .price {
+        position: relative;
+        right: 55px;
+        overflow: unset;
+    }
 
-    &:after {
-        font-weight: normal;
-        content: '≡';
-        font-size: 25px;
-        position: absolute;
-        left: 1px;
-        top: 1px;
-        transform: scaleX(0.8);
+    .drag-icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 3px;
+        div {
+            width: 8px;
+            height: 1px;
+            background-color: $color-white;
+            margin: 1px;
+        }
     }
 }
 

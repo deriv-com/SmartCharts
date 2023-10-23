@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { action, computed, observable, makeObservable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -47,7 +48,7 @@ export default class BarrierStore {
     isTopShadeVisible = false;
     isBottomShadeVisible = false;
     hidePriceLines = false;
-    lineStyle?: string;
+    lineStyle?: CSSProperties['borderStyle'];
     isInitialized = false;
     initializePromise = PendingPromise<void, void>();
     hideBarrierLine = false;
@@ -64,7 +65,7 @@ export default class BarrierStore {
         return this.mainStore.chart.yAxiswidth;
     }
     get priceLabelWidth(): number {
-        return this.yAxisWidth + 1;
+        return 16;
     }
 
     constructor(mainStore: MainStore) {

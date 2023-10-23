@@ -273,14 +273,10 @@ export default class PriceLineStore {
 
         this.isOverlappingWithPriceLine = this._distanceFromCurrentPrice() < 25;
 
-        if (this.isOverlappingWithPriceLine) {
-            top = this._locationFromPrice(+this.realPrice - +this._price);
-        }
-
         return Math.round(top) | 0;
     };
 
-    // Mantually update the top to improve performance.
+    // Manually update the top to improve performance.
     // We don't pay for react reconciler and mobx observable tracking in animation frames.
     set top(v) {
         this.__top = v;
