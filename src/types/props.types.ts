@@ -83,7 +83,22 @@ export type TSettings = {
     whitespace?: number;
 };
 
-export type TStateChangeListener = (state: string, option?: { symbol: string | undefined; isClosed: boolean }) => void;
+export type TStateChangeListener = (
+    state: string,
+    option?: {
+        indicator_type_name?: string;
+        indicators_category_name?: string;
+        isClosed?: boolean;
+        is_favorite?: boolean;
+        is_info_open?: boolean;
+        is_open?: boolean;
+        chart_type_name?: string;
+        search_string?: string;
+        symbol?: string;
+        symbol_category?: string;
+        time_interval_name?: string;
+    }
+) => void;
 
 export type TRatio = {
     height: number;

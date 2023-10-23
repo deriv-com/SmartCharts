@@ -10,7 +10,7 @@ import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
-import { TActiveItem, TooltipsContent } from '../Constant';
+import { STATE, TActiveItem, TooltipsContent } from '../Constant';
 import Menu from './Menu';
 import SearchInput from './SearchInput';
 
@@ -109,7 +109,9 @@ const IndicatorList = ({
                     }
                     content={
                         Item.isPrediction && isTick
-                            ? t.translate('This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.')
+                            ? t.translate(
+                                  'This indicator does not support 1-tick intervals. To use this indicator, change your chart time interval to 1 minute or more.'
+                              )
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
@@ -259,7 +261,7 @@ const TabularDisplay = ({
 );
 
 const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
-    const { studies, chart, timeperiod } = useStores();
+    const { studies, chart, state, timeperiod } = useStores();
 
     const {
         menuStore,
@@ -286,6 +288,18 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
     const activeStudiesNo = activeItems.length;
 
     updatePortalNode(portalNodeId);
+
+    const getIndicatorCategoryName = (id: string) =>
+        items.find(i => i.items.some(el => el.id === id))?.id.replace('-', ' ') ?? '';
+
+    const handleStateChange = (id: string, type: string, payload?: { is_info_open: boolean }) => {
+        state.stateChange(type, {
+            indicator_type_name: id,
+            indicators_category_name: getIndicatorCategoryName(id),
+            ...(payload ?? {}),
+        });
+    };
+
     return (
         <Menu
             store={menuStore}
@@ -298,7 +312,12 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
             customHead={
                 infoItem ? (
                     <div className='sc-dialog__head--info'>
-                        <BackIcon onClick={() => onInfoItem(null)} />
+                        <BackIcon
+                            onClick={() => {
+                                onInfoItem(null);
+                                handleStateChange(infoItem.id, STATE.INDICATOR_INFO_TOGGLE);
+                            }}
+                        />
                         {infoItem.name}
                     </div>
                 ) : (
@@ -331,7 +350,10 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                                 <button
                                     type='button'
                                     className='sc-btn sc-btn--primary sc-btn--w100'
-                                    onClick={() => onSelectItem(infoItem?.id)}
+                                    onClick={() => {
+                                        onSelectItem(infoItem?.id);
+                                        handleStateChange(infoItem?.id, STATE.INDICATOR_ADDED, { is_info_open: true });
+                                    }}
                                     disabled={infoItem?.disabledAddBtn}
                                 >
                                     {t.translate('Add')}
@@ -345,10 +367,22 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                     selectedTab={selectedTab}
                     categories={items}
                     searchedCategories={searchedItems}
-                    onSelectItem={onSelectItem}
-                    onDeleteItem={deleteStudy}
-                    onEditItem={editStudy}
-                    onInfoItem={onInfoItem}
+                    onSelectItem={(id: string) => {
+                        onSelectItem(id);
+                        handleStateChange(id, STATE.INDICATOR_ADDED);
+                    }}
+                    onDeleteItem={(item: TActiveItem['dataObject']['sd']) => {
+                        deleteStudy(item);
+                        handleStateChange(item.type, STATE.INDICATOR_DELETED);
+                    }}
+                    onEditItem={(study: TActiveItem['dataObject']) => {
+                        editStudy(study);
+                        handleStateChange(study.sd.type, STATE.INDICATOR_SETTINGS_OPEN);
+                    }}
+                    onInfoItem={(item: TActiveItem) => {
+                        onInfoItem(item);
+                        handleStateChange(item.id, STATE.INDICATOR_INFO_TOGGLE, { is_info_open: true });
+                    }}
                     activeItems={activeItems}
                     clearAll={deleteAll}
                     searchQuery={searchQuery}

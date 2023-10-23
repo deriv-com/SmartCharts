@@ -1,8 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
+import { STATE } from 'src/Constant';
 import { useStores } from 'src/store';
 import { ArrowIcon, CategoryIconMap, InfoCircleIcon } from '../Icons';
-import { stringToSlug } from '../../utils';
+import { getSymbolMarketCategory, stringToSlug } from '../../utils';
 import {
     TCategorizedSymbolItem,
     TCategorizedSymbols,
@@ -15,7 +16,7 @@ import { TNormalItemProps } from './Item';
 
 export type TResultsPanelProps = {
     filteredItems: TCategorizedSymbols;
-    onSelectItem?: (item: TProcessedSymbolItem) => void;
+    onSelectItem?: (item: TProcessedSymbolItem, category_id: string) => void;
     ItemType: (props: TNormalItemProps) => React.ReactElement | null;
     setCategoryElement: (element: HTMLElement | null, id: string) => void;
     activeHeadKey: null | string;
@@ -147,7 +148,9 @@ const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) =>
     const DEFAULT_LANGUAGE = 'EN';
     const lang_from_url =
         new URLSearchParams(window.location.search).get('lang')?.toLowerCase() || DEFAULT_LANGUAGE.toLowerCase();
-    const link_mapper = should_show_eu_content ? eu_subcategory_mapper[subCategoryId] : row_subcategory_mapper[subCategoryId];
+    const link_mapper = should_show_eu_content
+        ? eu_subcategory_mapper[subCategoryId]
+        : row_subcategory_mapper[subCategoryId];
     let language = `${lang_from_url}/`;
     const modified_lang_code = lang_from_url.replace('_', '-');
     if (lang_from_url.includes('_')) language = `${modified_lang_code}/`;
@@ -156,13 +159,19 @@ const redirectLink = (subCategoryId: string, should_show_eu_content: boolean) =>
     return link;
 };
 
-const RedirectIcon = ({ subcategoryId }: { subcategoryId: string }) => {
+const RedirectIcon = ({ subcategory }: { subcategory: TSubCategory }) => {
     const { state } = useStores();
     const { should_show_eu_content } = state;
-    const derivComLink = redirectLink(subcategoryId, !!should_show_eu_content);
+    const derivComLink = redirectLink(subcategory.subcategoryId, !!should_show_eu_content);
+
+    const onInfoClick = () => {
+        state.stateChange(STATE.MARKET_INFO_REDIRECT, {
+            symbol_category: getSymbolMarketCategory(subcategory.data[0].dataObject),
+        });
+    };
 
     return (
-        <a href={derivComLink} target='_blank' rel='noreferrer'>
+        <a href={derivComLink} target='_blank' rel='noreferrer' onClick={onInfoClick}>
             <InfoCircleIcon />
         </a>
     );
@@ -180,68 +189,74 @@ const Category = ({
     handleTitleClick,
     hasSubgroup,
     favoritesId,
-}: TCategoryProps) => (
-    <div
-        className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
-            'sc-mcd__category--has-subtitle': category.categorySubtitle,
-            'sc-mcd__category--active': category.active,
-        })}
-        ref={el => setCategoryElement(el, category.categoryId)}
-    >
-        {(isNestedList || !category.hasSubcategory) && (
-            <CategoryTitle
-                category={category}
-                activeHeadKey={activeHeadKey}
-                isNestedList={!!isNestedList}
-                handleTitleClick={handleTitleClick}
-                hasSubgroup={hasSubgroup}
-            />
-        )}
-        {!category.hasSubgroup && category.hasSubcategory
-            ? (category.data as TSubCategory[])
-                  .filter(subcategory => getItemCount(subcategory) > 0)
-                  .map(subcategory => (
-                      <div
-                          className={classNames(
-                              'sc-mcd__category__content',
-                              `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
-                              'sc-mcd__category--has-subgroup',
-                              'sc-mcd__category__content--has-subcategory'
-                          )}
-                          key={subcategory.subcategoryName}
-                      >
-                          <div className='subcategory'>
-                              {t.translate(subcategory.subcategoryName)}
-                              <RedirectIcon subcategoryId={subcategory.subcategoryId} />
+}: TCategoryProps) => {
+    const handleSelectItem = (symbol_object: TProcessedSymbolItem) => {
+        onSelectItem?.(symbol_object, category.categoryId);
+    };
+
+    return (
+        <div
+            className={classNames('sc-mcd__category', `sc-mcd__category--${category.categoryId}`, {
+                'sc-mcd__category--has-subtitle': category.categorySubtitle,
+                'sc-mcd__category--active': category.active,
+            })}
+            ref={el => setCategoryElement(el, category.categoryId)}
+        >
+            {(isNestedList || !category.hasSubcategory) && (
+                <CategoryTitle
+                    category={category}
+                    activeHeadKey={activeHeadKey}
+                    isNestedList={!!isNestedList}
+                    handleTitleClick={handleTitleClick}
+                    hasSubgroup={hasSubgroup}
+                />
+            )}
+            {!category.hasSubgroup && category.hasSubcategory
+                ? (category.data as TSubCategory[])
+                      .filter(subcategory => getItemCount(subcategory) > 0)
+                      .map(subcategory => (
+                          <div
+                              className={classNames(
+                                  'sc-mcd__category__content',
+                                  `sc-mcd__category__content--${stringToSlug(subcategory.subcategoryName)}`,
+                                  'sc-mcd__category--has-subgroup',
+                                  'sc-mcd__category__content--has-subcategory'
+                              )}
+                              key={subcategory.subcategoryName}
+                          >
+                              <div className='subcategory'>
+                                  {t.translate(subcategory.subcategoryName)}
+                                  <RedirectIcon subcategory={subcategory} />
+                              </div>
+                              {subcategory.data.map(item => (
+                                  <ItemType
+                                      key={item.display}
+                                      item={item}
+                                      onSelectItem={handleSelectItem}
+                                      disableAll={disableAll}
+                                      favoritesId={favoritesId}
+                                  />
+                              ))}
                           </div>
-                          {subcategory.data.map(item => (
+                      ))
+                : !category.hasSubgroup &&
+                  category.data.length > 0 && (
+                      <div className='sc-mcd__category__content'>
+                          {(category.data as TSubCategoryData).map(item => (
                               <ItemType
-                                  key={item.display}
+                                  key={item.itemId}
                                   item={item}
-                                  onSelectItem={onSelectItem}
+                                  onSelectItem={handleSelectItem}
                                   disableAll={disableAll}
                                   favoritesId={favoritesId}
                               />
                           ))}
                       </div>
-                  ))
-            : !category.hasSubgroup &&
-              category.data.length > 0 && (
-                  <div className='sc-mcd__category__content'>
-                      {(category.data as TSubCategoryData).map((item, idx) => (
-                          <ItemType
-                              key={`${item.display}-${idx}`} // eslint-disable-line react/no-array-index-key
-                              item={item}
-                              onSelectItem={onSelectItem}
-                              disableAll={disableAll}
-                              favoritesId={favoritesId}
-                          />
-                      ))}
-                  </div>
-              )}
-        {categoryItemCount === 0 && category.emptyDescription && <EmptyCategory category={category} />}
-    </div>
-);
+                  )}
+            {categoryItemCount === 0 && category.emptyDescription && <EmptyCategory category={category} />}
+        </div>
+    );
+};
 
 const ResultsPanel = ({
     filteredItems,
