@@ -155,9 +155,9 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
 
     final int visibleEpoch = (rightBoundEpoch ?? 0) - (leftBoundEpoch ?? 0);
     // 15 mins
-    const int maxEpochToScrollSmooth = 15 * 60 * 1000;
+    const int minEpochToScrollSmooth = 15 * 60 * 1000;
 
-    if (visibleEpoch > maxEpochToScrollSmooth &&
+    if (visibleEpoch > minEpochToScrollSmooth &&
         indicatorsModel.indicatorsRepo.items.length >= 3) {
       return 1000;
     }
