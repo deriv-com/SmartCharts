@@ -160,7 +160,7 @@ export default class ViewStore {
 
         const { layout } = this.sortedItems[idx];
 
-        this.restoreLayout(layout);
+        this.restoreLayout(clone(layout));
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
     }
 

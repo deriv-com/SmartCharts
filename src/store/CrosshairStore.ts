@@ -97,7 +97,7 @@ class CrosshairStore {
     };
 
     onMouseMove = (dx: number, dy: number, epoch: number, quote: string) => {
-        if (this.hoverOnScreen == false) {
+        if (this.hoverOnScreen === false) {
             this.isOverChartContainer = true;
             this.updateVisibility(true);
             this.hoverOnScreen = true;
@@ -357,17 +357,19 @@ class CrosshairStore {
         tooltipContent
             .filter(c => c)
             .forEach((item, index) => {
-                const labels = getTooltipLabels(item.name, activeItems[index])?.labels || [];
+                if (index < activeItems.length) {
+                    const labels = getTooltipLabels(item.name, activeItems[index])?.labels || [];
 
-                labels.forEach((label, i) => {
-                    const value = item.values[i];
-                    if (!value) return;
+                    labels.forEach((label, i) => {
+                        const value = item.values[i];
+                        if (!value) return;
 
-                    rows.push({
-                        name: label,
-                        value,
+                        rows.push({
+                            name: label,
+                            value,
+                        });
                     });
-                });
+                }
             });
 
         return rows;

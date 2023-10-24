@@ -33,6 +33,14 @@ export function createObjectFromLocalStorage(key: string) {
     return undefined;
 }
 
+export function safeParse(value: string) {
+    try {
+        return JSON.parse(value);
+    } catch (e) {
+        return undefined;
+    }
+}
+
 export function saveToLocalStorage(key: string, value: any) {
     const string = JSON.stringify(value);
     localStorage.setItem(key, string);
