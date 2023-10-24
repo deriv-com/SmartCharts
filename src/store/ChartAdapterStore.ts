@@ -63,10 +63,11 @@ export default class ChartAdapterStore {
             quoteBounds: observable.ref,
             msPerPx: observable,
             isFeedLoaded: observable,
+            cleanChart: action.bound,
         });
 
         this.mainStore = mainStore;
-
+        this.cleanChart();
         this.initFlutterCharts();
     }
 
@@ -196,6 +197,15 @@ export default class ChartAdapterStore {
     onChartLoad() {
         this.flutterChart = window.flutterChart;
         this.isChartLoaded = true;
+    }
+
+    cleanChart() {
+        // Clean charts if it's already loaded
+        if (window.flutterChartElement) {
+            this.updateLeftMargin();
+            this.setShowInterval(false);
+            this.setSymbolClosed(false);
+        }
     }
 
     onWheel = (e: WheelEvent) => {
