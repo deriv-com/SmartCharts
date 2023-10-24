@@ -68,8 +68,8 @@ class RealtimeSubscription extends Subscription {
     _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse, void>, (resp: TicksStreamResponse) => void] {
         const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
-            if (this._mainStore.chart.isDestroyed) {
-                this.forget();
+            if (this._mainStore.chart.isDestroyed && resp.subscription?.id) {
+                this._binaryApi.forgetStream(resp.subscription?.id);
                 return;
             }
             // We assume that 1st response is the history, and subsequent

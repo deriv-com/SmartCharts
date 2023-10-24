@@ -111,7 +111,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
               multiplier) /
           height;
 
-      return max(verticalPaddingFraction, 0.1);
+      return verticalPaddingFraction.clamp(0.1, 0.45);
     }
     return null;
   }
