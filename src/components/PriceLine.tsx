@@ -99,9 +99,11 @@ const PriceLine = ({
                             <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                         )}
                     </div>
-                    <div>
-                        <div className='price-overlay' style={{ width: yAxiswidth - width }} />
-                    </div>
+                    {isOverlappingWithPriceLine && (
+                        <div>
+                            <div className='price-overlay' style={{ width: yAxiswidth - width }} />
+                        </div>
+                    )}
                 </div>
                 {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
             </div>
