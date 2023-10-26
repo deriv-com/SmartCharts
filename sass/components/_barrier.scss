@@ -35,10 +35,6 @@
             position: relative;
             border-top-width: 1px;
             border-top-color: $color-blue;
-
-            &--zero {
-                width: calc(100% - 63px);
-            }
         }
         .title-wrapper {
             $title-height: 24px;
@@ -87,13 +83,6 @@
     background-color: $color-blue;
     justify-content: space-between;
 
-    &-frame {
-        display: block;
-        height: 24px;
-        top: -11px;
-        position: absolute;
-        right: 0;
-    }
     .arrow-icon {
         height: 41px;
         padding: 4px 0px;
@@ -136,15 +125,15 @@
 /*hover*/
 
 .price {
+    display: block;
     font-size: 12px;
     font-weight: bold;
-    display: block;
-    padding: 3px 1px;
     line-height: 18px;
-    text-align: center;
+    overflow: unset;
+    padding: 3px 1px;
     position: relative;
     right: 45px;
-    overflow: unset;
+    text-align: center;
     width: max-content;
 
     &--zero {
@@ -154,12 +143,12 @@
         }
     }
     &-overlay {
-        position: relative;
-        top: -12px;
-        right: -10px;
         background-color: $color-blue;
-        opacity: 0.3;
         height: 24px;
+        opacity: 0.3;
+        position: relative;
+        right: -10px;
+        top: -12px;
     }
 }
 
@@ -168,9 +157,9 @@
         display: flex;
     }
     .price {
+        overflow: unset;
         position: relative;
         right: 55px;
-        overflow: unset;
     }
     .drag-icon {
         display: flex;
@@ -179,10 +168,10 @@
         margin-left: 3px;
 
         div {
-            width: 8px;
-            height: 1px;
             background-color: $color-white;
+            height: 1px;
             margin: 1px;
+            width: 8px;
         }
     }
 }
