@@ -26,10 +26,6 @@
             top: -8px;
             position: absolute;
             width: 100%;
-
-            &-wrapper {
-                display: flex;
-            }
         }
         .drag-line {
             height: 1px;
@@ -168,6 +164,9 @@
 }
 
 .draggable {
+    &-area-wrapper {
+        display: flex;
+    }
     .price {
         position: relative;
         right: 55px;
