@@ -84,7 +84,7 @@ export default class BarrierStore {
             hideOffscreenLine: observable,
             hideOffscreenBarrier: observable,
             isSingleBarrier: observable,
-            destructor: action.bound
+            destructor: action.bound,
             init: action.bound,
             overlappedBarrierWidth: computed,
             pip: computed,
