@@ -64,7 +64,7 @@ export default class BarrierStore {
     get yAxisWidth(): number {
         return this.mainStore.chart.yAxiswidth;
     }
-    get priceLabelWidth(): number {
+    get overlappedBarrierWidth(): number {
         return 16;
     }
 
@@ -84,12 +84,12 @@ export default class BarrierStore {
             hideOffscreenLine: observable,
             hideOffscreenBarrier: observable,
             isSingleBarrier: observable,
-            pip: computed,
-            yAxisWidth: computed,
-            priceLabelWidth: computed,
-            init: action.bound,
-            updateProps: action.bound,
             destructor: action.bound
+            init: action.bound,
+            overlappedBarrierWidth: computed,
+            pip: computed,
+            updateProps: action.bound,
+            yAxisWidth: computed,
         });
 
         this.mainStore = mainStore;
