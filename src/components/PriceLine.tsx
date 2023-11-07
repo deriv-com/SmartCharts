@@ -77,6 +77,7 @@ const PriceLine = ({
                     <div
                         className={classNames('drag-line', { 'drag-line--zero': isOverlappingWithPriceLine })}
                         style={{
+                            borderTopColor: color,
                             borderTopStyle: lineStyle as React.CSSProperties['borderTopStyle'],
                             width: `calc(100% - ${yAxiswidth}px + ${width}px)`,
                         }}
@@ -86,14 +87,29 @@ const PriceLine = ({
                 <div className='draggable-area-wrapper'>
                     <div
                         className={classNames('drag-price')}
-                        style={{ width: isOverlappingWithPriceLine ? width : yAxiswidth, opacity, right: isOverlappingWithPriceLine ? yAxiswidth - width : 0 }}
+                        style={{
+                            backgroundColor: color,
+                            width: isOverlappingWithPriceLine ? width : yAxiswidth,
+                            opacity,
+                            right: isOverlappingWithPriceLine ? yAxiswidth - width : 0,
+                        }}
                     >
                         <div className='drag-icon'>
                             <div></div>
                             <div></div>
                             <div></div>
                         </div>
-                        <div className={classNames('price', { 'price--zero': isOverlappingWithPriceLine })} style={{ right: isOverlappingWithPriceLine ? width + (priceDisplay.length * 8) - (!draggable ? 16 : 0) : 0}}>{priceDisplay}</div>
+                        <div
+                            className={classNames('price', { 'price--zero': isOverlappingWithPriceLine })}
+                            style={{
+                                color: isOverlappingWithPriceLine ? color : '',
+                                right: isOverlappingWithPriceLine
+                                    ? width + priceDisplay.length * 8 - (!draggable ? 16 : 0)
+                                    : 0,
+                            }}
+                        >
+                            {priceDisplay}
+                        </div>
                         <div />
                         {offScreen && offScreenDirection && (
                             <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
@@ -101,7 +117,10 @@ const PriceLine = ({
                     </div>
                     {isOverlappingWithPriceLine && (
                         <div>
-                            <div className='price-overlay' style={{ width: yAxiswidth - width }} />
+                            <div
+                                className='price-overlay'
+                                style={{ backgroundColor: color, width: yAxiswidth - width }}
+                            />
                         </div>
                     )}
                 </div>
