@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import PriceLineStore from 'src/store/PriceLineStore';
 import PriceLineArrow from './PriceLineArrow';
 import PriceLineTitle from './PriceLineTitle';
+import HamburgerDragIcon from './HamburgerDragIcon';
 
 type TPriceLineProps = {
     store: PriceLineStore;
@@ -86,7 +87,7 @@ const PriceLine = ({
                 <div className='draggable-area' />
                 <div className='draggable-area-wrapper'>
                     <div
-                        className={classNames('drag-price')}
+                        className={'drag-price'}
                         style={{
                             backgroundColor: color,
                             width: isOverlappingWithPriceLine ? width : yAxiswidth,
@@ -94,11 +95,7 @@ const PriceLine = ({
                             right: isOverlappingWithPriceLine ? yAxiswidth - width : 0,
                         }}
                     >
-                        <div className='drag-icon'>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                        <HamburgerDragIcon />
                         <div
                             className={classNames('price', { 'price--zero': isOverlappingWithPriceLine })}
                             style={{
