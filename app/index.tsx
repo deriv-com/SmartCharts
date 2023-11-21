@@ -91,7 +91,23 @@ const IntervalEnum = {
     day: 24 * 3600,
     year: 365 * 24 * 3600,
 };
-const activeLanguages = ['EN', 'DE', 'ES', 'FR', 'ID', 'IT', 'KO', 'PL', 'RU', 'TR', 'TH', 'VI', 'ZH_CN', 'ZH_TW'];
+const activeLanguages = [
+    'EN',
+    'DE',
+    'ES',
+    'FR',
+    'ID',
+    'IT',
+    'KO',
+    'PL',
+    'PT',
+    'RU',
+    'TR',
+    'TH',
+    'VI',
+    'ZH_CN',
+    'ZH_TW',
+];
 const streamManager = new StreamManager(connectionManager);
 const requestAPI = connectionManager.send.bind(connectionManager);
 const requestSubscribe = streamManager.subscribe.bind(streamManager);

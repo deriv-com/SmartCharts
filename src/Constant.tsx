@@ -2054,6 +2054,11 @@ export const Languages = [
         icon: <FlagIcons.Korean />,
     },
     {
+        key: 'pt',
+        name: 'Português',
+        icon: <FlagIcons.Portugal />,
+    },
+    {
         key: 'tr',
         name: 'Türkçe',
         icon: <FlagIcons.Turkey />,
