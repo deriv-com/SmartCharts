@@ -18,18 +18,18 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         aboveShadeStore,
         belowShadeStore,
         betweenShadeStore,
-        shadeColor = '#39b19d',
         color = '#39b19d',
         foregroundColor = '#ffffff',
+        hideBarrierLine,
         hideOffscreenBarrier,
         hideOffscreenLine,
-        hideBarrierLine,
         hidePriceLines,
-        lineStyle,
         isInitialized,
-        priceLabelWidth,
         isSingleBarrier,
+        lineStyle,
         opacityOnOverlap,
+        overlappedBarrierWidth,
+        shadeColor = '#39b19d',
     } = store;
 
     if (!isInitialized) return null;
@@ -41,7 +41,7 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         >
             <PriceLine
                 store={_high_barrier}
-                width={priceLabelWidth}
+                width={overlappedBarrierWidth}
                 lineStyle={lineStyle}
                 color={color}
                 foregroundColor={foregroundColor}
@@ -55,7 +55,7 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
                 <>
                     <PriceLine
                         store={_low_barrier}
-                        width={priceLabelWidth}
+                        width={overlappedBarrierWidth}
                         lineStyle={lineStyle}
                         color={color}
                         foregroundColor={foregroundColor}

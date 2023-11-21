@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { action, computed, observable, makeObservable } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -47,7 +48,7 @@ export default class BarrierStore {
     isTopShadeVisible = false;
     isBottomShadeVisible = false;
     hidePriceLines = false;
-    lineStyle?: string;
+    lineStyle?: CSSProperties['borderStyle'];
     isInitialized = false;
     initializePromise = PendingPromise<void, void>();
     hideBarrierLine = false;
@@ -63,8 +64,8 @@ export default class BarrierStore {
     get yAxisWidth(): number {
         return this.mainStore.chart.yAxiswidth;
     }
-    get priceLabelWidth(): number {
-        return this.yAxisWidth + 1;
+    get overlappedBarrierWidth(): number {
+        return 16;
     }
 
     constructor(mainStore: MainStore) {
@@ -83,12 +84,12 @@ export default class BarrierStore {
             hideOffscreenLine: observable,
             hideOffscreenBarrier: observable,
             isSingleBarrier: observable,
-            pip: computed,
-            yAxisWidth: computed,
-            priceLabelWidth: computed,
+            destructor: action.bound,
             init: action.bound,
+            overlappedBarrierWidth: computed,
+            pip: computed,
             updateProps: action.bound,
-            destructor: action.bound
+            yAxisWidth: computed,
         });
 
         this.mainStore = mainStore;
