@@ -4,10 +4,11 @@ import classNames from 'classnames';
 import PriceLineStore from 'src/store/PriceLineStore';
 import PriceLineArrow from './PriceLineArrow';
 import PriceLineTitle from './PriceLineTitle';
+import HamburgerDragIcon from './HamburgerDragIcon';
 
 type TPriceLineProps = {
     store: PriceLineStore;
-    lineStyle?: string;
+    lineStyle?: React.CSSProperties['borderStyle'];
     hideOffscreenBarrier?: boolean;
     hideOffscreenLine?: boolean;
     hideBarrierLine?: boolean;
@@ -29,18 +30,19 @@ const PriceLine = ({
     store,
 }: TPriceLineProps) => {
     const {
-        priceDisplay,
-        visible,
-        setDragLine,
         className,
         draggable,
-        isDragging,
         init,
-        title,
-        yAxiswidth,
+        isDragging,
+        isOverlapping,
+        isOverlappingWithPriceLine,
         offScreen,
         offScreenDirection,
-        isOverlapping,
+        priceDisplay,
+        setDragLine,
+        title,
+        visible,
+        yAxiswidth,
     } = store;
 
     const showBarrier = React.useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
@@ -57,7 +59,12 @@ const PriceLine = ({
     if (!showBarrier) return null;
 
     return (
-        <div className='barrier-area' style={{ top: 0 }} ref={setDragLine} hidden={!visible}>
+        <div
+            className={classNames('barrier-area', { 'barrier-area--zero': isOverlappingWithPriceLine })}
+            style={{ top: 0 }}
+            ref={setDragLine}
+            hidden={!visible}
+        >
             <div
                 className={classNames('chart-line', 'horizontal', className || '', {
                     draggable,
@@ -65,18 +72,53 @@ const PriceLine = ({
                 })}
                 style={{
                     color: foregroundColor,
-                    backgroundImage:
-                        lineStyle && lineStyle !== 'solid' ? '' : `linear-gradient(to left, ${color} 90%, ${color}00`,
                 }}
             >
                 {showBarrierDragLine && (
-                    <div className='drag-line' style={{ borderTop: `${lineStyle} ${color} 1px` }} />
+                    <div
+                        className={classNames('drag-line', { 'drag-line--zero': isOverlappingWithPriceLine })}
+                        style={{
+                            borderTopColor: color,
+                            borderTopStyle: lineStyle as React.CSSProperties['borderTopStyle'],
+                            width: `calc(100% - ${yAxiswidth}px + ${width}px)`,
+                        }}
+                    />
                 )}
                 <div className='draggable-area' />
-                <div className='drag-price' style={{ backgroundColor: color, width, opacity }}>
-                    <div className='price'>{priceDisplay}</div>
-                    {offScreen && offScreenDirection && (
-                        <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
+                <div className='draggable-area-wrapper'>
+                    <div
+                        className={'drag-price'}
+                        style={{
+                            backgroundColor: color,
+                            width: isOverlappingWithPriceLine ? width : yAxiswidth,
+                            opacity,
+                            right: isOverlappingWithPriceLine ? yAxiswidth - width : 0,
+                        }}
+                    >
+                        <HamburgerDragIcon />
+                        <div
+                            className={classNames('price', { 'price--zero': isOverlappingWithPriceLine })}
+                            style={{
+                                color: isOverlappingWithPriceLine ? color : '',
+                                right: isOverlappingWithPriceLine
+                                    ? width + priceDisplay.length * 8 - (!draggable ? 16 : 0)
+                                    : 0,
+                            }}
+                        >
+                            {priceDisplay}
+                        </div>
+                        <div />
+                        {offScreen && offScreenDirection && (
+                            <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
+                        )}
+                    </div>
+                    {isOverlappingWithPriceLine && (
+                        <div>
+                            <div
+                                className='price-overlay'
+                                style={{ backgroundColor: color, width: yAxiswidth - width }}
+                            />
+                        </div>
                     )}
                 </div>
                 {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
