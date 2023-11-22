@@ -12,11 +12,11 @@ DataSeries<Tick> getDataSeries(
 // rgb(249,84,84)
   // Min granularity 1m
   if (ticks is List<Candle> && granularity >= 60000) {
-    final CandleStyle? style = CandleStyle(
-      positiveColor: Color.fromRGBO(249, 84, 84, opacity),
-      negativeColor: Color.fromRGBO(76, 175, 80, opacity),
-      neutralColor: Color.fromRGBO(85, 89, 117, opacity),
-          );
+    const CandleStyle style = CandleStyle(
+      positiveColor: Color(0xFF4caf50),
+      negativeColor: Color(0xFFf95454),
+      neutralColor: Color(0xFF555975),
+    );
 
     switch (configModel.style) {
       case ChartStyle.candles:
