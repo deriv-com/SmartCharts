@@ -9,7 +9,6 @@ DataSeries<Tick> getDataSeries(
     ChartFeedModel feedModel, ChartConfigModel configModel, int granularity) {
   final List<Tick> ticks = feedModel.ticks;
   final double opacity = configModel.isSymbolClosed ? 0.32 : 1;
-// rgb(249,84,84)
   // Min granularity 1m
   if (ticks is List<Candle> && granularity >= 60000) {
     const CandleStyle style = CandleStyle(

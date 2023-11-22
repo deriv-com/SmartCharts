@@ -266,6 +266,7 @@ const App = () => {
             networkStatus={networkStatus}
             shouldFetchTradingTimes
             shouldFetchTickHistory
+            isLive
             enabledChartFooter
             allTicks={allTicks}
             contractInfo={contractInfo}
