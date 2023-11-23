@@ -11,10 +11,10 @@ DataSeries<Tick> getDataSeries(
   final double opacity = configModel.isSymbolClosed ? 0.32 : 1;
   // Min granularity 1m
   if (ticks is List<Candle> && granularity >= 60000) {
-    const CandleStyle style = CandleStyle(
-      positiveColor: Color(0xFF4caf50),
-      negativeColor: Color(0xFFf95454),
-      neutralColor: Color(0xFF555975),
+    final CandleStyle style = CandleStyle(
+      positiveColor: Color.fromRGBO(76, 175, 80, opacity),
+      negativeColor: Color.fromRGBO(249, 84, 84, opacity),
+      neutralColor: Color.fromRGBO(85, 89, 117, opacity),
     );
 
     switch (configModel.style) {
