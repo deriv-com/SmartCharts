@@ -154,6 +154,7 @@ class ChartStore {
         }
         return currentQuote;
     };
+
     updateHeight(position?: string) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;

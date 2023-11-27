@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, when } from 'mobx';
+import { action, makeObservable, observable, when, runInAction } from 'mobx';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
@@ -315,7 +315,10 @@ export default class ChartAdapterStore {
         if (lastQuote && new Date(lastQuote.Date) > new Date(quote.Date)) return;
 
         this.mainStore.chart.feed?.addQuote(quote);
-        this.mainStore.chart.lastQuote = quote;
+
+        runInAction(() => {
+            this.mainStore.chart.lastQuote = quote;
+        });
 
         if (quote.ohlc) {
             this.flutterChart?.feed.onNewCandle(quote);

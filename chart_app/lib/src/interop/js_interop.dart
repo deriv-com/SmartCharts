@@ -11,7 +11,7 @@ class JsInterop {
   external static void onChartLoad();
 
   /// Called on each line series paint
-  external static void onMainSeriesPaint();
+  external static void onMainSeriesPaint(double currentTickPercent);
 
   /// Called when visible area is change
   external static void onVisibleAreaChanged(int leftEpoch, int rightEpoch);

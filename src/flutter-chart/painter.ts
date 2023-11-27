@@ -1,10 +1,10 @@
-type TPainterCallback = () => void;
+type TPainterCallback = (currentTickPercent: number) => void;
 
 export default class Painter {
     callbacks: TPainterCallback[] = [];
 
-    onPaint = () => {
-        this.callbacks.forEach(cb => cb());
+    onPaint = (currentTickPercent: number) => {
+        this.callbacks.forEach(cb => cb(currentTickPercent));
     };
 
     registerCallback = (callback: TPainterCallback) => {
