@@ -68,7 +68,11 @@ export default class PriceLineStore {
 
     onChartLoaded = () => {
         this.disposeDrawReaction = reaction(
-            () => [this.mainStore.chartAdapter.epochBounds, this.mainStore.chartAdapter.quoteBounds],
+            () => [
+                this.mainStore.chartAdapter.epochBounds,
+                this.mainStore.chartAdapter.quoteBounds,
+                this.mainStore.chart.lastQuote,
+            ],
             () => {
                 if (!this.isDragging) {
                     this._draw();

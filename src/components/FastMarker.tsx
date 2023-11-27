@@ -61,7 +61,13 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     React.useEffect(() => {
         updateCSS();
-    }, [chartAdapter.epochBounds, chartAdapter.quoteBounds, chartAdapter.isFeedLoaded, chartAdapter.isChartLoaded]);
+    }, [
+        chartAdapter.epochBounds,
+        chartAdapter.quoteBounds,
+        chartAdapter.isFeedLoaded,
+        chartAdapter.isChartLoaded,
+        chartStore.lastQuote,
+    ]);
 
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;

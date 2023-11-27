@@ -315,6 +315,7 @@ export default class ChartAdapterStore {
         if (lastQuote && new Date(lastQuote.Date) > new Date(quote.Date)) return;
 
         this.mainStore.chart.feed?.addQuote(quote);
+        this.mainStore.chart.lastQuote = quote;
 
         if (quote.ohlc) {
             this.flutterChart?.feed.onNewCandle(quote);
