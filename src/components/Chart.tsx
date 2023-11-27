@@ -26,8 +26,9 @@ import SettingsDialog from './SettingsDialog';
 import ScrollToRecent from './ScrollToRecent';
 
 const Chart = (props: TChartProps) => {
-    const { chart, drawTools, studies, chartSetting, chartType, state, loader, chartAdapter } = useStores();
+    const { chart, drawTools, studies, chartSetting, chartType, state, loader, chartAdapter, crosshair } = useStores();
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
+    const { setCrosshairState } = crosshair;
     const { settingsDialog: studiesSettingsDialog } = studies;
     const { settingsDialog: drawToolsSettingsDialog } = drawTools;
     const { settingsDialog: chartTypeSettingsDialog, isCandle, isSpline } = chartType;
@@ -98,6 +99,11 @@ const Chart = (props: TChartProps) => {
     React.useEffect(() => {
         chartAdapter.updateContracts(contracts_array);
     }, [contracts_array]);
+
+    // to always show price info on mobile screen
+    if (isMobile && crosshair.state !== 2) {
+        setCrosshairState(2);
+    }
 
     return (
         <div
