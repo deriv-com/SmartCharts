@@ -38,6 +38,12 @@ JsObject _exposeApp(ChartApp app) {
 
   setProperty(
     jsObject,
+    'getCurrentTickWidth',
+    allowInterop(() => app.currentTickWidth),
+  );
+
+  setProperty(
+    jsObject,
     'newChart',
     allowInterop(app.newChart),
   );

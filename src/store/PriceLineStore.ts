@@ -28,6 +28,7 @@ export default class PriceLineStore {
     offScreen = false;
     title?: string;
     isOverlapping = false;
+    isOverlappingWithPriceLine = false;
     offScreenDirection: keyof typeof DIRECTIONS | null = null;
     disposeDrawReaction?: IReactionDisposer;
 
@@ -43,22 +44,24 @@ export default class PriceLineStore {
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            _dragPrice: observable,
+            _price: observable,
             draggable: observable,
             isDragging: observable,
-            visible: observable,
-            _price: observable,
-            _dragPrice: observable,
-            offScreen: observable,
-            title: observable,
             isOverlapping: observable,
+            isOverlappingWithPriceLine: observable,
+            offScreen: observable,
             offScreenDirection: observable,
+            title: observable,
+            visible: observable,
+            overlappedBarrierWidth: computed,
             pip: computed,
             priceDisplay: computed,
-            setDragLine: action.bound,
-            _startDrag: action.bound,
+            _calculateTop: action.bound,
             _dragLine: action.bound,
             _endDrag: action.bound,
-            _calculateTop: action.bound,
+            _startDrag: action.bound,
+            setDragLine: action.bound,   
         });
 
         this.mainStore = mainStore;
@@ -175,8 +178,11 @@ export default class PriceLineStore {
     }
 
     get priceLineWidth() {
-        // TODO: measure the price label width
-        return Math.max(this.priceDisplay.length * 8, 60);
+        return window.flutterChart?.app.getCurrentTickWidth() || 60;
+    }
+
+    get overlappedBarrierWidth(): number {
+        return 16;
     }
 
     setDragLine(el: HTMLDivElement) {
@@ -231,6 +237,10 @@ export default class PriceLineStore {
         return this.mainStore.chartAdapter.getQuoteFromY(y);
     }
 
+    _distanceFromCurrentPrice() {
+        return Math.abs(this._locationFromPrice(+this.realPrice) - this._locationFromPrice(+this.realPrice - +this._price));
+    }
+
     _calculateTop = () => {
         if (this.mainStore.chart.currentCloseQuote() === null || !this.mainStore.chartAdapter.isChartLoaded) {
             return;
@@ -274,10 +284,12 @@ export default class PriceLineStore {
             this.isOverlapping = this.overlapCheck(top);
         }
 
+        this.isOverlappingWithPriceLine = this._distanceFromCurrentPrice() < 25;
+
         return Math.round(top) | 0;
     };
 
-    // Mantually update the top to improve performance.
+    // Manually update the top to improve performance.
     // We don't pay for react reconciler and mobx observable tracking in animation frames.
     set top(v) {
         this.__top = v;

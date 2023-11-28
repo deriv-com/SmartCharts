@@ -40,7 +40,8 @@
             width: 100%;
             margin-left: -10px;
             position: relative;
-            border-top-width: 0;
+            border-top-width: 1px;
+            border-top-color: $color-blue;
         }
         .title-wrapper {
             $title-height: 24px;
@@ -87,13 +88,13 @@
 }
 
 .drag-price {
-    display: block;
-    height: 23px;
-    top: -11px;
+    display: flex;
+    height: 24px;
+    top: -12px;
     position: absolute;
     right: -1px;
-    border: 1px solid inherit;
-    user-select: none;
+    background-color: $color-blue;
+    justify-content: space-between;
 
     .arrow-icon {
         height: 41px;
@@ -137,26 +138,54 @@
 /*hover*/
 
 .price {
+    display: block;
     font-size: 12px;
     font-weight: bold;
-    display: block;
-    padding: 3px 1px;
     line-height: 18px;
-    overflow: hidden;
+    overflow: unset;
+    padding: 3px 1px;
+    position: relative;
+    right: 45px;
     text-align: center;
+    width: max-content;
+
+    &--zero {
+        color: $color-blue;
+        @include themify($themes) {
+            background-color: themed('DefaultBg');
+        }
+    }
+    &-overlay {
+        background-color: $color-blue;
+        height: 24px;
+        opacity: 0.3;
+        position: relative;
+        right: -10px;
+        top: -12px;
+    }
 }
 
-.draggable .price {
-    padding-left: 16px;
+.draggable {
+    &-area-wrapper {
+        display: flex;
+    }
+    .price {
+        overflow: unset;
+        position: relative;
+        right: 55px;
+    }
+    .drag-icon {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 3px;
 
-    &:after {
-        font-weight: normal;
-        content: '≡';
-        font-size: 25px;
-        position: absolute;
-        left: 1px;
-        top: 1px;
-        transform: scaleX(0.8);
+        div {
+            background-color: $color-white;
+            height: 1px;
+            margin: 1px;
+            width: 8px;
+        }
     }
 }
 
