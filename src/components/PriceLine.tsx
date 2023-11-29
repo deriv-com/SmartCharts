@@ -32,13 +32,14 @@ const PriceLine = ({
         draggable,
         init,
         isDragging,
+        isMobile,
         isOverlapping,
         isOverlappingWithPriceLine,
         offScreen,
         offScreenDirection,
+        overlappedBarrierWidth,
         priceDisplay,
         priceLineWidth,
-        overlappedBarrierWidth,
         setDragLine,
         title,
         visible,
@@ -57,7 +58,7 @@ const PriceLine = ({
 
     if (!showBarrier) return null;
 
-    const width = priceLineWidth + 16;
+    const width = priceLineWidth + 12;
 
     return (
         <div
@@ -81,7 +82,7 @@ const PriceLine = ({
                         style={{
                             borderTopColor: color,
                             borderTopStyle: lineStyle as React.CSSProperties['borderTopStyle'],
-                            width: `calc(100% - ${width}px + ${overlappedBarrierWidth}px)`,
+                            width: `calc(100% - ${width}px + ${!isMobile ? overlappedBarrierWidth : 0}px)`,
                         }}
                     />
                 )}
@@ -93,7 +94,7 @@ const PriceLine = ({
                             backgroundColor: color,
                             width: isOverlappingWithPriceLine ? overlappedBarrierWidth : width,
                             opacity,
-                            right: isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0,
+                            right: (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 4),
                         }}
                     >
                         <HamburgerDragIcon />
@@ -117,7 +118,7 @@ const PriceLine = ({
                         <div>
                             <div
                                 className='price-overlay'
-                                style={{ backgroundColor: color, width: width - overlappedBarrierWidth }}
+                                style={{ backgroundColor: color, width: width - overlappedBarrierWidth, right: -6 }}
                             />
                         </div>
                     )}

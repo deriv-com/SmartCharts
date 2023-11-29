@@ -30,7 +30,7 @@ double calculateCurrentTickWidth(
       pipSize,
     );
 
-    return width + 4 * 3;
+    return width + 4 * 2 + 3;
   }
 }
 

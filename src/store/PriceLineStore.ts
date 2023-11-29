@@ -238,7 +238,7 @@ export default class PriceLineStore {
     }
 
     _distanceFromCurrentPrice() {
-        return Math.abs(this._locationFromPrice(+this.realPrice) - this._locationFromPrice(+this.realPrice - +this._price));
+        return Math.abs(this._locationFromPrice(+this.realPrice) - this._locationFromPrice(+this.realPrice - (this.isDragging ? +this._dragPrice : +this._price)));
     }
 
     _calculateTop = () => {
@@ -335,5 +335,9 @@ export default class PriceLineStore {
         }
 
         return false;
+    }
+
+    get isMobile() {
+        return this.mainStore.chart.isMobile;
     }
 }
