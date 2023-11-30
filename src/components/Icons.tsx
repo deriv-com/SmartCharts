@@ -110,6 +110,7 @@ import Indonesia from '../../sass/icons/flags/indonesia.svg';
 import Vietnam from '../../sass/icons/flags/vietnam.svg';
 import Italy from '../../sass/icons/flags/italy.svg';
 import Korean from '../../sass/icons/flags/korean.svg';
+import Portugal from '../../sass/icons/flags/portugal.svg';
 import Chinese from '../../sass/icons/flags/chinese.svg';
 import ChineseTraditional from '../../sass/icons/flags/chinese-traditional.svg';
 import German from '../../sass/icons/flags/german.svg';
@@ -503,6 +504,7 @@ export const FlagIcons = {
     Vietnam: Wrapper(Vietnam),
     Italy: Wrapper(Italy),
     Korean: Wrapper(Korean),
+    Portugal: Wrapper(Portugal),
     Chinese: Wrapper(Chinese),
     ChineseTraditional: Wrapper(ChineseTraditional),
     Poland: Wrapper(PLN),

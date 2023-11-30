@@ -1061,7 +1061,7 @@ class ChartStore {
 
         const { context } = this.context?.stx.chart;
         // barrier price can be wider than current tick price for 1 decimal digit
-        const priceWidth = context.measureText(price.toFixed((this.pip as number) + 1)).width + 20;
+        const priceWidth = context.measureText(price.toFixed((this.pip as number) + 1)).width + 26;
         if (priceWidth > this.yAxiswidth) {
             this.yAxiswidth = priceWidth;
 
