@@ -16,6 +16,6 @@ class CustomLinePainter extends LinePainter {
     AnimationInfo animationInfo,
   ) {
     super.onPaintData(canvas, size, epochToX, quoteToY, animationInfo);
-    JsInterop.onMainSeriesPaint();
+    JsInterop.onMainSeriesPaint(animationInfo.currentTickPercent);
   }
 }

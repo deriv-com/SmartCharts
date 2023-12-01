@@ -428,7 +428,7 @@ export type TFlutterChart = {
 
 export type JSInterop = {
     onChartLoad: () => void;
-    onMainSeriesPaint: () => void;
+    onMainSeriesPaint: (currentTickPercent: number) => void;
     onVisibleAreaChanged: (leftEpoch: number, rightEpoch: number) => void;
     onQuoteAreaChanged: (topQuote: number, bottomQuote: number) => void;
     onCrosshairDisappeared: () => void;
