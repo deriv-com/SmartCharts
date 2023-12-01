@@ -62,10 +62,6 @@ export default class BarrierStore {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
     }
 
-    get overlappedBarrierWidth(): number {
-        return 16;
-    }
-
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             color: observable,
@@ -83,7 +79,6 @@ export default class BarrierStore {
             isSingleBarrier: observable,
             isTopShadeVisible: observable,
             lineStyle: observable,
-            overlappedBarrierWidth: computed,
             pip: computed,
             shadeColor: observable,
             updateProps: action.bound,

@@ -63,7 +63,6 @@ const PriceLine = ({
     return (
         <div
             className={classNames('barrier-area', { 'barrier-area--zero': isOverlappingWithPriceLine })}
-            style={{ top: 0 }}
             ref={setDragLine}
             hidden={!visible}
         >
@@ -115,12 +114,10 @@ const PriceLine = ({
                         )}
                     </div>
                     {isOverlappingWithPriceLine && (
-                        <div>
-                            <div
-                                className='price-overlay'
-                                style={{ backgroundColor: color, width: width - overlappedBarrierWidth, right: -6 }}
-                            />
-                        </div>
+                        <div
+                            className='price-overlay'
+                            style={{ backgroundColor: color, width: width - overlappedBarrierWidth, right: -6 }}
+                        />
                     )}
                 </div>
                 {title && <PriceLineTitle color={color} title={title} yAxiswidth={overlappedBarrierWidth} opacity={opacity} />}

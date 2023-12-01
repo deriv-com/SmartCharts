@@ -1,12 +1,13 @@
 @charset "UTF-8";
 
 .barrier-area {
+    -moz-user-select: none;
+    -webkit-user-select: none;
     padding: 13px 0;
     position: absolute;
-    width: 100%;
+    top: 0;
     user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
+    width: 100%;
     z-index: 1;
 }
 /* Drag Lines and Prices */
