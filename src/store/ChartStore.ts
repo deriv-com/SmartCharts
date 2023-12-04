@@ -54,6 +54,7 @@ class ChartStore {
     serverTime?: string;
     shouldRenderDialogs = false;
     leftMargin?: number;
+    lastQuote?: TQuote;
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             chartContainerHeight: observable,
@@ -71,6 +72,7 @@ class ChartStore {
             serverTime: observable,
             shouldRenderDialogs: observable,
             yAxisWidth: computed,
+            lastQuote: observable,
             _initChart: action.bound,
             categorizedSymbols: computed,
             changeSymbol: action.bound,
@@ -152,6 +154,7 @@ class ChartStore {
         }
         return currentQuote;
     };
+
     updateHeight(position?: string) {
         const historicalMobile = this.mainStore.chartSetting.historical && this.isMobile;
         const panelPosition = position || this.mainStore.chartSetting.position;

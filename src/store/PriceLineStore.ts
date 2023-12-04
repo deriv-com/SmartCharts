@@ -2,7 +2,7 @@ import EventEmitter from 'event-emitter-es6';
 import { action, computed, observable, when, makeObservable, reaction, IReactionDisposer } from 'mobx';
 import Context from 'src/components/ui/Context';
 import MainStore from '.';
-import { ARROW_HEIGHT, DIRECTIONS, makeElementDraggable } from '../utils';
+import { ARROW_HEIGHT, DIRECTIONS, lerp, makeElementDraggable } from '../utils';
 
 const LINE_OFFSET_HEIGHT = 4;
 const LINE_OFFSET_HEIGHT_HALF = LINE_OFFSET_HEIGHT >> 1;
@@ -60,8 +60,8 @@ export default class PriceLineStore {
             _calculateTop: action.bound,
             _dragLine: action.bound,
             _endDrag: action.bound,
-            _startDrag: action.bound,
-            setDragLine: action.bound,   
+            _calculateTop: action.bound,
+            drawBarrier: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -71,17 +71,39 @@ export default class PriceLineStore {
 
     onChartLoaded = () => {
         this.disposeDrawReaction = reaction(
-            () => [this.mainStore.chartAdapter.epochBounds, this.mainStore.chartAdapter.quoteBounds],
+            () => [
+                this.mainStore.chartAdapter.epochBounds,
+                this.mainStore.chartAdapter.quoteBounds,
+                this.mainStore.chart.lastQuote,
+            ],
             () => {
                 if (!this.isDragging) {
                     this._draw();
                 }
             }
         );
+
+        this.mainStore.chartAdapter.painter.registerCallback(this.drawBarrier);
     };
+
+    drawBarrier(currentTickPercent: number) {
+        if (this.isDragging) return;
+
+        const quotes = this.mainStore.chart.feed?.quotes;
+
+        if (!quotes || quotes.length < 2) return;
+
+        const currentQuote = this._getPrice(quotes[quotes.length - 1].Close);
+        const previousQuote = this._getPrice(quotes[quotes.length - 2].Close);
+
+        const lerpQuote = lerp(previousQuote, currentQuote, currentTickPercent);
+
+        this.top = this._calculateTop(lerpQuote) as number;
+    }
 
     destructor() {
         this.disposeDrawReaction?.();
+        this.mainStore.chartAdapter.painter.unregisterCallback(this.drawBarrier);
     }
 
     init = () => {
@@ -169,12 +191,8 @@ export default class PriceLineStore {
     }
 
     get realPrice(): string {
-        const price = this.isDragging ? this.dragPrice : this.price;
-
-        const real_price = this.relative
-            ? (this.mainStore.chart.currentCloseQuote()?.Close as number) + Number(price)
-            : Number(price);
-        return real_price.toString();
+        const realPrice = this._getPrice(this.mainStore.chart.currentCloseQuote()?.Close as number);
+        return realPrice.toString();
     }
 
     get priceLineWidth() {
@@ -183,6 +201,11 @@ export default class PriceLineStore {
 
     get overlappedBarrierWidth(): number {
         return 16;
+    }
+
+    _getPrice(quote: number) {
+        const price = this.isDragging ? this.dragPrice : this.price;
+        return this.relative ? quote + Number(price) : Number(price);
     }
 
     setDragLine(el: HTMLDivElement) {
@@ -237,16 +260,12 @@ export default class PriceLineStore {
         return this.mainStore.chartAdapter.getQuoteFromY(y);
     }
 
-    _distanceFromCurrentPrice() {
-        return Math.abs(this._locationFromPrice(+this.realPrice) - this._locationFromPrice(+this.realPrice - (this.isDragging ? +this._dragPrice : +this._price)));
-    }
-
-    _calculateTop = () => {
+    _calculateTop = (quote?: number) => {
         if (this.mainStore.chart.currentCloseQuote() === null || !this.mainStore.chartAdapter.isChartLoaded) {
             return;
         }
 
-        let top = this._locationFromPrice(+this.realPrice);
+        let top = this._locationFromPrice(quote || +this.realPrice);
 
         // @ts-ignore
         const height = window.flutterChartElement?.clientHeight || 0;

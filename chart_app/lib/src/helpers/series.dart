@@ -9,20 +9,13 @@ DataSeries<Tick> getDataSeries(
     ChartFeedModel feedModel, ChartConfigModel configModel, int granularity) {
   final List<Tick> ticks = feedModel.ticks;
   final double opacity = configModel.isSymbolClosed ? 0.32 : 1;
-
   // Min granularity 1m
   if (ticks is List<Candle> && granularity >= 60000) {
-    final CandleStyle? style = configModel.theme is ChartDefaultLightTheme
-        ? CandleStyle(
-            positiveColor: Color.fromRGBO(76, 175, 79, opacity),
-            negativeColor: Color.fromRGBO(249, 83, 83, opacity),
-            neutralColor: Color.fromRGBO(62, 62, 62, opacity),
-          )
-        : CandleStyle(
-            positiveColor: Color.fromRGBO(0, 167, 159, opacity),
-            negativeColor: Color.fromRGBO(204, 46, 62, opacity),
-            neutralColor: Color.fromRGBO(110, 110, 110, opacity),
-          );
+    final CandleStyle style = CandleStyle(
+      positiveColor: Color.fromRGBO(76, 175, 80, opacity),
+      negativeColor: Color.fromRGBO(249, 84, 84, opacity),
+      neutralColor: Color.fromRGBO(85, 89, 117, opacity),
+    );
 
     switch (configModel.style) {
       case ChartStyle.candles:
