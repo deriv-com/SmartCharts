@@ -60,7 +60,9 @@ export default class PriceLineStore {
             _calculateTop: action.bound,
             _dragLine: action.bound,
             _endDrag: action.bound,
+            _startDrag: action.bound,
             drawBarrier: action.bound,
+            setDragLine: action.bound,
         });
 
         this.mainStore = mainStore;
