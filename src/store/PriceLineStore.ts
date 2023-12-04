@@ -60,7 +60,6 @@ export default class PriceLineStore {
             _calculateTop: action.bound,
             _dragLine: action.bound,
             _endDrag: action.bound,
-            _calculateTop: action.bound,
             drawBarrier: action.bound,
         });
 
@@ -258,6 +257,13 @@ export default class PriceLineStore {
 
     _priceFromLocation(y: number) {
         return this.mainStore.chartAdapter.getQuoteFromY(y);
+    }
+
+    _distanceFromCurrentPrice() {
+        return Math.abs(
+            this._locationFromPrice(+this.realPrice) -
+                this._locationFromPrice(+this.realPrice - (this.isDragging ? +this._dragPrice : +this._price))
+        );
     }
 
     _calculateTop = (quote?: number) => {
