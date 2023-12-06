@@ -40,6 +40,7 @@ class DerivChartApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData(fontFamily: 'IBMPlexSans'),
         home: const _DerivChartWebAdapter(),
+        title: html.document.title,
       );
 }
 
