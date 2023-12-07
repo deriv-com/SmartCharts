@@ -50,6 +50,7 @@ export default class MenuStore {
     blurInput() {
         const stx: Context['stx'] = this.context?.stx;
         setTimeout(this.handleDialogStatus, 300);
+        if (!stx) return;
         if (this.open === false) {
             (document.activeElement as HTMLElement).blur();
             stx.modalEnd();
