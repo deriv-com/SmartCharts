@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:chart_app/src/helpers/chart.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
@@ -36,16 +37,13 @@ class ChartApp {
   /// width of yAxis
   double yAxisWidth = 60;
 
+  /// width of current tick label
+  double currentTickWidth = 60;
+
   /// Whether chart is mounted or not.
   bool isMounted = false;
 
   void _processChartVisibilityChange(bool showChart) {
-    yAxisWidth = calculateYAxisWidth(
-      feedModel.ticks,
-      configModel.theme,
-      configModel.pipSize,
-    );
-
     if (showChart) {
       /// To prevent controller functions being called before mount.
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -73,6 +71,27 @@ class ChartApp {
     configModel.newChart(payload);
     drawingToolModel.newChart(payload);
     feedModel.newChart();
+  }
+
+  /// Calculates the width of yAxis
+  void calculateTickWidth() {
+    yAxisWidth = calculateYAxisWidth(
+      feedModel.ticks,
+      configModel.theme,
+      configModel.pipSize,
+    );
+
+    currentTickWidth = calculateCurrentTickWidth(
+      feedModel.ticks,
+      const TextStyle(
+        fontSize: 12,
+        height: 1.3,
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+        fontFeatures: <FontFeature>[FontFeature.tabularFigures()],
+      ),
+      configModel.pipSize,
+    );
   }
 
   /// Gets the tooltip content for indicator series

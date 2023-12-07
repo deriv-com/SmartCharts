@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { action, computed, observable, makeObservable, when, reaction, IReactionDisposer } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
@@ -45,7 +46,7 @@ export default class BarrierStore {
     isTopShadeVisible = false;
     isBottomShadeVisible = false;
     hidePriceLines = false;
-    lineStyle?: string;
+    lineStyle?: CSSProperties['borderStyle'];
     isInitialized = false;
     initializePromise = PendingPromise<void, void>();
     hideBarrierLine = false;
@@ -63,24 +64,24 @@ export default class BarrierStore {
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
-            shadeColor: observable,
             color: observable,
-            foregroundColor: observable,
-            isBetweenShadeVisible: observable,
-            isTopShadeVisible: observable,
-            isBottomShadeVisible: observable,
-            hidePriceLines: observable,
-            lineStyle: observable,
-            isInitialized: observable,
-            initializePromise: observable,
-            hideBarrierLine: observable,
-            hideOffscreenLine: observable,
-            hideOffscreenBarrier: observable,
-            isSingleBarrier: observable,
-            pip: computed,
-            init: action.bound,
-            updateProps: action.bound,
             destructor: action.bound,
+            foregroundColor: observable,
+            hideBarrierLine: observable,
+            hideOffscreenBarrier: observable,
+            hideOffscreenLine: observable,
+            hidePriceLines: observable,
+            init: action.bound,
+            initializePromise: observable,
+            isBetweenShadeVisible: observable,
+            isBottomShadeVisible: observable,
+            isInitialized: observable,
+            isSingleBarrier: observable,
+            isTopShadeVisible: observable,
+            lineStyle: observable,
+            pip: computed,
+            shadeColor: observable,
+            updateProps: action.bound,
         });
 
         this.mainStore = mainStore;

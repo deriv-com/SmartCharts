@@ -221,6 +221,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       (BuildContext context, ChartConfigModel configModel,
                           ChartFeedModel feedModel, Widget? child) {
                     final bool showChart = app.getChartVisibilitity();
+                    app.calculateTickWidth();
+
                     if (showChart == false) {
                       return Container(
                         color: configModel.theme is ChartDefaultLightTheme

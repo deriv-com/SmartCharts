@@ -18,17 +18,17 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         aboveShadeStore,
         belowShadeStore,
         betweenShadeStore,
-        shadeColor = '#39b19d',
         color = '#39b19d',
         foregroundColor = '#ffffff',
+        hideBarrierLine,
         hideOffscreenBarrier,
         hideOffscreenLine,
-        hideBarrierLine,
         hidePriceLines,
-        lineStyle,
         isInitialized,
         isSingleBarrier,
+        lineStyle,
         opacityOnOverlap,
+        shadeColor = '#39b19d',
     } = store;
 
     const barrierRef = React.useRef<HTMLDivElement>(null);

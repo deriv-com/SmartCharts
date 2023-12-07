@@ -369,6 +369,7 @@ export type TDrawingToolConfig = {
 export type TFlutterChart = {
     app: {
         getYAxisWidth: () => number;
+        getCurrentTickWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
         getIndicatorHoverIndex: (
             x: number,
@@ -400,9 +401,9 @@ export type TFlutterChart = {
         setRemainingTime: (time: string) => void;
     };
     feed: {
-        onTickHistory: (quotes: TQuote[], append: boolean) => void;
         onNewTick: (quote: TQuote) => void;
         onNewCandle: (quote: TQuote) => void;
+        onTickHistory: (quotes: TQuote[], append: boolean) => void;
     };
     indicators: {
         removeIndicator: (index: number) => void;
