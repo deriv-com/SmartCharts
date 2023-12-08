@@ -9,6 +9,7 @@ import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:chart_app/src/misc/no_navigation_strategy.dart';
 import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
+import 'package:chart_app/src/series/blinking_tick_indicator.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
 import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -257,8 +258,25 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
-                                      hasBlinkingDot:
-                                          !configModel.isSymbolClosed,
+                                      hasArrow: false,
+                                      textStyle: const TextStyle(
+                                        fontSize: 12,
+                                        height: 1.3,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFeatures: <FontFeature>[
+                                          FontFeature.tabularFigures()
+                                        ],
+                                      )),
+                                  visibility: HorizontalBarrierVisibility
+                                      .keepBarrierLabelVisible,
+                                ),
+                              BlinkingTickIndicator(
+                                feedModel.ticks.last,
+                                id: 'blinking_tick_indicator',
+                                style: HorizontalBarrierStyle(
+                                    color: latestTickColor,
+                                    labelShape: LabelShape.pentagon,
                                       hasArrow: false,
                                       textStyle: const TextStyle(
                                         fontSize: 12,
@@ -351,7 +369,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       minElapsedTimeToFollow: _getMinElapsedTimeToFollow(
                           isTickGranularity: isTickGranularity),
                       showCurrentTickBlinkAnimation:
-                          configModel.style == ChartStyle.line,
+                          false,
                       currentTickAnimationDuration: animationDuration,
                       quoteBoundsAnimationDuration: animationDuration,
                     );
