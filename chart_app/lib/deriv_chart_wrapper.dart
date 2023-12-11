@@ -17,6 +17,8 @@ import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 
 /// DerivChartWrapper
 class DerivChartWrapper extends StatefulWidget {
@@ -32,6 +34,11 @@ class DerivChartWrapper extends StatefulWidget {
 
 /// DerivChartWrapperState
 class DerivChartWrapperState extends State<DerivChartWrapper> {
+  /// Initialize
+  DerivChartWrapperState() {
+    _useLowAnimation = _shouldUseLowAnimation();
+  }
+
   /// Epochs
   int? leftBoundEpoch, rightBoundEpoch;
 
@@ -49,6 +56,27 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
 
   /// DrawingToolModel
   DrawingToolModel get drawingToolModel => widget.app.drawingToolModel;
+
+  bool _useLowAnimation = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  bool _shouldUseLowAnimation() {
+    final String userAgent = html.window.navigator.userAgent;
+
+    final List<String> devices = <String>[
+      'Android',
+      'iPhone',
+      'iPad',
+      'Mac',
+      'Windows'
+    ];
+
+    return !devices.any((String device) => userAgent.contains(device));
+  }
 
   double? _getVerticalPaddingFraction(double height) {
     if (configModel.yAxisMargin != null && height != 0) {
@@ -102,7 +130,11 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
       return const Duration(milliseconds: 30);
     }
 
-    return const Duration(milliseconds: 200);
+    if (_useLowAnimation) {
+      return const Duration(milliseconds: 75);
+    }
+
+    return const Duration(milliseconds: 150);
   }
 
   void _onCrosshairHover(
