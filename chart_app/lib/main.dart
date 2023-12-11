@@ -139,11 +139,20 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
   }
 
   Duration getAnimationDuration({required bool isTickGranularity}) {
-    if (isTickGranularity && indicatorsModel.indicatorsRepo.items.length <= 3) {
-      return const Duration(milliseconds: 300);
-    } else {
+    if (!isTickGranularity) {
       return const Duration(milliseconds: 30);
     }
+
+    final int visibleEpoch = (rightBoundEpoch ?? 0) - (leftBoundEpoch ?? 0);
+    // 15 mins
+    const int minEpochToScrollSmooth = 15 * 60 * 1000;
+
+    if (visibleEpoch > minEpochToScrollSmooth ||
+        indicatorsModel.indicatorsRepo.items.length >= 3) {
+      return const Duration(milliseconds: 30);
+    }
+
+    return const Duration(milliseconds: 200);
   }
 
   /// Specifies the time to draw the next frame to update the right epoch.
@@ -260,8 +269,6 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
-                                      hasBlinkingDot:
-                                          !configModel.isSymbolClosed,
                                       hasArrow: false,
                                       textStyle: const TextStyle(
                                         fontSize: 12,
@@ -353,8 +360,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                       loadingAnimationColor: Colors.transparent,
                       minElapsedTimeToFollow: _getMinElapsedTimeToFollow(
                           isTickGranularity: isTickGranularity),
-                      showCurrentTickBlinkAnimation:
-                          configModel.style == ChartStyle.line,
+                      showCurrentTickBlinkAnimation: false,
                       currentTickAnimationDuration: animationDuration,
                       quoteBoundsAnimationDuration: animationDuration,
                     );
