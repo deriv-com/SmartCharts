@@ -115,32 +115,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     return const Duration(milliseconds: 200);
   }
 
-  /// Specifies the time to draw the next frame to update the right epoch.
-  /// Returning 50 will draw 20 frames/second to update the right epoch.
-  /// Returning 1000 will draw 1 frame/second to update the right epoch
-  int _getMinElapsedTimeToFollow({required bool isTickGranularity}) {
-    if (!isTickGranularity) {
-      return 1000;
-    }
-
-    final int visibleEpoch = (rightBoundEpoch ?? 0) - (leftBoundEpoch ?? 0);
-    // 15 mins
-    const int minEpochToScrollSmooth = 15 * 60 * 1000;
-
-    if (visibleEpoch > minEpochToScrollSmooth &&
-        indicatorsModel.indicatorsRepo.items.length >= 3) {
-      return 1000;
-    }
-
-    final double? msPerPx = app.wrappedController.getMsPerPx();
-
-    if (msPerPx != null && msPerPx <= 50) {
-      return 25;
-    }
-
-    return 50;
-  }
-
   void _onCrosshairHover(
     Offset globalPosition,
     Offset localPosition,
@@ -307,8 +281,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                       showDataFitButton: false,
                       showScrollToLastTickButton: false,
                       loadingAnimationColor: Colors.transparent,
-                      minElapsedTimeToFollow: _getMinElapsedTimeToFollow(
-                          isTickGranularity: isTickGranularity),
                       showCurrentTickBlinkAnimation: false,
                       currentTickAnimationDuration: animationDuration,
                       quoteBoundsAnimationDuration: animationDuration,
