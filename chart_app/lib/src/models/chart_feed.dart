@@ -13,11 +13,15 @@ class ChartFeedModel extends ChangeNotifier {
   /// Flag to indicate the status of ticks load of a new symbol.
   bool isFeedLoaded = false;
 
+  /// ValueNotifier to indicate the status of ticks load of a new symbol.
+  final ValueNotifier<bool> feedLoadedNotifier = ValueNotifier<bool>(false);
+
   /// Reinitialize
   void newChart() {
     ticks = <Tick>[];
     waitingForHistory = false;
     isFeedLoaded = false;
+    feedLoadedNotifier.value = false;
 
     notifyListeners();
   }
@@ -81,6 +85,7 @@ class ChartFeedModel extends ChangeNotifier {
     } else {
       ticks = newTicks;
       isFeedLoaded = true;
+      feedLoadedNotifier.value = true;
     }
 
     if (append) {
