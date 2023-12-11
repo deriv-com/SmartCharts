@@ -50,16 +50,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
   /// DrawingToolModel
   DrawingToolModel get drawingToolModel => widget.app.drawingToolModel;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   double? _getVerticalPaddingFraction(double height) {
     if (configModel.yAxisMargin != null && height != 0) {
       // We are converting yAxisMargin to verticalPaddingFraction to make it
