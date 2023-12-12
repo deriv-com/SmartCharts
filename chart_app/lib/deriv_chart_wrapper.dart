@@ -24,10 +24,17 @@ import 'dart:html' as html;
 /// DerivChartWrapper
 class DerivChartWrapper extends StatefulWidget {
   /// Initialize
-  const DerivChartWrapper({required this.app, Key? key}) : super(key: key);
+  const DerivChartWrapper({
+    required this.app,
+    required this.onVisibleAreaChanged,
+    Key? key,
+  }) : super(key: key);
 
   /// ChartApp
   final ChartApp app;
+
+  /// Called when chart is scrolled or zoomed.
+  final VisibleAreaChangedCallback onVisibleAreaChanged;
 
   @override
   State<DerivChartWrapper> createState() => DerivChartWrapperState();
@@ -135,7 +142,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
       return const Duration(milliseconds: 75);
     }
 
-    return const Duration(milliseconds: 150);
+    return const Duration(milliseconds: 250);
   }
 
   void _onCrosshairHover(
@@ -277,6 +284,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                         }
                         leftBoundEpoch = leftEpoch;
                         rightBoundEpoch = rightEpoch;
+                        widget.onVisibleAreaChanged(leftEpoch, rightEpoch);
                         JsInterop.onVisibleAreaChanged(leftEpoch, rightEpoch);
                       },
                       onQuoteAreaChanged:

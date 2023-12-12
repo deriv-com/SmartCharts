@@ -79,6 +79,11 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
     }
   }
 
+  void onVisibleAreaChanged(int leftEpoch, int rightEpoch) {
+    leftBoundEpoch = leftEpoch;
+    rightBoundEpoch = rightEpoch;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -112,7 +117,10 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         );
                       }
 
-                      return DerivChartWrapper(app: app);
+                      return DerivChartWrapper(
+                        app: app,
+                        onVisibleAreaChanged: onVisibleAreaChanged,
+                      );
                     },
                   ),
                 ),
