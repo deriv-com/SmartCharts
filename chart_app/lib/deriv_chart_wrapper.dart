@@ -217,8 +217,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                 CurrentTickIndicator(
                                   feedModel.ticks.last,
                                   id: 'last_tick_indicator',
-                                  dataFitEnabled:
-                                      configModel.startWithDataFitMode,
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       labelShape: LabelShape.pentagon,
@@ -239,8 +237,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                 BlinkingTickIndicator(
                                   feedModel.ticks.last,
                                   id: 'blink_tick_indicator',
-                                  dataFitEnabled:
-                                      configModel.startWithDataFitMode,
                                   visibility: HorizontalBarrierVisibility
                                       .keepBarrierLabelVisible,
                                 ),

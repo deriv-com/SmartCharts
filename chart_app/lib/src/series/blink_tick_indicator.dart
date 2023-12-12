@@ -7,7 +7,6 @@ class BlinkingTickIndicator extends TickIndicator {
   BlinkingTickIndicator(
     Tick tick, {
     String? id,
-    this.dataFitEnabled = false,
     HorizontalBarrierStyle? style,
     HorizontalBarrierVisibility visibility = HorizontalBarrierVisibility.normal,
   }) : super(
@@ -17,17 +16,8 @@ class BlinkingTickIndicator extends TickIndicator {
           visibility: visibility,
         );
 
-  /// Whether the dataFit is enabled or not
-  bool dataFitEnabled;
-
   @override
-  bool shouldRepaint(ChartData? previous) {
-    /// To fix the animation issue when the chart is in data fit mode.
-    if (dataFitEnabled) {
-      return true;
-    }
-    return super.shouldRepaint(previous);
-  }
+  bool shouldRepaint(ChartData? previous) => true;
 
   @override
   SeriesPainter<Series> createPainter() =>
