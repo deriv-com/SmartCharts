@@ -12,6 +12,7 @@ import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
 import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
+import 'package:chart_app/src/series/blink_tick_indicator.dart';
 import 'package:chart_app/src/series/current_tick_indicator.dart';
 import 'package:chart_app/src/series/time_interval_indicator.dart';
 import 'package:deriv_chart/deriv_chart.dart';
@@ -224,6 +225,15 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                           FontFeature.tabularFigures()
                                         ],
                                       )),
+                                  visibility: HorizontalBarrierVisibility
+                                      .keepBarrierLabelVisible,
+                                ),
+                              if (configModel.isLive)
+                                BlinkingTickIndicator(
+                                  feedModel.ticks.last,
+                                  id: 'blink_tick_indicator',
+                                  dataFitEnabled:
+                                      configModel.startWithDataFitMode,
                                   visibility: HorizontalBarrierVisibility
                                       .keepBarrierLabelVisible,
                                 ),
