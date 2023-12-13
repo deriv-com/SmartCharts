@@ -134,12 +134,12 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     const int minEpochToScrollSmooth = 15 * 60 * 1000;
 
     if (visibleEpoch > minEpochToScrollSmooth ||
-        indicatorsModel.indicatorsRepo.items.length >= 3) {
+        indicatorsModel.indicatorsRepo.items.length >= 2) {
       return const Duration(milliseconds: 30);
     }
 
     if (_useLowAnimation) {
-      return const Duration(milliseconds: 75);
+      return const Duration(milliseconds: 150);
     }
 
     return const Duration(milliseconds: 250);
