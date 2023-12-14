@@ -67,6 +67,8 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
 
   bool _useLowAnimation = false;
 
+  final EdgeInsets _minFitPadding = const EdgeInsets.only(left: 16, right: 120);
+
   @override
   void initState() {
     super.initState();
@@ -103,21 +105,23 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     return null;
   }
 
-  double _getMaxCurrentTickOffset() {
+  double _getMaxCurrentTickOffset(int? rightPadding) {
     final double currentTickOffset =
         configModel.startWithDataFitMode ? 150 : 300;
-    return configModel.isMobile ? currentTickOffset / 1.25 : currentTickOffset;
+    return configModel.isMobile
+        ? currentTickOffset / 1.25
+        : currentTickOffset + (rightPadding ?? 0);
   }
 
-  double? _getMinIntervalWidth() {
+  double _getMinIntervalWidth() {
     if (configModel.startWithDataFitMode &&
         configModel.style == ChartStyle.line) {
       return 0.1;
     }
-    return null;
+    return 1;
   }
 
-  double? _getMaxIntervalWidth() {
+  double _getMaxIntervalWidth() {
     if (configModel.style == ChartStyle.candles) {
       return 240;
     }
@@ -127,7 +131,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
         feedModel.ticks.length <= 10) {
       return 160;
     }
-    return null;
+    return 80;
   }
 
   Duration _getAnimationDuration({required bool isTickGranularity}) {
@@ -149,6 +153,51 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     }
 
     return const Duration(milliseconds: 250);
+  }
+
+  int? _getRightPadding(bool isTickGranularity, int granularity, double width) {
+    if (configModel.rightPadding != null && configModel.rightPadding! > 0) {
+      return configModel.rightPadding!;
+    }
+
+    if (isTickGranularity &&
+        configModel.startWithDataFitMode &&
+        configModel.style == ChartStyle.line &&
+        feedModel.ticks.length <= 10) {
+      final int msDataDuration = feedModel.ticks.length * granularity;
+      final double pxTargetDataWidth = width - _minFitPadding.horizontal;
+
+      final double _minMsPerPx = granularity / _getMaxIntervalWidth();
+      final double _maxMsPerPx = granularity / _getMinIntervalWidth();
+      final double msPerPx = msDataDuration / pxTargetDataWidth;
+      final double clampedMsPerPx = msPerPx.clamp(_minMsPerPx, _maxMsPerPx);
+
+      if (msPerPx >= clampedMsPerPx) {
+        final int extraRightPadding = granularity ~/ (clampedMsPerPx * 2);
+        return extraRightPadding;
+      }
+
+      final double msPerPxDiff = clampedMsPerPx - msPerPx;
+
+      /// Added one granularity because tick_history will have one extra tick
+      /// to indicate the start
+      final int extraRightPadding =
+          (msPerPxDiff * pxTargetDataWidth + granularity) ~/
+              (clampedMsPerPx * 2);
+
+      return extraRightPadding;
+    }
+    return null;
+  }
+
+  EdgeInsets? _getDataFitPadding(int? rightPadding) {
+    if (rightPadding != null && rightPadding > 0) {
+      return EdgeInsets.only(
+        left: _minFitPadding.left,
+        right: _minFitPadding.right + rightPadding,
+      );
+    }
+    return null;
   }
 
   void _onCrosshairHover(
@@ -214,6 +263,10 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
 
                     final Duration animationDuration = _getAnimationDuration(
                         isTickGranularity: isTickGranularity);
+
+                    final int? rightPadding = _getRightPadding(
+                        isTickGranularity, granularity, constraints.maxWidth);
+
                     return DerivChart(
                       activeSymbol: configModel.symbol,
                       mainSeries: mainSeries,
@@ -309,12 +362,14 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                       isLive: configModel.isLive,
                       onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,
                       onCrosshairHover: _onCrosshairHover,
-                      maxCurrentTickOffset: _getMaxCurrentTickOffset(),
+                      maxCurrentTickOffset:
+                          _getMaxCurrentTickOffset(rightPadding),
                       msPerPx: configModel.startWithDataFitMode
                           ? null
                           : configModel.msPerPx,
                       minIntervalWidth: _getMinIntervalWidth(),
                       maxIntervalWidth: _getMaxIntervalWidth(),
+                      dataFitPadding: _getDataFitPadding(rightPadding),
                       bottomChartTitleMargin: configModel.leftMargin != null
                           ? EdgeInsets.only(left: configModel.leftMargin!)
                           : null,
