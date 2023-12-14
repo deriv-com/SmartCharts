@@ -123,7 +123,8 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     }
 
     if (configModel.startWithDataFitMode &&
-        configModel.style == ChartStyle.line) {
+        configModel.style == ChartStyle.line &&
+        feedModel.ticks.length <= 10) {
       return 160;
     }
     return null;
