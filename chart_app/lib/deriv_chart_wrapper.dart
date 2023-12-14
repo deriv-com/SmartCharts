@@ -121,6 +121,11 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     if (configModel.style == ChartStyle.candles) {
       return 240;
     }
+
+    if (configModel.startWithDataFitMode &&
+        configModel.style == ChartStyle.line) {
+      return 160;
+    }
     return null;
   }
 
