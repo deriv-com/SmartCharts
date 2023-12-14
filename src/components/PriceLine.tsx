@@ -15,6 +15,7 @@ type TPriceLineProps = {
     foregroundColor: string;
     color?: string;
     opacityOnOverlap: number;
+    title?: string;
     width: number;
 };
 
@@ -28,6 +29,7 @@ const PriceLine = ({
     hideOffscreenLine,
     hideBarrierLine,
     store,
+    title,
 }: TPriceLineProps) => {
     const {
         className,
@@ -40,7 +42,6 @@ const PriceLine = ({
         offScreenDirection,
         priceDisplay,
         setDragLine,
-        title,
         visible,
         yAxiswidth,
     } = store;
