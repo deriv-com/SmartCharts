@@ -147,7 +147,7 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     return (
         <div className='fast-marker' style={{ maxWidth: maxWidth }}>
-            <div className={className} ref={setRef} style={{ position: 'absolute',zIndex:2 }}>
+            <div className={className} ref={setRef} style={{ position: 'absolute' }}>
                 {children}
             </div>
         </div>
