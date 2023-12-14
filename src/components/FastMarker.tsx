@@ -69,6 +69,19 @@ const FastMarker = (props: TFastMarkerProps) => {
         chartStore.lastQuote,
     ]);
 
+    // TODO: Do a proper fix to detect the right padding
+    React.useEffect(() => {
+        const hasTooltip = elem_ref.current?.querySelector('.chart-spot-label-profit');
+        if (hasTooltip) {
+            chartAdapter.updateRightPadding(110);
+        }
+        return () => {
+            if (hasTooltip) {
+                chartAdapter.updateRightPadding(0);
+            }
+        };
+    }, [chartAdapter]);
+
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;
         date_ref.current = strToDateTime(getUTCDate(epoch as number)) as Date;
