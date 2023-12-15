@@ -1,7 +1,7 @@
 import 'package:chart_app/src/painters/blink_tick_painter.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
-///
+/// BlinkingTickIndicator
 class BlinkingTickIndicator extends TickIndicator {
   /// Initializes a BlinkingTickIndicator.
   BlinkingTickIndicator(
