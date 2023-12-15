@@ -353,6 +353,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                         controller: app.wrappedController,
                         yAxisWidth: app.yAxisWidth,
                         isMobile: app.configModel.isMobile,
+                        granularity: granularity,
                       ),
                       drawingToolsRepo: drawingToolModel.drawingToolsRepo,
                       drawingTools: drawingToolModel.drawingTools,

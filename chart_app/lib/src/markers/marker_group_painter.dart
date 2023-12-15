@@ -1,6 +1,6 @@
-import 'dart:math';
 import 'dart:ui';
 
+import 'package:chart_app/src/markers/helpers/convert_range.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 import 'package:chart_app/src/markers/marker_group.dart';
 import 'package:chart_app/src/markers/marker_group_icon_painter.dart';
@@ -17,6 +17,7 @@ class MarkerGroupPainter extends SeriesPainter<MarkerGroupSeries> {
     required this.controller,
     required this.yAxisWidth,
     required this.isMobile,
+    required this.granularity,
   }) : super(series);
 
   /// Marker painter which is based on trade type
@@ -31,6 +32,9 @@ class MarkerGroupPainter extends SeriesPainter<MarkerGroupSeries> {
   /// Whether it is in mobile mode or not.
   final bool isMobile;
 
+  /// Granulatiry of the chart.
+  final int granularity;
+
   @override
   void onPaint({
     required Canvas canvas,
@@ -40,8 +44,10 @@ class MarkerGroupPainter extends SeriesPainter<MarkerGroupSeries> {
     required AnimationInfo animationInfo,
   }) {
     final double? msPerPx = controller.getMsPerPx();
-    final double zoom =
-        msPerPx != null ? max(min(2 / pow(msPerPx, 1 / 8), 1.2), 0.8) : 1;
+
+    final double zoom = msPerPx != null
+        ? convertRange(msPerPx / granularity, 0, 1, 0.8, 1.2)
+        : 1;
 
     for (final MarkerGroup markerGroup in series.visibleMarkerGroupList) {
       markerGroupIconPainter.paintMarkerGroup(
