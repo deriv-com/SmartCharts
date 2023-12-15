@@ -151,7 +151,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
         color: style.backgroundColor.withOpacity(opacity),
         fontSize: style.activeMarkerText.fontSize! * zoom,
         fontWeight: FontWeight.bold,
-        backgroundColor: theme.base08Color,
+        backgroundColor: theme.base08Color.withOpacity(opacity),
       );
 
       final TextPainter textPainter = makeTextPainter(marker.text!, textStyle);
