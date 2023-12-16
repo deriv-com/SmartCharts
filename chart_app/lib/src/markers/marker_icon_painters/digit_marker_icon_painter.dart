@@ -47,8 +47,7 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
     double opacity = 1;
 
     if (startPoint != null && (endPoint != null || exitPoint != null)) {
-      opacity =
-          calculateOpacity(startPoint.dx, (endPoint?.dx ?? exitPoint?.dx)!);
+      opacity = calculateOpacity(startPoint.dx, exitPoint?.dx);
     }
 
     for (final WebMarker marker in markerGroup.markers) {

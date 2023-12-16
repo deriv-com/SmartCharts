@@ -49,6 +49,14 @@ class MarkerGroupPainter extends SeriesPainter<MarkerGroupSeries> {
         ? convertRange(msPerPx / granularity, 0, 1, 0.8, 1.2)
         : 1;
 
+    final PainterProps props = PainterProps(
+      zoom: zoom,
+      yAxisWidth: yAxisWidth,
+      isMobile: isMobile,
+      granularity: granularity,
+      msPerPx: msPerPx,
+    );
+
     for (final MarkerGroup markerGroup in series.visibleMarkerGroupList) {
       markerGroupIconPainter.paintMarkerGroup(
         canvas,
@@ -57,7 +65,7 @@ class MarkerGroupPainter extends SeriesPainter<MarkerGroupSeries> {
         markerGroup,
         epochToX,
         quoteToY,
-        PainterProps(zoom, yAxisWidth, isMobile: isMobile),
+        props,
       );
     }
   }

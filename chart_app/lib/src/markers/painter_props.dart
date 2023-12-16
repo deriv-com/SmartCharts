@@ -1,7 +1,13 @@
 /// PainterProps
 class PainterProps {
   /// Initialize
-  PainterProps(this.zoom, this.yAxisWidth, {required this.isMobile});
+  PainterProps({
+    required this.granularity,
+    required this.isMobile,
+    required this.msPerPx,
+    required this.zoom,
+    required this.yAxisWidth,
+  });
 
   /// Specifies zoom of the chart w.r.t to msPerPx.
   final double zoom;
@@ -11,4 +17,10 @@ class PainterProps {
 
   /// Whether it is in mobile mode or not.
   final bool isMobile;
+
+  /// Granulatiry of the chart.
+  final int granularity;
+
+  /// Specifies the zoom level of the chart.
+  final double? msPerPx;
 }

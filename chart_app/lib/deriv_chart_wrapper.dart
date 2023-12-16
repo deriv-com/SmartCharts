@@ -122,10 +122,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
   }
 
   double _getMaxIntervalWidth() {
-    if (configModel.style == ChartStyle.candles) {
-      return 240;
-    }
-
     if (configModel.startWithDataFitMode &&
         configModel.style == ChartStyle.line &&
         feedModel.ticks.length <= 10) {
