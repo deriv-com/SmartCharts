@@ -1,9 +1,10 @@
+import 'package:chart_app/src/painters/blink_tick_painter.dart';
 import 'package:deriv_chart/deriv_chart.dart';
 
-/// CurrentTickIndicator
-class CurrentTickIndicator extends TickIndicator {
-  /// Initializes a CurrentTickIndicator.
-  CurrentTickIndicator(
+/// BlinkingTickIndicator
+class BlinkingTickIndicator extends TickIndicator {
+  /// Initializes a BlinkingTickIndicator.
+  BlinkingTickIndicator(
     Tick tick, {
     String? id,
     HorizontalBarrierStyle? style,
@@ -17,4 +18,8 @@ class CurrentTickIndicator extends TickIndicator {
 
   @override
   bool shouldRepaint(ChartData? previous) => true;
+
+  @override
+  SeriesPainter<Series> createPainter() =>
+      BlinkingTickPainter<BlinkingTickIndicator>(this);
 }

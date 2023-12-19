@@ -368,6 +368,11 @@ export default class ChartAdapterStore {
         this.flutterChart?.config.setSymbolClosed(isClosed);
     }
 
+    async updateRightPadding(rightPadding?: number) {
+        await when(() => this.isChartLoaded);
+        this.flutterChart?.config.updateRightPadding(rightPadding);
+    }
+
     async setShowInterval(showInterval: boolean) {
         await when(() => this.isChartLoaded);
         this.flutterChart?.config.toggleTimeIntervalVisibility(showInterval);

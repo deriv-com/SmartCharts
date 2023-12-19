@@ -35,5 +35,12 @@ double calculateCurrentTickWidth(
 }
 
 /// Calculates opacity of the markers
-double calculateOpacity(double from, double to) =>
-    min(max(to - from - 10, 0) / 6, 1);
+double calculateOpacity(
+  double from,
+  double? exitTo,
+) {
+  if (exitTo != null) {
+    return min(max(exitTo - from - 10, 0) / 6, 1);
+  }
+  return 1;
+}

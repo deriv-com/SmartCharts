@@ -396,6 +396,7 @@ export type TFlutterChart = {
         updateContracts: (markers: any[]) => void;
         updateCrosshairVisibility: (visibility: boolean) => void;
         updateLeftMargin: (leftMargin?: number) => void;
+        updateRightPadding: (rightPadding?: number) => void;
         setSymbolClosed: (isClosed: boolean) => void;
         toggleTimeIntervalVisibility: (showInterval: boolean) => void;
         setRemainingTime: (time: string) => void;

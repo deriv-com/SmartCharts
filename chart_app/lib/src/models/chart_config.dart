@@ -37,6 +37,9 @@ class ChartConfigModel extends ChangeNotifier {
   /// Specifies the left margin to prevent overlap.
   double? leftMargin;
 
+  /// Specifies the right padding.
+  int? rightPadding;
+
   /// Type of the contract
   String? contractType;
 
@@ -143,6 +146,12 @@ class ChartConfigModel extends ChangeNotifier {
   /// To update leftMargin
   void updateLeftMargin(double _leftMargin) {
     leftMargin = _leftMargin;
+    notifyListeners();
+  }
+
+  /// To update leftMargin
+  void updateRightPadding(int _rightPadding) {
+    rightPadding = _rightPadding;
     notifyListeners();
   }
 

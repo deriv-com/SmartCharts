@@ -15,6 +15,7 @@ class MarkerGroupSeries extends MarkerSeries {
     required this.controller,
     required this.yAxisWidth,
     required this.isMobile,
+    required this.granularity,
     this.markerGroupList,
   }) : super(entries, markerIconPainter: markerGroupIconPainter);
 
@@ -33,6 +34,9 @@ class MarkerGroupSeries extends MarkerSeries {
   /// Whether it is in mobile mode or not.
   final bool isMobile;
 
+  /// Granulatiry of the chart.
+  final int granularity;
+
   /// Visible marker entries.
   List<MarkerGroup> visibleMarkerGroupList = <MarkerGroup>[];
 
@@ -43,6 +47,7 @@ class MarkerGroupSeries extends MarkerSeries {
         controller: controller,
         yAxisWidth: yAxisWidth,
         isMobile: isMobile,
+        granularity: granularity,
       );
 
   @override

@@ -197,6 +197,12 @@ JsObject _exposeConfigModel(ChartConfigModel model) {
 
   setProperty(
     chartConfig,
+    'updateRightPadding',
+    allowInterop(model.updateRightPadding),
+  );
+
+  setProperty(
+    chartConfig,
     'toggleTimeIntervalVisibility',
     allowInterop(model.toggleTimeIntervalVisibility),
   );
