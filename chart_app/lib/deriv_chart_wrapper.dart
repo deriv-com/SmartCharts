@@ -145,7 +145,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
     }
 
     if (_useLowAnimation) {
-      return const Duration(milliseconds: 150);
+      return const Duration(milliseconds: 100);
     }
 
     return const Duration(milliseconds: 250);
