@@ -36,8 +36,7 @@ export const createChartElement = ({ onChartLoad }: TCreateChartElementProps) =>
         },
     };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+    // @ts-expect-error chart dynamic load
     import(/* webpackChunkName: "flutter-chart-adapter", webpackPreload: true */ 'chart/main.dart.js');
 
     return flutterChartElement;
