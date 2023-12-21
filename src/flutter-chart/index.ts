@@ -21,6 +21,7 @@ export const createChartElement = ({ onChartLoad }: TCreateChartElementProps) =>
         loader: {
             didCreateEngineInitializer: async (engineInitializer: TEngineInitializer) => {
                 window._flutter.appRunner = await engineInitializer.initializeEngine({
+                    assetBase: '/',
                     hostElement: window.flutterChartElement,
                 });
                 window._flutter.initState.isEngineIntialized = true;

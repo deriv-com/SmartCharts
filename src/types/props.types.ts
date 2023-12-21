@@ -43,6 +43,7 @@ export type TAppRunner = {
 export type TFlutterChartConfiguration = {
     hostElement?: HTMLElement;
     renderer?: 'html' | 'canvaskit';
+    assetBase?: string;
 };
 
 export type TEngineInitializer = {
