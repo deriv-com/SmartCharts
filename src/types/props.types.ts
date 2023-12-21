@@ -23,6 +23,14 @@ declare global {
             loader: {
                 didCreateEngineInitializer: (engineInitializer: TEngineInitializer) => void;
             };
+            appRunner?: {
+                runApp: () => void;
+            };
+            initState: {
+                isInitialRunCompleted: boolean;
+                isEngineIntialized: boolean;
+                isMounted: boolean;
+            };
         };
         jsInterop: JSInterop;
     }

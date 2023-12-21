@@ -2,7 +2,7 @@ import { action, makeObservable, observable, when, runInAction } from 'mobx';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
-import { createChartElement } from 'src/flutter-chart';
+import { createChartElement, runChartApp } from 'src/flutter-chart';
 import Painter from 'src/flutter-chart/painter';
 import { safeParse } from 'src/utils';
 import { capitalize } from 'src/components/ui/utils';
@@ -182,6 +182,12 @@ export default class ChartAdapterStore {
 
     onMount(element: HTMLDivElement) {
         element.appendChild(window.flutterChartElement);
+        const initState = window._flutter.initState;
+        initState.isMounted = true;
+
+        if (initState.isEngineIntialized && !initState.isInitialRunCompleted) {
+            runChartApp();
+        }
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
@@ -189,6 +195,8 @@ export default class ChartAdapterStore {
     }
 
     onUnmount() {
+        window._flutter.initState.isMounted = false;
+
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });

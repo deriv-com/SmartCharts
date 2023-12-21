@@ -1,11 +1,12 @@
 import ChartAdapterStore from 'src/store/ChartAdapterStore';
 import { TEngineInitializer } from 'src/types';
 
-type TProps = {
+type TCreateChartElementProps = {
     onChartLoad: ChartAdapterStore['onChartLoad'];
 };
 
-export const createChartElement = ({ onChartLoad }: TProps) => {
+export const createChartElement = ({ onChartLoad }: TCreateChartElementProps) => {
+    // Chart element is set in a window element for faster initialization
     if (window.flutterChartElement) {
         onChartLoad();
         return;
@@ -19,16 +20,31 @@ export const createChartElement = ({ onChartLoad }: TProps) => {
     window._flutter = {
         loader: {
             didCreateEngineInitializer: async (engineInitializer: TEngineInitializer) => {
-                const appRunner = await engineInitializer.initializeEngine({
+                window._flutter.appRunner = await engineInitializer.initializeEngine({
                     hostElement: window.flutterChartElement,
                 });
-                appRunner?.runApp();
+                window._flutter.initState.isEngineIntialized = true;
+
+                runChartApp();
             },
+        },
+        initState: {
+            isInitialRunCompleted: false,
+            isEngineIntialized: false,
+            isMounted: false,
         },
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     import(/* webpackChunkName: "flutter-chart-adapter", webpackPreload: true */ 'chart/main.dart.js');
 
     return flutterChartElement;
+};
+
+export const runChartApp = () => {
+    if (window._flutter.initState.isMounted) {
+        window._flutter.appRunner?.runApp();
+        window._flutter.initState.isInitialRunCompleted = true;
+    }
 };
