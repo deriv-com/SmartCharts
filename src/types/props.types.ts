@@ -23,6 +23,14 @@ declare global {
             loader: {
                 didCreateEngineInitializer: (engineInitializer: TEngineInitializer) => void;
             };
+            appRunner?: {
+                runApp: () => void;
+            };
+            initState: {
+                isInitialRunCompleted: boolean;
+                isEngineIntialized: boolean;
+                isMounted: boolean;
+            };
         };
         jsInterop: JSInterop;
     }
@@ -35,6 +43,7 @@ export type TAppRunner = {
 export type TFlutterChartConfiguration = {
     hostElement?: HTMLElement;
     renderer?: 'html' | 'canvaskit';
+    assetBase?: string;
 };
 
 export type TEngineInitializer = {
