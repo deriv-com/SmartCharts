@@ -114,7 +114,7 @@ class ChartApp {
   int getQuotesInterval() {
     final int granularity = configModel.granularity ?? 1000;
 
-    // The current charts expects the granularity of the interval.
+    // The current charts expect the granularity of the ticks.
     // Sometimes the feed misses a tick and the chart zoom
     // doesn't work properly.
     // The 2 tick symbols are hard coded here to fix the scaling issue.
