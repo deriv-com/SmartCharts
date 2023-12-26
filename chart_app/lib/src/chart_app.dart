@@ -112,14 +112,22 @@ class ChartApp {
 
   /// Gets the quote interval as granularity to fix 2s ticks.
   int getQuotesInterval() {
-    if (feedModel.isFeedLoaded && feedModel.ticks.length > 1) {
-      final Tick previousTick = feedModel.ticks[feedModel.ticks.length - 2];
-      final Tick lastTick = feedModel.ticks.last;
-      if (previousTick.epoch != lastTick.epoch) {
-        return feedModel.ticks.last.epoch - previousTick.epoch;
-      }
+    final int granularity = configModel.granularity ?? 1000;
+
+    // The current charts expects the granularity of the interval.
+    // Sometimes the feed misses a tick and the chart zoom
+    // doesn't work properly.
+    // The 2 tick symbols are hard coded here to fix the scaling issue.
+    // To do: Make flutter chart independent of the granularity.
+    // Flutter chart should do the x-axis calculations from the first epoch
+    // and last epoch.
+    final RegExp regex = RegExp(r'^(RDBEAR|RDBULL|R_)');
+
+    if (granularity == 1000 && regex.hasMatch(configModel.symbol)) {
+      return 2000;
     }
-    return configModel.granularity ?? 1000;
+
+    return granularity;
   }
 
   /// Gets the hover index for indicator series
