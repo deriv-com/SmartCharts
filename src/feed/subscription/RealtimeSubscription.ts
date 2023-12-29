@@ -24,7 +24,7 @@ class RealtimeSubscription extends Subscription {
     async _startSubscribe(tickHistoryRequest: TCreateTickHistoryParams) {
         const contract_info = this.contractInfo as ProposalOpenContract;
         const [tickHistoryPromise, processTickHistory] = this._getProcessTickHistoryClosure();
-        
+
         //here we include duration = 'ticks' && exclude duration = 'seconds' which hasn't tick_stream, all_ticks, tick_count (consist of 15-86.400 ticks)
         if (!this.shouldFetchTickHistory && !!contract_info.tick_stream) {
             this._binaryApi.subscribeTickHistory(
@@ -68,9 +68,8 @@ class RealtimeSubscription extends Subscription {
     _getProcessTickHistoryClosure(): [IPendingPromise<TicksStreamResponse, void>, (resp: TicksStreamResponse) => void] {
         const tickHistoryPromise = PendingPromise<TicksStreamResponse, void>();
         const processTickHistory = (resp: TicksStreamResponse) => {
-            if (this._stx?.isDestroyed) {
-                const subscriptionId = resp.subscription?.id as string;
-                this._binaryApi.forgetStream(subscriptionId);
+            if (this._mainStore.chart.isDestroyed && resp.subscription?.id) {
+                this._binaryApi.forgetStream(resp.subscription?.id);
                 return;
             }
             // We assume that 1st response is the history, and subsequent

@@ -12,30 +12,31 @@ import Tooltip from './Tooltip';
 type TTimeperiodItemProps = {
     category: typeof Intervals[0];
     item: {
-        interval: number;
+        interval: TGranularity;
         num: number;
     };
-    onClick: (chart_type_id: string, key: string, inval: number) => void;
+    onClick: (chart_type_id: string, key: string, interval: TGranularity) => void;
 };
 
-const enableLoader = (isLoading: boolean, inval: number, preparingInterval: number | null) =>
-    isLoading && inval === preparingInterval;
+const enableLoader = (isLoading: boolean, interval: TGranularity, granularity: TGranularity) =>
+    isLoading && interval === granularity;
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
-    !isMobile && chartType_id !== 'mountain' && key === 'tick';
+    !isMobile && chartType_id !== 'line' && key === 'tick';
 
 const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
-    const { timeperiod, chartType, loader, state } = useStores();
+    const { timeperiod, chartType, loader, chart, state } = useStores();
     const chartTypeId = chartType.type.id;
     const { allowTickChartTypeOnly } = state;
-    const { timeUnit, interval, preparingInterval, mainStore } = timeperiod;
+    const { mainStore } = timeperiod;
+    const { granularity } = chart;
     const isMobile = mainStore.chart.isMobile as boolean;
     const { isActive: isLoading } = loader;
 
     const is_tick = React.useMemo(() => category.key === 'tick', [category]);
-    const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, preparingInterval), [
+    const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, granularity), [
         isLoading,
         item,
-        preparingInterval,
+        granularity,
     ]);
     const enable_tooltip = React.useMemo(() => enableTooltip(isMobile, category.key, chartTypeId), [
         isMobile,
@@ -43,17 +44,11 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
         chartTypeId,
     ]);
     const is_disabled = React.useMemo(
-        () => (is_tick && chartTypeId !== 'mountain') || (!is_tick && allowTickChartTypeOnly),
+        () => (is_tick && chartTypeId !== 'line') || (!is_tick && allowTickChartTypeOnly),
         [is_tick, chartTypeId, allowTickChartTypeOnly]
     );
-    const is_active = React.useMemo(
-        () =>
-            timeUnit === category.key &&
-            (((category.key === 'minute' || is_tick) && item.num === interval) ||
-                (category.key === 'hour' && typeof interval === 'number' && item.num === interval / 60) ||
-                (category.key === 'day' && item.num === 1)),
-        [is_tick, category, item, interval, timeUnit]
-    );
+
+    const is_active = item.interval === granularity;
 
     const handleClick = React.useCallback(() => onClick(chartTypeId, category.key, item.interval), [
         chartTypeId,
@@ -90,16 +85,17 @@ type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGran
 const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
     const { timeperiod } = useStores();
 
-    const { setGranularity, updateProps, changeGranularity, updatePortalNode } = timeperiod;
+    const { changeGranularity, setGranularity, updateProps, updatePortalNode } = timeperiod;
 
     const onChangeGranularity = onChange || setGranularity;
 
-    const onIntervalClick = (chart_type_id: string, key: string, inval: number) => {
-        if (key === 'tick' && chart_type_id !== 'mountain') {
+    const onIntervalClick = (chart_type_id: string, key: string, interval: TGranularity) => {
+        if (key === 'tick' && chart_type_id !== 'line') {
             return;
         }
-        changeGranularity(inval as TGranularity);
+        changeGranularity(interval);
     };
+
     React.useEffect(() => updateProps(onChangeGranularity));
     updatePortalNode(portalNodeId);
 

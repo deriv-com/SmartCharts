@@ -1,5 +1,6 @@
 import { ServerTimeResponse } from '@deriv/api-types';
 import { BinaryAPI } from 'src/binaryapi';
+import { strToDateTime } from './date';
 import { getUTCEpoch, getLocalDate, getUTCDate } from './index';
 import PendingPromise from './PendingPromise';
 
@@ -92,7 +93,7 @@ class ServerTime {
     }
 
     getUTCDate() {
-        return CIQ.strToDateTime(getUTCDate(this.getEpoch()));
+        return strToDateTime(getUTCDate(this.getEpoch()));
     }
 
     static getInstance() {

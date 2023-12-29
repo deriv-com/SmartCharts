@@ -1,11 +1,6 @@
-import {
-    TicksHistoryResponse,
-    TicksStreamResponse,
-    AuditDetailsForExpiredContract,
-    ProposalOpenContract,
-} from '@deriv/api-types';
-import { OHLCStreamResponse, TQuote } from 'src/types';
-import { getUTCDate } from '../utils';
+import { TicksHistoryResponse, TicksStreamResponse, ProposalOpenContract } from '@deriv/api-types';
+import { OHLCStreamResponse, TAllTicks, TQuote } from 'src/types';
+import { getUTCDate, lerp } from '../utils';
 
 export class TickHistoryFormatter {
     static formatHistory(response: TicksHistoryResponse): TQuote[] | undefined {
@@ -63,12 +58,17 @@ export class TickHistoryFormatter {
 
         return undefined;
     }
-    static formatAllTicks(
-        allTicksContract: NonNullable<AuditDetailsForExpiredContract>['all_ticks']
-    ): TQuote[] | undefined {
-        return allTicksContract?.map(res => ({
-            Date: getUTCDate(Number(res.epoch)),
-            Close: Number(res.tick),
+    static formatAllTicks(allTicksContract: TAllTicks): TQuote[] | undefined {
+        const getNearestTick = (index: number): number => {
+            const nextItem = allTicksContract?.[index + 1];
+            const prevItem = allTicksContract?.[index - 1];
+            return prevItem?.tick && nextItem?.tick
+                ? lerp(prevItem?.tick, nextItem?.tick, 0.5)
+                : ((nextItem?.tick || prevItem?.tick) as number);
+        };
+        return allTicksContract?.map((res, index: number) => ({
+            Date: getUTCDate(+(res.epoch as number)),
+            Close: +(res.tick || getNearestTick(index)),
         }));
     }
     static formatPOCTick(contract_info: ProposalOpenContract) {

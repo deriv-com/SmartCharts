@@ -16,6 +16,7 @@ import {
 import Menu from './Menu';
 import Timeperiod from './Timeperiod';
 
+
 type TChartModeProps = {
     portalNodeId?: string;
     onChartType: (chartType?: string | undefined) => void;
@@ -23,10 +24,10 @@ type TChartModeProps = {
 };
 
 const TypeMap = {
-    mountain: TypeAreaGrayscaleIcon,
-    candle: TypeCandleGrayscaleIcon,
-    colored_bar: TypeOhlcGrayscaleIcon,
-    hollow_candle: TypeHollowGrayscaleIcon,
+    line: TypeAreaGrayscaleIcon,
+    candles: TypeCandleGrayscaleIcon,
+    ohlc: TypeOhlcGrayscaleIcon,
+    hollow: TypeHollowGrayscaleIcon,
 };
 
 const ChartMode = ({ onChartType, onGranularity, portalNodeId }: TChartModeProps) => {

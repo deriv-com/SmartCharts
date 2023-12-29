@@ -1,17 +1,15 @@
 import { CSSProperties } from 'react';
-import { action, computed, observable, makeObservable } from 'mobx';
+import { action, computed, observable, makeObservable, when, reaction, IReactionDisposer } from 'mobx';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TBarrierChangeParam, TBarrierUpdateProps, TCIQAddEventListener, TCIQAppend } from '../types';
+import { TBarrierChangeParam, TBarrierUpdateProps } from '../types';
 import PendingPromise from '../utils/PendingPromise';
 import PriceLineStore from './PriceLineStore';
 import ShadeStore from './ShadeStore';
-import {getStringValue} from '../utils';
+import { getStringValue } from '../utils';
 
 export default class BarrierStore {
     _high_barrier: PriceLineStore;
-    _injectionId: TCIQAppend<() => void>;
-    _listenerId: TCIQAddEventListener<() => void>;
     _low_barrier: PriceLineStore;
     aboveShadeStore: ShadeStore;
     belowShadeStore: ShadeStore;
@@ -58,38 +56,32 @@ export default class BarrierStore {
 
     _shadeState = '';
 
+    disposeDrawReaction?: IReactionDisposer;
+
     get pip(): number {
         return this.mainStore.chart.currentActiveSymbol?.decimal_places as number;
-    }
-    get yAxisWidth(): number {
-        return this.mainStore.chart.yAxiswidth;
-    }
-    get overlappedBarrierWidth(): number {
-        return 16;
     }
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
-            shadeColor: observable,
             color: observable,
-            foregroundColor: observable,
-            isBetweenShadeVisible: observable,
-            isTopShadeVisible: observable,
-            isBottomShadeVisible: observable,
-            hidePriceLines: observable,
-            lineStyle: observable,
-            isInitialized: observable,
-            initializePromise: observable,
-            hideBarrierLine: observable,
-            hideOffscreenLine: observable,
-            hideOffscreenBarrier: observable,
-            isSingleBarrier: observable,
             destructor: action.bound,
+            foregroundColor: observable,
+            hideBarrierLine: observable,
+            hideOffscreenBarrier: observable,
+            hideOffscreenLine: observable,
+            hidePriceLines: observable,
             init: action.bound,
-            overlappedBarrierWidth: computed,
+            initializePromise: observable,
+            isBetweenShadeVisible: observable,
+            isBottomShadeVisible: observable,
+            isInitialized: observable,
+            isSingleBarrier: observable,
+            isTopShadeVisible: observable,
+            lineStyle: observable,
             pip: computed,
+            shadeColor: observable,
             updateProps: action.bound,
-            yAxisWidth: computed,
         });
 
         this.mainStore = mainStore;
@@ -102,11 +94,7 @@ export default class BarrierStore {
         this._high_barrier.onDragReleased(this._fireOnBarrierChange);
         this._low_barrier.onDragReleased(this._fireOnBarrierChange);
 
-        this._injectionId = this.stx.append('draw', this._drawShadedArea);
-
         this._setupConstrainBarrierPrices();
-
-        this._listenerId = this.stx.addEventListener('newChart', this.init);
 
         this.aboveShadeStore = new ShadeStore('top-shade');
         this.betweenShadeStore = new ShadeStore('between-shade');
@@ -114,54 +102,44 @@ export default class BarrierStore {
 
         this.shadeState = BarrierStore.SHADE_NONE_SINGLE;
 
-        if (this.context && mainStore.chart.currentCloseQuote()) {
-            this.init();
-        }
+        when(() => this.mainStore.chartAdapter.isChartLoaded, this.onChartLoaded);
 
         this.mainStore.chart._barriers.push(this);
     }
 
+    onChartLoaded = () => {
+        this.init();
+        this.disposeDrawReaction = reaction(
+            () => [this.mainStore.chartAdapter.epochBounds, this.mainStore.chartAdapter.quoteBounds],
+            this._drawShadedArea
+        );
+    };
+
     init(): void {
         this.isInitialized = true;
         this.initializePromise.resolve();
-
-        // Enable this to test barriers; high low values are mandatory
-        // for library user to provide
-        // this.setDefaultBarrier();
     }
 
-    setDefaultBarrier(): void {
-        const price = this.relative ? 0 : this.mainStore.chart.currentCloseQuote()?.Close;
-        const distance = this.chart.yAxis.priceTick;
-        this._high_barrier.price = (price + distance).toString();
-        this._low_barrier.price = ((price as number) - distance).toString();
-        this._high_barrier._calculateTop();
-        this._low_barrier._calculateTop();
-        this._drawShadedArea();
-    }
-
-    updateProps(
-        {
-            color,
-            foregroundColor,
-            shadeColor,
-            shade,
-            high,
-            low,
-            relative,
-            draggable,
-            onChange,
-            hideBarrierLine,
-            hideOffscreenBarrier,
-            hideOffscreenLine,
-            hidePriceLines,
-            lineStyle,
-            title,
-            showOffscreenArrows,
-            isSingleBarrier,
-            opacityOnOverlap,
-        }: TBarrierUpdateProps
-    ): void {
+    updateProps({
+        color,
+        foregroundColor,
+        shadeColor,
+        shade,
+        high,
+        low,
+        relative,
+        draggable,
+        onChange,
+        hideBarrierLine,
+        hideOffscreenBarrier,
+        hideOffscreenLine,
+        hidePriceLines,
+        lineStyle,
+        title,
+        showOffscreenArrows,
+        isSingleBarrier,
+        opacityOnOverlap,
+    }: TBarrierUpdateProps): void {
         this.initializePromise.then(
             action(() => {
                 if (color) {
@@ -212,10 +190,10 @@ export default class BarrierStore {
 
     destructor(): void {
         if (!this.context) return;
-        this.stx.removeInjection(this._injectionId);
-        this.stx.removeEventListener(this._listenerId);
         this._high_barrier.destructor();
         this._low_barrier.destructor();
+
+        this.disposeDrawReaction?.();
 
         const i = this.mainStore.chart._barriers.findIndex((b: BarrierStore) => b === this);
         if (i !== -1) {
@@ -243,7 +221,6 @@ export default class BarrierStore {
                 this._low_barrier.visible && newPrice < +this._low_barrier.realPrice
                     ? this._high_barrier.realPrice
                     : newPrice;
-            this.mainStore.chart.calculateYaxisWidth(+nextPrice);
 
             return +nextPrice;
         };
@@ -252,19 +229,12 @@ export default class BarrierStore {
         this._low_barrier.priceConstrainer = (newPrice: number) => {
             const nextPrice = newPrice > +this._high_barrier.realPrice ? this._low_barrier.realPrice : newPrice;
 
-            this.mainStore.chart.calculateYaxisWidth(+nextPrice);
             return +nextPrice;
         };
     }
 
     get context(): Context | null {
         return this.mainStore.chart.context;
-    }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
-    get chart(): typeof CIQ.ChartEngine.Chart {
-        return this.stx.chart;
     }
 
     _onBarrierChange: ((arg: TBarrierChangeParam) => void) | null = null;
@@ -324,9 +294,9 @@ export default class BarrierStore {
         this._low_barrier.visible = showLowBarrier;
 
         if (this.isInitialized && showLowBarrier && !wasLowBarrierVisible) {
-            if (+this._low_barrier.realPrice >= +this._high_barrier.realPrice) {
+            if (this._low_barrier.realPrice >= this._high_barrier.realPrice && this.mainStore.chart.currentClose) {
                 // fix position if _low_barrier above _high_barrier, since _low_barrier position is not updated when not visible
-                this._low_barrier.price = (+this._high_barrier.price - this.chart.yAxis.priceTick).toString();
+                this._low_barrier.price = (+this._high_barrier.price - this.mainStore.chart.currentClose).toString();
             }
         }
     }
@@ -394,7 +364,7 @@ export default class BarrierStore {
         this.betweenShadeStore.setPosition({
             top: this._high_barrier.top,
             bottom: this._low_barrier.top,
-            right: this.yAxisWidth,
+            right: this.mainStore.chart.yAxisWidth,
         });
     }
 
@@ -402,7 +372,7 @@ export default class BarrierStore {
         this.belowShadeStore.setPosition({
             top: barrier.top,
             bottom: 0,
-            right: this.yAxisWidth,
+            right: this.mainStore.chart.yAxisWidth,
         });
     }
 
@@ -410,7 +380,7 @@ export default class BarrierStore {
         this.aboveShadeStore.setPosition({
             top: 0,
             bottom: barrier.top,
-            right: this.yAxisWidth,
+            right: this.mainStore.chart.yAxisWidth,
         });
     }
 

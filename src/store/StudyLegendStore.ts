@@ -1,73 +1,18 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
 import React from 'react';
+import set from 'lodash.set';
 import Context from 'src/components/ui/Context';
-import { TSettingsItem } from 'src/types';
+import { getUniqueId, hexToInt } from 'src/components/ui/utils';
+import { TActiveItem, TIndicatorConfig, TSettingsParameter } from 'src/types';
 import MainStore from '.';
-import MaximizeIcon from '../../sass/icons/chart/ic-maximize.svg';
-import MinimizeIcon from '../../sass/icons/common/ic-minimize.svg';
 import { IndicatorCatTrendDarkIcon, IndicatorCatTrendLightIcon } from '../components/Icons';
-import { ExcludedStudies, getIndicatorsTree, STATE, TActiveItem, TIndicatorsTree } from '../Constant';
-import { prepareIndicatorName, renderSVGString } from '../utils';
+import { getIndicatorsTree, getDefaultIndicatorConfig, STATE } from '../Constant';
+import { clone, flatMap, isLiteralObject, prepareIndicatorName, transformStudiesforTheme } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 import SettingsDialogStore from './SettingsDialogStore';
 
-type THelperInput = {
-    defaultInput: number;
-    heading: string;
-    name: string;
-    type: string;
-    value: number;
-    options?: Record<string, string> | null;
-};
-
-type THelperOutput = {
-    color: string;
-    defaultOutput: string;
-    heading: string;
-    name: string;
-};
-
-type THelperParameter = {
-    color: string;
-    value: string;
-    defaultColor: string;
-    defaultValue: string;
-    heading: string;
-    name: string;
-};
-
-type TValueObject = {
-    [key: string]: string;
-};
-
-type TStudyItems = {
-    category: string;
-    defaultValue: string | number | TValueObject;
-    id: string;
-    min?: number;
-    options?: Record<string, string> | null;
-    step?: number;
-    title: string;
-    type: string;
-    value: string | number | TValueObject;
-};
-
-// TODO:
-// import StudyInfo from '../study-info';
-const updateFieldHeading = (heading: string, type: string) => {
-    const names = ['%D', '%K'];
-    if (heading.toLowerCase() === type.toLowerCase() || heading === 'Result') {
-        return 'Color';
-    }
-    if (names.indexOf(heading) > 0) {
-        return `${heading} Color`;
-    }
-    return heading;
-};
 export default class StudyLegendStore {
-    excludedStudies: Record<string, boolean>;
-    helper: typeof CIQ.UI.Helper;
     mainStore: MainStore;
     menuStore: MenuStore;
     searchInput: React.RefObject<HTMLInputElement>;
@@ -77,6 +22,8 @@ export default class StudyLegendStore {
     activeItems: TActiveItem[] = [];
     infoItem: (TActiveItem & { disabledAddBtn?: boolean }) | null = null;
     portalNodeIdChanged? = '';
+    currentHoverIndex: number | undefined | null = null;
+    previousHoverIndex: number | undefined | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -85,34 +32,35 @@ export default class StudyLegendStore {
             activeItems: observable,
             infoItem: observable,
             portalNodeIdChanged: observable,
-            removeExtraStudies: action.bound,
             onSelectItem: action.bound,
-            updateIndicatorHeight: action.bound,
             updateStyle: action.bound,
             updateProps: action.bound,
             editStudy: action.bound,
+            editStudyByIndex: action.bound,
             deleteStudy: action.bound,
+            deleteStudyById: action.bound,
             updateStudy: action.bound,
-            updateActiveStudies: action.bound,
             deletePredictionStudies: action.bound,
             deleteAllStudies: action.bound,
-            clearStudies: action.bound,
-            onStudyRemoved: action.bound,
             onSelectTab: action.bound,
             setFilterText: action.bound,
             onInfoItem: action.bound,
             updatePortalNode: action.bound,
+            restoreStudies: action.bound,
+            getItemById: action.bound,
+            setIndicator: action.bound,
+            highlightIndicator: action.bound,
+            clearHoverItem: action.bound,
         });
 
-        this.excludedStudies = ExcludedStudies;
         this.mainStore = mainStore;
         when(() => !!this.context, this.onContextReady);
         this.menuStore = new MenuStore(mainStore, { route: 'indicators' });
         this.settingsDialog = new SettingsDialogStore({
             mainStore,
-            onDeleted: () => this.deleteStudy(this.helper.sd),
+            onDeleted: this.deleteStudyById,
             favoritesId: 'indicators',
-            onChanged: (items: TSettingsItem[]) => this.updateStudy(this.helper.sd, items),
+            onChanged: (items: TSettingsParameter[]) => this.updateStudy(items),
         });
         this.searchInput = React.createRef();
         reaction(
@@ -127,33 +75,21 @@ export default class StudyLegendStore {
             }
         );
     }
-    previousStudies: Record<string, typeof CIQ.Studies.StudyDescriptor> = {};
     searchInputClassName?: string;
 
     onContextReady = () => {
-        this.stx.addEventListener('studyOverlayEdit', this.editStudy);
-        this.stx.addEventListener('studyPanelEdit', this.editStudy);
         // to remove studies if user has already more than 5
-        // and remove studies which are excluded
-        this.removeExtraStudies();
-        this.stx.append('createDataSet', this.renderLegend);
-        this.stx.append('drawPanels', this.handleDrawPanels);
-        this.stx.append('panelClose', this.onStudyRemoved);
+
         this.renderLegend();
     };
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
-    get indicatorRatio() {
-        return this.mainStore.chart;
-    }
+
     get items() {
         return [...getIndicatorsTree()].map(indicator => {
             // the only icon which is different on light/dark is trend
-            if (indicator.id === 'trend') {
+            if (indicator.name === 'trend') {
                 indicator.icon =
                     this.mainStore.chartSetting.theme === 'light'
                         ? IndicatorCatTrendLightIcon
@@ -172,9 +108,6 @@ export default class StudyLegendStore {
             })
             .filter(category => category.foundItems?.length);
     }
-    get chartActiveStudies() {
-        return (this.activeItems || []).filter((item: TActiveItem) => item.dataObject.sd.panel === 'chart');
-    }
 
     get hasPredictionIndicator() {
         return (this.activeItems || []).filter((item: TActiveItem) => item.isPrediction).length > 0;
@@ -183,117 +116,141 @@ export default class StudyLegendStore {
     get maxAllowedItem() {
         return this.mainStore.chart.isMobile ? 2 : 5;
     }
-    removeExtraStudies() {
-        if (this.stx.layout && this.stx.layout.studies) {
-            Object.keys(this.stx.layout.studies).forEach((study, idx) => {
-                const type = this.stx.layout.studies[study].type;
-                if (idx >= this.maxAllowedItem || this.excludedStudies[type]) {
-                    setTimeout(() => {
-                        CIQ.Studies.removeStudy(this.stx, this.stx.layout.studies[study]);
-                        this.renderLegend();
-                    }, 0);
-                }
+
+    transform = (value: any) => {
+        if (typeof value === 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+            return hexToInt(value);
+        }
+        if (isLiteralObject(value)) {
+            const map = value as Record<string, any>;
+            Object.keys(value).forEach(key => {
+                map[key] = this.transform(map[key]);
             });
-        }
-    }
-    onSelectItem(item: string) {
-        this.onInfoItem(null);
-        const addedIndicator = Object.keys(this.stx.layout.studies || []).length;
-        if (this.stx.layout && addedIndicator < this.maxAllowedItem) {
-            const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator + 1);
-            CIQ.Studies.studyLibrary[item].panelHeight = heightRatio.height + 20;
-            const sd = CIQ.Studies.addStudy(this.stx, item);
-            CIQ.Studies.studyLibrary[item].panelHeight = null;
-            this.changeStudyPanelTitle(sd);
-            setTimeout(this.updateIndicatorHeight, 20);
-            logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${item}`);
-            this.mainStore.chart.setYaxisWidth();
-        }
-    }
-    updateIndicatorHeight() {
-        const addedIndicator = Object.keys(this.stx.panels).filter(id => id !== 'chart').length;
-        const heightRatio = this.indicatorRatio.indicatorHeightRatio(addedIndicator);
-        Object.keys(this.stx.panels).forEach((id, index) => {
-            if (index === 0) {
-                return;
+        } else if (Array.isArray(value)) {
+            for (let i = 0; i < value.length; i++) {
+                value[i] = this.transform(value[i]);
             }
-            const panelObj = this.stx.panels[id];
-            panelObj.percent = heightRatio.percent;
-        });
-        this.stx.draw();
-        this.stx.calculateYAxisMargins(this.stx.chart.panel.yAxis);
-        this.stx.draw();
+        }
+
+        return value;
+    };
+
+    addOrUpdateIndicator = (activeItem: TActiveItem, index?: number) => {
+        const params = activeItem.parameters.reduce((acc, item) => {
+            const { path, paths, value } = item;
+
+            if (isLiteralObject(value) && paths) {
+                const map = value as Record<string, any>;
+                const keys = Object.keys(map);
+                keys.forEach(key => {
+                    set(acc, paths[key], map[key]);
+                });
+            } else if (path) {
+                set(acc, path, value);
+            }
+
+            return acc;
+        }, activeItem.config || {});
+
+        const config: TIndicatorConfig = {
+            id: activeItem.id,
+            name: activeItem.flutter_chart_id,
+            title: (activeItem.short_name_and_index + (activeItem.bars ? ` (${activeItem.bars})` : '')).toUpperCase(),
+            ...this.transform(params),
+        };
+
+        this.mainStore.chartAdapter.flutterChart?.app.addOrUpdateIndicator(JSON.stringify(config), index);
+    };
+
+    onSelectItem(indicatorName: string) {
+        this.onInfoItem(null);
+
+        if (this.activeItems.length >= this.maxAllowedItem) return;
+
+        this.changeStudyPanelTitle();
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Add ${indicatorName}`);
+
+        const props = this.getIndicatorProps(indicatorName);
+        const { parameters, config } = getDefaultIndicatorConfig(indicatorName);
+
+        if (props && parameters) {
+            parameters.map(p => (p.value = clone(p.defaultValue)));
+            const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
+
+            const lastGroupItem = this.findLastActiveItem(props.flutter_chart_id);
+            const group_length = lastGroupItem ? lastGroupItem.group_length + 1 : 0;
+
+            const item: TActiveItem = {
+                ...props,
+                group_length,
+                short_name_and_index: props.short_name + (group_length ? ` ${group_length}` : ''),
+                id: getUniqueId(),
+                config,
+                parameters,
+                bars: nameObj.bars,
+            };
+
+            transformStudiesforTheme(parameters, this.mainStore.chartSetting.theme);
+
+            this.addOrUpdateIndicator(item);
+            this.activeItems.push(item);
+
+            this.mainStore.bottomWidgetsContainer.updateChartHeight();
+            this.mainStore.state.saveLayout();
+        }
     }
+
+    async restoreStudies(activeItems: TActiveItem[]) {
+        this.deleteAllStudies();
+
+        activeItems.forEach((activeItem, index) => {
+            const props = this.getIndicatorProps(activeItem.flutter_chart_id);
+
+            if (props) {
+                this.addOrUpdateIndicator(activeItem);
+                Object.assign(activeItem, props);
+            } else {
+                activeItems.splice(index, 1);
+            }
+        });
+
+        this.activeItems = activeItems;
+
+        this.mainStore.bottomWidgetsContainer.updateChartHeight();
+    }
+
+    updateTheme() {
+        this.activeItems.forEach((activeItem, index) => {
+            transformStudiesforTheme(activeItem.parameters, this.mainStore.chartSetting.theme);
+            this.addOrUpdateIndicator(activeItem, index);
+        });
+        this.mainStore.state.saveLayout();
+    }
+
     // Temporary prevent user from adding more than 5 indicators
     // TODO All traces can be removed after new design for studies
     updateStyle() {
-        const should_minimise_last_digit = Object.keys(this.stx.panels).length > 2;
+        const should_minimise_last_digit = this.mainStore.studies.activeItems.length > 2;
         this.mainStore.state.setShouldMinimiseLastDigit(should_minimise_last_digit);
     }
     updateProps({ searchInputClassName }: { searchInputClassName?: string }) {
         this.searchInputClassName = searchInputClassName;
     }
-    editStudy(study: TActiveItem['dataObject']) {
-        const helper = new CIQ.Studies.DialogHelper(study);
-        this.helper = helper;
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${helper.name}`);
-        const attributes = helper.attributes;
-        const inputs = helper.inputs.map((inp: THelperInput) => ({
-            id: inp.name,
-            title: t.translate(inp.heading),
-            value: inp.value,
-            defaultValue: inp.defaultInput,
-            type: inp.type === 'checkbox' ? 'switch' : inp.type,
-            options: inp.options || null,
-            // {min:1, max: 20}
-            ...attributes[inp.name],
-            category: 'inputs',
-        }));
-        const outputs = helper.outputs.map((out: THelperOutput) => ({
-            id: out.name,
-            title: t.translate(updateFieldHeading(out.heading, study.sd.type)),
-            defaultValue: out.defaultOutput,
-            value: out.color,
-            type: 'colorpicker',
-            category: 'outputs',
-        }));
-        const parameters = helper.parameters.map((par: THelperParameter) => {
-            const shared = {
-                title: t.translate(par.heading),
-                ...attributes[par.name],
-                category: 'parameters',
-            };
-            if (par.defaultValue.constructor === Boolean) {
-                return {
-                    ...shared,
-                    id: `${par.name}Enabled`,
-                    value: par.value,
-                    defaultValue: par.defaultValue,
-                    type: 'switch',
-                };
-            }
-            if (par.defaultValue.constructor === Number) {
-                return {
-                    ...shared,
-                    id: par.name,
-                    type: 'numbercolorpicker',
-                    defaultValue: {
-                        Color: par.defaultColor,
-                        Value: par.defaultValue,
-                    },
-                    value: {
-                        Color: par.color,
-                        Value: par.value,
-                    },
-                };
-            }
-            throw new Error('Unrecognised parameter!');
-        });
-        (this.settingsDialog as SettingsDialogStore & { id: string }).id = study.sd.type;
-        this.settingsDialog.items = [...outputs, ...inputs, ...parameters];
-        this.settingsDialog.title = study.sd.libraryEntry.name;
+
+    editStudyByIndex(index: number) {
+        const activeItem = this.activeItems[index];
+        if (activeItem) this.editStudy(activeItem);
+    }
+
+    editStudy(study: TActiveItem) {
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Edit ${study.flutter_chart_id}`);
+
+        this.settingsDialog.id = study.id;
+        this.settingsDialog.flutter_chart_id = study.flutter_chart_id;
+        this.settingsDialog.items = study.parameters;
+        this.settingsDialog.title = study.name;
         this.settingsDialog.formTitle = t.translate('Result');
-        this.settingsDialog.formClassname = `form--${study.sd.type.toLowerCase().replace(/ /g, '-')}`;
+        this.settingsDialog.formClassname = `form--${study.id.toLowerCase().replace(/ /g, '-')}`;
         // TODO:
         // const description = StudyInfo[study.sd.type];
         // this.settingsDialog.description = description || t.translate("No description yet");
@@ -301,216 +258,89 @@ export default class StudyLegendStore {
         this.settingsDialog.dialogPortalNodeId = this.portalNodeIdChanged;
         this.settingsDialog.setOpen(true);
     }
-    deleteStudy(study: TActiveItem['dataObject']['sd']) {
-        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${study.name}`);
-        if (!study.permanent) {
-            // Need to run this in the nextTick because the study legend can be removed by this click
-            // causing the underlying chart to receive the mousedown (on IE win7)
-            setTimeout(() => {
-                CIQ.Studies.removeStudy(this.stx, study);
-                this.renderLegend();
-            }, 0);
-            setTimeout(this.updateIndicatorHeight, 20);
-        }
+    deleteStudyById(id: string) {
+        const index = this.activeItems.findIndex(item => item.id === id);
+        this.mainStore.chartAdapter.flutterChart?.indicators.removeIndicator(index);
+        this.deleteStudy(index);
     }
-    updateStudy(study: typeof CIQ.Studies.StudyDescriptor, items: TSettingsItem[]) {
-        const updates: Record<string, Record<string, string>> = {};
-        for (const { id, category, value, type } of items as TStudyItems[]) {
-            let isChanged;
-            if (type === 'numbercolorpicker') {
-                isChanged =
-                    study[category][`${id}Color`] !== (value as TValueObject).Color ||
-                    study[category][`${id}Value`] !== (value as TValueObject).Value;
-            } else {
-                isChanged = study[category][id] !== value;
-            }
-            if (isChanged) {
-                updates[category] = updates[category] || {};
-                if (typeof value === 'object') {
-                    for (const suffix in value) {
-                        updates[category][`${id}${suffix}`] = (value as TValueObject)[suffix];
-                    }
-                } else {
-                    updates[category][id] = value as string;
-                }
-            }
-        }
-        if (Object.keys(updates).length === 0) return;
-        this.helper.updateStudy(updates);
-        this.updateActiveStudies();
-        this.stx.draw();
-        this.changeStudyPanelTitle(this.helper.sd);
-        this.settingsDialog.title = t.translate(this.helper.sd.libraryEntry.name);
+    deleteStudy(index: number) {
+        logEvent(LogCategories.ChartControl, LogActions.Indicator, `Remove ${index}`);
+
+        this.activeItems.splice(index, 1);
+        this.mainStore.bottomWidgetsContainer.updateChartHeight();
+        this.mainStore.crosshair.removeIndicatorToolTip();
+        this.renderLegend();
+        this.mainStore.state.saveLayout();
     }
-    changeStudyPanelTitle(sd: typeof CIQ.Studies.StudyDescriptor) {
-        // Remove numbers from the end of indicator titles in mobile
-        if (this.mainStore.chart.isMobile) {
-            this.stx.panels[sd.panel].display = sd.type;
-            this.stx.draw();
+    updateStudy(parameters: TSettingsParameter[]) {
+        this.changeStudyPanelTitle();
+
+        const props = this.getIndicatorProps(this.settingsDialog.flutter_chart_id);
+        const { config } = getDefaultIndicatorConfig(this.settingsDialog.flutter_chart_id) || {};
+
+        if (props && parameters) {
+            const nameObj = prepareIndicatorName(this.settingsDialog.flutter_chart_id, parameters);
+            const index = this.activeItems.findIndex(item => item.id === this.settingsDialog.id);
+            const currentActiveItem = this.activeItems[index];
+
+            const item: TActiveItem = {
+                ...props,
+                short_name_and_index:
+                    props.short_name + (currentActiveItem.group_length ? ` ${currentActiveItem.group_length}` : ''),
+                group_length: currentActiveItem.group_length,
+                id: this.settingsDialog.id,
+                bars: nameObj.bars,
+                parameters,
+                config,
+            };
+
+            this.activeItems[index] = item;
+
+            this.addOrUpdateIndicator(item, index);
             this.mainStore.state.saveLayout();
         }
     }
-    shouldRenderLegend() {
-        const stx = this.stx;
-        if (!stx.layout.studies) {
-            return false;
+    changeStudyPanelTitle() {
+        // Remove numbers from the end of indicator titles in mobile
+        if (this.mainStore.chart.isMobile) {
+            this.mainStore.state.saveLayout();
         }
-        // Logic to determine if the studies have changed, otherwise don't re-create the legend
-        if (CIQ.objLength(this.previousStudies) === CIQ.objLength(stx.layout.studies)) {
-            let foundAChange = false;
-            for (const id in stx.layout.studies) {
-                if (!this.previousStudies[id]) {
-                    foundAChange = true;
-                    break;
-                }
-            }
-            if (!foundAChange) {
-                return false;
-            }
-        }
-        this.previousStudies = CIQ.shallowClone(stx.layout.studies);
-        return true;
     }
-    handleDrawPanels = () => {
-        if (this.stx) {
-            const panels = Object.keys(this.stx.panels);
-            const panelsLen = panels.length;
-            panels.forEach((id, index) => {
-                if (index === 0) {
-                    return;
-                }
 
-                const panelObj = this.stx.panels[id];
-                if (this.mainStore.chart.isMobile) {
-                    if (panelObj.up.className.indexOf('show') !== -1) {
-                        panelObj.up.className = 'stx-btn-panel';
-                    }
-                    if (panelObj.down.className.indexOf('show') !== -1) {
-                        panelObj.down.className = 'stx-btn-panel';
-                    }
-                    if (panelObj.solo.className.indexOf('show') !== -1) {
-                        panelObj.solo.className = 'stx-btn-panel';
-                    }
-                    if (panelObj.close.className.indexOf('show') !== -1) {
-                        panelObj.close.className = 'stx-btn-panel';
-                    }
-                }
-                const sd = this.stx.layout.studies[id];
-                const isSolo = panelObj.solo?.getAttribute?.('class').includes('stx_solo_lit');
-                if (sd) {
-                    const nameObj = prepareIndicatorName(sd.name);
-                    if (nameObj.name.trim() !== sd.name.trim()) {
-                        panelObj.title.innerHTML = nameObj.bars ? `${nameObj.name} (${nameObj.bars})` : nameObj.name;
-                    }
-
-                    // Regarding the ChartIQ.js, codes under Line 34217, edit function
-                    // not mapped, this is a force to map edit function for indicators
-                    if (sd.editFunction && panelObj && !panelObj.editFunction) {
-                        this.stx.setPanelEdit(panelObj, sd.editFunction);
-                    }
-                }
-
-                if (index === 1 || isSolo) {
-                    // Hide the up arrow from first indicator to prevent user
-                    // from moving the indicator panel above the main chart
-                    panelObj.up.style.display = 'none';
-                }
-
-                if (index === panelsLen - 1 || isSolo) {
-                    panelObj.down.style.display = 'none';
-                }
-
-                // Mean chart + 1 indicator
-                if (panelsLen === 2) {
-                    panelObj.solo.style.display = 'none';
-                }
-
-                // Updating Max/Min icon
-                if (panelObj.solo.style.display !== 'none') {
-                    const soloIcon = isSolo ? MinimizeIcon : MaximizeIcon;
-                    const InnerSoloPanel = panelObj.solo.querySelector('.stx-ico-focus');
-                    if (InnerSoloPanel.querySelector('svg')?.getAttribute?.('id') !== soloIcon.id) {
-                        InnerSoloPanel.innerHTML = renderSVGString(soloIcon);
-                    }
-                }
-            });
-        }
-    };
     /**
      * Gets called continually in the draw animation loop.
      * Be careful not to render unnecessarily. */
     renderLegend = () => {
-        if (!this.context || !this.shouldRenderLegend()) {
+        if (!this.context) {
             return;
         }
-        this.updateActiveStudies();
         // Temporary prevent user from adding more than 5 indicators
         // All traces can be removed after new design for studies
         this.updateStyle();
     };
-    updateActiveStudies() {
-        const stx = this.stx;
-        const activeItems: TActiveItem[] = [];
-        Object.keys(stx.layout.studies || []).forEach(id => {
-            const sd = stx.layout.studies[id];
-            if (sd.customLegend) {
-                return;
-            }
-            const studyObjCategory = getIndicatorsTree().find(category =>
-                category.items.find(item => item.id === sd.type)
-            );
-            const studyObj = (studyObjCategory as TIndicatorsTree).items.find(item => item.id === sd.type);
-            if (studyObj) {
-                const nameObj = prepareIndicatorName(sd.name);
-                activeItems.push({
-                    ...studyObj,
-                    id: sd.inputs.id,
-                    bars: nameObj.bars || '',
-                    name: nameObj.name,
-                    dataObject: {
-                        stx,
-                        sd,
-                        inputs: sd.inputs,
-                        outputs: sd.outputs,
-                        parameters: sd.parameters,
-                    },
-                });
-            }
-        });
-        this.activeItems = activeItems;
-    }
+
+    getIndicatorProps = (indicator: string) => {
+        return flatMap(getIndicatorsTree(), collection => collection.items).find(
+            item => item?.flutter_chart_id === indicator
+        );
+    };
 
     deletePredictionStudies() {
-        const stx = this.stx;
-        if (stx) {
-            (this.activeItems || [])
-                .filter((item: TActiveItem) => item.isPrediction)
-                .forEach((item: TActiveItem) => {
-                    this.deleteStudy(item.dataObject.sd);
-                });
-            setTimeout(this.updateIndicatorHeight, 20);
-        }
+        let filteredItem = this.activeItems.filter(item => item.isPrediction == true);
+        filteredItem.forEach(item => {
+            this.mainStore.state.stateChange(STATE.INDICATOR_DELETED);
+            this.deleteStudyById(item.id);
+        });
+        this.mainStore.state.saveLayout();
     }
 
     deleteAllStudies() {
-        const stx = this.stx;
-        if (stx) {
-            Object.keys(stx.layout.studies || []).forEach(id => {
-                this.deleteStudy(stx.layout.studies[id]);
-            });
-            setTimeout(this.updateIndicatorHeight, 20);
-        }
+        this.activeItems = [];
+        window.flutterChart?.indicators.clearIndicators();
+        this.mainStore.state.saveLayout();
         this.mainStore.state.stateChange(STATE.INDICATORS_CLEAR_ALL);
     }
-    clearStudies() {
-        if (this.context) {
-            this.context.advertised.Layout.clearStudies();
-        }
-    }
-    onStudyRemoved() {
-        this.updateActiveStudies();
-        setTimeout(this.updateIndicatorHeight, 20);
-    }
+
     onSelectTab(tabIndex: number) {
         this.setFilterText('');
         this.selectedTab = tabIndex;
@@ -530,7 +360,70 @@ export default class StudyLegendStore {
               }
             : study;
     }
+
+    setIndicator(item: TActiveItem, index: number) {
+        this.addOrUpdateIndicator(item, index);
+    }
+
+    highlightIndicator(hoverIndex: number | undefined | null, dx: number, dy: number) {
+        this.currentHoverIndex = hoverIndex;
+
+        if (this.previousHoverIndex === this.currentHoverIndex) {
+            return;
+        }
+
+        if (typeof this.previousHoverIndex === 'number') {
+            this.clearHoverItem(this.previousHoverIndex);
+        }
+
+        if (hoverIndex != null) {
+            const item = clone(this.activeItems[hoverIndex]);
+
+            if (item && item.config) {
+                this.mainStore.crosshair.renderIndicatorToolTip(`${item.name} ${item.bars || ''}`, dx, dy);
+                for (const key in item.config) {
+                    if (key.includes('Style')) {
+                        item.config[key].thickness = 2;
+                        if (key === 'scatterStyle') {
+                            item.config[key].radius = 2.5;
+                        }
+                    }
+
+                    if (key.includes('Styles')) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        item.config[key].forEach((element: any) => {
+                            element.thickness = 2;
+                        });
+                    }
+                }
+                this.setIndicator(item, hoverIndex);
+            }
+        }
+
+        this.previousHoverIndex = hoverIndex;
+    }
+
+    clearHoverItem(index: number) {
+        const item = this.activeItems[index];
+        this.mainStore.crosshair.removeIndicatorToolTip();
+        if (item) {
+            this.setIndicator(item, index);
+        }
+    }
+
     updatePortalNode(portalNodeId?: string) {
         this.portalNodeIdChanged = portalNodeId;
+    }
+
+    findLastActiveItem(flutter_chart_id: string) {
+        for (let i = this.activeItems.length - 1; i >= 0; i--) {
+            if (this.activeItems[i].flutter_chart_id === flutter_chart_id) {
+                return this.activeItems[i];
+            }
+        }
+    }
+
+    getItemById(id: string) {
+        return this.activeItems.find(item => item.id === id);
     }
 }

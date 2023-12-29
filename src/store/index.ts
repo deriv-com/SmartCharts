@@ -15,7 +15,7 @@ import LoaderStore from './LoaderStore';
 import FavoriteStore from './FavoriteStore';
 import ChartSizeStore from './ChartSizeStore';
 import RoutingStore from './RoutingStore';
-import CurrentSpotStore from './CurrentSpotStore';
+
 import ChartState from './ChartState';
 import Notifier from './Notifier';
 import LastDigitStatsStore from './LastDigitStatsStore';
@@ -25,12 +25,14 @@ import PaginationLoaderStore from './PaginationLoaderStore';
 import ToolbarWidgetStore from './ToolbarWidgetStore';
 import ScrollStore from './ScrollStore';
 import { TMainStore } from '../types';
+import ChartAdapterStore from './ChartAdapterStore';
 
 export default class MainStore implements TMainStore {
     notifier = new Notifier();
     favorites = FavoriteStore.getInstance();
     chart = new ChartStore(this);
     state = new ChartState(this);
+    chartAdapter = new ChartAdapterStore(this);
     chartType = new ChartTypeStore(this);
     chartMode = new ChartModeStore(this);
     studies = new StudyLegendStore(this);
@@ -44,7 +46,6 @@ export default class MainStore implements TMainStore {
     loader = new LoaderStore();
     chartSize = new ChartSizeStore(this);
     routing = new RoutingStore(this);
-    currentSpot = new CurrentSpotStore(this);
     lastDigitStats = new LastDigitStatsStore(this);
     bottomWidgetsContainer = new BottomWidgetsContainerStore(this);
     navigationWidget = new NavigationWidgetStore(this);

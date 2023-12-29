@@ -1,6 +1,6 @@
 import EventEmitter from 'event-emitter-es6';
 import { action, observable, makeObservable } from 'mobx';
-import { createObjectFromLocalStorage } from '../utils';
+import { createObjectFromLocalStorage, saveToLocalStorage } from '../utils';
 
 function loadFavorites() {
     const local = createObjectFromLocalStorage('cq-favorites');
@@ -46,7 +46,7 @@ class FavoriteStore {
         makeObservable(this, {
             favoritesMap: observable,
             isFavorite: action.bound,
-            toggleFavorite: action.bound
+            toggleFavorite: action.bound,
         });
 
         this._emitter = new EventEmitter({ emitDelay: 0 });
@@ -85,7 +85,7 @@ class FavoriteStore {
             }
             favorites[categoryName] = category;
         }
-        CIQ.localStorageSetItem('cq-favorites', JSON.stringify(favorites));
+        saveToLocalStorage('cq-favorites', favorites);
     }
 }
 

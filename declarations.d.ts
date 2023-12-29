@@ -4,7 +4,6 @@ declare var t: {
     lang: string;
 };
 
-declare var CIQ: any;
 declare var __webpack_public_path__: string;
 
 declare module '*.scss';

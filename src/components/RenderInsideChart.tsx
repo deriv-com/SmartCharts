@@ -9,15 +9,14 @@ const inChartPrefix = 'cq-inchart-';
 
 type TRenderInsideChartProps = {
     at: string;
-    hideInScrollToEpoch?: boolean;
     children?: React.ReactNode;
 };
 
 // Render given Components under stx-holder to position it relative to the active symbol chart.
-const RenderInsideChart = ({ at = 'holder', children, hideInScrollToEpoch }: TRenderInsideChartProps) => {
+const RenderInsideChart = ({ at = 'holder', children }: TRenderInsideChartProps) => {
     const { chart, state } = useStores();
     const { contextPromise } = chart;
-    const { isChartReady, isChartScrollingToEpoch } = state;
+    const { isChartReady } = state;
 
     const [container, setContainer] = React.useState<HTMLElement>();
     React.useEffect(() => {
@@ -27,7 +26,6 @@ const RenderInsideChart = ({ at = 'holder', children, hideInScrollToEpoch }: TRe
             let elem = context.topNode?.querySelector(`.${nodeName}`);
             if (!elem) {
                 elem = createElement(`<div class="${nodeName}"></div>`) as HTMLElement;
-                context.stx.chart.panel[at].appendChild(elem);
             }
 
             setContainer(elem as HTMLElement);
@@ -35,7 +33,6 @@ const RenderInsideChart = ({ at = 'holder', children, hideInScrollToEpoch }: TRe
     }, [at, contextPromise]);
 
     if (!isChartReady) return null;
-    if (hideInScrollToEpoch && isChartScrollingToEpoch) return null;
     if (container) {
         return ReactDOM.createPortal(children, container);
     }

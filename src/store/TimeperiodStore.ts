@@ -1,9 +1,8 @@
 import { action, observable, reaction, when, makeObservable } from 'mobx';
-import Context from 'src/components/ui/Context';
-import { TCIQAppend, TGranularity } from 'src/types';
+import { TGranularity } from 'src/types';
 import { ChartTypes, Intervals, STATE } from 'src/Constant';
 import MainStore from '.';
-import { displayMilliseconds, getIntervalInSeconds, getTimeIntervalName, getTimeUnit } from '../utils';
+import { displayMilliseconds, getTimeIntervalName, getTimeUnit } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import ServerTime from '../utils/ServerTime';
 import IndicatorPredictionDialogStore from './IndicatorPredictionDialogStore';
@@ -16,31 +15,23 @@ const UnitMap = {
 };
 
 const TimeMap = {
-    tick: 1,
-    minute: 1,
-    hour: 60,
+    minute: 60,
+    hour: 3600,
+    day: 86400,
 };
 
 export default class TimeperiodStore {
-    _injectionId?: TCIQAppend<() => void>;
     _serverTime: ReturnType<typeof ServerTime.getInstance>;
     mainStore: MainStore;
     portalNodeIdChanged?: string;
     predictionIndicator: IndicatorPredictionDialogStore;
-    timeUnit?: string | null = null;
-    interval: string | number | null = null;
-    preparingInterval: number | null = null;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            changeGranularity: action.bound,
             portalNodeIdChanged: observable,
-            timeUnit: observable,
-            interval: observable,
-            preparingInterval: observable,
             setGranularity: action.bound,
             updateProps: action.bound,
-            changeGranularity: action.bound,
-            updateDisplay: action.bound,
             updatePortalNode: action.bound,
         });
 
@@ -50,12 +41,9 @@ export default class TimeperiodStore {
         });
 
         this._serverTime = ServerTime.getInstance();
-        when(() => !!this.context, this.onContextReady);
+        when(() => this.mainStore.chartAdapter.isFeedLoaded, this.onDataInitialized);
     }
 
-    get context(): Context | null {
-        return this.mainStore.chart.context;
-    }
     get loader() {
         return this.mainStore.loader;
     }
@@ -65,9 +53,18 @@ export default class TimeperiodStore {
     get isSymbolOpen() {
         return this.mainStore.chartTitle.isSymbolOpen;
     }
+    get timeUnit() {
+        return getTimeUnit(this.mainStore.chart.granularity);
+    }
     get display() {
+        if (this.mainStore.chart.granularity === undefined) {
+            return '';
+        }
+
         return `${
-            this.interval === 'day' ? 1 : (this.interval as number) / TimeMap[this.timeUnit as keyof typeof TimeMap]
+            this.mainStore.chart.granularity === 0
+                ? 1
+                : this.mainStore.chart.granularity / TimeMap[this.timeUnit as keyof typeof TimeMap]
         } ${UnitMap[this.timeUnit as keyof typeof TimeMap]}`;
     }
 
@@ -75,17 +72,12 @@ export default class TimeperiodStore {
 
     remain: string | null = null;
 
-    onContextReady = () => {
-        const { timeUnit, interval } = this.context?.stx.layout;
-        this.timeUnit = getTimeUnit({ timeUnit, interval });
-        this.interval = interval;
-
+    onDataInitialized = () => {
         this.updateCountdown();
 
         reaction(
             () => [
                 this.timeUnit,
-                this.interval,
                 this.mainStore.chartSetting.countdown,
                 this.mainStore.chartType.type,
                 this.loader.currentState,
@@ -93,8 +85,6 @@ export default class TimeperiodStore {
             ],
             this.updateCountdown.bind(this)
         );
-
-        this.context?.stx.addEventListener('newChart', this.updateDisplay);
 
         reaction(
             () => this.mainStore.state.granularity,
@@ -109,39 +99,36 @@ export default class TimeperiodStore {
             clearInterval(this.countdownInterval);
         }
 
-        if (this._injectionId && this.context) {
-            this.context.stx.removeInjection(this._injectionId);
-        }
-
-        this._injectionId = undefined;
         this.countdownInterval = undefined;
     }
 
     updateCountdown() {
-        if (!this.context) return;
-        const stx = this.context.stx;
         this.remain = null;
         this.clearCountdown();
 
         const setRemain = () => {
-            if (stx.isDestroyed || this.isTick || !this.isSymbolOpen) {
+            if (this.isTick || !this.isSymbolOpen) {
                 this.clearCountdown();
                 return;
             }
 
-            const { dataSegment } = stx.chart;
+            const dataSegment = this.mainStore.chart?.feed?.quotes;
             if (dataSegment && dataSegment.length) {
                 const dataSegmentClose = [...dataSegment].filter(item => item && item.Close);
                 if (dataSegmentClose && dataSegmentClose.length) {
                     const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
-                    const now = this._serverTime.getUTCDate();
-                    const diff = now - currentQuote.DT;
-                    const chartInterval = getIntervalInSeconds(stx.layout) * 1000;
-                    const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
+                    if (currentQuote.DT) {
+                        const now = this._serverTime.getLocalDate().getTime();
+                        const diff = now - currentQuote.DT.getTime();
 
-                    if (this.context?.stx) {
+                        const granularity = this.mainStore.chart.granularity;
+
+                        const chartInterval = (granularity || 1) * 1000;
+                        const coefficient = diff > chartInterval ? Math.floor(diff / chartInterval) + 1 : 1;
+
                         this.remain = displayMilliseconds(coefficient * chartInterval - diff);
-                        stx.draw();
+
+                        this.mainStore.chartAdapter.flutterChart?.config.setRemainingTime(this.remain || '');
                     }
                 }
             }
@@ -150,23 +137,6 @@ export default class TimeperiodStore {
         const hasCountdown = this.mainStore.chartSetting.countdown && !this.isTick;
 
         if (hasCountdown) {
-            if (!this._injectionId) {
-                this._injectionId = stx.append('draw', () => {
-                    if (this.isTick) {
-                        this.clearCountdown();
-                        return;
-                    }
-
-                    if (this.remain && stx.currentQuote() !== null) {
-                        stx.yaxisLabelStyle = 'rect';
-                        stx.labelType = 'countdown';
-                        stx.createYAxisLabel(stx.chart.panel, this.remain, this.remainLabelY(), '#15212d', '#FFFFFF');
-                        stx.labelType = undefined;
-                        stx.yaxisLabelStyle = 'roundRect';
-                    }
-                });
-            }
-
             if (!this.countdownInterval) {
                 this.countdownInterval = setInterval(setRemain, 1000);
                 setRemain();
@@ -175,15 +145,13 @@ export default class TimeperiodStore {
     }
 
     setGranularity(granularity?: TGranularity) {
-        if (this.mainStore.state.granularity !== undefined) {
-            console.error(
-                'Setting granularity does nothing since granularity prop is set. Consider overriding the onChange prop in <TimePeriod />'
-            );
-            return;
-        }
-
         logEvent(LogCategories.ChartControl, LogActions.Interval, granularity?.toString());
-        this.mainStore.chart.changeSymbol(undefined, granularity);
+
+        if (this.onGranularityChange) {
+            this.onGranularityChange(granularity);
+        } else {
+            this.mainStore.chart.changeSymbol(undefined, granularity);
+        }
     }
 
     updateProps(onChange: (granularity?: TGranularity) => void) {
@@ -207,30 +175,16 @@ export default class TimeperiodStore {
             this.predictionIndicator.dialogPortalNodeId = this.portalNodeIdChanged;
             this.predictionIndicator.setOpen(true);
         } else {
-            this.preparingInterval = interval as number;
             this.onGranularityChange(interval);
         }
     }
 
-    updateDisplay() {
-        if (!this.context) return;
-        const stx = this.context.stx;
-        this.timeUnit = getTimeUnit(stx.layout);
-        this.interval = stx.layout.interval;
-    }
-
     remainLabelY = () => {
-        const stx = this.context?.stx;
-        const topPos = 36;
-        const labelHeight = 24;
-        const bottomPos = 66;
-        let y = stx.chart.currentPriceLabelY + labelHeight;
-        if (stx.chart.currentPriceLabelY > stx.chart.panel.bottom - bottomPos) {
-            y = stx.chart.panel.bottom - bottomPos;
-            y = y < stx.chart.currentPriceLabelY - labelHeight ? y : stx.chart.currentPriceLabelY - labelHeight;
-        } else if (stx.chart.currentPriceLabelY < stx.chart.panel.top) {
-            y = topPos;
-        }
+        const currentClose = this.mainStore.chart.currentClose;
+
+        if (!currentClose) return;
+
+        const y = this.mainStore.chartAdapter.getYFromQuote(currentClose);
         return y;
     };
 

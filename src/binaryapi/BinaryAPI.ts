@@ -35,7 +35,7 @@ export default class BinaryAPI {
         requestAPI: TRequestAPI,
         requestSubscribe: TRequestSubscribe,
         requestForget: TRequestForget,
-        requestForgetStream?: TRequestForgetStream,
+        requestForgetStream?: TRequestForgetStream
     ) {
         this.requestAPI = requestAPI;
         this.requestSubscribe = requestSubscribe;

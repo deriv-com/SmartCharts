@@ -6,21 +6,38 @@
     }
 }
 
-.cq-crosshair {
-    display: none;
+.cq-crosshair-wrapper {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
 }
 
-.stx-crosshair-on .cq-crosshair {
-    position: relative;
-    display: block;
-    opacity: 0;
+.cq-crosshair {
+    display: none;
+    pointer-events: none;
+}
+
+.chartContainer {
+    &:hover,
+    &:active {
+        .cq-crosshair.active {
+            display: block;
+        }
+    }
+}
+
+.cq-crosshair-tooltip {
+    position: absolute;
     z-index: 30;
-    top: 0;
-    left: 0;
+    top: -5px;
+    left: -5px;
+    pointer-events: none;
 
     .cq-crosshair-content {
         border-radius: $border-radius;
-        position: absolute;
         pointer-events: none;
         padding: 8px;
         box-sizing: border-box;
@@ -73,12 +90,64 @@
     &.arrow-right .cq-crosshair-content {
         transform: translateX(calc(-100% - 30px)) translateY(-50%);
     }
-    &.arrow-left  .cq-crosshair-content:after,
+    &.arrow-left .cq-crosshair-content:after,
     &.arrow-right .cq-crosshair-content:before {
         display: block;
     }
-    &.active {
-        pointer-events: initial;
-        opacity: 1;
+}
+
+/* -------- Crosshairs lines and labels-------- */
+
+.cq-crosshair-line {
+    /* Standard Crosshair lines color */
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    @include themify($themes) {
+        background-color: themed('CrosshairAxis');
     }
+}
+
+.cq-crosshair-x {
+    /* Horizontal Crosshair line size */
+    top: -5px;
+    width: 1px;
+    height: 100%;
+}
+
+.cq-crosshair-y {
+    /* Vertical Crosshair line size */
+    left: -5px;
+    top: 0px;
+    height: 1px;
+    width: 98%;
+    margin-top: 0; /* since we're using border-top to draw the actual line */
+}
+
+.cq-float-price,
+.cq-float-date {
+    border-radius: $border-radius;
+    font-weight: normal;
+    font-size: 12px;
+    font-family: 'Helvetica';
+    z-index: 3;
+    padding: 0 8px;
+    text-align: center;
+    width: auto;
+    height: 30px;
+    line-height: 31px;
+    @include themify($themes) {
+        background-color: themed('CrosshairLabelBg');
+        color: themed('CrosshairLabelText') !important;
+    }
+}
+
+.cq-float-price {
+    position: absolute;
+    right: 0px;
+}
+
+.cq-float-date {
+    position: absolute;
+    bottom: 0px;
 }

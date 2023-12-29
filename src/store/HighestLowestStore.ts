@@ -1,6 +1,6 @@
-import { reaction, when } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TCIQAppend, TQuote, TRefData } from 'src/types';
+import { TQuote, TRefData } from 'src/types';
+import { strToDateTime } from 'src/utils/date';
 import MainStore from '.';
 import { getUTCEpoch } from '../utils';
 import ChartStore from './ChartStore';
@@ -12,16 +12,11 @@ class HighestLowestStore {
     highest: TQuote | null = null;
     lowest: TQuote | null = null;
 
-    injectionId: TCIQAppend<() => void> | null = null;
-
     get feed(): ChartStore['feed'] {
         return this.mainStore.chart.feed;
     }
     get context(): Context | null {
         return this.mainStore.chart.context;
-    }
-    get stx(): ChartStore['stxx'] {
-        return this.mainStore.chart.stxx;
     }
 
     get isHighestLowestMarkerEnabled() {
@@ -33,27 +28,7 @@ class HighestLowestStore {
 
     constructor(mainStore: MainStore) {
         this.mainStore = mainStore;
-
-        when(() => !!this.context, this.onContextReady);
-        reaction(() => this.isHighestLowestMarkerEnabled, this.enableMarker);
     }
-
-    clearInjection = () => {
-        if (this.injectionId) {
-            this.highestRef = null;
-            this.lowestRef = null;
-            this.stx.removeInjection(this.injectionId);
-            this.injectionId = null;
-        }
-    };
-
-    enableMarker = () => {
-        if (this.isHighestLowestMarkerEnabled) {
-            this.injectionId = this.stx.append('createDataSegment', this.calculateHighestLowestByNewData);
-        } else {
-            this.clearInjection();
-        }
-    };
 
     setHighestRef = (ref: TRefData | null) => {
         this.highestRef = ref;
@@ -69,18 +44,18 @@ class HighestLowestStore {
         }
     };
 
-    onContextReady = this.enableMarker;
-
     calculateHighestLowestByNewData = () => {
         if (!this.highestRef || !this.lowestRef) {
             return;
         }
 
-        if (this.stx.chart && this.stx.chart.dataSegment.length) {
+        const dataSegment = this.mainStore.chart.feed?.quotes;
+
+        if (dataSegment && dataSegment.length) {
             this.highest = null;
             this.lowest = null;
 
-            this.stx.chart.dataSegment.forEach((tick: TQuote) => {
+            dataSegment.forEach((tick: TQuote) => {
                 if (!tick) {
                     return;
                 }
@@ -104,7 +79,7 @@ class HighestLowestStore {
             const price = this.highest.Close.toFixed(this.decimalPlaces);
 
             this.highestRef.setPosition({
-                epoch: getUTCEpoch(CIQ.strToDateTime(this.highest.Date)),
+                epoch: getUTCEpoch(strToDateTime(this.highest.Date)),
                 price: +price,
             });
 
@@ -113,7 +88,7 @@ class HighestLowestStore {
         if (this.lowest) {
             const price = this.lowest.Close.toFixed(this.decimalPlaces);
             this.lowestRef.setPosition({
-                epoch: getUTCEpoch(CIQ.strToDateTime(this.lowest.Date)),
+                epoch: getUTCEpoch(strToDateTime(this.lowest.Date)),
                 price: +price,
             });
             (this.lowestRef.value as HTMLElement).textContent = price;

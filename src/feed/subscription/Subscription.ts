@@ -2,7 +2,6 @@ import { TicksHistoryResponse, TicksStreamResponse } from '@deriv/api-types';
 import EventEmitter from 'event-emitter-es6';
 import { BinaryAPI } from 'src/binaryapi';
 import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
-import Context from 'src/components/ui/Context';
 import { Listener, OHLCStreamResponse, TMainStore, TQuote } from 'src/types';
 import { TickHistoryFormatter } from '../TickHistoryFormatter';
 
@@ -12,7 +11,6 @@ class Subscription {
     _binaryApi: BinaryAPI;
     _emitter: EventEmitter;
     _request: TCreateTickHistoryParams;
-    _stx: Context['stx'];
     lastStreamEpoch?: number;
     _mainStore: TMainStore;
     static get EVENT_CHART_DATA() {
@@ -25,9 +23,8 @@ class Subscription {
         return this._mainStore.state.shouldFetchTickHistory || false;
     }
 
-    constructor(request: TCreateTickHistoryParams, api: BinaryAPI, stx: Context['stx'], mainStore: TMainStore) {
+    constructor(request: TCreateTickHistoryParams, api: BinaryAPI, mainStore: TMainStore) {
         this._binaryApi = api;
-        this._stx = stx;
         this._request = request;
         this._emitter = new EventEmitter({ emitDelay: 0 });
         this._mainStore = mainStore;

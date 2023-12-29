@@ -140,10 +140,11 @@ const App = () => {
     const memoizedValues = React.useMemo(() => {
         let endEpoch: number | undefined,
             granularity: number | undefined,
-            chartType = '';
+            chartType = '',
+            symbol = '';
         if (settingsRef.current.historical) {
             endEpoch = new Date(`${today}:00Z`).valueOf() / 1000;
-            chartType = 'mountain';
+            chartType = 'line';
             granularity = 0;
             if (layout) {
                 granularity =
@@ -153,17 +154,19 @@ const App = () => {
                               (layout.interval * IntervalEnum[layout.timeUnit as keyof typeof IntervalEnum]).toString(),
                               10
                           ); // eslint-disable-line
-                if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
+                if (layout.chartType === 'candles' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
                 } else {
                     chartType = layout.chartType;
                 }
+                symbol = layout.symbol;
             }
         }
         return {
             chartType,
             granularity,
             endEpoch,
+            symbol,
         };
     }, [layout]);
     const [chartType, setChartType] = React.useState<string | undefined>(memoizedValues.chartType);
@@ -171,7 +174,7 @@ const App = () => {
     const [endEpoch, setEndEpoch] = React.useState(memoizedValues.endEpoch);
     const [isConnectionOpened, setIsConnectionOpened] = React.useState(true);
     const [networkStatus, setNetworkStatus] = React.useState<TNetworkConfig>();
-    const [symbol, setSymbol] = React.useState<string>('');
+    const [symbol, setSymbol] = React.useState<string>(memoizedValues.symbol);
     const allTicks: keyof AuditDetailsForExpiredContract | [] = [];
     const contractInfo: keyof ProposalOpenContract | {} = {};
     React.useEffect(() => {
@@ -192,7 +195,7 @@ const App = () => {
         console.log('settings updated:', newSettings);
         localStorage.setItem('smartchart-setting', JSON.stringify(newSettings));
         if (!prevSetting.historical && newSettings.historical) {
-            setChartType('mountain');
+            setChartType('line');
             setGranularity(0);
             setEndEpoch(new Date(`${today}:00Z`).valueOf() / 1000);
         } else if (!newSettings.historical) {
@@ -252,6 +255,7 @@ const App = () => {
             });
         }
     };
+
     return (
         <SmartChart
             id={chartId}
@@ -278,6 +282,7 @@ const App = () => {
             networkStatus={networkStatus}
             shouldFetchTradingTimes
             shouldFetchTickHistory
+            isLive
             enabledChartFooter
             allTicks={allTicks}
             contractInfo={contractInfo}

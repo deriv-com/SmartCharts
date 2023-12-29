@@ -6,18 +6,19 @@ import { TMainStore } from 'src/types';
 import CrosshairToggle from './CrosshairToggle';
 import '../../sass/components/_navigation-widget.scss';
 
-import { ZoominIcon, ZoomoutIcon, ScaleIcon } from './Icons';
+import { ScaleIcon, ZoominIcon, ZoomoutIcon } from './Icons';
 
 type TNavigationWidgetProps = {
     onCrosshairChange?: TMainStore['crosshair']['onCrosshairChanged'];
 };
 
 const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
-    const { chart, chartSize, navigationWidget, chartSetting } = useStores();
-    const { context, isScaledOneOne } = chart;
+    const { chart, chartSize, navigationWidget, chartSetting, chartAdapter } = useStores();
+    const { context, startWithDataFitMode } = chart;
     const { zoomIn, zoomOut } = chartSize;
     const { historical } = chartSetting;
-    const { onScale, enableScale, onMouseEnter, onMouseLeave } = navigationWidget;
+    const { onMouseEnter, onMouseLeave } = navigationWidget;
+    const { isDataFitModeEnabled, toggleDataFitMode } = chartAdapter;
 
     return context ? (
         <div
@@ -29,10 +30,10 @@ const NavigationWidget = ({ onCrosshairChange }: TNavigationWidgetProps) => {
         >
             <div
                 className={classNames('sc-navigation-widget__item', 'sc-navigation-widget__item--scale', {
-                    'sc-navigation-widget__item--hidden': !enableScale,
-                    'sc-navigation-widget__item--disabled': isScaledOneOne,
+                    'sc-navigation-widget__item--hidden': !startWithDataFitMode,
+                    'sc-navigation-widget__item--disabled': isDataFitModeEnabled,
                 })}
-                onClick={onScale}
+                onClick={toggleDataFitMode}
             >
                 <ScaleIcon />
             </div>

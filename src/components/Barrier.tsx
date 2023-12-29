@@ -28,9 +28,19 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         isSingleBarrier,
         lineStyle,
         opacityOnOverlap,
-        overlappedBarrierWidth,
         shadeColor = '#39b19d',
     } = store;
+
+    const barrierRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (isInitialized && barrierRef.current) {
+            // To prevent zooming on barriers
+            barrierRef.current.addEventListener('wheel', e => {
+                e.preventDefault();
+            });
+        }
+    }, [isInitialized]);
 
     if (!isInitialized) return null;
 
@@ -38,10 +48,10 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
         <div
             className={classNames('barrier', { 'hide-pricelines': hidePriceLines })}
             style={{ '--shade-color': shadeColor } as CSSProperties}
+            ref={barrierRef}
         >
             <PriceLine
                 store={_high_barrier}
-                width={overlappedBarrierWidth}
                 lineStyle={lineStyle}
                 color={color}
                 foregroundColor={foregroundColor}
@@ -55,7 +65,6 @@ const Barrier = ({ store, ...props }: TBarrierBaseProps) => {
                 <>
                     <PriceLine
                         store={_low_barrier}
-                        width={overlappedBarrierWidth}
                         lineStyle={lineStyle}
                         color={color}
                         foregroundColor={foregroundColor}

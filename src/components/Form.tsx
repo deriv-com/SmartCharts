@@ -4,7 +4,7 @@ import React, { ChangeEvent, PropsWithChildren } from 'react';
 import debounce from 'lodash.debounce';
 
 import classNames from 'classnames';
-import { ArrayElement, TIcon, TObject } from 'src/types';
+import { ArrayElement, TIcon, TNumberPickerValue, TObject } from 'src/types';
 import Scroll from './Scroll';
 import { ArrowIcon, InputNumberPlusIcon, InputNumberMinusIcon, CheckboxIcon, CheckboxActiveIcon } from './Icons';
 import '../../sass/components/_form.scss';
@@ -28,7 +28,7 @@ type TColorPickerProps = {
 };
 
 type TSwitchProps = {
-    value: string;
+    value: boolean;
     onChange: (value: boolean) => void;
 };
 
@@ -37,7 +37,7 @@ type TSliderProps = {
     max: number;
     value: number;
     step: number;
-    onChange: (value: string) => void;
+    onChange: (value: number) => void;
 };
 
 type TCheckboxProps = {
@@ -54,16 +54,13 @@ type TNumericInputProps = {
     min?: number;
     max?: number;
     step?: number;
-    value: string;
+    value: string | number;
 };
 
 type TNumberColorPickerProps = {
-    value: {
-        Value: string;
-        Color: string;
-    };
+    props: TNumberPickerValue;
     theme: string;
-    onChange: (item: { Value: string; Color: string }) => void;
+    onChange: (item: { value: string | number; color: string }) => void;
 };
 
 type TDropDownProps<T> = {
@@ -135,7 +132,12 @@ export const Slider = ({ min = 1, max = 10, step = 1, value, onChange }: TSlider
     }, [value, min, max]);
 
     const handleChange = React.useCallback(
-        (el: ChangeEvent<HTMLInputElement>) => onChange((el.currentTarget as HTMLInputElement).value),
+        (el: ChangeEvent<HTMLInputElement>) => {
+            let value = (el.currentTarget as HTMLInputElement).value;
+            if (value.length > 0) {
+                onChange(Number(value));
+            }
+        },
         [onChange]
     );
 
@@ -457,7 +459,7 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: TNum
 
     const handleUpdateValue = (e: ChangeEvent<HTMLInputElement>) => {
         e.persist();
-        setInnerValue(e.target.value);
+        setInnerValue(e.target.valueAsNumber || '');
     };
 
     const handleFireOnEnter: React.KeyboardEventHandler = e => {
@@ -507,18 +509,18 @@ export const NumericInput = ({ subtitle, onChange, min, max, step, value }: TNum
     );
 };
 
-export const NumberColorPicker = ({ value, theme, onChange }: TNumberColorPickerProps) => {
+export const NumberColorPicker = ({ props, theme, onChange }: TNumberColorPickerProps) => {
     // Do NOT rename the variables Value and Color! The keys are also
     // used as attribute suffixes
-    const { Value, Color } = value;
-    const onValueChange = (v: string) => onChange({ Color, Value: v });
-    const onColorChange = (c: string) => onChange({ Color: c, Value });
+    const { value, color } = props;
+    const onValueChange = (v: string) => onChange({ color, value: v });
+    const onColorChange = (c: string) => onChange({ color: c, value });
 
     return (
         <span className='sc-numbercolorpicker'>
-            <NumericInput value={Value} subtitle={t.translate('Size')} onChange={val => onValueChange(val as string)} />
+            <NumericInput value={value} subtitle={t.translate('Size')} onChange={val => onValueChange(val as string)} />
             <ColorPicker
-                color={Color}
+                color={color}
                 theme={theme}
                 subtitle={t.translate('Color')}
                 setColor={val => onColorChange(val)}

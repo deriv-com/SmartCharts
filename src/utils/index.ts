@@ -5,9 +5,7 @@ import {
     TSubCategory,
     TSubCategoryDataItem,
 } from 'src/binaryapi/ActiveSymbols';
-import Context from 'src/components/ui/Context';
-import MarkerStore from 'src/store/MarkerStore';
-import { TGranularity, TQuote } from 'src/types';
+import { TDragEvents, TGranularity, TSettingsParameter, TQuote } from 'src/types';
 
 type TGetYAxisScalingParams = (options: {
     is_contract_chart?: boolean;
@@ -35,10 +33,37 @@ export function createObjectFromLocalStorage(key: string) {
     return undefined;
 }
 
+export function safeParse(value: string) {
+    try {
+        return JSON.parse(value);
+    } catch (e) {
+        return undefined;
+    }
+}
+
+export function saveToLocalStorage(key: string, value: any) {
+    const string = JSON.stringify(value);
+    localStorage.setItem(key, string);
+}
+
 export function getStringValue(p: number | string, pipSize: number) {
     return typeof p === 'string' ? p : p.toFixed(pipSize);
 }
 
+export const getTimeUnit = (granularity: TGranularity) => {
+    if (granularity !== undefined) {
+        if (granularity === 86400) {
+            return 'day';
+        }
+        if (granularity === 0) {
+            return 'tick';
+        }
+        if (granularity >= 60 && granularity <= 1800) {
+            return 'minute';
+        }
+        return 'hour';
+    }
+};
 /**
  *
  * @param {TProcessedSymbolItem} symbol_object
@@ -64,19 +89,6 @@ export const getTimeIntervalName = (interval: TGranularity, intervals: typeof In
     return interval_label ? `${interval_num} ${interval_label}` : '';
 };
 
-export const getTimeUnit = ({ timeUnit, interval }: { timeUnit?: string; interval: string | number }) => {
-    if (timeUnit === null && interval === 'day') {
-        return 'day';
-    }
-    if (timeUnit === 'minute' && typeof interval === 'number' && interval % 60 === 0) {
-        return 'hour';
-    }
-    if (timeUnit === 'second') {
-        return 'tick';
-    }
-    return timeUnit;
-};
-
 export const getIntervalInSeconds = ({
     timeUnit,
     interval,
@@ -89,6 +101,9 @@ export const getIntervalInSeconds = ({
     if (interv === 'day') {
         unit = 86400;
         interv = 1;
+    }
+    if (interv === 'hour') {
+        unit = 3600;
     } else if (timeUnit === 'minute') {
         unit = 60;
     } else if (timeUnit === 'second') {
@@ -175,13 +190,6 @@ export function downloadFileInBrowser(filename: string, content: string, type: s
     }
 }
 
-export function stxtap(el: HTMLElement, func: EventListenerOrEventListenerObject) {
-    if (el && !(el as any).safeClickTouchEvents) {
-        CIQ.installTapEvent(el);
-        el.addEventListener('stxtap', func);
-    }
-}
-
 export const getYAxisScalingParams: TGetYAxisScalingParams = ({
     is_contract_chart,
     is_mobile,
@@ -218,24 +226,6 @@ export function getLocalDate(epoch: number) {
     return new Date(epoch * 1000);
 }
 
-export function updatePropIfChanged(
-    source: MarkerStore,
-    props: Record<string, string | number | Date | boolean | undefined>,
-    onChanged: () => void
-) {
-    let isChanged = false;
-    for (const attr in props) {
-        if (props[attr] !== undefined && source[attr as keyof MarkerStore] !== props[attr]) {
-            (source as any)[attr] = props[attr];
-            isChanged = true;
-        }
-    }
-
-    if (isChanged && onChanged) {
-        onChanged();
-    }
-}
-
 export function calculateTimeUnitInterval(granularity: TGranularity | undefined) {
     let interval = 1;
     let timeUnit = 'second';
@@ -248,16 +238,6 @@ export function calculateTimeUnitInterval(granularity: TGranularity | undefined)
     }
 
     return { interval, timeUnit };
-}
-
-export function calculateGranularity(period: number, interval: string): TGranularity {
-    const toSeconds = {
-        second: 0,
-        minute: 60,
-        day: 24 * 60 * 60,
-    };
-
-    return (toSeconds[interval as keyof typeof toSeconds] * period) as TGranularity;
 }
 
 export function displayMilliseconds(ms: number) {
@@ -314,57 +294,6 @@ export function cloneCategories<T>(
     return categorized;
 }
 
-// Get a raw callback with underlying canvas2dcontext
-// This component is used to render directly into the chart canvas.
-//
-// Props:
-//
-//  - epoch_array: array of epoch values to get coordinates for.
-//  - price_array: array of price values to get y-coordinates for.
-//  - draw_callback: called on every frame with ({ctx, points, prices}).
-//  -- points will be an array of [{left, top, epoch}] in pixels.
-//  -- ctx is the Context2dDrawingContext
-
-// Unfortunately chartiq.js does a Math.floor() on pixel values,
-// Which causes a jerky effect on the markers in auto-scroll,
-// However we need the pixel value down to the decimal points.
-// This is copy from chartiq.js file WITHOUT rounding down the pixel value.
-
-export function patchPixelFromChart(stx: Context['stx']) {
-    stx.pixelFromTick = function (tick: number, _chart: typeof CIQ.ChartEngine.Chart) {
-        const chart = _chart || stx.chart;
-        const dataSegment = chart.dataSegment,
-            dataSet = chart.dataSet,
-            segmentImage = chart.segmentImage,
-            mp = stx.micropixels,
-            length = dataSegment ? dataSegment.length : 0;
-        const panel = chart.panel,
-            scroll = chart.scroll;
-        const bar = tick - dataSet.length + scroll;
-        let quote = length ? dataSegment[bar] : null;
-
-        if (segmentImage) quote = segmentImage[bar];
-        if (quote && quote.leftOffset) {
-            // return Math.floor(panel.left + quote.leftOffset + mp)
-            return panel.left + quote.leftOffset + mp;
-        }
-        let rightOffset = 0,
-            dsTicks = 0;
-        quote = length ? dataSegment[length - 1] : null;
-        if (segmentImage) quote = segmentImage[length - 1];
-        if (quote && quote.leftOffset) {
-            if (length < tick - dataSet.length + scroll) {
-                rightOffset = quote.leftOffset - quote.candleWidth / 2;
-                dsTicks = length;
-            }
-        }
-        // return Math.floor(/* ... */)
-        return (
-            rightOffset + panel.left + (tick - dsTicks - dataSet.length + scroll + 0.5) * stx.layout.candleWidth + mp
-        );
-    };
-}
-
 export const ARROW_HEIGHT = 41;
 
 export const ARROW_COLORS = Object.freeze({
@@ -382,14 +311,55 @@ export const formatCamelCase = (s: string) => {
     return capitalized.replace(/([a-z](?=[A-Z]))/g, '$1 ');
 };
 
-export const prepareIndicatorName = (name: string) => {
-    const StudyNameRegex = /\((.*)\)/; /* eslint-disable-line */
-    const getStudyBars = (str: string) => (str.match(StudyNameRegex) || []).pop();
-    // const capitalizeFirstLetter = (string) => {
-    //     const str = string.replace(StudyNameRegex, '');
-    //     return str.charAt(0).toUpperCase() + str.slice(1);
-    // };
-    const bars = getStudyBars(name);
+const movingAverageShortCode = {
+    doubleExponential: 'DEMA',
+    exponential: 'EMA',
+    hull: 'HMA',
+    simple: 'MA',
+    timeSeries: 'TSMA',
+    triangular: 'TMA',
+    tripleExponential: 'TEMA',
+    variable: 'VMA',
+    weighted: 'WMA',
+    wellesWilder: 'SMMA',
+    zeroLag: 'ZMA',
+};
+
+const fieldTypeShortCode = {
+    open: 'O',
+    high: 'H',
+    close: 'C',
+    low: 'L',
+    'Hl/2': 'Hl/2',
+    'HlC/3': 'Hlc/3',
+    'HlCC/4': 'Hlcc/4',
+    'OHlC/4': 'Ohlc/4',
+};
+
+export const prepareIndicatorName = (name: string, parameters: TSettingsParameter[] = []) => {
+    const getStudyBars = () => {
+        const bars = parameters
+            .filter(
+                p =>
+                    ['movingAverageType', 'maType', 'fieldType'].includes(p.path || '') ||
+                    ['number', 'switch'].includes(p.type)
+            )
+            .map(p => {
+                if (p.path === 'movingAverageType' || p.path === 'maType') {
+                    return movingAverageShortCode[p.value as keyof typeof movingAverageShortCode];
+                } else if (p.path === 'fieldType') {
+                    return fieldTypeShortCode[p.value as keyof typeof fieldTypeShortCode];
+                }
+                if (p.type === 'switch') {
+                    return p.value ? 'Y' : 'N';
+                }
+                return p.value || p.defaultValue;
+            })
+            .join(',');
+        return bars ? bars : undefined;
+    };
+
+    const bars = getStudyBars();
     return {
         name: formatCamelCase(name.replace(`(${bars})`, '').replace('-', ' ')).trim(),
         bars,
@@ -422,3 +392,106 @@ export const stringToSlug = (str: string) =>
         .toLowerCase()
         .replace(/[^\w ]+/g, '')
         .replace(/ +/g, '-');
+
+export const makeElementDraggable = (
+    el: HTMLElement,
+    zone: HTMLElement,
+    { onDragStart, onDrag, onDragReleased }: TDragEvents
+) => {
+    el.addEventListener('mousedown', dragMouseDown);
+
+    let isDragging = false;
+
+    function dragMouseDown(ev: MouseEvent) {
+        window.addEventListener('mousemove', elementDrag);
+        zone.addEventListener('mouseup', closeDragElement);
+
+        isDragging = true;
+
+        onDragStart?.(ev);
+    }
+
+    function elementDrag(ev: MouseEvent) {
+        if (isDragging) {
+            onDrag?.(ev);
+        }
+    }
+
+    function closeDragElement(ev: MouseEvent) {
+        isDragging = false;
+        onDragReleased?.(ev);
+
+        window.removeEventListener('mousemove', elementDrag);
+        zone.removeEventListener('mouseup', closeDragElement);
+    }
+};
+
+export const lerp = (a: number, b: number, t: number) => {
+    a = a ?? 0;
+    b = b ?? 0;
+
+    return a * (1.0 - t) + b * t;
+};
+
+export const transformStudiesforTheme = (value: any, theme: string) => {
+    if (typeof value == 'string' && (value.startsWith('#') || value.toLowerCase().startsWith('0x'))) {
+        let color = value;
+
+        if (theme === 'light' && color === '#FFFFFF') {
+            return '#000000';
+        } else if (theme === 'dark' && color === '#000000') {
+            return '#FFFFFF';
+        }
+
+        return color;
+    } else if (isLiteralObject(value)) {
+        const map = value as Record<string, any>;
+        Object.keys(value).forEach(key => {
+            map[key] = transformStudiesforTheme(map[key], theme);
+        });
+    } else if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+            value[i] = transformStudiesforTheme(value[i], theme);
+        }
+    }
+
+    return value;
+};
+
+export const clone = (obj: any): any => {
+    var copy: any;
+
+    if (null == obj || 'object' != typeof obj) return obj;
+
+    if (obj instanceof Date) {
+        copy = new Date();
+        copy.setTime(obj.getTime());
+        return copy;
+    }
+
+    if (obj instanceof Array) {
+        copy = [];
+        for (var i = 0, len = obj.length; i < len; i++) {
+            copy[i] = clone(obj[i]);
+        }
+        return copy;
+    }
+
+    if (obj instanceof Object) {
+        copy = {};
+        for (var attr in obj) {
+            if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
+        }
+        return copy;
+    }
+
+    throw obj;
+};
+
+export const flatMap = <T, U>(array: T[], callback: (value: T) => U[]): U[] => {
+    return array.reduce((x, y) => [...x, ...callback(y)], [] as U[]) as U[];
+};
+
+export const isLiteralObject = function (a: any) {
+    return !!a && a.constructor === Object;
+};

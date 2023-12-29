@@ -1,6 +1,5 @@
 import { action, computed, observable, when, makeObservable } from 'mobx';
 import Context from 'src/components/ui/Context';
-import { TQuote } from 'src/types';
 import MainStore from '.';
 import { downloadFileInBrowser, is_browser } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
@@ -14,7 +13,7 @@ type TNodeToManipulate = {
 export default class ShareStore {
     mainStore: MainStore;
     menuStore: MenuStore;
-    screenshotArea?: Element | null;
+    screenshotArea?: HTMLElement | null;
 
     isLoadingPNG = false;
 
@@ -37,9 +36,6 @@ export default class ShareStore {
 
     get context(): Context | null {
         return this.mainStore.chart.context;
-    }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
     }
 
     get timeUnit() {
@@ -64,8 +60,8 @@ export default class ShareStore {
         this.isLoadingPNG = true;
         const newTab = this.createNewTab();
 
-        import(/* webpackChunkName: "html2canvas" */ '../../chartiq/html2canvas.min.js' as string).then(html2canvas => {
-            // since react rerenders is not immediate, we use CIQ.appendClassName to
+        import(/* webpackChunkName: "html2canvas" */ 'html2canvas').then(html2canvas => {
+            // since react rerenders is not immediate, we
             // immediately append/unappend class name before taking screenshot.
             this.screenshotArea?.classList.add('ciq-chart--screenshot');
             // There is no html2canvas version able to render our svgs on a screenshot (tried 0.5.0-beta4 as well),
@@ -113,7 +109,7 @@ export default class ShareStore {
             });
 
             setTimeout(() => {
-                html2canvas.default(this.screenshotArea).then((canvas: HTMLCanvasElement) => {
+                html2canvas.default(this.screenshotArea!).then((canvas: HTMLCanvasElement) => {
                     this._onCanvasReady(canvas, newTab);
                     // replacing the added imgs on canvas back with svgs after downloading a screenshot:
                     if (!is_browser.Firefox() && !is_browser.Safari()) {
@@ -143,13 +139,13 @@ export default class ShareStore {
         const isTick = this.timeUnit === 'tick';
         const header = `Date,Time,${isTick ? this.marketDisplayName : 'Open,High,Low,Close'}`;
         const lines = [header];
-        const totalItemCount = this.stx.masterData.length;
-        const allowableItems =
-            totalItemCount <= 100
-                ? this.stx.masterData
-                : this.stx.masterData.slice(totalItemCount - 100, totalItemCount);
+        const quotes = this.mainStore.chart.feed?.quotes || [];
+        const totalItemCount = quotes.length;
+        const allowableItems = totalItemCount <= 100 ? quotes : quotes.slice(totalItemCount - 100, totalItemCount);
 
-        allowableItems.forEach(({ DT, Open, High, Low, Close }: Required<TQuote>) => {
+        allowableItems.forEach(({ DT, Open, High, Low, Close }) => {
+            if (!DT) return;
+
             const year = DT.getFullYear();
             const month = DT.getMonth() + 1; // months from 1-12
             const day = DT.getDate();

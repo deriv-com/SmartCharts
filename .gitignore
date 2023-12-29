@@ -30,3 +30,5 @@ jsconfig.json
 CNAME
 .nyc_output
 **/*.swp
+
+chart_app/build/**

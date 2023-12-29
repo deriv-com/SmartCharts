@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { TIcon } from 'src/types';
+import { TActiveItem, TIcon } from 'src/types';
 import { useStores } from 'src/store';
 import StudyLegendStore from 'src/store/StudyLegendStore';
 import NotificationBadge from './NotificationBadge';
@@ -10,7 +10,7 @@ import Tooltip from './Tooltip';
 import Scroll from './Scroll';
 import { IndicatorIcon, ActiveIcon, EmptyStateIcon, SettingIcon, DeleteIcon, InfoCircleIcon, BackIcon } from './Icons';
 import '../../sass/components/_studylegend.scss';
-import { STATE, TActiveItem, TooltipsContent } from '../Constant';
+import { STATE, TooltipsContent, getIndicatorsTree } from '../Constant';
 import Menu from './Menu';
 import SearchInput from './SearchInput';
 
@@ -20,9 +20,9 @@ type TStudyIconProps = {
 
 type TIndicatorListProps = {
     items: TActiveItem[];
-    onSelectItem?: (id: string) => void;
-    onDeleteItem?: (study: TActiveItem['dataObject']['sd']) => void;
-    onEditItem?: (dataObject: TActiveItem['dataObject']) => void;
+    onSelectItem?: (name: string) => void;
+    onDeleteItem?: (id: string) => void;
+    onEditItem?: (activeItem: TActiveItem) => void;
     onInfoItem?: (item: TActiveItem) => void;
     disableAll?: boolean;
     isTick?: boolean;
@@ -30,7 +30,7 @@ type TIndicatorListProps = {
 
 type TTabularDisplaySearchPanelProps = {
     categories: StudyLegendStore['searchedItems'];
-    onSelectItem?: (id: string) => void;
+    onSelectItem?: (name: string) => void;
     onInfoItem: (item: TActiveItem) => void;
     isTick: boolean;
     disableAll: boolean;
@@ -39,8 +39,8 @@ type TTabularDisplaySearchPanelProps = {
 type TabularDisplayActivePanelProps = {
     items: TActiveItem[];
     isMobile?: boolean;
-    onDeleteItem?: (study: TActiveItem['dataObject']['sd']) => void;
-    onEditItem: (dataObject: TActiveItem['dataObject']) => void;
+    onDeleteItem?: (id: string) => void;
+    onEditItem: (activeItem: TActiveItem) => void;
     clearAll: () => void;
 };
 
@@ -49,10 +49,10 @@ type TTabularDisplayProps = {
     selectedTab: number;
     categories: StudyLegendStore['items'];
     searchedCategories: StudyLegendStore['searchedItems'];
-    onSelectItem?: (id: string) => void;
-    onDeleteItem?: (study: TActiveItem['dataObject']['sd']) => void;
-    onEditItem: (dataObject: TActiveItem['dataObject']) => void;
-    onInfoItem: (item: TActiveItem) => void;
+    onSelectItem?: (name: string) => void;
+    onDeleteItem?: (id: string) => void;
+    onEditItem: (activeItem: TActiveItem) => void;
+    onInfoItem: (activeItem: TActiveItem) => void;
     activeItems: StudyLegendStore['activeItems'];
     clearAll: () => void;
     searchQuery: string;
@@ -95,7 +95,7 @@ const IndicatorList = ({
     <div className='sc-studies__list'>
         {items.map(Item => (
             <div
-                key={`item--${Item.id}`}
+                key={`item--${Item.id || Item.flutter_chart_id}`}
                 className={classNames('sc-studies__list__item ', {
                     'sc-studies__list__item--disabled': disableAll,
                     'sc-studies__list__item--disabled-prediction': Item.isPrediction && isTick,
@@ -115,17 +115,17 @@ const IndicatorList = ({
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
-                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.id) : null)}>
+                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
-                            <span>{Item.name}</span>
+                            <span>{onDeleteItem ? Item.short_name_and_index : Item.name}</span>
                             {Item.bars && <small>({Item.bars})</small>}
                         </div>
                     </div>
                     <div className='detail'>
                         {onInfoItem && <InfoCircleIcon className='ic-info' onClick={() => onInfoItem(Item)} />}
-                        {onEditItem && <SettingIcon onClick={() => onEditItem(Item.dataObject)} />}
-                        {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.dataObject.sd)} />}
+                        {onEditItem && <SettingIcon onClick={() => onEditItem(Item)} />}
+                        {onDeleteItem && <DeleteIcon onClick={() => onDeleteItem(Item.id)} />}
                     </div>
                 </Tooltip>
             </div>
@@ -142,7 +142,7 @@ const TabularDisplaySearchPanel = ({
 }: TTabularDisplaySearchPanelProps) => (
     <Scroll autoHide>
         {categories.map(Category => (
-            <div key={Category.id} className='sc-studies__category'>
+            <div key={Category.name} className='sc-studies__category'>
                 <div className='sc-studies__category__head'>{Category.name}</div>
                 <div className='sc-studies__category__body'>
                     <IndicatorList
@@ -207,7 +207,7 @@ const TabularDisplay = ({
                 <NotificationBadge notificationCount={activeItems.length} />
             </Tab>
             {categories.map(Category => (
-                <Tab key={`tab--${Category.id}`}>
+                <Tab key={`tab--${Category.name}`}>
                     <StudyIcon Icon={Category.icon} />
                     <span>{Category.name}</span>
                 </Tab>
@@ -244,7 +244,7 @@ const TabularDisplay = ({
             </div>
         </TabPanel>
         {categories.map(Category => (
-            <TabPanel key={`panel--${Category.id}`}>
+            <TabPanel key={`panel--${Category.name}`}>
                 <div className='sc-studies__panel'>
                     <h3>{Category.name}</h3>
                     <IndicatorList
@@ -273,7 +273,8 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
         onSelectTab,
         onSelectItem,
         activeItems,
-        deleteStudy,
+        getItemById,
+        deleteStudyById,
         editStudy,
         onInfoItem,
         infoItem,
@@ -290,7 +291,9 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
     updatePortalNode(portalNodeId);
 
     const getIndicatorCategoryName = (id: string) =>
-        items.find(i => i.items.some(el => el.id === id))?.id.replace('-', ' ') ?? '';
+        getIndicatorsTree()
+            .find(categories => categories.items.some(item => item.flutter_chart_id === id))
+            ?.category.replace('-', ' ') ?? '';
 
     const handleStateChange = (id: string, type: string, payload?: { is_info_open: boolean }) => {
         state.stateChange(type, {
@@ -315,10 +318,10 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                         <BackIcon
                             onClick={() => {
                                 onInfoItem(null);
-                                handleStateChange(infoItem.id, STATE.INDICATOR_INFO_TOGGLE);
+                                handleStateChange(infoItem.flutter_chart_id, STATE.INDICATOR_INFO_TOGGLE);
                             }}
                         />
-                        {infoItem.name}
+                        {infoItem.flutter_chart_id}
                     </div>
                 ) : (
                     <div className='sc-dialog__head--search'>
@@ -351,8 +354,10 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                                     type='button'
                                     className='sc-btn sc-btn--primary sc-btn--w100'
                                     onClick={() => {
-                                        onSelectItem(infoItem?.id);
-                                        handleStateChange(infoItem?.id, STATE.INDICATOR_ADDED, { is_info_open: true });
+                                        onSelectItem(infoItem?.flutter_chart_id);
+                                        handleStateChange(infoItem?.flutter_chart_id, STATE.INDICATOR_ADDED, {
+                                            is_info_open: true,
+                                        });
                                     }}
                                     disabled={infoItem?.disabledAddBtn}
                                 >
@@ -367,21 +372,25 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                     selectedTab={selectedTab}
                     categories={items}
                     searchedCategories={searchedItems}
-                    onSelectItem={(id: string) => {
-                        onSelectItem(id);
-                        handleStateChange(id, STATE.INDICATOR_ADDED);
+                    onSelectItem={(flutter_chart_id: string) => {
+                        onSelectItem(flutter_chart_id);
+                        handleStateChange(flutter_chart_id, STATE.INDICATOR_ADDED);
                     }}
-                    onDeleteItem={(item: TActiveItem['dataObject']['sd']) => {
-                        deleteStudy(item);
-                        handleStateChange(item.type, STATE.INDICATOR_DELETED);
+                    onDeleteItem={(id: string) => {
+                        const item = getItemById(id);
+                        if (item) {
+                            handleStateChange(item.flutter_chart_id, STATE.INDICATOR_DELETED);
+                        }
+
+                        deleteStudyById(id);
                     }}
-                    onEditItem={(study: TActiveItem['dataObject']) => {
+                    onEditItem={(study: TActiveItem) => {
                         editStudy(study);
-                        handleStateChange(study.sd.type, STATE.INDICATOR_SETTINGS_OPEN);
+                        handleStateChange(study.flutter_chart_id, STATE.INDICATOR_SETTINGS_OPEN);
                     }}
                     onInfoItem={(item: TActiveItem) => {
                         onInfoItem(item);
-                        handleStateChange(item.id, STATE.INDICATOR_INFO_TOGGLE, { is_info_open: true });
+                        handleStateChange(item.flutter_chart_id, STATE.INDICATOR_INFO_TOGGLE, { is_info_open: true });
                     }}
                     activeItems={activeItems}
                     clearAll={deleteAll}

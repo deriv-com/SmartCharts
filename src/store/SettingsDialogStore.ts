@@ -1,24 +1,23 @@
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { TObject, TSettingsItem, TSettingsItemGroup } from 'src/types';
+import { TSettingsParameter, TSettingsItemGroup, TObject } from 'src/types';
+import { clone } from 'src/utils';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import MenuStore from './MenuStore';
 
 type TSettingsDialogStoreProps = {
     mainStore: MainStore;
-    onChanged: (items: TSettingsItem[]) => void;
-    getContext?: (stx: typeof CIQ.ChartEngine) => Context;
-    onDeleted?: (indx?: number) => void;
+    onChanged: (items: TSettingsParameter[]) => void;
+    onDeleted?: (id: string) => void;
     favoritesId?: string;
 };
 
 export default class SettingsDialogStore {
-    getContext?: (stx: typeof CIQ.ChartEngine) => Context;
     mainStore: MainStore;
     menuStore: MenuStore;
-    onChanged: (items: TSettingsItem[]) => void;
-    onDeleted?: () => void;
-    items: TSettingsItem[] = []; // [{id: '', title: '', value: ''}]
+    onChanged: (items: TSettingsParameter[]) => void;
+    onDeleted?: (id: string) => void;
+    items: TSettingsParameter[] = []; // [{id: '', title: '', value: ''}]
     title = '';
     formTitle = '';
     formClassname = '';
@@ -30,7 +29,9 @@ export default class SettingsDialogStore {
     scrollPanel?: HTMLElement;
     dialogPortalNodeId?: string;
     freezeScroll = false;
-    constructor({ mainStore, getContext, onChanged, onDeleted }: TSettingsDialogStoreProps) {
+    id = '';
+    flutter_chart_id = '';
+    constructor({ mainStore, onChanged, onDeleted }: TSettingsDialogStoreProps) {
         makeObservable(this, {
             items: observable,
             title: observable,
@@ -49,11 +50,10 @@ export default class SettingsDialogStore {
             onItemDelete: action.bound,
             onItemChange: action.bound,
             itemGroups: computed,
-            setScrollPanel: action.bound
+            setScrollPanel: action.bound,
         });
 
         this.mainStore = mainStore;
-        this.getContext = getContext;
         this.onChanged = onChanged;
         this.onDeleted = onDeleted;
         this.menuStore = new MenuStore(mainStore, { route: 'indicator-setting' });
@@ -79,9 +79,6 @@ export default class SettingsDialogStore {
     }
     get context(): Context | null {
         return this.mainStore.chart.context;
-    }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
     }
     get theme() {
         return this.mainStore.chartSetting.theme;
@@ -110,49 +107,54 @@ export default class SettingsDialogStore {
         return this.menuStore.setOpen(value);
     }
     onResetClick() {
-        const items = this.items.map(item => ({ ...item, value: item.defaultValue }));
+        const items = this.items.map(item => ({ ...item, value: clone(item.defaultValue) })) as TSettingsParameter[];
         this.items = items;
         this.onChanged(items);
     }
     onItemDelete() {
         this.menuStore.setOpen(false);
-        if (this.onDeleted) this.onDeleted();
+        if (this.onDeleted) this.onDeleted(this.id);
     }
-    onItemChange(id: string, newValue: string | number | boolean | TObject) {
-        const item = this.items.find(x => x.id === id);
+
+    onItemChange(item: TSettingsParameter, newValue: string | number | boolean | TObject) {
         if (item && item.value !== newValue) {
-            item.value = newValue;
+            item.value = newValue as string | number | boolean;
             this.items = this.items.slice(0); // force array update
             this.onChanged(this.items);
         }
     }
     get itemGroups() {
-        const restGroup: TSettingsItem[] = [];
+        const restGroup: TSettingsParameter[] = [];
         const groups: TSettingsItemGroup[] = [];
         groups.push({
-            key: '%K',
+            key: '%k',
+            title: '%K',
             fields: [],
         });
         groups.push({
-            key: '%D',
+            key: '%d',
+            title: '%D',
             fields: [],
         });
         groups.push({
-            key: 'OverBought',
+            key: 'over_bought',
+            title: 'Over Bought',
             fields: [],
         });
         groups.push({
-            key: 'OverSold',
+            key: 'over_sold',
+            title: 'OverSold',
             fields: [],
         });
         groups.push({
-            key: 'Show Zones',
+            key: 'show_zones',
+            title: 'Show Zones',
             fields: [],
         });
         for (const index in this.items) {
             const item = this.items[index];
-            const title = item.title;
-            const group = groups.find(x => title.indexOf(x.key) !== -1);
+            const { group_key, title } = item;
+            const group = groups.find(x => group_key === x.key);
             if (group) {
                 item.subtitle = title.replace(group.key, '').trim();
                 group.fields.push(item);
@@ -161,7 +163,8 @@ export default class SettingsDialogStore {
             }
         }
         groups.unshift({
-            key: this.formTitle || this.title,
+            key: 'others',
+            title: this.formTitle || this.title,
             fields: restGroup,
         });
         return groups;

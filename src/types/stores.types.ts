@@ -14,7 +14,6 @@ import LoaderStore from '../store/LoaderStore';
 import FavoriteStore from '../store/FavoriteStore';
 import ChartSizeStore from '../store/ChartSizeStore';
 import RoutingStore from '../store/RoutingStore';
-import CurrentSpotStore from '../store/CurrentSpotStore';
 import ChartState from '../store/ChartState';
 import Notifier from '../store/Notifier';
 import LastDigitStatsStore from '../store/LastDigitStatsStore';
@@ -23,6 +22,7 @@ import HighestLowestStore from '../store/HighestLowestStore';
 import PaginationLoaderStore from '../store/PaginationLoaderStore';
 import ToolbarWidgetStore from '../store/ToolbarWidgetStore';
 import ScrollStore from '../store/ScrollStore';
+import ChartAdapterStore from 'src/store/ChartAdapterStore';
 
 export type TMainStore = {
     notifier: Notifier;
@@ -42,7 +42,6 @@ export type TMainStore = {
     loader: LoaderStore;
     chartSize: ChartSizeStore;
     routing: RoutingStore;
-    currentSpot: CurrentSpotStore;
     lastDigitStats: LastDigitStatsStore;
     bottomWidgetsContainer: BottomWidgetsContainerStore;
     navigationWidget: NavigationWidgetStore;
@@ -50,6 +49,7 @@ export type TMainStore = {
     paginationLoader: PaginationLoaderStore;
     toolbarWidget: ToolbarWidgetStore;
     scroll: ScrollStore;
+    chartAdapter: ChartAdapterStore;
 };
 
 export type Stores = Notifier;

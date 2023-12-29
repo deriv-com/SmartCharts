@@ -47,3 +47,36 @@ export function downloadURI(uri: string, name: string) {
     link.click();
     document.body.removeChild(link);
 }
+
+export function getUniqueId() {
+    let s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    };
+    return '__' + s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4() + '__';
+}
+
+export function hexToInt(color: string) {
+    // Tranforms hex color code to integer so that dart can create Color object from it.
+    // Eg: #443a49 -> 0xff443a49 -> 4282661449 or 0xff443a49 -> 4282661449
+    const colorCode = color.replace('#', '0xff');
+    return parseInt(colorCode, 16);
+}
+export function capitalize(str: string) {
+    if (!str || typeof str !== 'string') {
+        return '';
+    }
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export function intToHexColor(intColor: number): string {
+    // Convert the integer color to a hexadecimal string without the "0x" prefix.
+    const hexString = (intColor & 0xffffff).toString(16).toUpperCase();
+
+    // Pad the hexadecimal string with zeros to ensure it has 6 digits.
+    const paddedHexString = ('000000' + hexString).slice(-6);
+
+    // Add the "#" prefix to the padded hexadecimal string.
+    return `#${paddedHexString}`;
+}

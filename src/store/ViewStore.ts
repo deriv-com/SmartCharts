@@ -1,26 +1,21 @@
-import { action, computed, observable, reaction, makeObservable } from 'mobx';
+import { action, computed, observable, reaction, makeObservable, when } from 'mobx';
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TCustomEvent, TGranularity } from '../types';
-import { createObjectFromLocalStorage, getIntervalInSeconds } from '../utils';
+import { TCustomEvent, TLayout } from '../types';
+import { clone, createObjectFromLocalStorage } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
 
 export type TViews = {
     name: string;
-    layout: {
-        chartType: string;
-        tension: number;
-        timeUnit?: string | number;
-        interval?: string | number;
-    };
+    layout: TLayout;
 }[];
 export default class ViewStore {
     templateName = '';
     currentRoute = 'main';
     isInputActive = false;
-    views: TViews = createObjectFromLocalStorage('cq-views') || [];
+    views: TViews = createObjectFromLocalStorage('chart-views') || [];
     routes = {
         add: () => this.saveViews(),
         main: () => this.updateRoute('add'),
@@ -47,7 +42,7 @@ export default class ViewStore {
             onToggleNew: action.bound,
             inputRef: action.bound,
             onFocus: action.bound,
-            onBlur: action.bound
+            onBlur: action.bound,
         });
 
         this.mainStore = mainStore;
@@ -71,13 +66,10 @@ export default class ViewStore {
     mainStore: MainStore;
     menuStore: MenuStore;
 
-
     get context(): Context | null {
         return this.mainStore.chart.context;
     }
-    get stx(): Context['stx'] {
-        return this.context?.stx;
-    }
+
     get loader() {
         return this.mainStore.loader;
     }
@@ -87,7 +79,7 @@ export default class ViewStore {
     }
 
     updateLocalStorage() {
-        CIQ.localStorageSetItem('cq-views', JSON.stringify(this.views));
+        localStorage.setItem('chart-views', JSON.stringify(this.views));
     }
 
     onChange(e: ChangeEvent<HTMLInputElement>) {
@@ -113,20 +105,32 @@ export default class ViewStore {
         this.currentRoute = name;
     }
 
+    getLayout(): TLayout {
+        return {
+            chartType: this.mainStore.state.chartType,
+            granularity: this.mainStore.state.granularity,
+            timeUnit: this.mainStore.state.timeperiodStore.timeUnit,
+            studyItems: this.mainStore.studies.activeItems,
+            crosshair: this.mainStore.crosshair.state,
+            drawTools: this.mainStore.drawTools.activeToolsGroup,
+            msPerPx: this.mainStore.chartAdapter.msPerPx,
+        };
+    }
+
     saveViews() {
         if (this.views.some(x => x.name.toLowerCase().trim() === this.templateName.toLowerCase().trim())) {
             this.updateRoute('overwrite');
         } else if (this.templateName.trim().length > 0) {
             this.updateRoute('main');
-            const layout = this.stx.exportLayout();
-            this.views.push({ name: this.templateName.trim(), layout });
+
+            this.views.push({ name: this.templateName.trim(), layout: clone(this.getLayout()) });
             this.updateLocalStorage();
             this.templateName = '';
         }
     }
 
     overwrite() {
-        const layout = this.stx.exportLayout();
+        const layout = clone(this.getLayout());
         const templateIndex = this.views.findIndex(x => x.name.toLowerCase() === this.templateName.toLowerCase());
         this.views[templateIndex].layout = layout;
         this.views[templateIndex].name = this.templateName.trim();
@@ -153,46 +157,48 @@ export default class ViewStore {
         if (e.nativeEvent.is_item_removed) {
             return;
         }
+
+        const { layout } = this.sortedItems[idx];
+
+        this.restoreLayout(clone(layout));
+        logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
+    }
+
+    async restoreLayout(layout: TLayout) {
+        const finishImportLayout = () => {
+            if (this.loader) {
+                this.loader.hide();
+                this.mainStore.paginationLoader.updateOnPagination(false);
+            }
+            this.mainStore.state.setChartIsReady(true);
+
+            if (layout.granularity !== undefined) {
+                this.mainStore.timeperiod.setGranularity(layout.granularity);
+            }
+        };
+
         if (this.loader) {
             this.loader.show();
         }
-        this.mainStore.state.setChartIsReady(false);
-        const sortedItems = this.sortedItems[idx].layout;
-        const stx = this.stx;
-        const granularity = getIntervalInSeconds(sortedItems) as TGranularity;
 
-        this.mainStore.timeperiod.onGranularityChange(granularity);
-        const importLayout = () => {
-            const finishImportLayout = () => {
-                stx.changeOccurred('layout');
-                this.mainStore.studies.updateActiveStudies();
-                if (this.loader) {
-                    this.loader.hide();
-                    this.mainStore.paginationLoader.updateOnPagination(false);
-                }
-                this.mainStore.state.setChartIsReady(true);
-                this.mainStore.state.setChartGranularity(granularity);
-            };
-            stx.importLayout(sortedItems, {
-                managePeriodicity: true,
-                preserveTicksAndCandleWidth: true,
-                cb: finishImportLayout,
-            });
-            // This condition is to make spline chart appear as spline chart
-            // Both line chart and spline chart are of type mountain but with different tensions
-            let chartType = sortedItems.chartType;
-            if (chartType === 'mountain') {
-                const tension = sortedItems.tension;
-                if (tension === 0.5) {
-                    chartType = 'spline';
-                }
-            }
-            this.mainStore.chartType.setType(chartType as string);
-            this.mainStore.state.setChartType(chartType);
-            this.menuStore.setOpen(false);
-            logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
-        };
-        setTimeout(importLayout, 100);
+        this.mainStore.chartAdapter.msPerPx = layout.msPerPx;
+
+        this.mainStore.state.setChartIsReady(false);
+
+        if (layout.chartType !== undefined) {
+            this.mainStore.chartType.setChartType(layout.chartType);
+        }
+        this.menuStore.setOpen(false);
+
+        await when(() => this.mainStore.chartAdapter.isChartLoaded);
+
+        this.mainStore.studies.restoreStudies(layout.studyItems || []);
+
+        if (typeof layout.crosshair === 'number') {
+            this.mainStore.crosshair.setCrosshairState(layout.crosshair);
+        }
+
+        finishImportLayout();
     }
 
     onToggleNew() {

@@ -145,7 +145,7 @@ const App = () => {
     const startingLanguageRef = React.useRef('en');
     const openMarketRef = React.useRef<TOpenMarket>({});
     const [notifier] = React.useState(new ChartNotifier());
-    const [layoutString] = React.useState(localStorage.getItem(`layout-${chartId}`) || '');
+    const [layoutString] = React.useState(localStorage.getItem(`layout-new-${chartId}`) || '');
     const [layout] = React.useState(JSON.parse(layoutString !== '' ? layoutString : '{}'));
     const initialSettings = React.useMemo(() => {
         let _settings: TSettings = createObjectFromLocalStorage('smartchart-setting');
@@ -184,12 +184,12 @@ const App = () => {
                               (layout.interval * IntervalEnum[layout.timeUnit as keyof typeof IntervalEnum]).toString(),
                               10
                           );
-                if (layout.chartType === 'candle' && layout.aggregationType !== 'ohlc') {
+                if (layout.chartType === 'candles' && layout.aggregationType !== 'ohlc') {
                     chartType = layout.aggregationType;
                 } else {
                     chartType = layout.chartType;
                 }
-                if (['mountain', 'line', 'colored_line', 'spline', 'baseline'].indexOf(chartType) === -1) {
+                if (['line', 'colored_line', 'spline', 'baseline'].indexOf(chartType) === -1) {
                     isChartTypeCandle = true;
                 }
             }
@@ -268,7 +268,7 @@ const App = () => {
         console.log('settings updated:', newSettings);
         localStorage.setItem('smartchart-setting', JSON.stringify(newSettings));
         if (!prevSetting.historical && newSettings.historical) {
-            setChartType('mountain');
+            setChartType('line');
             setIsChartTypeCandle(false);
             setGranularity(0);
             setEndEpoch(new Date(`${today}:00Z`).valueOf() / 1000);
@@ -550,6 +550,7 @@ const App = () => {
     const barriers = barrierType
         ? [
               {
+                  key: 'barrier_1',
                   shade: barrierType,
                   shadeColor,
                   foregroundColor: foregroundColor || null,

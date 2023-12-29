@@ -27,11 +27,11 @@ type TChartTypesProps = {
 const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
     const { chartType, chart, state } = useStores();
 
-    const { listStore, setTypeFromUI, updateProps, types, type, menuStore } = chartType;
+    const { listStore, setChartType, updateProps, types, type, menuStore } = chartType;
     const { open: menuOpen, setOpen } = chartType.menuStore;
     const { isMobile } = chart;
 
-    const onChange = onChangeFn || setTypeFromUI;
+    const onChange = onChangeFn || setChartType;
 
     if (type === undefined) return null;
 

@@ -1,8 +1,12 @@
 @charset "UTF-8";
 
 .barrier-area {
+    -moz-user-select: none;
+    -webkit-user-select: none;
     padding: 13px 0;
     position: absolute;
+    top: 0;
+    user-select: none;
     width: 100%;
 }
 /* Drag Lines and Prices */
@@ -10,6 +14,9 @@
     position: absolute;
     z-index: 35;
 
+    &.draggable {
+        pointer-events: all;
+    }
     &.horizontal {
         width: 100%;
         left: 0;
@@ -40,7 +47,13 @@
             $title-height: 24px;
             position: absolute;
             height: $title-height;
-            background-image: linear-gradient(rgba(255, 255, 255, 0.001) 30%, var(--general-main-1) 50%, rgba(255, 255, 255, 0.001) 75%); /* stylelint-disable-line number-max-precision, plugin/no-unsupported-browser-features */
+            /* stylelint-disable number-max-precision, plugin/no-unsupported-browser-features */
+            background-image: linear-gradient(
+                rgba(255, 255, 255, 0.001) 30%,
+                var(--general-main-1) 50%,
+                rgba(255, 255, 255, 0.001) 75%
+            );
+            /* stylelint-enable number-max-precision, plugin/no-unsupported-browser-features */
             top: -11px;
             display: flex;
             align-items: center;
@@ -192,12 +205,14 @@
     right: 0;
     height: 120px !important;
     opacity: 0.3;
-    transition: opacity 0.1s ease-out;
+    transition: all 0.1s ease-out;
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
 .top-shade {
-    background-image: linear-gradient(to bottom, transparent, var(--shade-color)); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    background-image: linear-gradient(to bottom, transparent, var(--shade-color));
+    /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
 .between-shade {
@@ -206,5 +221,7 @@
 }
 
 .bottom-shade {
-    background-image: linear-gradient(to bottom, var(--shade-color), transparent); /* stylelint-disable-line plugin/no-unsupported-browser-features */
+    /* stylelint-disable plugin/no-unsupported-browser-features */
+    background-image: linear-gradient(to bottom, var(--shade-color), transparent);
+    /* stylelint-enable plugin/no-unsupported-browser-features */
 }

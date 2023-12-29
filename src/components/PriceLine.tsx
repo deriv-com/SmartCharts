@@ -15,14 +15,12 @@ type TPriceLineProps = {
     foregroundColor: string;
     color?: string;
     opacityOnOverlap: number;
-    width: number;
 };
 
 const PriceLine = ({
     lineStyle,
     color,
     foregroundColor,
-    width,
     hideOffscreenBarrier,
     opacityOnOverlap,
     hideOffscreenLine,
@@ -34,15 +32,17 @@ const PriceLine = ({
         draggable,
         init,
         isDragging,
+        isMobile,
         isOverlapping,
         isOverlappingWithPriceLine,
         offScreen,
         offScreenDirection,
+        overlappedBarrierWidth,
         priceDisplay,
+        priceLineWidth,
         setDragLine,
         title,
         visible,
-        yAxiswidth,
     } = store;
 
     const showBarrier = React.useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
@@ -58,10 +58,11 @@ const PriceLine = ({
 
     if (!showBarrier) return null;
 
+    const width = priceLineWidth + 12;
+
     return (
         <div
             className={classNames('barrier-area', { 'barrier-area--zero': isOverlappingWithPriceLine })}
-            style={{ top: 0 }}
             ref={setDragLine}
             hidden={!visible}
         >
@@ -80,7 +81,7 @@ const PriceLine = ({
                         style={{
                             borderTopColor: color,
                             borderTopStyle: lineStyle as React.CSSProperties['borderTopStyle'],
-                            width: `calc(100% - ${yAxiswidth}px + ${width}px)`,
+                            width: `calc(100% - ${width}px + ${!isMobile ? overlappedBarrierWidth : 0}px)`,
                         }}
                     />
                 )}
@@ -90,9 +91,10 @@ const PriceLine = ({
                         className={'drag-price'}
                         style={{
                             backgroundColor: color,
-                            width: isOverlappingWithPriceLine ? width : yAxiswidth,
+                            width: isOverlappingWithPriceLine ? overlappedBarrierWidth : width,
                             opacity,
-                            right: isOverlappingWithPriceLine ? yAxiswidth - width : 0,
+                            right:
+                                (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 4),
                         }}
                     >
                         <HamburgerDragIcon />
@@ -101,7 +103,7 @@ const PriceLine = ({
                             style={{
                                 color: isOverlappingWithPriceLine ? color : '',
                                 right: isOverlappingWithPriceLine
-                                    ? width + priceDisplay.length * 8 - (!draggable ? 16 : 0)
+                                    ? overlappedBarrierWidth + priceDisplay.length * 8 - (!draggable ? 16 : 0)
                                     : 0,
                             }}
                         >
@@ -113,15 +115,15 @@ const PriceLine = ({
                         )}
                     </div>
                     {isOverlappingWithPriceLine && (
-                        <div>
-                            <div
-                                className='price-overlay'
-                                style={{ backgroundColor: color, width: yAxiswidth - width }}
-                            />
-                        </div>
+                        <div
+                            className='price-overlay'
+                            style={{ backgroundColor: color, width: width - overlappedBarrierWidth, right: -6 }}
+                        />
                     )}
                 </div>
-                {title && <PriceLineTitle color={color} title={title} yAxiswidth={yAxiswidth} opacity={opacity} />}
+                {title && (
+                    <PriceLineTitle color={color} title={title} yAxiswidth={overlappedBarrierWidth} opacity={opacity} />
+                )}
             </div>
         </div>
     );

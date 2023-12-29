@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/store';
 import { TRefData } from 'src/types';
+import { strToDateTime } from 'src/utils/date';
 import { getUTCDate } from '../utils';
-import Context from './ui/Context';
 
 // Render given Components under stx-subholder.
 // This component is used to position a marker on the chart.
@@ -37,29 +37,65 @@ type TFastMarkerProps = {
     x?: number;
     xPositioner?: string;
     yPositioner?: string;
+    overlap_y_axis?: boolean;
     children?: React.ReactNode;
 };
 
 const FastMarker = (props: TFastMarkerProps) => {
-    const { chart: chartStore } = useStores();
-    const { contextPromise } = chartStore;
+    const { chart: chartStore, chartAdapter } = useStores();
     const price_ref = React.useRef<number | null>(null);
     const date_ref = React.useRef<Date | null>(null);
+    const epoch_ref = React.useRef<number | null>(null);
     const elem_ref = React.useRef<HTMLDivElement | null>(null);
-    const ctx_ref = React.useRef<Context | null>(null);
-    const stx_ref = React.useRef<Context['stx']>(null);
-    const injection_id_ref = React.useRef();
+
     const props_ref = React.useRef(props);
     props_ref.current = props;
 
+    React.useEffect(() => {
+        chartAdapter.painter.registerCallback(updateCSS);
+
+        return () => {
+            chartAdapter.painter.unregisterCallback(updateCSS);
+        };
+    }, []);
+
+    React.useEffect(() => {
+        updateCSS();
+    }, [
+        chartAdapter.epochBounds,
+        chartAdapter.quoteBounds,
+        chartAdapter.isFeedLoaded,
+        chartAdapter.isChartLoaded,
+        chartStore.lastQuote,
+    ]);
+
+    // TODO: Do a proper fix to detect the right padding
+    React.useEffect(() => {
+        const hasTooltip = elem_ref.current?.querySelector('.chart-spot-label-profit');
+        if (hasTooltip) {
+            chartAdapter.updateRightPadding(110);
+        }
+        return () => {
+            if (hasTooltip) {
+                chartAdapter.updateRightPadding(0);
+            }
+        };
+    }, [chartAdapter]);
+
     const setPosition = ({ epoch, price }: Record<string, number | null | undefined>) => {
         price_ref.current = Number(price) || null;
-        date_ref.current = CIQ.strToDateTime(getUTCDate(epoch as number)) as Date;
+        date_ref.current = strToDateTime(getUTCDate(epoch as number)) as Date;
+        epoch_ref.current = epoch ? epoch * 1000 : null;
+
         updateCSS();
     };
 
     const updateCSS = () => {
-        if (!elem_ref.current || !ctx_ref.current || !stx_ref.current) {
+        if (!chartAdapter.isFeedLoaded || !chartAdapter.isChartLoaded) {
+            return;
+        }
+
+        if (!elem_ref.current) {
             return;
         }
         if (!date_ref.current) {
@@ -70,49 +106,18 @@ const FastMarker = (props: TFastMarkerProps) => {
         const offsetTop = props_ref.current.offsetTop || 0;
         const offsetLeft = props_ref.current.offsetLeft || 0;
         const elem = elem_ref.current;
-        const stx = stx_ref.current;
-        const chart = stx.chart;
 
         let top = 0,
             left = 0,
             show = true;
 
-        const threshold = Number(props_ref.current.threshold) || 0;
-        show = !threshold || stx.layout.candleWidth >= threshold;
+        if (epoch_ref.current) {
+            const x: number = chartAdapter.getXFromEpoch(epoch_ref.current);
+            const y: number = price_ref.current ? chartAdapter.getYFromQuote(price_ref.current) : 0;
 
-        if (show && chart.dataSet && chart.dataSet.length && stx.mainSeriesRenderer) {
-            let tickIdx = stx.tickFromDate(date_ref.current, chart);
-
-            if (tickIdx > -1 && stx.chart.dataSet[tickIdx] && stx.chart.dataSet[tickIdx].Close !== price_ref.current) {
-                delete stx.chart.tickCache[date_ref.current.getTime()];
-                tickIdx = stx.tickFromDate(date_ref.current, chart);
-            }
-
-            let x = stx.pixelFromTick(tickIdx, chart);
-
-            // ChartIQ doesn't support placing markers in the middle of ticks.
-            const bar = chart.dataSet[tickIdx];
-            // Here we interpolate the pixel distance between two adjacent ticks.
-            if (bar && bar.DT < date_ref.current) {
-                const barNext = chart.dataSet[tickIdx + 1];
-                const barPrev = tickIdx > 0 ? chart.dataSet[tickIdx - 1] : null;
-                if (barNext && barNext.Close && barNext.DT > date_ref.current) {
-                    const pixelToNextBar = stx.pixelFromTick(tickIdx + 1, chart) - x;
-                    x +=
-                        ((((date_ref.current as unknown) as number) - bar.DT) / (barNext.DT - bar.DT)) * pixelToNextBar;
-                } else if (barPrev && barPrev.Close) {
-                    const pixelFromPrevBar = x - stx.pixelFromTick(tickIdx - 1, chart);
-                    x +=
-                        ((((date_ref.current as unknown) as number) - bar.DT) / (bar.DT - barPrev.DT)) *
-                        pixelFromPrevBar;
-                }
-            }
-
-            const y = price_ref.current ? stx.pixelFromPrice(price_ref.current, chart.panel) : 0;
-
-            if (chart.yAxis.left > x && chart.yAxis.top <= y && chart.yAxis.bottom >= y) {
+            if (x > 0 && (price_ref.current == null || y > 0)) {
                 top = +y;
-                left = Math.round(x);
+                left = +x;
             } else {
                 show = false;
             }
@@ -139,28 +144,25 @@ const FastMarker = (props: TFastMarkerProps) => {
         }
 
         if (ref !== null) {
-            if (contextPromise) {
-                contextPromise.then((ctx: Context) => {
-                    ctx_ref.current = ctx;
-                    stx_ref.current = ctx_ref.current.stx;
-
-                    injection_id_ref.current = stx_ref.current.append('draw', updateCSS);
-                    updateCSS();
-                });
-            }
-        } else if (injection_id_ref.current && stx_ref.current) {
-            // remove the injection on unmount
-            stx_ref.current.removeInjection(injection_id_ref.current);
-            ctx_ref.current = null;
-            stx_ref.current = null;
+            updateCSS();
         }
     };
 
     const { children, className } = props;
 
+    if (!chartAdapter.isChartLoaded) return null;
+
+    const { chartNode, yAxisWidth } = chartStore;
+
+    const { overlap_y_axis = true } = props;
+
+    const maxWidth = chartNode && !overlap_y_axis ? chartNode.offsetWidth - yAxisWidth - 10 : '100%';
+
     return (
-        <div className={className} ref={setRef} style={{ position: 'absolute' }}>
-            {children}
+        <div className='fast-marker' style={{ maxWidth: maxWidth }}>
+            <div className={className} ref={setRef} style={{ position: 'absolute' }}>
+                {children}
+            </div>
         </div>
     );
 };
