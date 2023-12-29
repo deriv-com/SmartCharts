@@ -103,6 +103,8 @@ jobs:
                   cd SmartCharts/chart_app
                   flutter pub get
                   flutter build web --web-renderer html --release
+              env:
+                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
             - name: Build SmartCharts
               run: cd SmartCharts && npm run build -- --output-path ../deriv-app/node_modules/@deriv/deriv-charts/dist
