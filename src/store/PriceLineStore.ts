@@ -352,7 +352,6 @@ export default class PriceLineStore {
             if (i === current_barrier_idx) {
                 continue;
             }
-
             const barrier = filtered_barriers[i];
             const diffTop = barrier._high_barrier.top && Math.abs(barrier._high_barrier.top - top);
 

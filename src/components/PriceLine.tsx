@@ -93,7 +93,8 @@ const PriceLine = ({
                             backgroundColor: color,
                             width: isOverlappingWithPriceLine ? overlappedBarrierWidth : width,
                             opacity,
-                            right: (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 4),
+                            right:
+                                (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 4),
                         }}
                     >
                         <HamburgerDragIcon />
@@ -120,7 +121,9 @@ const PriceLine = ({
                         />
                     )}
                 </div>
-                {title && <PriceLineTitle color={color} title={title} yAxiswidth={overlappedBarrierWidth} opacity={opacity} />}
+                {title && (
+                    <PriceLineTitle color={color} title={title} yAxiswidth={overlappedBarrierWidth} opacity={opacity} />
+                )}
             </div>
         </div>
     );
