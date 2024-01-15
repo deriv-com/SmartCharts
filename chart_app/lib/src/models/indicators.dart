@@ -816,11 +816,11 @@ class IndicatorsModel {
             }
           }
         } else if (item is AlligatorSeries) {
-          final List<Tick> teethEntries = item.teethSeries!.entries ?? <Tick>[];
+          final List<Tick> teethEntries = item.teethSeries?.entries ?? <Tick>[];
 
-          final List<Tick> jawEntries = item.jawSeries!.entries ?? <Tick>[];
+          final List<Tick> jawEntries = item.jawSeries?.entries ?? <Tick>[];
 
-          final List<Tick> lipEntries = item.lipsSeries!.entries ?? <Tick>[];
+          final List<Tick> lipEntries = item.lipsSeries?.entries ?? <Tick>[];
 
           if (isPointOnIndicator(
                 teethEntries,
