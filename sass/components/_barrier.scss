@@ -1,5 +1,6 @@
 @charset "UTF-8";
 
+/*rtl:ignore*/
 .barrier-area {
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -10,6 +11,8 @@
     width: 100%;
 }
 /* Drag Lines and Prices */
+
+/*rtl:ignore*/
 .chart-line {
     position: absolute;
     z-index: 35;
@@ -71,6 +74,7 @@
 
 /*hover*/
 
+/*rtl:ignore*/
 .draggable.chart-line:hover {
     &.horizontal {
         cursor: ns-resize;
@@ -82,11 +86,14 @@
 
 /*hover*/
 
+/*rtl:ignore*/
 .hide-pricelines > .chart-line.horizontal,
 .hide-pricelines > .barrier-area {
     display: none;
 }
 
+
+/*rtl:ignore*/
 .drag-price {
     display: flex;
     height: 24px;
@@ -109,6 +116,7 @@
 
 /*hover*/
 
+/*rtl:ignore*/
 .no-touch {
     .price-arrow {
         span {
@@ -137,6 +145,8 @@
 
 /*hover*/
 
+
+/*rtl:ignore*/
 .price {
     display: block;
     font-size: 12px;
@@ -165,6 +175,7 @@
     }
 }
 
+/*rtl:ignore*/
 .draggable {
     &-area-wrapper {
         display: flex;
@@ -193,10 +204,12 @@
 
 /* shade */
 
+/*rtl:ignore*/
 .shade.hidden {
     opacity: 0;
 }
 
+/*rtl:ignore*/
 .shade {
     position: absolute;
     width: 100%;
@@ -209,17 +222,20 @@
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
+/*rtl:ignore*/
 .top-shade {
     /* stylelint-disable plugin/no-unsupported-browser-features */
     background-image: linear-gradient(to bottom, transparent, var(--shade-color));
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
 
+/*rtl:ignore*/
 .between-shade {
     opacity: 0.2;
     background-color: var(--shade-color);
 }
 
+/*rtl:ignore*/
 .bottom-shade {
     /* stylelint-disable plugin/no-unsupported-browser-features */
     background-image: linear-gradient(to bottom, var(--shade-color), transparent);

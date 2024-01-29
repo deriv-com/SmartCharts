@@ -1,5 +1,7 @@
+  /*rtl:ignore*/
 .sc-toolbar-widget {
     position: absolute;
+    direction: ltr;
     border-radius: $border-radius;
     width: 40px;
     top: 102px;
@@ -56,6 +58,7 @@
             }
         }
     }
+      /*rtl:ignore*/
     .sc-tooltip__inner {
         left: calc(100% + 15px);
     }

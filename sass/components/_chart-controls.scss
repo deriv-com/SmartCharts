@@ -1,4 +1,5 @@
 
+/*rtl:ignore*/
 .cq-chart-controls {
     position: absolute;
     display: flex;
@@ -135,6 +136,8 @@
 }
 
 /* Menu dropdown open/close animation */
+
+/*rtl:ignore*/
 .cq-chart-controls .ciq-menu .cq-menu-dropdown {
     .cq-chart-control-bottom & {
         transform: translateX(-50%) translateY(3em);
@@ -164,6 +167,8 @@
     }
 }
 
+
+/*rtl:ignore*/
 .cq-chart-control-bottom .cq-chart-controls {
     bottom: 0px;
     height: 40px;
@@ -171,6 +176,8 @@
     padding: 0 5px;
 }
 
+
+/*rtl:ignore*/
 .cq-chart-control-left .cq-chart-controls {
     left: 0px;
     top: 0;
@@ -195,6 +202,9 @@
 }
 
 /* Mobile Style */
+
+
+/*rtl:ignore*/
 .smartcharts-mobile {
     .cq-chart-controls {
         justify-content: space-around;
@@ -246,6 +256,8 @@
     }
 }
 
+
+/*rtl:ignore*/
 .smartcharts-480 {
     .smartcharts-desktop {
         .cq-chart-control-bottom {
@@ -278,6 +290,8 @@
     }
 }
 
+
+/*rtl:ignore*/
 .smartcharts-900 {
     .smartcharts-desktop {
         .cq-chart-control-bottom {
@@ -303,6 +317,8 @@
     }
 }
 
+
+/*rtl:ignore*/
 .smartcharts-1280 {
     .smartcharts-desktop {
         .cq-chart-controls {
