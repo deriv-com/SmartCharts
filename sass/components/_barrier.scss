@@ -12,7 +12,6 @@
 }
 /* Drag Lines and Prices */
 
-/*rtl:ignore*/
 .chart-line {
     position: absolute;
     z-index: 35;
@@ -38,6 +37,7 @@
             width: 100%;
         }
         .drag-line {
+            /* rtl:begin:ignore */
             height: 1px;
             float: left;
             width: 100%;
@@ -45,6 +45,7 @@
             position: relative;
             border-top-width: 1px;
             border-top-color: $color-blue;
+            /* rtl:end:ignore */
         }
         .title-wrapper {
             $title-height: 24px;
@@ -166,12 +167,14 @@
         }
     }
     &-overlay {
+        /* rtl:begin:ignore */
         background-color: $color-blue;
         height: 24px;
         opacity: 0.3;
         position: relative;
         right: -10px;
         top: -12px;
+        /* rtl:end:ignore */
     }
 }
 
