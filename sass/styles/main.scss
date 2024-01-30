@@ -161,7 +161,6 @@
     overflow: hidden;
 }
 
-
 /*rtl:ignore*/
 .ciq-modal {
     .cq-modal__overlay {
@@ -186,7 +185,6 @@
     font-size: 1.7em;
     color: #878787;
 }
-
 
 /*rtl:ignore*/
 .sc-tooltip {
@@ -235,6 +233,7 @@
             left: calc(100% + 10px);
             top: calc(50% - 17px);
             transform: none;
+
             &:before {
                 left: -6px;
                 bottom: calc(50% - 6px);
@@ -258,7 +257,6 @@
         }
     }
 }
-
 
 /*rtl:ignore*/
 .sc-notification-badge {
@@ -357,7 +355,6 @@
     }
 }
 
-
 /*rtl:ignore*/
 .sc-chart__status {
     width: 8px;
@@ -386,7 +383,6 @@
         }
     }
 }
-
 
 /*rtl:ignore*/
 .sc-input {
