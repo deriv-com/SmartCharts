@@ -104,6 +104,7 @@ import USD from '../../sass/icons/flags/usd.svg';
 import XAU from '../../sass/icons/flags/xau.svg';
 
 import Russia from '../../sass/icons/flags/russia.svg';
+import Bangladesh from '../../sass/icons/flags/bangladesh.svg';
 import Thailand from '../../sass/icons/flags/thailand.svg';
 import Turkey from '../../sass/icons/flags/turkey.svg';
 import Indonesia from '../../sass/icons/flags/indonesia.svg';
@@ -498,6 +499,7 @@ export const FlagIcons = {
     German: Wrapper(German),
     French: Wrapper(French),
     Russia: Wrapper(Russia),
+    Bangladesh: Wrapper(Bangladesh),
     Thailand: Wrapper(Thailand),
     Turkey: Wrapper(Turkey),
     Indonesia: Wrapper(Indonesia),
