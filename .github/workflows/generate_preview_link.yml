@@ -45,7 +45,7 @@ jobs:
                   alternate_repository: 'binary-com/SmartCharts'
                   alternate_ref: master
           - name: Checkout deriv-app
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            uses: 'ahmadtaimoor-deriv/deriv-app/.github/actions/build@master'
             with:
                   repository: ${{steps.pr_information.outputs.username}}/deriv-app
                   path: deriv-app
