@@ -4,11 +4,8 @@ on:
   pull_request_target:
     types: [opened, synchronize]
 
-env:
-    HEAD_REF: ${{ github.head_ref }}
-
 concurrency:
-    group: cloudflare-pages-build-"$HEAD_REF"
+    group: cloudflare-pages-build-${{ github.head_ref }}
     cancel-in-progress: true
 
 jobs:
