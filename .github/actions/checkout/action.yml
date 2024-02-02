@@ -6,7 +6,6 @@ inputs:
         required: false
         type: number
     path:
-        default: ''
         required: false
         type: string
     repository:
@@ -14,15 +13,12 @@ inputs:
         required: false
         type: string
     ref:
-        default: ''
         required: false
         type: string
     alternate_repository:
-         default: ''
         required: false
         type: string
     alternate_ref:
-        default: ''
         required: false
         type: string
     token:
