@@ -48,7 +48,7 @@ jobs:
           - name: Custom flutter-chart
             uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
-                  repository: ${{github.event.pull_request.user.login}}/flutter-chartz
+                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
                   path: flutter-chart
                   ref: ${{github.head_ref}}
                   alternate_repository: 'regentmarkets/flutter-chart'
