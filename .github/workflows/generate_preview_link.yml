@@ -78,6 +78,7 @@ jobs:
           - name: Build flutter
             run: |
                   cd SmartCharts/chart_app
+                  git config --global url.https://${{ secrets.ACESS_TOKEN }}@github.com/.insteadOf git@github.com:
                   flutter pub get
                   flutter build web --web-renderer html --release
             env:
