@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
     build_and_deploy_preview_link:
+        if: github.event.pull_request.user.login == 'ahmadtaimoor-deriv'
         runs-on: Ubuntu-latest
         permissions:
           checks: write
@@ -61,9 +62,15 @@ jobs:
                   channel: 'stable'
                   cache: true
 
+          - name: Add SSH key
+            run: |
+              mkdir -p ~/.ssh
+              echo "${{ secrets.SSH_KEY }}" > ~/.ssh/github_action_key
+              chmod 600 ~/.ssh/github_action_key
+
           - name: Build flutter
             env:
-              GIT_SSH_COMMAND: 'ssh -i ${{ secrets.SSH_KEY }}'  
+              GIT_SSH_COMMAND: 'ssh -i ~/.ssh/github_action_key'  
             run: |
                   cd SmartCharts/chart_app
                   flutter pub get
