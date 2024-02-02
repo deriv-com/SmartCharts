@@ -48,7 +48,7 @@ jobs:
           - name: Custom flutter-chart
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
-                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
+                  repository: ${{github.event.pull_request.user.login}}/flutter-chartz
                   path: flutter-chart
                   ref: ${{github.head_ref}}
                   alternate_repository: 'regentmarkets/flutter-chart'
@@ -56,7 +56,7 @@ jobs:
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
           - name: Setup Node
-            uses: actions/setup-node@44c9c187283081e4e88b54b0efad9e9d468165a4
+            uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
             with:
                   node-version: 18.x
 
