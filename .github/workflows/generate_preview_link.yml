@@ -37,7 +37,7 @@ jobs:
                   issue_number: ${{steps.pr_information.outputs.issue_number}}
                   head_sha: ${{github.event.pull_request.head.sha}}
           - name: Checkout SmartCharts     
-            uses: './.github/actions/checkout'
+            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{steps.pr_information.outputs.username}}/SmartCharts
                   path: SmartCharts
@@ -45,7 +45,7 @@ jobs:
                   alternate_repository: 'binary-com/SmartCharts'
                   alternate_ref: master
           - name: Checkout deriv-app
-            uses: './.github/actions/checkout'
+            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{steps.pr_information.outputs.username}}/deriv-app
                   path: deriv-app
@@ -53,7 +53,7 @@ jobs:
                   alternate_repository: 'binary-com/deriv-app'
                   alternate_ref: master
           - name: Custom flutter-chart
-            uses: './.github/actions/checkout'
+            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{steps.pr_information.outputs.username}}/flutter-chart
                   path: flutter-chart
