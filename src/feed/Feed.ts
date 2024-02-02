@@ -362,6 +362,10 @@ class Feed {
         end: number,
         callback: TPaginationCallback
     ) {
+        if (this._mainStore.state.hasReachedEndOfData) {
+            return;
+        }
+
         const isMainChart = true;
         // TODO There is no need to get historical data before startTime
         if (this.startEpoch /* && start < this.startEpoch */ || (this.endEpoch && end > this.endEpoch)) {
@@ -406,6 +410,12 @@ class Feed {
                 if (firstEpoch <= startLimit) {
                     callback({ moreAvailable: false, quotes: [] });
                     this.setHasReachedEndOfData(true);
+                }
+
+                if (result.quotes?.length && result.quotes.length < count) {
+                    callback({ moreAvailable: false, quotes: result.quotes });
+                    this.setHasReachedEndOfData(true);
+                    return;
                 }
             } catch (err) {
                 console.error(err);
