@@ -6,7 +6,6 @@ on:
 
 env:
     HEAD_REF: ${{ github.head_ref }}
-    NODE_ENV: 'production'
 
 concurrency:
     group: cloudflare-pages-build-"$HEAD_REF"
@@ -101,6 +100,8 @@ jobs:
             run: cd SmartCharts && npm run test
 
           - name: Build deriv-app
+            env:
+              NODE_ENV: 'production'
             run: cd deriv-app && npm run build:all
 
           - name: Setup Node
