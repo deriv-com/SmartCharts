@@ -69,11 +69,11 @@ jobs:
           # - name: Setup SmartCharts
           #   run: cd SmartCharts && npm install
 
-          # - uses: subosito/flutter-action@v2
-          #   with:
-          #         flutter-version: '3.10.6'
-          #         channel: 'stable'
-          #         cache: true
+          - uses: subosito/flutter-action@v2
+            with:
+                  flutter-version: '3.10.6'
+                  channel: 'stable'
+                  cache: true
 
           - name: Build flutter
             run: |
