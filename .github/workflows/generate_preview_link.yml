@@ -10,17 +10,16 @@ concurrency:
 
 jobs:
     build_and_deploy_preview_link:
-        if: github.event.pull_request.user.login == 'ahmadtaimoor-deriv'
         runs-on: Ubuntu-latest
         permissions:
           checks: write
           pull-requests: write
         steps:
-          #   - name: Verify user
-          #     uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
-          #     with:
-          #       username: ${{github.event.pull_request.user.login}}
-          #       token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
+          - name: Verify user
+            uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
+            with:
+              username: ${{github.event.pull_request.user.login}}
+              token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
           - name: Post preview build comment
             id: post_preview_build_comment
             uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
@@ -29,7 +28,7 @@ jobs:
                   head_sha: ${{github.event.pull_request.head.sha}}
 
           - name: Checkout SmartCharts     
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/SmartCharts
                   path: SmartCharts
@@ -38,7 +37,7 @@ jobs:
                   alternate_ref: master
 
           - name: Checkout deriv-app
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/deriv-app
                   path: deriv-app
@@ -47,7 +46,7 @@ jobs:
                   alternate_ref: master
 
           - name: Custom flutter-chart
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/flutter-chartz
                   path: flutter-chart
