@@ -55,6 +55,20 @@ jobs:
                   alternate_ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
+          - uses: subosito/flutter-action@v2
+            with:
+                  flutter-version: '3.10.6'
+                  channel: 'stable'
+                  cache: true
+
+          - name: Build flutter
+            env:
+              GIT_SSH_COMMAND: 'ssh -i ${{ secrets.SSH_KEY }}'  
+            run: |
+                  cd SmartCharts/chart_app
+                  flutter pub get
+                  flutter build web --web-renderer html --release
+
           - name: Setup Node
             uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
             with:
@@ -69,19 +83,7 @@ jobs:
           - name: Setup SmartCharts
             run: cd SmartCharts && npm install
 
-          - uses: subosito/flutter-action@v2
-            with:
-                  flutter-version: '3.10.6'
-                  channel: 'stable'
-                  cache: true
 
-          - name: Build flutter
-            env:
-              GIT_SSH_COMMAND: 'ssh -i ${{ secrets.SSH_KEY }}'
-            run: |
-                  cd SmartCharts/chart_app
-                  flutter pub get
-                  flutter build web --web-renderer html --release
 
           - name: Build SmartCharts
             run: cd SmartCharts && npm run build -- --output-path ../deriv-app/node_modules/@deriv/deriv-charts/dist
