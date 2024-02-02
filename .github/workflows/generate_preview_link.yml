@@ -6,6 +6,7 @@ on:
 
 env:
     HEAD_REF: ${{ github.head_ref }}
+    NODE_ENV: 'production'
 
 concurrency:
     group: cloudflare-pages-build-"$HEAD_REF"
@@ -30,6 +31,7 @@ jobs:
             with:
                   issue_number: ${{github.event.number}}
                   head_sha: ${{github.event.pull_request.head.sha}}
+
           - name: Checkout SmartCharts     
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
@@ -38,6 +40,7 @@ jobs:
                   ref: ${{github.head_ref}}
                   alternate_repository: 'binary-com/SmartCharts'
                   alternate_ref: master
+
           - name: Checkout deriv-app
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
@@ -46,6 +49,7 @@ jobs:
                   ref: ${{github.head_ref}}
                   alternate_repository: 'binary-com/deriv-app'
                   alternate_ref: master
+
           - name: Custom flutter-chart
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
@@ -89,8 +93,6 @@ jobs:
 
           - name: Setup SmartCharts
             run: cd SmartCharts && npm install
-
-
 
           - name: Build SmartCharts
             run: cd SmartCharts && npm run build -- --output-path ../deriv-app/node_modules/@deriv/deriv-charts/dist
