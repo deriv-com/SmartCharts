@@ -60,20 +60,20 @@ jobs:
             with:
                   node-version: 18.x
 
-          - name: Setup deriv-app
-            run: cd deriv-app && npm install && npm run bootstrap
+          # - name: Setup deriv-app
+          #   run: cd deriv-app && npm install && npm run bootstrap
 
-          - name: Remove @deriv-charts in deriv-app
-            run: rm -rf deriv-app/node_modules/@deriv/deriv-charts/dist
+          # - name: Remove @deriv-charts in deriv-app
+          #   run: rm -rf deriv-app/node_modules/@deriv/deriv-charts/dist
 
-          - name: Setup SmartCharts
-            run: cd SmartCharts && npm install
+          # - name: Setup SmartCharts
+          #   run: cd SmartCharts && npm install
 
-          - uses: subosito/flutter-action@v2
-            with:
-                  flutter-version: '3.10.6'
-                  channel: 'stable'
-                  cache: true
+          # - uses: subosito/flutter-action@v2
+          #   with:
+          #         flutter-version: '3.10.6'
+          #         channel: 'stable'
+          #         cache: true
 
           - name: Build flutter
             run: |
