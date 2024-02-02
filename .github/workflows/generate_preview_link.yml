@@ -34,7 +34,7 @@ jobs:
             with:
                   repository: ${{github.event.pull_request.user.login}}/SmartCharts
                   path: SmartCharts
-                  ref: ${{github.event.number}}
+                  ref: ${{github.head_ref}}
                   alternate_repository: 'binary-com/SmartCharts'
                   alternate_ref: master
           - name: Checkout deriv-app
@@ -42,7 +42,7 @@ jobs:
             with:
                   repository: ${{github.event.pull_request.user.login}}/deriv-app
                   path: deriv-app
-                  ref: ${{github.event.number}}
+                  ref: ${{github.head_ref}}
                   alternate_repository: 'binary-com/deriv-app'
                   alternate_ref: master
           - name: Custom flutter-chart
@@ -50,7 +50,7 @@ jobs:
             with:
                   repository: ${{github.event.pull_request.user.login}}/flutter-chart
                   path: flutter-chart
-                  ref: ${{github.event.number}}
+                  ref: ${{github.head_ref}}
                   alternate_repository: 'regentmarkets/flutter-chart'
                   alternate_ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
