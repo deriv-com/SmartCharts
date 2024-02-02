@@ -20,6 +20,7 @@ jobs:
             with:
               username: ${{github.event.pull_request.user.login}}
               token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
+
           - name: Post preview build comment
             id: post_preview_build_comment
             uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
