@@ -1,13 +1,5 @@
 name: Generate preview link
 
-permissions:
-    actions: write
-    checks: write
-    contents: write
-    deployments: write
-    pull-requests: write
-    statuses: write
-
 on:
   pull_request_target:
     types: [opened, synchronize]
@@ -22,44 +14,46 @@ concurrency:
 jobs:
     build_and_deploy_preview_link:
         runs-on: Ubuntu-latest
+        permissions:
+          checks: write
+          pull-requests: write
         steps:
-          - name: Retrieve pull request
-            id: pr_information
-            run: |
-                  echo "username=$(cat .pr/USERNAME)" >> $GITHUB_OUTPUT
-                  echo "issue_number=$(cat .pr/ISSUE_NUMBER)" >> $GITHUB_OUTPUT
-                  echo "branch_name=$(cat .pr/BRANCHNAME)" >> $GITHUB_OUTPUT
-
+          #   - name: Verify user
+          #     uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
+          #     with:
+          #       username: ${{github.event.pull_request.user.login}}
+          #       token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
           - name: Post preview build comment
             id: post_preview_build_comment
             uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
             with:
-                  issue_number: ${{steps.pr_information.outputs.issue_number}}
+                  issue_number: ${{github.event.number}}
                   head_sha: ${{github.event.pull_request.head.sha}}
           - name: Checkout SmartCharts     
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
-                  repository: ${{steps.pr_information.outputs.username}}/SmartCharts
+                  repository: ${{github.event.pull_request.user.login}}/SmartCharts
                   path: SmartCharts
-                  ref: ${{steps.pr_information.outputs.branch_name}}
+                  ref: ${{github.event.number}}
                   alternate_repository: 'binary-com/SmartCharts'
                   alternate_ref: master
           - name: Checkout deriv-app
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
-                  repository: ${{steps.pr_information.outputs.username}}/deriv-app
+                  repository: ${{github.event.pull_request.user.login}}/deriv-app
                   path: deriv-app
-                  ref: ${{steps.pr_information.outputs.branch_name}}
+                  ref: ${{github.event.number}}
                   alternate_repository: 'binary-com/deriv-app'
                   alternate_ref: master
           - name: Custom flutter-chart
             uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
             with:
-                  repository: ${{steps.pr_information.outputs.username}}/flutter-chart
+                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
                   path: flutter-chart
-                  ref: ${{steps.pr_information.outputs.branch_name}}
+                  ref: ${{github.event.number}}
                   alternate_repository: 'regentmarkets/flutter-chart'
                   alternate_ref: fe-changes
+                  token: ${{ secrets.REPO_READ_TOKEN }}
 
           - name: Setup Node
             uses: actions/setup-node@44c9c187283081e4e88b54b0efad9e9d468165a4
@@ -87,7 +81,7 @@ jobs:
                   flutter pub get
                   flutter build web --web-renderer html --release
             env:
-                GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+                GITHUB_TOKEN: ${{ secrets.REPO_READ_TOKEN }}
 
           - name: Build SmartCharts
             run: cd SmartCharts && npm run build -- --output-path ../deriv-app/node_modules/@deriv/deriv-charts/dist
