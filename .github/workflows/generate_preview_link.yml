@@ -23,11 +23,6 @@ jobs:
     build_and_deploy_preview_link:
         runs-on: Ubuntu-latest
         steps:
-          - name: Verify user
-            uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
-            with:
-                  username: ${{steps.pr_information.outputs.username}}
-                  token: ${{ secrets.PREVIEW_LINK_TOKEN }}
           - name: Retrieve pull request
             id: pr_information
             run: |
@@ -40,7 +35,7 @@ jobs:
             uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
             with:
                   issue_number: ${{steps.pr_information.outputs.issue_number}}
-                  head_sha: ${{github.event.workflow_run.head_sha}}
+                  head_sha: ${{github.event.pull_request.head.sha}}
 
           - name: Checkout SmartCharts     
             uses: './.github/actions/checkout'
