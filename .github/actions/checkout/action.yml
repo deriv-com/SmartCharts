@@ -17,6 +17,10 @@ inputs:
         default: ''
         required: false
         type: string
+    alternate_repository:
+         default: ''
+        required: false
+        type: string
     alternate_ref:
         default: ''
         required: false
@@ -63,6 +67,6 @@ runs:
           with:
               fetch-depth: ${{ inputs.fetch-depth }}
               path: ${{ inputs.path }}
-              repository: ${{ inputs.repository }}
+              repository: ${{ inputs.alternate_repository }}
               ref: ${{ inputs.alternate_ref }}
               token: ${{ inputs.token }}

@@ -36,13 +36,13 @@ jobs:
             with:
                   issue_number: ${{steps.pr_information.outputs.issue_number}}
                   head_sha: ${{github.event.pull_request.head.sha}}
-
           - name: Checkout SmartCharts     
             uses: './.github/actions/checkout'
             with:
                   repository: ${{steps.pr_information.outputs.username}}/SmartCharts
                   path: SmartCharts
                   ref: ${{steps.pr_information.outputs.branch_name}}
+                  alternate_repository: 'binary-com/SmartCharts'
                   alternate_ref: master
           - name: Checkout deriv-app
             uses: './.github/actions/checkout'
@@ -50,6 +50,7 @@ jobs:
                   repository: ${{steps.pr_information.outputs.username}}/deriv-app
                   path: deriv-app
                   ref: ${{steps.pr_information.outputs.branch_name}}
+                  alternate_repository: 'binary-com/deriv-app'
                   alternate_ref: master
           - name: Custom flutter-chart
             uses: './.github/actions/checkout'
@@ -57,6 +58,7 @@ jobs:
                   repository: ${{steps.pr_information.outputs.username}}/flutter-chart
                   path: flutter-chart
                   ref: ${{steps.pr_information.outputs.branch_name}}
+                  alternate_repository: 'regentmarkets/flutter-chart'
                   alternate_ref: fe-changes
 
           - name: Setup Node
