@@ -115,7 +115,7 @@ jobs:
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_TEST_LINKS_API_TOKEN }}
                   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_TEST_LINKS_ACCOUNT_ID }}
                   project_name: 'smartcharts-preview'
-                  branch_name: pr-${{github.event.number}}${{ steps.deriv_app.outputs.ref_exists == true && '-dtra'}}${{ steps.flutter_chart.outputs.ref_exists == true && '-flutt'}}
+                  branch_name: pr-${{github.event.number}}${{ steps.deriv_app.outputs.ref_exists == true && '-dtra' || ''}}${{ steps.flutter_chart.outputs.ref_exists == true && '-flutt' || ''}}
                   output_dir: deriv-app/packages/core/dist
 
           - name: 'Generate preview link comment'
