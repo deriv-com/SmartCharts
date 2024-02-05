@@ -43,7 +43,7 @@ runs:
               if git ls-remote --heads --quiet --exit-code https://${{ inputs.token }}@github.com/${{ inputs.repository }}.git ${{ inputs.ref }}
               then
                 echo "::notice::Checkout: ${{ inputs.repository }} using ${{ inputs.ref }}"
-                echo "::set-output name=ref-exists::true"  # Use ::set-output for boolean output
+                echo "::set-output name=ref-exists::true" 
               else
                 echo "::notice::Checkout: ${{ inputs.repository }} does not have ref ${{ inputs.ref }} (fallback to ${{ inputs.alternate_ref }})"
                 echo "::set-output name=ref-exists::false"
