@@ -84,8 +84,7 @@ class ServerTime {
         if (this.serverTimeAtResponse) {
             return this.serverTimeAtResponse;
         }
-
-        throw new Error('Server time is undefined!');
+        return getUTCEpoch(new Date());
     }
 
     getLocalDate() {
