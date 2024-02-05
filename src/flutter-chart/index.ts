@@ -12,6 +12,8 @@ export const createChartElement = ({ onChartLoad }: TCreateChartElementProps) =>
         return;
     }
 
+    setupListeners();
+
     const flutterChartElement = document.createElement('div');
     flutterChartElement.classList.add('flutter-chart');
 
@@ -40,6 +42,19 @@ export const createChartElement = ({ onChartLoad }: TCreateChartElementProps) =>
     import(/* webpackChunkName: "flutter-chart-adapter", webpackPreload: true */ 'chart/main.dart.js');
 
     return flutterChartElement;
+};
+
+const setupListeners = () => {
+    const listener = (ev: KeyboardEvent) => {
+        // To fix a trackjs issue caused by some keyboard events that don't contain `key` or `code` props.
+        // https://github.com/flutter/engine/blob/f20657354d8b53baafcec55650830ead89adf3e9/lib/web_ui/lib/src/engine/keyboard_binding.dart#L386
+        if (!ev.key || !ev.code) {
+            ev.stopImmediatePropagation();
+        }
+    };
+
+    window.addEventListener('keydown', listener, true);
+    window.addEventListener('keyup', listener, true);
 };
 
 export const runChartApp = () => {

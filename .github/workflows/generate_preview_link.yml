@@ -4,26 +4,23 @@ on:
   pull_request_target:
     types: [opened, synchronize]
 
-env:
-    HEAD_REF: ${{ github.head_ref }}
-
 concurrency:
-    group: cloudflare-pages-build-"$HEAD_REF"
+    group: cloudflare-pages-build-${{ github.head_ref }}
     cancel-in-progress: true
 
 jobs:
     build_and_deploy_preview_link:
-        if: github.event.pull_request.user.login == 'ahmadtaimoor-deriv'
         runs-on: Ubuntu-latest
         permissions:
           checks: write
           pull-requests: write
         steps:
-          #   - name: Verify user
-          #     uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
-          #     with:
-          #       username: ${{github.event.pull_request.user.login}}
-          #       token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
+          - name: Verify user
+            uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
+            with:
+              username: ${{github.event.pull_request.user.login}}
+              token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
+
           - name: Post preview build comment
             id: post_preview_build_comment
             uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
@@ -32,7 +29,7 @@ jobs:
                   head_sha: ${{github.event.pull_request.head.sha}}
 
           - name: Checkout SmartCharts     
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/SmartCharts
                   path: SmartCharts
@@ -41,7 +38,8 @@ jobs:
                   alternate_ref: master
 
           - name: Checkout deriv-app
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            id:   deriv_app
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/deriv-app
                   path: deriv-app
@@ -50,9 +48,10 @@ jobs:
                   alternate_ref: master
 
           - name: Custom flutter-chart
-            uses: 'ahmadtaimoor-deriv/SmartCharts/.github/actions/checkout@master'
+            id:   flutter_chart
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
-                  repository: ${{github.event.pull_request.user.login}}/flutter-chartz
+                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
                   path: flutter-chart
                   ref: ${{github.head_ref}}
                   alternate_repository: 'regentmarkets/flutter-chart'
@@ -116,7 +115,7 @@ jobs:
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_TEST_LINKS_API_TOKEN }}
                   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_TEST_LINKS_ACCOUNT_ID }}
                   project_name: 'smartcharts-preview'
-                  branch_name: 'pr-${{github.event.number}}'
+                  branch_name: pr-${{github.event.number}}${{ steps.deriv_app.outputs.ref_exists == true && '-dtra' || ''}}${{ steps.flutter_chart.outputs.ref_exists == true && '-flutt' || ''}}
                   output_dir: deriv-app/packages/core/dist
 
           - name: 'Generate preview link comment'
