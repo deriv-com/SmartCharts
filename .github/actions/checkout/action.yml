@@ -46,7 +46,7 @@ runs:
                 echo "::set-output name=ref-exists::true"  # Use ::set-output for boolean output
               else
                 echo "::notice::Checkout: ${{ inputs.repository }} does not have ref ${{ inputs.ref }} (fallback to ${{ inputs.alternate_ref }})"
-                echo "::set-output name=ref-exists::false"  # Use ::set-output for boolean output
+                echo "::set-output name=ref-exists::false"
               fi
 
         - if: steps.repo.outputs.ref-exists
