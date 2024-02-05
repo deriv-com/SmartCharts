@@ -38,6 +38,7 @@ jobs:
                   alternate_ref: master
 
           - name: Checkout deriv-app
+            id:   deriv_app
             uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/deriv-app
@@ -47,6 +48,7 @@ jobs:
                   alternate_ref: master
 
           - name: Custom flutter-chart
+            id:   flutter_chart
             uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
             with:
                   repository: ${{github.event.pull_request.user.login}}/flutter-chart
@@ -113,7 +115,7 @@ jobs:
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_TEST_LINKS_API_TOKEN }}
                   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_TEST_LINKS_ACCOUNT_ID }}
                   project_name: 'smartcharts-preview'
-                  branch_name: 'pr-${{github.event.number}}'
+                  branch_name: pr-${{github.event.number}}${{ steps.deriv_app.outputs.ref_exists == true && '-dtra'}}${{ steps.flutter_chart.outputs.ref_exists == true && '-flutt'}}
                   output_dir: deriv-app/packages/core/dist
 
           - name: 'Generate preview link comment'
