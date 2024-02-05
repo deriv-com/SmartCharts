@@ -334,7 +334,7 @@ class CrosshairStore {
                 if (dsField.constructor === Number) {
                     fieldValue = dsField.toString();
                 } else if (dsField.constructor === Date) {
-                    fieldValue = moment(dsField).format(this.getDateTimeFormat());
+                    fieldValue = moment(data.Date).format(this.getDateTimeFormat());
                 } else {
                     fieldValue = dsField as string;
                 }

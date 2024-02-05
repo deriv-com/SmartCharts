@@ -8,6 +8,7 @@
     top: 0;
     user-select: none;
     width: 100%;
+    z-index: 1;
 }
 /* Drag Lines and Prices */
 .chart-line {
@@ -159,7 +160,7 @@
         background-color: $color-blue;
         height: 24px;
         opacity: 0.3;
-        position: relative;
+        position: absolute;
         right: -10px;
         top: -12px;
     }
@@ -205,7 +206,6 @@
     right: 0;
     height: 120px !important;
     opacity: 0.3;
-    transition: all 0.1s ease-out;
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */

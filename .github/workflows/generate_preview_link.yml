@@ -1,0 +1,128 @@
+name: Generate preview link
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+concurrency:
+    group: cloudflare-pages-build-${{ github.head_ref }}
+    cancel-in-progress: true
+
+jobs:
+    build_and_deploy_preview_link:
+        runs-on: Ubuntu-latest
+        permissions:
+          checks: write
+          pull-requests: write
+        steps:
+          - name: Verify user
+            uses: "deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1"
+            with:
+              username: ${{github.event.pull_request.user.login}}
+              token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}    
+
+          - name: Post preview build comment
+            id: post_preview_build_comment
+            uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
+            with:
+                  issue_number: ${{github.event.number}}
+                  head_sha: ${{github.event.pull_request.head.sha}}
+
+          - name: Checkout SmartCharts     
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+            with:
+                  repository: ${{github.event.pull_request.user.login}}/SmartCharts
+                  path: SmartCharts
+                  ref: ${{github.head_ref}}
+                  alternate_repository: 'binary-com/SmartCharts'
+                  alternate_ref: master
+
+          - name: Checkout deriv-app
+            id:   deriv_app
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+            with:
+                  repository: ${{github.event.pull_request.user.login}}/deriv-app
+                  path: deriv-app
+                  ref: ${{github.head_ref}}
+                  alternate_repository: 'binary-com/deriv-app'
+                  alternate_ref: master
+
+          - name: Custom flutter-chart
+            id:   flutter_chart
+            uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+            with:
+                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
+                  path: flutter-chart
+                  ref: ${{github.head_ref}}
+                  alternate_repository: 'regentmarkets/flutter-chart'
+                  alternate_ref: fe-changes
+                  token: ${{ secrets.REPO_READ_TOKEN }}
+
+          - uses: subosito/flutter-action@v2
+            with:
+                  flutter-version: '3.10.6'
+                  channel: 'stable'
+                  cache: true
+
+          - name: Add SSH key
+            run: |
+              mkdir -p ~/.ssh
+              echo "${{ secrets.SSH_KEY }}" > ~/.ssh/github_action_key
+              chmod 600 ~/.ssh/github_action_key
+
+          - name: Build flutter
+            env:
+              GIT_SSH_COMMAND: 'ssh -i ~/.ssh/github_action_key'  
+            run: |
+                  cd SmartCharts/chart_app
+                  flutter pub get
+                  flutter build web --web-renderer html --release
+
+          - name: Setup Node
+            uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
+            with:
+                  node-version: 18.x
+
+          - name: Setup deriv-app
+            run: cd deriv-app && npm install && npm run bootstrap
+
+          - name: Remove @deriv-charts in deriv-app
+            run: rm -rf deriv-app/node_modules/@deriv/deriv-charts/dist
+
+          - name: Setup SmartCharts
+            run: cd SmartCharts && npm install
+
+          - name: Build SmartCharts
+            run: cd SmartCharts && npm run build -- --output-path ../deriv-app/node_modules/@deriv/deriv-charts/dist
+
+          - name: Run Tests
+            run: cd SmartCharts && npm run test
+
+          - name: Build deriv-app
+            env:
+              NODE_ENV: 'production'
+            run: cd deriv-app && npm run build:all
+
+          - name: Setup Node
+            uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
+            with:
+                node-version: 20
+
+          - name: Publish to CF pages branch
+            id: publish_to_pages_branch
+            uses: 'deriv-com/shared-actions/.github/actions/publish_to_pages_branch@v1'
+            with:
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_TEST_LINKS_API_TOKEN }}
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_TEST_LINKS_ACCOUNT_ID }}
+                  project_name: 'smartcharts-preview'
+                  branch_name: pr-${{github.event.number}}${{ steps.deriv_app.outputs.ref_exists == 'true' && '-dtra' || ''}}${{ steps.flutter_chart.outputs.ref_exists == 'true' && '-flutt' || ''}}
+                  output_dir: deriv-app/packages/core/dist
+
+          - name: 'Generate preview link comment'
+            if: always() && steps.post_preview_build_comment.outcome == 'success'
+            uses: 'deriv-com/shared-actions/.github/actions/post_preview_link_comment@v1'
+            with:
+                  issue_number: ${{github.event.number}}
+                  check_run_id: ${{steps.post_preview_build_comment.outputs.check_run_id}}
+                  preview_url: ${{steps.publish_to_pages_branch.outputs.cf_pages_url}}
+                  status: ${{job.status}}
