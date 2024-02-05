@@ -8,6 +8,7 @@
     top: 0;
     user-select: none;
     width: 100%;
+    z-index: 1;
 }
 /* Drag Lines and Prices */
 .chart-line {
@@ -159,7 +160,7 @@
         background-color: $color-blue;
         height: 24px;
         opacity: 0.3;
-        position: relative;
+        position: absolute;
         right: -10px;
         top: -12px;
     }
