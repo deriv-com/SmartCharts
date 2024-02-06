@@ -58,7 +58,7 @@ jobs:
                   alternate_ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
-          - uses: subosito/flutter-action@v2
+          - uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
             with:
                   flutter-version: '3.10.6'
                   channel: 'stable'
