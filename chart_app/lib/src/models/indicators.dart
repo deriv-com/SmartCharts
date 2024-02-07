@@ -309,7 +309,7 @@ class IndicatorsModel {
           values: values,
         ));
       } else if (item is AlligatorSeries) {
-        //TODO : enable offset after fixing in the flutter charts
+        //TO DO : enable offset after fixing in the flutter charts
         tooltipContent.add(JsIndicatorTooltip(
             name: AlligatorIndicatorConfig.name,
             values: <String?>[
@@ -368,6 +368,16 @@ class IndicatorsModel {
     double y,
     int bottomIndicatorIndex,
   ) {
+    /// Called to get epoch from x position
+    int? _getClosestEpoch(int? x, int granularity) {
+      try {
+        return getClosestEpoch?.call(x, granularity);
+        // ignore: avoid_catches_without_on_clauses
+      } catch (_) {
+        return null;
+      }
+    }
+
     int configIndex = 0;
     Series? bottomItemIndicator;
     final List<Series> sortedSeriesList = <Series>[...seriesList];
@@ -388,9 +398,11 @@ class IndicatorsModel {
 
     final Offset target = Offset(x, y);
     final int? epoch =
-        getClosestEpoch?.call(controller.getEpochFromX(x), granularity);
+        _getClosestEpoch(controller.getEpochFromX(x), granularity);
 
-    if (bottomItemIndicator != null && bottomIndicatorIndex != null) {
+    if (bottomItemIndicator != null &&
+        bottomIndicatorIndex > -1 &&
+        epoch != null) {
       if (bottomItemIndicator is AwesomeOscillatorSeries) {
         final List<Tick> aoEntries = bottomItemIndicator.entries ?? <Tick>[];
 
@@ -816,11 +828,11 @@ class IndicatorsModel {
             }
           }
         } else if (item is AlligatorSeries) {
-          final List<Tick> teethEntries = item.teethSeries!.entries ?? <Tick>[];
+          final List<Tick> teethEntries = item.teethSeries?.entries ?? <Tick>[];
 
-          final List<Tick> jawEntries = item.jawSeries!.entries ?? <Tick>[];
+          final List<Tick> jawEntries = item.jawSeries?.entries ?? <Tick>[];
 
-          final List<Tick> lipEntries = item.lipsSeries!.entries ?? <Tick>[];
+          final List<Tick> lipEntries = item.lipsSeries?.entries ?? <Tick>[];
 
           if (isPointOnIndicator(
                 teethEntries,
@@ -864,7 +876,7 @@ class IndicatorsModel {
     if (index != null) {
       final int quoteIndex = index - offset;
 
-      if (quoteIndex <= entries.length - 1) {
+      if (quoteIndex <= entries.length - 1 && quoteIndex > 0) {
         final Tick prevIndex = entries[quoteIndex - 1];
         final Tick currIndex = entries[quoteIndex];
 
