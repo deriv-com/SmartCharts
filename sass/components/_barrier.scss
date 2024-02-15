@@ -8,7 +8,6 @@
     top: 0;
     user-select: none;
     width: 100%;
-    z-index: 1;
 }
 /* Drag Lines and Prices */
 .chart-line {
@@ -206,6 +205,7 @@
     right: 0;
     height: 120px !important;
     opacity: 0.3;
+    z-index: -1;
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
