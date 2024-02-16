@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useStores } from 'src/store';
-import { ArrayElement, TCustomEvent, TMainStore } from 'src/types';
+import { ArrayElement, TCustomEvent, TGranularity, TMainStore } from 'src/types';
 import { TViews } from 'src/store/ViewStore';
 import Tooltip from './Tooltip';
 import Scroll from './Scroll';
@@ -19,6 +19,8 @@ type TViewItemProps = {
 
 type TViewsProps = {
     portalNodeId?: string;
+    onChartType: (chartType?: string | undefined) => void;
+    onGranularity: (granularity?: TGranularity) => void;
 };
 
 type TOverwriteViewProps = {
@@ -32,6 +34,8 @@ type TActiveListViewProps = {
     views: TMainStore['view']['sortedItems'];
     applyLayout: TMainStore['view']['applyLayout'];
     remove: TMainStore['view']['remove'];
+    onChartType: (chartType?: string | undefined) => void;
+    onGranularity: (granularity?: TGranularity) => void;
 };
 
 const ViewItem = ({ view, remove, onClick }: TViewItemProps) => (
@@ -78,7 +82,7 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }: TOverwriteViewPr
     </div>
 );
 
-const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListViewProps) => {
+const ActiveListView = ({ views, removeAll, applyLayout, remove, onGranularity, onChartType }: TActiveListViewProps) => {
     if (!views.length) return null;
 
     return (
@@ -95,7 +99,7 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListVi
                         <ViewItem
                             view={view}
                             key={view.name}
-                            onClick={e => applyLayout(i, e as TCustomEvent)}
+                            onClick={e => applyLayout(i, e as TCustomEvent,onGranularity,onChartType)}
                             remove={e => remove(i, e as TCustomEvent)}
                         />
                     ))}
@@ -105,7 +109,7 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove }: TActiveListVi
     );
 };
 
-const Views = ({ portalNodeId }: TViewsProps) => {
+const Views = ({ portalNodeId, onChartType, onGranularity}: TViewsProps) => {
     const { view } = useStores();
 
     const {
@@ -202,6 +206,8 @@ const Views = ({ portalNodeId }: TViewsProps) => {
                                     removeAll={removeAll}
                                     applyLayout={applyLayout}
                                     remove={remove}
+                                    onChartType={onChartType}
+                                    onGranularity={onGranularity}
                                 />
                             </Scroll>
                         </React.Fragment>

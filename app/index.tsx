@@ -238,7 +238,7 @@ const App = () => {
             <ToolbarWidget>
                 <ChartMode onChartType={changeChartType} onGranularity={changeGranularity} />
                 <StudyLegend />
-                <Views />
+                <Views onChartType={changeChartType} onGranularity={changeGranularity} />
                 <DrawTools />
                 <Share />
             </ToolbarWidget>
