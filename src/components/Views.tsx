@@ -19,7 +19,7 @@ type TViewItemProps = {
 
 type TViewsProps = {
     portalNodeId?: string;
-    onChartType: (chartType?: string | undefined) => void;
+    onChartType: (chartType?: string) => void;
     onGranularity: (granularity?: TGranularity) => void;
 };
 
@@ -34,7 +34,7 @@ type TActiveListViewProps = {
     views: TMainStore['view']['sortedItems'];
     applyLayout: TMainStore['view']['applyLayout'];
     remove: TMainStore['view']['remove'];
-    onChartType: (chartType?: string | undefined) => void;
+    onChartType: (chartType?: string) => void;
     onGranularity: (granularity?: TGranularity) => void;
 };
 

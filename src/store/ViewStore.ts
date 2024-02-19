@@ -153,7 +153,7 @@ export default class ViewStore {
         this.updateRoute('new');
     }
 
-    applyLayout(idx: number, e: TCustomEvent,onGranularity:(granularity?: TGranularity) => void,onChartType: (chartType:string|undefined) => void) {
+    applyLayout(idx: number, e: TCustomEvent,onGranularity:(granularity?: TGranularity) => void,onChartType: (chartType?:string) => void) {
         if (e.nativeEvent.is_item_removed) {
             return;
         }      
