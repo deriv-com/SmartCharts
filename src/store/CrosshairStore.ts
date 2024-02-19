@@ -77,9 +77,9 @@ class CrosshairStore {
     hoverOnScreen = false;
     isOverChartContainer = false;
     onCrosshairChanged: (state?: number) => void = () => null;
-    cachedDx:number|null = null;
-    cachedDy:number|null = null;
-    layoutCrosshair=0;
+    cachedDx: number | null = null;
+    cachedDy: number | null = null;
+    layoutCrosshair = 0;
 
     onMount = async (refs: TCrosshairRefs) => {
         await when(() => this.mainStore.chartAdapter.isChartLoaded);
@@ -99,24 +99,24 @@ class CrosshairStore {
     };
 
     onMouseMove = (dx: number, dy: number, epoch: number, quote: string) => {
-        if (!(this.cachedDx === dx && this.cachedDy === dy)) {
-            if (this.hoverOnScreen === false) {
-                this.isOverChartContainer = true;
-                this.updateVisibility(true);
-                this.hoverOnScreen = true;
-            }
-            this.cachedDx=dx;
-            this.cachedDy=dy;
-            if (!this.isOverChartContainer) return;
-            if(this.layoutCrosshair){
-                this.setCrosshairState(this.layoutCrosshair);
-                this.layoutCrosshair=0;
-            }
-
-            this.setPositions(dx, dy, epoch, quote);
-            this.renderCrosshairTooltip(dx, dy);
-            this.mainStore.crosshair.updateVisibility(true);
+        if (this.cachedDx === dx && this.cachedDy === dy) {
+            return;
         }
+        this.cachedDx = dx;
+        this.cachedDy = dy;
+        if (this.hoverOnScreen === false) {
+            this.isOverChartContainer = true;
+            this.hoverOnScreen = true;
+        }
+        if (!this.isOverChartContainer) return;
+
+        if (this.layoutCrosshair) {
+            this.setCrosshairState(this.layoutCrosshair);
+            this.layoutCrosshair = 0;
+        }
+        this.setPositions(dx, dy, epoch, quote);
+        this.renderCrosshairTooltip(dx, dy);
+        this.updateVisibility(true);
     };
 
     onMouseOut = () => {
@@ -130,8 +130,8 @@ class CrosshairStore {
         this.setCrosshairState(state);
     }
 
-    setLayoutCrosshair(crossHair:number){
-        this.layoutCrosshair=crossHair;
+    setLayoutCrosshair(crossHair: number) {
+        this.layoutCrosshair = crossHair;
     }
 
     updateProps(onChange?: () => void) {
