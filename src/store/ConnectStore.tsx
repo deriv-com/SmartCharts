@@ -1,12 +1,17 @@
 import React from 'react';
 import { TBarrierBaseProps } from 'src/components/Barrier';
-import { TMarkerBaseProps } from 'src/components/Marker';
 import { useConstructor } from 'src/hooks';
 import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
-import MarkerStore from './MarkerStore';
 
-type TWrappedComponentsProps = TBarrierBaseProps;
+
+export type TMarkerBaseProps = {
+    store: any;
+    children?: React.ReactNode;
+};
+
+
+type TWrappedComponentsProps = TBarrierBaseProps | TMarkerBaseProps;
 
 type TStoreClass = {
     new (mainStore: TMainStore): TWrappedComponentsProps['store'];
