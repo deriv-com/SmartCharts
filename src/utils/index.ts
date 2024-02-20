@@ -289,10 +289,7 @@ export function cloneCategories<T>(
     const categorized: TCategorizedSymbolItem<T>[] = [];
     for (const category of categories) {
         if (category.hasSubgroup) {
-            const subgroups: TCategorizedSymbolItem<T>['subgroups'] = [];
-            for (const subgroup of category.subgroups) {
-                subgroups.push(cloneCategory<TSubCategory>(subgroup, transformItem));
-            }
+            const subgroups = category.subgroups.map(subgroup => cloneCategory<T>(subgroup, transformItem));
             categorized.push(({ ...category, subgroups } as unknown) as TCategorizedSymbolItem<T>);
         } else {
             categorized.push(cloneCategory<T>(category, transformItem));
