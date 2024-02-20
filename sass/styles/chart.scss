@@ -168,6 +168,7 @@ body {
 /* Up/Down Arrow indicators */
 .cq-change {
     &:after {
+        /*rtl:ignore*/
         float: right;
         margin-top: 5px;
         margin-right: 5px;
