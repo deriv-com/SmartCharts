@@ -5,13 +5,7 @@ import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
 
 
-export type TMarkerBaseProps = {
-    store: any;
-    children?: React.ReactNode;
-};
-
-
-type TWrappedComponentsProps = TBarrierBaseProps | TMarkerBaseProps;
+type TWrappedComponentsProps = TBarrierBaseProps;
 
 type TStoreClass = {
     new (mainStore: TMainStore): TWrappedComponentsProps['store'];
