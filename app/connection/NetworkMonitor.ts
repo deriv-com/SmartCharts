@@ -42,7 +42,7 @@ class NetworkMonitor {
             window.addEventListener('offline', () => this.setNetworkStatus('offline'));
         } else {
             // default to always online and fallback to WS checks
-            navigator.onLine = true;
+            // navigator.onLine = true;
         }
         this.setNetworkStatus(this.isOnline() ? 'blinking' : 'offline');
         return this.establishConnection();
