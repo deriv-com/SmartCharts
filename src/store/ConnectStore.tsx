@@ -6,14 +6,14 @@ import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
 import MarkerStore from './MarkerStore';
 
-type TWrappedComponentsProps = TBarrierBaseProps | TMarkerBaseProps;
+type TWrappedComponentsProps = TBarrierBaseProps;
 
 type TStoreClass = {
     new (mainStore: TMainStore): TWrappedComponentsProps['store'];
 };
 
 type TConnectStoreWrapperProps = TBarrierUpdateProps &
-    MarkerStore & {
+    {
         StoreClass: TStoreClass;
         children: (store?: TWrappedComponentsProps['store']) => JSX.Element;
         [x: string]: unknown;
