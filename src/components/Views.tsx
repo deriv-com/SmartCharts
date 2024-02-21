@@ -82,7 +82,14 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }: TOverwriteViewPr
     </div>
 );
 
-const ActiveListView = ({ views, removeAll, applyLayout, remove, onGranularity, onChartType }: TActiveListViewProps) => {
+const ActiveListView = ({
+    views,
+    removeAll,
+    applyLayout,
+    remove,
+    onGranularity,
+    onChartType,
+}: TActiveListViewProps) => {
     if (!views.length) return null;
 
     return (
@@ -99,7 +106,7 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove, onGranularity, 
                         <ViewItem
                             view={view}
                             key={view.name}
-                            onClick={e => applyLayout(i, e as TCustomEvent,onGranularity,onChartType)}
+                            onClick={e => applyLayout(i, e as TCustomEvent, onGranularity, onChartType)}
                             remove={e => remove(i, e as TCustomEvent)}
                         />
                     ))}
@@ -109,7 +116,7 @@ const ActiveListView = ({ views, removeAll, applyLayout, remove, onGranularity, 
     );
 };
 
-const Views = ({ portalNodeId, onChartType, onGranularity}: TViewsProps) => {
+const Views = ({ portalNodeId, onChartType, onGranularity }: TViewsProps) => {
     const { view } = useStores();
 
     const {

@@ -149,20 +149,25 @@ export default class ViewStore {
     removeAll() {
         this.views = [];
         this.updateLocalStorage();
-        logEvent(LogCategories.ChartControl, LogActions.Template,'Remove All Templates');
+        logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove All Templates');
         this.updateRoute('new');
     }
 
-    applyLayout(idx: number, e: TCustomEvent,onGranularity:(granularity?: TGranularity) => void,onChartType: (chartType?:string) => void) {
+    applyLayout(
+        idx: number,
+        e: TCustomEvent,
+        onGranularity: (granularity?: TGranularity) => void,
+        onChartType: (chartType?: string) => void
+    ) {
         if (e.nativeEvent.is_item_removed) {
             return;
-        }      
+        }
         this.mainStore.crosshair.updateVisibility(false);
-         const { layout } = this.sortedItems[idx];
+        const { layout } = this.sortedItems[idx];
 
         onGranularity(layout.granularity);
         onChartType(layout.chartType);
-        
+
         // to not show tooltip while chart is loading
         this.mainStore.crosshair.setCrosshairState(0);
         this.restoreLayout(clone(layout));
