@@ -67,6 +67,7 @@
         @include themify($themes) {
             color: themed('ChartTitleText');
         }
+
         &__container {
             display: flex;
             justify-content: space-between;
@@ -116,11 +117,9 @@
             .cq-animated-price {
                 transition: color 300ms ease-out;
             }
-
             .divider {
                 padding: 0 3px;
             }
-
             > div {
                 line-height: 1.5;
             }
@@ -215,7 +214,6 @@
             opacity: 1;
             transform: translateX(0) translateY(0em);
         }
-
         &.cq-menu-dropdown-enter-done {
             z-index: 6;
         }
@@ -235,6 +233,7 @@
         display: block;
         top: 0em;
         margin: 0px;
+
         .cq-symbol-select-btn {
             margin: 0.3em 0.4em;
         }
