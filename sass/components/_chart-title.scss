@@ -26,7 +26,6 @@
                 }
             }
         }
-
         &.stxMenuActive > .cq-menu-btn > .cq-symbol-select-btn {
             @include themify($themes) {
                 border: solid 1px themed('ChartTitleActiveBorder');
@@ -43,14 +42,12 @@
             }
         }
     }
-
     &.ciq-enabled .cq-symbol-select-btn {
         @include themify($themes) {
             background: themed('ChartTitleBg');
             border: solid 1px themed('ChartTitleBorder');
         }
     }
-
     .cq-menu-btn {
         padding: 8px;
         border-radius: $border-radius;
@@ -59,7 +56,6 @@
             background: themed('ChartTitleSubBg');
         }
     }
-
     .cq-symbol-select-btn {
         font-family: $base-font;
         padding: 0.6em 1em;
@@ -71,18 +67,15 @@
         @include themify($themes) {
             color: themed('ChartTitleText');
         }
-
         &__container {
             display: flex;
             justify-content: space-between;
         }
-
         &:hover {
             @include themify($themes) {
                 border: solid 1px themed('ChartTitleHoverBorder');
             }
         }
-
         > .ic-icon.cq-symbol-dropdown {
             display: none;
             position: relative;
@@ -91,7 +84,6 @@
                 transition: transform 0.2s ease-in-out;
             }
         }
-
         > .ic-icon,
         > .ic-frx,
         > .ic-wld,
@@ -104,7 +96,6 @@
                 height: $large-icon-size;
             }
         }
-
         .cq-symbol-info {
             display: flex;
             flex-direction: column;
@@ -120,7 +111,6 @@
                 line-height: 1.5;
             }
         }
-
         .cq-symbol,
         .cq-chart-price {
             .cq-animated-price {
@@ -134,12 +124,10 @@
             > div {
                 line-height: 1.5;
             }
-
             line-height: 22px;
             font-size: 1.2em;
             text-align: left;
         }
-
         .cq-symbol {
             font-weight: bold;
             font-size: 1.6em;
@@ -160,7 +148,6 @@
                 line-height: calc(24px + 1.13em);
             }
         }
-
         .cq-chart-closed {
             .cq-closed-icon {
                 width: 12px;
@@ -177,7 +164,6 @@
                     position: absolute;
                 }
             }
-
             .cq-closed-opening {
                 font-size: 1.2em;
                 text-align: left;
@@ -192,7 +178,6 @@
                 }
             }
         }
-
         .cq-symbol-closed-text {
             display: flex;
             flex-direction: column;
@@ -206,12 +191,10 @@
             border-radius: $border-radius;
             text-transform: uppercase;
         }
-
         .cq-chart-price > *,
         .cq-chart-closed > * {
             position: relative;
         }
-
         .cq-chart-price,
         .cq-chart-closed {
             display: flex;
@@ -222,7 +205,6 @@
             }
         }
     }
-
     .cq-menu-dropdown {
         left: 0px;
         bottom: auto;
@@ -248,17 +230,14 @@
         margin: 0 !important;
         z-index: 3;
     }
-
     .cq-chart-title {
         width: 100%;
         display: block;
         top: 0em;
         margin: 0px;
-
         .cq-symbol-select-btn {
             margin: 0.3em 0.4em;
         }
-
         .cq-menu-dropdown {
             width: 100%;
             top: 0px;
