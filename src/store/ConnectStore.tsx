@@ -3,7 +3,6 @@ import { TBarrierBaseProps } from 'src/components/Barrier';
 import { useConstructor } from 'src/hooks';
 import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
-import MarkerStore from './MarkerStore';
 
 type TWrappedComponentsProps = TBarrierBaseProps;
 
@@ -12,7 +11,7 @@ type TStoreClass = {
 };
 
 type TConnectStoreWrapperProps = TBarrierUpdateProps &
-    MarkerStore & {
+    {
         StoreClass: TStoreClass;
         children: (store?: TWrappedComponentsProps['store']) => JSX.Element;
         [x: string]: unknown;
