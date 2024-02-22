@@ -69,8 +69,6 @@
     }
 }
 
-/*hover*/
-
 .draggable.chart-line:hover {
     &.horizontal {
         cursor: ns-resize;
@@ -79,8 +77,6 @@
         cursor: ew-resize;
     }
 }
-
-/*hover*/
 
 .hide-pricelines > .chart-line.horizontal,
 .hide-pricelines > .barrier-area {
@@ -106,36 +102,6 @@
         width: calc(100% - 2px);
     }
 }
-
-/*hover*/
-
-.no-touch {
-    .price-arrow {
-        span {
-            position: absolute;
-            top: 4px;
-            left: 6px;
-            display: block;
-            width: 15px;
-            height: 15px;
-            background-position: -4px -488px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-    }
-    .chart-line:hover {
-        .price-arrow {
-            width: 20px;
-            height: 23px;
-
-            span {
-                opacity: 1;
-            }
-        }
-    }
-}
-
-/*hover*/
 
 .price {
     display: block;

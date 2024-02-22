@@ -1,12 +1,11 @@
 import React from 'react';
 import { TBarrierBaseProps } from 'src/components/Barrier';
-import { TMarkerBaseProps } from 'src/components/Marker';
 import { useConstructor } from 'src/hooks';
 import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
 import MarkerStore from './MarkerStore';
 
-type TWrappedComponentsProps = TBarrierBaseProps | TMarkerBaseProps;
+type TWrappedComponentsProps = TBarrierBaseProps;
 
 type TStoreClass = {
     new (mainStore: TMainStore): TWrappedComponentsProps['store'];
@@ -40,7 +39,7 @@ const ConnectStoreWrapper = ({
         };
     }, []);
 
-    return <React.Fragment>{props.children(storeRef.current)}</React.Fragment>;
+    return <>{props.children(storeRef.current)}</>;
 };
 
 const connectStore = <B, C>(BaseComponent: (props: B) => React.ReactElement | null, StoreClass: TStoreClass) => {

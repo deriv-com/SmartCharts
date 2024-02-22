@@ -1,40 +1,3 @@
-/* --------------------------------------------------------- BUTTONS --------------------------------------------------------- */
-
-/* Basic Buttons */
-.annotationCancel,
-.annotationSave {
-    font-weight: 700;
-    text-transform: uppercase;
-    display: inline-block;
-    position: absolute;
-    line-height: 27px;
-    height: 27px;
-    padding: 0 10px;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s 0s, opacity 0.2s 0s;
-    box-sizing: border-box;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    @include themify($themes) {
-        background: themed('DefaultBg');
-        color: themed('MenuText');
-    }
-
-    &:hover {
-        border: none;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-    }
-    &:active {
-        border: none;
-        transition: all 0s 0s;
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-}
-
-.cq-menu-dropdown .ps-scrollbar-y-rail {
-    z-index: 1000000;
-}
-
 /* --------------------------------------------------------- Layout --------------------------------------------------------- */
 
 .ciq-chart-area,
@@ -111,9 +74,6 @@
         display: inline-block;
         position: relative;
         box-sizing: border-box;
-    }
-    .ciq-menu-section {
-        float: right;
     }
     .smartcharts-mobile,
     .smartcharts-desktop {

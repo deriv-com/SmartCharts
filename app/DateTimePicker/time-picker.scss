@@ -70,21 +70,6 @@
         &.from-right {
             right: 0;
         }
-        .time-picker-clear {
-            position: relative;
-            float: right;
-            display: none;
-            top: 1px;
-            width: 17px;
-            height: 17px;
-            cursor: pointer;
-
-            svg {
-                @include themify($themes) {
-                    fill: themed('ChartHistoryPickerTopColor');
-                }
-            }
-        }
         .time-picker-selector {
             display: flex;
             flex-direction: row;
