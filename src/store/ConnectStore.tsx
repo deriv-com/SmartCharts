@@ -4,7 +4,6 @@ import { useConstructor } from 'src/hooks';
 import { TBarrierUpdateProps } from 'src/types';
 import TMainStore, { useStores } from '.';
 
-
 type TWrappedComponentsProps = TBarrierBaseProps;
 
 type TStoreClass = {
