@@ -118,7 +118,7 @@ export default class TimeperiodStore {
                 if (dataSegmentClose && dataSegmentClose.length) {
                     const currentQuote = dataSegmentClose[dataSegmentClose.length - 1];
                     if (currentQuote.DT) {
-                        const now = this._serverTime.getLocalDate().getTime();
+                        const now = this._serverTime?.getLocalDate()?.getTime();
                         const diff = now - currentQuote.DT.getTime();
 
                         const granularity = this.mainStore.chart.granularity;

@@ -113,6 +113,8 @@ export default class BarrierStore {
             () => [this.mainStore.chartAdapter.epochBounds, this.mainStore.chartAdapter.quoteBounds],
             this._drawShadedArea
         );
+
+        this.mainStore.chartAdapter.painter.registerCallback(this._drawShadedArea);
     };
 
     init(): void {
@@ -194,6 +196,9 @@ export default class BarrierStore {
         this._low_barrier.destructor();
 
         this.disposeDrawReaction?.();
+
+        this.mainStore.chartAdapter.painter.unregisterCallback(this._drawShadedArea);
+
 
         const i = this.mainStore.chart._barriers.findIndex((b: BarrierStore) => b === this);
         if (i !== -1) {

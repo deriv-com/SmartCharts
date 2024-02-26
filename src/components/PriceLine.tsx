@@ -45,7 +45,6 @@ const PriceLine = ({
         setDragLine,
         visible,
     } = store;
-
     const showBarrier = React.useMemo(() => !(hideOffscreenBarrier && offScreen), [hideOffscreenBarrier, offScreen]);
     const showBarrierDragLine = React.useMemo(
         () => !hideBarrierLine && (!hideOffscreenLine || !offScreen) && !isOverlapping,
@@ -60,7 +59,7 @@ const PriceLine = ({
     if (!showBarrier) return null;
 
     const width = priceLineWidth + 12;
-    const price_right_offset = (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 4);
+    const price_right_offset = (isOverlappingWithPriceLine ? width - overlappedBarrierWidth + 6 : 0) + (isMobile ? 20 : 3);
 
     return (
         <div
@@ -118,7 +117,7 @@ const PriceLine = ({
                     {isOverlappingWithPriceLine && (
                         <div
                             className='price-overlay'
-                            style={{ backgroundColor: color, width: width - overlappedBarrierWidth, right: -6 }}
+                            style={{ backgroundColor: color, width: width - overlappedBarrierWidth + 6, right: isMobile ? 20 : 3 }}
                         />
                     )}
                 </div>

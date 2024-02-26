@@ -169,7 +169,7 @@
         background-color: $color-blue;
         height: 24px;
         opacity: 0.3;
-        position: relative;
+        position: absolute;
         right: -10px;
         top: -12px;
         /* rtl:end:ignore */
@@ -219,7 +219,7 @@
     right: 0;
     height: 120px !important;
     opacity: 0.3;
-    transition: all 0.1s ease-out;
+    z-index: -1;
 }
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
