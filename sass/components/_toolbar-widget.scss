@@ -1,4 +1,4 @@
-/*rtl:ignore*/
+/*rtl:begin:ignore*/
 .sc-toolbar-widget {
     position: absolute;
     direction: ltr;
@@ -69,3 +69,4 @@
         z-index: 5;
     }
 }
+ /*rtl:end:ignore*/
