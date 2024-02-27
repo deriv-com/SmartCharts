@@ -146,6 +146,7 @@
         "mobx": "^6.5.0",
         "mobx-react-lite": "^3.4.0",
         "moment": "^2.24.0",
+        "postcss-rtlcss": "^5.1.0",
         "prop-types": "^15.7.2",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
