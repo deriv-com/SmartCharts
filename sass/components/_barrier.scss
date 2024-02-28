@@ -10,7 +10,6 @@
     user-select: none;
     width: 100%;
 }
-/*! rtl:end:ignore */
 
 /* Drag Lines and Prices */
 
@@ -39,7 +38,7 @@
             width: 100%;
         }
         .drag-line {
-            /* rtl:begin:ignore */
+            /*! rtl:begin:ignore */
             height: 1px;
             float: left;
             width: 100%;
@@ -47,7 +46,7 @@
             position: relative;
             border-top-width: 1px;
             border-top-color: $color-blue;
-            /* rtl:end:ignore */
+            /*! rtl:end:ignore */
         }
         .title-wrapper {
             $title-height: 24px;
@@ -77,7 +76,6 @@
 
 /*hover*/
 
-/*! rtl:begin:ignore */
 .draggable.chart-line:hover {
     &.horizontal {
         cursor: ns-resize;
@@ -86,17 +84,14 @@
         cursor: ew-resize;
     }
 }
-/*! rtl:end:ignore */
 
 /*hover*/
 
-/*! rtl:ignore */
 .hide-pricelines > .chart-line.horizontal,
 .hide-pricelines > .barrier-area {
     display: none;
 }
 
-/*! rtl:begin:ignore */
 .drag-price {
     display: flex;
     height: 24px;
@@ -116,11 +111,9 @@
         width: calc(100% - 2px);
     }
 }
-/*! rtl:end:ignore */
 
 /*hover*/
 
-/*! rtl:ignore */
 .no-touch {
     .price-arrow {
         span {
@@ -149,7 +142,6 @@
 
 /*hover*/
 
-/*! rtl:begin:ignore */
 .price {
     display: block;
     font-size: 12px;
@@ -179,9 +171,7 @@
         /* rtl:end:ignore */
     }
 }
-/*! rtl:end:ignore */
 
-/*! rtl:begin:ignore */
 .draggable {
     &-area-wrapper {
         display: flex;
@@ -205,13 +195,11 @@
         }
     }
 }
-/*! rtl:end:ignore */
 
 /*--------------------------------------------------*/
 
 /* shade */
 
-/*! rtl:begin:ignore */
 .shade.hidden {
     opacity: 0;
 }
@@ -226,28 +214,23 @@
     opacity: 0.3;
     z-index: -1;
 }
-/*! rtl:end:ignore */
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
-/*! rtl:begin:ignore */
 .top-shade {
     /* stylelint-disable plugin/no-unsupported-browser-features */
     background-image: linear-gradient(to bottom, transparent, var(--shade-color));
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
-/*! rtl:end:ignore */
 
-/*! rtl:begin:ignore */
 .between-shade {
     opacity: 0.2;
     background-color: var(--shade-color);
 }
-/*! rtl:end:ignore */
 
-/*! rtl:begin:ignore */
 .bottom-shade {
     /* stylelint-disable plugin/no-unsupported-browser-features */
     background-image: linear-gradient(to bottom, var(--shade-color), transparent);
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
+
 /*! rtl:end:ignore */
