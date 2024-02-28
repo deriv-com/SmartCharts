@@ -1,6 +1,6 @@
 @charset "UTF-8";
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .barrier-area {
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -10,6 +10,8 @@
     user-select: none;
     width: 100%;
 }
+/*! rtl:end:ignore */
+
 /* Drag Lines and Prices */
 
 .chart-line {
@@ -75,7 +77,7 @@
 
 /*hover*/
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .draggable.chart-line:hover {
     &.horizontal {
         cursor: ns-resize;
@@ -84,16 +86,17 @@
         cursor: ew-resize;
     }
 }
+/*! rtl:end:ignore */
 
 /*hover*/
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .hide-pricelines > .chart-line.horizontal,
 .hide-pricelines > .barrier-area {
     display: none;
 }
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .drag-price {
     display: flex;
     height: 24px;
@@ -113,10 +116,11 @@
         width: calc(100% - 2px);
     }
 }
+/*! rtl:end:ignore */
 
 /*hover*/
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .no-touch {
     .price-arrow {
         span {
@@ -145,7 +149,7 @@
 
 /*hover*/
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .price {
     display: block;
     font-size: 12px;
@@ -175,8 +179,9 @@
         /* rtl:end:ignore */
     }
 }
+/*! rtl:end:ignore */
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .draggable {
     &-area-wrapper {
         display: flex;
@@ -200,17 +205,17 @@
         }
     }
 }
+/*! rtl:end:ignore */
 
 /*--------------------------------------------------*/
 
 /* shade */
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .shade.hidden {
     opacity: 0;
 }
 
-/*rtl:ignore*/
 .shade {
     position: absolute;
     width: 100%;
@@ -221,24 +226,28 @@
     opacity: 0.3;
     z-index: -1;
 }
+/*! rtl:end:ignore */
 
 /* css gradients are only partially supported in Safari, but will work here since colors are not premultiplied */
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .top-shade {
     /* stylelint-disable plugin/no-unsupported-browser-features */
     background-image: linear-gradient(to bottom, transparent, var(--shade-color));
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
+/*! rtl:end:ignore */
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .between-shade {
     opacity: 0.2;
     background-color: var(--shade-color);
 }
+/*! rtl:end:ignore */
 
-/*rtl:ignore*/
+/*! rtl:begin:ignore */
 .bottom-shade {
     /* stylelint-disable plugin/no-unsupported-browser-features */
     background-image: linear-gradient(to bottom, var(--shade-color), transparent);
     /* stylelint-enable plugin/no-unsupported-browser-features */
 }
+/*! rtl:end:ignore */

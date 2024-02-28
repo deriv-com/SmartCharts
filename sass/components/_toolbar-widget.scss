@@ -1,12 +1,11 @@
+/*! rtl:begin:ignore */
 .sc-toolbar-widget {
     position: absolute;
     direction: ltr;
     border-radius: $border-radius;
     width: 40px;
     top: 102px;
-    /*rtl:begin:ignore*/
     left: 1.2em;
-    /*rtl:end:ignore*/
     z-index: 4;
     box-sizing: content-box;
     @include themify($themes) {
@@ -60,9 +59,7 @@
         }
     }
     .sc-tooltip__inner {
-        /*rtl:begin:ignore*/
         left: calc(100% + 15px);
-        /*rtl:end:ignore*/
     }
     &--bottom {
         top: auto;
@@ -72,3 +69,4 @@
         z-index: 5;
     }
 }
+/*! rtl:end:ignore */

@@ -147,7 +147,7 @@
     }
 }
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .cq-modal__overlay {
     display: flex;
     width: 100%;
@@ -161,7 +161,7 @@
     overflow: hidden;
 }
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .ciq-modal {
     .cq-modal__overlay {
         z-index: 9999;
@@ -175,7 +175,7 @@
 @import 'menu';
 
 /* -------------------------- custom styles -------------------------------------*/
-/*rtl:ignore*/
+/*! rtl:ignore */
 .cq-chart-unavailable {
     position: absolute;
     text-align: center;
@@ -186,9 +186,9 @@
     color: #878787;
 }
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .sc-tooltip {
-    /*rtl:ignore*/
+    /*! rtl:ignore */
     &__inner {
         position: absolute;
         top: 0px;
@@ -211,7 +211,7 @@
             background: themed('TooltipBg');
             color: themed('TooltipText');
         }
-        /*rtl:ignore*/
+        /*! rtl:ignore */
         &:before {
             position: absolute;
             width: 0;
@@ -229,6 +229,7 @@
         }
     }
     &--right {
+        /*! rtl:begin:ignore */
         .sc-tooltip__inner {
             left: calc(100% + 10px);
             top: calc(50% - 17px);
@@ -246,10 +247,11 @@
                 }
             }
         }
+        /*! rtl:end:ignore */
     }
     &--enable {
         &:hover {
-            /*rtl:ignore*/
+            /*! rtl:ignore */
             .sc-tooltip__inner {
                 opacity: 1;
                 z-index: 3;
@@ -258,7 +260,7 @@
     }
 }
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .sc-notification-badge {
     width: 16px;
     height: 16px;
@@ -279,7 +281,7 @@
 }
 /* -------------------------- buttons -------------------------------------*/
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .sc-btn {
     padding: 5px 16px;
     font-size: 14px;
@@ -355,7 +357,7 @@
     }
 }
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .sc-chart__status {
     width: 8px;
     height: 8px;
@@ -384,7 +386,7 @@
     }
 }
 
-/*rtl:ignore*/
+/*! rtl:ignore */
 .sc-input {
     border-radius: $border-radius 0 0 $border-radius;
     height: 40px;
