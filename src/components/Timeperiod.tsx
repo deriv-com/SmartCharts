@@ -10,7 +10,7 @@ import { InlineLoader } from './Loader';
 import Tooltip from './Tooltip';
 
 type TTimeperiodItemProps = {
-    category: (typeof Intervals)[0];
+    category: typeof Intervals[0];
     item: {
         interval: TGranularity;
         num: number;
@@ -31,7 +31,6 @@ const TimeperiodItemComponent = ({ item, category, onClick, isLoading }: TTimepe
     const { mainStore } = timeperiod;
     const { granularity } = chart;
     const isMobile = mainStore.chart.isMobile as boolean;
-    // const { isActive: isLoading } = loader;
 
     const is_tick = React.useMemo(() => category.key === 'tick', [category]);
     const is_loading = React.useMemo(
