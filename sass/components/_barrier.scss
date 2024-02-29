@@ -38,7 +38,7 @@
             width: 100%;
         }
         .drag-line {
-            /*! rtl:begin:ignore */
+            /* rtl:begin:ignore */
             height: 1px;
             float: left;
             width: 100%;
@@ -46,7 +46,7 @@
             position: relative;
             border-top-width: 1px;
             border-top-color: $color-blue;
-            /*! rtl:end:ignore */
+            /* rtl:end:ignore */
         }
         .title-wrapper {
             $title-height: 24px;
