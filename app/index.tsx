@@ -93,6 +93,7 @@ const IntervalEnum = {
 };
 const activeLanguages = [
     'EN',
+    'BN',
     'DE',
     'ES',
     'FR',
