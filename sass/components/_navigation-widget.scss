@@ -1,5 +1,6 @@
-
+/*! rtl:begin:ignore */
 .sc-navigation-widget {
+    direction: ltr;
     width: 32px;
     position: absolute;
     bottom: 80px;
@@ -42,7 +43,7 @@
         }
     }
 }
-
+/*! rtl:end:ignore */
 .smartcharts-mobile .sc-navigation-widget__item--indent {
     margin-bottom: calc(10% - 1rem);
 }

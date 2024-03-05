@@ -147,6 +147,7 @@
     }
 }
 
+/*! rtl:ignore */
 .cq-modal__overlay {
     display: flex;
     width: 100%;
@@ -160,6 +161,7 @@
     overflow: hidden;
 }
 
+/*! rtl:ignore */
 .ciq-modal {
     .cq-modal__overlay {
         z-index: 9999;
@@ -173,7 +175,7 @@
 @import 'menu';
 
 /* -------------------------- custom styles -------------------------------------*/
-
+/*! rtl:ignore */
 .cq-chart-unavailable {
     position: absolute;
     text-align: center;
@@ -183,12 +185,14 @@
     font-size: 1.7em;
     color: #878787;
 }
-
+/*! rtl:begin:ignore */
 .sc-tooltip {
     &__inner {
         position: absolute;
         top: 0px;
+        /*! rtl:begin:ignore */
         left: 50%;
+        /*! rtl:end:ignore */
         border-radius: $border-radius;
         height: 34px;
         width: auto;
@@ -272,6 +276,7 @@
     }
 }
 /* -------------------------- buttons -------------------------------------*/
+
 .sc-btn {
     padding: 5px 16px;
     font-size: 14px;
@@ -412,6 +417,11 @@
     }
 }
 
+[dir='rtl'] .sc-input {
+    border-right: 1px solid $color-grey-5 !important;
+}
+
+/*! rtl:end:ignore */
 @keyframes blinking-network-status {
     40% {
         opacity: 1;

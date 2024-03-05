@@ -1,3 +1,4 @@
+/*! rtl:begin:ignore */
 .cq-chart-title {
     display: inline-block;
     top: 1em;
@@ -18,6 +19,7 @@
 
                 svg {
                     width: 12px;
+
                     @include themify($themes) {
                         fill: themed('ChartTitleArrow');
                     }
@@ -49,6 +51,7 @@
     .cq-menu-btn {
         padding: 8px;
         border-radius: $border-radius;
+
         @include themify($themes) {
             background: themed('ChartTitleSubBg');
         }
@@ -60,6 +63,7 @@
         display: flex;
         align-items: center;
         border-radius: $border-radius;
+
         @include themify($themes) {
             color: themed('ChartTitleText');
         }
@@ -81,7 +85,10 @@
                 transition: transform 0.2s ease-in-out;
             }
         }
-        > .ic-icon, > .ic-frx, > .ic-wld, > .ic-otc {
+        > .ic-icon,
+        > .ic-frx,
+        > .ic-wld,
+        > .ic-otc {
             height: $large-icon-size;
             width: $large-icon-size;
             transform: scale(1.3);
@@ -94,6 +101,7 @@
             display: flex;
             flex-direction: column;
             margin: 0 0 0 20px;
+
             @media (min-width: 768px) {
                 min-width: 15rem;
                 min-height: 4.2rem;
@@ -126,6 +134,7 @@
             line-height: 24px;
             width: auto;
             padding-right: 1rem;
+
             @include themify($themes) {
                 color: themed('ChartTitleSymbolText');
             }
@@ -144,6 +153,7 @@
                 margin-right: 5px;
                 height: 12px;
                 margin-top: 3px;
+
                 @include themify($themes) {
                     fill: themed('TimeIconColor');
                 }
@@ -160,6 +170,7 @@
 
                 .cq-closed-opening-time {
                     font-weight: bold;
+
                     @include themify($themes) {
                         color: themed('ChartTitleText');
                     }
@@ -179,12 +190,15 @@
             border-radius: $border-radius;
             text-transform: uppercase;
         }
-        .cq-chart-price > *, .cq-chart-closed > * {
+        .cq-chart-price > *,
+        .cq-chart-closed > * {
             position: relative;
         }
-        .cq-chart-price, .cq-chart-closed {
+        .cq-chart-price,
+        .cq-chart-closed {
             display: flex;
             vertical-align: text-bottom;
+
             @include themify($themes) {
                 color: themed('ChartTitlePriceText');
             }
@@ -195,7 +209,8 @@
         bottom: auto;
         transform: translateX(0) translateY(-3em);
 
-        &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
+        &.cq-menu-dropdown-enter-done,
+        &.cq-menu-dropdown-enter-active {
             opacity: 1;
             transform: translateX(0) translateY(0em);
         }
@@ -229,3 +244,4 @@
         }
     }
 }
+/*! rtl:end:ignore */

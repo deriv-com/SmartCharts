@@ -1,3 +1,4 @@
+/*! rtl:begin:ignore */
 .cq-crosshair-toggle {
     &:hover {
         @include themify($themes) {
@@ -151,3 +152,4 @@
     position: absolute;
     bottom: 0px;
 }
+/*! rtl:end:ignore */

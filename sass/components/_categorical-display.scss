@@ -78,6 +78,7 @@
             display: none;
 
             &-item {
+                direction: ltr;
                 width: 100%;
                 display: flex;
                 box-sizing: border-box;
@@ -115,6 +116,7 @@
             }
         }
         &__item {
+            direction: ltr;
             width: 100%;
             display: flex;
             box-sizing: border-box;
@@ -309,6 +311,7 @@
     }
     &__item {
         $item: &;
+        direction: ltr;
         padding-left: 20px;
         padding-right: 20px;
         display: flex;
