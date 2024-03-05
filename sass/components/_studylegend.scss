@@ -15,9 +15,6 @@
     .hidden {
         display: none;
     }
-    .cq-dialog__body {
-        position: relative;
-    }
     &__panel {
         width: 360px;
         height: 392px;
@@ -320,9 +317,6 @@
 }
 
 .smartcharts-mobile {
-    .stx-panel-control {
-        left: 5px;
-    }
     .sc-studies {
         .react-tabs__tab-panel {
             height: 425px !important;
