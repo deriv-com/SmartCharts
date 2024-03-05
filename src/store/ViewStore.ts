@@ -2,7 +2,7 @@ import { action, computed, observable, reaction, makeObservable, when } from 'mo
 import { ChangeEvent, KeyboardEvent } from 'react';
 import MainStore from '.';
 import Context from '../components/ui/Context';
-import { TCustomEvent, TLayout } from '../types';
+import { TCustomEvent, TGranularity, TLayout } from '../types';
 import { clone, createObjectFromLocalStorage } from '../utils';
 import { LogActions, LogCategories, logEvent } from '../utils/ga';
 import MenuStore from './MenuStore';
@@ -153,13 +153,23 @@ export default class ViewStore {
         this.updateRoute('new');
     }
 
-    applyLayout(idx: number, e: TCustomEvent) {
+    applyLayout(
+        idx: number,
+        e: TCustomEvent,
+        onGranularity: (granularity?: TGranularity) => void,
+        onChartType: (chartType?: string) => void
+    ) {
         if (e.nativeEvent.is_item_removed) {
             return;
         }
-
+        this.mainStore.crosshair.updateVisibility(false);
         const { layout } = this.sortedItems[idx];
 
+        onGranularity(layout.granularity);
+        onChartType(layout.chartType);
+
+        // to not show tooltip while chart is loading
+        this.mainStore.crosshair.setCrosshairState(0);
         this.restoreLayout(clone(layout));
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
     }
@@ -195,7 +205,7 @@ export default class ViewStore {
         this.mainStore.studies.restoreStudies(layout.studyItems || []);
 
         if (typeof layout.crosshair === 'number') {
-            this.mainStore.crosshair.setCrosshairState(layout.crosshair);
+            this.mainStore.crosshair.setLayoutCrosshair(layout.crosshair);
         }
 
         finishImportLayout();

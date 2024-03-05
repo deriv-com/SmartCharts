@@ -11,6 +11,7 @@ body {
     margin: 0px; /*to deal with iFraming which sets 8px by default in some browsers*/
 }
 
+/*! rtl:ignore */
 .chartContainer {
     /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
     display: block;
@@ -29,6 +30,7 @@ body {
     }
 }
 
+/*! rtl:ignore */
 .cq-inchart-subholder {
     width: 100%;
     height: 100%;
@@ -37,6 +39,8 @@ body {
     pointer-events: none;
 }
 /* Chart Block */
+
+/*! rtl:ignore */
 .ciq-chart {
     height: auto;
     width: 100%;
@@ -64,6 +68,8 @@ body {
 }
 
 /* The Chart */
+
+/*! rtl:ignore */
 .cq-chart-control-left {
     .chartContainer {
         width: calc(100% - 100px);
@@ -76,6 +82,7 @@ body {
 /* Up/Down Arrow indicators */
 .cq-change {
     &:after {
+        /*! rtl:ignore */
         float: right;
         margin-top: 5px;
         margin-right: 5px;
@@ -94,11 +101,15 @@ body {
 
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
 
+/*! rtl:ignore */
+
 .scroll_to_recent:hover,
 .scroll_to_recent:active {
     /* Make buttons full opacity on hover or hit */
     opacity: 1;
 }
+
+/*! rtl:ignore */
 
 .scroll_to_recent {
     /* Button  jumping to today's data */
