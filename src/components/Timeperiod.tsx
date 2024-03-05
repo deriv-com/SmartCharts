@@ -16,6 +16,7 @@ type TTimeperiodItemProps = {
         num: number;
     };
     onClick: (chart_type_id: string, key: string, interval: TGranularity) => void;
+    isLoading: boolean;
 };
 
 const enableLoader = (isLoading: boolean, interval: TGranularity, granularity: TGranularity) =>
@@ -23,26 +24,23 @@ const enableLoader = (isLoading: boolean, interval: TGranularity, granularity: T
 const enableTooltip = (isMobile: boolean, key: string, chartType_id: string) =>
     !isMobile && chartType_id !== 'line' && key === 'tick';
 
-const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemProps) => {
-    const { timeperiod, chartType, loader, chart, state } = useStores();
+const TimeperiodItemComponent = ({ item, category, onClick, isLoading }: TTimeperiodItemProps) => {
+    const { timeperiod, chartType, chart, state } = useStores();
     const chartTypeId = chartType.type.id;
     const { allowTickChartTypeOnly } = state;
     const { mainStore } = timeperiod;
     const { granularity } = chart;
     const isMobile = mainStore.chart.isMobile as boolean;
-    const { isActive: isLoading } = loader;
 
     const is_tick = React.useMemo(() => category.key === 'tick', [category]);
-    const is_loading = React.useMemo(() => enableLoader(isLoading, item.interval, granularity), [
-        isLoading,
-        item,
-        granularity,
-    ]);
-    const enable_tooltip = React.useMemo(() => enableTooltip(isMobile, category.key, chartTypeId), [
-        isMobile,
-        category.key,
-        chartTypeId,
-    ]);
+    const is_loading = React.useMemo(
+        () => enableLoader(isLoading, item.interval, granularity),
+        [isLoading, item, granularity]
+    );
+    const enable_tooltip = React.useMemo(
+        () => enableTooltip(isMobile, category.key, chartTypeId),
+        [isMobile, category.key, chartTypeId]
+    );
     const is_disabled = React.useMemo(
         () => (is_tick && chartTypeId !== 'line') || (!is_tick && allowTickChartTypeOnly),
         [is_tick, chartTypeId, allowTickChartTypeOnly]
@@ -50,12 +48,10 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
 
     const is_active = item.interval === granularity;
 
-    const handleClick = React.useCallback(() => onClick(chartTypeId, category.key, item.interval), [
-        chartTypeId,
-        category,
-        item,
-        onClick,
-    ]);
+    const handleClick = React.useCallback(
+        () => onClick(chartTypeId, category.key, item.interval),
+        [chartTypeId, category, item, onClick]
+    );
 
     return (
         <Tooltip
@@ -63,7 +59,7 @@ const TimeperiodItemComponent = ({ item, category, onClick }: TTimeperiodItemPro
             onClick={handleClick}
             className={classNames('sc-interval__item', {
                 'sc-interval__item--active': is_active,
-                'sc-interval__item--disabled': is_disabled,
+                'sc-interval__item--disabled': is_disabled || isLoading,
                 'pre-loading': is_loading,
             })}
             enabled={enable_tooltip}
@@ -83,13 +79,16 @@ const TimeperiodItem = observer(TimeperiodItemComponent);
 type TTimeperiodProps = { portalNodeId?: string; onChange?: (granularity?: TGranularity) => void; newDesign?: boolean };
 
 const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
-    const { timeperiod } = useStores();
+    const { timeperiod, loader } = useStores();
 
     const { changeGranularity, setGranularity, updateProps, updatePortalNode } = timeperiod;
+    const { isActive: isLoading } = loader;
 
     const onChangeGranularity = onChange || setGranularity;
 
     const onIntervalClick = (chart_type_id: string, key: string, interval: TGranularity) => {
+        if (isLoading) return;
+
         if (key === 'tick' && chart_type_id !== 'line') {
             return;
         }
@@ -110,7 +109,13 @@ const Timeperiod = ({ portalNodeId, onChange }: TTimeperiodProps) => {
             <div className='sc-interval__content'>
                 {Intervals.map(category =>
                     category.items.map(item => (
-                        <TimeperiodItem key={item.interval} item={item} category={category} onClick={onIntervalClick} />
+                        <TimeperiodItem
+                            key={item.interval}
+                            item={item}
+                            category={category}
+                            onClick={onIntervalClick}
+                            isLoading={isLoading}
+                        />
                     ))
                 )}
             </div>
