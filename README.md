@@ -372,13 +372,16 @@ Here are the following components you can import:
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
   - `<StudyLegend />`
   - `<DrawTools />`
-  - `<Views />`
+  - `<Views  portalNodeId='modal_root' onChartType={()=>{}} onGranularity={()=>{}}/>`
   - `<Share />`
   - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
   - `<ChartSize />`
   - `<ChartSetting />`
 - Toolbar Widget
-  - `<ChartMode />`
+  - `<ChartMode  portalNodeId='modal_root' onChartType={()=>{}} onGranularity={updateGranularity={()=>{}}}/>`
+
+> Note: ChartMode and Views have the same type of props . It include onChartType and onGranularity callback with portalNodeId
+
 
 ### Props vs UI
 
