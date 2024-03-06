@@ -249,47 +249,21 @@ Attributes marked with `*` are **mandatory**:
 | opacityOnOverlap     | Sets the opacity of the barrier when it is overlapping with other barrier.                                                                                                         |
 | high\*               | Sets the price of the high barrier.                                                                                                                                                |
 | low\*                | Sets the price of the low barrier.                                                                                                                                                 |
-#### ~~Marker API~~ (Depricated)
-
-Markers provide a way for developers to place DOM elements inside the chart that are positioned based on date, values or tick location. Unlike [CharIQ's Markers](http://documentation.chartiq.com/tutorial-Markers.html#main), we only allow markers to be placed on the main chart. Also note that this Marker implementation does not factor the width and height of the marker; this is expensive to calculate, so we expect you to offset this in CSS.
-
-```jsx
-<SmartChart>
-  <Marker
-    x={1533192979}
-    yPositioner="none"
-    className="chart-line vertical trade-start-line"
-  >
-    {/* Place marker content here */}
-    <div className="drag-line" />
-    <div className="trade-text">Trade Start</div>
-  </Marker>
-</SmartChart>
-```
-
-| Attribute   | Description                                                                   |
-| ----------- | ----------------------------------------------------------------------------- |
-| className   | Adds custom class name to marker. All markers have class name `stx-marker`.   |
-| x           | x position of the chart; depends on `xPositioner`.                            |
-| xPositioner | Determines x position. Choose between `epoch` or `none`. Defaults to `epoch`. |
-| y           | y position of the chart; depends on `yPositioner`.                            |
-| yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`. |
-
-There are more options for `xPositioner` and `yPositioner` in [ChartIQ docs](http://documentation.chartiq.com/CIQ.Marker.html#main). What we document here is the most common use case.
-
 #### Marker API
 
 Use `FastMarker` to render given Components under stx-subholder.
 It will keep the marker position on the chart.
 
 ```jsx
- <FastMarker
-     markerRef={setRef}
-     threshold={optional visibility threshold}
-     className="your-css-class"
- >
+<SmartChart>
+  <FastMarker
+    markerRef={setRef}
+    threshold={optional visibility threshold}
+    className="your-css-class"
+  >
     <your content here/>
- </FastMarker>
+  </FastMarker>
+</SmartChart>
 
 ```
 
@@ -664,7 +638,7 @@ export default connect(({ chartTitle: c }) => ({
 
 ##### 3. Independent Components: components that are not managed by the main store
 
-Examples: `<Barrier />`, `<Marker />`
+Examples: `<Barrier />`, `<ChartMode />`
 
 Independent components is able to access the main store, but the main store has no control over independent components. As such, each independent component manages its own life cycle. Here is the interface for its store:
 
