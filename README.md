@@ -354,7 +354,7 @@ Here are the following components you can import:
 - Toolbar Widget
   - `<ChartMode onChartType={(chartType) => {}} onGranularity={(granularity) => {}} />`
 
-> Note: ChartMode and Views have the same type of props . It include onChartType and onGranularity callback with portalNodeId
+> Note: ChartMode and Views have the same type of props. It includes required `onChartType` and `onGranularity` callbacks and an optional `portalNodeId`.
 
 
 ### Props vs UI
