@@ -5,7 +5,7 @@ import { TRefData } from 'src/types';
 import { strToDateTime } from 'src/utils/date';
 import { getUTCDate } from '../utils';
 
-// Render given Components under stx-subholder.
+// Render given Components inside the chart.
 // This component is used to position a marker on the chart.
 //
 // USAGE:
@@ -159,7 +159,7 @@ const FastMarker = (props: TFastMarkerProps) => {
     const maxWidth = chartNode && !overlap_y_axis ? chartNode.offsetWidth - yAxisWidth - 10 : '100%';
 
     return (
-        <div className='fast-marker' style={{ maxWidth: maxWidth }}>
+        <div className='fast-marker' style={{ maxWidth }}>
             <div className={className} ref={setRef} style={{ position: 'absolute' }}>
                 {children}
             </div>

@@ -251,14 +251,15 @@ Attributes marked with `*` are **mandatory**:
 | low\*                | Sets the price of the low barrier.                                                                                                                                                 |
 #### Marker API
 
-Use `FastMarker` to render given Components under stx-subholder.
-It will keep the marker position on the chart.
+Use `FastMarker` to render given components inside the chart.
+Markers provide a way for developers to place DOM elements that are positioned based on date, values or tick location inside the chart. Also, please note that this `FastMarker` implementation does not factor the width and height of the marker: this is expensive to calculate, so we expect you to offset this in CSS.
+`FastMarker` will keep the marker position on the chart.
+It can be imported from `@deriv/deriv-chart` package either as `FastMarker`, or simply as `Marker`.
 
 ```jsx
 <SmartChart>
   <FastMarker
     markerRef={setRef}
-    threshold={optional visibility threshold}
     className="your-css-class"
   >
     <your content here/>
@@ -282,7 +283,6 @@ USAGE:
 
 PROPS:
 
-- `threshold` (optional): the chart has a zoom level, the marker will be only shown within that threshold.
 - `markerRef` (required): pass the `setRef` callback using this property
 - `className` (optional): avoid expoensive css transition or keyframe animations on this class.
 
