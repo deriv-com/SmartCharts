@@ -19,7 +19,7 @@ import Timeperiod from './Timeperiod';
 
 type TChartModeProps = {
     portalNodeId?: string;
-    onChartType: (chartType?: string | undefined) => void;
+    onChartType: (chartType?: string) => void;
     onGranularity: (granularity?: TGranularity) => void;
 };
 

@@ -249,47 +249,22 @@ Attributes marked with `*` are **mandatory**:
 | opacityOnOverlap     | Sets the opacity of the barrier when it is overlapping with other barrier.                                                                                                         |
 | high\*               | Sets the price of the high barrier.                                                                                                                                                |
 | low\*                | Sets the price of the low barrier.                                                                                                                                                 |
-#### ~~Marker API~~ (Depricated)
+#### Marker API
 
-Markers provide a way for developers to place DOM elements inside the chart that are positioned based on date, values or tick location. Unlike [CharIQ's Markers](http://documentation.chartiq.com/tutorial-Markers.html#main), we only allow markers to be placed on the main chart. Also note that this Marker implementation does not factor the width and height of the marker; this is expensive to calculate, so we expect you to offset this in CSS.
+Use `FastMarker` to render given components inside the chart.
+Markers provide a way for developers to place DOM elements that are positioned based on date, values or tick location inside the chart. Also, please note that this `FastMarker` implementation does not factor the width and height of the marker: this is expensive to calculate, so we expect you to offset this in CSS.
+`FastMarker` will keep the marker position on the chart.
+It can be imported from `@deriv/deriv-chart` package either as `FastMarker`, or simply as `Marker`.
 
 ```jsx
 <SmartChart>
-  <Marker
-    x={1533192979}
-    yPositioner="none"
-    className="chart-line vertical trade-start-line"
+  <FastMarker
+    markerRef={setRef}
+    className="your-css-class"
   >
-    {/* Place marker content here */}
-    <div className="drag-line" />
-    <div className="trade-text">Trade Start</div>
-  </Marker>
-</SmartChart>
-```
-
-| Attribute   | Description                                                                   |
-| ----------- | ----------------------------------------------------------------------------- |
-| className   | Adds custom class name to marker. All markers have class name `stx-marker`.   |
-| x           | x position of the chart; depends on `xPositioner`.                            |
-| xPositioner | Determines x position. Choose between `epoch` or `none`. Defaults to `epoch`. |
-| y           | y position of the chart; depends on `yPositioner`.                            |
-| yPositioner | Determines y position. Choose between `value` or `none`. Defaults to `value`. |
-
-There are more options for `xPositioner` and `yPositioner` in [ChartIQ docs](http://documentation.chartiq.com/CIQ.Marker.html#main). What we document here is the most common use case.
-
-#### Marker API
-
-Use `FastMarker` to render given Components under stx-subholder.
-It will keep the marker position on the chart.
-
-```jsx
- <FastMarker
-     markerRef={setRef}
-     threshold={optional visibility threshold}
-     className="your-css-class"
- >
     <your content here/>
- </FastMarker>
+  </FastMarker>
+</SmartChart>
 
 ```
 
@@ -308,7 +283,6 @@ USAGE:
 
 PROPS:
 
-- `threshold` (optional): the chart has a zoom level, the marker will be only shown within that threshold.
 - `markerRef` (required): pass the `setRef` callback using this property
 - `className` (optional): avoid expoensive css transition or keyframe animations on this class.
 
@@ -372,15 +346,15 @@ Here are the following components you can import:
   - `<ChartTypes enabled={true} onChange={(chartType) => {}} />`
   - `<StudyLegend />`
   - `<DrawTools />`
-  - `<Views  portalNodeId='modal_root' onChartType={()=>{}} onGranularity={()=>{}}/>`
+  - `<Views onChartType={(chartType) => {}} onGranularity={(granularity) => {}} />`
   - `<Share />`
   - `<Timeperiod enabled={true} onChange={(chartType) => {}} />`
   - `<ChartSize />`
   - `<ChartSetting />`
 - Toolbar Widget
-  - `<ChartMode  portalNodeId='modal_root' onChartType={()=>{}} onGranularity={updateGranularity={()=>{}}}/>`
+  - `<ChartMode onChartType={(chartType) => {}} onGranularity={(granularity) => {}} />`
 
-> Note: ChartMode and Views have the same type of props . It include onChartType and onGranularity callback with portalNodeId
+> Note: ChartMode and Views have the same type of props. It includes required `onChartType` and `onGranularity` callbacks and an optional `portalNodeId`.
 
 
 ### Props vs UI
@@ -664,7 +638,7 @@ export default connect(({ chartTitle: c }) => ({
 
 ##### 3. Independent Components: components that are not managed by the main store
 
-Examples: `<Barrier />`, `<Marker />`
+Examples: `<Barrier />`, `<ChartMode />`
 
 Independent components is able to access the main store, but the main store has no control over independent components. As such, each independent component manages its own life cycle. Here is the interface for its store:
 
