@@ -170,9 +170,6 @@ export default class CategoricalDisplayStore {
             ? this.activeCategories
             : [this.getCurrentActiveCategory ? this.getCurrentActiveCategory() : 'favorite'];
 
-        console.log('activeItems', activeItems);
-        console.log('filteredItems', filteredItems);
-
         for (const item of filteredItems) {
             if (activeItems.includes(item.categoryId)) {
                 item.active = true;
