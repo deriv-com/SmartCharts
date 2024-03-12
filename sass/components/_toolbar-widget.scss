@@ -1,5 +1,7 @@
+/*! rtl:begin:ignore */
 .sc-toolbar-widget {
     position: absolute;
+    direction: ltr;
     border-radius: $border-radius;
     width: 40px;
     top: 102px;
@@ -67,3 +69,4 @@
         z-index: 5;
     }
 }
+/*! rtl:end:ignore */

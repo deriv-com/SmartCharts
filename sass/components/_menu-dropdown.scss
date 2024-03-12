@@ -24,32 +24,12 @@
                     bottom: auto;
                     transform: translateX(0) translateY(-3em);
 
-                    &.open {
-                        margin: 0px;
-                    }
                     &.cq-menu-dropdown-enter-done, &.cq-menu-dropdown-enter-active {
                         opacity: 1;
                         transform: translateX(0) translateY(0em);
                     }
                     &.cq-menu-dropdown-enter-done {
                         z-index: 6;
-                    }
-                    .cq-dialog__body {
-                        height: 100% !important;
-                        box-shadow: none;
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    .cq-categorical-display {
-                        flex: 1;
-                        box-shadow: none;
-                    }
-                    .category-title.sticky-top {
-                        // stylelint-disable-next-line
-                        top: unset;
-                    }
-                    .cq-scroll-panel .category:last-child {
-                        padding-bottom: 8em;
                     }
                 }
             }

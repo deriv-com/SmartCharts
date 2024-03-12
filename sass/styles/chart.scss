@@ -11,6 +11,7 @@ body {
     margin: 0px; /*to deal with iFraming which sets 8px by default in some browsers*/
 }
 
+/*! rtl:ignore */
 .chartContainer {
     /* DIV that the canvas expands to. #chartContainer is only for backward compatibility with older libraries. */
     display: block;
@@ -23,15 +24,13 @@ body {
         color: themed('ChartText');
     }
 
-    &.ciq-draw-mode {
-        cursor: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
-    }
     .flutter-chart {
         width: 100%;
         height: 100%;
     }
 }
 
+/*! rtl:ignore */
 .cq-inchart-subholder {
     width: 100%;
     height: 100%;
@@ -40,6 +39,8 @@ body {
     pointer-events: none;
 }
 /* Chart Block */
+
+/*! rtl:ignore */
 .ciq-chart {
     height: auto;
     width: 100%;
@@ -67,6 +68,8 @@ body {
 }
 
 /* The Chart */
+
+/*! rtl:ignore */
 .cq-chart-control-left {
     .chartContainer {
         width: calc(100% - 100px);
@@ -74,93 +77,12 @@ body {
     }
 }
 
-.sharing .ciq-no-share {
-    display: none !important;
-    left: -9999px !important;
-}
-
 /* --------------------------------------------------------- BUTTONS --------------------------------------------------------- */
-
-/* Basic Buttons */
-
-.stx-btn {
-    /* Inactive Button */
-    display: inline-block;
-    cursor: pointer;
-    padding: 0px 8px;
-    border: solid 1px #ddd;
-    font-weight: bold;
-    line-height: 27px;
-    color: #7e7e7e;
-    text-align: center;
-    overflow: visible;
-    background-repeat: no-repeat;
-    border-radius: 3px;
-    transition: color 0.25s, border 0.25s, box-shadow 0.25s;
-    user-select: none;
-
-    &:hover {
-        color: #444444;
-        border: solid 1px #c5c5c5;
-        box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1), inset 0px -8px 6px rgba(100, 100, 100, 0.03);
-    }
-    &:active {
-        color: #333;
-        box-shadow: inset 0px 8px 6px rgba(100, 100, 100, 0.03);
-    }
-}
-
-/* Panel Buttons */
-
-.stx-btn-panel,
-.stx-btn-panel span {
-    /* Button Defaults */
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.stx-btn-panel {
-    /* Button Spacing */
-    margin: 2px;
-    opacity: 0;
-    transition: opacity 0.5s;
-    display: none;
-    @include themify($themes) {
-        background-color: themed('ChartBg');
-    }
-
-    > span {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: no-repeat center;
-    }
-    &:hover span,
-    &:active span {
-        /* Make buttons full opacity on hover or hit */
-        opacity: 1;
-    }
-    &:active svg {
-        /* Scale up when active */
-        transform: scale(1.2, 1.2);
-    }
-    &.stx-show {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .stx-ico-close {
-        width: 16px;
-        height: 16px;
-    }
-}
 
 /* Up/Down Arrow indicators */
 .cq-change {
     &:after {
+        /*! rtl:ignore */
         float: right;
         margin-top: 5px;
         margin-right: 5px;
@@ -176,27 +98,18 @@ body {
         padding-left: 3px;
     }
 }
+
 /* --------------------------------------------------------- CHART CONTROLS --------------------------------------------------------- */
 
-.stx_chart_controls {
-    /* Chart Control module */
-    position: absolute;
-    display: block;
-    bottom: 60px;
-    left: 50%;
-    margin-left: -55px;
-    height: 27px;
-    margin-bottom: 15px;
-    width: auto;
-    text-align: center;
-    z-index: 30;
-}
+/*! rtl:ignore */
 
 .scroll_to_recent:hover,
 .scroll_to_recent:active {
     /* Make buttons full opacity on hover or hit */
     opacity: 1;
 }
+
+/*! rtl:ignore */
 
 .scroll_to_recent {
     /* Button  jumping to today's data */
@@ -225,97 +138,6 @@ body {
         position: relative;
         @include themify($themes) {
             fill: themed('NavigationWidgetColor');
-        }
-    }
-}
-
-/* --------------------------------------------------------- PANEL CONTROL TEMPLATES --------------------------------------------------------- */
-
-.stx-baseline-handle {
-    /* used for dragging the baseline up and down */
-    cursor: ns-resize;
-    display: none;
-    opacity: 0.5;
-    position: absolute;
-    z-index: 30;
-    height: 20px;
-    width: 20px;
-
-    svg {
-        height: inherit;
-        width: inherit;
-    }
-}
-
-.stx-baseline-handle:hover {
-    opacity: 1;
-}
-
-.stx-drag-chart {
-    /* Use the hand icon when grabbing and moving the chart */
-    cursor: grabbing; /* stylelint-disable-line plugin/no-unsupported-browser-features */
-}
-
-.stx-panel-control {
-    /* Panel Control buttons template */
-    position: absolute;
-    top: 4px;
-    left: 80px;
-    overflow: hidden;
-    z-index: 30;
-    display: none;
-    border-radius: $border-radius;
-    height: 24px;
-    @include themify($themes) {
-        background: themed('ChartPanelBg');
-    }
-
-    .stx-btn-panel {
-        opacity: 1;
-        background: transparent;
-
-        svg {
-            @include themify($themes) {
-                fill: themed('ChartPanelText');
-                stroke: themed('ChartPanelText');
-            }
-        }
-        &.stx_solo_lit {
-            svg {
-                stroke: transparent !important;
-            }
-        }
-    }
-    * {
-        user-select: none;
-    }
-    &.stx-show {
-        display: inline-flex;
-    }
-    .stx-btn {
-        /* Float all icons so they stay in line on the left */
-        float: left;
-    }
-    .stx-panel-title {
-        /* Panel/Chart Titles */
-        box-shadow: none;
-        margin: 0px 4px;
-        float: left;
-        display: inline-block;
-        padding: 0;
-        text-align: left;
-        text-transform: uppercase;
-        font-size: 10px;
-        font-weight: bold;
-        font-style: normal;
-        line-height: 2.6;
-        letter-spacing: normal;
-        @include themify($themes) {
-            color: themed('ChartPanelText');
-        }
-
-        .bars {
-            font-weight: normal;
         }
     }
 }
@@ -356,83 +178,6 @@ body {
             color: themed('ChartStickyInnerText');
         }
     }
-    .mStickyRightClick {
-        position: relative;
-    }
-}
-
-.stx_draw_ok {
-    display: none !important;
-}
-
-.vectorTrashCan,
-.overlayEdit {
-    position: absolute;
-    z-index: 40;
-}
-
-.sMeasure {
-    /* Drawing and study info div contents*/
-    margin: 0px;
-    padding: 5px 10px;
-    display: inline-block;
-    float: left;
-}
-
-.overlayEdit.stx-btn,
-.vectorTrashCan.stx-btn {
-    /* Drawing and study info div delete button wrappers for mobile */
-    cursor: pointer;
-    display: inline-block;
-    text-align: center;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border: none;
-
-    @include themify($themes) {
-        background: themed('TooltipBg') !important;
-    }
-    border-radius: 3px;
-}
-
-.overlayEdit.stx-btn span,
-.vectorTrashCan.stx-btn span {
-    /* Drawing and study info div delete button content */
-    align-items: center;
-    justify-content: center;
-    height: 30px;
-    width: 30px !important;
-
-    svg {
-        fill: $COLOR_DARK_GRAY_3;
-    }
-    &.ic-delete {
-        display: none;
-    }
-    &.ic-edit {
-        display: flex;
-    }
-}
-
-.rightclick_study .overlayEdit {
-    margin: 0px !important;
-}
-
-.rightclick_series {
-    .overlayEdit.stx-btn,
-    .vectorTrashCan.stx-btn {
-        > .ic-delete {
-            display: flex;
-        }
-        > .ic-edit {
-            display: none;
-        }
-    }
-}
-
-.overlayTrashCan {
-    display: none !important;
 }
 
 .mouseDeleteInstructions {
@@ -441,622 +186,9 @@ body {
     display: block;
 }
 
-.mouseDeleteText,
-.mouseManageText {
-    display: none;
-}
-
-.rightclick_drawing .mouseManageText {
-    display: inline;
-}
-
-.rightclick_series .mouseDeleteText {
-    display: inline;
-}
-
-.stx-loader {
-    /* Loading image size and placement */
-    position: absolute;
-    top: 280px;
-    left: 50%;
-    margin-left: -20px;
-    width: 40px;
-    height: 40px;
-    z-index: 50;
-}
-
-/* --------------------------------------------------------- CHART ELEMENT STYLES --------------------------------------------------------- */
-
-/* -------- Current Price label (Floating last price on y-axis)-------- */
-
-.stx_current_hr_up, /* 'Up' color for current chart value */
-.stx_current_hr_down {
-    /* 'Down' color for current chart value */
-    font-weight: bold;
-    font-size: 12px;
-    font-family: $base-font;
-    @include themify($themes) {
-        color: themed('ChartCandleText');
-        background-color: themed('ChartCandleBg');
-    }
-}
-
-.stx_crosshair_drawing {
-    /* Crosshairs lines when drawing */
-    position: absolute;
-    z-index: 10;
-    pointer-events: none;
-    @include themify($themes) {
-        background-color: themed('CrosshairAxis');
-    }
-}
-
-/* -------- Chart and Study Panel Styling -------- */
-
-.stx_panels {
-    /* Panel Title text */
-    font-family: 'Helvetica';
-    font-size: 12px;
-    color: #fff;
-}
-
-.stx_panel_background {
-    /* Panel Title background */
-    color: #7c878b;
-}
-
-.stx_panel_border {
-    /* Divider between panels */
-    width: 1px;
-    color: #cccccc;
-}
-
-/* -------- Chart Grid -------- */
-
-.stx_grid {
-    /* Default Grid */
-    @include themify($themes) {
-        background: themed('ChartBg');
-        color: themed('ChartGrid');
-    }
-    width: 1px;
-    opacity: 1;
-    border: none;
-}
-
-.stx_grid_border {
-    /* Default Grid borders */
-    @include themify($themes) {
-        border-color: themed('ChartAreaBorder');
-    }
-    opacity: 0.2;
-    border-style: solid;
-}
-
-/* -------- Chart Type Styles -------- */
-
-.stx_line_chart {
-    /* Default width for line Charts */
-    width: 1px;
-    border-top-style: dotted;
-}
-
-.stx_bar_chart,
-.stx_bar_up,
-.stx_bar_down,
-.stx_bar_even {
-    /* Default width for bar Charts */
-    width: 1px;
-}
-
-/* Default color for line and bar Charts */
-.stx_line_chart,
-.stx_bar_chart {
-    @include themify($themes) {
-        color: themed('DefaultBorder');
-    }
-}
-
-.stx_bar_down {
-    /* Down Bar color */
-    color: $chart-red;
-}
-
-.stx_bar_up {
-    /* Up Bar color */
-    color: $chart-green;
-}
-
-.stx_baseline_delta_mountain {
-    /* Default color for baseline delta mountain Charts */
-    background-color: rgba(163, 102, 255, 0.5);
-    /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(163, 102, 255, 0.01);
-    /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
-    padding: 3px; /* Optional padding between the baseline and the mountain shading*/
-}
-
-.stx_colored_mountain_chart {
-    /* Default color for colored mountain Charts */
-    background-color: rgba(163, 102, 255, 0.5);
-    /* background color for mountain. If IE8 support is needed use #5CC7C0 instead as rgba is not supported*/
-    color: rgba(163, 102, 255, 0.01);
-    /* Optional gradient. If IE8 support is needed use #EFF9F9 instead as rgba is not supported */
-    width: 2px; /* Optional line width */
-    padding: 4px; /* Optional padding between the baseline and the mountain shading*/
-}
-
-.stx_mountain_chart {
-    /* Default color for mountain Charts */
-    width: 1px; /* Optional line width */
-    @include themify($themes) {
-        border: themed('ChartMountainBorder');
-        background-color: themed('ChartMountainBg'); /* Optional gradient */
-        color: themed('ChartMountainBgShade'); /* background color for mountain */
-    }
-}
-
-.stx_histogram_down {
-    /* Down Bar color */
-    color: $chart-red;
-    @include themify($themes) {
-        border-left-color: themed('ChartBorder');
-    }
-}
-
-.stx_histogram_up {
-    /* Up Bar color */
-    color: $chart-green;
-    @include themify($themes) {
-        border-left-color: themed('ChartBorder');
-    }
-}
-
-.stx_histogram_even {
-    /* Even Bar color */
-    color: #999999;
-    @include themify($themes) {
-        border-left-color: themed('ChartBorder');
-    }
-}
-
-.stx_highlight_vector {
-    /* change the color and weight of drawings and study overlays on hover */
-    color: #ff0000;
-    width: 3px;
-}
-
-.stx_candle_shadow,
-.stx_bar_even {
-    /* Candle wick color */
-    color: #2e383b;
-}
-
-/******* Optionally use .stx_candle_shadow_up and .stx_candle_shadow_down to change shadow/wick color for up/down candles
- .stx_candle_shadow_up {
-	color:$chart-green;
-}
-.stx_candle_shadow_down {
-	color:$chart-red;
-}
-********/
-
-.stx_candle_down,
-.stx_line_down {
-    /* Down Candle color */
-    color: $chart-red;
-    border-left-color: transparent;
-}
-
-.stx_candle_up,
-.stx_line_up {
-    /* Up Candle color */
-    color: $chart-green;
-    border-left-color: transparent;
-}
-
-.stx_hollow_candle_down {
-    color: $chart-red;
-}
-
-.stx_hollow_candle_up {
-    color: $chart-green;
-}
-
-.stx_hollow_candle_even {
-    color: #888888;
-}
-
-.stx_baseline {
-    /* color of baseline (dashed horizontal line) */
-    color: #2e383b;
-}
-
-.stx_baseline_down {
-    /* under area color */
-    color: $chart-red;
-    width: 2px;
-}
-
-.stx_baseline_up {
-    /* over area color */
-    color: $chart-green;
-    width: 2px;
-}
-
-.stx_kagi_down {
-    /* Kagi chart width and color for downtrend */
-    color: $chart-red;
-    width: 1px;
-}
-
-.stx_kagi_up {
-    /* Kagi chart width and color for uptrend */
-    color: $chart-green;
-    width: 3px;
-}
-
-.stx_pandf_down {
-    /* P&F chart color, padding, width for downtrend */
-    color: $chart-red;
-    padding: 2px 0px;
-    width: 2px;
-}
-
-.stx_pandf_up {
-    /* P&F chart color, padding, width for uptrend */
-    color: $chart-green;
-    padding: 2px 0px;
-    width: 2px;
-}
-
-.stx_volume_up {
-    /* Up Volume color */
-    color: $chart-green; /* legacy only. Use study library output "Up Volume" instead */
-    @include themify($themes) {
-        border: themed('ChartBorder');
-    }
-}
-
-.stx_volume_down {
-    /* Down volume color */
-    color: $chart-red; /* legacy only. Use study library output "Down Volume" instead */
-    @include themify($themes) {
-        border: themed('ChartBorder');
-    }
-}
-
-/* Volume underlay styles */
-.stx_volume_underlay_up {
-    color: rgb(140, 193, 118); /* legacy only. Use study library output "Up Volume" instead */
-    opacity: 0.3;
-    border-left-color: rgb(0, 0, 0);
-}
-
-.stx_volume_underlay_down {
-    color: rgb(184, 45, 12); /* legacy only. Use study library output "Down Volume" instead */
-    opacity: 0.3;
-    border-left-color: rgb(0, 0, 0);
-}
-
-/* Volume profile styles */
-.stx_volume_profile {
-    opacity: 0.3;
-    border-color: rgb(0, 0, 0);
-}
-
-/* Line color for projections */
-
-.stx_projection_new {
-    /* Line color for active line when drawing projections */
-    color: #0000ff;
-}
-
-.stx_gaps {
-    /* Transparent gaps overlay style */
-    color: #b1b7b8;
-    opacity: 0.3;
-}
-
-.stx_histogram {
-    /* Default color for histograms */
-    @include themify($themes) {
-        color: themed('ChartText');
-    }
-    opacity: 0.2;
-}
-
-/* -------- Annotations -------- */
-
-.stx_annotation {
-    /* Annotation styles */
-    font-size: 13px;
-    font-family: 'Helvetica';
-    background: transparent;
-    box-shadow: none;
-    padding: 0px 6px;
-    outline: none;
-    color: #333;
-    resize: none; /* stylelint-disable-line plugin/no-unsupported-browser-features */
-    z-index: 1000;
-    @include themify($themes) {
-        border: 1px solid themed('ChartBorder');
-    }
-}
-
-.stx_annotation_bg {
-    /* Annotation backgrounds */
-    color: #f5f5f5;
-}
-
-.stx_annotation_highlight {
-    /* Annotation highlight color */
-    color: #fff;
-}
-
-.stx_annotation_highlight_bg {
-    /* Annotation highlight background color */
-    color: #3d4447;
-}
-
-.annotationSave,
-.annotationCancel,
-.stx-btn.stx_annotation_save,
-.stx-btn.stx_annotation_cancel {
-    /* Annotation Buttons */
-    position: absolute;
-    display: none;
-    font-size: 11px;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-    z-index: 50;
-}
-
-.annotationCancel,
-.stx_annotation_cancel {
-    margin-left: 10px;
-}
-
-.stx_watermark {
-    /* Optional watermark style */
-    font-size: 16px;
-    font-family: 'Helvetica';
-}
-
-.stx_fib_levels {
-    /* Text for fibonacci values */
-    font-size: 12px;
-    font-family: 'Helvetica';
-    color: transparent;
-}
-
-.stx-holder {
-    display: block;
-    position: absolute;
-    overflow: hidden;
-    z-index: 4;
-}
-
-.stx-subholder {
-    position: absolute;
-    overflow: hidden;
-
-    &:before {
-        content: ' ';
-        display: none; // TODO the value should be change to `block` after receiving new background.;
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        @include themify($themes) {
-            opacity: themed('ChartBackgroundOpacity');
-        }
-        background-image: url('https://static.cdnpub.info/traderoom/map.png'); // TODO the image's url should be changed after getting new image from UI/UX team.
-        background-repeat: no-repeat;
-        background-position: 50% 0;
-        -ms-background-size: cover;
-        -o-background-size: cover;
-        -moz-background-size: cover;
-        -webkit-background-size: cover;
-        background-size: cover;
-    }
-}
-
-/* -------- Colors for session shading -------- */
-.stx_market_session {
-    &.divider {
-        background-color: rgba(0, 255, 0, 0.8);
-        width: 1px;
-    }
-    &.pre {
-        background-color: rgba(255, 255, 0, 0.1);
-    }
-    &.post {
-        background-color: rgba(0, 0, 255, 0.2);
-    }
-}
-
-.stx_grid_dark {
-    /* Default Grid dividers */
-    @include themify($themes) {
-        color: themed('ChartText');
-    }
-    opacity: 1;
-    opacity: 0.95;
-    border-style: solid;
-    border: none;
-}
-
-.stx_yaxis,
-.stx_xaxis,
-.stx_xaxis_dark {
-    @include themify($themes) {
-        color: themed('ChartText');
-    }
-    font-size: 10px;
-    font-family: $base-font;
-}
-
-.stx_price_label {
-    @include themify($themes) {
-        color: themed('ChartText');
-    }
-    font-weight: normal;
-    font-size: 12px;
-    font-family: $base-font;
-}
-
 /* --------------------------------------------------------- CHART SDK --------------------------------------------------------- */
 
 /* -------- Axis tabs and current Prices -------- */
-
-.stx-holder:hover .stx-btn-panel {
-    opacity: 1;
-    transition: opacity 0.5s, height 0.3s;
-}
-
-.stx-ico-handle {
-    opacity: 1;
-    position: absolute;
-    left: 0%;
-    height: 1px;
-    width: 100%;
-    overflow: hidden;
-    cursor: ns-resize;
-    z-index: 1;
-    @include themify($themes) {
-        box-shadow: 0 0 0px 2px themed('ChartBg');
-        background: themed('ChartBg');
-    }
-
-    span {
-        padding: 100%;
-        @include themify($themes) {
-            background: themed('ChartIndicateDivide');
-        }
-    }
-    &:hover {
-        opacity: 0.3;
-    }
-    &:active {
-        /* Use the vertical resize when adjusting panels */
-        cursor: ns-resize;
-    }
-    &.stx-grab {
-        opacity: 0.3;
-        height: 2px;
-        @include themify($themes) {
-            background-color: themed('ChartBorder');
-        }
-    }
-}
-
-/* hide the default panel drag */
-.stx_panel_drag {
-    color: transparent;
-}
-
-.stx_xaxis,
-.stx_yaxis,
-.stx_watermark {
-    font-family: $base-font;
-}
-
-.ciq-menu > span.icons-on {
-    margin-top: -3px;
-}
-
-.stx_range_slider.shading {
-    background-color: rgba(128, 128, 128, 0.3);
-    border: solid 2px rgba(0, 144, 183, 1);
-    width: 5px;
-}
-
-.stx-chart-panel.stx-show {
-    /* Hide default Chart Title and Icons */
-    display: none;
-}
-
-.ps--active-x > .ps__rail-x,
-.ps--active-y > .ps__rail-y {
-    background-color: transparent !important;
-}
-
-$spot-color: #0298d3;
-
-.cq-spot {
-    width: 6px;
-    height: 6px;
-    padding: 0px;
-    line-height: 1px;
-    border-radius: 100%;
-    cursor: pointer;
-    position: absolute;
-    background: transparent;
-    animation: pulse 1.6s infinite;
-    margin-left: -3px;
-    margin-top: -3px;
-    box-shadow: 0 0 0 rgba($COLOR_ORANGE, 0.6);
-    z-index: -2 !important;
-
-    &:before {
-        content: '\25CF';
-        font-size: 18px;
-        color: $COLOR_ORANGE;
-        position: relative;
-        left: -2.3px;
-        line-height: 5px;
-    }
-    &.cq-endpoint {
-        position: absolute;
-        text-align: center;
-        width: 1px;
-        height: 100%;
-        line-height: 20px;
-        color: #ffffff;
-        bottom: 0px !important;
-        top: 0px !important;
-        animation: none;
-        @include themify($themes) {
-            border-left: 2px dashed themed('ChartCandleBg');
-        }
-
-        &:before {
-            content: '\25CF';
-            font-size: 18px;
-            color: $spot-color;
-            position: relative;
-            left: -2.3px;
-            line-height: 5px;
-            display: none;
-        }
-        .cq-endpoint-label {
-            width: 145px;
-            padding: 1px 9px;
-            border-radius: $border-radius;
-            position: absolute;
-            top: calc(100% - 22px);
-            transform: translateX(-50%);
-            @include themify($themes) {
-                background-color: themed('ChartCandleBg');
-                color: themed('ChartCandleText');
-            }
-        }
-    }
-}
-
-.closed-chart {
-    .cq-spot {
-        animation: none;
-
-        &:before {
-            @include themify($themes) {
-                color: themed('ChartCandleBgClosed');
-            }
-        }
-    }
-}
 
 @keyframes pulse {
     0% {
@@ -1081,26 +213,6 @@ $spot-color: #0298d3;
             border-radius: 3px 0px 0px 3px;
             width: auto;
             z-index: 99;
-        }
-        .mStickyRightClick {
-            margin-left: -2px !important;
-        }
-    }
-    .stx-panel-control {
-        .stx-panel-title {
-            font-size: 13px;
-            line-height: 2;
-        }
-        .stx-btn-panel {
-            .stx-ico-edit {
-                width: 22px;
-                height: 22px;
-
-                svg {
-                    width: 22px;
-                    height: 22px;
-                }
-            }
         }
     }
     .ciq-chart {
