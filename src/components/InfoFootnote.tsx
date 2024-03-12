@@ -9,7 +9,7 @@ type InfoFootnoteProps = {
 
 const InfoFootnote = ({ className, isMobile, text }: InfoFootnoteProps) => (
     <div
-        className={classNames('info-footnote', className, {
+        className={classNames(className,{
             [`${className}--mobile`]: isMobile,
         })}
     >
@@ -18,7 +18,7 @@ const InfoFootnote = ({ className, isMobile, text }: InfoFootnoteProps) => (
 );
 
 InfoFootnote.defaultProps = {
-    className: '',
+    className: 'info-footnote',
     isMobile: false,
 };
 
