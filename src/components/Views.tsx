@@ -10,8 +10,10 @@ import { wrapText } from '../utils';
 import { TemplateIcon, AddIcon, DeleteIcon, EmptyStateIcon, OverwriteStateIcon } from './Icons';
 import '../../sass/components/_view.scss';
 import Menu from './Menu';
+import InfoFootnote from './InfoFootnote';
 
 type TViewItemProps = {
+    disabled?: boolean;
     onClick: (event: React.MouseEvent<HTMLElement>) => void;
     view: ArrayElement<TViews>;
     remove: (event: React.MouseEvent<HTMLElement>) => void;
@@ -30,6 +32,7 @@ type TOverwriteViewProps = {
 };
 
 type TActiveListViewProps = {
+    allowTickChartTypeOnly: TMainStore['state']['allowTickChartTypeOnly'];
     removeAll: TMainStore['view']['removeAll'];
     views: TMainStore['view']['sortedItems'];
     applyLayout: TMainStore['view']['applyLayout'];
@@ -38,17 +41,21 @@ type TActiveListViewProps = {
     onGranularity: (granularity?: TGranularity) => void;
 };
 
-const ViewItem = ({ view, remove, onClick }: TViewItemProps) => (
+const ViewItem = ({ disabled, view, remove, onClick }: TViewItemProps) => (
     <Tooltip
         className='sc-views__views__list__item'
-        onClick={onClick}
+        onClick={disabled ? undefined : onClick}
         enabled={view.name.length > 27}
         content={wrapText(view.name, 26)}
     >
-        <div className='text'>{view.name}</div>
+        <div className={classNames('text', { 'text--disabled': disabled })}>{view.name}</div>
         <DeleteIcon onClick={remove} />
     </Tooltip>
 );
+
+ViewItem.defaultProps = {
+    disabled: false,
+};
 
 const EmptyView = ({ onClick }: { onClick: (event: React.MouseEvent<HTMLElement>) => void }) => (
     <div className='sc-views--empty'>
@@ -83,6 +90,7 @@ const OverwriteView = ({ templateName, onCancel, onOverwrite }: TOverwriteViewPr
 );
 
 const ActiveListView = ({
+    allowTickChartTypeOnly,
     views,
     removeAll,
     applyLayout,
@@ -91,6 +99,12 @@ const ActiveListView = ({
     onChartType,
 }: TActiveListViewProps) => {
     if (!views.length) return null;
+
+    const isDisabled = (layout: TMainStore['view']['sortedItems'][number]['layout']) => {
+        const { chartType, timeUnit } = layout ?? {};
+        const oneTickChartTemplate = chartType === 'line' && timeUnit === 'tick';
+        return allowTickChartTypeOnly && !oneTickChartTemplate;
+    };
 
     return (
         <div className='sc-views__views'>
@@ -104,6 +118,7 @@ const ActiveListView = ({
                 <div className='sc-views__views__list'>
                     {views.map((view, i) => (
                         <ViewItem
+                            disabled={isDisabled(view.layout)}
                             view={view}
                             key={view.name}
                             onClick={e => applyLayout(i, e as TCustomEvent, onGranularity, onChartType)}
@@ -117,7 +132,9 @@ const ActiveListView = ({
 };
 
 const Views = ({ portalNodeId, onChartType, onGranularity }: TViewsProps) => {
-    const { view } = useStores();
+    const { view, state, chart } = useStores();
+    const { allowTickChartTypeOnly } = state;
+    const { isMobile } = chart;
 
     const {
         sortedItems: views,
@@ -161,7 +178,7 @@ const Views = ({ portalNodeId, onChartType, onGranularity }: TViewsProps) => {
                     {currentRoute === 'new' ? (
                         <EmptyView onClick={onToggleNew} />
                     ) : (
-                        <React.Fragment>
+                        <>
                             {currentRoute !== 'overwrite' ? (
                                 ''
                             ) : (
@@ -209,6 +226,7 @@ const Views = ({ portalNodeId, onChartType, onGranularity }: TViewsProps) => {
                                     </div>
                                 </div>
                                 <ActiveListView
+                                    allowTickChartTypeOnly={allowTickChartTypeOnly}
                                     views={views}
                                     removeAll={removeAll}
                                     applyLayout={applyLayout}
@@ -217,9 +235,15 @@ const Views = ({ portalNodeId, onChartType, onGranularity }: TViewsProps) => {
                                     onGranularity={onGranularity}
                                 />
                             </Scroll>
-                        </React.Fragment>
+                        </>
                     )}
                 </div>
+                {allowTickChartTypeOnly && (
+                    <InfoFootnote
+                        isMobile={isMobile}
+                        text={t.translate('Some of your templates may not work with this trade type.')}
+                    />
+                )}
             </Menu.Body>
         </Menu>
     );

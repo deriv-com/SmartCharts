@@ -93,7 +93,7 @@ export const getIntervalInSeconds = ({
     timeUnit,
     interval,
 }: {
-    timeUnit?: string | number;
+    timeUnit?: string | number | null;
     interval?: string | number;
 }) => {
     let unit = timeUnit;
@@ -117,7 +117,7 @@ export const getIntervalInSeconds = ({
         if (typeof interv === 'string') {
             interv = Number(interv);
         }
-        return unit * interv;
+        return Number(unit) * interv;
     }
 
     return 0;
