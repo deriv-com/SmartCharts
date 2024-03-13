@@ -93,9 +93,9 @@ export default class LastDigitStatsStore {
         this.updateBars();
     }
     onMasterDataUpdate({ Close, tick }: TicksStreamResponse & { Close: number }) {
-        if (!this.context || !this.mainStore.chart.currentActiveSymbol) return;
+        if (!this.context || !this.mainStore.chart.currentActiveSymbol || !this.mainStore.lastDigitStats.isVisible) return;
         this.lastTick = tick;
-        if (this.marketDisplayName !== this.lastSymbol && this.mainStore.lastDigitStats.isVisible) {
+        if (this.marketDisplayName !== this.lastSymbol) {
             this.lastSymbol = this.marketDisplayName;
             // Symbol has changed
             this.updateLastDigitStats();
