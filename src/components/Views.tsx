@@ -106,7 +106,7 @@ const ActiveListView = ({
                         <ViewItem
                             view={view}
                             key={view.name}
-                            onClick={e => applyLayout(i, e as TCustomEvent, onGranularity, onChartType)}
+                            onClick={e => applyLayout(i, view.name, e as TCustomEvent, onGranularity, onChartType)}
                             remove={e => remove(i, e as TCustomEvent)}
                         />
                     ))}

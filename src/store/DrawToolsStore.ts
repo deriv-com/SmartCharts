@@ -184,7 +184,6 @@ export default class DrawToolsStore {
     // Callback that runs when the chart is loaded
     onLoad(drawings: TDrawingCreatedConfig[]) {
         this.activeToolsGroup = [];
-
         drawings.forEach((item: TDrawingCreatedConfig) => {
             if (typeof item === 'string') {
                 item = safeParse(item);
@@ -364,14 +363,32 @@ export default class DrawToolsStore {
             activeTools.push({
                 id: finalItem.id,
                 items: [finalItem],
-            });
-        } else {
+        });
+    } else {
             const item = activeTools[groupIndex];
             item.items.push({ ...finalItem, ...{ num: item.items.length } });
             activeTools[groupIndex] = item;
         }
         this.activeToolsGroup = activeTools;
     }
+
+
+    saveTemplate(name:string){
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.saveTemplate(name);
+    }
+    
+    applyTemplate(name:string){
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.applyTemplate(name);
+    }
+
+    removeTemplate(name:string){
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.removeTemplate(name);
+    }
+
+    removeAllTemplate(){
+        this.mainStore.chartAdapter.flutterChart?.drawingTool.removeAllTemplate();
+    }
+    
 
     /// Callback that runs after the creation of the drawing tool in flutter charts
     onCreation() {

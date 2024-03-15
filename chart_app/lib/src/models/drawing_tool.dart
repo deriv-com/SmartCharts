@@ -61,9 +61,8 @@ class DrawingToolModel {
   }
 
   /// function to get drawtool items
-  // List<DrawingToolConfig>? getDrawingToolsRepoItems() => drawingToolsRepo.items;
+  /// 
 
-  ///
   List<String> getDrawingToolsRepoItems() =>
       drawingToolsRepo.items.map((e) => jsonEncode(e)).toList();
 
@@ -80,6 +79,25 @@ class DrawingToolModel {
   /// To remove an existing drawing tool
   void removeDrawingTool(int index) {
     drawingToolsRepo.removeAt(index);
+  }
+  /// Save the template
+  void saveTemplate(String template){
+    drawingToolsRepo.saveTemplate(template);
+  }
+
+  /// Load template
+  void applyTemplate(String template){
+    drawingToolsRepo.applyTemplate(template);
+  }
+
+  /// Remove single Template
+  void removeTemplate(String template){
+    drawingToolsRepo.removeTemplate(template);
+  }
+
+  /// Remove all template
+  void removeAllTemplate(){
+    drawingToolsRepo.removeAllTemplates();
   }
 
   /// To get the tool name from config

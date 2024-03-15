@@ -101,6 +101,51 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
     onLoadCallback?.call(items.map((e) => jsonEncode(e)).toList());
   }
 
+  /// Save Template in the Prefs
+  Future<void> saveTemplate(String templateName) async {
+    final List<String> encodedAddOns =
+        _addOns.map((addOn) => jsonEncode(addOn.toJson())).toList();
+    await _prefs?.setStringList('template_$templateName', encodedAddOns);
+  }
+
+  /// Apply Template of the drawing tool 
+  Future<void> applyTemplate(String templateName) async {
+    final List<String>? encodedAddOns =
+        _prefs?.getStringList('template_$templateName');
+    if (encodedAddOns == null) return;
+
+    _addOns.clear();
+
+    for (final String encodedAddOn in encodedAddOns) {
+        final T addOnConfig = createAddOn.call(jsonDecode(encodedAddOn));
+        _addOns.add(addOnConfig);
+    }
+    notifyListeners();
+    _writeToPrefs(); 
+  }
+
+  ///Remove the template
+  Future<void> removeTemplate(String templateName) async {
+  if (_prefs != null && _prefs!.containsKey('template_$templateName')) {
+    await _prefs!.remove('template_$templateName');
+  }
+}
+
+/// Remove all the templates
+Future<void> removeAllTemplates() async {
+  if (_prefs == null) return;
+
+  final Set<String> keys = _prefs!.getKeys();
+
+  final List<String> templateKeys = keys
+      .where((key) => key.startsWith('template_'))
+      .toList();
+
+  for (String key in templateKeys) {
+    await _prefs!.remove(key);
+  }
+}
+
   /// Adds a new indicator or drawing tool.
   @override
   void add(T addOnConfig) {

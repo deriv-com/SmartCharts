@@ -279,5 +279,29 @@ JsObject _exposeDrawingToolModel(DrawingToolModel model) {
     allowInterop(model.getDrawingToolsRepoItems),
   );
 
+  setProperty(
+    chartConfig,
+    'saveTemplate',
+    allowInterop(model.saveTemplate),
+  );
+
+  setProperty(
+    chartConfig,
+    'applyTemplate',
+    allowInterop(model.applyTemplate),
+  );
+
+  setProperty(
+    chartConfig,
+    'removeTemplate',
+    allowInterop(model.removeTemplate),
+  );
+
+  setProperty(
+    chartConfig,
+    'removeAllTemplate',
+    allowInterop(model.removeAllTemplate),
+  );
+
   return chartConfig;
 }

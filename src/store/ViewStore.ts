@@ -125,6 +125,7 @@ export default class ViewStore {
 
             this.views.push({ name: this.templateName.trim(), layout: clone(this.getLayout()) });
             this.updateLocalStorage();
+            this.mainStore.drawTools.saveTemplate(this.templateName.trim());
             this.templateName = '';
         }
     }
@@ -140,6 +141,7 @@ export default class ViewStore {
     }
 
     remove(idx: number, e: TCustomEvent) {
+        this.mainStore.drawTools.removeTemplate(this.views[idx].name);
         this.views = this.sortedItems.filter((_x, index) => idx !== index);
         e.nativeEvent.is_item_removed = true;
         this.updateLocalStorage();
@@ -148,6 +150,7 @@ export default class ViewStore {
 
     removeAll() {
         this.views = [];
+        this.mainStore.drawTools.removeAllTemplate();
         this.updateLocalStorage();
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Remove All Templates');
         this.updateRoute('new');
@@ -155,6 +158,7 @@ export default class ViewStore {
 
     applyLayout(
         idx: number,
+        name: string,
         e: TCustomEvent,
         onGranularity: (granularity?: TGranularity) => void,
         onChartType: (chartType?: string) => void
@@ -170,6 +174,7 @@ export default class ViewStore {
 
         // to not show tooltip while chart is loading
         this.mainStore.crosshair.setCrosshairState(0);
+        this.mainStore.drawTools.applyTemplate(name);
         this.restoreLayout(clone(layout));
         logEvent(LogCategories.ChartControl, LogActions.Template, 'Load Template');
     }
