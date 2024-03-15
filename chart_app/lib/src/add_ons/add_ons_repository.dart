@@ -120,6 +120,7 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
         final T addOnConfig = createAddOn.call(jsonDecode(encodedAddOn));
         _addOns.add(addOnConfig);
     }
+    onLoadCallback?.call(_addOns.map((e) => jsonEncode(e)).toList());
     notifyListeners();
     _writeToPrefs(); 
   }
