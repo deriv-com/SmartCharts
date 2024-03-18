@@ -110,7 +110,7 @@ export const getIntervalInSeconds = ({
         unit = 1;
     }
 
-    if (interv !== undefined && unit != null) {
+    if (unit !== undefined && interv !== undefined && unit !== null) {
         if (typeof unit === 'string') {
             unit = Number(unit);
         }
