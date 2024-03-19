@@ -15,10 +15,10 @@ import {
     ToolbarWidget,
     Views,
 } from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
-import whyDidYouRender from '@welldone-software/why-did-you-render';
+// import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { configure } from 'mobx';
 import moment from 'moment';
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { TNotification } from 'src/store/Notifier';
 import { TGranularity, TNetworkConfig, TRefData, TStateChangeListener } from 'src/types';
@@ -34,11 +34,11 @@ import Notification from './Notification';
 setSmartChartsPublicPath('./dist/');
 const isMobile = window.navigator.userAgent.toLowerCase().includes('mobi');
 if (process.env.NODE_ENV !== 'production') {
-    whyDidYouRender(React, {
-        collapseGroups: true,
-        include: [/.*/],
-        exclude: [/^RenderInsideChart$/, /^inject-/],
-    });
+    // whyDidYouRender(React, {
+    //     collapseGroups: true,
+    //     include: [/.*/],
+    //     exclude: [/^RenderInsideChart$/, /^inject-/],
+    // });
 }
 const trackJSDomains = ['binary.com', 'binary.me'];
 window.isProductionWebsite = trackJSDomains.some(val => window.location.host.endsWith(val));
@@ -256,9 +256,11 @@ const App = () => {
             });
         }
     };
-
+    const ref=useRef(null);
+    
     return (
         <SmartChart
+            ref={ref}
             id={chartId}
             chartStatusListener={(isChartReady: boolean) => getIsChartReady(isChartReady)}
             stateChangeListener={handleStateChange}
