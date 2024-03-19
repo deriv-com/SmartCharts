@@ -114,3 +114,4 @@ jobs:
                   body: 'This PR updates @deriv/deriv-charts to ${{ steps.check_new_version.outputs.new_version }}'
                   branch: 'chore/update-deriv-charts-to-${{ steps.check_new_version.outputs.new_version }}'
                   base: 'master'
+                  path: 'deriv-app'
