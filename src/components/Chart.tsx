@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useImperativeHandle } from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
 import { TChartProps } from 'src/types';
@@ -25,8 +25,19 @@ import RenderInsideChart from './RenderInsideChart';
 import SettingsDialog from './SettingsDialog';
 import ScrollToRecent from './ScrollToRecent';
 
-const Chart = (props: TChartProps) => {
-    const { chart, drawTools, studies, chartSetting, chartType, state, loader, chartAdapter, crosshair } = useStores();
+const Chart = React.forwardRef((props: TChartProps, ref) => {
+    const {
+        chart,
+        drawTools,
+        studies,
+        chartSetting,
+        chartType,
+        state,
+        loader,
+        chartAdapter,
+        crosshair,
+        timeperiod,
+    } = useStores();
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
     const { setCrosshairState } = crosshair;
     const { settingsDialog: studiesSettingsDialog } = studies;
@@ -38,6 +49,17 @@ const Chart = (props: TChartProps) => {
 
     const rootRef = React.useRef<HTMLDivElement>(null);
     const chartContainerRef = React.useRef<HTMLDivElement>(null);
+
+    useImperativeHandle(ref, () => {
+        return {
+            hasPredictionIndicators() {
+                return studies.hasPredictionIndicator;
+            },
+            triggerPopup() {
+                timeperiod.predictionIndicator.setOpen(true);
+            },
+        };
+    });
 
     React.useEffect(() => {
         initGA();
@@ -193,6 +215,6 @@ const Chart = (props: TChartProps) => {
             </div>
         </div>
     );
-};
+});
 
 export default observer(Chart);

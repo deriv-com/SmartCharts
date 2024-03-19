@@ -15,6 +15,7 @@ export default class IndicatorPredictionDialogStore {
             setOpen: action.bound,
             handleCancel: action.bound,
             handleContinue: action.bound,
+            setHandleCancel: action,
         });
 
         this.mainStore = mainStore;
@@ -32,15 +33,20 @@ export default class IndicatorPredictionDialogStore {
         return this.menuStore.setOpen(value);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleCancel() {
         this.setOpen(false);
+    }
+
+    setHandleCancel(newHandleCancel: () => void) {
+        this.handleCancel = newHandleCancel.bind(this);
     }
 
     handleContinue() {
         this.mainStore.timeperiod.setGranularity(0);
         this.mainStore.studies.deletePredictionStudies();
         setTimeout(() => {
-            this.handleCancel();
+            this.setOpen(false);
         }, 100);
     }
 }

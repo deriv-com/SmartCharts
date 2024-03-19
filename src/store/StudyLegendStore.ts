@@ -74,6 +74,21 @@ export default class StudyLegendStore {
                 }, 400);
             }
         );
+        // reaction(
+        //     () => this.mainStore.chart.granularity && this.mainStore.state.allowTickChartTypeOnly,
+        //     () => {
+        //         if (this.mainStore.state.allowTickChartTypeOnly && this.hasPredictionIndicator) {
+        //             const filteredItem = [...this.activeItems];
+        //             this.deletePredictionStudies();
+        //             console.log(filteredItem);
+        //             localStorage.setItem('predictionIndicators', JSON.stringify(filteredItem));
+        //         } else if (localStorage.getItem('predictionIndicators')) {
+        //             const activeItem = JSON.parse(localStorage.getItem('predictionIndicators') || '');
+        //             this.restoreStudies(activeItem);
+        //             localStorage.removeItem('predictionIndicators');
+        //         }
+        //     }
+        // );
     }
     searchInputClassName?: string;
 
