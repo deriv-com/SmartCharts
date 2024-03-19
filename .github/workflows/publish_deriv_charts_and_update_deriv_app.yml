@@ -70,6 +70,7 @@ jobs:
         permissions:
             checks: write
             pull-requests: write
+        needs: [build_and_publish_deriv_charts]
         steps:
             - name: Checkout deriv-app
               uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
