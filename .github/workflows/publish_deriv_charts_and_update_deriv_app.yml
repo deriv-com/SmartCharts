@@ -79,6 +79,14 @@ jobs:
                   path: deriv-app
                   ref: master
 
+            - name: Setup Node
+              uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
+              with:
+                  node-version: 18.x
+
+            - name: Setup deriv-app
+              run: cd deriv-app && npm install && npm run bootstrap
+
             - name: Get the new chart version
               id: check_new_version
               run: |
@@ -103,7 +111,7 @@ jobs:
                   npm install @deriv/deriv-charts@${{ steps.check_new_version.outputs.new_version }}
                   rm -f package-lock.json
 
-            - name: Update root package-lock
+            - name: Update root package-lock.json
               run: cd deriv-app && npm run bootstrap:dev
 
             - name: Create Pull Request to deriv-app
