@@ -1,4 +1,6 @@
 
+/* rtl:begin:ignore */
+
 .cq-chart-controls {
     position: absolute;
     display: flex;
@@ -41,8 +43,7 @@
                         background: themed('MenuActiveBg');
                     }
 
-                    > .ic-icon,
-                    > .cq-toggle {
+                    > .ic-icon {
                         @include themify($themes) {
                             color: themed('MenuActiveText');
                         }
@@ -74,10 +75,6 @@
             justify-content: center;
 
             > .ic-icon {
-                padding: 0.35em 0.5em;
-            }
-            > .ic-icon,
-            > .cq-toggle {
                 &.active {
                     .ic-subtitle {
                         font-weight: bold;
@@ -96,45 +93,17 @@
                         color: themed('MenuText');
                     }
                 }
-            }
-        }
-        .notification-badge {
-            background: #e9e9e9;
-            color: $COLOR_DARK_BLUE_5;
-            border-radius: 100px;
-            font-size: 1em;
-            position: absolute;
-            top: 1px;
-            line-height: 18px;
-            left: 55px;
-            width: 16px;
-            height: 16px;
-            font-family: $base-font;
-            font-weight: bold;
-            text-align: center;
-            z-index: 1;
-
-            &.x2 {
-                width: 24px;
+                padding: 0.35em 0.5em;
             }
         }
         .sc-tooltip__inner {
             display: none !important;
         }
     }
-    .ciq-icon {
-        width: 24px;
-        height: 24px;
-        display: inline-block;
-        box-sizing: border-box;
-    }
-    .cq-toggle {
-        cursor: pointer;
-        color: #575757;
-    }
 }
 
 /* Menu dropdown open/close animation */
+
 .cq-chart-controls .ciq-menu .cq-menu-dropdown {
     .cq-chart-control-bottom & {
         transform: translateX(-50%) translateY(3em);
@@ -195,6 +164,7 @@
 }
 
 /* Mobile Style */
+
 .smartcharts-mobile {
     .cq-chart-controls {
         justify-content: space-around;
@@ -218,9 +188,6 @@
                 > .ic-icon {
                     padding: 0.35em 0em;
                 }
-                > .bt-priod {
-                    padding: 0.7em 0.5em !important;
-                }
             }
             .cq-menu-dropdown {
                 height: auto;
@@ -229,16 +196,9 @@
                 border: none;
                 box-shadow: none;
             }
-            .notification-badge {
-                left: 15px;
-                top: 0px;
-            }
         }
-        .bt-priod, .cq-toggle, .cq-menu-btn, .sc-chart-size > span {
+        .cq-menu-btn, .sc-chart-size > span {
             padding: 0 !important;
-        }
-        .ic-priod {
-            padding: 6px 0px !important;
         }
         .ic-icon-with-sub > svg {
             padding: 5px 10px;
@@ -250,9 +210,6 @@
     .smartcharts-desktop {
         .cq-chart-control-bottom {
             .cq-chart-controls {
-                .cq-toggle {
-                    padding: 0.35em 0.6em;
-                }
                 .ciq-menu {
                     width: 50px;
 
@@ -266,12 +223,6 @@
                             display: none;
                         }
                     }
-                    .notification-badge {
-                        left: 28px;
-                    }
-                }
-                .ic-priod {
-                    padding: 0 !important;
                 }
             }
         }
@@ -294,9 +245,6 @@
                             display: none;
                         }
                     }
-                    .notification-badge {
-                        left: 30px;
-                    }
                 }
             }
         }
@@ -318,10 +266,9 @@
                         display: none;
                     }
                 }
-                .notification-badge {
-                    left: 55px;
-                }
             }
         }
     }
 }
+
+/* rtl:end:ignore */

@@ -598,9 +598,6 @@
     align-items: center;
     cursor: pointer;
 
-    &__input {
-        display: none;
-    }
     &__label {
         font-size: 14px;
         font-weight: normal;
@@ -665,9 +662,6 @@
                 border-color: themed('ColorPickerActiveBorder') !important;
             }
         }
-    }
-    .field {
-        width: 50%;
     }
     .sc-numeric-input {
         width: 124px;
@@ -784,21 +778,6 @@
     }
 }
 
-.sc-fontsetting {
-    .cq-text-icon {
-        margin-right: 5px;
-    }
-}
-
-.cq-text-icon {
-    justify-content: space-around;
-    align-items: center;
-    vertical-align: middle;
-    display: inline-flex;
-    font-family: serif;
-    font-size: 1.5em;
-}
-
 .sc-changefontsize {
     width: 56px;
     margin-right: 5px;
@@ -814,8 +793,7 @@
     align-items: center;
 }
 
-.sc-toggle > .ic-icon,
-.sc-chart-controls .ic-icon-with-sub {
+.sc-toggle > .ic-icon {
     width: 24px;
     height: 24px;
 }

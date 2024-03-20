@@ -127,8 +127,7 @@
     .calendar-date-panel,
     .calendar-month-panel,
     .calendar-year-panel,
-    .calendar-decade-panel,
-    .calendar-century-panel {
+    .calendar-decade-panel {
         display: grid;
         grid-gap: 0.8rem 1.2rem;
         padding: 0.8rem 2rem;
@@ -139,8 +138,7 @@
         }
         &.calendar-month-panel,
         &.calendar-year-panel,
-        &.calendar-decade-panel,
-        &.calendar-century-panel {
+        &.calendar-decade-panel {
             grid-template-columns: repeat(3, minmax(7.2rem, 1fr));
             grid-auto-rows: minmax(4.2rem, auto);
         }
@@ -347,30 +345,6 @@
         }
         &::-webkit-date-and-time-value {
             margin: 0;
-        }
-    }
-    .picker-calendar-icon,
-    .close-circle-icon {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        transition: all 0.3s;
-        user-select: none;
-        opacity: 0;
-        pointer-events: none;
-        cursor: pointer;
-
-        &:before {
-            content: '';
-            display: block;
-            width: 14px;
-            height: 14px;
-            background-size: 14px 14px;
-        }
-        &.show {
-            opacity: 1;
-            pointer-events: auto;
         }
     }
     .datepicker-calendar {

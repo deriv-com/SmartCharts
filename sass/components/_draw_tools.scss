@@ -156,26 +156,6 @@
             padding: 0 7px 0 16px;
             overflow: visible;
 
-            .cq-draw-buttons {
-                display: flex;
-                margin-top: 18px;
-            }
-            .cq-draw-buttons + div {
-                border-radius: $border-radius $border-radius 0 0;
-            }
-            .cq-draw-button {
-                flex: 1;
-                display: flex;
-                justify-content: center;
-                cursor: pointer;
-                margin: 0 0 8px;
-                border-radius: 3px;
-                font-weight: bold;
-
-                @include themify($themes) {
-                    border: solid themed('DropdownBorder') 1px;
-                }
-            }
             .ciq-list {
                 padding-right: 9px;
             }

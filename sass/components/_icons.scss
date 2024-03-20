@@ -1,7 +1,6 @@
 @import '../_variables';
 
-.ic-icon,
-.cq-text-icon {
+.ic-icon {
     display: block;
     height: $normal-icon-size;
     width: $normal-icon-size;
@@ -38,6 +37,18 @@
     .ic-subtitle {
         display: none;
     }
+    &.ic-frxXAUUSD > svg {
+        fill: #ffd700;
+    }
+    &.ic-frxXPDUSD > svg {
+        fill: #e9eaf0;
+    }
+    &.ic-frxXPTUSD > svg {
+        fill: #f4f3f3;
+    }
+    &.ic-frxXAGUSD > svg {
+        fill: #e1e1e1;
+    }
 }
 
 .ic-icon-with-sub {
@@ -52,14 +63,6 @@
 }
 
 .cq-chart-controls .cq-menu-btn,
-.sc-filter,
-.cq-active-options,
-.titlebar > .icons,
-.cq-draw-button,
-.cq-lookup-input,
-.template-name,
-.ciq-views .ciq-list-item,
-.ciq-chart-dialog,
 .cq-menu-dropdown .title, // Close icon right of dropdown title in mobile mode
 .ciq-chart-types .ciq-list-item,
 .sc-mcd__filter,
@@ -79,13 +82,7 @@
     }
 }
 
-.stx-ico-up {
-    transform: rotate(180deg); // reuse the down icon by rotating the up icon
-}
-
 .cq-chart-controls .stxMenuActive .cq-menu-btn .ic-icon,
-.ciq-aggregate-setting > .ic-icon:hover,
-.cq-active-options .ic-icon:hover,
 .ciq-chart-types .ciq-list-item .active.ic-icon {
     svg {
         @include themify($themes) {
@@ -146,21 +143,6 @@
                 box-sizing: content-box;
             }
         }
-    }
-}
-
-.ic-icon {
-    &.ic-frxXAUUSD > svg {
-        fill: #ffd700;
-    }
-    &.ic-frxXPDUSD > svg {
-        fill: #e9eaf0;
-    }
-    &.ic-frxXPTUSD > svg {
-        fill: #f4f3f3;
-    }
-    &.ic-frxXAGUSD > svg {
-        fill: #e1e1e1;
     }
 }
 
