@@ -1,6 +1,6 @@
 {
     "name": "@deriv/deriv-charts",
-    "version": "2.1.6",
+    "version": "2.1.7",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
     "contributors": [
