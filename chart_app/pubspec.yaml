@@ -10,10 +10,7 @@ dependencies:
     flutter:
         sdk: flutter
     deriv_chart:
-        git:
-            # It's temporarily pointed to this repo and this will be removed after the refactor is merged.
-            url: git@github.com:balakrishna-deriv/flutter-chart.git
-            ref: refactor-x-axis
+        path: ../../flutter-chart
     js: ^0.6.7
 
 dev_dependencies:
