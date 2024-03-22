@@ -62,7 +62,7 @@ jobs:
                   CI: true
                   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                   NPM_TOKEN: ${{ secrets. NPM_ACCESS_TOKEN }}
-              run: npx semantic-release
+              run: cd SmartCharts && npx semantic-release
 
     update_chart_version_in_deriv_app:
         runs-on: Ubuntu-latest
