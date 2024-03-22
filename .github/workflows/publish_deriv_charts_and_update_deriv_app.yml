@@ -58,7 +58,6 @@ jobs:
               run: cd SmartCharts && npm run build
 
             - name: Release SmartCharts
-              if: success()
               env:
                   CI: true
                   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -87,6 +86,9 @@ jobs:
             - name: Setup deriv-app
               run: cd deriv-app && npm install && npm run bootstrap
 
+            - name: Install jq
+              run: sudo apt-get install jq
+
             - name: Get the new chart version
               id: check_new_version
               run: |
@@ -96,20 +98,20 @@ jobs:
             - name: Update core package.json
               run: |
                   cd deriv-app/packages/core
-                  npm install @deriv/deriv-charts@${{ steps.check_new_version.outputs.new_version }}
-                  rm -f package-lock.json
+                  tmp=$(mktemp)
+                  jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
 
             - name: Update trader package.json
               run: |
                   cd deriv-app/packages/trader
-                  npm install @deriv/deriv-charts@${{ steps.check_new_version.outputs.new_version }}
-                  rm -f package-lock.json
+                  tmp=$(mktemp)
+                  jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
 
             - name: Update bot-web-ui package.json
               run: |
                   cd deriv-app/packages/bot-web-ui
-                  npm install @deriv/deriv-charts@${{ steps.check_new_version.outputs.new_version }}
-                  rm -f package-lock.json
+                  tmp=$(mktemp)
+                  jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
 
             - name: Update root package-lock.json
               run: cd deriv-app && npm run bootstrap:dev
