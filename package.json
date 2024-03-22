@@ -1,6 +1,6 @@
 {
     "name": "@deriv/deriv-charts",
-    "version": "2.1.6",
+    "version": "2.1.7",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
     "contributors": [
@@ -95,7 +95,6 @@
         "estree-walk": "^2.2.0",
         "fork-ts-checker-webpack-plugin": "^6.5.0",
         "fs": "^0.0.1-security",
-        "gettext-loader2": "^0.3.0",
         "gh-pages": "^2.1.1",
         "husky": "^4.2.5",
         "json-loader": "^0.5.7",
