@@ -2014,6 +2014,11 @@ export const Languages = [
         icon: <FlagIcons.GBP />,
     },
     {
+        key: 'bn',
+        name: 'বাংলা',
+        icon: <FlagIcons.Bangladesh />,
+    },
+    {
         key: 'de',
         name: 'Deutsch',
         icon: <FlagIcons.German />,

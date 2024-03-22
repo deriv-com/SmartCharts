@@ -43,12 +43,6 @@
             letter-spacing: normal;
             display: block;
         }
-        &--loading {
-            > .sc-download__item__label,
-            > .ic-icon {
-                opacity: 0.32;
-            }
-        }
     }
 }
 

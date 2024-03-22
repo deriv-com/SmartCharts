@@ -1,11 +1,4 @@
-.cq-crosshair-toggle {
-    &:hover {
-        @include themify($themes) {
-            background: themed('MenuHoverBg');
-        }
-    }
-}
-
+/*! rtl:begin:ignore */
 .cq-crosshair-wrapper {
     position: absolute;
     top: 0px;
@@ -151,3 +144,4 @@
     position: absolute;
     bottom: 0px;
 }
+/*! rtl:end:ignore */

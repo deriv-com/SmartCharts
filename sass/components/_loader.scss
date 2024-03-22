@@ -1,10 +1,10 @@
-.sc-loader .sc-loader-spin, .cq-comparison-loader, .cq-loading {
+.sc-loader .sc-loader-spin, .cq-comparison-loader {
     background-image: svg-load('./icons/loading/loading-spin.svg');
     background-size: cover;
 }
 
 .smartcharts-dark {
-    .sc-loader .sc-loader-spin, .cq-comparison-loader, .cq-loading {
+    .sc-loader .sc-loader-spin, .cq-comparison-loader {
         background-image: svg-load('./icons/loading/loading-spin-white.svg');
     }
 }
@@ -48,16 +48,6 @@
             color: themed('Loading');
         }
     }
-}
-
-.cq-loading {
-    height: 12px;
-    width: 12px;
-    display: inline-block;
-    vertical-align: middle;
-    background-size: contain;
-    margin-bottom: 2px;
-    margin-left: 1px;
 }
 
 .sc-inline-loader {

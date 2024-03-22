@@ -7,75 +7,6 @@
     .ciq-num-input > input[type=number] {
         width: 5.5em;
     }
-    .titlebar {
-        height: 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        @include themify($themes) {
-            color: themed('DialogSettingHeadText');
-        }
-
-        .title {
-            font-size: 1.4em;
-            padding-left: 16px;
-            font-weight: bold;
-        }
-        .icons {
-            display: flex;
-            align-items: center;
-            height: 50px;
-            cursor: pointer;
-
-            svg {
-                @include themify($themes) {
-                    fill: themed('DialogSettingHeadText');
-                }
-            }
-        }
-        &.no-tabs {
-            @include themify($themes) {
-                border-bottom: 1px solid themed('DialogHeadBorder');
-            }
-        }
-    }
-    .tabs {
-        height: 40px;
-        align-items: stretch;
-        display: flex;
-        position: relative;
-        box-sizing: border-box;
-        @include themify($themes) {
-            border-bottom: 1px solid themed('DialogHeadBorder');
-        }
-
-        > div {
-            text-align: center;
-            line-height: 40px;
-            width: 50%;
-            cursor: pointer;
-            font-size: 1.4em;
-
-            &.active {
-                font-weight: bold;
-            }
-        }
-        .active-border {
-            position: absolute;
-            height: 2px;
-            width: calc(50% + 1px);
-            bottom: -1px;
-            left: 0;
-            transition: left linear 0.1s;
-            @include themify($themes) {
-                background: themed('DialogHeadActiveBorder');
-            }
-
-            &.second {
-                left: 50%;
-            }
-        }
-    }
     .buttons {
         display: flex;
         justify-content: space-between;
@@ -111,12 +42,6 @@
             padding: 5px 12px;
         }
     }
-    .description {
-        flex-grow: 1;
-        padding: 16px;
-        font-size: 1.2em;
-        line-height: 18px;
-    }
     input[type=number] {
         display: inline-block;
         width: 3.2em;
@@ -125,22 +50,5 @@
         padding-left: 6px;
         border-radius: 3px;
         font-size: 14px;
-    }
-}
-
-/* Mobile Style */
-.smartcharts-mobile {
-    .cq-dialog-active {
-        visibility: visible;
-        z-index: 1;
-    }
-    .cq-settings-dialog {
-        .items {
-            padding: 5px 0;
-
-            .item {
-                height: 28px;
-            }
-        }
     }
 }

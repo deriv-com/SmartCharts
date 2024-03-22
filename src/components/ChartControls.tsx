@@ -5,7 +5,6 @@ import { TChartControlsWidgets } from 'src/types';
 import { useStores } from 'src/store';
 import ChartTypes from './ChartTypes';
 import StudyLegend from './StudyLegend';
-import Views from './Views';
 import CrosshairToggle from './CrosshairToggle';
 import Timeperiod from './Timeperiod';
 import ChartSize from './ChartSize';
@@ -22,7 +21,6 @@ export const RenderDefaultControls = ({ isMobile }: TRenderDefaultControls) => (
         <Timeperiod />
         <StudyLegend />
         <DrawTools />
-        <Views />
         <Share />
         {isMobile ? '' : <ChartSize />}
     </>

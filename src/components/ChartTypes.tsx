@@ -25,10 +25,11 @@ type TChartTypesProps = {
 };
 
 const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesProps) => {
-    const { chartType, chart, state } = useStores();
+    const { chartType, chart, state, loader } = useStores();
 
     const { listStore, setChartType, updateProps, types, type, menuStore } = chartType;
     const { open: menuOpen, setOpen } = chartType.menuStore;
+    const { isActive: isLoading } = loader;
     const { isMobile } = chart;
 
     const onChange = onChangeFn || setChartType;
@@ -56,14 +57,14 @@ const ChartTypes = ({ enabled, newDesign, onChange: onChangeFn }: TChartTypesPro
                 {types.map(chart_type => {
                     const Icon = chart_type.icon;
                     let className = 'sc-chart-type__item';
-                    className += chart_type.active ? ' sc-chart-type__item--active' : '';
-                    className += chart_type.disabled ? ' sc-chart-type__item--disabled' : '';
+                    className += chart_type.active && !isLoading ? ' sc-chart-type__item--active' : '';
+                    className += chart_type.disabled || isLoading ? ' sc-chart-type__item--disabled' : '';
 
-                    const onClick = () => (chart_type.disabled ? null : onItemClick(chart_type));
+                    const onClick = () => (chart_type.disabled || isLoading ? null : onItemClick(chart_type));
                     return (
                         <Tooltip
                             key={chart_type.id}
-                            enabled={chart_type.disabled && !isMobile}
+                            enabled={chart_type.disabled && !isLoading && !isMobile}
                             className={className}
                             content={t.translate('Available only for non-tick time intervals.')}
                             onClick={onClick}

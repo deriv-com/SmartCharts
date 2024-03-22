@@ -58,7 +58,7 @@ jobs:
                   alternate_ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
-          - uses: subosito/flutter-action@v2
+          - uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
             with:
                   flutter-version: '3.10.6'
                   channel: 'stable'
@@ -84,7 +84,7 @@ jobs:
                   node-version: 18.x
 
           - name: Setup deriv-app
-            run: cd deriv-app && npm install && npm run bootstrap
+            run: cd deriv-app && npm i -g lerna@^5.5.1 && npm run bootstrap
 
           - name: Remove @deriv-charts in deriv-app
             run: rm -rf deriv-app/node_modules/@deriv/deriv-charts/dist

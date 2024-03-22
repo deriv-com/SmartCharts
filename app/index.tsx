@@ -93,6 +93,7 @@ const IntervalEnum = {
 };
 const activeLanguages = [
     'EN',
+    'BN',
     'DE',
     'ES',
     'FR',
@@ -238,7 +239,7 @@ const App = () => {
             <ToolbarWidget>
                 <ChartMode onChartType={changeChartType} onGranularity={changeGranularity} />
                 <StudyLegend />
-                <Views />
+                <Views onChartType={changeChartType} onGranularity={changeGranularity} />
                 <DrawTools />
                 <Share />
             </ToolbarWidget>

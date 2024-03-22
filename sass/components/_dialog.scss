@@ -132,6 +132,20 @@
             }
         }
     }
+    .info-footnote {
+        @include themify($themes) {
+            color: themed('ChartModeText') !important;
+        }
+        line-height: 18px;
+        font-size: 12px;
+        font-weight: 400;
+        padding: 16px;
+        text-align: center;
+
+        &--mobile {
+            font-size: 11px;
+        }
+    }
 }
 
 .tabs {
@@ -243,25 +257,6 @@
 
         .react-tabs__tab-panel {
             height: 430px;
-        }
-        .cq-titlebar {
-            height: 40px;
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            @include themify($themes) {
-                color: themed('DialogHeadText');
-                border-bottom: 2px solid themed('DialogBodyBg');
-            }
-
-            :last-child {
-                margin-left: auto;
-            }
-            .cq-title {
-                font-size: 1.4em;
-                font-weight: bold;
-                padding-left: 10px;
-            }
         }
         &--tabular {
             .sc-dialog__head {
