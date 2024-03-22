@@ -83,9 +83,6 @@ jobs:
               with:
                   node-version: 18.x
 
-            - name: Setup deriv-app
-              run: cd deriv-app && npm install && npm run bootstrap
-
             - name: Install jq
               run: sudo apt-get install jq
 
@@ -114,7 +111,7 @@ jobs:
                   jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
 
             - name: Update root package-lock.json
-              run: cd deriv-app && npm run bootstrap:dev
+              run: cd deriv-app && && npm install && npm run bootstrap:dev
 
             - name: Create Pull Request to deriv-app
               uses: peter-evans/create-pull-request@v6
