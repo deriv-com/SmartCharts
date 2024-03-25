@@ -5,6 +5,8 @@ on:
 jobs:
     build_and_publish_deriv_charts:
         runs-on: Ubuntu-latest
+        permissions:
+            contents: write
         steps:
             - name: Checkout SmartCharts
               uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
