@@ -7,15 +7,17 @@ export default class IndicatorPredictionDialogStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     scrollPanel?: HTMLElement;
+    cancelCallback?: () => void;
 
     constructor({ mainStore }: { mainStore: MainStore }) {
         makeObservable(this, {
             dialogPortalNodeId: observable,
             open: computed,
+            cancelCallback: observable,
             setOpen: action.bound,
+            setCancel: action.bound,
             handleCancel: action.bound,
             handleContinue: action.bound,
-            setHandleCancel: action,
         });
 
         this.mainStore = mainStore;
@@ -33,13 +35,16 @@ export default class IndicatorPredictionDialogStore {
         return this.menuStore.setOpen(value);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     handleCancel() {
+        if (this.cancelCallback) {
+            this.cancelCallback();
+        }
         this.setOpen(false);
+        this.cancelCallback= () => false;
     }
 
-    setHandleCancel(newHandleCancel: () => void) {
-        this.handleCancel = newHandleCancel.bind(this);
+    setCancel(callback: () => void) {
+        this.cancelCallback = callback;
     }
 
     handleContinue() {

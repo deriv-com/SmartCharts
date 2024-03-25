@@ -55,8 +55,10 @@ const Chart = React.forwardRef((props: TChartProps, ref) => {
             hasPredictionIndicators() {
                 return studies.hasPredictionIndicator;
             },
-            triggerPopup() {
+            triggerPopup(cancelCallback: () => void) {
+                timeperiod.predictionIndicator.setCancel(cancelCallback);
                 timeperiod.predictionIndicator.setOpen(true);
+                timeperiod.predictionIndicator.dialogPortalNodeId='modal_root';
             },
         };
     });
