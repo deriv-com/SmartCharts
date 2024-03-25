@@ -49,7 +49,6 @@ jobs:
               uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
               with:
                   node-version: 20.x
-                  registry-url: 'https://registry.npmjs.org'
 
             - name: Setup SmartCharts
               run: cd SmartCharts && npm install
@@ -61,7 +60,7 @@ jobs:
               env:
                   CI: true
                   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-                  NPM_TOKEN: ${{ secrets. NPM_ACCESS_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
               run: cd SmartCharts && npx semantic-release
 
     update_chart_version_in_deriv_app:
