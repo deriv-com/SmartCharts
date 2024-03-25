@@ -111,7 +111,12 @@ jobs:
                   jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
 
             - name: Update root package-lock.json
-              run: cd deriv-app && npm i -g lerna@^5.5.1 && npm run bootstrap:dev
+              run: |
+                  cd deriv-app
+                  npm i -g lerna@^5.5.1
+                  lerna link
+                  lerna bootstrap --hoist --no-ci --strict
+                  lerna link
 
             - name: Create Pull Request to deriv-app
               uses: peter-evans/create-pull-request@70a41aba780001da0a30141984ae2a0c95d8704e
