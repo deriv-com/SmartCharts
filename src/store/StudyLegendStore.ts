@@ -12,7 +12,6 @@ import {
     flatMap,
     isLiteralObject,
     prepareIndicatorName,
-    safeParse,
     saveToLocalStorage,
     transformStudiesforTheme,
 } from '../utils';
