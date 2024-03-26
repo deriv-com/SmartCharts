@@ -1030,6 +1030,10 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         signalLineStyle: clone(lineStyle),
         pipSize: 2,
         showLastIndicator: true,
+        smiOscillatorLimits: {
+            overboughtStyle: { ...clone(lineStyle), color: '#626b73'},
+            oversoldStyle: { ...clone(lineStyle), color: '#626b73'},
+        },
     },
     parameters: [
         {
@@ -1091,7 +1095,8 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         },
         {
             paths: {
-                value: 'overboughtValue',
+                value: 'smiOscillatorLimits.overboughtValue',
+                color: 'smiOscillatorLimits.overboughtStyle.color',
             },
             group_key: 'over_bought',
             title: t.translate('OverBought'),
@@ -1099,12 +1104,13 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             category: 'parameters',
             defaultValue: {
                 value: 40,
-                color: '#000000',
+                color: '#626b73',
             },
         },
         {
             paths: {
-                value: 'oversoldValue',
+                value: 'smiOscillatorLimits.oversoldValue',
+                color: 'smiOscillatorLimits.oversoldStyle.color',
             },
             group_key: 'over_sold',
             title: t.translate('OverSold'),
@@ -1112,7 +1118,7 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
             category: 'parameters',
             defaultValue: {
                 value: -40,
-                color: '#000000',
+                color: '#626b73',
             },
         },
         {
