@@ -4,6 +4,7 @@ import React, { useImperativeHandle } from 'react';
 import 'react-tabs/style/react-tabs.css';
 import { useStores } from 'src/store';
 import { TChartProps } from 'src/types';
+import { safeParse } from 'src/utils';
 import { usePrevious } from '../hooks';
 
 /* css + scss */
@@ -40,7 +41,7 @@ const Chart = React.forwardRef((props: TChartProps, ref) => {
     } = useStores();
     const { chartId, init, destroy, isChartAvailable, chartContainerHeight, containerWidth } = chart;
     const { setCrosshairState } = crosshair;
-    const { settingsDialog: studiesSettingsDialog } = studies;
+    const { settingsDialog: studiesSettingsDialog, restoreStudies, activeItems } = studies;
     const { settingsDialog: drawToolsSettingsDialog } = drawTools;
     const { settingsDialog: chartTypeSettingsDialog, isCandle, isSpline } = chartType;
     const { updateProps, isChartClosed } = state;
@@ -53,12 +54,15 @@ const Chart = React.forwardRef((props: TChartProps, ref) => {
     useImperativeHandle(ref, () => {
         return {
             hasPredictionIndicators() {
-                return studies.hasPredictionIndicator;
+                return localStorage.getItem('predictionIndicators') !== null;
             },
             triggerPopup(cancelCallback: () => void) {
-                timeperiod.predictionIndicator.setCancel(cancelCallback);
+                timeperiod.predictionIndicator.dialogPortalNodeId = 'modal_root';
                 timeperiod.predictionIndicator.setOpen(true);
-                timeperiod.predictionIndicator.dialogPortalNodeId='modal_root';
+                timeperiod.predictionIndicator.setCancel(() => {
+                    cancelCallback();
+                    restoreStudies([...activeItems, ...safeParse(localStorage.getItem('predictionIndicators') || '')]);
+                });
             },
         };
     });

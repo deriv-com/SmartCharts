@@ -256,8 +256,8 @@ const App = () => {
             });
         }
     };
-    const ref=React.useRef(null);
-    
+    const ref = React.useRef(null);
+
     return (
         <SmartChart
             ref={ref}
