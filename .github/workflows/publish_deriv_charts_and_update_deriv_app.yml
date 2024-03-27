@@ -24,7 +24,7 @@ jobs:
                   ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
-            - uses: subosito/flutter-action@88cab4064b0a5145b0b53b42565b68248a3d7bcb
+            - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
                   flutter-version: '3.10.6'
                   channel: 'stable'
@@ -116,7 +116,7 @@ jobs:
                   lerna link
 
             - name: Create Pull Request to deriv-app
-              uses: peter-evans/create-pull-request@70a41aba780001da0a30141984ae2a0c95d8704e
+              uses: peter-evans/create-pull-request@76c6f5c20e2111bfee3cd30fae52a25e410f5efc
               with:
                   token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                   commit-message: 'chore: update @deriv/deriv-charts to ${{ steps.check_new_version.outputs.new_version }}'
