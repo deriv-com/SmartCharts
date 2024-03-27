@@ -366,6 +366,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                           : configModel.msPerPx,
                       minIntervalWidth: _getMinIntervalWidth(),
                       maxIntervalWidth: _getMaxIntervalWidth(),
+                      dataFitPadding: _getDataFitPadding(rightPadding),
                       bottomChartTitleMargin: configModel.leftMargin != null
                           ? EdgeInsets.only(left: configModel.leftMargin!)
                           : null,
