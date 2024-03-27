@@ -334,7 +334,7 @@ export default class StudyLegendStore {
     };
 
     deletePredictionStudies() {
-        const filteredItem = this.activeItems.filter(item => item.isPrediction === true);
+        const filteredItem = this.activeItems.filter(item => item.isPrediction);
         if (filteredItem.length > 0) {
             filteredItem.forEach(item => {
                 this.mainStore.state.stateChange(STATE.INDICATOR_DELETED);
@@ -344,7 +344,7 @@ export default class StudyLegendStore {
         }
     }
     savePredictionStudies() {
-        const filteredItem = this.activeItems.filter(item => item.isPrediction === true);
+        const filteredItem = this.activeItems.filter(item => item.isPrediction);
         if (filteredItem.length > 0) {
             saveToLocalStorage('predictionIndicators', filteredItem);
         }
