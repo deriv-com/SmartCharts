@@ -1,0 +1,127 @@
+name: Publish @deriv/deriv-charts and update package in deriv-app
+on:
+    workflow_dispatch:
+
+jobs:
+    build_and_publish_deriv_charts:
+        runs-on: Ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout SmartCharts
+              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              with:
+                  repository: 'binary-com/SmartCharts'
+                  path: SmartCharts
+                  ref: master
+
+            - name: Custom flutter-chart
+              id: flutter_chart
+              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              with:
+                  repository: 'regentmarkets/flutter-chart'
+                  path: flutter-chart
+                  ref: fe-changes
+                  token: ${{ secrets.REPO_READ_TOKEN }}
+
+            - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
+              with:
+                  flutter-version: '3.10.6'
+                  channel: 'stable'
+                  cache: true
+
+            - name: Add SSH key
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.SSH_KEY }}" > ~/.ssh/github_action_key
+                  chmod 600 ~/.ssh/github_action_key
+
+            - name: Build flutter
+              env:
+                  GIT_SSH_COMMAND: 'ssh -i ~/.ssh/github_action_key'
+              run: |
+                  cd SmartCharts/chart_app
+                  flutter pub get
+                  flutter build web --web-renderer html --release
+
+            - name: Setup node
+              uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
+              with:
+                  node-version: 20.x
+
+            - name: Setup SmartCharts
+              run: cd SmartCharts && npm install
+
+            - name: Build SmartCharts
+              run: cd SmartCharts && npm run build
+
+            - name: Release SmartCharts
+              env:
+                  CI: true
+                  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+              run: cd SmartCharts && npx semantic-release
+
+    update_chart_version_in_deriv_app:
+        runs-on: Ubuntu-latest
+        permissions:
+            pull-requests: write
+        needs: [build_and_publish_deriv_charts]
+        steps:
+            - name: Checkout deriv-app
+              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              with:
+                  repository: 'binary-com/deriv-app'
+                  path: deriv-app
+                  ref: master
+
+            - name: Setup Node
+              uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
+              with:
+                  node-version: 18.x
+
+            - name: Install jq
+              run: sudo apt-get install jq
+
+            - name: Get the new chart version
+              id: check_new_version
+              run: |
+                  new_version=$(npm show @deriv/deriv-charts version)
+                  echo "new_version=$new_version" >> $GITHUB_OUTPUT
+
+            - name: Update core package.json
+              run: |
+                  cd deriv-app/packages/core
+                  tmp=$(mktemp)
+                  jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
+
+            - name: Update trader package.json
+              run: |
+                  cd deriv-app/packages/trader
+                  tmp=$(mktemp)
+                  jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
+
+            - name: Update bot-web-ui package.json
+              run: |
+                  cd deriv-app/packages/bot-web-ui
+                  tmp=$(mktemp)
+                  jq --indent 4 ".dependencies[\"@deriv/deriv-charts\"] = \"^${{ steps.check_new_version.outputs.new_version }}\"" package.json > "$tmp" && mv "$tmp" package.json
+
+            - name: Update root package-lock.json
+              run: |
+                  cd deriv-app
+                  npm i -g lerna@^5.5.1
+                  lerna link
+                  lerna bootstrap --hoist --no-ci --strict
+                  lerna link
+
+            - name: Create Pull Request to deriv-app
+              uses: peter-evans/create-pull-request@76c6f5c20e2111bfee3cd30fae52a25e410f5efc
+              with:
+                  token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+                  commit-message: 'chore: update @deriv/deriv-charts to ${{ steps.check_new_version.outputs.new_version }}'
+                  title: 'Update deriv-charts to ${{ steps.check_new_version.outputs.new_version }}'
+                  body: 'This PR updates @deriv/deriv-charts to ${{ steps.check_new_version.outputs.new_version }}'
+                  branch: 'chore/update-deriv-charts-to-${{ steps.check_new_version.outputs.new_version }}'
+                  base: 'master'
+                  path: 'deriv-app'
