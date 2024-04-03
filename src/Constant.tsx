@@ -2030,6 +2030,11 @@ export const Languages = [
         icon: <FlagIcons.German />,
     },
     {
+        key: 'ar',
+        name: 'العربية',
+        icon: <FlagIcons.Arabic />,
+    },
+    {
         key: 'fr',
         name: 'French',
         icon: <FlagIcons.French />,
