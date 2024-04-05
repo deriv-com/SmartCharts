@@ -1031,8 +1031,8 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         pipSize: 2,
         showLastIndicator: true,
         smiOscillatorLimits: {
-            overboughtStyle: { ...clone(lineStyle), color: '#626b73'},
-            oversoldStyle: { ...clone(lineStyle), color: '#626b73'},
+            overboughtStyle: { ...clone(lineStyle), color: '#626b73' },
+            oversoldStyle: { ...clone(lineStyle), color: '#626b73' },
         },
     },
     parameters: [
@@ -2042,6 +2042,11 @@ export const Languages = [
     {
         key: 'ru',
         name: 'Русский',
+        icon: <FlagIcons.Russia />,
+    },
+    {
+        key: 'si',
+        name: 'සිංහල',
         icon: <FlagIcons.Russia />,
     },
     {
