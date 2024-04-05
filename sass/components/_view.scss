@@ -205,6 +205,11 @@
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+
+                    &--disabled {
+                        opacity: 0.5;
+                        cursor: not-allowed; /* stylelint-disable-line plugin/no-unsupported-browser-features */
+                    }
                 }
                 .ic-icon {
                     @include themify($themes) {
