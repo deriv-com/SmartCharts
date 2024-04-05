@@ -100,7 +100,7 @@ jobs:
 
           - name: Build deriv-app
             env:
-              NODE_ENV: 'production'
+              NODE_ENV: 'staging'
             run: cd deriv-app && npm run build:all
 
           - name: Setup Node
