@@ -173,6 +173,12 @@ export default class CategoricalDisplayStore {
         for (const item of filteredItems) {
             if (activeItems.includes(item.categoryId)) {
                 item.active = true;
+            } else if (item.hasSubgroup) {
+                for (const subgroup of item.subgroups) {
+                    if (activeItems.includes(subgroup.categoryId)) {
+                        subgroup.active = true;
+                    }
+                }
             }
         }
 
@@ -390,18 +396,22 @@ export default class CategoricalDisplayStore {
                       .length > 0;
             if (isItemActive) {
                 if (item.hasSubgroup) {
-                    const triggered_subgroup = item.subgroups.find(
-                        (subgroup: TCategorizedSymbolItem) => subgroup.categoryId === categoryId
-                    );
-
-                    if (triggered_subgroup !== undefined) {
-                        triggered_subgroup.active = !triggered_subgroup.active;
+                    for (const subgroup of item.subgroups) {
+                        if (subgroup.categoryId === categoryId) {
+                            subgroup.active = !subgroup.active;
+                        }
                     }
                 }
                 item.active = !item.active;
                 setTimeout(() => this.handleFilterClick(item.categoryId), 250);
             }
-            if (item.active && item.categoryId !== 'favorite') {
+            if (item.active && item.hasSubgroup) {
+                for (const subgroup of item.subgroups) {
+                    if (subgroup.active) {
+                        this.activeCategories.push(subgroup.categoryId);
+                    }
+                }
+            } else if (item.active && item.categoryId !== 'favorite') {
                 this.activeCategories.push(item.categoryId);
             }
         }
