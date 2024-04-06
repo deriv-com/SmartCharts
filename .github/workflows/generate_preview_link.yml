@@ -99,9 +99,7 @@ jobs:
             run: cd SmartCharts && npm run test
 
           - name: Build deriv-app
-            env:
-              NODE_ENV: 'staging'
-            run: cd deriv-app && npm run build:all
+            run: cd deriv-app && npm run build:prod
 
           - name: Setup Node
             uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
