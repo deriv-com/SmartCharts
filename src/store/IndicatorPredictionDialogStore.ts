@@ -7,7 +7,7 @@ export default class IndicatorPredictionDialogStore {
     mainStore: MainStore;
     menuStore: MenuStore;
     scrollPanel?: HTMLElement;
-    cancelCallback?: () => void;
+    cancelCallback?: (() => void) | null;
 
     constructor({ mainStore }: { mainStore: MainStore }) {
         makeObservable(this, {
@@ -40,7 +40,7 @@ export default class IndicatorPredictionDialogStore {
             this.cancelCallback();
         }
         this.setOpen(false);
-        this.cancelCallback= () => false;
+        this.cancelCallback = null;
     }
 
     setCancel(callback: () => void) {
