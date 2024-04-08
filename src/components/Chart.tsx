@@ -60,8 +60,13 @@ const Chart = React.forwardRef((props: TChartProps, ref) => {
                 timeperiod.predictionIndicator.dialogPortalNodeId = 'modal_root';
                 timeperiod.predictionIndicator.setOpen(true);
                 timeperiod.predictionIndicator.setCancel(() => {
-                    cancelCallback();
-                    restoreStudies([...activeItems, ...safeParse(localStorage.getItem('predictionIndicators') || '')]);
+                    if (localStorage.getItem('predictionIndicators')) {
+                        cancelCallback();
+                        restoreStudies([
+                            ...activeItems,
+                            ...safeParse(localStorage.getItem('predictionIndicators') || ''),
+                        ]);
+                    }
                 });
             },
         };
