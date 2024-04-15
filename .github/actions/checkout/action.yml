@@ -61,11 +61,11 @@ runs:
               FETCH_DEPTH: ${{ inputs.fetch-depth }}
               REF: ${{ inputs.ref }}
           with:
-              fetch-depth: $FETCH_DEPTH
-              path: $PATH
-              repository: $REPOSITORY
-              ref: $REF
-              token: $GH_TOKEN
+              fetch-depth: ${{ env.FETCH_DEPTH }}
+              path: ${{ env.PATH }}
+              repository: ${{ env.REPOSITORY }}
+              ref: ${{ env.REF }}
+              token: ${{ env.GH_TOKEN }}
 
         - if: steps.repo.outputs.ref-exists == 'false'
           uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
@@ -76,8 +76,8 @@ runs:
               ALTERNATE_REPOSITORY: ${{ inputs.alternate_repository }}
               FETCH_DEPTH: ${{ inputs.fetch-depth }}
           with:
-              fetch-depth: $FETCH_DEPTH
-              path: $PATH
-              repository: $ALTERNATE_REPOSITORY
-              ref: $ALTERNATE_REF
-              token: $GH_TOKEN
+              fetch-depth: ${{ env.FETCH_DEPTH }}
+              path: ${{ env.PATH }}
+              repository: ${{ env.ALTERNATE_REPOSITORY }}
+              ref: ${{ env.ALTERNATE_REF }}
+              token: ${{ env.GH_TOKEN }}
