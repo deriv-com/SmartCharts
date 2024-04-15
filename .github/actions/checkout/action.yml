@@ -39,30 +39,45 @@ runs:
           shell: bash
           env:
               GH_TOKEN: ${{ inputs.token }}
+              ALTERNATE_REF: ${{ inputs.alternate_ref }}
+              REPOSITORY: ${{ inputs.repository }}
+              REF: ${{ inputs.ref }}
           run: |
-              if git ls-remote --heads --quiet --exit-code https://${{ inputs.token }}@github.com/${{ inputs.repository }}.git ${{ inputs.ref }}
+              if git ls-remote --heads --quiet --exit-code https://$GH_TOKEN@github.com/$REPOSITORY.git $REF
               then
-                echo "::notice::Checkout: ${{ inputs.repository }} using ${{ inputs.ref }}"
+                echo "::notice::Checkout: $REPOSITORY using $REF"
                 echo "ref-exists=true" >> $GITHUB_OUTPUT
               else
-                echo "::notice::Checkout: ${{ inputs.repository }} does not have ref ${{ inputs.ref }} (fallback to ${{ inputs.alternate_ref }})"
+                echo "::notice::Checkout: $REPOSITORY does not have ref  $REF (fallback to $ALTERNATE_REF)"
                 echo "ref-exists=false" >> $GITHUB_OUTPUT
               fi
 
         - if: steps.repo.outputs.ref-exists == 'true'
           uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+          env:
+              PATH: ${{inputs.path}}
+              GH_TOKEN: ${{ inputs.token }}
+              REPOSITORY: ${{ inputs.repository }}
+              FETCH_DEPTH: ${{ inputs.fetch-depth }}
+              REF: ${{ inputs.ref }}
           with:
-              fetch-depth: ${{ inputs.fetch-depth }}
-              path: ${{ inputs.path }}
-              repository: ${{ inputs.repository }}
-              ref: ${{ inputs.ref }}
-              token: ${{ inputs.token }}
+              fetch-depth: ${{ env.FETCH_DEPTH }}
+              path: ${{ env.PATH }}
+              repository: ${{ env.REPOSITORY }}
+              ref: ${{ env.REF }}
+              token: ${{ env.GH_TOKEN }}
 
         - if: steps.repo.outputs.ref-exists == 'false'
           uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+          env:
+              PATH: ${{inputs.path}}
+              GH_TOKEN: ${{ inputs.token }}
+              ALTERNATE_REF: ${{ inputs.alternate_ref }}
+              ALTERNATE_REPOSITORY: ${{ inputs.alternate_repository }}
+              FETCH_DEPTH: ${{ inputs.fetch-depth }}
           with:
-              fetch-depth: ${{ inputs.fetch-depth }}
-              path: ${{ inputs.path }}
-              repository: ${{ inputs.alternate_repository }}
-              ref: ${{ inputs.alternate_ref }}
-              token: ${{ inputs.token }}
+              fetch-depth: ${{ env.FETCH_DEPTH }}
+              path: ${{ env.PATH }}
+              repository: ${{ env.ALTERNATE_REPOSITORY }}
+              ref: ${{ env.ALTERNATE_REF }}
+              token: ${{ env.GH_TOKEN }}
