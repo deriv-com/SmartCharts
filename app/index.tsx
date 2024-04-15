@@ -95,6 +95,7 @@ const activeLanguages = [
     'EN',
     'BN',
     'DE',
+    'AR',
     'ES',
     'FR',
     'ID',

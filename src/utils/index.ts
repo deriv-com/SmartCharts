@@ -93,7 +93,7 @@ export const getIntervalInSeconds = ({
     timeUnit,
     interval,
 }: {
-    timeUnit?: string | number;
+    timeUnit?: string | number | null;
     interval?: string | number;
 }) => {
     let unit = timeUnit;
@@ -110,14 +110,14 @@ export const getIntervalInSeconds = ({
         unit = 1;
     }
 
-    if (unit !== undefined && interv !== undefined) {
+    if (unit !== undefined && interv !== undefined && unit !== null) {
         if (typeof unit === 'string') {
             unit = Number(unit);
         }
         if (typeof interv === 'string') {
             interv = Number(interv);
         }
-        return unit * interv;
+        return Number(unit) * interv;
     }
 
     return 0;
@@ -288,7 +288,12 @@ export function cloneCategories<T>(
 ): TCategorizedSymbolItem<T>[] {
     const categorized: TCategorizedSymbolItem<T>[] = [];
     for (const category of categories) {
-        categorized.push(cloneCategory<T>(category, transformItem));
+        if (category.hasSubgroup) {
+            const subgroups = category.subgroups.map(subgroup => cloneCategory<T>(subgroup, transformItem));
+            categorized.push(({ ...category, subgroups } as unknown) as TCategorizedSymbolItem<T>);
+        } else {
+            categorized.push(cloneCategory<T>(category, transformItem));
+        }
     }
 
     return categorized;
