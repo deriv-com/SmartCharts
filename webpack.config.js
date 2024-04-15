@@ -168,6 +168,7 @@ const config = {
             t: [path.resolve(__dirname, './src/Translation.ts'), 't'],
         }),
         new MiniCssExtractPlugin({ filename: 'smartcharts.css' }),
+        new StyleLintPlugin(),
         new SpriteLoaderPlugin(),
         new CopyWebpackPlugin({
             patterns: [
