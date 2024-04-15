@@ -11,6 +11,7 @@ export type TDialogProps = {
     enableTabular?: boolean;
     title?: string;
     handleCloseDialog?: () => void;
+    handleOverlayClick?: () => void;
     customHead?: React.ReactElement;
     children?: React.ReactNode;
 };
@@ -22,10 +23,16 @@ const Dialog = ({
     title,
     customHead,
     enableTabular = false,
+    handleOverlayClick,
     handleCloseDialog,
 }: TDialogProps) => {
-    const { updateCloseCallback, onContainerClick } = store;
-    useEffect(() => updateCloseCallback(handleCloseDialog));
+    const { updateCloseCallback, onContainerClick, updateOutsideClickCallback } = store;
+
+    useEffect(() => {
+        updateCloseCallback(handleCloseDialog);
+        updateOutsideClickCallback(handleOverlayClick);
+    });
+
     return (
         <div
             className={classNames('sc-dialog', className, { 'sc-dialog--tabular': enableTabular })}
