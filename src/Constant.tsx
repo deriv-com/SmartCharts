@@ -2047,7 +2047,7 @@ export const Languages = [
     {
         key: 'si',
         name: 'සිංහල',
-        icon: <FlagIcons.Russia />,
+        icon: <FlagIcons.Srilanka />,
     },
     {
         key: 'th',
