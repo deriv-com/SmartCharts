@@ -21,6 +21,7 @@ const IndicatorPredictionDialog = () => {
             modalMode
             emptyMenu
             portalNodeId={dialogPortalNodeId}
+            handleOverlayClick={onCancel}
         >
             <Menu.Title />
             <Menu.Body>

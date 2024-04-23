@@ -9,7 +9,7 @@ let activeDialog: DialogStore | undefined;
 export default class DialogStore {
     mainStore: MainStore;
     open = false;
-    
+
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             open: observable,
@@ -17,7 +17,9 @@ export default class DialogStore {
             register: action.bound,
             unregister: action.bound,
             onContainerClick: action.bound,
-            updateCloseCallback: action.bound
+            updateCloseCallback: action.bound,
+            updateOutsideClickCallback: action.bound,
+            outsideClickCallback: observable,
         });
 
         this.mainStore = mainStore;
@@ -36,8 +38,8 @@ export default class DialogStore {
         return this.mainStore.routing;
     }
 
-
     onClose = () => this.setOpen(false);
+    outsideClickCallback = () => this.setOpen(false);
     setOpen = debounce(
         (val: boolean) => {
             this.openDialog(val);
@@ -70,6 +72,12 @@ export default class DialogStore {
         }
     }
 
+    updateOutsideClickCallback(newCallback?: (() => void) | undefined) {
+        if (newCallback !== undefined) {
+            this.outsideClickCallback = newCallback;
+        }
+    }
+
     handleClickOutside = (e: React.MouseEvent | Event | UIEvent | TCustomEvent) => {
         let isRightClick = false;
         if ('which' in e) {
@@ -79,7 +87,7 @@ export default class DialogStore {
         }
 
         if (!(e as TCustomEvent).isHandledByDialog && !isRightClick) {
-            this.onClose();
+            this.outsideClickCallback();
         }
     };
     closeOnEscape = (e: React.KeyboardEvent | Event) => {
