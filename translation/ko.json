@@ -208,7 +208,7 @@
   "Smooth": "평활법",
   "Smoothing Period": "평활법 기간",
   "Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.": "일부 활성 지표는 1틱 간격을 지원하지 않습니다. 1틱 간격으로 변경하면 이러한 지표는 차트에서 제거됩니다.",
-  "Some of your templates may not work with this trade type.": "",
+  "Some of your templates may not work with this trade type.": "일부 템플릿은 이 거래 유형에서 작동하지 않을 수 있습니다.",
   "Standard Deviations": "표준 편차",
   "Stch Mtm": "Stch Mtm",
   "Stochastic": "확률론적",

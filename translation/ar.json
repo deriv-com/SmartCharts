@@ -208,7 +208,7 @@
   "Smooth": "سلس",
   "Smoothing Period": "فترة التنعيم",
   "Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.": "بعض المؤشرات النشطة الخاصة بك لا تدعم الفواصل الزمنية بنقرة واحدة. إذا قمت بالتغيير إلى فاصل زمني مكون من علامة واحدة، فستتم إزالة هذه المؤشرات من الرسم البياني الخاص بك.",
-  "Some of your templates may not work with this trade type.": "",
+  "Some of your templates may not work with this trade type.": "قد لا تعمل بعض القوالب الخاصة بك مع هذا النوع من التجارة.",
   "Standard Deviations": "الانحرافات المعيارية",
   "Stch Mtm": "Stch Mtm",
   "Stochastic": "العشوائية",
