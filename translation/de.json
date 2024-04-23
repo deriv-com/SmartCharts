@@ -208,7 +208,7 @@
   "Smooth": "Glatt",
   "Smoothing Period": "Glättungszeitraum",
   "Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.": "Einige Ihrer aktiven Indikatoren unterstützen keine 1-Tick-Intervalle. Wenn Sie zu einem 1-Tick-Intervall wechseln, werden diese Indikatoren aus Ihrem Chart entfernt.",
-  "Some of your templates may not work with this trade type.": "",
+  "Some of your templates may not work with this trade type.": "Einige Ihrer Vorlagen funktionieren möglicherweise nicht mit dieser Handelsart.",
   "Standard Deviations": "Standardabweichungen",
   "Stch Mtm": "Stch Mtm",
   "Stochastic": "Stochastisch",

@@ -208,7 +208,7 @@
   "Smooth": "Smooth",
   "Smoothing Period": "Période de lissage",
   "Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.": "Certains de vos indicateurs actifs ne prennent pas en charge les intervalles de 1 tick. Si vous passez à un intervalle de 1 tick, ces indicateurs seront supprimés de votre graphique.",
-  "Some of your templates may not work with this trade type.": "",
+  "Some of your templates may not work with this trade type.": "Certains de vos modèles peuvent ne pas fonctionner avec ce type de commerce.",
   "Standard Deviations": "Écarts types",
   "Stch Mtm": "Stch Mtm",
   "Stochastic": "Stochastique",
