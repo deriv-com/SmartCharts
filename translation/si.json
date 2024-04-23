@@ -208,6 +208,7 @@
   "Smooth": "සුමට",
   "Smoothing Period": "සුමට කිරීමේ කාලය",
   "Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.": "ඔබගේ සමහර ක්රියාකාරී දර්ශක 1-ටික් කාල පරාසයන් සඳහා සහය නොදක්වයි. ඔබ 1-ටික් පරතරයකට වෙනස් වුවහොත්, මෙම දර්ශකයන් ඔබගේ ප්රස්ථාරයෙන් ඉවත් කරනු ලැබේ.",
+  "Some of your templates may not work with this trade type.": "",
   "Standard Deviations": "සම්මත අපගමනය",
   "Stch Mtm": "එස්ටීච් එම්ටීඑම්",
   "Stochastic": "ස්ටෝචස්ටික්",
