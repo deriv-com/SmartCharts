@@ -208,7 +208,7 @@
   "Smooth": "平滑",
   "Smoothing Period": "平滑周期",
   "Some of your active indicators don’t support 1-tick intervals. If you change to a 1-tick interval, these indicators will be removed from your chart.": "一些活动指标不支持 1 跳动点间隔。如果更改为 1 跳动点间隔，这些指标将从图表中删除。",
-  "Some of your templates may not work with this trade type.": "",
+  "Some of your templates may not work with this trade type.": "某些模板可能无法使用此交易类型。",
   "Standard Deviations": "标准差",
   "Stch Mtm": "Stch Mtm",
   "Stochastic": "随机",
