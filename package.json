@@ -3,6 +3,11 @@
     "version": "0.0.0-semantic",
     "main": "dist/smartcharts.js",
     "author": "amin@binary.com",
+    "config": {
+        "commitizen": {
+          "path": "@commitlint/cz-commitlint"
+        }
+    },
     "contributors": [
         "Lee Zhen Yong <bruce@binary.com>",
         "Mahboobeh Mohammadi <mahboobeh@binary.com>",
@@ -26,6 +31,7 @@
         "build": "rimraf dist && cross-env NODE_ENV=production webpack --mode=production --progress",
         "build:app": "cross-env BUILD_MODE='app' npm run build",
         "build-travis": "npm run build:app && node scripts/update-hashes.js",
+        "commit": "git-cz",
         "analyze": "cross-env ANALYZE_BUNDLE=true npm run build",
         "webpack": "webpack",
         "watch": "f () { npm run webpack -- --mode development --progress --watch --output-path $1; }; f",
@@ -56,6 +62,7 @@
         "@babel/register": "^7.5.5",
         "@commitlint/cli": "^19.3.0",
         "@commitlint/config-conventional": "^19.2.2",
+        "@commitlint/cz-commitlint": "^19.2.0",
         "@deriv/api-types": "^1.0.47",
         "@semantic-release/changelog": "^6.0.3",
         "@semantic-release/github": "^9.2.6",
@@ -80,6 +87,7 @@
         "babel-plugin-istanbul": "^5.2.0",
         "babel-plugin-transform-runtime": "^6.23.0",
         "chai": "^4.2.0",
+        "commitizen": "^4.3.0",
         "copy-webpack-plugin": "^6.4.1",
         "cross-env": "^5.1.4",
         "css-loader": "^6.7.3",
@@ -104,6 +112,7 @@
         "fs": "^0.0.1-security",
         "gh-pages": "^2.1.1",
         "husky": "^7.0.4",
+        "inquirer": "^9.2.19",
         "json-loader": "^0.5.7",
         "lint-staged": "^10.4.0",
         "md5-file": "^4.0.0",
