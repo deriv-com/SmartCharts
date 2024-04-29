@@ -2050,6 +2050,11 @@ export const Languages = [
         icon: <FlagIcons.Srilanka />,
     },
     {
+        key: 'sw',
+        name: 'Kiswahili',
+        icon: <FlagIcons.Kenya />,
+    },
+    {
         key: 'th',
         name: 'Thai',
         icon: <FlagIcons.Thailand />,
