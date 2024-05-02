@@ -208,6 +208,10 @@ export default class PriceLineStore {
         return 16;
     }
 
+    get isContractOngoing(): boolean {
+        return this.mainStore.chart.isLive;
+    }
+
     _getPrice(quote: number) {
         const price = this.isDragging ? this.dragPrice : this.price;
         return this.relative ? quote + Number(price) : Number(price);
@@ -317,7 +321,7 @@ export default class PriceLineStore {
             this.isOverlapping = this.overlapCheck(top);
         }
 
-        this.isOverlappingWithPriceLine = this._distanceFromCurrentPrice() < 25;
+        this.isOverlappingWithPriceLine = this.isContractOngoing && this._distanceFromCurrentPrice() < 25;
 
         return Math.round(top) | 0;
     };
