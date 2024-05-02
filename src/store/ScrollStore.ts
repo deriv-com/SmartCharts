@@ -10,7 +10,7 @@ export default class ScrollStore {
             scrollPanel: observable,
             handleMouseOver: action.bound,
             handleMouseOut: action.bound,
-            setScrollPanel: action.bound
+            setScrollPanel: action.bound,
         });
 
         reaction(
