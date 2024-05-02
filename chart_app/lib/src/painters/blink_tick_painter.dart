@@ -54,18 +54,21 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
 
       if (animationInfo.currentTickPercent > 0 &&
           animationInfo.currentTickPercent < 1) {
-        canvas.drawCircle(
-          Offset(dotX, y),
-          3 + (animationInfo.currentTickPercent * 6),
-          Paint()..color = _paint.color.withOpacity(0.15),
-        );
+        yAxisClipping(canvas, size, () {
+          canvas.drawCircle(
+            Offset(dotX!, y),
+            3 + (animationInfo.currentTickPercent * 6),
+            Paint()..color = _paint.color.withOpacity(0.15),
+          );
+        });
       }
-
-      canvas.drawCircle(
-        Offset(dotX, y),
-        3,
-        _paint,
-      );
+      yAxisClipping(canvas, size, () {
+        canvas.drawCircle(
+          Offset(dotX!, y),
+          3,
+          _paint,
+        );
+      });
     }
   }
 }

@@ -52,8 +52,10 @@ class DigitMarkerIconPainter extends MarkerGroupIconPainter {
 
     for (final WebMarker marker in markerGroup.markers) {
       final Offset center = points[marker.markerType!]!;
-      _drawMarker(canvas, size, theme, marker, center, markerGroup.style,
-          painterProps.zoom, opacity);
+      yAxisClipping(canvas, size, () {
+        _drawMarker(canvas, size, theme, marker, center, markerGroup.style,
+            painterProps.zoom, opacity);
+      });
     }
   }
 
