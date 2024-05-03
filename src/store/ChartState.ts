@@ -60,7 +60,6 @@ class ChartState {
     clearChart?: () => void;
     isChartClosed = false;
     shouldMinimiseLastDigits = false;
-    should_show_eu_content?: boolean;
     allowTickChartTypeOnly?: boolean;
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
@@ -112,7 +111,6 @@ class ChartState {
             chartStatusListener: observable,
             debouncedStateChange: action.bound,
             stateChangeListener: observable,
-            should_show_eu_content: observable,
             settings: observable,
             showLastDigitStats: observable,
             allowTickChartTypeOnly: observable,
@@ -180,7 +178,6 @@ class ChartState {
         settings,
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
-        should_show_eu_content,
         should_zoom_out_on_yaxis,
         allTicks = [],
         contractInfo = {},
@@ -229,7 +226,6 @@ class ChartState {
         this.margin = margin;
         this.has_updated_settings = !isDeepEqual(this.settings?.whitespace, settings?.whitespace);
         this.settings = settings;
-        this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
         this.allowTickChartTypeOnly = allowTickChartTypeOnly;
