@@ -137,7 +137,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
       fontSize: painterProps.isMobile ? 10 : 14,
     );
 
-    yAxisClipping(canvas, size, () {
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
       if (previousTickMarker != null && previousTickMarker.color != null) {
         _drawPreviousTickBarrier(
           canvas,

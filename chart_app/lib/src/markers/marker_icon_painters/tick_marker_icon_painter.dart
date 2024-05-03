@@ -76,7 +76,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     final Offset? _endOffset = points[MarkerType.end];
     final Offset? _exitOffset = points[MarkerType.exit];
 
-    yAxisClipping(canvas, size, () {
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
       if (_entryOffset != null && _startOffset != null) {
         paintHorizontalDashedLine(
           canvas,
@@ -130,7 +130,7 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
 
     final Paint paint = Paint()..color = color;
 
-    yAxisClipping(canvas, size, () {
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
       switch (marker.markerType) {
         case MarkerType.activeStart:
           paintStartLine(canvas, size, marker, anchor, style, zoom);
