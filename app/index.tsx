@@ -105,6 +105,7 @@ const activeLanguages = [
     'PT',
     'RU',
     'SI',
+    'SW',
     'TR',
     'TH',
     'VI',
