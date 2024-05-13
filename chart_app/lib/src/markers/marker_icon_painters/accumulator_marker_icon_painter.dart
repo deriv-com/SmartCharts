@@ -140,6 +140,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     YAxisConfig.instance.yAxisClipping(canvas, size, () {
       if (previousTickMarker != null && previousTickMarker.color != null) {
         _drawPreviousTickBarrier(
+          size,
           canvas,
           startLeft,
           endLeft,
@@ -226,6 +227,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
   }
 
   void _drawPreviousTickBarrier(
+    Size size,
     Canvas canvas,
     double startX,
     double endX,
@@ -233,21 +235,23 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     Color circleColor,
     Color barrierColor,
   ) {
-    canvas.drawCircle(
-      Offset(startX, y),
-      1.5,
-      Paint()..color = circleColor,
-    );
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
+      canvas.drawCircle(
+        Offset(startX, y),
+        1.5,
+        Paint()..color = circleColor,
+      );
 
-    paintHorizontalDashedLine(
-      canvas,
-      startX,
-      endX,
-      y,
-      barrierColor,
-      1.5,
-      dashWidth: 2,
-      dashSpace: 4,
-    );
+      paintHorizontalDashedLine(
+        canvas,
+        startX,
+        endX,
+        y,
+        barrierColor,
+        1.5,
+        dashWidth: 2,
+        dashSpace: 4,
+      );
+    });
   }
 }
