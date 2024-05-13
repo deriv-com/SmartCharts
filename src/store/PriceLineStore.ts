@@ -196,12 +196,20 @@ export default class PriceLineStore {
         return realPrice.toString();
     }
 
+    get currentClosePrice(): number {
+        return this.mainStore.chart.currentCloseQuote()?.Close || 0;
+    }
+
     get priceLineWidth() {
         return window.flutterChart?.app.getCurrentTickWidth() || 60;
     }
 
     get overlappedBarrierWidth(): number {
         return 16;
+    }
+
+    get isContractOngoing(): boolean {
+        return this.mainStore.chart.isLive;
     }
 
     _getPrice(quote: number) {
@@ -264,7 +272,9 @@ export default class PriceLineStore {
     _distanceFromCurrentPrice() {
         return Math.abs(
             this._locationFromPrice(+this.realPrice) -
-                this._locationFromPrice(+this.realPrice - (this.isDragging ? +this._dragPrice : +this._price))
+                (this.relative
+                    ? this._locationFromPrice(+this.realPrice - (this.isDragging ? +this._dragPrice : +this._price))
+                    : this._locationFromPrice(this.currentClosePrice))
         );
     }
 
@@ -311,7 +321,7 @@ export default class PriceLineStore {
             this.isOverlapping = this.overlapCheck(top);
         }
 
-        this.isOverlappingWithPriceLine = this._distanceFromCurrentPrice() < 25;
+        this.isOverlappingWithPriceLine = this.isContractOngoing && this._distanceFromCurrentPrice() < 25;
 
         return Math.round(top) | 0;
     };

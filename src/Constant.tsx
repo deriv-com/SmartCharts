@@ -2050,6 +2050,11 @@ export const Languages = [
         icon: <FlagIcons.Srilanka />,
     },
     {
+        key: 'sw',
+        name: 'Kiswahili',
+        icon: <FlagIcons.Kenya />,
+    },
+    {
         key: 'th',
         name: 'Thai',
         icon: <FlagIcons.Thailand />,
@@ -2119,7 +2124,6 @@ export const STATE = {
     INDICATORS_CLEAR_ALL: 'INDICATORS_CLEAR_ALL',
     INDICATORS_MODAL_TOGGLE: 'INDICATORS_MODAL_TOGGLE',
     INITIAL: 'INITIAL',
-    MARKET_INFO_REDIRECT: 'MARKET_INFO_REDIRECT',
     MARKET_SEARCH: 'MARKET_SEARCH',
     MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
     MARKETS_LIST_TOGGLE: 'MARKETS_LIST_TOGGLE',

@@ -255,23 +255,12 @@
                 font-size: 1.4em;
                 border-radius: $border-radius $border-radius 0 0;
                 display: flex;
-                justify-content: space-between;
                 height: 40px;
                 font-weight: bold;
                 align-items: center;
                 @include themify($themes) {
                     color: themed('CatDisplayCatTitleText');
                     background-color: themed('CatDisplayCatContentBg');
-                }
-
-                .ic-icon {
-                    svg {
-                        width: 16px;
-                        height: 16px;
-                        @include themify($themes) {
-                            fill: themed('IndicatorListItemText');
-                        }
-                    }
                 }
             }
         }
@@ -472,7 +461,6 @@
                 }
                 .subcategory {
                     padding: 0 45px 0 48px;
-                    justify-content: space-between;
                 }
             }
             .empty-category {
