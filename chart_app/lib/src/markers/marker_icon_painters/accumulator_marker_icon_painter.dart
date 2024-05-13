@@ -63,7 +63,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
       final double endLeft = endMarker != null
           ? _getOffset(endMarker, epochToX, quoteToY).dx
-          : size.width - painterProps.yAxisWidth - 15;
+          : size.width;
 
       _drawShadedBarriers(
         canvas: canvas,
