@@ -54,7 +54,7 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
 
       if (animationInfo.currentTickPercent > 0 &&
           animationInfo.currentTickPercent < 1) {
-        yAxisClipping(canvas, size, () {
+        YAxisConfig.instance.yAxisClipping(canvas, size, () {
           canvas.drawCircle(
             Offset(dotX!, y),
             3 + (animationInfo.currentTickPercent * 6),
@@ -62,7 +62,7 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
           );
         });
       }
-      yAxisClipping(canvas, size, () {
+      YAxisConfig.instance.yAxisClipping(canvas, size, () {
         canvas.drawCircle(
           Offset(dotX!, y),
           3,

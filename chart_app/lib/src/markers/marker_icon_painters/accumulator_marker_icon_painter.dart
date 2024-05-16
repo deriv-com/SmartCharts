@@ -174,11 +174,11 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
         if (highMarker.text != null) {
           final TextPainter textPainter =
               makeTextPainter(highMarker.text!, textStyle);
-
           paintWithTextPainter(
             canvas,
             painter: textPainter,
-            anchor: Offset(endLeft - 1, displayedTop - 10),
+            anchor: Offset(endLeft - YAxisConfig.instance.cachedLabelWidth! - 1,
+                displayedTop - 10),
             anchorAlignment: Alignment.centerRight,
           );
         }
@@ -211,7 +211,8 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
           paintWithTextPainter(
             canvas,
             painter: textPainter,
-            anchor: Offset(endLeft - 1, displayedBottom + 12),
+            anchor: Offset(endLeft - YAxisConfig.instance.cachedLabelWidth! - 1,
+                displayedBottom + 12),
             anchorAlignment: Alignment.centerRight,
           );
         }
@@ -235,23 +236,21 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
     Color circleColor,
     Color barrierColor,
   ) {
-    YAxisConfig.instance.yAxisClipping(canvas, size, () {
-      canvas.drawCircle(
-        Offset(startX, y),
-        1.5,
-        Paint()..color = circleColor,
-      );
+    canvas.drawCircle(
+      Offset(startX, y),
+      1.5,
+      Paint()..color = circleColor,
+    );
 
-      paintHorizontalDashedLine(
-        canvas,
-        startX,
-        endX,
-        y,
-        barrierColor,
-        1.5,
-        dashWidth: 2,
-        dashSpace: 4,
-      );
-    });
+    paintHorizontalDashedLine(
+      canvas,
+      startX,
+      endX,
+      y,
+      barrierColor,
+      1.5,
+      dashWidth: 2,
+      dashSpace: 4,
+    );
   }
 }
