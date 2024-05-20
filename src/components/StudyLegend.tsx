@@ -115,7 +115,11 @@ const IndicatorList = ({
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
-                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
+                    <div
+                        className='info'
+                        onClick={() => onSelectItem?.(Item.flutter_chart_id)}
+                        onTouchEnd={() => onSelectItem?.(Item.flutter_chart_id)}
+                    >
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
                             <span>{onDeleteItem ? Item.short_name_and_index : Item.name}</span>
