@@ -107,6 +107,7 @@ import Russia from '../../sass/icons/flags/russia.svg';
 import Arabic from '../../sass/icons/flags/arabic.svg';
 import Bangladesh from '../../sass/icons/flags/bangladesh.svg';
 import Srilanka from '../../sass/icons/flags/srilanka.svg';
+import Mongolian from '../../sass/icons/flags/mongolian.svg';
 import Kenya from '../../sass/icons/flags/kenya.svg';
 import Thailand from '../../sass/icons/flags/thailand.svg';
 import Turkey from '../../sass/icons/flags/turkey.svg';
@@ -505,6 +506,7 @@ export const FlagIcons = {
     Arabic: Wrapper(Arabic),
     Bangladesh: Wrapper(Bangladesh),
     Srilanka: Wrapper(Srilanka),
+    Mongolian: Wrapper(Mongolian),
     Kenya: Wrapper(Kenya),
     Thailand: Wrapper(Thailand),
     Turkey: Wrapper(Turkey),

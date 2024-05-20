@@ -2042,7 +2042,7 @@ export const Languages = [
     {
         key: 'mn',
         name: 'Монгол',
-        icon: <FlagIcons.French />,
+        icon: <FlagIcons.Mongolian />,
     },
     {
         key: 'ru',
