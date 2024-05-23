@@ -26,17 +26,17 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
     double? dotX;
 
     if (series.previousObject == null) {
-      animatedValue = series.quote;
+      animatedValue = series.value;
       if (series.epoch != null) {
         dotX = epochToX(series.epoch!);
       }
     } else {
       final BarrierObject previousBarrier = series.previousObject!;
-      animatedValue = series.quote;
+      animatedValue = series.value;
 
       animatedValue = ui.lerpDouble(
-        previousBarrier.quote,
-        series.quote,
+        previousBarrier.value,
+        series.value,
         animationInfo.currentTickPercent,
       );
 
