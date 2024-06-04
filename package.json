@@ -5,7 +5,7 @@
     "author": "amin@binary.com",
     "config": {
         "commitizen": {
-          "path": "@commitlint/cz-commitlint"
+            "path": "@commitlint/cz-commitlint"
         }
     },
     "contributors": [
@@ -30,7 +30,6 @@
     "scripts": {
         "build": "rimraf dist && cross-env NODE_ENV=production webpack --mode=production --progress",
         "build:app": "cross-env BUILD_MODE='app' npm run build",
-        "build-travis": "npm run build:app && node scripts/update-hashes.js",
         "commit": "git-cz",
         "analyze": "cross-env ANALYZE_BUNDLE=true npm run build",
         "webpack": "webpack",
@@ -42,8 +41,6 @@
         "gh-pages:folder": "f () { gh-pages --dist '.' --src '{index.html,manifest.json,sw.js,dist/**,CNAME,Dockerfile,.dockerignore,default.conf,.circleci/**}' --dest $1 ;}; f",
         "translations": "npm run build && node scripts/extract-translations.js ./dist/smartcharts.js",
         "translations:download": "crowdin download -b master",
-        "deploy:production": "npm run build-travis && echo 'charts.binary.com' > CNAME  && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git'",
-        "deploy:beta": "npm run build-travis && npm run gh-pages --repo 'git@github.com:binary-com/SmartCharts.git' --dest './beta'",
         "prettify": "./node_modules/.bin/prettier --config ./.prettierrc --write \"./{app,loaders,src}/**/*.{js,jsx,scss}\"",
         "precommit": "lint-staged --allow-empty",
         "prepare": "husky install"

@@ -2,7 +2,6 @@
 .eslintignore
 .eslintrc
 .tern-project
-.travis.yml
 chart_app/
 crowdin.yml
 css/
