@@ -1,6 +1,5 @@
 import { action, computed, observable, reaction, makeObservable } from 'mobx';
-import { ChartTypes, Intervals, STATE } from 'src/Constant';
-import { getTimeIntervalName } from 'src/utils';
+import { STATE } from 'src/Constant';
 import MainStore from '.';
 import Context from '../components/ui/Context';
 import DialogStore from './DialogStore';
