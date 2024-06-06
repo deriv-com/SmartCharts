@@ -108,9 +108,9 @@ export default class StudyLegendStore {
     get searchedItems() {
         return [...getIndicatorsTree()]
             .map(category => {
-                category.foundItems = (category.items.filter(
+                category.foundItems = category.items.filter(
                     item => item.name.toLowerCase().indexOf(this.filterText.toLowerCase().trim()) !== -1
-                ) as unknown) as TActiveItem[];
+                ) as unknown as TActiveItem[];
                 return category;
             })
             .filter(category => category.foundItems?.length);
@@ -359,7 +359,6 @@ export default class StudyLegendStore {
         this.activeItems = [];
         window.flutterChart?.indicators.clearIndicators();
         this.mainStore.state.saveLayout();
-        this.mainStore.state.stateChange(STATE.INDICATORS_CLEAR_ALL);
     }
 
     onSelectTab(tabIndex: number) {
