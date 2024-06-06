@@ -57,22 +57,7 @@ export default class MenuStore {
         this.setOpen(!this.open);
     }
     handleDialogStatus() {
-        if (this.route === 'chart-mode') {
-            const chart_type_name = ChartTypes.find(type => type.id === this.mainStore.chartType.type.id)?.text ?? '';
-            this.mainStore.state.stateChange(STATE.CHART_MODE_TOGGLE, {
-                is_open: this.open,
-                chart_type_name:
-                    this.mainStore.chartType.type.id === 'colored_bar'
-                        ? chart_type_name
-                        : chart_type_name.toLowerCase(),
-                time_interval_name: getTimeIntervalName(this.mainStore.state.granularity, Intervals),
-            });
-        } else if (this.route === 'chart-title') {
-            this.mainStore.state.stateChange(STATE.MARKETS_LIST_TOGGLE, {
-                is_open: this.open,
-                symbol: this.mainStore.chart.currentActiveSymbol?.symbol,
-            });
-        } else if (this.route === 'indicators') {
+        if (this.route === 'indicators') {
             this.mainStore.state.stateChange(STATE.INDICATORS_MODAL_TOGGLE, {
                 is_open: this.open,
             });
