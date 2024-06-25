@@ -80,7 +80,6 @@ class ChartApp {
   }
 
   /// Calculates the width of yAxis
-  /// HERE: feedModel might be empty
   void calculateTickWidth() {
     yAxisWidth = calculateYAxisWidth(
       feedModel.ticks,
