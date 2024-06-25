@@ -43,6 +43,12 @@ class ChartApp {
   /// Whether chart is mounted or not.
   bool isMounted = false;
 
+  /// To get the width of yAxis
+  double getYAxisWidth() => yAxisWidth;
+
+  /// To get the width of current tick
+  double getCurrentTickWidth() => currentTickWidth;
+
   void _processChartVisibilityChange(bool showChart) {
     if (showChart) {
       /// To prevent controller functions being called before mount.
@@ -74,6 +80,7 @@ class ChartApp {
   }
 
   /// Calculates the width of yAxis
+  /// HERE: feedModel might be empty
   void calculateTickWidth() {
     yAxisWidth = calculateYAxisWidth(
       feedModel.ticks,

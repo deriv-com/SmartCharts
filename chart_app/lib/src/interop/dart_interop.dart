@@ -33,13 +33,13 @@ JsObject _exposeApp(ChartApp app) {
   setProperty(
     jsObject,
     'getYAxisWidth',
-    allowInterop(() => app.yAxisWidth),
+    allowInterop(app.getYAxisWidth),
   );
 
   setProperty(
     jsObject,
     'getCurrentTickWidth',
-    allowInterop(() => app.currentTickWidth),
+    allowInterop(app.getCurrentTickWidth),
   );
 
   setProperty(
