@@ -59,7 +59,7 @@ const PriceLine = ({
     if (!showBarrier) return null;
 
     const width = priceLineWidth + 12;
-    const price_right_offset = (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 3);
+    const price_right_offset = (isOverlappingWithPriceLine ? width - overlappedBarrierWidth + 6 : 0) + (isMobile ? 20 : 3);
 
     return (
         <div
