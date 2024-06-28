@@ -359,8 +359,10 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                       isLive: configModel.isLive,
                       onCrosshairDisappeared: JsInterop.onCrosshairDisappeared,
                       onCrosshairHover: _onCrosshairHover,
-                      maxCurrentTickOffset:
-                          _getMaxCurrentTickOffset(rightPadding),
+                      chartAxisConfig: ChartAxisConfig(
+                        maxCurrentTickOffset:
+                            _getMaxCurrentTickOffset(rightPadding),
+                      ),
                       msPerPx: configModel.startWithDataFitMode
                           ? null
                           : configModel.msPerPx,
