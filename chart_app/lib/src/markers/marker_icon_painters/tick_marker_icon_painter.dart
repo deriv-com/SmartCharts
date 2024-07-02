@@ -76,49 +76,52 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
     final Offset? _endOffset = points[MarkerType.end];
     final Offset? _exitOffset = points[MarkerType.exit];
 
-    if (_entryOffset != null && _startOffset != null) {
-      paintHorizontalDashedLine(
-        canvas,
-        _startOffset.dx,
-        _entryOffset.dx,
-        _startOffset.dy,
-        color,
-        1,
-        dashWidth: 1,
-        dashSpace: 1,
-      );
-    }
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
+      if (_entryOffset != null && _startOffset != null) {
+        paintHorizontalDashedLine(
+          canvas,
+          _startOffset.dx,
+          _entryOffset.dx,
+          _startOffset.dy,
+          color,
+          1,
+          dashWidth: 1,
+          dashSpace: 1,
+        );
+      }
 
-    if (_entryOffset != null && (_latestOffset != null || _endOffset != null)) {
-      final double dx = (_latestOffset?.dx ?? _endOffset?.dx)!;
-      final double dy = (_latestOffset?.dy ?? _endOffset?.dy)!;
+      if (_entryOffset != null &&
+          (_latestOffset != null || _endOffset != null)) {
+        final double dx = (_latestOffset?.dx ?? _endOffset?.dx)!;
+        final double dy = (_latestOffset?.dy ?? _endOffset?.dy)!;
 
-      canvas.drawLine(_entryOffset, Offset(dx, dy), paint);
-    }
+        canvas.drawLine(_entryOffset, Offset(dx, dy), paint);
+      }
 
-    if (_entryOffset != null && _entryTickOffset != null) {
-      paintVerticalLine(
-        canvas,
-        _entryOffset,
-        _entryTickOffset,
-        color,
-        1,
-        dashWidth: 2,
-        dashSpace: 2,
-      );
-    }
+      if (_entryOffset != null && _entryTickOffset != null) {
+        paintVerticalLine(
+          canvas,
+          _entryOffset,
+          _entryTickOffset,
+          color,
+          1,
+          dashWidth: 2,
+          dashSpace: 2,
+        );
+      }
 
-    if (_exitOffset != null && _endOffset != null) {
-      paintVerticalLine(
-        canvas,
-        _exitOffset,
-        _endOffset,
-        color,
-        1,
-        dashWidth: 2,
-        dashSpace: 2,
-      );
-    }
+      if (_exitOffset != null && _endOffset != null) {
+        paintVerticalLine(
+          canvas,
+          _exitOffset,
+          _endOffset,
+          color,
+          1,
+          dashWidth: 2,
+          dashSpace: 2,
+        );
+      }
+    });
   }
 
   void _drawMarker(Canvas canvas, Size size, ChartTheme theme, WebMarker marker,
@@ -127,39 +130,41 @@ class TickMarkerIconPainter extends MarkerGroupIconPainter {
 
     final Paint paint = Paint()..color = color;
 
-    switch (marker.markerType) {
-      case MarkerType.activeStart:
-        paintStartLine(canvas, size, marker, anchor, style, zoom);
-        break;
-      case MarkerType.start:
-        _drawStartPoint(
-            canvas, size, theme, marker, anchor, style, zoom, opacity);
-        break;
-      case MarkerType.entry:
-      case MarkerType.entryTick:
-        _drawEntryPoint(canvas, theme, anchor, color, zoom, opacity);
-        break;
-      case MarkerType.end:
-        paintEndMarker(canvas, theme, anchor - Offset(1, 20 * zoom),
-            style.backgroundColor, zoom);
-        break;
-      case MarkerType.exit:
-        canvas.drawCircle(
-          anchor,
-          3 * zoom,
-          paint,
-        );
-        break;
-      case MarkerType.tick:
-        final Paint paint = Paint()..color = theme.base01Color;
-        _drawTickPoint(canvas, anchor, paint, zoom);
-        break;
-      case MarkerType.latestTick:
-        _drawTickPoint(canvas, anchor, paint, zoom);
-        break;
-      default:
-        break;
-    }
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
+      switch (marker.markerType) {
+        case MarkerType.activeStart:
+          paintStartLine(canvas, size, marker, anchor, style, zoom);
+          break;
+        case MarkerType.start:
+          _drawStartPoint(
+              canvas, size, theme, marker, anchor, style, zoom, opacity);
+          break;
+        case MarkerType.entry:
+        case MarkerType.entryTick:
+          _drawEntryPoint(canvas, theme, anchor, color, zoom, opacity);
+          break;
+        case MarkerType.end:
+          paintEndMarker(canvas, theme, anchor - Offset(1, 20 * zoom),
+              style.backgroundColor, zoom);
+          break;
+        case MarkerType.exit:
+          canvas.drawCircle(
+            anchor,
+            3 * zoom,
+            paint,
+          );
+          break;
+        case MarkerType.tick:
+          final Paint paint = Paint()..color = theme.base01Color;
+          _drawTickPoint(canvas, anchor, paint, zoom);
+          break;
+        case MarkerType.latestTick:
+          _drawTickPoint(canvas, anchor, paint, zoom);
+          break;
+        default:
+          break;
+      }
+    });
   }
 
   void _drawTickPoint(Canvas canvas, Offset anchor, Paint paint, double zoom) {

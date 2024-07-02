@@ -63,7 +63,7 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
 
       final double endLeft = endMarker != null
           ? _getOffset(endMarker, epochToX, quoteToY).dx
-          : size.width - painterProps.yAxisWidth - 15;
+          : size.width;
 
       _drawShadedBarriers(
         canvas: canvas,
@@ -137,93 +137,98 @@ class AccumulatorMarkerIconPainter extends TickMarkerIconPainter {
       fontSize: painterProps.isMobile ? 10 : 14,
     );
 
-    if (previousTickMarker != null && previousTickMarker.color != null) {
-      _drawPreviousTickBarrier(
-        canvas,
-        startLeft,
-        endLeft,
-        middleTop,
-        previousTickMarker.color!,
-        barrierColor,
-      );
-    }
-
-    if (isTopVisible || hasPersistentBorders) {
-      final Path path = Path()
-        ..moveTo(startLeft + 2.5, displayedTop)
-        ..lineTo(startLeft - 2.5, displayedTop)
-        ..lineTo(startLeft, displayedTop + 4.5)
-        ..lineTo(startLeft + 2.5, displayedTop)
-        ..close();
-
-      canvas.drawPath(path, paint);
-
-      paintHorizontalDashedLine(
-        canvas,
-        startLeft - 2.5,
-        endLeft,
-        displayedTop,
-        barrierColor,
-        1.5,
-        dashSpace: 0,
-      );
-
-      // draw difference between high barrier and previous spot price
-      if (highMarker.text != null) {
-        final TextPainter textPainter =
-            makeTextPainter(highMarker.text!, textStyle);
-
-        paintWithTextPainter(
+    YAxisConfig.instance.yAxisClipping(canvas, size, () {
+      if (previousTickMarker != null && previousTickMarker.color != null) {
+        _drawPreviousTickBarrier(
+          size,
           canvas,
-          painter: textPainter,
-          anchor: Offset(endLeft - 1, displayedTop - 10),
-          anchorAlignment: Alignment.centerRight,
+          startLeft,
+          endLeft,
+          middleTop,
+          previousTickMarker.color!,
+          barrierColor,
         );
       }
-    }
-    if (isBottomVisible || hasPersistentBorders) {
-      final Path path = Path()
-        ..moveTo(startLeft + 2.5, displayedBottom)
-        ..lineTo(startLeft - 2.5, displayedBottom)
-        ..lineTo(startLeft, displayedBottom - 4.5)
-        ..lineTo(startLeft + 2.5, displayedBottom)
-        ..close();
 
-      canvas.drawPath(path, paint);
+      if (isTopVisible || hasPersistentBorders) {
+        final Path path = Path()
+          ..moveTo(startLeft + 2.5, displayedTop)
+          ..lineTo(startLeft - 2.5, displayedTop)
+          ..lineTo(startLeft, displayedTop + 4.5)
+          ..lineTo(startLeft + 2.5, displayedTop)
+          ..close();
 
-      paintHorizontalDashedLine(
-        canvas,
-        startLeft - 2.5,
-        endLeft,
-        displayedBottom,
-        barrierColor,
-        1.5,
-        dashSpace: 0,
-      );
+        canvas.drawPath(path, paint);
 
-      // draw difference between low barrier and previous spot price
-      if (lowMarker.text != null) {
-        final TextPainter textPainter =
-            makeTextPainter(lowMarker.text!, textStyle);
-
-        paintWithTextPainter(
+        paintHorizontalDashedLine(
           canvas,
-          painter: textPainter,
-          anchor: Offset(endLeft - 1, displayedBottom + 12),
-          anchorAlignment: Alignment.centerRight,
+          startLeft - 2.5,
+          endLeft,
+          displayedTop,
+          barrierColor,
+          1.5,
+          dashSpace: 0,
         );
+
+        // draw difference between high barrier and previous spot price
+        if (highMarker.text != null) {
+          final TextPainter textPainter =
+              makeTextPainter(highMarker.text!, textStyle);
+          paintWithTextPainter(
+            canvas,
+            painter: textPainter,
+            anchor: Offset(endLeft - YAxisConfig.instance.cachedLabelWidth! - 1,
+                displayedTop - 10),
+            anchorAlignment: Alignment.centerRight,
+          );
+        }
       }
-    }
+      if (isBottomVisible || hasPersistentBorders) {
+        final Path path = Path()
+          ..moveTo(startLeft + 2.5, displayedBottom)
+          ..lineTo(startLeft - 2.5, displayedBottom)
+          ..lineTo(startLeft, displayedBottom - 4.5)
+          ..lineTo(startLeft + 2.5, displayedBottom)
+          ..close();
 
-    final Paint rectPaint = Paint()..color = shadeColor;
+        canvas.drawPath(path, paint);
 
-    canvas.drawRect(
-      Rect.fromLTRB(startLeft, displayedTop, endLeft, displayedBottom),
-      rectPaint,
-    );
+        paintHorizontalDashedLine(
+          canvas,
+          startLeft - 2.5,
+          endLeft,
+          displayedBottom,
+          barrierColor,
+          1.5,
+          dashSpace: 0,
+        );
+
+        // draw difference between low barrier and previous spot price
+        if (lowMarker.text != null) {
+          final TextPainter textPainter =
+              makeTextPainter(lowMarker.text!, textStyle);
+
+          paintWithTextPainter(
+            canvas,
+            painter: textPainter,
+            anchor: Offset(endLeft - YAxisConfig.instance.cachedLabelWidth! - 1,
+                displayedBottom + 12),
+            anchorAlignment: Alignment.centerRight,
+          );
+        }
+      }
+
+      final Paint rectPaint = Paint()..color = shadeColor;
+
+      canvas.drawRect(
+        Rect.fromLTRB(startLeft, displayedTop, endLeft, displayedBottom),
+        rectPaint,
+      );
+    });
   }
 
   void _drawPreviousTickBarrier(
+    Size size,
     Canvas canvas,
     double startX,
     double endX,
