@@ -117,6 +117,8 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         );
                       }
 
+                      app.calculateTickWidth();
+
                       return DerivChartWrapper(
                         app: app,
                         onVisibleAreaChanged: onVisibleAreaChanged,
