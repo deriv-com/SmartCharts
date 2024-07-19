@@ -181,6 +181,7 @@ export type TBarrierUpdateProps = {
 };
 
 export type TChartProps = {
+    ref: React.RefObject<{ hasPredictionIndicators(): void; triggerPopup(arg: () => void): void }>;
     requestAPI: BinaryAPI['requestAPI'];
     requestSubscribe: BinaryAPI['requestSubscribe'];
     requestForget: BinaryAPI['requestForget'];
@@ -213,7 +214,6 @@ export type TChartProps = {
     showLastDigitStats?: boolean;
     scrollToEpoch?: number | null;
     clearChart?: () => void;
-    should_show_eu_content?: boolean;
     shouldFetchTradingTimes?: boolean;
     shouldFetchTickHistory?: boolean;
     allowTickChartTypeOnly?: boolean;

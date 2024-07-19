@@ -115,7 +115,11 @@ const IndicatorList = ({
                             : `${Item.name} ${Item.bars ? `(${Item.bars})` : ''}`
                     }
                 >
-                    <div className='info' onClick={() => (onSelectItem ? onSelectItem(Item.flutter_chart_id) : null)}>
+                    <div
+                        className='info'
+                        onClick={() => onSelectItem?.(Item.flutter_chart_id)}
+                        onTouchEnd={() => onSelectItem?.(Item.flutter_chart_id)}
+                    >
                         <StudyIcon Icon={Item.icon} />
                         <div className='text'>
                             <span>{onDeleteItem ? Item.short_name_and_index : Item.name}</span>
@@ -165,7 +169,7 @@ const TabularDisplayActivePanel = ({
     clearAll,
     isMobile,
 }: TabularDisplayActivePanelProps) => (
-    <React.Fragment>
+    <>
         <div className='sc-studies__panel__head'>
             <p>
                 {isMobile
@@ -179,7 +183,7 @@ const TabularDisplayActivePanel = ({
         <div className='sc-studies__panel__content sc-studies__panel__content--active'>
             <IndicatorList items={items} onDeleteItem={onDeleteItem} onEditItem={onEditItem} />
         </div>
-    </React.Fragment>
+    </>
 );
 
 const TabularDisplay = ({
@@ -303,6 +307,11 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
         });
     };
 
+    const handleClearAll = () => {
+        deleteAll();
+        state.stateChange(STATE.INDICATORS_CLEAR_ALL);
+    };
+
     return (
         <Menu
             store={menuStore}
@@ -393,7 +402,7 @@ const StudyLegend = ({ portalNodeId }: TStudyLegendProps) => {
                         handleStateChange(item.flutter_chart_id, STATE.INDICATOR_INFO_TOGGLE, { is_info_open: true });
                     }}
                     activeItems={activeItems}
-                    clearAll={deleteAll}
+                    clearAll={handleClearAll}
                     searchQuery={searchQuery}
                     isMobile={isMobile}
                     maxAllowedItem={maxAllowedItem}

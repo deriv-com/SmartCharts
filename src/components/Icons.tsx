@@ -104,8 +104,12 @@ import USD from '../../sass/icons/flags/usd.svg';
 import XAU from '../../sass/icons/flags/xau.svg';
 
 import Russia from '../../sass/icons/flags/russia.svg';
-import Arabic from '../../sass/icons/flags/uae.svg';
+import Arabic from '../../sass/icons/flags/arabic.svg';
 import Bangladesh from '../../sass/icons/flags/bangladesh.svg';
+import Cambodia from '../../sass/icons/flags/cambodia.svg';
+import Srilanka from '../../sass/icons/flags/srilanka.svg';
+import Mongolian from '../../sass/icons/flags/mongolian.svg';
+import Kenya from '../../sass/icons/flags/kenya.svg';
 import Thailand from '../../sass/icons/flags/thailand.svg';
 import Turkey from '../../sass/icons/flags/turkey.svg';
 import Indonesia from '../../sass/icons/flags/indonesia.svg';
@@ -502,6 +506,10 @@ export const FlagIcons = {
     Russia: Wrapper(Russia),
     Arabic: Wrapper(Arabic),
     Bangladesh: Wrapper(Bangladesh),
+    Cambodia: Wrapper(Cambodia),
+    Srilanka: Wrapper(Srilanka),
+    Mongolian: Wrapper(Mongolian),
+    Kenya: Wrapper(Kenya),
     Thailand: Wrapper(Thailand),
     Turkey: Wrapper(Turkey),
     Indonesia: Wrapper(Indonesia),

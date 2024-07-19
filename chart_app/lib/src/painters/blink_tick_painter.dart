@@ -26,17 +26,17 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
     double? dotX;
 
     if (series.previousObject == null) {
-      animatedValue = series.value;
+      animatedValue = series.quote;
       if (series.epoch != null) {
         dotX = epochToX(series.epoch!);
       }
     } else {
       final BarrierObject previousBarrier = series.previousObject!;
-      animatedValue = series.value;
+      animatedValue = series.quote;
 
       animatedValue = ui.lerpDouble(
-        previousBarrier.value,
-        series.value,
+        previousBarrier.quote,
+        series.quote,
         animationInfo.currentTickPercent,
       );
 
@@ -54,18 +54,21 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
 
       if (animationInfo.currentTickPercent > 0 &&
           animationInfo.currentTickPercent < 1) {
-        canvas.drawCircle(
-          Offset(dotX, y),
-          3 + (animationInfo.currentTickPercent * 6),
-          Paint()..color = _paint.color.withOpacity(0.15),
-        );
+        YAxisConfig.instance.yAxisClipping(canvas, size, () {
+          canvas.drawCircle(
+            Offset(dotX!, y),
+            3 + (animationInfo.currentTickPercent * 6),
+            Paint()..color = _paint.color.withOpacity(0.15),
+          );
+        });
       }
-
-      canvas.drawCircle(
-        Offset(dotX, y),
-        3,
-        _paint,
-      );
+      YAxisConfig.instance.yAxisClipping(canvas, size, () {
+        canvas.drawCircle(
+          Offset(dotX!, y),
+          3,
+          _paint,
+        );
+      });
     }
   }
 }

@@ -156,8 +156,7 @@ const FastMarker = (props: TFastMarkerProps) => {
 
     const { overlap_y_axis = true } = props;
 
-    const maxWidth = chartNode && !overlap_y_axis ? chartNode.offsetWidth - yAxisWidth - 10 : '100%';
-
+    const maxWidth = chartNode && !overlap_y_axis ? chartNode.offsetWidth - yAxisWidth - 50 : 'calc(100% - 50px)';   
     return (
         <div className='fast-marker' style={{ maxWidth }}>
             <div className={className} ref={setRef} style={{ position: 'absolute' }}>

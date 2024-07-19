@@ -153,18 +153,22 @@ export default class ChartSettingStore {
         if (!this.languages.length) {
             return;
         }
-        if (this.language && lng === (this.language as TLanguage).key) {
+        const newLang = lng.toLowerCase();
+        if (this.language && newLang === (this.language as TLanguage).key) {
             return;
         }
-        this.language = this.languages.find(item => (item as TLanguage).key === lng) || this.defaultLanguage;
-        t.setLanguage((this.language as TLanguage).key, () => {
+        this.language = this.languages.find(item => (item as TLanguage).key === newLang) || this.defaultLanguage;
+        const updatedLanguage = (this.language as TLanguage).key;
+        t.setLanguage(updatedLanguage, () => {
             this?.mainStore?.loader?.hide?.();
         });
-        logEvent(
-            LogCategories.ChartControl,
-            LogActions.ChartSetting,
-            `Change language to ${(this.language as TLanguage)?.key}`
-        );
+        logEvent(LogCategories.ChartControl, LogActions.ChartSetting, `Change language to ${updatedLanguage}`);
+        if (updatedLanguage !== localStorage.getItem('current_chart_lang')) {
+            localStorage.setItem('current_chart_lang', updatedLanguage);
+        }
+        if (updatedLanguage !== this.mainStore.chart.currentLanguage) {
+            this.mainStore.chart.currentLanguage = updatedLanguage;
+        }
         this.saveSetting();
     }
     setTheme(theme: string) {

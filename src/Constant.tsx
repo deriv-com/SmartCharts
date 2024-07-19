@@ -1004,8 +1004,8 @@ const getSMIIndicatorConfig: TDefaultIndicatorConfigFn = () => ({
         pipSize: 2,
         showLastIndicator: true,
         smiOscillatorLimits: {
-            overboughtStyle: { ...clone(lineStyle), color: '#626b73'},
-            oversoldStyle: { ...clone(lineStyle), color: '#626b73'},
+            overboughtStyle: { ...clone(lineStyle), color: '#626b73' },
+            oversoldStyle: { ...clone(lineStyle), color: '#626b73' },
         },
     },
     parameters: [
@@ -2013,9 +2013,24 @@ export const Languages = [
         icon: <FlagIcons.French />,
     },
     {
+        key: 'mn',
+        name: 'Монгол',
+        icon: <FlagIcons.Mongolian />,
+    },
+    {
         key: 'ru',
         name: 'Русский',
         icon: <FlagIcons.Russia />,
+    },
+    {
+        key: 'si',
+        name: 'සිංහල',
+        icon: <FlagIcons.Srilanka />,
+    },
+    {
+        key: 'sw',
+        name: 'Kiswahili',
+        icon: <FlagIcons.Kenya />,
     },
     {
         key: 'th',
@@ -2036,6 +2051,11 @@ export const Languages = [
         key: 'it',
         name: 'Italiano',
         icon: <FlagIcons.Italy />,
+    },
+    {
+        key: 'km',
+        name: 'ខ្មែរ',
+        icon: <FlagIcons.Cambodia />,
     },
     {
         key: 'ko',
@@ -2076,7 +2096,6 @@ export const Languages = [
 
 export const STATE = {
     CHART_INTERVAL_CHANGE: 'CHART_INTERVAL_CHANGE',
-    CHART_MODE_TOGGLE: 'CHART_MODE_TOGGLE',
     CHART_TYPE_CHANGE: 'CHART_TYPE_CHANGE',
     FAVORITE_MARKETS_TOGGLE: 'FAVORITE_MARKETS_TOGGLE',
     INDICATOR_ADDED: 'INDICATOR_ADDED',
@@ -2087,10 +2106,8 @@ export const STATE = {
     INDICATORS_CLEAR_ALL: 'INDICATORS_CLEAR_ALL',
     INDICATORS_MODAL_TOGGLE: 'INDICATORS_MODAL_TOGGLE',
     INITIAL: 'INITIAL',
-    MARKET_INFO_REDIRECT: 'MARKET_INFO_REDIRECT',
     MARKET_SEARCH: 'MARKET_SEARCH',
     MARKET_STATE_CHANGE: 'MARKET_STATE_CHANGE',
-    MARKETS_LIST_TOGGLE: 'MARKETS_LIST_TOGGLE',
     READY: 'READY',
     SCROLL_TO_LEFT: 'SCROLL_TO_LEFT',
     SYMBOL_CHANGE: 'SYMBOL_CHANGE',

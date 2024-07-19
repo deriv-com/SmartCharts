@@ -25,6 +25,7 @@ type TMenuProps = {
     enableTabular?: boolean;
     customHead?: React.ReactElement;
     children?: React.ReactNode;
+    handleOverlayClick?: () => void;
 };
 
 const Menu = ({
@@ -40,6 +41,7 @@ const Menu = ({
     enableTabular,
     customHead,
     emptyMenu,
+    handleOverlayClick,
     modalMode,
 }: TMenuProps) => {
     const { open, dialogStatus, onTitleClick, handleCloseDialog, dialogStore } = store;
@@ -85,6 +87,7 @@ const Menu = ({
                                     handleCloseDialog={handleCloseDialog}
                                     enableTabular={enableTabular}
                                     customHead={customHead}
+                                    handleOverlayClick={handleOverlayClick}
                                 >
                                     {rest}
                                 </Dialog>

@@ -32,7 +32,7 @@ class TimeIntervalPainter<T extends TimeIntervalIndicator>
       ..strokeWidth = 1
       ..color = style.color;
 
-    double y = quoteToY(series.value as double);
+    double y = quoteToY(series.quote as double);
 
     final double labelHalfHeight = style.labelHeight / 2;
 
@@ -49,7 +49,6 @@ class TimeIntervalPainter<T extends TimeIntervalIndicator>
 
     //set Y axis below the marker
     y = y + style.labelHeight;
-
 
     // creating labelArea rectangle
     final Rect labelArea = Rect.fromCenter(

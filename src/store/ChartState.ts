@@ -1,5 +1,5 @@
 /* eslint-disable no-new */
-import { action, observable, when, makeObservable } from 'mobx';
+import { action, observable, when, makeObservable, reaction } from 'mobx';
 import {
     TChartControlsWidgets,
     TChartProps,
@@ -60,7 +60,6 @@ class ChartState {
     clearChart?: () => void;
     isChartClosed = false;
     shouldMinimiseLastDigits = false;
-    should_show_eu_content?: boolean;
     allowTickChartTypeOnly?: boolean;
     isStaticChart? = false;
     shouldFetchTradingTimes = true;
@@ -112,7 +111,6 @@ class ChartState {
             chartStatusListener: observable,
             debouncedStateChange: action.bound,
             stateChangeListener: observable,
-            should_show_eu_content: observable,
             settings: observable,
             showLastDigitStats: observable,
             allowTickChartTypeOnly: observable,
@@ -144,6 +142,15 @@ class ChartState {
         this.mainStore = mainStore;
         this.chartStore = mainStore.chart;
         when(() => !!this.context, this.onContextReady);
+        reaction(
+            () => this.allowTickChartTypeOnly,
+            allowTickChartTypeOnly => {
+                if (allowTickChartTypeOnly) {
+                    this.mainStore.studies.savePredictionStudies();
+                    this.mainStore.studies.deletePredictionStudies();
+                }
+            }
+        );
     }
 
     onContextReady = () => {
@@ -171,7 +178,6 @@ class ChartState {
         settings,
         shouldFetchTradingTimes = true,
         shouldFetchTickHistory = true,
-        should_show_eu_content,
         should_zoom_out_on_yaxis,
         allTicks = [],
         contractInfo = {},
@@ -220,7 +226,6 @@ class ChartState {
         this.margin = margin;
         this.has_updated_settings = !isDeepEqual(this.settings?.whitespace, settings?.whitespace);
         this.settings = settings;
-        this.should_show_eu_content = should_show_eu_content;
         this.shouldFetchTradingTimes = shouldFetchTradingTimes;
         this.shouldFetchTickHistory = shouldFetchTickHistory;
         this.allowTickChartTypeOnly = allowTickChartTypeOnly;
@@ -458,7 +463,6 @@ class ChartState {
             msPerPx: layoutData.msPerPx,
         });
     }
-
     // returns false if restoring layout fails
     restoreLayout() {
         const id = this.mainStore.chart.chartId;
