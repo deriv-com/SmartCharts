@@ -437,15 +437,6 @@ const getVerticalDrawingConfig: TDefaultIndicatorConfigFn = () => ({
             type: 'colorpicker',
         },
         {
-            path: 'pattern',
-            title: t.translate('Pattern'),
-            type: 'pattern',
-            lineWidth: '1',
-            category: 'inputs',
-            defaultValue: 'solid',
-            value: 'solid',
-        },
-        {
             path: 'enableLabel',
             title: t.translate('Axis Label'),
             type: 'switch',
@@ -469,15 +460,6 @@ const getLineDrawingConfig: TDefaultIndicatorConfigFn = () => ({
             defaultValue: '#000000',
             category: 'inputs',
             type: 'colorpicker',
-        },
-        {
-            path: 'pattern',
-            title: t.translate('Pattern'),
-            type: 'pattern',
-            lineWidth: '1',
-            category: 'inputs',
-            defaultValue: 'solid',
-            value: 'solid',
         },
     ],
 });
@@ -503,15 +485,6 @@ const getTrendlDrawingConfig: TDefaultIndicatorConfigFn = () => ({
             defaultValue: '#000000',
             category: 'inputs',
             type: 'colorpicker',
-        },
-        {
-            path: 'pattern',
-            title: t.translate('Pattern'),
-            type: 'pattern',
-            lineWidth: '1',
-            category: 'inputs',
-            defaultValue: 'solid',
-            value: 'solid',
         },
     ],
 });
