@@ -21,7 +21,8 @@ jobs:
               with:
                   repository: 'regentmarkets/flutter-chart'
                   path: flutter-chart
-                  ref: dev
+                  # temporary reference to an old commit
+                  ref: 2c0cd84b9ccd5aff18a6e0284f42332d04244189
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
