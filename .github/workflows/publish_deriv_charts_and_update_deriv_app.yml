@@ -21,7 +21,7 @@ jobs:
               with:
                   repository: 'regentmarkets/flutter-chart'
                   path: flutter-chart
-                  # temporary reference to an old commit
+                  # temporary reference to an old branch
                   ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
