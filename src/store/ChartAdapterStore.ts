@@ -218,13 +218,13 @@ export default class ChartAdapterStore {
 
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
+        if (e.offsetX < Number(this.mainStore.chart.chartNode?.offsetWidth) - this.mainStore.chart.yAxisWidth) return;
         if (e.deltaX === 0 && e.deltaZ === 0) {
             const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);
         } else {
             window.flutterChart?.app.scroll(e.deltaX);
         }
-
         return false;
     };
 
@@ -447,16 +447,14 @@ export default class ChartAdapterStore {
                     delta_x = this.getXFromEpoch(barNext.DT!.getTime()) - x;
 
                     ratio =
-                        (((date as unknown) as number) - bar.DT!.getTime()) /
-                        (barNext.DT!.getTime() - bar.DT!.getTime());
+                        ((date as unknown as number) - bar.DT!.getTime()) / (barNext.DT!.getTime() - bar.DT!.getTime());
 
                     if (price) delta_y = barNext.Close - price;
                 } else if (barPrev && barPrev.Close) {
                     delta_x = x - this.getXFromEpoch(barPrev.DT!.getTime());
 
                     ratio =
-                        (((date as unknown) as number) - bar.DT!.getTime()) /
-                        (bar.DT!.getTime() - barPrev.DT!.getTime());
+                        ((date as unknown as number) - bar.DT!.getTime()) / (bar.DT!.getTime() - barPrev.DT!.getTime());
 
                     if (price) delta_y = price - barPrev.Close;
                 }
