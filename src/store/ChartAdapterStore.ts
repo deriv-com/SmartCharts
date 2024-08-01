@@ -42,6 +42,7 @@ export default class ChartAdapterStore {
     };
 
     isOverFlutterCharts = false;
+    enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -54,6 +55,7 @@ export default class ChartAdapterStore {
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
             newChart: action.bound,
+            enableVerticalScrollTimer: observable,
             scale: action.bound,
             toggleDataFitMode: action.bound,
             onCrosshairMove: action.bound,
@@ -200,6 +202,7 @@ export default class ChartAdapterStore {
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
+        clearTimeout(this.enableVerticalScrollTimer);
     }
 
     onChartLoad() {
@@ -218,7 +221,20 @@ export default class ChartAdapterStore {
 
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
-        if (e.offsetX < Number(this.mainStore.chart.chartNode?.offsetWidth) - this.mainStore.chart.yAxisWidth) return;
+        const chartNode = this.mainStore.chart.chartNode;
+        if (chartNode && !this.mainStore.state.isVerticalScrollEnabled) {
+            const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+            const isVerticalScroll = e.deltaY && e.deltaX === 0;
+            if (e.offsetX < nonScrollableAreaWidth && isVerticalScroll) {
+                if (chartNode.style.pointerEvents !== 'none') {
+                    chartNode.style.pointerEvents = 'none';
+                    this.enableVerticalScrollTimer = setTimeout(() => {
+                        chartNode.style.pointerEvents = 'auto';
+                    }, 400);
+                }
+                return;
+            }
+        }
         if (e.deltaX === 0 && e.deltaZ === 0) {
             const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);
