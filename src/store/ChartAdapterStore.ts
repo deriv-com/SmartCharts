@@ -40,14 +40,21 @@ export default class ChartAdapterStore {
         yLocal: 0,
         bottomIndex: 0,
     };
+    touchMoveValues: {
+        x?: number;
+        y?: number;
+    } = {};
 
     isOverFlutterCharts = false;
     enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
+    enableVerticalScrollTouchTimer?: ReturnType<typeof setTimeout>;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
             onTickHistory: action.bound,
+            // onTouchStart: action.bound,
+            // onTouchEnd: action.bound,
             onChartLoad: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
@@ -56,8 +63,10 @@ export default class ChartAdapterStore {
             setMsPerPx: action.bound,
             newChart: action.bound,
             enableVerticalScrollTimer: observable,
+            enableVerticalScrollTouchTimer: observable,
             scale: action.bound,
             toggleDataFitMode: action.bound,
+            touchMoveValues: observable,
             onCrosshairMove: action.bound,
             isDataFitModeEnabled: observable,
             isChartLoaded: observable,
@@ -191,7 +200,10 @@ export default class ChartAdapterStore {
             runChartApp();
         }
 
-        window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.addEventListener('wheel', this.onWheel as any, { capture: true });
+        // window.flutterChartElement?.addEventListener('touchstart', this.onTouchStart, { capture: true });
+        window.flutterChartElement?.addEventListener('touchmove', this.onWheel as any, { capture: true });
+        // window.flutterChartElement?.addEventListener('touchend', this.onTouchEnd, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.addEventListener('mousemove', this.onMouseMove, { capture: true });
     }
@@ -199,10 +211,14 @@ export default class ChartAdapterStore {
     onUnmount() {
         window._flutter.initState.isMounted = false;
 
-        window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.removeEventListener('wheel', this.onWheel as any, { capture: true });
+        // window.flutterChartElement?.removeEventListener('touchstart', this.onTouchStart, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchmove', this.onWheel as any, { capture: true });
+        // window.flutterChartElement?.removeEventListener('touchend', this.onTouchEnd, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
         clearTimeout(this.enableVerticalScrollTimer);
+        clearTimeout(this.enableVerticalScrollTouchTimer);
     }
 
     onChartLoad() {
@@ -219,17 +235,77 @@ export default class ChartAdapterStore {
         }
     }
 
-    onWheel = (e: WheelEvent) => {
+    // onTouchStart(e: TouchEvent) {
+    //     console.log('touchstart');
+    //     const chartNode = this.mainStore.chart.chartNode;
+    //     if (chartNode && !this.mainStore.state.isVerticalScrollEnabled && e.touches.length === 1) {
+    //         const { screenX, screenY } = e.touches[0];
+    //         this.touchMoveValues = {
+    //             x: screenX,
+    //             y: screenY,
+    //         };
+    //         chartNode.style.pointerEvents = 'none';
+    //     }
+    // }
+    // onTouchEnd(e: TouchEvent) {
+    //     const chartNode = this.mainStore.chart.chartNode;
+    //     if (chartNode && !this.mainStore.state.isVerticalScrollEnabled && e.touches.length === 1) {
+    //         this.touchMoveValues = {};
+    //         console.log('touchend');
+    //         chartNode.style.pointerEvents = 'auto';
+    //     }
+    // }
+
+    onWheel = (e: WheelEvent & TouchEvent) => {
         e.preventDefault();
         const chartNode = this.mainStore.chart.chartNode;
         if (chartNode && !this.mainStore.state.isVerticalScrollEnabled) {
             const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+            const { left } = chartNode.getBoundingClientRect();
+
+            if (e.type === 'touchmove' && e.touches.length === 1) {
+                // console.log('touchmove 1');
+                const { pageX, screenX, screenY } = e.touches[0];
+                if (this.touchMoveValues.x && this.touchMoveValues.y) {
+                    const deltaX = Math.abs(screenX - this.touchMoveValues.x);
+                    const deltaY = Math.abs(screenY - this.touchMoveValues.y);
+                    const isVerticalScroll = deltaY > deltaX;
+                    const x = pageX - left;
+                    if (x < nonScrollableAreaWidth && isVerticalScroll) {
+                        chartNode.style.pointerEvents = 'none';
+                        chartNode.style.touchAction = 'none';
+                        // console.log('touchmove set to none');
+                        if (!this.enableVerticalScrollTouchTimer) {
+                            this.enableVerticalScrollTouchTimer = setTimeout(() => {
+                                // console.log('touchmove set to auto');
+                                chartNode.style.pointerEvents = 'auto';
+                                chartNode.style.touchAction = 'auto';
+                                this.enableVerticalScrollTouchTimer = undefined;
+                            }, 700);
+                        }
+                    } else {
+                        // console.log('touchmove set to auto 2');
+                        chartNode.style.pointerEvents = 'auto';
+                        chartNode.style.touchAction = 'auto';
+                    }
+                }
+                this.touchMoveValues = {
+                    x: screenX,
+                    y: screenY,
+                };
+                return;
+            }
+
             const isVerticalScroll = e.deltaY && e.deltaX === 0;
-            if (e.offsetX < nonScrollableAreaWidth && isVerticalScroll) {
+            const x = e.pageX - left;
+            if (x < nonScrollableAreaWidth && isVerticalScroll) {
                 if (chartNode.style.pointerEvents !== 'none') {
                     chartNode.style.pointerEvents = 'none';
+                    chartNode.style.touchAction = 'none';
+                    // console.log('wheel', chartNode.style.pointerEvents);
                     this.enableVerticalScrollTimer = setTimeout(() => {
                         chartNode.style.pointerEvents = 'auto';
+                        chartNode.style.touchAction = 'auto';
                     }, 400);
                 }
                 return;
