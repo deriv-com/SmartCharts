@@ -211,6 +211,7 @@ export type TChartProps = {
     isConnectionOpened?: boolean;
     onMessage?: (message: TNotification) => void;
     isAnimationEnabled?: boolean;
+    isVerticalScrollEnabled?: boolean;
     showLastDigitStats?: boolean;
     scrollToEpoch?: number | null;
     clearChart?: () => void;

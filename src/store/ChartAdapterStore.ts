@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, when, runInAction } from 'mobx';
+import { action, makeObservable, observable, when, runInAction, computed } from 'mobx';
 import moment from 'moment';
 import debounce from 'lodash.debounce';
 import { TFlutterChart, TLoadHistoryParams, TQuote } from 'src/types';
@@ -40,13 +40,21 @@ export default class ChartAdapterStore {
         yLocal: 0,
         bottomIndex: 0,
     };
+    touchValues: {
+        x?: number;
+        y?: number;
+        yOnTouchEnd?: number;
+    } = {};
 
     isOverFlutterCharts = false;
+    enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
+    scrollChartParentOnTouchTimer?: ReturnType<typeof setTimeout>;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
             onMount: action.bound,
             onTickHistory: action.bound,
+            onTouch: action.bound,
             onChartLoad: action.bound,
             onTick: action.bound,
             loadHistory: action.bound,
@@ -54,8 +62,12 @@ export default class ChartAdapterStore {
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
             newChart: action.bound,
+            enableVerticalScrollTimer: observable,
             scale: action.bound,
+            scrollableChartParent: computed,
+            scrollChartParentOnTouchTimer: observable,
             toggleDataFitMode: action.bound,
+            touchValues: observable,
             onCrosshairMove: action.bound,
             isDataFitModeEnabled: observable,
             isChartLoaded: observable,
@@ -190,6 +202,9 @@ export default class ChartAdapterStore {
         }
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.addEventListener('touchstart', this.onTouch, { capture: true });
+        window.flutterChartElement?.addEventListener('touchmove', this.onTouch, { capture: true });
+        window.flutterChartElement?.addEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.addEventListener('mousemove', this.onMouseMove, { capture: true });
     }
@@ -198,8 +213,13 @@ export default class ChartAdapterStore {
         window._flutter.initState.isMounted = false;
 
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchstart', this.onTouch, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchmove', this.onTouch, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
+        clearTimeout(this.enableVerticalScrollTimer);
+        clearTimeout(this.scrollChartParentOnTouchTimer);
     }
 
     onChartLoad() {
@@ -216,15 +236,70 @@ export default class ChartAdapterStore {
         }
     }
 
+    onTouch(e: TouchEvent) {
+        const chartNode = this.mainStore.chart.chartNode;
+        // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
+        if (
+            chartNode &&
+            this.scrollableChartParent &&
+            !this.mainStore.state.isVerticalScrollEnabled &&
+            e.touches.length === 1
+        ) {
+            const { pageX, screenX, screenY } = e.touches[0];
+            if (['touchstart', 'touchend'].includes(e.type)) {
+                this.touchValues = e.type === 'touchstart' ? { x: screenX, y: screenY } : { yOnTouchEnd: screenY };
+            } else if (e.type === 'touchmove') {
+                const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+                const { left } = chartNode.getBoundingClientRect();
+
+                if (this.touchValues.x && this.touchValues.y) {
+                    const deltaX = Math.abs(screenX - this.touchValues.x);
+                    const deltaY = Math.abs(screenY - this.touchValues.y);
+                    const isVerticalScroll = deltaY > deltaX;
+                    const x = pageX - left;
+                    if (x < nonScrollableAreaWidth && isVerticalScroll && !this.scrollChartParentOnTouchTimer) {
+                        this.touchValues.yOnTouchEnd = undefined;
+                        this.scrollChartParentOnTouchTimer = setTimeout(() => {
+                            this.scrollableChartParent?.scrollBy({
+                                top: screenY - Number(this.touchValues.yOnTouchEnd ?? this.touchValues.y),
+                                behavior: 'smooth',
+                            });
+                            this.scrollChartParentOnTouchTimer = undefined;
+                        }, 300);
+                    }
+                }
+                this.touchValues = { x: screenX, y: screenY };
+            }
+        }
+    }
+
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
+
+        // Prevent vertical scroll on the chart on wheel devices by disabling pointer events to make chart parent scrollable:
+        const chartNode = this.mainStore.chart.chartNode;
+        if (chartNode && !this.mainStore.state.isVerticalScrollEnabled) {
+            const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+            const { left } = chartNode.getBoundingClientRect();
+            const isVerticalScroll = e.deltaY && e.deltaX === 0;
+            const x = e.pageX - left;
+            if (x < nonScrollableAreaWidth && isVerticalScroll) {
+                if (this.enableVerticalScrollTimer) return;
+                chartNode.style.pointerEvents = 'none';
+                this.enableVerticalScrollTimer = setTimeout(() => {
+                    chartNode.style.pointerEvents = 'auto';
+                    this.enableVerticalScrollTimer = undefined;
+                }, 300);
+                return;
+            }
+        }
+
         if (e.deltaX === 0 && e.deltaZ === 0) {
             const value = (100 - Math.min(10, Math.max(-10, e.deltaY))) / 100;
             this.scale(value);
         } else {
             window.flutterChart?.app.scroll(e.deltaX);
         }
-
         return false;
     };
 
@@ -439,24 +514,24 @@ export default class ChartAdapterStore {
             let delta_x, delta_y, ratio;
 
             // Here we interpolate the pixel distance between two adjacent ticks.
-            if (bar && bar.DT! < date) {
+            if (bar && (bar.DT as Date) < date) {
                 const barNext = this.mainStore.chart.feed?.quotes[tickIdx + 1];
                 const barPrev = tickIdx > 0 ? this.mainStore.chart.feed?.quotes[tickIdx - 1] : null;
 
-                if (barNext && barNext.Close && barNext.DT! > date) {
-                    delta_x = this.getXFromEpoch(barNext.DT!.getTime()) - x;
+                if (barNext && barNext.Close && (barNext.DT as Date) > date) {
+                    delta_x = this.getXFromEpoch((barNext.DT as Date).getTime()) - x;
 
                     ratio =
-                        (((date as unknown) as number) - bar.DT!.getTime()) /
-                        (barNext.DT!.getTime() - bar.DT!.getTime());
+                        ((date as unknown as number) - (bar.DT as Date).getTime()) /
+                        ((barNext.DT as Date).getTime() - (bar.DT as Date).getTime());
 
                     if (price) delta_y = barNext.Close - price;
                 } else if (barPrev && barPrev.Close) {
-                    delta_x = x - this.getXFromEpoch(barPrev.DT!.getTime());
+                    delta_x = x - this.getXFromEpoch((barPrev.DT as Date).getTime());
 
                     ratio =
-                        (((date as unknown) as number) - bar.DT!.getTime()) /
-                        (bar.DT!.getTime() - barPrev.DT!.getTime());
+                        ((date as unknown as number) - (bar.DT as Date).getTime()) /
+                        ((bar.DT as Date).getTime() - (barPrev.DT as Date).getTime());
 
                     if (price) delta_y = price - barPrev.Close;
                 }
@@ -498,5 +573,19 @@ export default class ChartAdapterStore {
 
     getQuoteFromY(y: number) {
         return this.flutterChart?.app.getQuoteFromY(y) ?? 0;
+    }
+
+    get scrollableChartParent() {
+        const chartNode = this.mainStore.chart.chartNode;
+        if (!chartNode) return undefined;
+        let parent = chartNode.parentElement;
+        while (parent) {
+            const { overflow } = window.getComputedStyle(parent);
+            if (overflow.split(' ').every(o => o === 'auto' || o === 'scroll')) {
+                return parent;
+            }
+            parent = parent.parentElement;
+        }
+        return document.documentElement;
     }
 }

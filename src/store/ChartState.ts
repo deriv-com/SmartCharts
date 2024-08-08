@@ -42,6 +42,7 @@ class ChartState {
     shouldDrawTicksFromContractInfo? = false;
     has_updated_settings = false;
     isAnimationEnabled?: boolean;
+    isVerticalScrollEnabled? = true;
     mainStore: MainStore;
     margin?: number;
     granularity: TGranularity;
@@ -108,6 +109,7 @@ class ChartState {
             heightFactor: observable,
             isConnectionOpened: observable,
             isChartReady: observable,
+            isVerticalScrollEnabled: observable,
             chartStatusListener: observable,
             debouncedStateChange: action.bound,
             stateChangeListener: observable,
@@ -171,6 +173,7 @@ class ChartState {
         isAnimationEnabled = true,
         isConnectionOpened,
         isStaticChart,
+        isVerticalScrollEnabled = true,
         granularity,
         margin = 0,
         refreshActiveSymbols,
@@ -223,6 +226,7 @@ class ChartState {
         this.isAnimationEnabled = isAnimationEnabled;
         this.isConnectionOpened = isConnectionOpened;
         this.isStaticChart = isStaticChart;
+        this.isVerticalScrollEnabled = isVerticalScrollEnabled;
         this.margin = margin;
         this.has_updated_settings = !isDeepEqual(this.settings?.whitespace, settings?.whitespace);
         this.settings = settings;
