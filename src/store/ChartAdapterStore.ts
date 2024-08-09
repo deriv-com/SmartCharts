@@ -262,7 +262,6 @@ export default class ChartAdapterStore {
                         this.scrollChartParentOnTouchTimer = setTimeout(() => {
                             this.scrollableChartParent?.scrollBy({
                                 top: screenY - Number(this.touchValues.yOnTouchEnd ?? this.touchValues.y),
-                                behavior: 'smooth',
                             });
                             this.scrollChartParentOnTouchTimer = undefined;
                         }, 300);
