@@ -41,10 +41,16 @@ export default class ChartAdapterStore {
         bottomIndex: 0,
     };
     touchValues: {
+        deltaYTotal?: number;
         x?: number;
         y?: number;
         yOnTouchEnd?: number;
-    } = {};
+    } = {
+        deltaYTotal: 0,
+        x: 0,
+        y: 0,
+        yOnTouchEnd: 0,
+    };
 
     isOverFlutterCharts = false;
     enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
@@ -243,32 +249,37 @@ export default class ChartAdapterStore {
             chartNode &&
             this.scrollableChartParent &&
             !this.mainStore.state.isVerticalScrollEnabled &&
-            e.touches.length === 1
+            e.changedTouches.length === 1
         ) {
-            const { pageX, screenX, screenY } = e.touches[0];
+            const { pageX, pageY } = e.changedTouches[0];
             if (['touchstart', 'touchend'].includes(e.type)) {
-                this.touchValues = e.type === 'touchstart' ? { x: screenX, y: screenY } : { yOnTouchEnd: screenY };
+                this.touchValues =
+                    e.type === 'touchstart'
+                        ? { x: pageX, y: pageY }
+                        : { yOnTouchEnd: pageY, deltaYTotal: this.touchValues.deltaYTotal };
             } else if (e.type === 'touchmove') {
                 const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
                 const { left } = chartNode.getBoundingClientRect();
 
                 if (this.touchValues.x && this.touchValues.y) {
-                    const deltaX = Math.abs(screenX - this.touchValues.x);
-                    const deltaY = Math.abs(screenY - this.touchValues.y);
+                    const deltaX = Math.abs(pageX - this.touchValues.x);
+                    const deltaY = Math.abs(pageY - this.touchValues.y);
+                    this.touchValues.deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + (this.touchValues.y - pageY);
                     const isVerticalScroll = deltaY > deltaX;
                     const x = pageX - left;
                     if (x < nonScrollableAreaWidth && isVerticalScroll && !this.scrollChartParentOnTouchTimer) {
                         this.touchValues.yOnTouchEnd = undefined;
                         this.scrollChartParentOnTouchTimer = setTimeout(() => {
                             this.scrollableChartParent?.scrollBy({
-                                top: screenY - Number(this.touchValues.yOnTouchEnd ?? this.touchValues.y),
+                                top: this.touchValues.deltaYTotal,
                                 behavior: 'smooth',
                             });
                             this.scrollChartParentOnTouchTimer = undefined;
-                        }, 300);
+                            this.touchValues = { ...this.touchValues, deltaYTotal: 0 };
+                        }, 100);
                     }
                 }
-                this.touchValues = { x: screenX, y: screenY };
+                this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
             }
         }
     }
