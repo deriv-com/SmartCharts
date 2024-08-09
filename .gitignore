@@ -32,3 +32,6 @@ CNAME
 **/*.swp
 
 chart_app/build/**
+
+*.env
+.env.*
