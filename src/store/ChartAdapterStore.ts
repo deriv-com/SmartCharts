@@ -44,12 +44,10 @@ export default class ChartAdapterStore {
         deltaYTotal?: number;
         x?: number;
         y?: number;
-        yOnTouchEnd?: number;
     } = {
         deltaYTotal: 0,
         x: 0,
         y: 0,
-        yOnTouchEnd: 0,
     };
 
     isOverFlutterCharts = false;
@@ -243,8 +241,8 @@ export default class ChartAdapterStore {
     }
 
     onTouch(e: TouchEvent) {
-        const chartNode = this.mainStore.chart.chartNode;
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
+        const chartNode = this.mainStore.chart.chartNode;
         if (
             chartNode &&
             this.scrollableChartParent &&
@@ -252,12 +250,8 @@ export default class ChartAdapterStore {
             e.changedTouches.length === 1
         ) {
             const { pageX, pageY } = e.changedTouches[0];
-            if (['touchstart', 'touchend'].includes(e.type)) {
-                this.touchValues =
-                    e.type === 'touchstart'
-                        ? { x: pageX, y: pageY }
-                        : { yOnTouchEnd: pageY, deltaYTotal: this.touchValues.deltaYTotal };
-            } else if (e.type === 'touchmove') {
+
+            if (['touchmove', 'touchend'].includes(e.type)) {
                 const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
                 const { left } = chartNode.getBoundingClientRect();
 
@@ -267,19 +261,38 @@ export default class ChartAdapterStore {
                     this.touchValues.deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + (this.touchValues.y - pageY);
                     const isVerticalScroll = deltaY > deltaX;
                     const x = pageX - left;
-                    if (x < nonScrollableAreaWidth && isVerticalScroll && !this.scrollChartParentOnTouchTimer) {
-                        this.touchValues.yOnTouchEnd = undefined;
-                        this.scrollChartParentOnTouchTimer = setTimeout(() => {
-                            this.scrollableChartParent?.scrollBy({
-                                top: this.touchValues.deltaYTotal,
+                    const isForcedScrollArea = x < nonScrollableAreaWidth;
+                    const shouldForceMaxScroll =
+                        Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
+                    if (isForcedScrollArea) {
+                        if (shouldForceMaxScroll) {
+                            clearTimeout(this.scrollChartParentOnTouchTimer);
+                            this.scrollableChartParent?.scrollTo({
+                                top:
+                                    Number(this.touchValues.deltaYTotal) < 0
+                                        ? 0
+                                        : this.scrollableChartParent.scrollHeight,
                                 behavior: 'smooth',
                             });
                             this.scrollChartParentOnTouchTimer = undefined;
                             this.touchValues = { ...this.touchValues, deltaYTotal: 0 };
-                        }, 100);
+                        } else if (isVerticalScroll && !this.scrollChartParentOnTouchTimer) {
+                            this.scrollChartParentOnTouchTimer = setTimeout(() => {
+                                this.scrollableChartParent?.scrollBy({
+                                    top: this.touchValues.deltaYTotal,
+                                    behavior: 'smooth',
+                                });
+                                this.scrollChartParentOnTouchTimer = undefined;
+                                this.touchValues = { ...this.touchValues, deltaYTotal: 0 };
+                            }, 100);
+                        }
                     }
                 }
                 this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
+            }
+            if (['touchstart', 'touchend'].includes(e.type)) {
+                this.touchValues =
+                    e.type === 'touchstart' ? { x: pageX, y: pageY } : { deltaYTotal: this.touchValues.deltaYTotal };
             }
         }
     }
