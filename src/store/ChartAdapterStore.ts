@@ -41,10 +41,12 @@ export default class ChartAdapterStore {
         bottomIndex: 0,
     };
     touchValues: {
+        deltaXTotal?: number;
         deltaYTotal?: number;
         x?: number;
         y?: number;
     } = {
+        deltaXTotal: 0,
         deltaYTotal: 0,
         x: 0,
         y: 0,
@@ -256,15 +258,22 @@ export default class ChartAdapterStore {
                 const { left } = chartNode.getBoundingClientRect();
 
                 if (this.touchValues.x && this.touchValues.y) {
-                    const deltaX = Math.abs(pageX - this.touchValues.x);
-                    const deltaY = Math.abs(pageY - this.touchValues.y);
+                    this.touchValues.deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + (this.touchValues.x - pageX);
                     this.touchValues.deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + (this.touchValues.y - pageY);
+                    const deltaX =
+                        e.type === 'touchend'
+                            ? Math.abs(this.touchValues.deltaXTotal)
+                            : Math.abs(pageX - this.touchValues.x);
+                    const deltaY =
+                        e.type === 'touchend'
+                            ? Math.abs(this.touchValues.deltaYTotal)
+                            : Math.abs(pageY - this.touchValues.y);
                     const isVerticalScroll = deltaY > deltaX;
                     const x = pageX - left;
                     const isForcedScrollArea = x < nonScrollableAreaWidth;
                     const shouldForceMaxScroll =
                         Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
-                    if (isForcedScrollArea) {
+                    if (isForcedScrollArea && isVerticalScroll) {
                         if (shouldForceMaxScroll) {
                             clearTimeout(this.scrollChartParentOnTouchTimer);
                             this.scrollableChartParent?.scrollTo({
@@ -275,15 +284,15 @@ export default class ChartAdapterStore {
                                 behavior: 'smooth',
                             });
                             this.scrollChartParentOnTouchTimer = undefined;
-                            this.touchValues = { ...this.touchValues, deltaYTotal: 0 };
-                        } else if (isVerticalScroll && !this.scrollChartParentOnTouchTimer) {
+                            this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
+                        } else if (!this.scrollChartParentOnTouchTimer) {
                             this.scrollChartParentOnTouchTimer = setTimeout(() => {
                                 this.scrollableChartParent?.scrollBy({
                                     top: this.touchValues.deltaYTotal,
                                     behavior: 'smooth',
                                 });
                                 this.scrollChartParentOnTouchTimer = undefined;
-                                this.touchValues = { ...this.touchValues, deltaYTotal: 0 };
+                                this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
                             }, 100);
                         }
                     }
@@ -292,7 +301,9 @@ export default class ChartAdapterStore {
             }
             if (['touchstart', 'touchend'].includes(e.type)) {
                 this.touchValues =
-                    e.type === 'touchstart' ? { x: pageX, y: pageY } : { deltaYTotal: this.touchValues.deltaYTotal };
+                    e.type === 'touchstart'
+                        ? { x: pageX, y: pageY }
+                        : { deltaYTotal: this.touchValues.deltaYTotal, deltaXTotal: this.touchValues.deltaXTotal };
             }
         }
     }
