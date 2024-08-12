@@ -43,9 +43,11 @@ export default class ChartAdapterStore {
     touchValues: {
         deltaXTotal?: number;
         deltaYTotal?: number;
+        multiTouch?: boolean;
         x?: number;
         y?: number;
     } = {
+        multiTouch: false,
         deltaXTotal: 0,
         deltaYTotal: 0,
         x: 0,
@@ -245,12 +247,16 @@ export default class ChartAdapterStore {
     onTouch(e: TouchEvent) {
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
-        if (
-            chartNode &&
-            this.scrollableChartParent &&
-            !this.mainStore.state.isVerticalScrollEnabled &&
-            e.changedTouches.length === 1
-        ) {
+        if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
+            if (this.touchValues.multiTouch) {
+                if (e.type === 'touchend') this.touchValues.multiTouch = false;
+                return;
+            }
+            if (e.touches.length > 1) {
+                this.touchValues.multiTouch = true;
+                return;
+            }
+
             const { pageX, pageY } = e.changedTouches[0];
 
             if (['touchmove', 'touchend'].includes(e.type)) {
