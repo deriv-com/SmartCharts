@@ -44,12 +44,14 @@ export default class ChartAdapterStore {
         deltaXTotal?: number;
         deltaYTotal?: number;
         multiTouch?: boolean;
+        touchIds?: number[];
         x?: number;
         y?: number;
     } = {
         multiTouch: false,
         deltaXTotal: 0,
         deltaYTotal: 0,
+        touchIds: [],
         x: 0,
         y: 0,
     };
@@ -249,11 +251,20 @@ export default class ChartAdapterStore {
         const chartNode = this.mainStore.chart.chartNode;
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
             if (this.touchValues.multiTouch) {
-                if (e.type === 'touchend') this.touchValues.multiTouch = false;
+                if (e.type === 'touchend') {
+                    if (!this.touchValues.touchIds?.length) {
+                        this.touchValues.multiTouch = false;
+                    } else {
+                        this.touchValues.touchIds = this.touchValues.touchIds?.filter(
+                            id => id === e.changedTouches[0].identifier
+                        );
+                    }
+                }
                 return;
             }
             if (e.touches.length > 1) {
                 this.touchValues.multiTouch = true;
+                this.touchValues.touchIds = Array.from(e.touches).map(t => t.identifier);
                 return;
             }
 
@@ -274,7 +285,7 @@ export default class ChartAdapterStore {
                         e.type === 'touchend'
                             ? Math.abs(this.touchValues.deltaYTotal)
                             : Math.abs(pageY - this.touchValues.y);
-                    const isVerticalScroll = deltaY > deltaX;
+                    const isVerticalScroll = deltaY - deltaX >= deltaX * 4;
                     const x = pageX - left;
                     const isForcedScrollArea = x < nonScrollableAreaWidth;
                     const shouldForceMaxScroll =
