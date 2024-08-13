@@ -252,13 +252,10 @@ export default class ChartAdapterStore {
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
             if (this.touchValues.multiTouch) {
                 if (e.type === 'touchend') {
-                    if (!this.touchValues.touchIds?.length) {
-                        this.touchValues = { multiTouch: false };
-                    } else {
-                        this.touchValues.touchIds = this.touchValues.touchIds?.filter(
-                            id => id === e.changedTouches[0].identifier
-                        );
-                    }
+                    this.touchValues.touchIds = this.touchValues.touchIds?.filter(
+                        id => id === e.changedTouches[0].identifier
+                    );
+                    this.touchValues = { multiTouch: !!this.touchValues.touchIds?.length };
                 }
                 return;
             }
