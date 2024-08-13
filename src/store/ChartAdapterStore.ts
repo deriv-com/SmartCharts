@@ -285,7 +285,7 @@ export default class ChartAdapterStore {
                     const deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + yDiff;
                     const deltaX = e.type === 'touchend' ? Math.abs(deltaXTotal) : Math.abs(xDiff);
                     const deltaY = e.type === 'touchend' ? Math.abs(deltaYTotal) : Math.abs(yDiff);
-                    const isVerticalScroll = deltaY - deltaX >= deltaX * 4;
+                    const isVerticalScroll = deltaY > deltaX;
                     this.touchValues = isVerticalScroll ? { ...this.touchValues, deltaXTotal, deltaYTotal } : {};
 
                     if (!isVerticalScroll) return;
