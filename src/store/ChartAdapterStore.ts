@@ -253,7 +253,7 @@ export default class ChartAdapterStore {
             if (this.touchValues.multiTouch) {
                 if (e.type === 'touchend') {
                     if (!this.touchValues.touchIds?.length) {
-                        this.touchValues.multiTouch = false;
+                        this.touchValues = { multiTouch: false };
                     } else {
                         this.touchValues.touchIds = this.touchValues.touchIds?.filter(
                             id => id === e.changedTouches[0].identifier
@@ -263,7 +263,7 @@ export default class ChartAdapterStore {
                 return;
             }
             if (e.touches.length > 1) {
-                this.touchValues.multiTouch = true;
+                this.touchValues = { multiTouch: true };
                 this.touchValues.touchIds = Array.from(e.touches).map(t => t.identifier);
                 return;
             }
@@ -273,8 +273,12 @@ export default class ChartAdapterStore {
             if (['touchmove', 'touchend'].includes(e.type)) {
                 const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
                 const { left } = chartNode.getBoundingClientRect();
+                const x = pageX - left;
+                const isForcedScrollArea = x < nonScrollableAreaWidth;
 
                 if (this.touchValues.x && this.touchValues.y) {
+                    const shouldForceMaxScroll =
+                        Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
                     this.touchValues.deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + (this.touchValues.x - pageX);
                     this.touchValues.deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + (this.touchValues.y - pageY);
                     const deltaX =
@@ -286,10 +290,7 @@ export default class ChartAdapterStore {
                             ? Math.abs(this.touchValues.deltaYTotal)
                             : Math.abs(pageY - this.touchValues.y);
                     const isVerticalScroll = deltaY - deltaX >= deltaX * 4;
-                    const x = pageX - left;
-                    const isForcedScrollArea = x < nonScrollableAreaWidth;
-                    const shouldForceMaxScroll =
-                        Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
+
                     if (isForcedScrollArea && isVerticalScroll) {
                         if (shouldForceMaxScroll) {
                             clearTimeout(this.scrollChartParentOnTouchTimer);
