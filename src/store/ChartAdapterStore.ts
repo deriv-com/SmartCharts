@@ -289,7 +289,7 @@ export default class ChartAdapterStore {
                     this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
 
                     if (isForcedScrollArea && isVerticalScroll) {
-                        e.stopPropagation();
+                        e.stopImmediatePropagation();
                         if (shouldForceMaxScroll) {
                             clearTimeout(this.scrollChartParentOnTouchTimer);
                             this.scrollableChartParent?.scrollTo({
@@ -309,7 +309,7 @@ export default class ChartAdapterStore {
                                 });
                                 this.scrollChartParentOnTouchTimer = undefined;
                                 this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                            }, 100);
+                            }, 150);
                         }
                     }
                 }
