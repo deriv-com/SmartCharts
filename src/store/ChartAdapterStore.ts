@@ -212,9 +212,9 @@ export default class ChartAdapterStore {
         }
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
-        window.flutterChartElement?.addEventListener('touchstart', this.onTouch, { capture: true });
-        window.flutterChartElement?.addEventListener('touchmove', this.onTouch, { capture: true });
-        window.flutterChartElement?.addEventListener('touchend', this.onTouch, { capture: true });
+        window.addEventListener('touchstart', this.onTouch, { capture: true });
+        window.addEventListener('touchmove', this.onTouch, { capture: true });
+        window.addEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.addEventListener('mousemove', this.onMouseMove, { capture: true });
     }
@@ -223,9 +223,9 @@ export default class ChartAdapterStore {
         window._flutter.initState.isMounted = false;
 
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
-        window.flutterChartElement?.removeEventListener('touchstart', this.onTouch, { capture: true });
-        window.flutterChartElement?.removeEventListener('touchmove', this.onTouch, { capture: true });
-        window.flutterChartElement?.removeEventListener('touchend', this.onTouch, { capture: true });
+        window.removeEventListener('touchstart', this.onTouch, { capture: true });
+        window.removeEventListener('touchmove', this.onTouch, { capture: true });
+        window.removeEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
         clearTimeout(this.enableVerticalScrollTimer);
@@ -286,11 +286,10 @@ export default class ChartAdapterStore {
                     const deltaX = e.type === 'touchend' ? Math.abs(deltaXTotal) : Math.abs(xDiff);
                     const deltaY = e.type === 'touchend' ? Math.abs(deltaYTotal) : Math.abs(yDiff);
                     const isVerticalScroll = deltaY > deltaX;
-                    this.touchValues = isVerticalScroll ? { ...this.touchValues, deltaXTotal, deltaYTotal } : {};
+                    this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
 
-                    if (!isVerticalScroll) return;
-
-                    if (isForcedScrollArea) {
+                    if (isForcedScrollArea && isVerticalScroll) {
+                        e.stopPropagation();
                         if (shouldForceMaxScroll) {
                             clearTimeout(this.scrollChartParentOnTouchTimer);
                             this.scrollableChartParent?.scrollTo({
