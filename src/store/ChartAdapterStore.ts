@@ -261,7 +261,7 @@ export default class ChartAdapterStore {
             }
             if (e.touches.length > 1) {
                 this.touchValues = { multiTouch: true };
-                this.touchValues.touchIds = Array.from(e.touches).map(t => t.identifier);
+                this.touchValues.touchIds = Array.from(e.touches).map(touch => touch.identifier);
                 return;
             }
 
