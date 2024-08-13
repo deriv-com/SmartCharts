@@ -58,10 +58,11 @@ export default class ChartAdapterStore {
 
     isOverFlutterCharts = false;
     enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
-    scrollChartParentOnTouchTimer?: ReturnType<typeof setTimeout>;
+    clearTouchDeltasTimer?: ReturnType<typeof setTimeout>;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            clearTouchDeltasTimer: observable,
             onMount: action.bound,
             onTickHistory: action.bound,
             onTouch: action.bound,
@@ -75,7 +76,6 @@ export default class ChartAdapterStore {
             enableVerticalScrollTimer: observable,
             scale: action.bound,
             scrollableChartParent: computed,
-            scrollChartParentOnTouchTimer: observable,
             toggleDataFitMode: action.bound,
             touchValues: observable,
             onCrosshairMove: action.bound,
@@ -212,9 +212,9 @@ export default class ChartAdapterStore {
         }
 
         window.flutterChartElement?.addEventListener('wheel', this.onWheel, { capture: true });
-        window.addEventListener('touchstart', this.onTouch, { capture: true });
-        window.addEventListener('touchmove', this.onTouch, { capture: true });
-        window.addEventListener('touchend', this.onTouch, { capture: true });
+        window.flutterChartElement?.addEventListener('touchstart', this.onTouch, { capture: true });
+        window.flutterChartElement?.addEventListener('touchmove', this.onTouch, { capture: true });
+        window.flutterChartElement?.addEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.addEventListener('mousemove', this.onMouseMove, { capture: true });
     }
@@ -223,13 +223,13 @@ export default class ChartAdapterStore {
         window._flutter.initState.isMounted = false;
 
         window.flutterChartElement?.removeEventListener('wheel', this.onWheel, { capture: true });
-        window.removeEventListener('touchstart', this.onTouch, { capture: true });
-        window.removeEventListener('touchmove', this.onTouch, { capture: true });
-        window.removeEventListener('touchend', this.onTouch, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchstart', this.onTouch, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchmove', this.onTouch, { capture: true });
+        window.flutterChartElement?.removeEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
         clearTimeout(this.enableVerticalScrollTimer);
-        clearTimeout(this.scrollChartParentOnTouchTimer);
+        clearTimeout(this.clearTouchDeltasTimer);
     }
 
     onChartLoad() {
@@ -277,8 +277,6 @@ export default class ChartAdapterStore {
                 const isForcedScrollArea = x < nonScrollableAreaWidth;
 
                 if (this.touchValues.x && this.touchValues.y) {
-                    const shouldForceMaxScroll =
-                        Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
                     const xDiff = this.touchValues.x - pageX;
                     const yDiff = this.touchValues.y - pageY;
                     const deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + xDiff;
@@ -289,9 +287,15 @@ export default class ChartAdapterStore {
                     this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
 
                     if (isForcedScrollArea && isVerticalScroll) {
-                        e.stopImmediatePropagation();
+                        const shouldForceMaxScroll =
+                            Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
+                        const stopChartPagination = () => {
+                            // calling _scrollAnimationController.stop() in flutter-chart, value 1 doesn't affect the scale:
+                            this.flutterChart?.app.scale(1);
+                        };
                         if (shouldForceMaxScroll) {
-                            clearTimeout(this.scrollChartParentOnTouchTimer);
+                            // handling max scroll on quick swipe
+                            stopChartPagination();
                             this.scrollableChartParent?.scrollTo({
                                 top:
                                     Number(this.touchValues.deltaYTotal) < 0
@@ -299,17 +303,19 @@ export default class ChartAdapterStore {
                                         : this.scrollableChartParent.scrollHeight,
                                 behavior: 'smooth',
                             });
-                            this.scrollChartParentOnTouchTimer = undefined;
-                            this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                        } else if (!this.scrollChartParentOnTouchTimer) {
-                            this.scrollChartParentOnTouchTimer = setTimeout(() => {
-                                this.scrollableChartParent?.scrollBy({
-                                    top: this.touchValues.deltaYTotal,
-                                    behavior: 'smooth',
-                                });
-                                this.scrollChartParentOnTouchTimer = undefined;
-                                this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                            }, 150);
+                        } else if (e.type === 'touchmove') {
+                            // handling slow scroll
+                            stopChartPagination();
+                            this.scrollableChartParent?.scrollBy({
+                                top: yDiff,
+                            });
+                            if (!this.clearTouchDeltasTimer) {
+                                this.clearTouchDeltasTimer = setTimeout(() => {
+                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
+                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
+                                    this.clearTouchDeltasTimer = undefined;
+                                }, 100);
+                            }
                         }
                     }
                 }
