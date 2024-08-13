@@ -279,19 +279,18 @@ export default class ChartAdapterStore {
                 if (this.touchValues.x && this.touchValues.y) {
                     const shouldForceMaxScroll =
                         Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
-                    this.touchValues.deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + (this.touchValues.x - pageX);
-                    this.touchValues.deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + (this.touchValues.y - pageY);
-                    const deltaX =
-                        e.type === 'touchend'
-                            ? Math.abs(this.touchValues.deltaXTotal)
-                            : Math.abs(pageX - this.touchValues.x);
-                    const deltaY =
-                        e.type === 'touchend'
-                            ? Math.abs(this.touchValues.deltaYTotal)
-                            : Math.abs(pageY - this.touchValues.y);
+                    const xDiff = this.touchValues.x - pageX;
+                    const yDiff = this.touchValues.y - pageY;
+                    const deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + xDiff;
+                    const deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + yDiff;
+                    const deltaX = e.type === 'touchend' ? Math.abs(deltaXTotal) : Math.abs(xDiff);
+                    const deltaY = e.type === 'touchend' ? Math.abs(deltaYTotal) : Math.abs(yDiff);
                     const isVerticalScroll = deltaY - deltaX >= deltaX * 4;
+                    this.touchValues = isVerticalScroll ? { ...this.touchValues, deltaXTotal, deltaYTotal } : {};
 
-                    if (isForcedScrollArea && isVerticalScroll) {
+                    if (!isVerticalScroll) return;
+
+                    if (isForcedScrollArea) {
                         if (shouldForceMaxScroll) {
                             clearTimeout(this.scrollChartParentOnTouchTimer);
                             this.scrollableChartParent?.scrollTo({
