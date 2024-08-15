@@ -273,10 +273,12 @@ export default class ChartAdapterStore {
             const { pageX, pageY } = e.changedTouches[0];
 
             if (['touchmove', 'touchend'].includes(e.type)) {
-                const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
-                const { left } = chartNode.getBoundingClientRect();
-                const x = pageX - left;
-                const isForcedScrollArea = x < nonScrollableAreaWidth;
+                const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+                const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
+                const { top, left } = chartNode.getBoundingClientRect();
+                const xCoord = pageX - left;
+                const yCoord = pageY - top;
+                const isForcedScrollArea = xCoord < forcedScrollAreaWidth && yCoord < forcedScrollAreaHeight;
 
                 if (this.touchValues.x && this.touchValues.y) {
                     const xDiff = this.touchValues.x - pageX;

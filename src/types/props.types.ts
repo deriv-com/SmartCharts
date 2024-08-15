@@ -378,6 +378,7 @@ export type TDrawingToolConfig = {
 
 export type TFlutterChart = {
     app: {
+        getXAxisHeight: () => number;
         getYAxisWidth: () => number;
         getCurrentTickWidth: () => number;
         newChart: (payload: TNewChartPayload) => void;
