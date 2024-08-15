@@ -44,6 +44,17 @@ class WrappedController {
     }
   }
 
+  /// Block/Unblock horizontal scroll on the chart.
+  // ignore: avoid_positional_boolean_parameters
+  void toggleXScrollBlock(bool isXScrollBlocked) {
+    try {
+      _chartController.toggleXScrollBlock
+          ?.call(isXScrollBlocked: isXScrollBlocked);
+    } catch (_) {
+      return;
+    }
+  }
+
   /// Scroll chart visible area to the newest data.
   // ignore: avoid_positional_boolean_parameters
   void toggleDataFitMode(bool dataFitMode) {

@@ -396,6 +396,7 @@ export type TFlutterChart = {
         scale: (scale: number) => number;
         scroll: (pxShift: number) => void;
         toggleDataFitMode: (isDataFitEnabled: boolean) => void;
+        toggleXScrollBlock: (isXScrollBlocked: boolean) => void;
         scrollToLastTick: () => void;
         addOrUpdateIndicator: (config: string, index?: number) => void;
     };

@@ -24,6 +24,7 @@ export default class ChartAdapterStore {
     msPerPx?: number;
     drawingHoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
+    isXScrollBlocked = false;
     painter = new Painter();
     drawingColor = 0;
     isScaled = false;
@@ -57,8 +58,9 @@ export default class ChartAdapterStore {
     };
 
     isOverFlutterCharts = false;
-    enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
     clearTouchDeltasTimer?: ReturnType<typeof setTimeout>;
+    enableXScrollTimer?: ReturnType<typeof setTimeout>;
+    enableYScrollTimer?: ReturnType<typeof setTimeout>;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
@@ -73,10 +75,12 @@ export default class ChartAdapterStore {
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
             newChart: action.bound,
-            enableVerticalScrollTimer: observable,
+            enableXScrollTimer: observable,
+            enableYScrollTimer: observable,
             scale: action.bound,
             scrollableChartParent: computed,
             toggleDataFitMode: action.bound,
+            toggleXScrollBlock: action.bound,
             touchValues: observable,
             onCrosshairMove: action.bound,
             isDataFitModeEnabled: observable,
@@ -228,8 +232,9 @@ export default class ChartAdapterStore {
         window.flutterChartElement?.removeEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
-        clearTimeout(this.enableVerticalScrollTimer);
         clearTimeout(this.clearTouchDeltasTimer);
+        clearTimeout(this.enableXScrollTimer);
+        clearTimeout(this.enableYScrollTimer);
     }
 
     onChartLoad() {
@@ -286,13 +291,9 @@ export default class ChartAdapterStore {
                     if (isForcedScrollArea && isVerticalScroll) {
                         const shouldForceMaxScroll =
                             Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
-                        const stopChartPagination = () => {
-                            // calling _scrollAnimationController.stop() in flutter-chart, value 1 doesn't affect the scale:
-                            this.flutterChart?.app.scale(1);
-                        };
+                        if (!this.isXScrollBlocked) this.toggleXScrollBlock();
                         if (shouldForceMaxScroll) {
                             // handling max scroll on quick swipe
-                            stopChartPagination();
                             this.scrollableChartParent?.scrollTo({
                                 top:
                                     Number(this.touchValues.deltaYTotal) < 0
@@ -302,7 +303,6 @@ export default class ChartAdapterStore {
                             });
                         } else if (e.type === 'touchmove') {
                             // handling slow scroll
-                            stopChartPagination();
                             this.scrollableChartParent?.scrollBy({
                                 top: yDiff,
                             });
@@ -317,6 +317,11 @@ export default class ChartAdapterStore {
                     }
                 }
                 this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
+                if (e.type === 'touchend' && this.isXScrollBlocked) {
+                    this.enableXScrollTimer = setTimeout(() => {
+                        this.toggleXScrollBlock(false);
+                    }, 100);
+                }
             }
             if (['touchstart', 'touchend'].includes(e.type)) {
                 this.touchValues =
@@ -338,11 +343,11 @@ export default class ChartAdapterStore {
             const isVerticalScroll = e.deltaY && e.deltaX === 0;
             const x = e.pageX - left;
             if (x < nonScrollableAreaWidth && isVerticalScroll) {
-                if (this.enableVerticalScrollTimer) return;
+                if (this.enableYScrollTimer) return;
                 chartNode.style.pointerEvents = 'none';
-                this.enableVerticalScrollTimer = setTimeout(() => {
+                this.enableYScrollTimer = setTimeout(() => {
                     chartNode.style.pointerEvents = 'auto';
-                    this.enableVerticalScrollTimer = undefined;
+                    this.enableYScrollTimer = undefined;
                 }, 300);
                 return;
             }
@@ -527,6 +532,11 @@ export default class ChartAdapterStore {
             this.setMsPerPx(msPerPx);
         }
     }
+
+    toggleXScrollBlock = (isBlocked = true) => {
+        this.isXScrollBlocked = isBlocked;
+        window.flutterChart?.app.toggleXScrollBlock(isBlocked);
+    };
 
     toggleDataFitMode = () => {
         this.isDataFitModeEnabled = !this.isDataFitModeEnabled;

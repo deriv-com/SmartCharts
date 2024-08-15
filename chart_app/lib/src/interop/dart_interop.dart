@@ -86,6 +86,12 @@ JsObject _exposeApp(ChartApp app) {
 
   setProperty(
     jsObject,
+    'toggleXScrollBlock',
+    allowInterop(app.wrappedController.toggleXScrollBlock),
+  );
+
+  setProperty(
+    jsObject,
     'toggleDataFitMode',
     allowInterop(app.wrappedController.toggleDataFitMode),
   );
