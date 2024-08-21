@@ -125,6 +125,7 @@ import French from '../../sass/icons/flags/french.svg';
 import Dutch from '../../sass/icons/flags/dutch.svg';
 import Spanish from '../../sass/icons/flags/spanish.svg';
 import WallStreet from '../../sass/icons/flags/wallstreet.svg';
+import Uzbekistan from '../../sass/icons/flags/uzbekistan.svg';
 
 /* Energy */
 import OilUSD from '../../sass/icons/active-symbols/energy/oil usd/ic-oilusd.svg';
@@ -523,6 +524,7 @@ export const FlagIcons = {
     ChineseTraditional: Wrapper(ChineseTraditional),
     Poland: Wrapper(PLN),
     Spanish: Wrapper(Spanish),
+    Uzbekistan: Wrapper(Uzbekistan),
 };
 
 export const ItemIconMap = {

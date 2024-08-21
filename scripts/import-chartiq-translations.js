@@ -20,6 +20,7 @@ const languages = [
     'si',
     'sw',
     'tr',
+    'uz',
     'es',
     'zh_cn',
     'ja',
