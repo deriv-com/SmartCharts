@@ -71,6 +71,7 @@ class ChartStore {
             networkStatus: observable,
             serverTime: observable,
             shouldRenderDialogs: observable,
+            xAxisHeight: computed,
             yAxisWidth: computed,
             lastQuote: observable,
             _initChart: action.bound,
@@ -132,6 +133,10 @@ class ChartStore {
 
     get currentClose() {
         return this.currentCloseQuote()?.Close;
+    }
+
+    get xAxisHeight(): number {
+        return window.flutterChart?.app.getXAxisHeight() || 24;
     }
 
     get yAxisWidth(): number {

@@ -32,6 +32,12 @@ JsObject _exposeApp(ChartApp app) {
 
   setProperty(
     jsObject,
+    'getXAxisHeight',
+    allowInterop(() => app.xAxisHeight),
+  );
+
+  setProperty(
+    jsObject,
     'getYAxisWidth',
     allowInterop(() => app.yAxisWidth),
   );
@@ -82,6 +88,12 @@ JsObject _exposeApp(ChartApp app) {
     allowInterop(
       app.wrappedController.scrollToLastTick,
     ),
+  );
+
+  setProperty(
+    jsObject,
+    'toggleXScrollBlock',
+    allowInterop(app.wrappedController.toggleXScrollBlock),
   );
 
   setProperty(

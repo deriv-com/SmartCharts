@@ -34,6 +34,9 @@ class ChartApp {
 
   bool _prevShowChart = false;
 
+  /// height of xAxis
+  double xAxisHeight = 24;
+
   /// width of yAxis
   double yAxisWidth = 60;
 
@@ -73,13 +76,14 @@ class ChartApp {
     feedModel.newChart();
   }
 
-  /// Calculates the width of yAxis
+  /// Calculates the width of yAxis and sets the height of xAxis
   void calculateTickWidth() {
     yAxisWidth = calculateYAxisWidth(
       feedModel.ticks,
       configModel.theme,
       configModel.pipSize,
     );
+    xAxisHeight = configModel.theme.gridStyle.xLabelsAreaHeight;
 
     currentTickWidth = calculateCurrentTickWidth(
       feedModel.ticks,
