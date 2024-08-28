@@ -157,6 +157,8 @@ import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/i
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 import Step100 from '../../sass/icons/active-symbols/volatility/step index/step-100-index.svg';
 import Step200 from '../../sass/icons/active-symbols/volatility/step index/step-200-index.svg';
+import Step300 from '../../sass/icons/active-symbols/volatility/step index/step-300-index.svg';
+import Step400 from '../../sass/icons/active-symbols/volatility/step index/step-400-index.svg';
 import Step500 from '../../sass/icons/active-symbols/volatility/step index/step-500-index.svg';
 import JD10 from '../../sass/icons/active-symbols/volatility/jd10 index/ic-10-index.svg';
 import JD25 from '../../sass/icons/active-symbols/volatility/jd25 index/ic-25-index.svg';
@@ -567,6 +569,8 @@ export const ItemIconMap = {
     RDBULL: Wrapper(MarketBull),
     stpRNG: Wrapper(Step100),
     stpRNG2: Wrapper(Step200),
+    stpRNG3: Wrapper(Step300),
+    stpRNG4: Wrapper(Step400),
     stpRNG5: Wrapper(Step500),
     JD10: Wrapper(JD10),
     JD25: Wrapper(JD25),
