@@ -24,6 +24,7 @@ export default class ChartAdapterStore {
     msPerPx?: number;
     drawingHoverIndex: number | undefined | null = null;
     isDataFitModeEnabled = false;
+    isXScrollBlocked = false;
     painter = new Painter();
     drawingColor = 0;
     isScaled = false;
@@ -41,17 +42,29 @@ export default class ChartAdapterStore {
         bottomIndex: 0,
     };
     touchValues: {
+        deltaXTotal?: number;
+        deltaYTotal?: number;
+        multiTouch?: boolean;
+        touchIds?: number[];
         x?: number;
         y?: number;
-        yOnTouchEnd?: number;
-    } = {};
+    } = {
+        multiTouch: false,
+        deltaXTotal: 0,
+        deltaYTotal: 0,
+        touchIds: [],
+        x: 0,
+        y: 0,
+    };
 
     isOverFlutterCharts = false;
-    enableVerticalScrollTimer?: ReturnType<typeof setTimeout>;
-    scrollChartParentOnTouchTimer?: ReturnType<typeof setTimeout>;
+    clearTouchDeltasTimer?: ReturnType<typeof setTimeout>;
+    enableXScrollTimer?: ReturnType<typeof setTimeout>;
+    enableYScrollTimer?: ReturnType<typeof setTimeout>;
 
     constructor(mainStore: MainStore) {
         makeObservable(this, {
+            clearTouchDeltasTimer: observable,
             onMount: action.bound,
             onTickHistory: action.bound,
             onTouch: action.bound,
@@ -62,11 +75,12 @@ export default class ChartAdapterStore {
             onQuoteAreaChanged: action.bound,
             setMsPerPx: action.bound,
             newChart: action.bound,
-            enableVerticalScrollTimer: observable,
+            enableXScrollTimer: observable,
+            enableYScrollTimer: observable,
             scale: action.bound,
             scrollableChartParent: computed,
-            scrollChartParentOnTouchTimer: observable,
             toggleDataFitMode: action.bound,
+            toggleXScrollBlock: action.bound,
             touchValues: observable,
             onCrosshairMove: action.bound,
             isDataFitModeEnabled: observable,
@@ -218,8 +232,9 @@ export default class ChartAdapterStore {
         window.flutterChartElement?.removeEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
         window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
-        clearTimeout(this.enableVerticalScrollTimer);
-        clearTimeout(this.scrollChartParentOnTouchTimer);
+        clearTimeout(this.clearTouchDeltasTimer);
+        clearTimeout(this.enableXScrollTimer);
+        clearTimeout(this.enableYScrollTimer);
     }
 
     onChartLoad() {
@@ -237,38 +252,84 @@ export default class ChartAdapterStore {
     }
 
     onTouch(e: TouchEvent) {
-        const chartNode = this.mainStore.chart.chartNode;
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
-        if (
-            chartNode &&
-            this.scrollableChartParent &&
-            !this.mainStore.state.isVerticalScrollEnabled &&
-            e.touches.length === 1
-        ) {
-            const { pageX, screenX, screenY } = e.touches[0];
-            if (['touchstart', 'touchend'].includes(e.type)) {
-                this.touchValues = e.type === 'touchstart' ? { x: screenX, y: screenY } : { yOnTouchEnd: screenY };
-            } else if (e.type === 'touchmove') {
-                const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
-                const { left } = chartNode.getBoundingClientRect();
+        const chartNode = this.mainStore.chart.chartNode;
+        if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
+            if (this.touchValues.multiTouch) {
+                if (e.type === 'touchend') {
+                    this.touchValues.touchIds = this.touchValues.touchIds?.filter(
+                        id => id === e.changedTouches[0].identifier
+                    );
+                    this.touchValues = { multiTouch: !!this.touchValues.touchIds?.length };
+                }
+                return;
+            }
+            if (e.touches.length > 1) {
+                this.touchValues = { multiTouch: true };
+                this.touchValues.touchIds = Array.from(e.touches).map(touch => touch.identifier);
+                return;
+            }
+
+            const { pageX, pageY } = e.changedTouches[0];
+
+            if (['touchmove', 'touchend'].includes(e.type)) {
+                const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+                const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
+                const { top, left } = chartNode.getBoundingClientRect();
+                const xCoord = pageX - left;
+                const yCoord = pageY - top;
+                const isForcedScrollArea = xCoord < forcedScrollAreaWidth && yCoord < forcedScrollAreaHeight;
 
                 if (this.touchValues.x && this.touchValues.y) {
-                    const deltaX = Math.abs(screenX - this.touchValues.x);
-                    const deltaY = Math.abs(screenY - this.touchValues.y);
+                    const xDiff = this.touchValues.x - pageX;
+                    const yDiff = this.touchValues.y - pageY;
+                    const deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + xDiff;
+                    const deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + yDiff;
+                    const deltaX = e.type === 'touchend' ? Math.abs(deltaXTotal) : Math.abs(xDiff);
+                    const deltaY = e.type === 'touchend' ? Math.abs(deltaYTotal) : Math.abs(yDiff);
                     const isVerticalScroll = deltaY > deltaX;
-                    const x = pageX - left;
-                    if (x < nonScrollableAreaWidth && isVerticalScroll && !this.scrollChartParentOnTouchTimer) {
-                        this.touchValues.yOnTouchEnd = undefined;
-                        this.scrollChartParentOnTouchTimer = setTimeout(() => {
-                            this.scrollableChartParent?.scrollBy({
-                                top: screenY - Number(this.touchValues.yOnTouchEnd ?? this.touchValues.y),
+                    this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
+
+                    if (isForcedScrollArea && isVerticalScroll) {
+                        const shouldForceMaxScroll =
+                            Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
+                        if (!this.isXScrollBlocked) this.toggleXScrollBlock();
+                        if (shouldForceMaxScroll) {
+                            // handling max scroll on quick swipe
+                            this.scrollableChartParent?.scrollTo({
+                                top:
+                                    Number(this.touchValues.deltaYTotal) < 0
+                                        ? 0
+                                        : this.scrollableChartParent.scrollHeight,
                                 behavior: 'smooth',
                             });
-                            this.scrollChartParentOnTouchTimer = undefined;
-                        }, 300);
+                        } else if (e.type === 'touchmove') {
+                            // handling slow scroll
+                            this.scrollableChartParent?.scrollBy({
+                                top: yDiff,
+                            });
+                            if (!this.clearTouchDeltasTimer) {
+                                this.clearTouchDeltasTimer = setTimeout(() => {
+                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
+                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
+                                    this.clearTouchDeltasTimer = undefined;
+                                }, 100);
+                            }
+                        }
                     }
                 }
-                this.touchValues = { x: screenX, y: screenY };
+                this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
+                if (e.type === 'touchend' && this.isXScrollBlocked) {
+                    this.enableXScrollTimer = setTimeout(() => {
+                        this.toggleXScrollBlock(false);
+                    }, 100);
+                }
+            }
+            if (['touchstart', 'touchend'].includes(e.type)) {
+                this.touchValues =
+                    e.type === 'touchstart'
+                        ? { x: pageX, y: pageY }
+                        : { deltaYTotal: this.touchValues.deltaYTotal, deltaXTotal: this.touchValues.deltaXTotal };
             }
         }
     }
@@ -284,11 +345,11 @@ export default class ChartAdapterStore {
             const isVerticalScroll = e.deltaY && e.deltaX === 0;
             const x = e.pageX - left;
             if (x < nonScrollableAreaWidth && isVerticalScroll) {
-                if (this.enableVerticalScrollTimer) return;
+                if (this.enableYScrollTimer) return;
                 chartNode.style.pointerEvents = 'none';
-                this.enableVerticalScrollTimer = setTimeout(() => {
+                this.enableYScrollTimer = setTimeout(() => {
                     chartNode.style.pointerEvents = 'auto';
-                    this.enableVerticalScrollTimer = undefined;
+                    this.enableYScrollTimer = undefined;
                 }, 300);
                 return;
             }
@@ -473,6 +534,11 @@ export default class ChartAdapterStore {
             this.setMsPerPx(msPerPx);
         }
     }
+
+    toggleXScrollBlock = (isBlocked = true) => {
+        this.isXScrollBlocked = isBlocked;
+        window.flutterChart?.app.toggleXScrollBlock(isBlocked);
+    };
 
     toggleDataFitMode = () => {
         this.isDataFitModeEnabled = !this.isDataFitModeEnabled;
