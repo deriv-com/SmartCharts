@@ -110,6 +110,7 @@ const activeLanguages = [
     'SW',
     'TR',
     'TH',
+    'UZ',
     'VI',
     'ZH_CN',
     'ZH_TW',

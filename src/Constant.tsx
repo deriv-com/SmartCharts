@@ -2073,6 +2073,11 @@ export const Languages = [
         icon: <FlagIcons.Turkey />,
     },
     {
+        key: 'uz',
+        name: "O'zbek",
+        icon: <FlagIcons.Uzbekistan />,
+    },
+    {
         key: 'zh_cn',
         name: '简体中文',
         icon: <FlagIcons.Chinese />,
