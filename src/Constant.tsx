@@ -218,7 +218,7 @@ export const getIndicatorsTree = (): TIndicatorsTree[] => [
                 name: t.translate('Relative Strength Index (RSI)'),
                 short_name: t.translate('RSI'),
                 description: t.translate(
-                    'The Relative Strength Index (RSI) was published by J. Welles Wilder. The current price is normalized as a percentage between 0 and 100. The flutter_chart_id of this oscillator is misleading because it does not compare the instrument relative to another instrument or set of instruments, but rather represents the current price relative to other recent pieces within the selected lookback window length.'
+                    'The Relative Strength Index (RSI) was published by J. Welles Wilder. The current price is normalized as a percentage between 0 and 100. The name of this oscillator is misleading because it does not compare the instrument relative to another instrument or set of instruments, but rather represents the current price relative to other recent prices within the selected lookback window length.'
                 ),
                 icon: IndicatorRSIIcon,
             },
