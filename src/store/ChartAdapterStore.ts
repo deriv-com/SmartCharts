@@ -251,10 +251,97 @@ export default class ChartAdapterStore {
         }
     }
 
+    // onTouch(e: TouchEvent) {
+    //     console.log('here', e.type);
+    //     // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
+    //     const chartNode = this.mainStore.chart.chartNode;
+    //     if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
+    //         if (this.touchValues.multiTouch) {
+    //             if (e.type === 'touchend') {
+    //                 this.touchValues.touchIds = this.touchValues.touchIds?.filter(
+    //                     id => id === e.changedTouches[0].identifier
+    //                 );
+    //                 this.touchValues = { multiTouch: !!this.touchValues.touchIds?.length };
+    //             }
+    //             return;
+    //         }
+    //         if (e.touches.length > 1) {
+    //             this.touchValues = { multiTouch: true };
+    //             this.touchValues.touchIds = Array.from(e.touches).map(touch => touch.identifier);
+    //             return;
+    //         }
+
+    //         const { pageX, pageY } = e.changedTouches[0];
+
+    //         if (['touchmove', 'touchend'].includes(e.type)) {
+    //             const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
+    //             const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
+    //             const { top, left } = chartNode.getBoundingClientRect();
+    //             const xCoord = pageX - left;
+    //             const yCoord = pageY - top;
+    //             const isForcedScrollArea = xCoord < forcedScrollAreaWidth && yCoord < forcedScrollAreaHeight;
+
+    //             if (this.touchValues.x && this.touchValues.y) {
+    //                 const xDiff = this.touchValues.x - pageX;
+    //                 const yDiff = this.touchValues.y - pageY;
+    //                 const deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + xDiff;
+    //                 const deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + yDiff;
+    //                 const deltaX = e.type === 'touchend' ? Math.abs(deltaXTotal) : Math.abs(xDiff);
+    //                 const deltaY = e.type === 'touchend' ? Math.abs(deltaYTotal) : Math.abs(yDiff);
+    //                 const isVerticalScroll = deltaY > deltaX;
+    //                 this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
+
+    //                 if (isForcedScrollArea && isVerticalScroll) {
+    //                     const shouldForceMaxScroll =
+    //                         Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
+    //                     if (!this.isXScrollBlocked) this.toggleXScrollBlock();
+    //                     if (shouldForceMaxScroll) {
+    //                         // handling max scroll on quick swipe
+    //                         // this.scrollableChartParent?.scrollTo({
+    //                         //     top:
+    //                         //         Number(this.touchValues.deltaYTotal) < 0
+    //                         //             ? 0
+    //                         //             : this.scrollableChartParent.scrollHeight,
+    //                         //     behavior: 'smooth',
+    //                         // });
+    //                     } else if (e.type === 'touchmove') {
+    //                         // handling slow scroll
+    //                         this.scrollableChartParent?.scrollBy({
+    //                             top: yDiff,
+    //                         });
+
+    //                         // if (!this.clearTouchDeltasTimer) {
+    //                         //     this.clearTouchDeltasTimer = setTimeout(() => {
+    //                         //         // clearing total deltas to avoid triggering max scroll after the slow scroll
+    //                         //         this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
+    //                         //         this.clearTouchDeltasTimer = undefined;
+    //                         //     }, 100);
+    //                         // }
+    //                     }
+    //                 }
+    //             }
+    //             this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
+    //             if (e.type === 'touchend' && this.isXScrollBlocked) {
+    //                 this.enableXScrollTimer = setTimeout(() => {
+    //                     this.toggleXScrollBlock(false);
+    //                 }, 100);
+    //             }
+    //         }
+    //         if (['touchstart', 'touchend'].includes(e.type)) {
+    //             this.touchValues =
+    //                 e.type === 'touchstart'
+    //                     ? { x: pageX, y: pageY }
+    //                     : { deltaYTotal: this.touchValues.deltaYTotal, deltaXTotal: this.touchValues.deltaXTotal };
+    //         }
+    //     }
+    // }
+
     onTouch(e: TouchEvent) {
-        // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
+
+        // Ensure the chart node and parent container are available and vertical scroll is disabled for the chart.
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
+            // Handle multi-touch events.
             if (this.touchValues.multiTouch) {
                 if (e.type === 'touchend') {
                     this.touchValues.touchIds = this.touchValues.touchIds?.filter(
@@ -264,6 +351,8 @@ export default class ChartAdapterStore {
                 }
                 return;
             }
+
+            // Detect multi-touch and store touch identifiers.
             if (e.touches.length > 1) {
                 this.touchValues = { multiTouch: true };
                 this.touchValues.touchIds = Array.from(e.touches).map(touch => touch.identifier);
@@ -271,65 +360,30 @@ export default class ChartAdapterStore {
             }
 
             const { pageX, pageY } = e.changedTouches[0];
+            const { top, left } = chartNode.getBoundingClientRect();
+            const xCoord = pageX - left;
+            const yCoord = pageY - top;
 
-            if (['touchmove', 'touchend'].includes(e.type)) {
-                const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
-                const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
-                const { top, left } = chartNode.getBoundingClientRect();
-                const xCoord = pageX - left;
-                const yCoord = pageY - top;
-                const isForcedScrollArea = xCoord < forcedScrollAreaWidth && yCoord < forcedScrollAreaHeight;
+            const isForcedScrollArea =
+                xCoord < chartNode.offsetWidth - this.mainStore.chart.yAxisWidth &&
+                yCoord < chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
 
-                if (this.touchValues.x && this.touchValues.y) {
-                    const xDiff = this.touchValues.x - pageX;
+            // Track touch coordinates for scrolling.
+            if (isForcedScrollArea) {
+                if (this.touchValues.x !== undefined && this.touchValues.y !== undefined) {
                     const yDiff = this.touchValues.y - pageY;
-                    const deltaXTotal = (this.touchValues.deltaXTotal ?? 0) + xDiff;
-                    const deltaYTotal = (this.touchValues.deltaYTotal ?? 0) + yDiff;
-                    const deltaX = e.type === 'touchend' ? Math.abs(deltaXTotal) : Math.abs(xDiff);
-                    const deltaY = e.type === 'touchend' ? Math.abs(deltaYTotal) : Math.abs(yDiff);
-                    const isVerticalScroll = deltaY > deltaX;
-                    this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
 
-                    if (isForcedScrollArea && isVerticalScroll) {
-                        const shouldForceMaxScroll =
-                            Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
-                        if (!this.isXScrollBlocked) this.toggleXScrollBlock();
-                        if (shouldForceMaxScroll) {
-                            // handling max scroll on quick swipe
-                            this.scrollableChartParent?.scrollTo({
-                                top:
-                                    Number(this.touchValues.deltaYTotal) < 0
-                                        ? 0
-                                        : this.scrollableChartParent.scrollHeight,
-                                behavior: 'smooth',
-                            });
-                        } else if (e.type === 'touchmove') {
-                            // handling slow scroll
-                            this.scrollableChartParent?.scrollBy({
-                                top: yDiff,
-                            });
-                            if (!this.clearTouchDeltasTimer) {
-                                this.clearTouchDeltasTimer = setTimeout(() => {
-                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
-                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                                    this.clearTouchDeltasTimer = undefined;
-                                }, 100);
-                            }
-                        }
+                    // Scroll the parent container normally based on touch movement.
+                    if (e.type === 'touchmove') {
+                        this.scrollableChartParent?.scrollBy({ top: yDiff });
                     }
                 }
-                this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
-                if (e.type === 'touchend' && this.isXScrollBlocked) {
-                    this.enableXScrollTimer = setTimeout(() => {
-                        this.toggleXScrollBlock(false);
-                    }, 100);
-                }
+                this.touchValues = { x: pageX, y: pageY }; // Update coordinates for next move.
             }
+
+            // Reset touch values on touch start or touch end.
             if (['touchstart', 'touchend'].includes(e.type)) {
-                this.touchValues =
-                    e.type === 'touchstart'
-                        ? { x: pageX, y: pageY }
-                        : { deltaYTotal: this.touchValues.deltaYTotal, deltaXTotal: this.touchValues.deltaXTotal };
+                this.touchValues = e.type === 'touchstart' ? { x: pageX, y: pageY } : {};
             }
         }
     }
@@ -588,7 +642,7 @@ export default class ChartAdapterStore {
                     delta_x = this.getXFromEpoch((barNext.DT as Date).getTime()) - x;
 
                     ratio =
-                        ((date as unknown as number) - (bar.DT as Date).getTime()) /
+                        (((date as unknown) as number) - (bar.DT as Date).getTime()) /
                         ((barNext.DT as Date).getTime() - (bar.DT as Date).getTime());
 
                     if (price) delta_y = barNext.Close - price;
@@ -596,7 +650,7 @@ export default class ChartAdapterStore {
                     delta_x = x - this.getXFromEpoch((barPrev.DT as Date).getTime());
 
                     ratio =
-                        ((date as unknown as number) - (bar.DT as Date).getTime()) /
+                        (((date as unknown) as number) - (bar.DT as Date).getTime()) /
                         ((bar.DT as Date).getTime() - (barPrev.DT as Date).getTime());
 
                     if (price) delta_y = price - barPrev.Close;
