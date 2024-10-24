@@ -539,7 +539,7 @@ export default class ChartAdapterStore {
     toggleXScrollBlock = (isBlocked = true) => {
         this.isXScrollBlocked = isBlocked;
 
-        const flutterChart = document.getElementsByClassName('flutter-chart')[0];
+        const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
         console.log('isBlocked', isBlocked);
 
         if (flutterChart) {
