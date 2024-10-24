@@ -252,7 +252,6 @@ export default class ChartAdapterStore {
     }
 
     onTouch(e: TouchEvent) {
-        console.log('here', e.type);
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
@@ -345,7 +344,6 @@ export default class ChartAdapterStore {
             const nonScrollableAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
             const { left } = chartNode.getBoundingClientRect();
             const isVerticalScroll = e.deltaY && e.deltaX === 0;
-            ``;
             const x = e.pageX - left;
             if (x < nonScrollableAreaWidth && isVerticalScroll) {
                 if (this.enableYScrollTimer) return;
@@ -540,7 +538,24 @@ export default class ChartAdapterStore {
 
     toggleXScrollBlock = (isBlocked = true) => {
         this.isXScrollBlocked = isBlocked;
-        window.flutterChart?.app.toggleXScrollBlock(isBlocked);
+
+        const flutterChart = document.getElementsByClassName('flutter-chart')[0];
+        console.log('isBlocked', isBlocked);
+
+        if (flutterChart) {
+            if (isBlocked) {
+                flutterChart.style.overflowY = 'scroll';
+                flutterChart.style.touchAction = 'pan-y';
+            } else {
+                flutterChart.style.touchAction = 'auto';
+                flutterChart.style.overflowY = 'hide';
+            }
+        } else {
+            console.log('No element with the class "flutter-chart" found.');
+        }
+
+        // this.isXScrollBlocked = isBlocked;
+        // window.flutterChart?.app.toggleXScrollBlock(isBlocked);
     };
 
     toggleDataFitMode = () => {
