@@ -546,16 +546,17 @@ export default class ChartAdapterStore {
             if (isBlocked) {
                 flutterChart.style.overflowY = 'scroll';
                 flutterChart.style.touchAction = 'pan-y';
+                window.flutterChart?.app.toggleXScrollBlock(isBlocked);
             } else {
                 flutterChart.style.touchAction = 'auto';
                 flutterChart.style.overflowY = 'hide';
+                window.flutterChart?.app.toggleXScrollBlock(isBlocked);
             }
         } else {
             console.log('No element with the class "flutter-chart" found.');
         }
 
         // this.isXScrollBlocked = isBlocked;
-        // window.flutterChart?.app.toggleXScrollBlock(isBlocked);
     };
 
     toggleDataFitMode = () => {
