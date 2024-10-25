@@ -254,6 +254,11 @@ export default class ChartAdapterStore {
     onTouch(e: TouchEvent) {
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
+        const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
+        if (!this.isXScrollBlocked) {
+            this.stopScroll(flutterChart);
+        }
+
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
             if (this.touchValues.multiTouch) {
                 if (e.type === 'touchend') {
@@ -527,33 +532,49 @@ export default class ChartAdapterStore {
 
     toggleXScrollBlock = (isBlocked = true) => {
         this.isXScrollBlocked = isBlocked;
-
-        console.log('isBlocked', isBlocked);
         const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
 
         if (flutterChart) {
-            flutterChart.style.touchAction = 'pan-y';
-            flutterChart.style.overflowY = 'scroll';
-            document.getElementsByTagName('body')[0].style.touchAction = 'none';
-
-            // if (isBlocked) {
-            //     flutterChart.style.overflowY = 'scroll';
-            //     flutterChart.style.touchAction = 'pan-y';
-
-            //     // window.flutterChart?.app.toggleXScrollBlock(isBlocked);
-            //     // flutterChart.addEventListener('touchmove', this.preventHorizontalScroll, { passive: false });
-            // } else {
-            //     flutterChart.style.overflowY = 'hide';
-            //     flutterChart.style.touchAction = 'auto';
-            //     // window.flutterChart?.app.toggleXScrollBlock(isBlocked);
-            //     // flutterChart.removeEventListener('touchmove', this.preventHorizontalScroll);
-            // }
+            if (isBlocked) {
+                flutterChart.style.overflowY = 'scroll';
+                flutterChart.style.overflowX = 'hidden';
+                flutterChart.style.touchAction = 'pan-y';
+            } else {
+                this.allowTemporaryScroll(flutterChart);
+            }
         }
     };
 
-    preventHorizontalScroll = (event: TouchEvent) => {
-        event.stopPropagation();
-        event.preventDefault();
+    allowTemporaryScroll = (element: HTMLElement) => {
+        let lastScrollTop = element.scrollTop;
+        let isScrolling = false;
+        let scrollTimeout: ReturnType<typeof setTimeout>;
+
+        const monitorScroll = () => {
+            if (element.scrollTop !== lastScrollTop) {
+                isScrolling = true;
+                lastScrollTop = element.scrollTop;
+
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    this.stopScroll(element);
+                }, 200);
+            } else {
+                isScrolling = false;
+            }
+
+            if (isScrolling) {
+                requestAnimationFrame(monitorScroll);
+            }
+        };
+
+        requestAnimationFrame(monitorScroll);
+    };
+
+    stopScroll = (element: HTMLElement) => {
+        element.style.removeProperty('overflow-y');
+        element.style.removeProperty('overflow-x');
+        element.style.removeProperty('touch-action');
     };
 
     toggleDataFitMode = () => {
