@@ -256,6 +256,9 @@ export default class ChartAdapterStore {
         const chartNode = this.mainStore.chart.chartNode;
         const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
         if (!this.isXScrollBlocked) {
+            if (e.type === 'touchstart' || e.type === 'touchmove') {
+                e.preventDefault();
+            }
             this.stopScroll(flutterChart);
         }
 
@@ -536,6 +539,7 @@ export default class ChartAdapterStore {
 
         if (flutterChart) {
             if (isBlocked) {
+                console.log('isBlocked', isBlocked);
                 flutterChart.style.overflowY = 'scroll';
                 flutterChart.style.overflowX = 'hidden';
                 flutterChart.style.touchAction = 'pan-y';
@@ -566,9 +570,8 @@ export default class ChartAdapterStore {
             if (isScrolling) {
                 requestAnimationFrame(monitorScroll);
             }
+            requestAnimationFrame(monitorScroll);
         };
-
-        requestAnimationFrame(monitorScroll);
     };
 
     stopScroll = (element: HTMLElement) => {
