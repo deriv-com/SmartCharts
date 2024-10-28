@@ -304,13 +304,13 @@ export default class ChartAdapterStore {
                             //     top: yDiff,
                             // });
 
-                            // if (!this.clearTouchDeltasTimer) {
-                            //     this.clearTouchDeltasTimer = setTimeout(() => {
-                            //         // clearing total deltas to avoid triggering max scroll after the slow scroll
-                            //         this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                            //         this.clearTouchDeltasTimer = undefined;
-                            //     }, 100);
-                            // }
+                            if (!this.clearTouchDeltasTimer) {
+                                this.clearTouchDeltasTimer = setTimeout(() => {
+                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
+                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
+                                    this.clearTouchDeltasTimer = undefined;
+                                }, 100);
+                            }
                         }
                     }
                 }
