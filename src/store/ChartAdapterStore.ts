@@ -256,9 +256,6 @@ export default class ChartAdapterStore {
         const chartNode = this.mainStore.chart.chartNode;
         const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
         if (!this.isXScrollBlocked) {
-            if (e.type === 'touchstart' || e.type === 'touchmove') {
-                e.preventDefault();
-            }
             this.stopScroll(flutterChart);
         }
 
