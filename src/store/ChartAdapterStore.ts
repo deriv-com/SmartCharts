@@ -255,9 +255,6 @@ export default class ChartAdapterStore {
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
         const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
-        if (!this.isXScrollBlocked) {
-            this.stopScroll(flutterChart);
-        }
 
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
             if (this.touchValues.multiTouch) {
@@ -280,7 +277,7 @@ export default class ChartAdapterStore {
             if (['touchmove', 'touchend'].includes(e.type)) {
                 const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
                 const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
-                
+
                 const { top, left } = chartNode.getBoundingClientRect();
                 const xCoord = pageX - left;
                 const yCoord = pageY - top;
@@ -298,20 +295,8 @@ export default class ChartAdapterStore {
 
                     if (isForcedScrollArea && isVerticalScroll) {
                         if (!this.isXScrollBlocked) this.toggleXScrollBlock();
-                        if (e.type === 'touchmove') {
-                            // handling slow scroll
-                            // this.scrollableChartParent?.scrollBy({
-                            //     top: yDiff,
-                            // });
-
-                            if (!this.clearTouchDeltasTimer) {
-                                this.clearTouchDeltasTimer = setTimeout(() => {
-                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
-                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                                    this.clearTouchDeltasTimer = undefined;
-                                }, 100);
-                            }
-                        }
+                    } else if (!this.isXScrollBlocked) {
+                        this.stopScroll(flutterChart);
                     }
                 }
                 this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
@@ -543,12 +528,12 @@ export default class ChartAdapterStore {
                 flutterChart.style.overscrollBehavior = 'contain';
                 flutterChart.style.touchAction = 'pan-y';
             } else {
-                this.allowTemporaryScroll(flutterChart);
+                this.allowScroll(flutterChart);
             }
         }
     };
 
-    allowTemporaryScroll = (element: HTMLElement) => {
+    allowScroll = (element: HTMLElement) => {
         let lastScrollTop = element.scrollTop;
         let isScrolling = false;
         let scrollTimeout: ReturnType<typeof setTimeout>;
@@ -569,7 +554,6 @@ export default class ChartAdapterStore {
             if (isScrolling) {
                 requestAnimationFrame(monitorScroll);
             }
-            requestAnimationFrame(monitorScroll);
         };
     };
 
