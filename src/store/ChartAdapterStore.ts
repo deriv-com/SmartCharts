@@ -332,6 +332,7 @@ export default class ChartAdapterStore {
 
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
+        e.stopPropagation();
 
         // Prevent vertical scroll on the chart on wheel devices by disabling pointer events to make chart parent scrollable:
         const chartNode = this.mainStore.chart.chartNode;
@@ -538,7 +539,8 @@ export default class ChartAdapterStore {
         if (flutterChart) {
             if (isBlocked) {
                 flutterChart.style.overflowY = 'scroll';
-                // flutterChart.style.overflowX = 'hidden';
+                flutterChart.style.overflowX = 'hidden';
+                flutterChart.style.overscrollBehavior = 'contain';
                 flutterChart.style.touchAction = 'pan-y';
             } else {
                 this.allowTemporaryScroll(flutterChart);
