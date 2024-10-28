@@ -254,7 +254,7 @@ export default class ChartAdapterStore {
     onTouch(e: TouchEvent) {
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
-        const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
+        const flutterChart = document.querySelector('.flutter-chart') as HTMLElement;
 
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
             if (this.touchValues.multiTouch) {
@@ -294,7 +294,7 @@ export default class ChartAdapterStore {
                     this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
 
                     if (isForcedScrollArea && isVerticalScroll) {
-                        if (!this.isXScrollBlocked) this.toggleXScrollBlock();
+                        if (!this.isXScrollBlocked) this.toggleXScrollBlock(true, flutterChart);
                     } else if (!this.isXScrollBlocked) {
                         this.stopScroll(flutterChart);
                     }
@@ -302,7 +302,7 @@ export default class ChartAdapterStore {
                 this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
                 if (e.type === 'touchend' && this.isXScrollBlocked) {
                     this.enableXScrollTimer = setTimeout(() => {
-                        this.toggleXScrollBlock(false);
+                        this.toggleXScrollBlock(false, flutterChart);
                     }, 100);
                 }
             }
@@ -517,10 +517,8 @@ export default class ChartAdapterStore {
         }
     }
 
-    toggleXScrollBlock = (isBlocked = true) => {
+    toggleXScrollBlock = (isBlocked = true, flutterChart: HTMLElement) => {
         this.isXScrollBlocked = isBlocked;
-        const flutterChart = document.getElementsByClassName('flutter-chart')[0] as HTMLElement;
-
         if (flutterChart) {
             if (isBlocked) {
                 flutterChart.style.overflowY = 'scroll';
@@ -555,6 +553,7 @@ export default class ChartAdapterStore {
                 requestAnimationFrame(monitorScroll);
             }
         };
+        requestAnimationFrame(monitorScroll);
     };
 
     stopScroll = (element: HTMLElement) => {
