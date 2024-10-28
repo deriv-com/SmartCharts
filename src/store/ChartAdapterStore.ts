@@ -280,6 +280,7 @@ export default class ChartAdapterStore {
             if (['touchmove', 'touchend'].includes(e.type)) {
                 const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
                 const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
+                
                 const { top, left } = chartNode.getBoundingClientRect();
                 const xCoord = pageX - left;
                 const yCoord = pageY - top;
@@ -299,17 +300,17 @@ export default class ChartAdapterStore {
                         if (!this.isXScrollBlocked) this.toggleXScrollBlock();
                         if (e.type === 'touchmove') {
                             // handling slow scroll
-                            this.scrollableChartParent?.scrollBy({
-                                top: yDiff,
-                            });
+                            // this.scrollableChartParent?.scrollBy({
+                            //     top: yDiff,
+                            // });
 
-                            if (!this.clearTouchDeltasTimer) {
-                                this.clearTouchDeltasTimer = setTimeout(() => {
-                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
-                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                                    this.clearTouchDeltasTimer = undefined;
-                                }, 100);
-                            }
+                            // if (!this.clearTouchDeltasTimer) {
+                            //     this.clearTouchDeltasTimer = setTimeout(() => {
+                            //         // clearing total deltas to avoid triggering max scroll after the slow scroll
+                            //         this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
+                            //         this.clearTouchDeltasTimer = undefined;
+                            //     }, 100);
+                            // }
                         }
                     }
                 }
@@ -536,9 +537,8 @@ export default class ChartAdapterStore {
 
         if (flutterChart) {
             if (isBlocked) {
-                console.log('isBlocked', isBlocked);
                 flutterChart.style.overflowY = 'scroll';
-                flutterChart.style.overflowX = 'hidden';
+                // flutterChart.style.overflowX = 'hidden';
                 flutterChart.style.touchAction = 'pan-y';
             } else {
                 this.allowTemporaryScroll(flutterChart);
