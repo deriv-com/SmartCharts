@@ -283,6 +283,8 @@ export default class ChartAdapterStore {
                 const yCoord = pageY - top;
                 const isForcedScrollArea = xCoord < forcedScrollAreaWidth && yCoord < forcedScrollAreaHeight;
 
+                const isTouchOnYAxis = xCoord >= forcedScrollAreaWidth;
+
                 if (this.touchValues.x && this.touchValues.y) {
                     const xDiff = this.touchValues.x - pageX;
                     const yDiff = this.touchValues.y - pageY;
@@ -295,7 +297,7 @@ export default class ChartAdapterStore {
 
                     if (isForcedScrollArea && isVerticalScroll) {
                         if (!this.isXScrollBlocked) this.toggleXScrollBlock(true, flutterChart);
-                    } else if (!this.isXScrollBlocked) {
+                    } else if (!this.isXScrollBlocked && isTouchOnYAxis) {
                         this.stopScroll(flutterChart);
                     }
                 }
