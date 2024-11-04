@@ -254,6 +254,8 @@ export default class ChartAdapterStore {
     onTouch(e: TouchEvent) {
         // Prevent vertical scroll on the chart for touch devices by forcing scroll on a scrollable parent of the chart:
         const chartNode = this.mainStore.chart.chartNode;
+        const flutterChart = document.querySelector('.flutter-chart') as HTMLElement;
+
         if (chartNode && this.scrollableChartParent && !this.mainStore.state.isVerticalScrollEnabled) {
             if (this.touchValues.multiTouch) {
                 if (e.type === 'touchend') {
@@ -275,10 +277,13 @@ export default class ChartAdapterStore {
             if (['touchmove', 'touchend'].includes(e.type)) {
                 const forcedScrollAreaWidth = chartNode.offsetWidth - this.mainStore.chart.yAxisWidth;
                 const forcedScrollAreaHeight = chartNode.offsetHeight - this.mainStore.chart.xAxisHeight;
+
                 const { top, left } = chartNode.getBoundingClientRect();
                 const xCoord = pageX - left;
                 const yCoord = pageY - top;
                 const isForcedScrollArea = xCoord < forcedScrollAreaWidth && yCoord < forcedScrollAreaHeight;
+
+                const isTouchOnYAxis = xCoord >= forcedScrollAreaWidth;
 
                 if (this.touchValues.x && this.touchValues.y) {
                     const xDiff = this.touchValues.x - pageX;
@@ -291,37 +296,15 @@ export default class ChartAdapterStore {
                     this.touchValues = { ...this.touchValues, deltaXTotal, deltaYTotal };
 
                     if (isForcedScrollArea && isVerticalScroll) {
-                        const shouldForceMaxScroll =
-                            Math.abs(Number(this.touchValues.deltaYTotal)) > 10 && e.type === 'touchend';
-                        if (!this.isXScrollBlocked) this.toggleXScrollBlock();
-                        if (shouldForceMaxScroll) {
-                            // handling max scroll on quick swipe
-                            this.scrollableChartParent?.scrollTo({
-                                top:
-                                    Number(this.touchValues.deltaYTotal) < 0
-                                        ? 0
-                                        : this.scrollableChartParent.scrollHeight,
-                                behavior: 'smooth',
-                            });
-                        } else if (e.type === 'touchmove') {
-                            // handling slow scroll
-                            this.scrollableChartParent?.scrollBy({
-                                top: yDiff,
-                            });
-                            if (!this.clearTouchDeltasTimer) {
-                                this.clearTouchDeltasTimer = setTimeout(() => {
-                                    // clearing total deltas to avoid triggering max scroll after the slow scroll
-                                    this.touchValues = { ...this.touchValues, deltaYTotal: 0, deltaXTotal: 0 };
-                                    this.clearTouchDeltasTimer = undefined;
-                                }, 100);
-                            }
-                        }
+                        if (!this.isXScrollBlocked) this.toggleXScrollBlock(true, flutterChart);
+                    } else if (!this.isXScrollBlocked && isTouchOnYAxis) {
+                        this.stopScroll(flutterChart);
                     }
                 }
                 this.touchValues = { ...this.touchValues, x: pageX, y: pageY };
                 if (e.type === 'touchend' && this.isXScrollBlocked) {
                     this.enableXScrollTimer = setTimeout(() => {
-                        this.toggleXScrollBlock(false);
+                        this.toggleXScrollBlock(false, flutterChart);
                     }, 100);
                 }
             }
@@ -336,6 +319,7 @@ export default class ChartAdapterStore {
 
     onWheel = (e: WheelEvent) => {
         e.preventDefault();
+        e.stopPropagation();
 
         // Prevent vertical scroll on the chart on wheel devices by disabling pointer events to make chart parent scrollable:
         const chartNode = this.mainStore.chart.chartNode;
@@ -535,9 +519,49 @@ export default class ChartAdapterStore {
         }
     }
 
-    toggleXScrollBlock = (isBlocked = true) => {
+    toggleXScrollBlock = (isBlocked = true, flutterChart: HTMLElement) => {
         this.isXScrollBlocked = isBlocked;
-        window.flutterChart?.app.toggleXScrollBlock(isBlocked);
+        if (flutterChart) {
+            if (isBlocked) {
+                flutterChart.style.overflowY = 'scroll';
+                flutterChart.style.overflowX = 'hidden';
+                flutterChart.style.overscrollBehavior = 'contain';
+                flutterChart.style.touchAction = 'pan-y';
+            } else {
+                this.allowScroll(flutterChart);
+            }
+        }
+    };
+
+    allowScroll = (element: HTMLElement) => {
+        let lastScrollTop = element.scrollTop;
+        let isScrolling = false;
+        let scrollTimeout: ReturnType<typeof setTimeout>;
+
+        const monitorScroll = () => {
+            if (element.scrollTop !== lastScrollTop) {
+                isScrolling = true;
+                lastScrollTop = element.scrollTop;
+
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    this.stopScroll(element);
+                }, 200);
+            } else {
+                isScrolling = false;
+            }
+
+            if (isScrolling) {
+                requestAnimationFrame(monitorScroll);
+            }
+        };
+        requestAnimationFrame(monitorScroll);
+    };
+
+    stopScroll = (element: HTMLElement) => {
+        element.style.removeProperty('overflow-y');
+        element.style.removeProperty('overflow-x');
+        element.style.removeProperty('touch-action');
     };
 
     toggleDataFitMode = () => {
@@ -588,7 +612,7 @@ export default class ChartAdapterStore {
                     delta_x = this.getXFromEpoch((barNext.DT as Date).getTime()) - x;
 
                     ratio =
-                        ((date as unknown as number) - (bar.DT as Date).getTime()) /
+                        (((date as unknown) as number) - (bar.DT as Date).getTime()) /
                         ((barNext.DT as Date).getTime() - (bar.DT as Date).getTime());
 
                     if (price) delta_y = barNext.Close - price;
@@ -596,7 +620,7 @@ export default class ChartAdapterStore {
                     delta_x = x - this.getXFromEpoch((barPrev.DT as Date).getTime());
 
                     ratio =
-                        ((date as unknown as number) - (bar.DT as Date).getTime()) /
+                        (((date as unknown) as number) - (bar.DT as Date).getTime()) /
                         ((bar.DT as Date).getTime() - (barPrev.DT as Date).getTime());
 
                     if (price) delta_y = price - barPrev.Close;
