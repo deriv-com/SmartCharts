@@ -279,6 +279,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                   feedModel.ticks.last,
                                   id: 'last_tick_indicator',
                                   style: HorizontalBarrierStyle(
+                                      labelPadding: 8,
                                       color: latestTickColor,
                                       hasArrow: false,
                                       textStyle: TextStyle(
