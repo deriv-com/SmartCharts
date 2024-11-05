@@ -281,7 +281,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
                                       hasArrow: false,
-                                      labelHeight: 26,
                                       textStyle: TextStyle(
                                         fontSize: 12,
                                         height: 1.8,

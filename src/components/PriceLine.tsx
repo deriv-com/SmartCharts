@@ -95,6 +95,8 @@ const PriceLine = ({
                             width: isOverlappingWithPriceLine ? overlappedBarrierWidth : width,
                             opacity,
                             right: price_right_offset,
+                            borderTopRightRadius: isOverlappingWithPriceLine ? 0 : 4,
+                            borderBottomRightRadius: isOverlappingWithPriceLine ? 0 : 4,
                         }}
                     >
                         <HamburgerDragIcon />
@@ -117,7 +119,13 @@ const PriceLine = ({
                     {isOverlappingWithPriceLine && (
                         <div
                             className='price-overlay'
-                            style={{ backgroundColor: color, width: width - overlappedBarrierWidth + 6, right: isMobile ? 20 : 3 }}
+                            style={{
+                                backgroundColor: color,
+                                width: width - overlappedBarrierWidth + 6,
+                                right: isMobile ? 20 : 3,
+                                borderTopRightRadius: isOverlappingWithPriceLine ? 4 : 0,
+                                borderBottomRightRadius: isOverlappingWithPriceLine ? 4 : 0,
+                            }}
                         />
                     )}
                 </div>
