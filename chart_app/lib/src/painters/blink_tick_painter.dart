@@ -17,7 +17,10 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
     required QuoteToY quoteToY,
     required AnimationInfo animationInfo,
   }) {
-    final Paint _paint = Paint()..color = Colors.redAccent;
+    final HorizontalBarrierStyle style =
+        series.style as HorizontalBarrierStyle? ?? theme.horizontalBarrierStyle;
+
+    final Paint _paint = Paint()..color = style.color;
 
     /// Animated Value
     double? animatedValue;
@@ -57,7 +60,7 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
         YAxisConfig.instance.yAxisClipping(canvas, size, () {
           canvas.drawCircle(
             Offset(dotX!, y),
-            3 + (animationInfo.currentTickPercent * 6),
+            4 + (animationInfo.currentTickPercent * 6),
             Paint()..color = _paint.color.withOpacity(0.15),
           );
         });
@@ -65,7 +68,7 @@ class BlinkingTickPainter<T extends BlinkingTickIndicator>
       YAxisConfig.instance.yAxisClipping(canvas, size, () {
         canvas.drawCircle(
           Offset(dotX!, y),
-          3,
+          4,
           _paint,
         );
       });
