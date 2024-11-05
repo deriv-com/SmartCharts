@@ -251,11 +251,17 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
 
                     final bool isTickGranularity = granularity < 60000;
 
+                    final bool isLightMode =
+                        configModel.theme is ChartDefaultLightTheme;
+
                     final DataSeries<Tick> mainSeries =
                         getDataSeries(feedModel, configModel, granularity);
 
-                    final Color latestTickColor = Color.fromRGBO(
-                        255, 68, 81, configModel.isSymbolClosed ? 0.32 : 1);
+                    final Color latestTickColor = isLightMode
+                        ? Color.fromRGBO(
+                            0, 0, 0, configModel.isSymbolClosed ? 0.32 : 1)
+                        : Color.fromRGBO(255, 255, 255,
+                            configModel.isSymbolClosed ? 0.32 : 1);
 
                     final Duration animationDuration = _getAnimationDuration(
                         isTickGranularity: isTickGranularity);
@@ -274,14 +280,16 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                   id: 'last_tick_indicator',
                                   style: HorizontalBarrierStyle(
                                       color: latestTickColor,
-                                      labelShape: LabelShape.pentagon,
                                       hasArrow: false,
-                                      textStyle: const TextStyle(
+                                      labelHeight: 26,
+                                      textStyle: TextStyle(
                                         fontSize: 12,
-                                        height: 1.3,
+                                        height: 1.8,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                        fontFeatures: <FontFeature>[
+                                        color: isLightMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontFeatures: const <FontFeature>[
                                           FontFeature.tabularFigures()
                                         ],
                                       )),
@@ -289,12 +297,15 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                       .keepBarrierLabelVisible,
                                 ),
                               if (configModel.isLive)
-                                BlinkingTickIndicator(
-                                  feedModel.ticks.last,
-                                  id: 'blink_tick_indicator',
-                                  visibility: HorizontalBarrierVisibility
-                                      .keepBarrierLabelVisible,
-                                ),
+                                BlinkingTickIndicator(feedModel.ticks.last,
+                                    id: 'blink_tick_indicator',
+                                    visibility: HorizontalBarrierVisibility
+                                        .keepBarrierLabelVisible,
+                                    style: HorizontalBarrierStyle(
+                                      color: isLightMode
+                                          ? Colors.black
+                                          : Colors.white,
+                                    )),
                               if (app.configModel.showTimeInterval &&
                                   !isTickGranularity)
                                 TimeIntervalIndicator(
@@ -302,8 +313,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                   feedModel.ticks.last.close,
                                   longLine: false,
                                   style: HorizontalBarrierStyle(
-                                    color: configModel.theme
-                                            is ChartDefaultLightTheme
+                                    color: isLightMode
                                         ? Colors.black
                                         : Colors.white,
                                     hasArrow: false,
@@ -311,8 +321,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                       fontSize: 12,
                                       height: 1.3,
                                       fontWeight: FontWeight.w600,
-                                      color: configModel.theme
-                                              is ChartDefaultLightTheme
+                                      color: isLightMode
                                           ? Colors.white
                                           : Colors.black,
                                       fontFeatures: const <FontFeature>[
