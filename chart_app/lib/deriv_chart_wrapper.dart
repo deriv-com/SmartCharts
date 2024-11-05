@@ -284,7 +284,7 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                                       hasArrow: false,
                                       textStyle: TextStyle(
                                         fontSize: 12,
-                                        height: 1.8,
+                                        height: 1.3,
                                         fontWeight: FontWeight.w600,
                                         color: isLightMode
                                             ? Colors.white
