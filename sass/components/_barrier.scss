@@ -52,13 +52,6 @@
             $title-height: 24px;
             position: absolute;
             height: $title-height;
-            /* stylelint-disable number-max-precision, plugin/no-unsupported-browser-features */
-            background-image: linear-gradient(
-                rgba(255, 255, 255, 0.001) 30%,
-                var(--general-main-1) 50%,
-                rgba(255, 255, 255, 0.001) 75%
-            );
-            /* stylelint-enable number-max-precision, plugin/no-unsupported-browser-features */
             top: -11px;
             display: flex;
             align-items: center;
@@ -96,6 +89,7 @@
     right: -1px;
     background-color: $color-blue;
     justify-content: space-between;
+    border-radius: 4px;
 
     .arrow-icon {
         height: 41px;
@@ -103,7 +97,6 @@
         position: absolute;
         transition: none;
         left: 2px;
-        background: var(--general-main-1);
         width: calc(100% - 2px);
     }
 }

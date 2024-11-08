@@ -1,25 +1,25 @@
 /* stylelint-disable color-no-hex */
 /* stylelint-disable value-keyword-case */
 // Colours based on Zeplin style guide 28march 2019
-$COLOR_WHITE        : #ffffff;
-$COLOR_BLACK        : #000000;
-$COLOR_ORANGE       : #ff9933;
-$COLOR_SKY_BLUE     : #2196f3;
-$COLOR_GREEN_2      : #2d9f93;
-$COLOR_PURPLE       : #4f60ae;
-$COLOR_DARK_BLUE_1  : #0b0e18;
-$COLOR_DARK_BLUE_2  : #101320;
-$COLOR_DARK_BLUE_3  : #191c31;
-$COLOR_DARK_BLUE_4  : #202641;
-$COLOR_DARK_BLUE_5  : #2a3052; /* Brand Blue */
-$COLOR_DARK_GRAY_1  : #282a37;
-$COLOR_DARK_GRAY_2  : #303342;
-$COLOR_DARK_GRAY_3  : #555975;
-$COLOR_LIGHT_GRAY   : #7f8397;
+$COLOR_WHITE: #ffffff;
+$COLOR_BLACK: #000000;
+$COLOR_ORANGE: #ff9933;
+$COLOR_SKY_BLUE: #2196f3;
+$COLOR_GREEN_2: #2d9f93;
+$COLOR_PURPLE: #4f60ae;
+$COLOR_DARK_BLUE_1: #0b0e18;
+$COLOR_DARK_BLUE_2: #101320;
+$COLOR_DARK_BLUE_3: #191c31;
+$COLOR_DARK_BLUE_4: #202641;
+$COLOR_DARK_BLUE_5: #2a3052; /* Brand Blue */
+$COLOR_DARK_GRAY_1: #282a37;
+$COLOR_DARK_GRAY_2: #303342;
+$COLOR_DARK_GRAY_3: #555975;
+$COLOR_LIGHT_GRAY: #7f8397;
 $COLOR_LIGHT_GRAY_30: rgba($COLOR_LIGHT_GRAY, 0.3);
-$COLOR_LIGHT_GRAY_1 : #999cac;
-$COLOR_LIGHT_GRAY_2 : rgba($COLOR_LIGHT_GRAY_1, 0.32);
-$COLOR_LIGHT_GRAY_3 : rgb(250, 250, 251);
+$COLOR_LIGHT_GRAY_1: #999cac;
+$COLOR_LIGHT_GRAY_2: rgba($COLOR_LIGHT_GRAY_1, 0.32);
+$COLOR_LIGHT_GRAY_3: rgb(250, 250, 251);
 $COLOR_LIGHT_BLACK_1: rgba($COLOR_BLACK, 0.8);
 $COLOR_LIGHT_BLACK_1_40: rgba($COLOR_BLACK, 0.4);
 $COLOR_LIGHT_BLACK_3: rgba($COLOR_BLACK, 0.16);
@@ -32,13 +32,13 @@ $COLOR_LIGHT_BLACK_6: rgba($COLOR_BLACK, 0.15);
 
 //Legacy Colours. TODO: Check with design team, replace and remove these colours
 //Legacy Colours. TODO: Check with design team, replace and remove these colours
-$COLOR_YELLOW       : #fef1cf;
-$COLOR_LIGHT_BLACK : #5c5c5c;
+$COLOR_YELLOW: #fef1cf;
+$COLOR_LIGHT_BLACK: #5c5c5c;
 $COLOR_BRANDBLUE_40: #aaacba;
 $COLOR_BRANDBLUE_95: #353b5b;
 $COLOR_BRANDBLUE_85: #4a4f6c;
 $COLOR_BRANDBLUE_75: #60647e;
-$COLOR_DARK_BLUE_8 : rgba(127, 131, 151, 0.3);
+$COLOR_DARK_BLUE_8: rgba(127, 131, 151, 0.3);
 
 $COLOR_GREEN: #85acb0;
 $COLOR_GREEN_1: #4bb4b3;
@@ -49,7 +49,7 @@ $COLOR_GREEN_1: #4bb4b3;
  *****************************
 \*****************************/
 
-$color-black: #0e0e0e;
+$color-black: #181c25;
 $color-black-1: #333333;
 $color-black-3: #151717;
 $color-black-4: #1d1f20;
@@ -92,63 +92,63 @@ $color-blue: #377cfc;
 /* Preserve legacy variables */
 /* Primary */
 
-$COLOR_BLACK      : #000000;
-$COLOR_BLACK_2    : #1d1f20;
-$COLOR_BLACK_3    : #0e0e0e;
-$COLOR_GREEN_1    : #39b19d;
-$COLOR_GREEN_2    : #2d9f93;
-$COLOR_GREEN_3    : #21ce99;
-$COLOR_GREEN_4    : #00a79e;
-$COLOR_GREEN_5    : #4bb4b3;
-$COLOR_ORANGE     : #ff9933;
+$COLOR_BLACK: #000000;
+$COLOR_BLACK_2: #1d1f20;
+$COLOR_BLACK_3: #0e0e0e;
+$COLOR_GREEN_1: #39b19d;
+$COLOR_GREEN_2: #2d9f93;
+$COLOR_GREEN_3: #21ce99;
+$COLOR_GREEN_4: #00a79e;
+$COLOR_GREEN_5: #4bb4b3;
+$COLOR_ORANGE: #ff9933;
 $COLOR_DARK_ORANGE: #ff8802;
-$COLOR_PURPLE     : #4f60ae;
-$COLOR_RED        : #e31c4b;
-$COLOR_RED_2      : #cc2e3d;
-$COLOR_RED_3      : #ec3f3f;
-$COLOR_CORAL_RED  : #ff444f;
-$COLOR_SKY_BLUE   : #2196f3;
-$COLOR_WHITE      : #ffffff;
-$COLOR_BLUE       : #1c5ae3;
+$COLOR_PURPLE: #4f60ae;
+$COLOR_RED: #e31c4b;
+$COLOR_RED_2: #cc2e3d;
+$COLOR_RED_3: #ec3f3f;
+$COLOR_CORAL_RED: #ff444f;
+$COLOR_SKY_BLUE: #2196f3;
+$COLOR_WHITE: #ffffff;
+$COLOR_BLUE: #1c5ae3;
 // Light theme
-$COLOR_LIGHT_BLACK_1        : rgba(0, 0, 0, 0.8);
-$COLOR_LIGHT_BLACK_2        : rgba(0, 0, 0, 0.4);
-$COLOR_LIGHT_BLACK_3        : rgba(0, 0, 0, 0.16);
+$COLOR_LIGHT_BLACK_1: rgba(0, 0, 0, 0.8);
+$COLOR_LIGHT_BLACK_2: rgba(0, 0, 0, 0.4);
+$COLOR_LIGHT_BLACK_3: rgba(0, 0, 0, 0.16);
 $COLOR_LIGHT_BLACK_3_SOLID_1: #d6d6d6;
 $COLOR_LIGHT_BLACK_3_SOLID_2: #b3b3b3;
-$COLOR_LIGHT_BLACK_4        : rgba(0, 0, 0, 0.04);
-$COLOR_LIGHT_BLACK_4_SOLID  : #f4f4f6;
-$COLOR_LIGHT_GRAY_1         : #999cac;
-$COLOR_LIGHT_GRAY_2         : rgba(153, 156, 172, 0.32);
-$COLOR_LIGHT_GRAY_3         : #eaeced;
-$COLOR_LIGHT_GRAY_4         : #6e6e6e;
-$COLOR_LIGHT_GRAY_5         : #c2c2c2;
-$COLOR_LIGHT_GRAY_6          : #e9e9ed;
+$COLOR_LIGHT_BLACK_4: rgba(0, 0, 0, 0.04);
+$COLOR_LIGHT_BLACK_4_SOLID: #f4f4f6;
+$COLOR_LIGHT_GRAY_1: #999cac;
+$COLOR_LIGHT_GRAY_2: rgba(153, 156, 172, 0.32);
+$COLOR_LIGHT_GRAY_3: #eaeced;
+$COLOR_LIGHT_GRAY_4: #6e6e6e;
+$COLOR_LIGHT_GRAY_5: #c2c2c2;
+$COLOR_LIGHT_GRAY_6: #e9e9ed;
 $COLOR_LIGHT_GRAY_7: rgba(0, 0, 0, 0.08);
-$COLOR_LIGHT_GREEN_GRADIENT : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(0, 148, 117, 0.16));
-$COLOR_LIGHT_RED_GRADIENT   : linear-gradient(to top, rgba(255, 255, 255, 0), rgba(227, 28, 75, 0.16));
-$COLOR_LIGHT_WHITE_GRADIENT : linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+$COLOR_LIGHT_GREEN_GRADIENT: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(0, 148, 117, 0.16));
+$COLOR_LIGHT_RED_GRADIENT: linear-gradient(to top, rgba(255, 255, 255, 0), rgba(227, 28, 75, 0.16));
+$COLOR_LIGHT_WHITE_GRADIENT: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
 // Dark theme
-$COLOR_DARK_BLACK_GRADIENT : linear-gradient(to right, rgba(16, 19, 32, 1), rgba(16, 19, 32, 0));
-$COLOR_DARK_BLUE_1         : #0b0e18;
-$COLOR_DARK_BLUE_2         : #101320;
-$COLOR_DARK_BLUE_3         : #191c31;
-$COLOR_DARK_BLUE_4         : #202641;
-$COLOR_DARK_BLUE_5         : #2a3052;
-$COLOR_DARK_BLUE_6         : #555975;
-$COLOR_DARK_BLUE_7         : #7f8397;
-$COLOR_DARK_BLUE_8         : rgba(127, 131, 151, 0.3);
-$COLOR_DARK_GREEN_GRADIENT : linear-gradient(to top, rgba(16, 19, 32, 0), rgba(0, 148, 117, 0.16));
-$COLOR_DARK_RED_GRADIENT   : linear-gradient(to top, rgba(16, 19, 32, 0), rgba(227, 28, 75, 0.16));
-$COLOR_DARK_GRAY_1         : #282a37;
-$COLOR_DARK_GRAY_2         : #303342;
-$COLOR_DARK_GRAY_3         : #555975;
-$COLOR_DARK_GRAY_4         : #999999;
+$COLOR_DARK_BLACK_GRADIENT: linear-gradient(to right, rgba(16, 19, 32, 1), rgba(16, 19, 32, 0));
+$COLOR_DARK_BLUE_1: #0b0e18;
+$COLOR_DARK_BLUE_2: #101320;
+$COLOR_DARK_BLUE_3: #191c31;
+$COLOR_DARK_BLUE_4: #202641;
+$COLOR_DARK_BLUE_5: #2a3052;
+$COLOR_DARK_BLUE_6: #555975;
+$COLOR_DARK_BLUE_7: #7f8397;
+$COLOR_DARK_BLUE_8: rgba(127, 131, 151, 0.3);
+$COLOR_DARK_GREEN_GRADIENT: linear-gradient(to top, rgba(16, 19, 32, 0), rgba(0, 148, 117, 0.16));
+$COLOR_DARK_RED_GRADIENT: linear-gradient(to top, rgba(16, 19, 32, 0), rgba(227, 28, 75, 0.16));
+$COLOR_DARK_GRAY_1: #282a37;
+$COLOR_DARK_GRAY_2: #303342;
+$COLOR_DARK_GRAY_3: #555975;
+$COLOR_DARK_GRAY_4: #999999;
 
 $themes: (
     light: (
         DefaultMain: $COLOR_WHITE,
-        DefaultBg:  $COLOR_WHITE,
+        DefaultBg: $COLOR_WHITE,
         DefaultText: $COLOR_LIGHT_GRAY,
         BtnDefaultBg: transparent,
         BtnDefaultText: $color-red,
@@ -471,11 +471,11 @@ $themes: (
         ChartHistoricalMarkerFont: $color-black-1,
     ),
     dark: (
-        DefaultMain:            $color-black,
-        DefaultBg:              $color-black,
-        DefaultText:            $COLOR_WHITE,
-        DefaultBorder:          $COLOR_WHITE,
-        TooltipBg:  $color-black-8,
+        DefaultMain: $color-black,
+        DefaultBg: $color-black,
+        DefaultText: $COLOR_WHITE,
+        DefaultBorder: $COLOR_WHITE,
+        TooltipBg: $color-black-8,
         TooltipText: $color-white,
         TooltipShadow: transparent,
         TooltipTextBg: transparent,
@@ -742,7 +742,7 @@ $themes: (
         ChartHistoryPickerFooterBorder: $color-black,
         ChartHistoryPickerFooterColor: $color-grey,
         ChartHistoryPickerBodyColor: $color-grey,
-        ChartHistoryPickerBodyDisableColor:$color-black-6,
+        ChartHistoryPickerBodyDisableColor: $color-black-6,
         ChartHistoryPickerBodyActiveBg: $color-black-8,
         ChartHistoryPickerBodyActiveColor: $COLOR_WHITE,
         ChartHistoryPickerBodyActiveBorder: $color-black-8,
@@ -797,7 +797,12 @@ $themes: (
             $theme-map: () !global;
             @each $key, $submap in $map {
                 $value: map-get(map-get($themes, $theme), '#{$key}');
-                $theme-map: map-merge($theme-map, ($key: $value)) !global;
+                $theme-map: map-merge(
+                    $theme-map,
+                    (
+                        $key: $value,
+                    )
+                ) !global;
             }
             @content;
             $theme-map: null !global;

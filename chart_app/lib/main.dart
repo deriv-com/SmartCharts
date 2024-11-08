@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:chart_app/deriv_chart_wrapper.dart';
 import 'package:chart_app/src/chart_app.dart';
+import 'package:chart_app/src/helpers/color.dart';
 import 'package:chart_app/src/misc/no_navigation_strategy.dart';
 import 'package:chart_app/src/models/drawing_tool.dart';
 import 'package:chart_app/src/models/indicators.dart';
@@ -112,7 +113,7 @@ class _DerivChartWebAdapterState extends State<_DerivChartWebAdapter> {
                         return Container(
                           color: configModel.theme is ChartDefaultLightTheme
                               ? Colors.white
-                              : Colors.black,
+                              : getColorFromString('rgba(24, 28, 37, 1)'),
                           constraints: const BoxConstraints.expand(),
                         );
                       }
