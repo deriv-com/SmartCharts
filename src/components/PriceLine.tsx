@@ -59,7 +59,7 @@ const PriceLine = ({
     if (!showBarrier) return null;
 
     const width = priceLineWidth + 12;
-    const price_right_offset = (isOverlappingWithPriceLine ? width - overlappedBarrierWidth : 0) + (isMobile ? 20 : 3);
+    const price_right_offset = isMobile ? 20 : 3;
 
     return (
         <div
@@ -82,7 +82,7 @@ const PriceLine = ({
                         style={{
                             borderTopColor: color,
                             borderTopStyle: lineStyle as React.CSSProperties['borderTopStyle'],
-                            width: `calc(100% - ${width}px + ${!isMobile ? overlappedBarrierWidth : 0}px)`,
+                            width: `calc(100% - ${width}px + ${isMobile ? 0 : overlappedBarrierWidth - 4}px)`,
                         }}
                     />
                 )}
@@ -91,8 +91,10 @@ const PriceLine = ({
                     <div
                         className='drag-price'
                         style={{
-                            backgroundColor: color,
-                            width: isOverlappingWithPriceLine ? overlappedBarrierWidth : width,
+                            backgroundColor: isOverlappingWithPriceLine ? 'rgba(12, 40, 247, 0.16)' : '',
+                            color,
+                            borderColor: color,
+                            width: draggable && isOverlappingWithPriceLine ? width + 6 : width - 6,
                             opacity,
                             right: price_right_offset,
                         }}
@@ -103,7 +105,7 @@ const PriceLine = ({
                             style={{
                                 color: isOverlappingWithPriceLine ? color : '',
                                 right: isOverlappingWithPriceLine
-                                    ? overlappedBarrierWidth + priceDisplay.length * 8 - (!draggable ? 16 : 0)
+                                    ? overlappedBarrierWidth + 6 + priceDisplay.length * 8 + (draggable ? 16 : 0)
                                     : 0,
                             }}
                         >
@@ -114,12 +116,6 @@ const PriceLine = ({
                             <PriceLineArrow offScreenDirection={offScreenDirection} color={color} />
                         )}
                     </div>
-                    {isOverlappingWithPriceLine && (
-                        <div
-                            className='price-overlay'
-                            style={{ backgroundColor: color, width: width - overlappedBarrierWidth + 6, right: isMobile ? 20 : 3 }}
-                        />
-                    )}
                 </div>
                 {title && (
                     <PriceLineTitle

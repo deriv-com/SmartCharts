@@ -83,13 +83,17 @@
 
 .drag-price {
     display: flex;
-    height: 24px;
-    top: -12px;
+    height: 21px;
+    top: -10px;
     position: absolute;
     right: -1px;
-    background-color: $color-blue;
     justify-content: space-between;
+    border: 1px solid;
     border-radius: 4px;
+
+    @include themify($themes) {
+        background: themed('DefaultMain');
+    }
 
     .arrow-icon {
         height: 41px;
@@ -104,10 +108,8 @@
 .price {
     display: block;
     font-size: 12px;
-    font-weight: bold;
     line-height: 18px;
     overflow: unset;
-    padding: 3px 1px;
     position: relative;
     right: 45px;
     text-align: center;
@@ -116,18 +118,14 @@
     &--zero {
         color: $color-blue;
         @include themify($themes) {
-            background-color: themed('DefaultBg');
+            /* stylelint-disable number-max-precision, plugin/no-unsupported-browser-features */
+            background-image: linear-gradient(
+                rgba(255, 255, 255, 0.001) 30%,
+                themed('DefaultBg') 50%,
+                rgba(255, 255, 255, 0.001) 75%
+            );
+            /* stylelint-enable number-max-precision, plugin/no-unsupported-browser-features */
         }
-    }
-    &-overlay {
-        /* rtl:begin:ignore */
-        background-color: $color-blue;
-        height: 24px;
-        opacity: 0.3;
-        position: absolute;
-        right: -10px;
-        top: -12px;
-        /* rtl:end:ignore */
     }
 }
 
@@ -144,10 +142,16 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-left: 3px;
+        padding-left: 3px;
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+
+        @include themify($themes) {
+            background: themed('DefaultMain');
+        }
 
         div {
-            background-color: $color-white;
+            background-color: $color-blue;
             height: 1px;
             margin: 1px;
             width: 8px;
