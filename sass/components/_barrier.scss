@@ -83,8 +83,8 @@
 
 .drag-price {
     display: flex;
-    height: 21px;
-    top: -10px;
+    height: 24px;
+    top: -12px;
     position: absolute;
     right: -1px;
     justify-content: space-between;
@@ -92,7 +92,15 @@
     border-radius: 4px;
 
     @include themify($themes) {
-        background: themed('DefaultMain');
+        &:not(&--narrow) {
+            background-color: themed('DefaultMain');
+        }
+    }
+
+    &--narrow {
+        height: 21px;
+        top: -10px;
+        background-color: rgba(12, 40, 247, 0.16);
     }
 
     .arrow-icon {
@@ -110,6 +118,7 @@
     font-size: 12px;
     line-height: 18px;
     overflow: unset;
+    padding: 3px 1px;
     position: relative;
     right: 45px;
     text-align: center;
@@ -117,6 +126,8 @@
 
     &--zero {
         color: $color-blue;
+        padding: unset;
+
         @include themify($themes) {
             /* stylelint-disable number-max-precision, plugin/no-unsupported-browser-features */
             background-image: linear-gradient(

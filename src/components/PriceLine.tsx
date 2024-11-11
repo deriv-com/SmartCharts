@@ -89,9 +89,8 @@ const PriceLine = ({
                 <div className='draggable-area' />
                 <div className='draggable-area-wrapper'>
                     <div
-                        className='drag-price'
+                        className={classNames('drag-price', { 'drag-price--narrow': isOverlappingWithPriceLine })}
                         style={{
-                            backgroundColor: isOverlappingWithPriceLine ? 'rgba(12, 40, 247, 0.16)' : '',
                             color,
                             borderColor: color,
                             width: draggable && isOverlappingWithPriceLine ? width + 6 : width - 6,
@@ -105,7 +104,7 @@ const PriceLine = ({
                             style={{
                                 color: isOverlappingWithPriceLine ? color : '',
                                 right: isOverlappingWithPriceLine
-                                    ? overlappedBarrierWidth + 6 + priceDisplay.length * 8 + (draggable ? 16 : 0)
+                                    ? overlappedBarrierWidth + 6 + priceDisplay.length * 8 + (draggable ? 26 : 0)
                                     : 0,
                             }}
                         >
