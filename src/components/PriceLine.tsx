@@ -96,8 +96,6 @@ const PriceLine = ({
                             width: draggable && isOverlappingWithPriceLine ? width + 6 : width - 6,
                             opacity,
                             right: price_right_offset,
-                            borderTopRightRadius: isOverlappingWithPriceLine ? 0 : 4,
-                            borderBottomRightRadius: isOverlappingWithPriceLine ? 0 : 4,
                         }}
                     >
                         <HamburgerDragIcon />
