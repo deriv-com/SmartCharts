@@ -33,7 +33,7 @@ Before running or contribute to this project, you need to have the setup of the 
 2.  **Clone using SSH**
 
     ```sh
-    git clone git@github.com:binary-com/SmartCharts.git
+    git clone git@github.com:deriv-com/SmartCharts.git
     ```
 
 3.  **Enter project directory**
@@ -548,7 +548,7 @@ This has much less freedom compared to [inline SVG](https://github.com/MoOx/reac
 
 SmartCharts uses a variation of [Mobdux](https://medium.com/@cameronfletcher92/mobdux-combining-the-good-parts-of-mobx-and-redux-61bac90ee448) to assist with state management using Mobx.
 
-Each component consists of 2 parts: a **template** (`*.jsx` file), and a **store** (`*Store.js` file). There are 3 scenarios in which the [`connect`](https://github.com/binary-com/SmartCharts/blob/dev/src/store/Connect.js) method is used:
+Each component consists of 2 parts: a **template** (`*.jsx` file), and a **store** (`*Store.js` file). There are 3 scenarios in which the [`connect`](https://github.com/deriv-com/SmartCharts/blob/dev/src/store/Connect.js) method is used:
 
 ##### 1. Main Components: The component is tied directly to the main store.
 
