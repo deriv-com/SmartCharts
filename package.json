@@ -16,9 +16,9 @@
     "license": "ISC",
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@github.com/binary-com/SmartCharts.git"
+        "url": "git+ssh://git@github.com/deriv-com/SmartCharts.git"
     },
-    "homepage": "https://github.com/binary-com/SmartCharts#readme",
+    "homepage": "https://github.com/deriv-com/SmartCharts#readme",
     "keywords": [
         "charts",
         "binary.com"

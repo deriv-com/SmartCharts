@@ -29,27 +29,27 @@ jobs:
                   head_sha: ${{github.event.pull_request.head.sha}}
 
             - name: Checkout SmartCharts
-              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
                   repository: ${{github.event.pull_request.user.login}}/SmartCharts
                   path: SmartCharts
                   ref: ${{github.head_ref}}
-                  alternate_repository: 'binary-com/SmartCharts'
+                  alternate_repository: 'deriv-com/SmartCharts'
                   alternate_ref: master
 
             - name: Checkout deriv-app
               id: deriv_app
-              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
                   repository: ${{github.event.pull_request.user.login}}/deriv-app
                   path: deriv-app
                   ref: ${{github.head_ref}}
-                  alternate_repository: 'binary-com/deriv-app'
+                  alternate_repository: 'deriv-com/deriv-app'
                   alternate_ref: master
 
             - name: Custom flutter-chart
               id: flutter_chart
-              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
                   repository: ${{github.event.pull_request.user.login}}/flutter-chart
                   path: flutter-chart
