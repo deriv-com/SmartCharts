@@ -27,7 +27,7 @@
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
         "paths": {
-            "@binary-com/smartcharts": ["src/"]
+            "@deriv-com/smartcharts": ["src/"]
         },
         "useDefineForClassFields": true
     },
