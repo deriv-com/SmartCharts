@@ -149,9 +149,13 @@ import Vol1S250 from '../../sass/icons/active-symbols/volatility/1s250 index/ic-
 import Vol1S300 from '../../sass/icons/active-symbols/volatility/1s300 index/ic-300-1s-index.svg';
 import Crash300 from '../../sass/icons/active-symbols/volatility/crash300 index/crash300 index.svg';
 import Crash500 from '../../sass/icons/active-symbols/volatility/crash500 index/crash500 index.svg';
+import Crash600 from '../../sass/icons/active-symbols/volatility/crash600 index/crash600 index.svg';
+import Crash900 from '../../sass/icons/active-symbols/volatility/crash900 index/crash900 index.svg';
 import Crash1000 from '../../sass/icons/active-symbols/volatility/crash1000 index/crash1000 index.svg';
 import Boom300 from '../../sass/icons/active-symbols/volatility/boom300 index/boom300 index.svg';
 import Boom500 from '../../sass/icons/active-symbols/volatility/boom500 index/boom500 index.svg';
+import Boom600 from '../../sass/icons/active-symbols/volatility/boom600 index/boom600 index.svg';
+import Boom900 from '../../sass/icons/active-symbols/volatility/boom900 index/boom900 index.svg';
 import Boom1000 from '../../sass/icons/active-symbols/volatility/boom1000 index/boom1000 index.svg';
 import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/ic-marketbear.svg';
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
@@ -561,9 +565,13 @@ export const ItemIconMap = {
     '1HZ300V': Wrapper(Vol1S300),
     BOOM300N: Wrapper(Boom300),
     BOOM500: Wrapper(Boom500),
+    BOOM600: Wrapper(Boom600),
+    BOOM900: Wrapper(Boom900),
     BOOM1000: Wrapper(Boom1000),
     CRASH300N: Wrapper(Crash300),
     CRASH500: Wrapper(Crash500),
+    CRASH600: Wrapper(Crash600),
+    CRASH900: Wrapper(Crash900),
     CRASH1000: Wrapper(Crash1000),
     RDBEAR: Wrapper(MarketBear),
     RDBULL: Wrapper(MarketBull),

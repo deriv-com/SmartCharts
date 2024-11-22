@@ -9,15 +9,15 @@ jobs:
             contents: write
         steps:
             - name: Checkout SmartCharts
-              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: 'binary-com/SmartCharts'
+                  repository: 'deriv-com/SmartCharts'
                   path: SmartCharts
                   ref: master
 
             - name: Custom flutter-chart
               id: flutter_chart
-              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
                   repository: 'regentmarkets/flutter-chart'
                   path: flutter-chart
@@ -70,7 +70,7 @@ jobs:
         needs: [build_and_publish_deriv_charts]
         steps:
             - name: Checkout deriv-app
-              uses: 'binary-com/SmartCharts/.github/actions/checkout@master'
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
                   repository: 'deriv-com/deriv-app'
                   path: deriv-app

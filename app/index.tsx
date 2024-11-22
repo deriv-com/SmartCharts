@@ -14,7 +14,7 @@ import {
     StudyLegend,
     ToolbarWidget,
     Views,
-} from '@binary-com/smartcharts'; // eslint-disable-line import/no-unresolved
+} from '@deriv-com/smartcharts'; // eslint-disable-line import/no-unresolved
 import whyDidYouRender from '@welldone-software/why-did-you-render';
 import { configure } from 'mobx';
 import moment from 'moment';

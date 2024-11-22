@@ -1,4 +1,4 @@
-import { PendingPromise } from '@binary-com/smartcharts';
+import { PendingPromise } from '@deriv-com/smartcharts';
 import { PingResponse } from '@deriv/api-types';
 import { TNetworkConfig, TRequestAPI } from 'src/types';
 // eslint-disable-line import/no-extraneous-dependencies,import/no-unresolved

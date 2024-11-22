@@ -29,7 +29,7 @@ const config = {
     output,
     resolve: {
         alias: {
-            '@binary-com/smartcharts': path.resolve(__dirname, 'src/'),
+            '@deriv-com/smartcharts': path.resolve(__dirname, 'src/'),
             src: path.resolve(__dirname, 'src'),
             chart: path.resolve(__dirname, 'chart_app/build/web'),
         },

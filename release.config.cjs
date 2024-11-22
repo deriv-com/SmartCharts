@@ -9,7 +9,7 @@ module.exports = {
         { name: 'beta', prerelease: true },
         { name: 'alpha', prerelease: true },
     ],
-    repositoryUrl: 'git@github.com:binary-com/SmartCharts.git',
+    repositoryUrl: 'git@github.com:deriv-com/SmartCharts.git',
     plugins: [
         [
             '@semantic-release/commit-analyzer',
