@@ -10,9 +10,11 @@ type TBottomWidgetProps = {
 };
 
 const BottomWidget = ({ bottomWidgets }: TBottomWidgetProps) => {
-    const { state, lastDigitStats } = useStores();
+    const { state, lastDigitStats, chartTitle } = useStores();
+    const { animatedPrice, decimalPlaces } = chartTitle;
+    const { price } = animatedPrice;
     const { showLastDigitStats } = state;
-    const { digits, lastTick } = lastDigitStats;
+    const { digits, lastTick = { quote: price, pip_size: decimalPlaces } } = lastDigitStats;
 
     const Widget = !bottomWidgets && showLastDigitStats ? LastDigitStats : bottomWidgets;
     return Widget ? <Widget digits={digits} tick={toJS(lastTick)} /> : null;
