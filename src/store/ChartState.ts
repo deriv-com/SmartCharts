@@ -11,6 +11,7 @@ import {
 import debounce from 'lodash.debounce';
 import { AuditDetailsForExpiredContract, ProposalOpenContract } from '@deriv/api-types';
 import { isDeepEqual } from 'src/utils/object';
+import LZString from 'lz-string';
 import MainStore from '.';
 import Theme from '../../sass/_themes.scss';
 import { STATE } from '../Constant';
@@ -461,16 +462,21 @@ class ChartState {
         const layoutData: TLayout = this.mainStore.view.getLayout();
         const id = this.mainStore.chart.chartId;
 
-        saveToLocalStorage(`chart-layout-${id}`, {
-            studyItems: layoutData.studyItems,
-            crosshair: layoutData.crosshair,
-            msPerPx: layoutData.msPerPx,
-        });
+        const layoutCompressedData = LZString.compress(
+            JSON.stringify({
+                studyItems: layoutData.studyItems,
+                crosshair: layoutData.crosshair,
+                msPerPx: layoutData.msPerPx,
+            })
+        );
+
+        saveToLocalStorage(`chart-layout-${id}`, layoutCompressedData);
     }
     // returns false if restoring layout fails
     restoreLayout() {
         const id = this.mainStore.chart.chartId;
-        const layout: TLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
+        const compressedLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
+        const layout: TLayout = JSON.parse(LZString.decompress(compressedLayout ?? undefined));
 
         if (!layout) {
             this.clearLayout();
@@ -491,12 +497,15 @@ class ChartState {
         if (!this.chartStore.chartId) return;
         const layoutData: TLayout = this.mainStore.view.getLayout();
         const id = this.mainStore.chart.chartId;
+        const layoutCompressedData = LZString.compress(
+            JSON.stringify({
+                crosshair: layoutData.crosshair,
+                studyItems: layoutData.studyItems,
+                msPerPx: layoutData.msPerPx,
+            })
+        );
 
-        saveToLocalStorage(`chart-layout-${id}`, {
-            crosshair: layoutData.crosshair,
-            studyItems: layoutData.studyItems,
-            msPerPx: layoutData.msPerPx,
-        });
+        saveToLocalStorage(`chart-layout-${id}`, layoutCompressedData);
     }
 
     cleanChart() {
