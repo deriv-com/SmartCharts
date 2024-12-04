@@ -476,7 +476,12 @@ class ChartState {
     restoreLayout() {
         const id = this.mainStore.chart.chartId;
         const compressedLayout = createObjectFromLocalStorage(`chart-layout-${id}`);
-        const layout: TLayout = JSON.parse(LZString.decompress(compressedLayout ?? ''));
+        let layout: TLayout | null = null;
+        try {
+            layout = JSON.parse(LZString.decompress(compressedLayout ?? ''));
+        } catch (e) {
+            layout = compressedLayout;
+        }
 
         if (!layout) {
             this.clearLayout();
