@@ -1,6 +1,6 @@
+import 'dart:js';
+import 'dart:js_util';
 import 'package:chart_app/src/helpers/color.dart';
-import 'package:chart_app/src/markers/marker_group.dart';
-import 'package:chart_app/src/markers/web_marker.dart';
 import 'package:deriv_chart/deriv_chart.dart' hide ChartDefaultDarkTheme;
 import 'package:flutter/material.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
@@ -89,7 +89,7 @@ class ChartConfigModel extends ChangeNotifier {
     markerGroupList = <MarkerGroup>[];
 
     for (final JSContractsUpdate _markerGroup in _markerGroupList) {
-      final List<WebMarker> markers = <WebMarker>[];
+      final List<ChartMarker> markers = <ChartMarker>[];
 
       contractType = _markerGroup.type;
 
@@ -97,7 +97,7 @@ class ChartConfigModel extends ChangeNotifier {
         if (_marker.quote != null &&
             _marker.epoch != null &&
             _marker.type != null) {
-          markers.add(WebMarker(
+          markers.add(ChartMarker(
             quote: _marker.quote!,
             epoch: _marker.epoch! * 1000,
             text: _marker.text,
@@ -123,7 +123,7 @@ class ChartConfigModel extends ChangeNotifier {
           style: MarkerStyle(
             backgroundColor: _bgColor,
           ),
-          props: _markerGroup.props,
+          props: _toMap(_markerGroup.props),
         ),
       );
     }
@@ -192,5 +192,57 @@ class ChartConfigModel extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  /// Converts a JavaScript object to a Dart Map<String, dynamic>.
+  ///
+  /// This method extracts specific properties from a JavaScript object and
+  /// converts them into a Dart map. It only includes properties that are
+  /// defined in the [propertiesToExtract] list and have non-null values.
+  ///
+  /// To extend this method's functionality:
+  /// 1. Add new property names to the [propertiesToExtract] list
+  /// 2. For properties that need default values when not present in the input,
+  ///    add a check after the extraction loop:
+  ///    ```dart
+  ///    if (!result.containsKey('propertyName')) {
+  ///      result['propertyName'] = defaultValue;
+  ///    }
+  ///    ```
+  ///
+  /// Parameters:
+  /// - [props]: The JavaScript object to convert. Can be null.
+  ///
+  /// Returns:
+  /// - A Map<String, dynamic> containing the extracted properties.
+  ///   If [props] is null, returns an empty map.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final Map<String, dynamic> dartMap = _toMap(jsObject);
+  /// ```
+  Map<String, dynamic> _toMap(JsObject? props) {
+    if (props == null) {
+      return <String, dynamic>{};
+    }
+
+    final Map<String, dynamic> result = <String, dynamic>{};
+
+    // List of properties we want to extract
+    final List<String> propertiesToExtract = <String>[
+      'hasPersistentBorders',
+      // Add additional properties to extract here
+    ];
+
+    // Extract only the properties we want (don't include non-user-defined
+    // properties)
+    for (final String name in propertiesToExtract) {
+      final dynamic value = getProperty(props, name);
+      if (value != null) {
+        result[name] = value;
+      }
+    }
+
+    return result;
   }
 }

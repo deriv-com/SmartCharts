@@ -41,4 +41,7 @@ class ChartDefaultDarkTheme extends ChartDefaultTheme {
 
   @override
   TextStyle get overLine => TextStyles.overLine;
+
+  @override
+  Color get hoverColor => Color(0xFF242828);
 }

@@ -6,7 +6,6 @@ import 'package:chart_app/src/chart_app.dart';
 import 'package:chart_app/src/helpers/marker_painter.dart';
 import 'package:chart_app/src/helpers/series.dart';
 import 'package:chart_app/src/interop/js_interop.dart';
-import 'package:chart_app/src/markers/marker_group_series.dart';
 import 'package:chart_app/src/misc/crosshair_controller.dart';
 import 'package:chart_app/src/models/chart_config.dart';
 import 'package:chart_app/src/models/chart_feed.dart';
@@ -355,10 +354,6 @@ class DerivChartWrapperState extends State<DerivChartWrapper> {
                         SplayTreeSet<Marker>(),
                         markerGroupList: configModel.markerGroupList,
                         markerGroupIconPainter: getMarkerGroupPainter(app),
-                        controller: app.wrappedController,
-                        yAxisWidth: app.yAxisWidth,
-                        isMobile: app.configModel.isMobile,
-                        granularity: granularity,
                       ),
                       drawingToolsRepo: drawingToolModel.drawingToolsRepo,
                       drawingTools: drawingToolModel.drawingTools,

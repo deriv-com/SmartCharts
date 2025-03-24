@@ -67,8 +67,6 @@ class DrawingToolModel {
   List<String> getDrawingToolsRepoItems() =>
       drawingToolsRepo.items.map((e) => jsonEncode(e)).toList();
 
-
-
   /// To add a drawing
   void addOrUpdateDrawing(String dataString) {
     final Map<String, dynamic> config = json.decode(dataString)..remove('id');
@@ -125,8 +123,6 @@ class DrawingToolModel {
 
     drawingToolsRepo.updateAt(index, drawingToolConfig);
   }
-
-
 
   /// To clear the selection of drawing tool
   void clearDrawingToolSelect() {

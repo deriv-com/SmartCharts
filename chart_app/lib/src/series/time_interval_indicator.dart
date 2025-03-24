@@ -27,9 +27,8 @@ class TimeIntervalIndicator extends HorizontalBarrier {
   // TODO: optimizing the shouldRepaint
   @override
   bool shouldRepaint(ChartData? previous) => true;
-  
+
   @override
   SeriesPainter<Series> createPainter() =>
       TimeIntervalPainter<TimeIntervalIndicator>(this);
-
 }

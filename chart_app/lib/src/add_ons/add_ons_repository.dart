@@ -173,4 +173,20 @@ class AddOnsRepository<T extends AddOnConfig> extends ChangeNotifier
       );
     }
   }
+
+  @override
+  bool getHiddenStatus(int index) {
+    // TODO(Jim): implement getHiddenStatus
+    throw UnimplementedError();
+  }
+
+  @override
+  void update() {
+    // TODO(Jim): implement update
+  }
+
+  @override
+  void updateHiddenStatus({required int index, required bool hidden}) {
+    // TODO(Jim): implement updateHiddenStatus
+  }
 }
