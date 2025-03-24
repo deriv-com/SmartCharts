@@ -19,15 +19,13 @@ jobs:
               id: flutter_chart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: 'regentmarkets/flutter-chart'
+                  repository: 'deriv-com/flutter-chart'
                   path: flutter-chart
-                  # temporary reference to an old branch
-                  ref: fe-changes
-                  token: ${{ secrets.REPO_READ_TOKEN }}
+                  ref: master
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
-                  flutter-version: '3.10.6'
+                  flutter-version: '3.24.1'
                   channel: 'stable'
                   cache: true
 

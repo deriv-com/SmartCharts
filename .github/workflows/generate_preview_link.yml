@@ -54,14 +54,12 @@ jobs:
                   repository: ${{github.event.pull_request.user.login}}/flutter-chart
                   path: flutter-chart
                   ref: ${{github.head_ref}}
-                  alternate_repository: 'regentmarkets/flutter-chart'
-                  # temporary reference to an old branch
-                  alternate_ref: fe-changes
-                  token: ${{ secrets.REPO_READ_TOKEN }}
+                  alternate_repository: 'deriv-com/flutter-chart'
+                  alternate_ref: master
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
-                  flutter-version: '3.10.6'
+                  flutter-version: '3.24.1'
                   channel: 'stable'
                   cache: true
 
