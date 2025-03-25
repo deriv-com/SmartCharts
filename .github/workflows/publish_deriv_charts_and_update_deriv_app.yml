@@ -117,7 +117,7 @@ jobs:
                   lerna link
 
             - name: Create Pull Request to deriv-app
-              uses: peter-evans/create-pull-request@76c6f5c20e2111bfee3cd30fae52a25e410f5efc
+              uses: peter-evans/create-pull-request@98106d3f2b65918a6591f9e155117b7219ff7e51
               with:
                   token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
                   commit-message: 'chore: update @deriv/deriv-charts to ${{ steps.check_new_version.outputs.new_version }}'
