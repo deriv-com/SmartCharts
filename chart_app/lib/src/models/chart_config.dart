@@ -123,7 +123,9 @@ class ChartConfigModel extends ChangeNotifier {
           style: MarkerStyle(
             backgroundColor: _bgColor,
           ),
-          props: _toMap(_markerGroup.props),
+          props: MarkerProps(
+              hasPersistentBorders:
+                  _getProperty(_markerGroup.props, 'hasPersistentBorders')),
         ),
       );
     }
@@ -194,55 +196,34 @@ class ChartConfigModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Converts a JavaScript object to a Dart Map<String, dynamic>.
+  /// Safely retrieves a property value from a JavaScript object.
   ///
-  /// This method extracts specific properties from a JavaScript object and
-  /// converts them into a Dart map. It only includes properties that are
-  /// defined in the [propertiesToExtract] list and have non-null values.
-  ///
-  /// To extend this method's functionality:
-  /// 1. Add new property names to the [propertiesToExtract] list
-  /// 2. For properties that need default values when not present in the input,
-  ///    add a check after the extraction loop:
-  ///    ```dart
-  ///    if (!result.containsKey('propertyName')) {
-  ///      result['propertyName'] = defaultValue;
-  ///    }
-  ///    ```
+  /// This utility method provides a safe way to access properties
+  /// from JavaScript objects
+  /// in Dart, handling the null case to prevent runtime errors.
   ///
   /// Parameters:
-  /// - [props]: The JavaScript object to convert. Can be null.
+  /// - [props]: The JavaScript object from which to retrieve the property.
+  ///   If null, the method returns null without attempting to access
+  /// any property.
+  /// - [targetPropName]: The name of the property to retrieve from the
+  /// JavaScript object.
   ///
   /// Returns:
-  /// - A Map<String, dynamic> containing the extracted properties.
-  ///   If [props] is null, returns an empty map.
+  /// - The value of the specified property if the JavaScript object exists and
+  /// contains the property.
+  /// - null if the JavaScript object is null or the property doesn't exist.
   ///
-  /// Example usage:
-  /// ```dart
-  /// final Map<String, dynamic> dartMap = _toMap(jsObject);
-  /// ```
-  Map<String, dynamic> _toMap(JsObject? props) {
+  /// This method is used internally to safely extract properties
+  /// from JavaScript objects
+  /// passed from the web side, particularly for marker properties in the
+  /// chart configuration.
+  dynamic _getProperty(JsObject? props, String targetPropName) {
     if (props == null) {
-      return <String, dynamic>{};
+      return null;
     }
 
-    final Map<String, dynamic> result = <String, dynamic>{};
-
-    // List of properties we want to extract
-    final List<String> propertiesToExtract = <String>[
-      'hasPersistentBorders',
-      // Add additional properties to extract here
-    ];
-
-    // Extract only the properties we want (don't include non-user-defined
-    // properties)
-    for (final String name in propertiesToExtract) {
-      final dynamic value = getProperty(props, name);
-      if (value != null) {
-        result[name] = value;
-      }
-    }
-
-    return result;
+    final dynamic value = getProperty(props, targetPropName);
+    return value;
   }
 }
