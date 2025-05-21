@@ -139,9 +139,12 @@ import Vol50 from '../../sass/icons/active-symbols/volatility/50 index/ic-50-ind
 import Vol75 from '../../sass/icons/active-symbols/volatility/75 index/ic-75-index-v.svg';
 import Vol100 from '../../sass/icons/active-symbols/volatility/100 index/ic-100-index-v.svg';
 import Vol1S10 from '../../sass/icons/active-symbols/volatility/1s10 index/ic-10-1s-index.svg';
+import Vol1S15 from '../../sass/icons/active-symbols/volatility/1s15 index/ic-15-1s-index.svg';
 import Vol1S25 from '../../sass/icons/active-symbols/volatility/1s25 index/light-25(1s)index.svg';
+import Vol1S30 from '../../sass/icons/active-symbols/volatility/1s30 index/ic-30-1s-index.svg';
 import Vol1S50 from '../../sass/icons/active-symbols/volatility/1s50 index/light-50(1s) index.svg';
 import Vol1S75 from '../../sass/icons/active-symbols/volatility/1s75 index/light-75(1s) index.svg';
+import Vol1S90 from '../../sass/icons/active-symbols/volatility/1s90 index/ic-90-1s-index.svg';
 import Vol1S100 from '../../sass/icons/active-symbols/volatility/1s100 index/ic-100-1s-index.svg';
 import Vol1S150 from '../../sass/icons/active-symbols/volatility/1s150 index/ic-150-1s-index.svg';
 import Vol1S200 from '../../sass/icons/active-symbols/volatility/1s200 index/ic-200-1s-index.svg';
@@ -161,6 +164,8 @@ import MarketBear from '../../sass/icons/active-symbols/volatility/bear market/i
 import MarketBull from '../../sass/icons/active-symbols/volatility/bull market/ic-marketbull.svg';
 import Step100 from '../../sass/icons/active-symbols/volatility/step index/step-100-index.svg';
 import Step200 from '../../sass/icons/active-symbols/volatility/step index/step-200-index.svg';
+import RangeBreak100 from '../../sass/icons/active-symbols/volatility/range break 100/range-break-100-index.svg';
+import RangeBreak200 from '../../sass/icons/active-symbols/volatility/range break 200/range-break-200-index.svg';
 import Step300 from '../../sass/icons/active-symbols/volatility/step index/step-300-index.svg';
 import Step400 from '../../sass/icons/active-symbols/volatility/step index/step-400-index.svg';
 import Step500 from '../../sass/icons/active-symbols/volatility/step index/step-500-index.svg';
@@ -563,6 +568,9 @@ export const ItemIconMap = {
     '1HZ200V': Wrapper(Vol1S200),
     '1HZ250V': Wrapper(Vol1S250),
     '1HZ300V': Wrapper(Vol1S300),
+    '1HZ15V': Wrapper(Vol1S15),
+    '1HZ30V': Wrapper(Vol1S30),
+    '1HZ90V': Wrapper(Vol1S90),
     BOOM300N: Wrapper(Boom300),
     BOOM500: Wrapper(Boom500),
     BOOM600: Wrapper(Boom600),
@@ -580,6 +588,8 @@ export const ItemIconMap = {
     stpRNG3: Wrapper(Step300),
     stpRNG4: Wrapper(Step400),
     stpRNG5: Wrapper(Step500),
+    RB100: Wrapper(RangeBreak100),
+    RB200: Wrapper(RangeBreak200),
     JD10: Wrapper(JD10),
     JD25: Wrapper(JD25),
     JD50: Wrapper(JD50),
