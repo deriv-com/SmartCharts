@@ -19,7 +19,7 @@ jobs:
               id: flutter_chart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: 'regentmarkets/flutter-chart'
+                  repository: 'deriv-com/flutter-chart'
                   path: flutter-chart
                   # temporary reference to an old branch
                   ref: fe-changes
