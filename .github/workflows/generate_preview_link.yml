@@ -51,12 +51,10 @@ jobs:
               id: flutter_chart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
+                  repository: 'deriv-com/flutter-chart'
                   path: flutter-chart
-                  ref: ${{github.head_ref}}
-                  alternate_repository: 'deriv-com/flutter-chart'
                   # temporary reference to an old branch
-                  alternate_ref: fe-changes
+                  ref: fe-changes
                   token: ${{ secrets.REPO_READ_TOKEN }}
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
