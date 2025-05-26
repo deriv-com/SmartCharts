@@ -55,7 +55,6 @@ jobs:
                   path: flutter-chart
                   # temporary reference to an old branch
                   ref: fe-changes
-                  token: ${{ secrets.REPO_READ_TOKEN }}
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
