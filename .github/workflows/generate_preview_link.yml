@@ -54,6 +54,7 @@ jobs:
                   repository: 'deriv-com/flutter-chart'
                   path: flutter-chart
                   ref: fe-changes
+                  token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
