@@ -51,11 +51,9 @@ jobs:
               id: flutter_chart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: deriv-com/flutter-chart
-                  path: flutter-chart
-                  ref: fe-changes
-                  alternate_repository: 'deriv-com/flutter-chart'
-                  alternate_ref: fe-changes
+                  repository: deriv-com/bot
+                  path: bot
+                  ref: master
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
