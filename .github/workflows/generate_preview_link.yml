@@ -28,7 +28,7 @@ jobs:
                   issue_number: ${{github.event.number}}
                   head_sha: ${{github.event.pull_request.head.sha}}
 
-            - name: Checkout SmartCharts
+            - name: Checkout SmartChart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
                   repository: deriv-com/SmartCharts
