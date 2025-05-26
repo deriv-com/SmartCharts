@@ -49,10 +49,13 @@ jobs:
 
             - name: Custom flutter-chart
               id: flutter_chart
-              uses: actions/checkout@v3
+              uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: 'deriv-com/flutter-chart'
+                  repository: deriv-com/flutter-chart
+                  path: flutter-chart
                   ref: fe-changes
+                  alternate_repository: 'deriv-com/flutter-chart'
+                  alternate_ref: fe-changes
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
