@@ -31,7 +31,7 @@ jobs:
             - name: Checkout SmartCharts
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: ${{github.event.pull_request.user.login}}/SmartCharts
+                  repository: deriv-com/SmartCharts
                   path: SmartCharts
                   ref: ${{github.head_ref}}
                   alternate_repository: 'deriv-com/SmartCharts'
@@ -41,7 +41,7 @@ jobs:
               id: deriv_app
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: ${{github.event.pull_request.user.login}}/deriv-app
+                  repository: deriv-com/deriv-app
                   path: deriv-app
                   ref: ${{github.head_ref}}
                   alternate_repository: 'deriv-com/deriv-app'
@@ -51,9 +51,9 @@ jobs:
               id: flutter_chart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: ${{github.event.pull_request.user.login}}/flutter-chart
+                  repository: deriv-com/flutter-chart
                   path: flutter-chart
-                  ref: ${{github.head_ref}}
+                  ref: fe-changes
                   alternate_repository: 'deriv-com/flutter-chart'
                   # temporary reference to an old branch
                   alternate_ref: fe-changes
