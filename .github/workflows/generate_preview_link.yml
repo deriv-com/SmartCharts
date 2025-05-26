@@ -57,7 +57,6 @@ jobs:
                   alternate_repository: 'deriv-com/flutter-chart'
                   # temporary reference to an old branch
                   alternate_ref: fe-changes
-                  token: ${{ secrets.REPO_READ_TOKEN }}
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
