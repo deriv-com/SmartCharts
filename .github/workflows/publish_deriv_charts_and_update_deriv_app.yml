@@ -19,8 +19,8 @@ jobs:
               id: flutter_chart
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: 'deriv-com/smarttrader'
-                  path: smarttrader
+                  repository: 'deriv-com/bot'
+                  path: bot
                   # temporary reference to an old branch
                   ref: master
 
