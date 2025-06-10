@@ -24,7 +24,7 @@ jobs:
                   # temporary reference to an old branch
                   ref: fe-changes
 
-            - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
+            - uses: subosito/flutter-action@395322a6cded4e9ed503aebd4cc1965625f8e59a
               with:
                   flutter-version: '3.10.6'
                   channel: 'stable'
