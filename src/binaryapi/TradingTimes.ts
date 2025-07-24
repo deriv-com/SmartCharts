@@ -233,8 +233,9 @@ class TradingTimes {
         }
         return this._tradingTimesMap[symbol]?.feed_license === TradingTimes.FEED_UNAVAILABLE;
     }
-    getDelayedMinutes(symbol: string): number {
-        return this._tradingTimesMap?.[symbol].delay_amount as number;
+    getDelayedMinutes(): number {
+        // return this._tradingTimesMap?.[symbol].delay_amount as number;
+        return 0;
     }
     isMarketOpened(symbol: string) {
         if (!this._tradingTimesMap) {

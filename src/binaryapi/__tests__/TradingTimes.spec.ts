@@ -35,7 +35,7 @@ describe('TradingTimes test', async function () {
     });
 
     it('Test getDelayedMinutes', function () {
-        expect(this.tt.getDelayedMinutes('BSESENSEX30')).to.be.equal(10);
+        expect(this.tt.getDelayedMinutes('BSESENSEX30')).to.be.equal(0);
         expect(this.tt.getDelayedMinutes('R_50')).to.be.equal(0);
     });
 
