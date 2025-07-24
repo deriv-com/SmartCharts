@@ -6,6 +6,9 @@ import TradingTimes from './TradingTimes';
 import { cloneCategories, stableSort } from '../utils';
 import PendingPromise from '../utils/PendingPromise';
 import { isDeepEqual } from '../utils/object';
+import {
+    getCachedDisplayNames
+} from '../utils/displayNameUtils';
 
 const DefaultSymbols = [
     'synthetic_index',
@@ -21,12 +24,15 @@ export type TProcessedSymbolItem = {
     symbol: string;
     name: string;
     market: string;
-    market_display_name: string;
     subgroup: string;
-    subgroup_display_name: string;
-    submarket_display_name: string;
+    submarket: string;
     exchange_is_open: boolean;
     decimal_places: number;
+    // Display names for UI
+    displayName: string;
+    marketDisplayName: string;
+    submarketDisplayName: string;
+    subgroupDisplayName: string;
 };
 
 type TProcessedSymbols = TProcessedSymbolItem[];
@@ -126,6 +132,7 @@ export default class ActiveSymbols {
     computeActiveSymbols(active_symbols: TActiveSymbols) {
         runInAction(() => {
             this.processedSymbols = this._processSymbols(active_symbols);
+            
             this.categorizedSymbols = this._categorizeActiveSymbols(this.processedSymbols);
         });
         for (const symbolObj of this.processedSymbols || []) {
@@ -164,20 +171,31 @@ export default class ActiveSymbols {
 
         // Stable sort is required to retain the order of the symbol name
         const sortedSymbols = stableSort(symbols, (a, b) =>
-            a.submarket_display_name.localeCompare(b.submarket_display_name)
+            a.submarket.localeCompare(b.submarket)
         );
 
         for (const s of sortedSymbols) {
+            // Get display names using the display name service
+            const displayNames = getCachedDisplayNames({
+                symbol: s.symbol,
+                market: s.market,
+                submarket: s.submarket,
+                subgroup: s.subgroup,
+            });
+
             processedSymbols.push({
                 symbol: s.symbol,
-                name: s.display_name,
+                name: s.symbol, // Keep raw symbol for internal use
                 market: s.market,
-                market_display_name: s.market_display_name,
                 subgroup: s.subgroup,
-                subgroup_display_name: s.subgroup_display_name,
-                submarket_display_name: s.submarket_display_name,
+                submarket: s.submarket,
                 exchange_is_open: !!s.exchange_is_open,
                 decimal_places: s.pip.toString().length - 2,
+                // Add display names for UI
+                displayName: displayNames.symbolDisplayName,
+                marketDisplayName: displayNames.marketDisplayName,
+                submarketDisplayName: displayNames.submarketDisplayName,
+                subgroupDisplayName: displayNames.subgroupDisplayName,
             });
         }
 
@@ -199,38 +217,50 @@ export default class ActiveSymbols {
 
     _categorizeActiveSymbols(activeSymbols: TProcessedSymbols): TCategorizedSymbols {
         const categorizedSymbols: TCategorizedSymbols = [];
-        const first = activeSymbols[0];
         const getSubcategory = (d: TProcessedSymbolItem): TSubCategory => ({
-            subcategoryName: d.submarket_display_name,
+            subcategoryName: d.submarketDisplayName || d.submarket,
             data: [],
         });
         const getCategory = (d: TProcessedSymbolItem): TCategorizedSymbolItem => ({
-            categoryName: d.market_display_name,
-            categoryId: d.market,
+            categoryName: d.marketDisplayName || d.market,
+            categoryId: d.market, // Keep raw market as ID for internal logic
             hasSubcategory: true,
             hasSubgroup: !!(d.subgroup && d.subgroup !== 'none'),
             data: [],
             subgroups: [],
         });
-        let subcategory = getSubcategory(first);
-        let category = getCategory(first);
-        for (const symbol of activeSymbols) {
-            if (
-                category.categoryName !== symbol.market_display_name &&
-                category.categoryName !== symbol.subgroup_display_name
-            ) {
-                category.data.push(subcategory);
-                categorizedSymbols.push(category);
-                subcategory = getSubcategory(symbol);
-                category = getCategory(symbol);
+        
+        // Use a Map to collect all subcategories for each category
+        const categoryMap = new Map<string, {
+            category: TCategorizedSymbolItem,
+            subcategories: Map<string, TSubCategory>
+        }>();        
+        for (const symbol of activeSymbols) {            
+            const category = getCategory(symbol);
+            const subcategory = getSubcategory(symbol);
+            
+            if (!categoryMap.has(category.categoryId)) {
+                categoryMap.set(category.categoryId, {
+                    category: category,
+                    subcategories: new Map<string, TSubCategory>()
+                });
             }
-
+            
+            const categoryData = categoryMap.get(category.categoryId)!;
+            
+            if (!categoryData.subcategories.has(subcategory.subcategoryName)) {
+                categoryData.subcategories.set(subcategory.subcategoryName, subcategory);
+            }
+            
+            const currentSubcategory = categoryData.subcategories.get(subcategory.subcategoryName)!;
+            
+            // Handle subgroups if needed
             if (category.hasSubgroup) {
-                if (!category.subgroups?.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
-                    category.subgroups?.push({
+                if (!categoryData.category.subgroups?.some((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)) {
+                    categoryData.category.subgroups?.push({
                         data: [],
-                        categoryName: symbol.subgroup_display_name,
-                        categoryId: symbol.subgroup,
+                        categoryName: symbol.subgroupDisplayName || symbol.subgroup,
+                        categoryId: symbol.subgroup, // Keep raw subgroup as ID for internal logic
                         hasSubcategory: true,
                         hasSubgroup: false,
                         subgroups: [],
@@ -238,41 +268,39 @@ export default class ActiveSymbols {
                 }
                 // should push a subcategory instead of symbol
                 if (
-                    !category.subgroups
+                    !categoryData.category.subgroups
                         ?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)
-                        ?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)
+                        ?.data.find((el: TSubCategory) => el.subcategoryName === (symbol.submarketDisplayName || symbol.submarket))
                 ) {
-                    subcategory = getSubcategory(symbol);
-                    category.subgroups
+                    const subgroupSubcategory = getSubcategory(symbol);
+                    categoryData.category.subgroups
                         ?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)
-                        ?.data.push(subcategory);
-                    subcategory = getSubcategory(symbol);
+                        ?.data.push(subgroupSubcategory);
                 }
-                category.subgroups
+                categoryData.category.subgroups
                     ?.find((el: TCategorizedSymbolItem) => el.categoryId === symbol.subgroup)
-                    ?.data.find((el: TSubCategory) => el.subcategoryName === symbol.submarket_display_name)
+                    ?.data.find((el: TSubCategory) => el.subcategoryName === (symbol.submarketDisplayName || symbol.submarket))
                     ?.data.push({
                         enabled: true,
                         itemId: symbol.symbol,
-                        display: symbol.name,
+                        display: symbol.displayName || symbol.name,
                         dataObject: symbol,
                     });
             }
-            if (subcategory.subcategoryName !== symbol.submarket_display_name) {
-                category.data.push(subcategory);
-                subcategory = getSubcategory(symbol);
-            }
-            subcategory.data.push({
+            currentSubcategory.data.push({
                 enabled: true,
                 itemId: symbol.symbol,
-                display: symbol.name,
+                display: symbol.displayName || symbol.name,
                 dataObject: symbol,
             });
         }
 
-        category.data.push(subcategory);
-        categorizedSymbols.push(category);
-
+        // Convert the map back to the expected array format
+        for (const [, categoryData] of categoryMap) {
+            // Add all subcategories to the category
+            categoryData.category.data = Array.from(categoryData.subcategories.values());
+            categorizedSymbols.push(categoryData.category);
+        }
         return categorizedSymbols;
     }
 }

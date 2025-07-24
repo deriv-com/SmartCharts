@@ -6,6 +6,7 @@ import { TCreateTickHistoryParams } from 'src/binaryapi/BinaryAPI';
 import { Listener, TError, TGranularity, TMainStore, TPaginationCallback, TQuote } from 'src/types';
 import { strToDateTime } from 'src/utils/date';
 import { getUTCDate } from '../utils';
+import { getSymbolDisplayName } from '../utils/displayNameUtils';
 import ServerTime from '../utils/ServerTime';
 import { DelayedSubscription, RealtimeSubscription } from './subscription';
 import { TQuoteResponse } from './subscription/Subscription';
@@ -229,7 +230,7 @@ class Feed {
         let start = this.margin && this.startEpoch ? this.startEpoch - this.margin : this.startEpoch;
         const end = this.margin && this.endEpoch ? this.endEpoch + this.margin : this.endEpoch;
 
-        const symbolName = symbolObject.name;
+        const symbolName = getSymbolDisplayName(symbolObject.symbol) || symbolObject.name;
         this.loader.setState('chart-data');
         if (this._tradingTimes.isFeedUnavailable(symbol)) {
             this._mainStore.notifier.notifyFeedUnavailable(symbolName);

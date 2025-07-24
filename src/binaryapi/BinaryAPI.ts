@@ -42,8 +42,12 @@ export default class BinaryAPI {
         this.requestForget = requestForget;
         this.requestForgetStream = requestForgetStream;
     }
-    getActiveSymbols(): Promise<ActiveSymbolsResponse> {
-        return this.requestAPI({ active_symbols: 'brief' });
+    getActiveSymbols(brand_id?: string): Promise<ActiveSymbolsResponse> {
+        const request: any = { active_symbols: 'brief' };
+        if (brand_id) {
+            request.brand_id = brand_id;
+        }
+        return this.requestAPI(request);
     }
     getServerTime(): Promise<ServerTimeResponse> {
         return this.requestAPI({ time: 1 });
