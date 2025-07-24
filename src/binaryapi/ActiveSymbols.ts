@@ -183,14 +183,17 @@ export default class ActiveSymbols {
                 subgroup: s.subgroup,
             });
 
+            // Type assertion for new API property names until @deriv/api-types is updated
+            const symbolData = s as any;
+            
             processedSymbols.push({
-                symbol: s.symbol,
-                name: s.symbol, // Keep raw symbol for internal use
+                symbol: symbolData.underlying_symbol,
+                name: symbolData.underlying_symbol, // Keep raw symbol for internal use
                 market: s.market,
                 subgroup: s.subgroup,
                 submarket: s.submarket,
                 exchange_is_open: !!s.exchange_is_open,
-                decimal_places: s.pip.toString().length - 2,
+                decimal_places: symbolData.pip_size.toString().length - 2,
                 // Add display names for UI
                 displayName: displayNames.symbolDisplayName,
                 marketDisplayName: displayNames.marketDisplayName,
