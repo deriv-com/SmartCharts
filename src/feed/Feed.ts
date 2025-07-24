@@ -259,7 +259,7 @@ class Feed {
             getHistoryOnly = true;
         } else if (validation_error !== 'MarketIsClosed' && validation_error !== 'MarketIsClosedTryVolatility') {
             let subscription: DelayedSubscription | RealtimeSubscription;
-            const delay = this._tradingTimes.getDelayedMinutes(symbol);
+            const delay = this._tradingTimes.getDelayedMinutes();
             if (delay > 0) {
                 this._mainStore.notifier.notifyDelayedMarket(symbolName, delay);
                 subscription = new DelayedSubscription(
