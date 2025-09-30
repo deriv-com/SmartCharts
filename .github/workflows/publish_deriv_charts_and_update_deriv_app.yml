@@ -26,19 +26,11 @@ jobs:
 
             - uses: subosito/flutter-action@62f096cacda5168a3bd7b95793373be14fa4fbaf
               with:
-                  flutter-version: '3.10.6'
+                  flutter-version: '3.24.1'
                   channel: 'stable'
                   cache: true
 
-            - name: Add SSH key
-              run: |
-                  mkdir -p ~/.ssh
-                  echo "${{ secrets.SSH_KEY }}" > ~/.ssh/github_action_key
-                  chmod 600 ~/.ssh/github_action_key
-
             - name: Build flutter
-              env:
-                  GIT_SSH_COMMAND: 'ssh -i ~/.ssh/github_action_key'
               run: |
                   cd SmartCharts/chart_app
                   flutter pub get
