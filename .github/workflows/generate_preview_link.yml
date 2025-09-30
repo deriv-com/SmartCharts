@@ -64,15 +64,7 @@ jobs:
                   channel: 'stable'
                   cache: true
 
-            - name: Add SSH key
-              run: |
-                  mkdir -p ~/.ssh
-                  echo "${{ secrets.SSH_KEY }}" > ~/.ssh/github_action_key
-                  chmod 600 ~/.ssh/github_action_key
-
             - name: Build flutter
-              env:
-                  GIT_SSH_COMMAND: 'ssh -i ~/.ssh/github_action_key'
               run: |
                   cd SmartCharts/chart_app
                   flutter pub get
