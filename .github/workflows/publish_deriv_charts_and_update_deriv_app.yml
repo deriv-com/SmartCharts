@@ -37,7 +37,7 @@ jobs:
                   flutter build web --web-renderer html --release
 
             - name: Setup node
-              uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
+              uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
               with:
                   node-version: 20.x
 
@@ -68,7 +68,7 @@ jobs:
                   ref: master
 
             - name: Setup Node
-              uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8
+              uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
               with:
                   node-version: 18.x
 
