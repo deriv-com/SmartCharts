@@ -16,14 +16,14 @@ jobs:
             pull-requests: write
         steps:
             - name: Verify user
-              uses: 'deriv-com/shared-actions/.github/actions/verify_user_in_organization@v1'
+              uses: 'deriv-com/shared-actions/.github/actions/verify_user_in_organization@v4'
               with:
                   username: ${{github.event.pull_request.user.login}}
                   token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
             - name: Post preview build comment
               id: post_preview_build_comment
-              uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
+              uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v4'
               with:
                   issue_number: ${{github.event.number}}
                   head_sha: ${{github.event.pull_request.head.sha}}
@@ -102,7 +102,7 @@ jobs:
 
             - name: Publish to CF pages branch
               id: publish_to_pages_branch
-              uses: 'deriv-com/shared-actions/.github/actions/publish_to_pages_branch@v1'
+              uses: 'deriv-com/shared-actions/.github/actions/publish_to_pages_branch@v4'
               with:
                   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_TEST_LINKS_API_TOKEN }}
                   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_TEST_LINKS_ACCOUNT_ID }}
@@ -112,7 +112,7 @@ jobs:
 
             - name: 'Generate preview link comment'
               if: always() && steps.post_preview_build_comment.outcome == 'success'
-              uses: 'deriv-com/shared-actions/.github/actions/post_preview_link_comment@v1'
+              uses: 'deriv-com/shared-actions/.github/actions/post_preview_link_comment@v4'
               with:
                   issue_number: ${{github.event.number}}
                   check_run_id: ${{steps.post_preview_build_comment.outputs.check_run_id}}
