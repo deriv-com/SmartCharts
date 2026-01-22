@@ -150,11 +150,15 @@ import Vol1S150 from '../../sass/icons/active-symbols/volatility/1s150 index/ic-
 import Vol1S200 from '../../sass/icons/active-symbols/volatility/1s200 index/ic-200-1s-index.svg';
 import Vol1S250 from '../../sass/icons/active-symbols/volatility/1s250 index/ic-250-1s-index.svg';
 import Vol1S300 from '../../sass/icons/active-symbols/volatility/1s300 index/ic-300-1s-index.svg';
+import Crash50 from '../../sass/icons/active-symbols/volatility/crash50 index/crash50 index.svg';
+import Crash150 from '../../sass/icons/active-symbols/volatility/crash150 index/crash150 index.svg';
 import Crash300 from '../../sass/icons/active-symbols/volatility/crash300 index/crash300 index.svg';
 import Crash500 from '../../sass/icons/active-symbols/volatility/crash500 index/crash500 index.svg';
 import Crash600 from '../../sass/icons/active-symbols/volatility/crash600 index/crash600 index.svg';
 import Crash900 from '../../sass/icons/active-symbols/volatility/crash900 index/crash900 index.svg';
 import Crash1000 from '../../sass/icons/active-symbols/volatility/crash1000 index/crash1000 index.svg';
+import Boom50 from '../../sass/icons/active-symbols/volatility/boom50 index/boom50 index.svg';
+import Boom150 from '../../sass/icons/active-symbols/volatility/boom150 index/boom150 index.svg';
 import Boom300 from '../../sass/icons/active-symbols/volatility/boom300 index/boom300 index.svg';
 import Boom500 from '../../sass/icons/active-symbols/volatility/boom500 index/boom500 index.svg';
 import Boom600 from '../../sass/icons/active-symbols/volatility/boom600 index/boom600 index.svg';
@@ -571,11 +575,15 @@ export const ItemIconMap = {
     '1HZ15V': Wrapper(Vol1S15),
     '1HZ30V': Wrapper(Vol1S30),
     '1HZ90V': Wrapper(Vol1S90),
+    BOOM50: Wrapper(Boom50),
+    BOOM150: Wrapper(Boom150),
     BOOM300N: Wrapper(Boom300),
     BOOM500: Wrapper(Boom500),
     BOOM600: Wrapper(Boom600),
     BOOM900: Wrapper(Boom900),
     BOOM1000: Wrapper(Boom1000),
+    CRASH50: Wrapper(Crash50),
+    CRASH150: Wrapper(Crash150),
     CRASH300N: Wrapper(Crash300),
     CRASH500: Wrapper(Crash500),
     CRASH600: Wrapper(Crash600),
