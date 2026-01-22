@@ -31,7 +31,7 @@ jobs:
             - name: Checkout SmartCharts
               uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
               with:
-                  repository: deriv-com/SmartCharts
+                  repository: ${{ github.event.pull_request.head.repo.full_name }}
                   path: SmartCharts
                   ref: ${{github.head_ref}}
                   alternate_repository: 'deriv-com/SmartCharts'

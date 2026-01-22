@@ -35,12 +35,12 @@ export default class ChartAdapterStore {
         yLocal: number;
         bottomIndex: number | undefined;
     } = {
-        x: 0,
-        y: 0,
-        xLocal: 0,
-        yLocal: 0,
-        bottomIndex: 0,
-    };
+            x: 0,
+            y: 0,
+            xLocal: 0,
+            yLocal: 0,
+            bottomIndex: 0,
+        };
     touchValues: {
         deltaXTotal?: number;
         deltaYTotal?: number;
@@ -49,15 +49,14 @@ export default class ChartAdapterStore {
         x?: number;
         y?: number;
     } = {
-        multiTouch: false,
-        deltaXTotal: 0,
-        deltaYTotal: 0,
-        touchIds: [],
-        x: 0,
-        y: 0,
-    };
+            multiTouch: false,
+            deltaXTotal: 0,
+            deltaYTotal: 0,
+            touchIds: [],
+            x: 0,
+            y: 0,
+        };
 
-    isOverFlutterCharts = false;
     clearTouchDeltasTimer?: ReturnType<typeof setTimeout>;
     enableXScrollTimer?: ReturnType<typeof setTimeout>;
     enableYScrollTimer?: ReturnType<typeof setTimeout>;
@@ -142,8 +141,6 @@ export default class ChartAdapterStore {
                 this.mainStore.crosshair.updateVisibility(false);
             },
             onCrosshairHover: (dx, dy, dxLocal, dyLocal, bottomIndicatorIndex) => {
-                if (!this.isOverFlutterCharts) return;
-
                 this.onCrosshairMove(dx, dy, dxLocal, dyLocal, bottomIndicatorIndex);
 
                 if (this.drawingHoverIndex != null) {
@@ -220,7 +217,6 @@ export default class ChartAdapterStore {
         window.flutterChartElement?.addEventListener('touchmove', this.onTouch, { capture: true });
         window.flutterChartElement?.addEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.addEventListener('dblclick', this.onDoubleClick, { capture: true });
-        window.addEventListener('mousemove', this.onMouseMove, { capture: true });
     }
 
     onUnmount() {
@@ -231,7 +227,6 @@ export default class ChartAdapterStore {
         window.flutterChartElement?.removeEventListener('touchmove', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('touchend', this.onTouch, { capture: true });
         window.flutterChartElement?.removeEventListener('dblclick', this.onDoubleClick, { capture: true });
-        window.removeEventListener('mousemove', this.onMouseMove, { capture: true });
         clearTimeout(this.clearTouchDeltasTimer);
         clearTimeout(this.enableXScrollTimer);
         clearTimeout(this.enableYScrollTimer);
@@ -346,10 +341,6 @@ export default class ChartAdapterStore {
             window.flutterChart?.app.scroll(e.deltaX);
         }
         return false;
-    };
-
-    onMouseMove = (e: MouseEvent) => {
-        this.isOverFlutterCharts = (e.target as HTMLElement)?.tagName?.toLowerCase() === 'flt-glass-pane';
     };
 
     onDoubleClick = () => {
