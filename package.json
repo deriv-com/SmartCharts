@@ -178,7 +178,13 @@
         "cipher-base": "1.0.5",
         "webpack-bundle-analyzer": {
             "ws": "^8.18.2"
-        }
+        },
+        "serialize-javascript": "^7.0.5",
+        "lodash": "^4.18.0",
+        "tinyglobby": {
+            "picomatch": "^4.0.4"
+        },
+        "tmp": "^0.2.4"
     },
     "husky": {
         "hooks": {
