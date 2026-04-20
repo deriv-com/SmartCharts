@@ -6,6 +6,7 @@ import AnimatedPriceStore from 'src/store/AnimatedPriceStore';
 import ChartTitleStore from 'src/store/ChartTitleStore';
 import { ItemIconMap, SymbolPlaceholderIcon, ArrowIcon, TimeIcon } from './Icons';
 import { MarketOpeningTimeCounter } from './MarketOpeningTimeCounter';
+import { getSymbolDisplayName } from '../utils/displayNameUtils';
 import AnimatedPrice from './AnimatedPrice';
 
 type TChartPriceProps = {
@@ -43,7 +44,9 @@ const SymbolInfoBase = () => {
         <>
             {SymbolIcon && <SymbolIcon className={`ic-${symbol.symbol}`} />}
             <div className='cq-symbol-info'>
-                <div className={classNames('cq-symbol', { 'closed-no-opentime': hasNoOpenTime })}>{symbol.name}</div>
+                <div className={classNames('cq-symbol', { 'closed-no-opentime': hasNoOpenTime })}>
+                    {getSymbolDisplayName(symbol.symbol) || symbol.name}
+                </div>
                 {isSymbolOpen && (
                     <ChartPrice
                         status={status}
