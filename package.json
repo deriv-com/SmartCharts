@@ -64,7 +64,7 @@
         "@deriv/api-types": "^1.0.47",
         "@semantic-release/changelog": "^6.0.3",
         "@semantic-release/github": "^9.2.6",
-        "@semantic-release/npm": "^11.0.3",
+        "@semantic-release/npm": "^13.1.5",
         "@semantic-release/release-notes-generator": "^12.1.0",
         "@types/chai": "^4.2.18",
         "@types/classnames": "^2.3.1",
