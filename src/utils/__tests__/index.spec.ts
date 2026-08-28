@@ -105,28 +105,30 @@ describe('getSymbolMarketCategory', () => {
         decimal_places: 3,
         exchange_is_open: true,
         market: 'synthetic_index',
-        market_display_name: 'Derived',
-        name: 'Volatility 10 Index',
+        name: 'R_10',
         submarket: 'random_index',
-        submarket_display_name: 'Continuous Indices',
         subgroup: 'synthetics',
-        subgroup_display_name: 'Synthetics',
         symbol: 'R_10',
+        displayName: 'Volatility 10 Index',
+        marketDisplayName: 'Synthetic Indices',
+        submarketDisplayName: 'Continuous Indices',
+        subgroupDisplayName: 'Synthetics',
     };
     const symbol_object_without_subgroup = {
         decimal_places: 5,
         exchange_is_open: true,
         market: 'forex',
-        market_display_name: 'Forex',
-        name: 'GBP/AUD',
+        name: 'frxGBPAUD',
         submarket: 'major_pairs',
-        submarket_display_name: 'Major Pairs',
         subgroup: 'none',
-        subgroup_display_name: 'None',
         symbol: 'frxGBPAUD',
+        displayName: 'GBP/AUD',
+        marketDisplayName: 'Forex',
+        submarketDisplayName: 'Major Pairs',
+        subgroupDisplayName: '',
     };
     it('should return concatenated market + subgroup + submarket name when has a subgroup', () => {
-        expect(getSymbolMarketCategory(symbol_object_with_subgroup)).to.equal('derived-synthetics-continuous_indices');
+        expect(getSymbolMarketCategory(symbol_object_with_subgroup)).to.equal('synthetic_index-synthetics-random_index');
     });
     it('should return concatenated market + submarket name when has no subgroup', () => {
         expect(getSymbolMarketCategory(symbol_object_without_subgroup)).to.equal('forex-major_pairs');

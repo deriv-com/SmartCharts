@@ -72,14 +72,14 @@ export const getTimeUnit = (granularity: TGranularity) => {
  * and 'Forex basket' is a submarket.
  */
 export const getSymbolMarketCategory = (symbol_object: TProcessedSymbolItem) => {
-    const { market_display_name, submarket_display_name, subgroup } = symbol_object || {};
-    if (!market_display_name) return '';
-    const market = market_display_name.replace(' ', '_');
-    const submarket = submarket_display_name.replace(' ', '_');
+    const { market, submarket, subgroup } = symbol_object || {};
+    if (!market) return '';
+    const marketFormatted = market.replace(' ', '_');
+    const submarketFormatted = submarket.replace(' ', '_');
     if (subgroup && subgroup !== 'none') {
-        return `${market}-${subgroup}-${submarket}`.toLowerCase();
+        return `${marketFormatted}-${subgroup}-${submarketFormatted}`.toLowerCase();
     }
-    return `${market}-${submarket}`.toLowerCase();
+    return `${marketFormatted}-${submarketFormatted}`.toLowerCase();
 };
 
 export const getTimeIntervalName = (interval: TGranularity, intervals: typeof Intervals) => {

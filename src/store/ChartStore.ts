@@ -381,12 +381,12 @@ class ChartStore {
     onMarketOpenClosedChange = (changes: TChanges) => {
         const symbolObjects = this.activeSymbols?.processedSymbols || [];
         let shouldRefreshChart = false;
-        for (const { symbol, name } of symbolObjects) {
+        for (const { symbol, name, displayName } of symbolObjects) {
             if (symbol in changes) {
                 if (changes[symbol]) {
                     shouldRefreshChart = true;
                     this.chartClosedOpenThemeChange(false);
-                    this.mainStore.notifier.notifyMarketOpen(name);
+                    this.mainStore.notifier.notifyMarketOpen(displayName || name);
                 } else {
                     this.chartClosedOpenThemeChange(true);
                     this.mainStore.notifier.notifyMarketClose(name);

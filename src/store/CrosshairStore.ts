@@ -3,6 +3,7 @@ import moment from 'moment';
 import Context from 'src/components/ui/Context';
 import { TQuote } from 'src/types';
 import { getTooltipLabels } from 'src/Constant';
+import { getSymbolDisplayName } from '../utils/displayNameUtils';
 import MainStore from '.';
 
 type TDupMap = {
@@ -324,8 +325,9 @@ class CrosshairStore {
             }
             dupMap.Open = dupMap.High = dupMap.Low = 1;
         }
-        if (this.activeSymbol?.name) {
-            const display = this.activeSymbol?.name as string;
+        if (this.activeSymbol?.symbol) {
+            // Use display name instead of raw symbol name
+            const display = getSymbolDisplayName(this.activeSymbol.symbol) || this.activeSymbol.symbol;
             fields.push({
                 member: 'Close',
                 display,
