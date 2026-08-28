@@ -1,0 +1,122 @@
+name: Publish to GitHub Pages
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: github-pages-build-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  build_and_deploy:
+    runs-on: Ubuntu-latest
+    permissions:
+      contents: write
+      checks: write
+      pull-requests: write
+    steps:
+      - name: Post preview build comment
+        if: github.event_name == 'pull_request_target'
+        id: post_preview_build_comment
+        uses: 'deriv-com/shared-actions/.github/actions/post_preview_build_comment@v1'
+        with:
+          issue_number: ${{github.event.number}}
+          head_sha: ${{github.event.pull_request.head.sha}}
+      - name: Checkout SmartCharts
+        uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
+        with:
+          repository: deriv-com/SmartCharts
+          path: SmartCharts
+          ref: ${{github.event_name == 'pull_request_target' && github.head_ref || 'master'}}
+          alternate_repository: 'deriv-com/SmartCharts'
+          alternate_ref: master
+
+      - name: Custom flutter-chart
+        id: flutter_chart
+        uses: 'deriv-com/SmartCharts/.github/actions/checkout@master'
+        with:
+          repository: 'deriv-com/flutter-chart'
+          path: flutter-chart
+          ref: fe-changes
+          alternate_repository: 'deriv-com/flutter-chart'
+          alternate_ref: fe-changes
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.10.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Add SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/github_action_key
+          chmod 600 ~/.ssh/github_action_key
+
+      - name: Build flutter
+        env:
+          GIT_SSH_COMMAND: 'ssh -i ~/.ssh/github_action_key'
+        run: |
+          cd SmartCharts/chart_app
+          flutter pub get
+          flutter build web --web-renderer html --release
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Setup SmartCharts
+        run: cd SmartCharts && npm install
+
+      - name: Run Tests
+        run: cd SmartCharts && npm run test
+
+      - name: Build SmartCharts
+        run: cd SmartCharts && npm run build
+
+      - name: Copy Flutter build to dist
+        run: |
+          # Copy Flutter build artifacts to the dist directory
+          mkdir -p SmartCharts/dist/flutter
+          cp -r SmartCharts/chart_app/build/web/* SmartCharts/dist/flutter/
+
+      - name: Configure Git
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+      - name: Set deployment branch name
+        id: set_branch
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request_target" ]; then
+            echo "branch_name=pr-${{ github.event.number }}" >> $GITHUB_OUTPUT
+          else
+            echo "branch_name=gh-pages" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Deploy to GitHub Pages
+        env:
+          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          cd SmartCharts
+          if [ "${{ github.event_name }}" == "pull_request_target" ]; then
+            npm run gh-pages:folder ${{ steps.set_branch.outputs.branch_name }}
+          else
+            npm run gh-pages
+          fi
+          
+      - name: Generate preview link comment
+        if: github.event_name == 'pull_request_target' && steps.post_preview_build_comment.outcome == 'success'
+        uses: 'deriv-com/shared-actions/.github/actions/post_preview_link_comment@v1'
+        with:
+          issue_number: ${{github.event.number}}
+          check_run_id: ${{steps.post_preview_build_comment.outputs.check_run_id}}
+          preview_url: https://${{ github.repository_owner }}.github.io/SmartCharts/${{ steps.set_branch.outputs.branch_name }}
+          status: ${{job.status}}
